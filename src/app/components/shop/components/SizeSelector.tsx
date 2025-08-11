@@ -1,5 +1,6 @@
 import React from "react"
 import type { Product } from "@/types"
+import { motion } from "framer-motion"
 import { cn } from "../../../lib/utils"
 
 interface SizeSelectorProps {

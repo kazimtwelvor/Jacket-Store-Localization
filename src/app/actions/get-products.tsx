@@ -59,13 +59,9 @@ const getProducts = async (query: Query): Promise<PaginatedResponse> => {
     })
 
     let responseData: PaginatedResponse
-    if (typeof window === "undefined") {
-      // Server: call external API directly
-      responseData = await fetchJson<PaginatedResponse>("/products", {
-        query: queryParams!,
-      })
-    } else {
-      // Client: fall back to our API route if present; if not, still call external API
+    
+    // Always try API route first (works for both server and client)
+    try {
       const apiRouteRes = await fetch(`/api/products?${queryParams?.toString() ?? ""}`, {
         headers: { "Content-Type": "application/json" },
         cache: "no-store",
@@ -73,9 +69,16 @@ const getProducts = async (query: Query): Promise<PaginatedResponse> => {
       if (apiRouteRes.ok) {
         responseData = (await apiRouteRes.json()) as PaginatedResponse
       } else {
+        throw new Error('API route failed')
+      }
+    } catch (apiError) {
+      // Fallback to direct API call only on server
+      if (typeof window === "undefined") {
         responseData = await fetchJson<PaginatedResponse>("/products", {
           query: queryParams!,
         })
+      } else {
+        throw apiError
       }
     }
 
