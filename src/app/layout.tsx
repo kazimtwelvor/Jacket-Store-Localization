@@ -1,6 +1,7 @@
 
 import "./globals.css";
-import Navbar from "./components/navbar/Navbar";
+import Navbar from "@/src/app/components/navbar/Navbar";
+import { avertaBold, avertaDefault } from "@/public/fonts";
 
 export default function RootLayout({
   children,
@@ -9,7 +10,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
+      <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0`}
       >
         <Navbar />
         {children}

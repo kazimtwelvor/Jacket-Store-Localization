@@ -269,14 +269,14 @@ const Navbar = () => {
 
       <div
         className={cn(
-          "fixed left-0 right-0 z-[9001]",
+          "fixed left-0 right-0 z-[9001] w-full",
           !isHeaderVisible
             ? 'transform -translate-y-full transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]'
             : 'transform translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]',
           'top-0'
         )}
       >
-        <header className="flex items-center bg-[#2B2B2B] px-4 md:px-6 h-16 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]">
+        <header className="flex items-center bg-[#2B2B2B] h-16 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] w-full">
           <div className="lg:hidden flex items-center space-x-2">
             <div className="w-10 h-10" />
           </div>
@@ -583,7 +583,7 @@ const Navbar = () => {
       {!isMobileMenuOpen && !pathname.startsWith('/auth') && !pathname.startsWith('/checkout') && pathname !== '/cart' && (
         <div
           className={cn(
-            "fixed left-0 right-0 z-[9002] mx-auto flex justify-center px-4 md:px-0",
+            "fixed left-0 right-0 z-[9002] w-full flex justify-center",
             "top-16 transition-opacity duration-500 ease-in-out",
             isCapsuleVisible ? "opacity-100" : "opacity-0"
           )}
