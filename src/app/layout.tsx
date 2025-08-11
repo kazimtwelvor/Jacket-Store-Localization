@@ -10,7 +10,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0`}
+      <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0 bg-[#000000]`}
       >
         <Navbar />
         {children}
