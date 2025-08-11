@@ -1,0 +1,215 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { ChevronDown } from "lucide-react"
+import { cn } from "../../lib/utils"
+import type { Product } from "@/types"
+import type { ReviewData } from "../../actions/get-reviews"
+import ProductDetailsModal from "../../modals/ProductDetailsModal"
+
+interface ProductDropdownsProps {
+  data: Product
+  activeTab: string
+  setActiveTab: (tab: string) => void
+  reviews: ReviewData[]
+  reviewsLoading: boolean
+  getTimeAgo: (date: Date) => string
+  isMobile: boolean
+  deliveryDates: {
+    earliest: string
+    latest: string
+  }
+}
+
+const ProductDropdowns = ({ 
+  data, 
+  activeTab, 
+  setActiveTab, 
+  reviews, 
+  reviewsLoading, 
+  getTimeAgo,
+  isMobile,
+  deliveryDates
+}: ProductDropdownsProps) => {
+  const [showDetailsModal, setShowDetailsModal] = useState(false)
+  
+  // Enable smooth scrolling
+  useEffect(() => {
+    document.documentElement.style.scrollBehavior = 'smooth'
+  }, [])
+  
+  return (
+    <div className="border-t border-gray-200">
+      {/* Details Dropdown */}
+      <div className="border-b border-gray-200" data-dropdown>
+        <button 
+          onClick={() => setActiveTab(activeTab === "details" ? "" : "details")}
+          className="w-full py-3 sm:py-4 px-2 sm:px-0 flex items-center justify-between text-sm font-bold uppercase text-[#00000]"
+        >
+          <span>Details</span>
+          <ChevronDown 
+            size={16} 
+            className={cn(
+              "transition-transform text-[#00000]", 
+              activeTab === "details" ? "transform rotate-180" : ""
+            )} 
+          />
+        </button>
+        {activeTab === "details" && (
+          <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed" data-dropdown>
+            {(() => {
+              const description = data.description || "";
+              const firstParagraphEnd = description.indexOf('</p>') + 4;
+              const firstParagraph = firstParagraphEnd > 4 ? description.substring(0, firstParagraphEnd) : description;
+              const restOfDescription = firstParagraphEnd > 4 ? description.substring(firstParagraphEnd) : "";
+              
+              return (
+                <>
+                  <div dangerouslySetInnerHTML={{ __html: firstParagraph }} />
+                  
+                  {restOfDescription && (
+                    <button 
+                      onClick={() => setShowDetailsModal(true)}
+                      className="flex items-center justify-center w-full py-2 mt-2 bg-black-50 hover:bg-black-100 rounded-md transition-colors"
+                    >
+                      <span className="text-sm font-medium mr-1 text-[#00000]">Read more</span>
+                      <ChevronDown size={16} className="text-[#00000]" />
+                    </button>
+                  )}
+                  
+                  <ul className="list-disc pl-5 mt-3 sm:mt-4 space-y-1">
+                    <li>SKU: {data.sku || "N/A"}</li>
+                    <li>Material: {data.material || "Premium fabric"}</li>
+                    <li>Fit: {data.specifications?.fit || "Regular fit"}</li>
+                  </ul>
+                </>
+              );
+            })()}
+          </div>
+        )}
+      </div>
+      
+      {/* Reviews Dropdown */}
+      <div className="border-b border-gray-200" data-dropdown>
+        <button 
+          onClick={() => setActiveTab(activeTab === "reviews" ? "" : "reviews")}
+          className="w-full py-3 sm:py-4 px-2 sm:px-0 flex items-center justify-between text-sm font-bold uppercase text-[#00000]"
+        >
+          <span>Customer Reviews</span>
+          <div className="flex items-center">
+            <div className="flex items-center mr-2">
+              {[1, 2, 3, 4, 5].map((star) => {
+                const avgRating = reviews.length > 0 ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 0
+                return (
+                  <svg key={star} className={`w-3 h-3 ${star <= Math.round(avgRating) ? 'text-yellow-400' : 'text-gray-300'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                  </svg>
+                )
+              })}
+            </div>
+            <span className="text-xs text-gray-500">({reviews.length})</span>
+            <ChevronDown 
+              size={16} 
+              className={cn(
+                "transition-transform text-[#00000] ml-2", 
+                activeTab === "reviews" ? "transform rotate-180" : ""
+              )} 
+            />
+          </div>
+        </button>
+        {activeTab === "reviews" && (
+          <div className="pb-6 pt-2" data-dropdown>
+            {reviewsLoading ? (
+              <div className="flex justify-center py-8">
+                <div className="w-8 h-8 border-2 border-[#00000] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-gray-500">Reviews functionality would go here</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Care Dropdown */}
+      <div className="border-b border-gray-200" data-dropdown>
+        <button 
+          onClick={() => setActiveTab(activeTab === "care" ? "" : "care")}
+          className="w-full py-3 sm:py-4 px-2 sm:px-0 flex items-center justify-between text-sm font-bold uppercase text-[#00000]"
+        >
+          <span>Care</span>
+          <ChevronDown 
+            size={16} 
+            className={cn(
+              "transition-transform text-[#00000]", 
+              activeTab === "care" ? "transform rotate-180" :""
+            )} 
+          />
+        </button>
+        {activeTab === "care" && (
+          <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed" data-dropdown>
+            <p>To preserve the quality of your garment:</p>
+            <ul className="list-disc pl-5 mt-2 space-y-1">
+              <li>Machine wash cold with similar colors</li>
+              <li>Do not bleach</li>
+              <li>Tumble dry low</li>
+              <li>Iron on low heat if needed</li>
+              <li>Do not dry clean</li>
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* Shipping Dropdown */}
+      <div className="border-b border-gray-200" data-dropdown>
+        <button 
+          onClick={() => setActiveTab(activeTab === "shipping" ? "" : "shipping")}
+          className="w-full py-3 sm:py-4 px-2 sm:px-0 flex items-center justify-between text-sm font-bold uppercase text-[#00000]"
+        >
+          <span>Shipping & Returns</span>
+          <ChevronDown 
+            size={16} 
+            className={cn(
+              "transition-transform text-[#00000]", 
+              activeTab === "shipping" ? "transform rotate-180" : ""
+            )} 
+          />
+        </button>
+        {activeTab === "shipping" && (
+          <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed" data-dropdown>
+            <p className="mb-2">Standard Shipping (5-10 business days): Free on orders over $99</p>
+            <p className="mb-2">Express Shipping (1-2 business days): $15</p>
+            <p>International shipping available to select countries.</p>
+            <div className={cn(
+              "mt-3 p-4 bg-gray  rounded-lg border border-black-200 shadow-sm",
+              isMobile && "mt-2 p-3"
+            )}>
+              <div className="flex items-center gap-2 mb-2">
+                <div className={cn("bg-gray rounded-full p-1.5", isMobile && "p-1")}>
+                  <svg className={cn("text-red", isMobile ? "w-3 h-3" : "w-4 h-4")} fill="white" stroke="black" viewBox="0 0 24 24">
+                    <path strokeLinecap="round"  strokeLinejoin="round" strokeWidth={2} d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0h6m-6 0l-2 13a2 2 0 002 2h6a2 2 0 002-2L16 7" />
+                  </svg>
+                </div>
+                <p className={cn("font-medium text-[#00000]", isMobile && "text-xs")}>Estimated Delivery Range</p>
+              </div>
+              <p className={cn("ml-8  text-black-600 font-bold", isMobile && "ml-4 text-sm")}>
+                {deliveryDates.earliest} - {deliveryDates.latest}
+              </p>
+              <p className={cn("ml-8 text-xs text-gray-500 mt-2", isMobile && "ml-6 text-[10px]")}>If you order today</p>
+            </div>
+            <p className="mt-3 sm:mt-4 font-medium">Returns accepted within 30 days of delivery.</p>
+          </div>
+        )}
+      </div>
+      
+      <ProductDetailsModal 
+        isOpen={showDetailsModal}
+        onClose={() => setShowDetailsModal(false)}
+        product={data}
+      />
+    </div>
+  )
+}
+
+export default ProductDropdowns

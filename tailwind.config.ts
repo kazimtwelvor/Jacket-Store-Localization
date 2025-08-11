@@ -10,6 +10,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-averta-default)", "Arial", "Helvetica", "sans-serif"],
+        bold: ["var(--font-averta-bold)", "Arial", "Helvetica", "sans-serif"],
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

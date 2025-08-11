@@ -1,16 +1,19 @@
-
-import getProduct from "@/actions/get-product"
-import getProducts from "@/actions/get-products"
-import GalleryWrapper from "@/components/product-page/gallery-wrapper"
-import Info from "@/components/product-page/info"
-import { ProductSuggestionsSection } from "@/components/product-page/ProductSuggestionsSection"
-import ProductPageClient from "./page-client"
-import StructuredData from "@/components/layout/structured-data"
-import StickyProductDetails from "@/components/product-page/StickyProductDetails"
+import getProduct from "@/src/app/actions/get-product"
+import getProducts from "@/src/app/actions/get-products"
+// import GalleryWrapper from "@/src/app/components/product-page/gallery-wrapper"
+// import Info from "@/src/app/components/product-page/info"
+// import { ProductSuggestionsSection } from "@/src/app/components/product-page/ProductSuggestionsSection"
+// import ProductPageClient from "./page-client"
+// import StructuredData from "@/src/app/components/layout/structured-data"
+// import StickyProductDetails from "@/src/app/components/product-page/StickyProductDetails"
 
 import { notFound, redirect } from "next/navigation"
 import type { Metadata, ResolvingMetadata } from "next"
 import type { Product, ProductImage } from "@/types"
+import GalleryWrapper from "@/src/app/components/product-page/gallery-wrapper"
+import { Info } from "lucide-react"
+import StickyProductDetails from "@/src/app/components/product-page/StickyProductDetails"
+import { ProductSuggestionsSection } from "@/src/app/components/product-page/ProductSuggestionsSection"
 
 
 interface ProductPageProps {
@@ -252,7 +255,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         
         {/* Product Suggestions - Full Width Outside Grid */}
         <div className="w-full">
-          <ProductSuggestionsSection 
+          <ProductSuggestionsSection
             suggestProducts={suggestProducts}
             isMobile={false}
           />
