@@ -1,7 +1,9 @@
 
 import "./globals.css";
 import Navbar from "@/src/app/components/navbar/Navbar";
-import { avertaBold, avertaDefault } from "@/public/fonts";
+import { FontProvider } from "@/src/components/font-provider";
+import { CartProvider } from "@/src/app/contexts/CartContext";
+import { avertaBold, avertaDefault } from "@/src/lib/fonts";
 
 export default function RootLayout({
   children,
@@ -10,10 +12,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0 bg-[#000000]`}
-      >
-        <Navbar />
-        {children}
+      <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0 bg-[#000000]`}>
+        <FontProvider>
+          <CartProvider>
+            <Navbar />
+            {children}
+          </CartProvider>
+        </FontProvider>
       </body>
     </html>
   );

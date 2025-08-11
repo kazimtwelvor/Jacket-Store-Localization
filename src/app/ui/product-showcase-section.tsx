@@ -6,9 +6,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ShoppingCart } from "lucide-react"
-import Currency from "@/components/ui/currency"
+import Currency from "./currency"
 import { useRouter } from "next/navigation"
-import useCart from "@/hooks/use-cart"
+import { useCart } from "@/src/app/contexts/CartContext"
 
 interface ProductShowcaseSectionProps {
   title: string
@@ -24,7 +24,7 @@ const ProductShowcaseSection: React.FC<ProductShowcaseSectionProps> = ({
   textColor,
 }) => {
   const router = useRouter()
-  const cart = useCart()
+  const { addToCart } = useCart()
 
   return (
     <div className="w-full relative overflow-hidden">
@@ -37,7 +37,7 @@ const ProductShowcaseSection: React.FC<ProductShowcaseSectionProps> = ({
               <div key={product.id} className="bg-white p-4 rounded-lg shadow-md">
                 <Link href={`/product/${product.id}`}>
                   <Image
-                    src={product.images[0]?.url || "/placeholder.svg"}
+                    src={product.images[0]?.image?.url || "/placeholder.svg"}
                     alt={product.name}
                     width={300}
                     height={400}
@@ -81,7 +81,7 @@ const ProductShowcaseSection: React.FC<ProductShowcaseSectionProps> = ({
                   <div className="relative z-10">
                     <div className="relative aspect-[3/4] cursor-pointer overflow-hidden">
                       <Image
-                        src={product.images[0]?.url || "/placeholder.svg"}
+                        src={product.images[0]?.image?.url || "/placeholder.svg"}
                         alt={product.name}
                         fill
                         className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
@@ -90,7 +90,7 @@ const ProductShowcaseSection: React.FC<ProductShowcaseSectionProps> = ({
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            cart.addItem(product)
+                            addToCart(product, "M", undefined)
                             router.push("/cart")
                           }}
                           className="w-full bg-white text-black hover:bg-gray-100 py-2 shadow-md"

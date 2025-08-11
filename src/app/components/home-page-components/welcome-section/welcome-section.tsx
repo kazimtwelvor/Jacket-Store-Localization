@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { ChevronDown } from "lucide-react"
+import { avertaBold, avertaDefault } from "@/src/lib/fonts"
 
 export default function WelcomeAccordionSection() {
     const [isExpanded, setIsExpanded] = useState(false)
@@ -36,10 +37,10 @@ export default function WelcomeAccordionSection() {
             <section className="max-w-7xl mx-auto">
                 <section className="text-center mb-4 sm:mb-6">
 
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b2b2b] mb-3 sm:mb-4 leading-tight">
+                    <h2 className={`${avertaBold.className} font-bold text-2xl sm:text-3xl md:text-4xl text-[#2b2b2b] mb-3 sm:mb-4 leading-tight `}>
                         WELCOME TO FINEYST
                     </h2>
-                    <p className="text-sm sm:text-base lg:text-lg text-gray-700 max-w-3xl mx-auto mb-3 sm:mb-4 px-2 sm:px-0">
+                    <p className={`${avertaDefault.className} text-sm sm:text-base lg:text-lg text-gray-700 max-w-3xl mx-auto mb-3 sm:mb-4 px-2 sm:px-0`}>
                         Your Destination for Timeless, Custom, and Everyday Leather Jackets
                     </p>
 

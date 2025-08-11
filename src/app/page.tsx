@@ -1,6 +1,8 @@
 import SlideBanners from "@/src/app/components/home-page-components/banners/slide-banners";
 import WelcomeAccordionSection from "./components/home-page-components/welcome-section/welcome-section";
 import ProductCategory from "./components/home-page-components/product-category/product-category";
+import SignatureStylesSection from "./components/home-page-components/signature-styles/signature-section";
+import ProductCarousel from "./components/home-page-components/product-category/product-carousel";
 
 export default function Home() {
   return (
@@ -10,6 +12,8 @@ export default function Home() {
       </section>
       <WelcomeAccordionSection />
       <ProductCategory />
+      <SignatureStylesSection />
+      <ProductCarousel />
     </>
   );
 }

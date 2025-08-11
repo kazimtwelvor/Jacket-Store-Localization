@@ -3,15 +3,14 @@
 
 import Button from "@/components/ui/button"
 import Currency from "@/components/ui/currency"
-import useCart from "@/hooks/use-cart"
+import { useCart } from "@/src/app/contexts/CartContext"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
 
 const Summary = () => {
   const searchParams = useSearchParams()
-  const items = useCart((state) => state.items)
-  const removeAll = useCart((state) => state.removeAll)
+  const { items, clearCart } = useCart()
   const totalPrice = items.reduce((total, item) => total + Number(item.price), 0)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -19,12 +18,12 @@ const Summary = () => {
   useEffect(() => {
     if (searchParams.get("success")) {
       toast.success("Payment completed.")
-      removeAll()
+      clearCart()
     }
     if (searchParams.get("canceled")) {
       toast.error("Something went wrong.")
     }
-  }, [searchParams, removeAll])
+  }, [searchParams, clearCart])
 
   // Update the checkout button to use the existing checkout API
   const onCheckout = async () => {

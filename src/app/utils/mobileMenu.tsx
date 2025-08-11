@@ -14,7 +14,7 @@ import {
   User
 } from "lucide-react"
 import useAuth from "../hooks/use-auth"
-import useCart from "../hooks/use-cart"
+import { useCart } from "../contexts/CartContext"
 import useWishlist from "../hooks/use-wishlist"
 import MegaMenuCarousel from "../components/navbar/MegaMenuCarousal"
 

@@ -4,12 +4,12 @@ import type { Product } from "@/types"
 import Image from "next/image"
 import { Heart } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { cn } from "@/lib/utils"
+import { cn } from "../lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
-import useWishlist from "@/hooks/use-wishlist"
-import useCart from "@/hooks/use-cart"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import useWishlist from "../hooks/use-wishlist"
+import { useCart } from "@/src/app/contexts/CartContext"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./dialog"
 
 // Shimmer effect for image loading
 const shimmer = (w: number, h: number) => `
@@ -37,7 +37,7 @@ interface ProductCardProps {
 const ProductCard = ({ data, onMouseEnter }: ProductCardProps) => {
   const router = useRouter()
   const wishlist = useWishlist()
-  const cart = useCart()
+  const { addToCart } = useCart()
   const [isHovered, setIsHovered] = useState(false)
   const [selectedSize, setSelectedSize] = useState<{ id: string; name: string; value: string } | null>(null)
   const [isMounted, setIsMounted] = useState(false)
