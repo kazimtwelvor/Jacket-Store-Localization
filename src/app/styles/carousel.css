@@ -1,0 +1,42 @@
+/* Carousel and slider touch enhancements */
+
+/* Enable smooth scrolling and touch behavior */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide scrollbars */
+.touch-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Snap scrolling for touch devices */
+.snap-scroll {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-scroll > * {
+  scroll-snap-align: center;
+}
+
+/* Smooth transitions for all carousels */
+.carousel-transition {
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Prevent text selection during swipe */
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Improved touch target size for mobile */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
