@@ -129,7 +129,7 @@ export default function ProductCategory() {
     const [isDragging, setIsDragging] = useState(false)
     const [dragOffset, setDragOffset] = useState(0)
     const [hasDragged, setHasDragged] = useState(false)
-    const carouselRef = useRef<HTMLsectionElement>(null)
+    const carouselRef = useRef<HTMLDivElement>(null)
     const [scrollAmount, setScrollAmount] = useState(0)
 
     const categories = activeTab === "men" ? menCategories : womenCategories
@@ -197,17 +197,17 @@ export default function ProductCategory() {
         setTimeout(() => setIsAnimating(false), 300)
     }
 
-    const handleTouchStart = (e: React.TouchEvent<HTMLsectionElement>) => {
+    const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
         setTouchStart(e.targetTouches[0].clientX)
         e.stopPropagation()
     }
 
-    const handleTouchMove = (e: React.TouchEvent<HTMLsectionElement>) => {
+    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
         setTouchEnd(e.targetTouches[0].clientX)
         e.stopPropagation()
     }
 
-    const handleTouchEnd = (e: React.TouchEvent<HTMLsectionElement>) => {
+    const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
         e.stopPropagation()
         if (!touchStart || !touchEnd) return
 
@@ -225,7 +225,7 @@ export default function ProductCategory() {
         setTouchEnd(null)
     }
 
-    const handleMouseDown = (e: React.MouseEvent<HTMLsectionElement>) => {
+    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
         setMouseStart(e.clientX)
         setIsDragging(true)

@@ -3,6 +3,8 @@ import WelcomeAccordionSection from "./components/home-page-components/welcome-s
 import ProductCategory from "./components/home-page-components/product-category/product-category";
 import SignatureStylesSection from "./components/home-page-components/signature-styles/signature-section";
 import ProductCarousel from "./components/home-page-components/product-category/product-carousel";
+import JacketColorCollection from "./components/home-page-components/product-category/jacket-color-collection";
+import AboutSection from "./components/home-page-components/about-us/about-us";
 
 export default function Home() {
   return (
@@ -14,6 +16,8 @@ export default function Home() {
       <ProductCategory />
       <SignatureStylesSection />
       <ProductCarousel />
+      <JacketColorCollection />
+      <AboutSection />
     </>
   );
 }

@@ -49,7 +49,7 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
     const [activeCategory, setActiveCategory] = useState<Category>("MEN")
     const [productItems, setProductItems] = useState<Product[]>(items)
     const [loading, setLoading] = useState(true)
-    const trackRef = useRef<HTMLsectionElement>(null)
+    const trackRef = useRef<HTMLDivElement>(null)
     const x = useMotionValue(0)
     const isTransitioning = useRef(false)
     const [isJumping, setIsJumping] = useState(false)

@@ -1,19 +1,14 @@
 import getProduct from "@/src/app/actions/get-product"
 import getProducts from "@/src/app/actions/get-products"
-// import GalleryWrapper from "@/src/app/components/product-page/gallery-wrapper"
-// import Info from "@/src/app/components/product-page/info"
-// import { ProductSuggestionsSection } from "@/src/app/components/product-page/ProductSuggestionsSection"
-// import ProductPageClient from "./page-client"
-// import StructuredData from "@/src/app/components/layout/structured-data"
-// import StickyProductDetails from "@/src/app/components/product-page/StickyProductDetails"
-
 import { notFound, redirect } from "next/navigation"
 import type { Metadata, ResolvingMetadata } from "next"
 import type { Product, ProductImage } from "@/types"
 import GalleryWrapper from "@/src/app/components/product-page/gallery-wrapper"
-import { Info } from "lucide-react"
+import Info from "@/src/app/components/product-page/info"
 import StickyProductDetails from "@/src/app/components/product-page/StickyProductDetails"
 import { ProductSuggestionsSection } from "@/src/app/components/product-page/ProductSuggestionsSection"
+import StructuredData from "@/src/app/components/layout/structured-data"
+import ProductPageClient from "./page-client"
 
 
 interface ProductPageProps {
