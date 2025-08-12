@@ -81,6 +81,9 @@ const Navbar = () => {
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [activeNavItem, setActiveNavItem] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchResults, setSearchResults] = useState<any>(null);
+  const [isSearching, setIsSearching] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
   const megaMenuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -107,6 +110,10 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
 
     setWindowHeight(window.innerHeight);
     if (navRef.current) {
@@ -199,13 +206,27 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("touchmove", handleScroll);
     };
-  }, [pathname]);
+  }, [pathname, isMounted]);
 
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, [isSearchOpen]);
+
+  // Debounced search as user types
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults(null);
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      performSearch(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
 
   useEffect(() => {
     const handleEscKey = (e: KeyboardEvent) => {
@@ -228,8 +249,6 @@ const Navbar = () => {
     };
   }, []);
 
-
-
   const itemCount = isMounted ? totalItems : 0;
 
   const handleLoginClick = () => {
@@ -249,9 +268,48 @@ const Navbar = () => {
     router.push("/");
   };
 
-  const handleSearch = (e: React.FormEvent) => {
+  const performSearch = async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults(null);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const params = new URLSearchParams({
+        q: query.trim(),
+        limit: "8",
+      });
+
+      if (selectedCategory) {
+        params.append(
+          "category",
+          selectedCategory.toLowerCase().replace(/\s+/g, "-")
+        );
+      }
+
+      const response = await fetch(`/api/search?${params}`);
+      const data = await response.json();
+
+      if (data.success) {
+        setSearchResults(data.data);
+      } else {
+        setSearchResults(null);
+      }
+    } catch (error) {
+      console.error("Search error:", error);
+      setSearchResults(null);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      await performSearch(searchQuery);
+
+      // Navigate to shop page with search query
       const currentPath = window.location.pathname;
       const currentSearch = new URLSearchParams(window.location.search).get(
         "search"
@@ -272,31 +330,45 @@ const Navbar = () => {
     }
   };
 
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    setSearchQuery(category);
+  };
+
+  const handleBackToSuggestions = () => {
+    setSelectedCategory(null);
+    setSearchQuery("");
+  };
+
   return (
     <div className="relative w-full" ref={navRef}>
       <MegaMenuScrollbarStyle />
 
-      <MobileMenu
-        isOpen={isMobileMenuOpen}
-        onClose={toggleMobileMenu}
-        onNavigate={handleMobileNav}
-      />
+      {isMounted && (
+        <MobileMenu
+          isOpen={isMobileMenuOpen}
+          onClose={toggleMobileMenu}
+          onNavigate={handleMobileNav}
+        />
+      )}
 
-      <AnimatedMenuIcon
-        isOpen={isMobileMenuOpen}
-        onClick={toggleMobileMenu}
-        className={cn(
-          "fixed left-4 z-[9992] lg:hidden p-2 transition-all duration-300",
-          isMobileMenuOpen ? "top-[0.8rem]" : "top-[0.8rem]",
-          !isHeaderVisible && "hidden"
-        )}
-        color="white"
-      />
+      {isMounted && (
+        <AnimatedMenuIcon
+          isOpen={isMobileMenuOpen}
+          onClick={toggleMobileMenu}
+          className={cn(
+            "fixed left-4 z-[9992] lg:hidden p-2 transition-all duration-300",
+            isMobileMenuOpen ? "top-[0.8rem]" : "top-[0.8rem]",
+            !isHeaderVisible && "hidden"
+          )}
+          color="white"
+        />
+      )}
 
       <div
         className={cn(
           "fixed left-0 right-0 z-[9001] w-full",
-          !isHeaderVisible
+          isMounted && !isHeaderVisible
             ? "transform -translate-y-full transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
             : "transform translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]",
           "top-0"
@@ -321,7 +393,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div 
+          <div
             className={cn(
               "absolute left-0 right-0 mb-3 mx-auto hidden h-full items-center justify-center lg:flex lg:w-auto lg:max-w-[70%] lg:left-1/2 lg:-translate-x-1/2 transition-all duration-500",
               isSticky ? "nav_animate" : ""
@@ -335,7 +407,8 @@ const Navbar = () => {
                       variant="ghost"
                       className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
                       onMouseEnter={() => {
-                        if (megaMenuTimeout.current) clearTimeout(megaMenuTimeout.current);
+                        if (megaMenuTimeout.current)
+                          clearTimeout(megaMenuTimeout.current);
                         setShowMegaMenu(true);
                         setActiveNavItem("leather-jackets");
                       }}
@@ -353,7 +426,8 @@ const Navbar = () => {
                       variant="ghost"
                       className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
                       onMouseEnter={() => {
-                        if (megaMenuTimeout.current) clearTimeout(megaMenuTimeout.current);
+                        if (megaMenuTimeout.current)
+                          clearTimeout(megaMenuTimeout.current);
                         setShowMegaMenu(true);
                         setActiveNavItem("womens-jackets");
                       }}
@@ -371,7 +445,8 @@ const Navbar = () => {
                       variant="ghost"
                       className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
                       onMouseEnter={() => {
-                        if (megaMenuTimeout.current) clearTimeout(megaMenuTimeout.current);
+                        if (megaMenuTimeout.current)
+                          clearTimeout(megaMenuTimeout.current);
                         setShowMegaMenu(true);
                         setActiveNavItem("mens-jackets");
                       }}
@@ -388,7 +463,8 @@ const Navbar = () => {
                     variant="ghost"
                     className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
                     onMouseEnter={() => {
-                      if (megaMenuTimeout.current) clearTimeout(megaMenuTimeout.current);
+                      if (megaMenuTimeout.current)
+                        clearTimeout(megaMenuTimeout.current);
                       setShowMegaMenu(true);
                       setActiveNavItem("coats");
                     }}
@@ -453,7 +529,7 @@ const Navbar = () => {
               aria-label="View wishlist"
             >
               <Heart className="h-6 w-6" strokeWidth={1.5} fill="none" />
-              {wishlist.items.length > 0 && (
+              {isMounted && wishlist.items.length > 0 && (
                 <span className="absolute -right-1 -top-1 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-[#2B2B2B] text-[10px] sm:text-xs text-white font-bold border-2 border-white shadow-lg transform scale-100 hover:scale-110 transition-transform pointer-events-none">
                   {wishlist.items.length > 99 ? "99+" : wishlist.items.length}
                 </span>
@@ -473,7 +549,7 @@ const Navbar = () => {
               aria-label="View cart"
             >
               <ShoppingCart className="h-6 w-6" strokeWidth={1.5} />
-              {itemCount > 0 && (
+              {isMounted && itemCount > 0 && (
                 <span className="absolute -right-1 -top-1 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-[#2B2B2B] text-[10px] sm:text-xs text-white font-bold border-2 border-white shadow-lg transform scale-100 hover:scale-110 transition-transform pointer-events-none">
                   {itemCount > 99 ? "99+" : itemCount}
                 </span>
@@ -484,365 +560,870 @@ const Navbar = () => {
         </header>
       </div>
 
-             {showMegaMenu && (
-                  <div
-            className="fixed left-0 right-0 top-16 w-screen z-[9001]"
-            onMouseLeave={() => {
-              megaMenuTimeout.current = setTimeout(() => {
-                setShowMegaMenu(false);
-                setActiveNavItem(null);
-              }, 150);
-            }}
+      {isMounted && showMegaMenu && (
+        <div
+          className="fixed left-0 right-0 top-16 w-screen z-[9001]"
+          onMouseLeave={() => {
+            megaMenuTimeout.current = setTimeout(() => {
+              setShowMegaMenu(false);
+              setActiveNavItem(null);
+            }, 150);
+          }}
+        >
+          <div
+            ref={megaMenuRef}
+            className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl h-screen overflow-y-auto mega-menu-scrollbar"
           >
-         <div
-           ref={megaMenuRef}
-           className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl h-screen overflow-y-auto mega-menu-scrollbar"
-         >
-          <button
-            onClick={() => setShowMegaMenu(false)}
-            className="sticky top-6 right-8 float-right bg-white text-black rounded-full p-1 flex items-center justify-center hover:bg-gray-200 transition-colors z-20 mr-8 mt-6"
-            aria-label="Close menu"
-          >
-            <X className="h-8 w-8" />
-          </button>
-          <div className="w-full max-w-screen-2xl mx-auto px-8 lg:px-16 py-16">
-            <div className="grid grid-cols-6 gap-4 pt-8">
-              <div className="space-y-4">
-                <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                  LEATHER JACKETS
-                </h3>
-                <ul className="space-y-3">
-                  <li>
-                    <Link
-                      href="/shop?category=biker-jackets"
-                      className="mega-menu-link text-gray-200 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Biker Jackets
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=bomber-jackets"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Bomber Jackets
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=moto-jackets"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Moto Jackets
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=racing-jackets"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Racing Jackets
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=vintage-leather"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Vintage Leather
-                    </Link>
-                  </li>
-                </ul>
+            <button
+              onClick={() => setShowMegaMenu(false)}
+              className="sticky top-6 right-8 float-right bg-white text-black rounded-full p-1 flex items-center justify-center hover:bg-gray-200 transition-colors z-20 mr-8 mt-6"
+              aria-label="Close menu"
+            >
+              <X className="h-8 w-8" />
+            </button>
+            <div className="w-full max-w-screen-2xl mx-auto px-8 lg:px-16 py-16">
+              <div className="grid grid-cols-6 gap-4 pt-8">
+                <div className="space-y-4">
+                  <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
+                    LEATHER JACKETS
+                  </h3>
+                  <ul className="space-y-3">
+                    <li>
+                      <Link
+                        href="/shop?category=biker-jackets"
+                        className="mega-menu-link text-gray-200 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Biker Jackets
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=bomber-jackets"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Bomber Jackets
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=moto-jackets"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Moto Jackets
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=racing-jackets"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Racing Jackets
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=vintage-leather"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Vintage Leather
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
+                    COATS & OUTERWEAR
+                  </h3>
+                  <ul className="space-y-3">
+                    <li>
+                      <Link
+                        href="/shop?category=trench-coats"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Trench Coats
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=wool-coats"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Wool Coats
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=puffer-jackets"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Puffer Jackets
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=peacoats"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Peacoats
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=parkas"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Parkas
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
+                    SPECIALTY
+                  </h3>
+                  <ul className="space-y-3">
+                    <li>
+                      <Link
+                        href="/shop?category=varsity-jackets"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Varsity Jackets
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=denim-jackets"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      >
+                        Denim Jackets
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=blazers"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      >
+                        Blazers
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=windbreakers"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      >
+                        Windbreakers
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=hooded-jackets"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      >
+                        Hooded Jackets
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
+                    COLLECTIONS
+                  </h3>
+                  <ul className="space-y-3">
+                    <li>
+                      <Link
+                        href="/shop?gender=mens"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Men's Collection
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?gender=womens"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Women's Collection
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?category=unisex"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      >
+                        Unisex Styles
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/shop?price=luxury"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      >
+                        Luxury Collection
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/size-guide"
+                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                        onClick={() => setShowMegaMenu(false)}
+                      >
+                        Size Guide
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div className="space-y-4">
-                <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                  COATS & OUTERWEAR
+              <div className="mt-20">
+                <h3 className="font-bold text-white mb-8 text-4xl uppercase tracking-widest text-left">
+                  More Inspiration
                 </h3>
-                <ul className="space-y-3">
-                  <li>
-                    <Link
-                      href="/shop?category=trench-coats"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Trench Coats
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=wool-coats"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Wool Coats
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=puffer-jackets"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Puffer Jackets
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=peacoats"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Peacoats
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=parkas"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Parkas
-                    </Link>
-                  </li>
-                </ul>
+                <MegaMenuCarousel />
               </div>
-              <div className="space-y-4">
-                <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                  SPECIALTY
-                </h3>
-                <ul className="space-y-3">
-                  <li>
-                    <Link
-                      href="/shop?category=varsity-jackets"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Varsity Jackets
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=denim-jackets"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                    >
-                      Denim Jackets
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=blazers"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                    >
-                      Blazers
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=windbreakers"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                    >
-                      Windbreakers
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=hooded-jackets"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                    >
-                      Hooded Jackets
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <div className="space-y-4">
-                <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                  COLLECTIONS
-                </h3>
-                <ul className="space-y-3">
-                  <li>
-                    <Link
-                      href="/shop?gender=mens"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Men's Collection
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?gender=womens"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Women's Collection
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?category=unisex"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                    >
-                      Unisex Styles
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/shop?price=luxury"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                    >
-                      Luxury Collection
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/size-guide"
-                      className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                      onClick={() => setShowMegaMenu(false)}
-                    >
-                      Size Guide
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="mt-20">
-              <h3 className="font-bold text-white mb-8 text-4xl uppercase tracking-widest text-left">
-                More Inspiration
-              </h3>
-              <MegaMenuCarousel />
             </div>
           </div>
-        </div>
         </div>
       )}
 
       {/* Search Overlay */}
-      {isSearchOpen && (
-        <div className="fixed inset-0 bg-[#B01E23] z-[9999] animate-in fade-in duration-300">
-          <div className="fixed inset-0 flex items-center justify-center">
-            <div className="container mx-auto px-4">
-              <div className="bg-[#a01a1f] rounded-lg shadow-2xl h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[28rem] overflow-visible">
-                <div className="flex flex-col h-full">
-                  <div className="px-3 sm:px-4 md:px-6 pt-4 sm:pt-5 md:pt-6 pb-3 sm:pb-4">
-                    <div className="relative w-full flex items-center border-b border-[#d04a4e] pb-3 sm:pb-4">
-                      <form
-                        onSubmit={handleSearch}
-                        className="flex items-center w-full"
-                      >
-                        <input
-                          ref={searchInputRef}
-                          type="text"
-                          placeholder="Search products..."
-                          className="w-full bg-transparent text-white text-sm sm:text-base md:text-lg lg:text-xl outline-none placeholder-gray-200 pr-12 sm:pr-14 md:pr-16"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                        />
+      {isMounted && isSearchOpen && (
+        <div className="fixed inset-0 bg-black max-h-[800px] z-[9999] animate-in fade-in duration-300">
+          <div className="fixed inset-0 flex items-start justify-center pt-8">
+            <div className="w-full max-w-4xl mx-auto px-4">
+              <div className="bg-black w-full overflow-y-auto">
+                <div className="flex flex-col w-full">
+                  {/* Search Bar */}
+                  <form
+                    onSubmit={handleSearch}
+                    className="relative w-full mb-8"
+                  >
+                    <div className="relative flex items-center border border-gray-600 rounded-lg bg-gray-800 p-4">
+                      {selectedCategory && (
+                        <button
+                          type="button"
+                          onClick={handleBackToSuggestions}
+                          className="absolute left-4 text-white hover:bg-gray-700 rounded-full p-1 transition-colors"
+                          aria-label="Back to suggestions"
+                        >
+                          <ChevronRight className="h-5 w-5 rotate-180" />
+                        </button>
+                      )}
+                      <input
+                        ref={searchInputRef}
+                        type="text"
+                        placeholder={
+                          selectedCategory
+                            ? `Search in ${selectedCategory}...`
+                            : "Search for jackets, coats, and more..."
+                        }
+                        className={cn(
+                          "w-full bg-transparent text-white text-lg outline-none placeholder-gray-400",
+                          selectedCategory ? "pl-12 pr-20" : "pr-20"
+                        )}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            handleSearch(e);
+                          }
+                        }}
+                      />
+                      {isSearching && (
+                        <div className="absolute right-20 text-gray-400">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-400"></div>
+                        </div>
+                      )}
+                      <div className="absolute right-4 flex items-center space-x-3">
                         <button
                           type="submit"
-                          className="text-white p-1.5 sm:p-2 absolute right-10 sm:right-12"
+                          className="text-white p-2 hover:bg-gray-700 rounded-full transition-colors"
                         >
-                          <Search className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
+                          <Search className="h-5 w-5" />
                         </button>
-                      </form>
-                      <button
-                        onClick={() => setIsSearchOpen(false)}
-                        className="absolute right-0 text-white p-1.5 sm:p-2 hover:bg-white/10 rounded-full transition-colors"
-                        aria-label="Close search"
-                      >
-                        <X className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsSearchOpen(false);
+                            setSelectedCategory(null);
+                            setSearchQuery("");
+                            setSearchResults(null);
+                          }}
+                          className="text-white p-2 hover:bg-gray-700 rounded-full transition-colors"
+                          aria-label="Close search"
+                        >
+                          <X className="h-5 w-5" />
+                        </button>
+                        <button
+                          type="button"
+                          className="text-white p-2 hover:bg-gray-700 rounded-full transition-colors"
+                        >
+                          <Menu className="h-5 w-5" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex-1 px-3 sm:px-4 md:px-6 pb-4 sm:pb-5 md:pb-6">
+                  </form>
+
+                  {/* Conditional Content Based on Selection */}
+                  {!selectedCategory ? (
+                    /* Initial Suggestions View */
                     <div className="text-white">
-                      <h2 className="text-xs sm:text-sm font-semibold mb-3 sm:mb-4 tracking-wider">
-                        SUGGESTIONS
-                      </h2>
-                      <div className="bg-[#8a1519] rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 flex items-center justify-between cursor-pointer hover:bg-[#7a1317] transition-colors">
-                        <div className="flex items-center flex-1 min-w-0">
-                          <div className="mr-2 sm:mr-3 flex-shrink-0">
-                            <svg
-                              width="16"
-                              height="16"
-                              className="sm:w-5 sm:h-5 md:w-6 md:h-6"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
+                      {searchQuery && searchResults ? (
+                        /* Search Results View */
+                        <div>
+                          <h2 className="text-sm font-bold mb-6 tracking-wider uppercase">
+                            SEARCH RESULTS FOR "{searchQuery.toUpperCase()}"
+                          </h2>
+
+                          {/* Products Section */}
+                          {searchResults.products &&
+                            searchResults.products.length > 0 && (
+                              <div className="mb-8">
+                                <h3 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
+                                  PRODUCTS ({searchResults.products.length})
+                                </h3>
+                                <div className="space-y-3">
+                                  {searchResults.products.map(
+                                    (product: any) => (
+                                      <div
+                                        key={product.id}
+                                        className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                                        onClick={() => {
+                                          router.push(
+                                            `/shop?category=${
+                                              product.category
+                                            }&product=${product.name
+                                              .toLowerCase()
+                                              .replace(/\s+/g, "-")}`
+                                          );
+                                          setIsSearchOpen(false);
+                                          setSelectedCategory(null);
+                                          setSearchQuery("");
+                                        }}
+                                      >
+                                        <div className="w-16 h-16 rounded flex-shrink-0 overflow-hidden">
+                                          <Image
+                                            src={
+                                              product.image ||
+                                              "/images/women-leather.webp"
+                                            }
+                                            alt={product.name}
+                                            width={64}
+                                            height={64}
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                              const target =
+                                                e.target as HTMLImageElement;
+                                              target.src =
+                                                "/images/women-leather.webp";
+                                            }}
+                                          />
+                                        </div>
+                                        <div className="flex-1">
+                                          <p className="text-white font-medium text-sm">
+                                            {product.name}
+                                          </p>
+                                          <p className="text-gray-400 text-xs">
+                                            {product.subcategory}
+                                          </p>
+                                          <p className="text-gray-500 text-xs">
+                                            ${product.price}
+                                          </p>
+                                        </div>
+                                        <ChevronRight className="h-4 w-4 text-white" />
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Categories Section */}
+                          {searchResults.categories &&
+                            searchResults.categories.length > 0 && (
+                              <div className="mb-8">
+                                <h3 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
+                                  CATEGORIES ({searchResults.categories.length})
+                                </h3>
+                                <div className="space-y-2">
+                                  {searchResults.categories.map(
+                                    (category: string, index: number) => (
+                                      <div
+                                        key={index}
+                                        className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                                        onClick={() =>
+                                          handleCategorySelect(category)
+                                        }
+                                      >
+                                        <span className="text-white font-medium">
+                                          {category}
+                                        </span>
+                                        <ChevronRight className="h-4 w-4 text-white" />
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* No Results */}
+                          {(!searchResults.products ||
+                            searchResults.products.length === 0) &&
+                            (!searchResults.categories ||
+                              searchResults.categories.length === 0) && (
+                              <div className="text-center py-8">
+                                <p className="text-gray-400">
+                                  No results found for "{searchQuery}"
+                                </p>
+                                <p className="text-gray-500 text-sm mt-2">
+                                  Try different keywords or browse categories
+                                </p>
+                              </div>
+                            )}
+                        </div>
+                      ) : (
+                        /* Default Suggestions View */
+                        <div>
+                          <h2 className="text-sm font-bold mb-6 tracking-wider uppercase">
+                            SUGGESTIONS
+                          </h2>
+                          <div className="space-y-2">
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() =>
+                                handleCategorySelect("Leather Jackets")
+                              }
                             >
-                              <path
-                                d="M12 6C9.79 6 8 7.79 8 10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10C16 7.79 14.21 6 12 6Z"
-                                stroke="white"
-                                strokeWidth="1.5"
-                              />
-                              <path
-                                d="M16 14L19 17"
-                                stroke="white"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                              />
-                              <path
-                                d="M3 10C3 4.5 5.5 3 12 3C18.5 3 21 4.5 21 10C21 15.5 18.5 17 12 17C5.5 17 3 15.5 3 10Z"
-                                stroke="white"
-                                strokeWidth="1.5"
-                              />
-                            </svg>
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="font-medium text-xs sm:text-sm md:text-base truncate">
-                              Discover a better way to search
-                            </p>
-                            <p className="text-xs sm:text-sm text-gray-200 truncate">
-                              Try Your Personal Stylist
-                            </p>
+                              <span className="text-white font-medium">
+                                Leather Jackets
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() =>
+                                handleCategorySelect("Women's Jackets")
+                              }
+                            >
+                              <span className="text-white font-medium">
+                                Women's Jackets
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() =>
+                                handleCategorySelect("Men's Jackets")
+                              }
+                            >
+                              <span className="text-white font-medium">
+                                Men's Jackets
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() =>
+                                handleCategorySelect("Biker Jackets")
+                              }
+                            >
+                              <span className="text-white font-medium">
+                                Biker Jackets
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() =>
+                                handleCategorySelect("Bomber Jackets")
+                              }
+                            >
+                              <span className="text-white font-medium">
+                                Bomber Jackets
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() =>
+                                handleCategorySelect("Moto Jackets")
+                              }
+                            >
+                              <span className="text-white font-medium">
+                                Moto Jackets
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() =>
+                                handleCategorySelect("Racing Jackets")
+                              }
+                            >
+                              <span className="text-white font-medium">
+                                Racing Jackets
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() =>
+                                handleCategorySelect("Trench Coats")
+                              }
+                            >
+                              <span className="text-white font-medium">
+                                Trench Coats
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Wool Coats")}
+                            >
+                              <span className="text-white font-medium">
+                                Wool Coats
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() =>
+                                handleCategorySelect("Varsity Jackets")
+                              }
+                            >
+                              <span className="text-white font-medium">
+                                Varsity Jackets
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() =>
+                                handleCategorySelect("Denim Jackets")
+                              }
+                            >
+                              <span className="text-white font-medium">
+                                Denim Jackets
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
+                            <div
+                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Size Guide")}
+                            >
+                              <span className="text-white font-medium">
+                                Size Guide
+                              </span>
+                              <ChevronRight className="h-4 w-4 text-white" />
+                            </div>
                           </div>
                         </div>
-                        <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-white flex-shrink-0 ml-1 sm:ml-2" />
+                      )}
+                    </div>
+                  ) : (
+                    /* Detailed Categories and Products View */
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                      {/* Left Column - Categories */}
+                      <div className="text-white">
+                        <h2 className="text-sm font-bold mb-6 tracking-wider uppercase">
+                          CATEGORIES
+                        </h2>
+
+                        {/* Men Section */}
+                        <div className="mb-6">
+                          <h3 className="text-white font-semibold mb-3">MEN</h3>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors bg-gray-800">
+                              <span className="text-white font-medium">
+                                {">"} {selectedCategory}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Women Section */}
+                        <div className="mb-6">
+                          <h3 className="text-white font-semibold mb-3">
+                            WOMEN
+                          </h3>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors">
+                              <span className="text-white font-medium">
+                                {">"} {selectedCategory}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Kids Section */}
+                        <div className="mb-6">
+                          <h3 className="text-white font-semibold mb-3">
+                            KIDS
+                          </h3>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors">
+                              <span className="text-gray-500 font-medium">
+                                No results
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Search All Categories Link */}
+                        <div className="pt-4 border-t border-gray-700">
+                          <div
+                            className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                            onClick={() => {
+                              router.push("/shop");
+                              setIsSearchOpen(false);
+                              setSelectedCategory(null);
+                              setSearchQuery("");
+                            }}
+                          >
+                            <span className="text-white font-medium">
+                              {">"} SEARCH IN ALL CATEGORIES
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="space-y-2 sm:space-y-3">
-                        <div
-                          className="flex items-center justify-between py-3 sm:py-4 border-b border-[#d04a4e] cursor-pointer hover:bg-[#8a1519] px-2 sm:px-3 rounded transition-colors"
-                          onClick={() => {
-                            router.push("/category/leather-jackets");
-                            setIsSearchOpen(false);
-                          }}
-                        >
-                          <span className="text-sm sm:text-base font-medium">
-                            Leather Jackets
-                          </span>
-                          <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-white" />
-                        </div>
-                        <div
-                          className="flex items-center justify-between py-3 sm:py-4 border-b border-[#d04a4e] cursor-pointer hover:bg-[#8a1519] px-2 sm:px-3 rounded transition-colors"
-                          onClick={() => {
-                            router.push("/category/womens-jackets");
-                            setIsSearchOpen(false);
-                          }}
-                        >
-                          <span className="text-sm sm:text-base font-medium">
-                            Women's Jackets
-                          </span>
-                          <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-white" />
-                        </div>
-                        <div
-                          className="flex items-center justify-between py-3 sm:py-4 border-b border-[#d04a4e] cursor-pointer hover:bg-[#8a1519] px-2 sm:px-3 rounded transition-colors"
-                          onClick={() => {
-                            router.push("/category/mens-jackets");
-                            setIsSearchOpen(false);
-                          }}
-                        >
-                          <span className="text-sm sm:text-base font-medium">
-                            Men's Jackets
-                          </span>
-                          <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-white" />
+
+                      {/* Right Column - Products */}
+                      <div className="text-white">
+                        <h2 className="text-sm font-bold mb-6 tracking-wider uppercase">
+                          PRODUCTS
+                        </h2>
+
+                        {searchQuery &&
+                        searchResults &&
+                        searchResults.products &&
+                        searchResults.products.length > 0 ? (
+                          /* Dynamic Search Results */
+                          <div className="space-y-4">
+                            {searchResults.products.map((product: any) => (
+                              <div
+                                key={product.id}
+                                className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                                onClick={() => {
+                                  router.push(
+                                    `/shop?category=${
+                                      product.category
+                                    }&product=${product.name
+                                      .toLowerCase()
+                                      .replace(/\s+/g, "-")}`
+                                  );
+                                  setIsSearchOpen(false);
+                                  setSelectedCategory(null);
+                                  setSearchQuery("");
+                                }}
+                              >
+                                <div className="w-16 h-16 rounded flex-shrink-0 overflow-hidden">
+                                  <Image
+                                    src={
+                                      product.image ||
+                                      "/images/women-leather.webp"
+                                    }
+                                    alt={product.name}
+                                    width={64}
+                                    height={64}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      const target =
+                                        e.target as HTMLImageElement;
+                                      target.src = "/images/women-leather.webp";
+                                    }}
+                                  />
+                                </div>
+                                <div className="flex-1">
+                                  <p className="text-white font-medium text-sm">
+                                    {product.name}
+                                  </p>
+                                  <p className="text-gray-400 text-xs">
+                                    {product.subcategory}
+                                  </p>
+                                  <p className="text-gray-500 text-xs">
+                                    ${product.price}
+                                  </p>
+                                </div>
+                                <ChevronRight className="h-4 w-4 text-white" />
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          /* Default Products View */
+                          <div className="space-y-4">
+                            {/* Product 1 */}
+                            <div
+                              className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => {
+                                router.push(
+                                  "/shop?category=biker-jackets&product=classic-biker-leather-jacket"
+                                );
+                                setIsSearchOpen(false);
+                                setSelectedCategory(null);
+                                setSearchQuery("");
+                              }}
+                            >
+                              <div className="w-16 h-16 rounded flex-shrink-0 overflow-hidden">
+                                <Image
+                                  src="/images/women-biker.webp"
+                                  alt="Classic Biker Leather Jacket"
+                                  width={64}
+                                  height={64}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = "/images/women-leather.webp";
+                                  }}
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-white font-medium text-sm">
+                                  CLASSIC BIKER LEATHER JACKET
+                                </p>
+                                <p className="text-gray-400 text-xs">
+                                  Premium Leather
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Product 2 */}
+                            <div
+                              className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => {
+                                router.push(
+                                  "/shop?category=bomber-jackets&product=vintage-bomber-jacket"
+                                );
+                                setIsSearchOpen(false);
+                                setSelectedCategory(null);
+                                setSearchQuery("");
+                              }}
+                            >
+                              <div className="w-16 h-16 rounded flex-shrink-0 overflow-hidden">
+                                <Image
+                                  src="/images/women-puffer.webp"
+                                  alt="Vintage Bomber Jacket"
+                                  width={64}
+                                  height={64}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = "/images/women-leather.webp";
+                                  }}
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-white font-medium text-sm">
+                                  VINTAGE BOMBER JACKET
+                                </p>
+                                <p className="text-gray-400 text-xs">
+                                  Authentic Style
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Product 3 */}
+                            <div
+                              className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => {
+                                router.push(
+                                  "/shop?category=racing-jackets&product=racing-motorcycle-jacket"
+                                );
+                                setIsSearchOpen(false);
+                                setSelectedCategory(null);
+                                setSearchQuery("");
+                              }}
+                            >
+                              <div className="w-16 h-16 rounded flex-shrink-0 overflow-hidden">
+                                <Image
+                                  src="/images/women-leather.webp"
+                                  alt="Racing Motorcycle Jacket"
+                                  width={64}
+                                  height={64}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = "/images/women-leather.webp";
+                                  }}
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-white font-medium text-sm">
+                                  RACING MOTORCYCLE JACKET
+                                </p>
+                                <p className="text-gray-400 text-xs">
+                                  Performance Gear
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Product 4 */}
+                            <div
+                              className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => {
+                                router.push(
+                                  "/shop?category=trench-coats&product=luxury-trench-coat"
+                                );
+                                setIsSearchOpen(false);
+                                setSelectedCategory(null);
+                                setSearchQuery("");
+                              }}
+                            >
+                              <div className="w-16 h-16 rounded flex-shrink-0 overflow-hidden">
+                                <Image
+                                  src="/images/trench-coat.webp"
+                                  alt="Luxury Trench Coat"
+                                  width={64}
+                                  height={64}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = "/images/women-leather.webp";
+                                  }}
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-white font-medium text-sm">
+                                  LUXURY TRENCH COAT
+                                </p>
+                                <p className="text-gray-400 text-xs">
+                                  Elegant Design
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Show All Products Link */}
+                        <div className="pt-4 border-t border-gray-700 mt-6">
+                          <div
+                            className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                            onClick={() => {
+                              router.push("/shop");
+                              setIsSearchOpen(false);
+                              setSelectedCategory(null);
+                              setSearchQuery("");
+                            }}
+                          >
+                            <span className="text-white font-medium">
+                              {">"} SHOW ALL PRODUCTS
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -851,7 +1432,8 @@ const Navbar = () => {
       )}
 
       {/* ✅ CapsuleNav: Show on all pages except excluded ones */}
-      {!isMobileMenuOpen &&
+      {isMounted &&
+        !isMobileMenuOpen &&
         !pathname.startsWith("/auth") &&
         !pathname.startsWith("/checkout") &&
         pathname !== "/cart" && (

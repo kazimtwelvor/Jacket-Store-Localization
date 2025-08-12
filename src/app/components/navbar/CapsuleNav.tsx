@@ -129,33 +129,33 @@ export function CapsuleNav() {
     router.push(`/shop?category=${category}`);
   };
 
-  // if (!isMounted) {
-  //   return (
-  //     <div className="relative w-[70%] mx-auto md:w-auto md:mx-0">
-  //       <div className="rounded-[15px] bg-white px-1 py-1 shadow-lg">
-  //         <div className="overflow-hidden">
-  //           <div className="flex touch-pan-y">
-  //             {items.map((item) => (
-  //               <div key={item.id} className="relative mr-1">
-  //                 <Button
-  //                   variant={item.id === activeItem ? "default" : "ghost"}
-  //                   className={cn(
-  //                     "rounded-[13px] px-4 md:px-6 whitespace-nowrap text-sm md:text-base",
-  //                     item.id === activeItem &&
-  //                       "bg-[#2b2b2b] text-white hover:bg-[#2b2b2b]/90"
-  //                   )}
-  //                   onClick={() => handleItemClick(item.id, item.category)}
-  //                 >
-  //                   {item.label}
-  //                 </Button>
-  //               </div>
-  //             ))}
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (!isMounted) {
+    return (
+      <div className="relative w-[70%] mx-auto md:w-auto md:mx-0">
+        <div className="rounded-[15px] bg-white px-1 py-1 shadow-lg">
+          <div className="overflow-hidden">
+            <div className="flex touch-pan-y">
+              {items.map((item) => (
+                <div key={item.id} className="relative mr-1">
+                  <Button
+                    variant={item.id === activeItem ? "default" : "ghost"}
+                    className={cn(
+                      "rounded-[13px] px-4 md:px-6 whitespace-nowrap text-sm md:text-base",
+                      item.id === activeItem &&
+                        "bg-[#2b2b2b] text-white hover:bg-[#2b2b2b]/90"
+                    )}
+                    onClick={() => handleItemClick(item.id, item.category)}
+                  >
+                    {item.label}
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!isMounted) return null;
 
@@ -177,7 +177,7 @@ export function CapsuleNav() {
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       )}
     >
-      {/* <div className="rounded-[15px] bg-white px-1 py-1 shadow-lg">
+      <div className="rounded-[15px] bg-white px-1 py-1 shadow-lg">
         <div ref={emblaRef} className="overflow-hidden">
           <div className="flex touch-pan-y">
             {items.map((item) => (
@@ -197,7 +197,7 @@ export function CapsuleNav() {
             ))}
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }
