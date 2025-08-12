@@ -284,7 +284,7 @@ export default function ProductCategory() {
     }, [isDragging, mouseStart, currentIndex, visibleItems, categories.length, handleMouseUp])
 
     return (
-        <section className="w-full bg-white flex justify-end overflow-hidden">
+        <section className="w-full bg-white flex justify-center overflow-hidden">
             <section className="w-full max-w-[1896px] py-0 m-0 pl-4 md:pl-8 lg:pl-12">
                 <motion.section
                     initial={{ opacity: 0, y: 20 }}

@@ -283,7 +283,7 @@ const BlogsShowcase = () => {
     }, [isDragging, mouseStart, currentIndex, visibleItems, blogItems.length, handleMouseUp])
 
     return (
-        <section className="w-full bg-white flex justify-end overflow-hidden py-16 md:py-24">
+        <section className="w-full bg-white flex justify-center overflow-hidden py-16 md:py-24">
             <section className="w-full max-w-[1896px] py-0 m-0 pl-4 md:pl-8 lg:pl-12">
                 <motion.section
                     initial={{ opacity: 0, y: 20 }}
