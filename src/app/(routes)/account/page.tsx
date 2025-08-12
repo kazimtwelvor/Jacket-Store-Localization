@@ -3,8 +3,8 @@
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { LogOut, User, Sliders, Package, Heart } from "lucide-react"
-import useAuth from "@/hooks/use-auth"
-import Container from "@/components/ui/container"
+import useAuth from "@/src/app/hooks/use-auth"
+import Container from "@/src/app/ui/container"
 
 export default function AccountPage() {
   const { user, isAuthenticated, logout } = useAuth()

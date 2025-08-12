@@ -1,18 +1,16 @@
+"use client";
 
-"use client"
-
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { Pencil, Plus } from "lucide-react"
-import useAuth from "@/hooks/use-auth"
-import Container from "@/components/ui/container"
-import Link from "next/link"
-import Image from "next/image"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Container, Pencil, Plus } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import useAuth from "@/src/app/hooks/use-auth";
 
 export default function MyDataPage() {
-  const { user, isAuthenticated } = useAuth()
-  const router = useRouter()
-  const [activeTab, setActiveTab] = useState("my-data")
+  const { user, isAuthenticated } = useAuth();
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState("my-data");
 
   // Mock user data - in a real app, this would come from an API
   const userData = {
@@ -21,17 +19,17 @@ export default function MyDataPage() {
     dob: "14.08.1991",
     phone: "Mobile",
     customerNumber: "12754689",
-  }
+  };
 
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push("/auth/login")
+      router.push("/auth/login");
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router]);
 
   if (!isAuthenticated) {
-    return null
+    return null;
   }
 
   return (
@@ -43,10 +41,16 @@ export default function MyDataPage() {
             <div className="w-full md:w-64 mb-6 md:mb-0">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="flex flex-col space-y-1">
-                  <Link href="/account" className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium">
+                  <Link
+                    href="/account"
+                    className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium"
+                  >
                     Overview
                   </Link>
-                  <Link href="/account/my-data" className="py-2 px-4 bg-gray-200 rounded text-sm uppercase font-medium">
+                  <Link
+                    href="/account/my-data"
+                    className="py-2 px-4 bg-gray-200 rounded text-sm uppercase font-medium"
+                  >
                     My Data
                   </Link>
                   <Link
@@ -69,8 +73,8 @@ export default function MyDataPage() {
                   </Link>
                   <button
                     onClick={() => {
-                      useAuth.getState().logout()
-                      router.push("/")
+                      useAuth.getState().logout();
+                      router.push("/");
                     }}
                     className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium text-left"
                   >
@@ -101,7 +105,9 @@ export default function MyDataPage() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold">MY DATA</h1>
-                  <p className="text-gray-600">Personal data, address and payment methods</p>
+                  <p className="text-gray-600">
+                    Personal data, address and payment methods
+                  </p>
                 </div>
               </div>
 
@@ -116,7 +122,9 @@ export default function MyDataPage() {
                     <p>{userData.email}</p>
                     <p>{userData.dob}</p>
                     <p>{userData.phone}</p>
-                    <p className="mt-4">Customer Number: {userData.customerNumber}</p>
+                    <p className="mt-4">
+                      Customer Number: {userData.customerNumber}
+                    </p>
                   </div>
                   <button className="flex items-center text-sm font-medium hover:underline">
                     <Pencil size={16} className="mr-1" /> EDIT
@@ -137,7 +145,8 @@ export default function MyDataPage() {
                   </div>
                   <div className="text-center">
                     <p className="font-bold mb-2">
-                      Congratulations! You are a FINEYST EXPERIENCE member and can benefit from our exclusive services.
+                      Congratulations! You are a FINEYST EXPERIENCE member and
+                      can benefit from our exclusive services.
                     </p>
                     <button className="flex items-center text-sm font-medium hover:underline mx-auto mt-4">
                       Discover more
@@ -149,7 +158,9 @@ export default function MyDataPage() {
                 <div className="bg-gray-50 p-6 rounded-lg">
                   <h2 className="font-bold text-lg mb-4">INVOICE ADDRESS</h2>
                   <div className="mb-2">
-                    <h3 className="font-medium text-sm uppercase mb-1">INVOICE ADDRESS</h3>
+                    <h3 className="font-medium text-sm uppercase mb-1">
+                      INVOICE ADDRESS
+                    </h3>
                     <div className="space-y-1 text-sm">
                       <p>Mr. {userData.name}</p>
                       <p>Street1</p>
@@ -157,7 +168,9 @@ export default function MyDataPage() {
                       <p>Texas</p>
                       <p>United States</p>
                     </div>
-                    <p className="text-sm text-gray-500 mt-2">✓ Preferred Billing Address</p>
+                    <p className="text-sm text-gray-500 mt-2">
+                      ✓ Preferred Billing Address
+                    </p>
                   </div>
                   <div className="flex flex-col space-y-3 mt-4">
                     <button className="flex items-center text-sm font-medium hover:underline">
@@ -171,8 +184,12 @@ export default function MyDataPage() {
 
                 {/* Credit Card Section */}
                 <div className="bg-gray-50 p-6 rounded-lg">
-                  <h2 className="font-bold text-lg mb-4">CREDIT CARD INFORMATION</h2>
-                  <p className="text-sm mb-6">You have not saved any credit card information.</p>
+                  <h2 className="font-bold text-lg mb-4">
+                    CREDIT CARD INFORMATION
+                  </h2>
+                  <p className="text-sm mb-6">
+                    You have not saved any credit card information.
+                  </p>
                   <button className="flex items-center text-sm font-medium hover:underline">
                     <Plus size={16} className="mr-1" /> ADD CARD
                   </button>
@@ -183,5 +200,5 @@ export default function MyDataPage() {
         </div>
       </div>
     </Container>
-  )
+  );
 }
