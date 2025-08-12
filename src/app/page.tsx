@@ -5,6 +5,7 @@ import SignatureStylesSection from "./components/home-page-components/signature-
 import ProductCarousel from "./components/home-page-components/product-category/product-carousel";
 import JacketColorCollection from "./components/home-page-components/product-category/jacket-color-collection";
 import AboutSection from "./components/home-page-components/about-us/about-us";
+import WhyChooseSlider from "./components/home-page-components/why-choose-slider/why-choose-slider";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <ProductCarousel />
       <JacketColorCollection />
       <AboutSection />
+      <WhyChooseSlider />
     </>
   );
 }
