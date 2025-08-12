@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { AnimatedBackgroundProps } from "./types"
 
-// Animated background component with ease-based transitions
 export const AnimatedBackground = ({ 
   images, 
   currentIndex 

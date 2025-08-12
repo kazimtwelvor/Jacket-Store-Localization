@@ -4,6 +4,7 @@ import Navbar from "@/src/app/components/navbar/Navbar";
 import { FontProvider } from "@/src/components/font-provider";
 import { CartProvider } from "@/src/app/contexts/CartContext";
 import { avertaBold, avertaDefault } from "@/src/lib/fonts";
+import Footer from "./components/home-page-components/footer/footer";
 
 export default function RootLayout({
   children,
@@ -17,6 +18,7 @@ export default function RootLayout({
           <CartProvider>
             <Navbar />
             {children}
+            <Footer />
           </CartProvider>
         </FontProvider>
       </body>

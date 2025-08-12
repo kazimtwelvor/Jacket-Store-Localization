@@ -6,6 +6,10 @@ import ProductCarousel from "./components/home-page-components/product-category/
 import JacketColorCollection from "./components/home-page-components/product-category/jacket-color-collection";
 import AboutSection from "./components/home-page-components/about-us/about-us";
 import WhyChooseSlider from "./components/home-page-components/why-choose-slider/why-choose-slider";
+import FAQ from "./components/home-page-components/faqs/faq";
+import BlogsShowcase from "./components/home-page-components/blog-showcase/blog-showcase";
+import GlobalFashionPartners from "./components/home-page-components/global-fashion-partner/global-fashion-partner";
+import AnimatedReviewsSection from "./components/home-page-components/animated-review-section/animated-review-section";
 
 export default function Home() {
   return (
@@ -20,6 +24,10 @@ export default function Home() {
       <JacketColorCollection />
       <AboutSection />
       <WhyChooseSlider />
+      <FAQ />
+      <BlogsShowcase />
+      <GlobalFashionPartners />
+      <AnimatedReviewsSection />
     </>
   );
 }
