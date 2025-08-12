@@ -146,17 +146,13 @@ const ProductPage = async ({ params }: ProductPageProps) => {
       isPrimary: index === 0,
     }))
 
-    // Handle schema data - your schema is an object with multiple schema types
     const schemaArray = []
 
     if (product.schema) {
       try {
-        // Parse schema if it's a string
         const schemaData = typeof product.schema === "string" ? JSON.parse(product.schema) : product.schema
 
-        // Convert the schema object to an array of schema objects
         if (schemaData && typeof schemaData === "object") {
-          // Extract each schema type (Article, BreadcrumbList, Product) into the array
           Object.values(schemaData).forEach((schema) => {
             if (schema && typeof schema === "object") {
               schemaArray.push(schema)
@@ -168,7 +164,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
       }
     }
 
-    // If no schema was found or there was an error, create a basic product schema
     if (schemaArray.length === 0) {
       const basicSchema: any = {
         "@context": "https://schema.org",
@@ -192,7 +187,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
       }
 
       
-      // Add review data if available
       if (product.ratingValue && product.reviewCount) {
         basicSchema.aggregateRating = {
           "@type": "AggregateRating",

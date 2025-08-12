@@ -9,6 +9,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import { cn } from "@/src/app/lib/utils"
+import { avertaDefault } from "@/src/lib/fonts"
 
 interface Category {
     id: string
@@ -284,7 +285,7 @@ export default function ProductCategory() {
     }, [isDragging, mouseStart, currentIndex, visibleItems, categories.length, handleMouseUp])
 
     return (
-        <section className="w-full bg-white flex justify-center overflow-hidden">
+        <section className={`w-full bg-white flex justify-center overflow-hidden ${avertaDefault.className}`}>
             <section className="w-full max-w-[1896px] py-0 m-0 pl-4 md:pl-8 lg:pl-12">
                 <motion.section
                     initial={{ opacity: 0, y: 20 }}
@@ -300,7 +301,7 @@ export default function ProductCategory() {
                         <button
                             onClick={() => setActiveTab("men")}
                             className={cn(
-                                "px-3 pb-1 text-base font-medium transition-colors border-b-2 text-center",
+                                "px-3 pb-1 text-base font-semibold transition-colors border-b-2 text-center",
                                 activeTab === "men"
                                     ? "border-[#2b2b2b] text-[#2b2b2b]"
                                     : "border-transparent text-gray-700 hover:text-[#2b2b2b]",
@@ -311,7 +312,7 @@ export default function ProductCategory() {
                         <button
                             onClick={() => setActiveTab("women")}
                             className={cn(
-                                "px-3 pb-1 text-base font-medium transition-colors border-b-2 text-center",
+                                "px-3 pb-1 text-base font-semibold transition-colors border-b-2 text-center",
                                 activeTab === "women"
                                     ? "border-[#2b2b2b] text-[#2b2b2b]"
                                     : "border-transparent text-gray-700 hover:text-[#2b2b2b]",

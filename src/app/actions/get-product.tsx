@@ -4,13 +4,11 @@ import { unstable_cache } from "next/cache"
 
 const getCachedProduct = unstable_cache(
   async (slug: string): Promise<Product> => {
-    // Try direct product fetch first
     try {
-      return await fetchJson<Product>(`/products/${slug}`, {
+      return await fetchJson<Product>(`/api/products/${slug}`, {
         next: { revalidate: 3600 }
       })
     } catch {
-      // Fallback: search by slug in products list
       const { products } = await fetchJson<{ products: Product[] }>("/products", {
         query: { search: slug, limit: 100 },
         next: { revalidate: 3600 }
