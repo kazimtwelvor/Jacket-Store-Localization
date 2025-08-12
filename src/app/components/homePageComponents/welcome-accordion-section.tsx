@@ -37,7 +37,7 @@ export default function WelcomeAccordionSection() {
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-4 sm:mb-6">
-          
+
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2b2b2b] mb-3 sm:mb-4 leading-tight">
             WELCOME TO FINEYST
           </h2>
@@ -54,9 +54,8 @@ export default function WelcomeAccordionSection() {
               aria-controls="accordion-content"
             >
               <ChevronDown
-                className={`w-6 h-5 sm:w-5 sm:h-5 text-gray-500 transition-transform duration-500 ease-in-out ${
-                  isExpanded ? "rotate-180" : ""
-                }`}
+                className={`w-6 h-5 sm:w-5 sm:h-5 text-gray-500 transition-transform duration-500 ease-in-out ${isExpanded ? "rotate-180" : ""
+                  }`}
                 aria-hidden="true"
               />
             </button>
@@ -81,7 +80,7 @@ export default function WelcomeAccordionSection() {
                   {!readMoreExpanded && (
                     <button
                       onClick={() => setReadMoreExpanded(true)}
-                      className="ml-1 text-[#b01e23] font-medium underline hover:opacity-80 transition"
+                      className="ml-1 text-black font-medium underline hover:opacity-80 transition"
                     >
                       Read more
                     </button>

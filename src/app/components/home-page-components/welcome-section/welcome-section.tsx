@@ -33,7 +33,7 @@ export default function WelcomeAccordionSection() {
     }
 
     return (
-        <section className="w-full pt-4 sm:pt-5 lg:pt-8 px-3 sm:px-4 lg:px-6">
+        <section className={`${avertaDefault.className} w-full pt-4 sm:pt-5 lg:pt-8 px-3 sm:px-4 lg:px-6`}>
             <section className="max-w-7xl mx-auto">
                 <section className="text-center mb-4 sm:mb-6">
 
@@ -76,7 +76,7 @@ export default function WelcomeAccordionSection() {
                                     {!readMoreExpanded && (
                                         <button
                                             onClick={() => setReadMoreExpanded(true)}
-                                            className="ml-1 text-[#b01e23] font-medium underline hover:opacity-80 transition"
+                                            className="ml-1 text-black underline hover:opacity-80 transition font-bold"
                                         >
                                             Read more
                                         </button>
@@ -94,8 +94,8 @@ export default function WelcomeAccordionSection() {
                             </section>
 
                             <section className="mb-8 sm:mb-10">
-                                <h3 className="text-base sm:text-lg text-black mb-4 sm:mb-6 text-center px-2 sm:px-0">
-                                    Things to Know About Leather Jackets
+                                <h3 className={`${avertaBlack.className} text-lg sm:text-xl text-black mb-4 sm:mb-6 text-center px-2 sm:px-0`}>
+                                    THINGS TO KNOW ABOUT LEATHER JACKETS
                                 </h3>
 
                                 <section className="space-y-3 sm:space-y-4">
@@ -106,7 +106,7 @@ export default function WelcomeAccordionSection() {
                                             aria-expanded={accordions.expensive}
                                         >
                                             <section className="flex items-center justify-between">
-                                                <h4 className="text-sm sm:text-base text-gray-800 pr-2">Why Are Leather Jackets Expensive?</h4>
+                                                <h4 className={`${avertaBlack.className} text-xl sm:text-lg text-gray-800 pr-2`}>WHY ARE LEATHER JACKETS EXPENSIVE?</h4>
                                                 <ChevronDown
                                                     className={`w-4 h-4 sm:w-5 sm:h-5 text-gray-500 transition-transform duration-200 flex-shrink-0 ${accordions.expensive ? "rotate-180" : ""}`}
                                                 />
@@ -116,42 +116,42 @@ export default function WelcomeAccordionSection() {
                                             className={`overflow-hidden transition-all duration-300 ${accordions.expensive ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"}`}
                                         >
                                             <section className="px-4 sm:px-6 py-3 sm:py-4">
-                                                <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4">
+                                                <p className="text-base sm:text-lg text-gray-700 mb-3 sm:mb-4">
                                                     A real leather jacket is more than a garment — it's an investment. Here's why prices vary:
                                                 </p>
                                                 <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>High-Quality Leather:</strong> Full-grain cowhide and lambskin are premium hides
+                                                            <strong className={`${avertaBold.className}`}>High-Quality Leather:</strong> Full-grain cowhide and lambskin are premium hides
                                                             that last for years, age beautifully, and offer unmatched strength and texture.
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Skilled Craftsmanship:</strong> Our jackets are handmade by expert artisans using
+                                                            <strong className={`${avertaBold.className}`}>Skilled Craftsmanship:</strong> Our jackets are handmade by expert artisans using
                                                             traditional methods — precision cutting, reinforced stitching, and detailed finishing.
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Time-Intensive Production:</strong> From ethical sourcing to tanning to
+                                                            <strong className={`${avertaBold.className}`}>Time - Intensive Production:</strong> From ethical sourcing to tanning to
                                                             construction, each jacket takes time — especially for complex or custom pieces.
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Hardware & Lining Quality:</strong> We only use durable zippers, breathable
+                                                            <strong className={`${avertaBold.className}`}>Hardware & Lining Quality:</strong> We only use durable zippers, breathable
                                                             linings, and solid inner structure — because longevity matters.
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Brand Transparency:</strong> Unlike fast fashion, we don't cut corners — FINEYST
+                                                            <strong className={`${avertaBold.className}`}>Brand Transparency:</strong> Unlike fast fashion, we don't cut corners — FINEYST
                                                             prioritizes real leather, ethical labor, and transparent practices.
                                                         </section>
                                                     </li>
@@ -167,7 +167,7 @@ export default function WelcomeAccordionSection() {
                                             aria-expanded={accordions.bestLeather}
                                         >
                                             <section className="flex items-center justify-between">
-                                                <h4 className="text-sm sm:text-base text-gray-800 pr-2">What's the Best Leather for Jackets?</h4>
+                                                <h4 className={`${avertaBlack.className} text-xl sm:text-lg text-gray-800 pr-2`}>WHAT'S THE BEST LEATHER FOR JACKETS?</h4>
                                                 <ChevronDown
                                                     className={`w-4 h-4 sm:w-5 sm:h-5 text-gray-500 transition-transform duration-200 flex-shrink-0 ${accordions.bestLeather ? "rotate-180" : ""}`}
                                                 />
@@ -180,37 +180,37 @@ export default function WelcomeAccordionSection() {
                                                 <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4">It depends on the fit, feel, and use case:</p>
                                                 <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Cowhide:</strong> Rugged, weather-resistant, ideal for biker and bomber jackets.
+                                                            <strong className={`${avertaBold.className}`}>Cowhide:</strong> Rugged, weather-resistant, ideal for biker and bomber jackets.
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Lambskin:</strong> Lightweight, buttery soft, best for fitted and everyday wear.
+                                                            <strong className={`${avertaBold.className}`}>Lambskin:</strong> Lightweight, buttery soft, best for fitted and everyday wear.
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Goatskin:</strong> Durable and flexible with a pebbled finish.
+                                                            <strong className={`${avertaBold.className}`}>Goatskin:</strong> Durable and flexible with a pebbled finish.
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Suede:</strong> Smooth, matte texture for streetwear or vintage aesthetics.
+                                                            <strong className={`${avertaBold.className}`}>Suede:</strong> Smooth, matte texture for streetwear or vintage aesthetics.
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Distressed & Washed Leathers:</strong> Adds character and edge with worn-in looks.
+                                                            <strong className={`${avertaBold.className}`}>Distressed & Washed Leathers:</strong> Adds character and edge with worn-in looks.
                                                         </section>
                                                     </li>
                                                 </ul>
-                                                <p className="text-[#b01e23] font-semibold mt-3 sm:mt-4 text-sm sm:text-base">
+                                                <p className="text-[#2b2b2b] font-semibold mt-3 sm:mt-4 text-sm sm:text-base">
                                                     At FINEYST, we use only full-grain hides — no PU or bonded leather. Every jacket is made to
                                                     endure.
                                                 </p>
@@ -225,7 +225,7 @@ export default function WelcomeAccordionSection() {
                                             aria-expanded={accordions.rightStyle}
                                         >
                                             <section className="flex items-center justify-between">
-                                                <h4 className="text-sm sm:text-base text-gray-800 pr-2">What Style Is Right for You?</h4>
+                                                <h4 className={`${avertaBlack.className} text-xl sm:text-lg text-gray-800 pr-2`}>WHAT STYLE IS RIGHT FOR YOU?</h4>
                                                 <ChevronDown
                                                     className={`w-4 h-4 sm:w-5 sm:h-5 text-gray-500 transition-transform duration-200 flex-shrink-0 ${accordions.rightStyle ? "rotate-180" : ""}`}
                                                 />
@@ -238,33 +238,33 @@ export default function WelcomeAccordionSection() {
                                                 <p className="text-sm sm:text-base text-gray-700 mb-3 sm:mb-4">Our range covers both classic and modern looks:</p>
                                                 <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Biker Jackets:</strong> Asymmetrical zip, attitude built in
+                                                            <strong className={`${avertaBold.className}`}>Biker Jackets:</strong> Asymmetrical zip, attitude built in
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Bomber Jackets:</strong> Heritage aviation meets everyday comfort
+                                                            <strong className={`${avertaBold.className}`}>Bomber Jackets:</strong> Heritage aviation meets everyday comfort
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Racer Jackets:</strong> Minimalist, close-cut, versatile
+                                                            <strong className={`${avertaBold.className}`}>Racer Jackets:</strong> Minimalist, close-cut, versatile
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Trench & Long Coats:</strong> Full-coverage, structured silhouettes
+                                                            <strong className={`${avertaBold.className}`}>Trench & Long Coats:</strong> Full-coverage, structured silhouettes
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Cropped, Oversized, Custom:</strong> Fashion-forward and personalized
+                                                            <strong className={`${avertaBold.className}`}>Cropped, Oversized, Custom:</strong> Fashion-forward and personalized
                                                         </section>
                                                     </li>
                                                 </ul>
@@ -282,7 +282,7 @@ export default function WelcomeAccordionSection() {
                                             aria-expanded={accordions.colors}
                                         >
                                             <section className="flex items-center justify-between">
-                                                <h4 className="text-sm sm:text-base text-gray-800 pr-2">Popular Colors We Offer</h4>
+                                                <h4 className={`${avertaBlack.className} text-xl sm:text-lg text-gray-800 pr-2`}>POPULAR COLORS WE OFFER</h4>
                                                 <ChevronDown
                                                     className={`w-4 h-4 sm:w-5 sm:h-5 text-gray-500 transition-transform duration-200 flex-shrink-0 ${accordions.colors ? "rotate-180" : ""}`}
                                                 />
@@ -294,25 +294,25 @@ export default function WelcomeAccordionSection() {
                                             <section className="px-4 sm:px-6 py-3 sm:py-4">
                                                 <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-600">
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Black:</strong> Always in, forever iconic
+                                                            <strong className={`${avertaBold.className}`}>Black:</strong> Always in, forever iconic
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
-                                                            <strong>Brown & Tan:</strong> Timeless and rugged
+                                                            <strong className={`${avertaBold.className}`}>Brown & Tan:</strong> Timeless and rugged
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
                                                             <strong>Burgundy / Red / Olive:</strong> For standout personalities
                                                         </section>
                                                     </li>
                                                     <li className="flex items-start gap-2 sm:gap-3">
-                                                        <span className="text-[#b01e23] font-bold flex-shrink-0">•</span>
+                                                        <span className="text-[#2b2b2b] font-bold flex-shrink-0">•</span>
                                                         <section>
                                                             <strong>Two-tone / Distressed:</strong> Vintage feel, modern attitude
                                                         </section>
@@ -327,6 +327,6 @@ export default function WelcomeAccordionSection() {
                     </section>
                 </section>
             </section>
-        </section>
+        </section >
     )
 }
