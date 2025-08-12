@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Get the origin from the request headers or default to localhost:3000
-  const origin = request.headers.get("origin") || "http://localhost:3000"
+  const origin = request.headers.get("origin") || "http://localhost:4000"
 
   // Clone the response and add CORS headers
   const response = NextResponse.next()

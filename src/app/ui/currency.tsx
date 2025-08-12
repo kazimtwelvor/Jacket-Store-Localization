@@ -22,7 +22,6 @@ const Currency = ({ value }: CurrencyProps) => {
   }
 
   return (
-    // Change from div to span to avoid nesting issues
     <span className="inline-block">{formatter.format(Number(value))}</span>
   )
 }

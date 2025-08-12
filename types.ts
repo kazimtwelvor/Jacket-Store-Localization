@@ -19,29 +19,24 @@ export interface KeywordCategory {
   seoDescription?: string
   focusKeyword?: string
   supportingKeywords?: string[]
-  
-  // Open Graph fields
+
   ogTitle?: string
   ogDescription?: string
-  
-  // Twitter fields
+
   twitterTitle?: string
   twitterDescription?: string
-  
-  // Technical SEO fields
+
   canonicalUrl?: string
   indexPage?: boolean
   followLinks?: boolean
-  
-  // Schema fields
+
   enableSchema?: boolean
   schemaType?: string
   customSchema?: string
-  
-  // Additional fields
+
   apiSlug?: string
   categoryContent?: any
-  
+
   isPublished?: boolean
   createdAt?: string
   updatedAt?: string
@@ -57,48 +52,39 @@ export interface Category {
   gender?: string
   description?: string
   categoryContent?: any
-  
-  // SEO fields
+
   seoTitle?: string
   seoDescription?: string
   focusKeyword?: string
   supportingKeywords?: string[]
-  
-  // Open Graph fields
+
   ogTitle?: string
   ogDescription?: string
-  
-  // Twitter fields
+
   twitterTitle?: string
   twitterDescription?: string
-  
-  // Technical SEO fields
+
   canonicalUrl?: string
   indexPage?: boolean
   followLinks?: boolean
-  
-  // Schema fields
+
   enableSchema?: boolean
   schemaType?: string
   customSchema?: string
-  
-  // Publishing fields
+
   isPublished?: boolean
   publishedAt?: string | null
-  
-  // Timestamps
+
   createdAt?: string
   updatedAt?: string
-  
-  // Additional fields for keyword categories
+
   apiSlug?: string
   materials?: string[]
   styles?: string[]
   colors?: string[]
   genders?: string[]
   bannerImageUrl?: string
-  
-  // Current category info (for display purposes)
+
   currentCategory?: {
     categoryId: string
     categoryName: string
@@ -119,7 +105,6 @@ export interface Product {
   isDeleted?: boolean
   images: ProductImage[]
 
-  // Basic product information
   description?: string | null
   careInstructions?: string
   sku?: string
@@ -128,11 +113,9 @@ export interface Product {
   storeId?: string
   slug?: string
 
-  // Product variants
   colorDetails?: any[] | null
   sizeDetails?: any[] | null
 
-  // Product classification
   isDiscounted?: boolean
   material?: string[]
   style?: string[]
@@ -143,7 +126,6 @@ export interface Product {
   isVirtual?: boolean
   isDownloadable?: boolean
 
-  // SEO fields
   metaTitle?: string
   metaDescription?: string
   focusKeyword?: string
@@ -151,15 +133,12 @@ export interface Product {
   keywords?: string[]
   noIndex?: boolean
 
-  // Structured data
   schema?: any
 
-  // Brand and ratings
   brandName?: string
   ratingValue?: string
   reviewCount?: string
 
-  // Additional fields
   menuOrder?: string | null
   weight?: string | null
   length?: string | null
@@ -167,7 +146,6 @@ export interface Product {
   height?: string | null
   purchaseNote?: string
 
-  // Timestamps
   createdAt?: Date
   updatedAt?: Date
   deletedAt?: Date | null

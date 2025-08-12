@@ -1,11 +1,5 @@
 import { Suspense } from "react";
-// import getProducts from "@/actions/get-products"
-// import getCategories from "@/actions/get-categories"
-// import getColors from "@/actions/get-colors"
-// import getSizes from "@/actions/get-sizes"
-// import getKeywordCategories from "@/actions/get-keyword-categories"
 import ProductsPageClient from "./products-page-client";
-// import DesktopCategoryCarousel from "@/components/home-page-components/desktop-category-carousel";
 import getProducts from "../../actions/get-products";
 import getCategories from "../../actions/get-categories";
 import getSizes from "../../actions/get-sizes";
@@ -38,7 +32,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const page = Number.parseInt(resolvedSearchParams.page || "1");
   const limit = Number.parseInt(resolvedSearchParams.limit || "28");
 
-  // Fetch paginated products and filter data
   const productsData = await getProducts({
     page,
     limit,

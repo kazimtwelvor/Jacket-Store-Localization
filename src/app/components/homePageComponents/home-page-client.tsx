@@ -111,9 +111,9 @@ export default function HomePageClient({ billboard, products, showcaseItems, fea
       </section>
 
       {/* Category Carousel */}
-      <section id="category-carousel" className="w-full mt-0 pt-0">
+      {/* <section id="category-carousel" className="w-full mt-0 pt-0">
         <DesktopCategoryCarousel />
-      </section>
+      </section> */}
 
        
 {/* Signature Styles */}

@@ -1,6 +1,7 @@
 import React from "react"
 import { cn } from "../../../lib/utils"
 import type { Category, Color, Size } from "@/types"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../../../ui/sheet"
 
 interface FilterSidebarProps {
   isOpen: boolean
@@ -49,12 +50,12 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   }
 
   return (
-    <div className={`fixed inset-0 bg-black bg-opacity-50 z-50 ${isOpen ? 'block' : 'hidden'}`}>
-      <div className="absolute left-0 top-0 h-full w-[85vw] max-w-[300px] bg-white">
+    <Sheet open={isOpen} onOpenChange={onClose}>
+      <SheetContent side="left" className="w-[85vw] max-w-[300px] p-0">
         <div className="h-full flex flex-col">
-          <div className="text-left px-4 pt-4 pb-2 border-b">
+          <SheetHeader className="text-left px-4 pt-4 pb-2 border-b">
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold">Filters</h2>
+              <SheetTitle className="text-xl font-bold">Filters</SheetTitle>
               {hasActiveFilters && (
                 <button 
                   onClick={onClearFilters} 
@@ -73,7 +74,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 {selectedFilters.colors.length > 0 && <div className="text-xs bg-gray-100 px-2 py-1 rounded-full">{selectedFilters.colors.length} colors</div>}
               </div>
             )}
-          </div>
+          </SheetHeader>
 
           <div className="flex-1 overflow-y-auto p-4 pt-6">
             {/* Materials Section */}
@@ -227,7 +228,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                       >
                         <span 
                           className="w-4 h-4 rounded-full mr-2 border border-gray-300" 
-                          style={{ backgroundColor: color.value || color.hex || "#ccc" }}
+                          style={{ backgroundColor: color.value || "#ccc" }}
                         ></span>
                         {colorName}
                       </button>
@@ -253,9 +254,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
             </button>
           </div>
         </div>
-      </div>
-      
-      <div className="absolute inset-0 -z-10" onClick={onClose}></div>
-    </div>
+      </SheetContent>
+    </Sheet>
   )
 }
