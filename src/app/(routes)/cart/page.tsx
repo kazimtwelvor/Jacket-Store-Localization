@@ -9,12 +9,12 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { ShoppingBag, Minus, Plus, ArrowRight, X, ChevronLeft, ChevronRight, Truck, RotateCcw } from "lucide-react"
 import Cards from 'react-credit-cards-2'
-import Container from "@/components/ui/container"
-import { useCart } from "@/contexts/CartContext"
-import useWishlist from "@/hooks/use-wishlist"
-import Currency from "@/components/ui/currency"
-import Button from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import Container from "@/src/app/ui/container"
+import { useCart } from "@/src/app/contexts/CartContext"
+import useWishlist from "@/src/app/hooks/use-wishlist"
+import Currency from "@/src/app/ui/currency"
+import Button from "@/src/app/ui/button"
+import { cn } from "@/src/app/lib/utils"
 import { toast } from "react-hot-toast"
 
 interface AddMoreOfferProps {

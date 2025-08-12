@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Image from "next/image"
-import { Heart } from "lucide-react"
-import Currency from "@/components/ui/currency"
-import Link from "next/link"
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { Heart } from "lucide-react";
+import Currency from "@/src/app/ui/currency"
+import Link from "next/link";
 
 // Client component that fetches and displays trending products
 export default function TrendingProducts() {
@@ -13,9 +13,18 @@ export default function TrendingProducts() {
       id: "product1",
       name: "GARY CRYSTAL-TRIM TRAINERS IN LEATHER",
       price: "399.00",
-      images: [{ id: "img1", url: "http://localhost:3001/uploads/2025/leather-jacket-1.jpg" }],
+      images: [
+        {
+          id: "img1",
+          url: "http://localhost:3001/uploads/2025/leather-jacket-1.jpg",
+        },
+      ],
       isFeatured: true,
-      category: { id: "cat1", name: "Shoes", billboard: { id: "bill1", label: "Shoes", imageUrl: "" } },
+      category: {
+        id: "cat1",
+        name: "Shoes",
+        billboard: { id: "bill1", label: "Shoes", imageUrl: "" },
+      },
       size: { id: "size1", name: "42", value: "42" },
       color: { id: "color1", name: "Black", value: "#000000" },
     },
@@ -23,9 +32,18 @@ export default function TrendingProducts() {
       id: "product2",
       name: "MERCERIZED-COTTON POLO SHIRT",
       price: "129.00",
-      images: [{ id: "img2", url: "http://localhost:3001/uploads/2025/leather-jacket-2.jpg" }],
+      images: [
+        {
+          id: "img2",
+          url: "http://localhost:3001/uploads/2025/leather-jacket-2.jpg",
+        },
+      ],
       isFeatured: true,
-      category: { id: "cat2", name: "Shirts", billboard: { id: "bill2", label: "Shirts", imageUrl: "" } },
+      category: {
+        id: "cat2",
+        name: "Shirts",
+        billboard: { id: "bill2", label: "Shirts", imageUrl: "" },
+      },
       size: { id: "size2", name: "M", value: "M" },
       color: { id: "color2", name: "White", value: "#FFFFFF" },
     },
@@ -33,60 +51,73 @@ export default function TrendingProducts() {
       id: "product3",
       name: "THREE-PACK OF STRETCH-COTTON BOXER BRIEFS",
       price: "49.00",
-      images: [{ id: "img3", url: "http://localhost:3001/uploads/2025/leather-jacket-3.jpg" }],
+      images: [
+        {
+          id: "img3",
+          url: "http://localhost:3001/uploads/2025/leather-jacket-3.jpg",
+        },
+      ],
       isFeatured: true,
-      category: { id: "cat3", name: "Underwear", billboard: { id: "bill3", label: "Underwear", imageUrl: "" } },
+      category: {
+        id: "cat3",
+        name: "Underwear",
+        billboard: { id: "bill3", label: "Underwear", imageUrl: "" },
+      },
       size: { id: "size3", name: "L", value: "L" },
       color: { id: "color3", name: "Black", value: "#000000" },
     },
-  ])
-  const [isLoading, setIsLoading] = useState(false)
+  ]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
       // Check if API URL is available and valid
       if (!process.env.NEXT_PUBLIC_API_URL) {
-        setIsLoading(false)
-        return
+        setIsLoading(false);
+        return;
       }
 
       try {
-        setIsLoading(true)
+        setIsLoading(true);
 
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?isFeatured=true`)
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/products?isFeatured=true`
+          );
 
           if (response.ok) {
-            const data = await response.json()
+            const data = await response.json();
             if (data && data.length > 0) {
               // Keep our local images but update other product data
-              const updatedProducts = data.slice(0, 3).map((product: any, index: number) => ({
-                ...product,
-                images: [
-                  {
-                    id: `img${index + 1}`,
-                    url: products[index].images[0].url,
-                  },
-                ],
-              }))
-              setProducts(updatedProducts)
+              const updatedProducts = data
+                .slice(0, 3)
+                .map((product: any, index: number) => ({
+                  ...product,
+                  images: [
+                    {
+                      id: `img${index + 1}`,
+                      url: products[index].images[0].url,
+                    },
+                  ],
+                }));
+              setProducts(updatedProducts);
             }
           }
         } catch (error) {
-          console.error("Error fetching products:", error)
+          console.error("Error fetching products:", error);
           // Continue with local data
         }
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
     // Call the fetch function
-    fetchProducts()
-  }, [])
+    fetchProducts();
+  }, []);
 
   if (isLoading) {
-    return <div className="py-8 text-center">Loading trending products...</div>
+    return <div className="py-8 text-center">Loading trending products...</div>;
   }
 
   return (
@@ -118,7 +149,10 @@ export default function TrendingProducts() {
             </button>
 
             {/* Product Image */}
-            <Link href={`/product/${product.id}`} className="block aspect-[3/4] w-full overflow-hidden bg-gray-100">
+            <Link
+              href={`/product/${product.id}`}
+              className="block aspect-[3/4] w-full overflow-hidden bg-gray-100"
+            >
               <Image
                 src={product.images[0]?.url || "/placeholder.svg"}
                 alt={product.name}
@@ -131,7 +165,9 @@ export default function TrendingProducts() {
             {/* Product Info */}
             <div className="mt-4">
               <div className="text-center font-bold">FINEYST</div>
-              <h3 className="text-sm text-center mt-1 uppercase line-clamp-2">{product.name}</h3>
+              <h3 className="text-sm text-center mt-1 uppercase line-clamp-2">
+                {product.name}
+              </h3>
 
               <div className="flex justify-center items-center mt-2 gap-2">
                 {index < 2 && (
@@ -183,5 +219,5 @@ export default function TrendingProducts() {
         ))}
       </div>
     </div>
-  )
+  );
 }

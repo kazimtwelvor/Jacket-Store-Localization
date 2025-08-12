@@ -18,9 +18,9 @@ export const metadata = {
   description: "Browse our collection of premium clothing and accessories.",
 };
 
-export const revalidate = 3600;
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
+export const revalidate = 300;
+export const dynamic = "auto";
+export const fetchCache = "default-cache";
 
 type ShopPageProps = {
   searchParams: Promise<{

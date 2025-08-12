@@ -79,10 +79,12 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
+  const [activeNavItem, setActiveNavItem] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
   const megaMenuTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isMegaMenuHovered, setIsMegaMenuHovered] = useState(false);
 
   const { items } = useCart();
   const totalItems = items.length;
@@ -217,21 +219,16 @@ const Navbar = () => {
     };
   }, [isSearchOpen]);
 
+  // Cleanup timeout on unmount
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        showMegaMenu &&
-        megaMenuRef.current &&
-        !megaMenuRef.current.contains(e.target as Node)
-      ) {
-        setShowMegaMenu(false);
+    return () => {
+      if (megaMenuTimeout.current) {
+        clearTimeout(megaMenuTimeout.current);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showMegaMenu]);
+  }, []);
+
+
 
   const itemCount = isMounted ? totalItems : 0;
 
@@ -324,48 +321,87 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <nav
+          <div 
             className={cn(
               "absolute left-0 right-0 mb-3 mx-auto hidden h-full items-center justify-center lg:flex lg:w-auto lg:max-w-[70%] lg:left-1/2 lg:-translate-x-1/2 transition-all duration-500",
               isSticky ? "nav_animate" : ""
             )}
           >
-            <div className="flex space-x-8 text-xl">
-              <Link href="/shop?category=leather-jackets">
-                <Button
-                  variant="ghost"
-                  className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
-                >
-                  LEATHER JACKETS
-                </Button>
-              </Link>
-              <Link href="/shop?category=womens-jackets">
-                <Button
-                  variant="ghost"
-                  className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
-                >
-                  WOMEN'S JACKETS
-                </Button>
-              </Link>
-              <Link href="/shop?category=mens-jackets">
-                <Button
-                  variant="ghost"
-                  className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
-                >
-                  MEN'S JACKETS
-                </Button>
-              </Link>
-              <div className="relative">
-                <Button
-                  variant="ghost"
-                  className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
-                  onClick={() => setShowMegaMenu(!showMegaMenu)}
-                >
-                  COATS
-                </Button>
+            <nav>
+              <div className="flex space-x-8 text-xl">
+                <div className="relative">
+                  <Link href="/shop?category=leather-jackets" prefetch={true}>
+                    <Button
+                      variant="ghost"
+                      className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
+                      onMouseEnter={() => {
+                        if (megaMenuTimeout.current) clearTimeout(megaMenuTimeout.current);
+                        setShowMegaMenu(true);
+                        setActiveNavItem("leather-jackets");
+                      }}
+                    >
+                      LEATHER JACKETS
+                    </Button>
+                  </Link>
+                  {activeNavItem === "leather-jackets" && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
+                  )}
+                </div>
+                <div className="relative">
+                  <Link href="/shop?category=womens-jackets" prefetch={true}>
+                    <Button
+                      variant="ghost"
+                      className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
+                      onMouseEnter={() => {
+                        if (megaMenuTimeout.current) clearTimeout(megaMenuTimeout.current);
+                        setShowMegaMenu(true);
+                        setActiveNavItem("womens-jackets");
+                      }}
+                    >
+                      WOMEN'S JACKETS
+                    </Button>
+                  </Link>
+                  {activeNavItem === "womens-jackets" && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
+                  )}
+                </div>
+                <div className="relative">
+                  <Link href="/shop?category=mens-jackets" prefetch={true}>
+                    <Button
+                      variant="ghost"
+                      className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
+                      onMouseEnter={() => {
+                        if (megaMenuTimeout.current) clearTimeout(megaMenuTimeout.current);
+                        setShowMegaMenu(true);
+                        setActiveNavItem("mens-jackets");
+                      }}
+                    >
+                      MEN'S JACKETS
+                    </Button>
+                  </Link>
+                  {activeNavItem === "mens-jackets" && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
+                  )}
+                </div>
+                <div className="relative">
+                  <Button
+                    variant="ghost"
+                    className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
+                    onMouseEnter={() => {
+                      if (megaMenuTimeout.current) clearTimeout(megaMenuTimeout.current);
+                      setShowMegaMenu(true);
+                      setActiveNavItem("coats");
+                    }}
+                  >
+                    COATS
+                  </Button>
+                  {activeNavItem === "coats" && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white" />
+                  )}
+                </div>
               </div>
-            </div>
-          </nav>
+            </nav>
+          </div>
 
           <div className="flex items-center space-x-4 lg:space-x-6 z-10">
             {isAuthenticated ? (
@@ -448,17 +484,20 @@ const Navbar = () => {
         </header>
       </div>
 
-      {/* Mega Menu */}
-      <div
-        className={`fixed left-0 right-0 top-[6.5rem] md:top-[5.5rem] w-screen z-[9001] ${
-          showMegaMenu ? "block" : "hidden"
-        }`}
-        style={{ willChange: showMegaMenu ? "transform, opacity" : "auto" }}
-      >
-        <div
-          ref={megaMenuRef}
-          className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl max-h-[85vh] overflow-y-auto mega-menu-scrollbar"
-        >
+             {showMegaMenu && (
+                  <div
+            className="fixed left-0 right-0 top-16 w-screen z-[9001]"
+            onMouseLeave={() => {
+              megaMenuTimeout.current = setTimeout(() => {
+                setShowMegaMenu(false);
+                setActiveNavItem(null);
+              }, 150);
+            }}
+          >
+         <div
+           ref={megaMenuRef}
+           className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl h-screen overflow-y-auto mega-menu-scrollbar"
+         >
           <button
             onClick={() => setShowMegaMenu(false)}
             className="sticky top-6 right-8 float-right bg-white text-black rounded-full p-1 flex items-center justify-center hover:bg-gray-200 transition-colors z-20 mr-8 mt-6"
@@ -477,6 +516,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?category=biker-jackets"
                       className="mega-menu-link text-gray-200 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Biker Jackets
                     </Link>
@@ -485,6 +525,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?category=bomber-jackets"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Bomber Jackets
                     </Link>
@@ -493,6 +534,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?category=moto-jackets"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Moto Jackets
                     </Link>
@@ -501,6 +543,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?category=racing-jackets"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Racing Jackets
                     </Link>
@@ -509,6 +552,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?category=vintage-leather"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Vintage Leather
                     </Link>
@@ -524,6 +568,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?category=trench-coats"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Trench Coats
                     </Link>
@@ -532,6 +577,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?category=wool-coats"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Wool Coats
                     </Link>
@@ -540,6 +586,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?category=puffer-jackets"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Puffer Jackets
                     </Link>
@@ -548,6 +595,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?category=peacoats"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Peacoats
                     </Link>
@@ -556,6 +604,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?category=parkas"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Parkas
                     </Link>
@@ -571,6 +620,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?category=varsity-jackets"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Varsity Jackets
                     </Link>
@@ -618,6 +668,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?gender=mens"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Men's Collection
                     </Link>
@@ -626,6 +677,7 @@ const Navbar = () => {
                     <Link
                       href="/shop?gender=womens"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Women's Collection
                     </Link>
@@ -650,6 +702,7 @@ const Navbar = () => {
                     <Link
                       href="/size-guide"
                       className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                      onClick={() => setShowMegaMenu(false)}
                     >
                       Size Guide
                     </Link>
@@ -665,7 +718,8 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      )}
 
       {/* Search Overlay */}
       {isSearchOpen && (

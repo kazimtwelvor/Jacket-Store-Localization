@@ -1,16 +1,23 @@
+"use client";
 
-"use client"
-
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { User, Sliders, Package, Heart, ArrowRight } from "lucide-react"
-import useAuth from "@/hooks/use-auth"
-import Container from "@/components/ui/container"
-import Link from "next/link"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  User,
+  Sliders,
+  Package,
+  Heart,
+  ArrowRight,
+  Container,
+} from "lucide-react";
+// import useAuth from "@/hooks/use-auth"
+// import Container from "@/components/ui/container"
+import Link from "next/link";
+import useAuth from "@/src/app/hooks/use-auth";
 
 export default function PreferencesPage() {
-  const { user, isAuthenticated, logout } = useAuth()
-  const router = useRouter()
+  const { user, isAuthenticated, logout } = useAuth();
+  const router = useRouter();
 
   // Mock user data
   const userData = {
@@ -20,7 +27,7 @@ export default function PreferencesPage() {
     zipCode: "73781",
     country: "United States",
     phone: "+12555551454",
-  }
+  };
 
   // Communication preferences state
   const [preferences, setPreferences] = useState({
@@ -29,25 +36,25 @@ export default function PreferencesPage() {
     sms: false,
     whatsapp: false,
     email: true,
-  })
+  });
 
   // Handle preference change
   const handlePreferenceChange = (channel: keyof typeof preferences) => {
     setPreferences((prev) => ({
       ...prev,
       [channel]: !prev[channel],
-    }))
-  }
+    }));
+  };
 
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push("/auth/login")
+      router.push("/auth/login");
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router]);
 
   if (!isAuthenticated) {
-    return null
+    return null;
   }
 
   return (
@@ -95,8 +102,8 @@ export default function PreferencesPage() {
                   </Link>
                   <button
                     onClick={() => {
-                      logout()
-                      router.push("/")
+                      logout();
+                      router.push("/");
                     }}
                     className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium text-left flex items-center"
                   >
@@ -113,11 +120,16 @@ export default function PreferencesPage() {
               <div className="bg-gray-50 p-6 rounded-lg mb-6">
                 <div className="flex items-center">
                   <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
-                    <Sliders className="h-10 w-10 text-black" strokeWidth={1.5} />
+                    <Sliders
+                      className="h-10 w-10 text-black"
+                      strokeWidth={1.5}
+                    />
                   </div>
                   <div>
                     <h1 className="text-3xl font-bold">MY PREFERENCES</h1>
-                    <p className="text-gray-600">Choose your preferred communication channels</p>
+                    <p className="text-gray-600">
+                      Choose your preferred communication channels
+                    </p>
                   </div>
                 </div>
               </div>
@@ -125,14 +137,20 @@ export default function PreferencesPage() {
               {/* Consent Text */}
               <div className="mb-8">
                 <p className="text-sm">
-                  I agree and authorize FINEYST Fashions, Inc. and its affiliated companies and subsidiaries within
-                  FINEYST family of companies ("FINEYST") and otherwise in accordance with the privacy policy to contact
-                  me through each of the communication channels indicated below about its newsletters, events, new
-                  products, launches, promotional offers and other FINEYST initiatives, even if my phone number is on a
-                  corporate, state or national Do Not Call Registry. I understand that I am not obligated to provide
-                  this information before making a purchase.
+                  I agree and authorize FINEYST Fashions, Inc. and its
+                  affiliated companies and subsidiaries within FINEYST family of
+                  companies ("FINEYST") and otherwise in accordance with the
+                  privacy policy to contact me through each of the communication
+                  channels indicated below about its newsletters, events, new
+                  products, launches, promotional offers and other FINEYST
+                  initiatives, even if my phone number is on a corporate, state
+                  or national Do Not Call Registry. I understand that I am not
+                  obligated to provide this information before making a
+                  purchase.
                 </p>
-                <p className="text-sm font-medium mt-4">Please send me such information by:</p>
+                <p className="text-sm font-medium mt-4">
+                  Please send me such information by:
+                </p>
               </div>
 
               {/* Communication Preferences */}
@@ -177,7 +195,9 @@ export default function PreferencesPage() {
                     <label htmlFor="call" className="font-medium">
                       Call
                     </label>
-                    <p className="text-sm text-gray-700 mt-1">{userData.phone}</p>
+                    <p className="text-sm text-gray-700 mt-1">
+                      {userData.phone}
+                    </p>
                   </div>
                 </div>
 
@@ -196,14 +216,20 @@ export default function PreferencesPage() {
                     <label htmlFor="sms" className="font-medium">
                       SMS/MMS
                     </label>
-                    <p className="text-sm text-gray-700 mt-1">{userData.phone}</p>
+                    <p className="text-sm text-gray-700 mt-1">
+                      {userData.phone}
+                    </p>
                     <p className="text-xs text-gray-600 mt-2">
-                      SMS Consent: By checking the SMS/MMS box, I agree to receive recurring automated marketing text
-                      messages from or on behalf of FINEYST regarding event invitations, new product launches,
-                      promotional offers (such as Private Sale), cart reminders, regional and local events and other
-                      FINEYST initiatives, at the number provided. Consent not required to purchase goods or services.
-                      Text STOP to cancel to 49982. Msg & data rates may apply. For more information about text
-                      messages, see our Terms & Conditions & Privacy Policy.
+                      SMS Consent: By checking the SMS/MMS box, I agree to
+                      receive recurring automated marketing text messages from
+                      or on behalf of FINEYST regarding event invitations, new
+                      product launches, promotional offers (such as Private
+                      Sale), cart reminders, regional and local events and other
+                      FINEYST initiatives, at the number provided. Consent not
+                      required to purchase goods or services. Text STOP to
+                      cancel to 49982. Msg & data rates may apply. For more
+                      information about text messages, see our Terms &
+                      Conditions & Privacy Policy.
                     </p>
                   </div>
                 </div>
@@ -223,10 +249,14 @@ export default function PreferencesPage() {
                     <label htmlFor="whatsapp" className="font-medium">
                       WhatsApp
                     </label>
-                    <p className="text-sm text-gray-700 mt-1">{userData.phone}</p>
+                    <p className="text-sm text-gray-700 mt-1">
+                      {userData.phone}
+                    </p>
                     <p className="text-xs text-gray-600 mt-2">
-                      By providing us with your contact information or by using WhatsApp you agree that we can
-                      communicate with you via WhatsApp and send you marketing communications via WhatsApp.
+                      By providing us with your contact information or by using
+                      WhatsApp you agree that we can communicate with you via
+                      WhatsApp and send you marketing communications via
+                      WhatsApp.
                     </p>
                   </div>
                 </div>
@@ -247,8 +277,9 @@ export default function PreferencesPage() {
                       E-Mail
                     </label>
                     <p className="text-sm text-gray-700 mt-2">
-                      Receive information about exclusive events, product launches, fashions shows, promotional offers,
-                      sales, new arrivals and other communication initiatives.
+                      Receive information about exclusive events, product
+                      launches, fashions shows, promotional offers, sales, new
+                      arrivals and other communication initiatives.
                     </p>
                   </div>
                 </div>
@@ -257,24 +288,32 @@ export default function PreferencesPage() {
               {/* Consent Information */}
               <div className="mt-8 space-y-6 text-sm">
                 <p>
-                  By providing my consent I authorize FINEYST Fashions, Inc. and its affiliated companies and
-                  subsidiaries within FINEYST family of companies ("FINEYST") and otherwise in accordance with the
-                  privacy policy to contact me through e-mail. I understand that I am not obligated to provide this
-                  information before making a purchase.
+                  By providing my consent I authorize FINEYST Fashions, Inc. and
+                  its affiliated companies and subsidiaries within FINEYST
+                  family of companies ("FINEYST") and otherwise in accordance
+                  with the privacy policy to contact me through e-mail. I
+                  understand that I am not obligated to provide this information
+                  before making a purchase.
                 </p>
 
                 <p>
-                  Your consent is voluntary. There are no disadvantages to withholding or withdrawing your consent. You
-                  have the right to revoke your consent at any time. Revocation of consent does not affect the
-                  lawfulness of the processing of your personal data performed on the basis of the consent up to the
-                  time of revocation. You can revoke your consent here under the category "My communication" by clicking
-                  on the specific communication channel or at experience@fineyst.com.
+                  Your consent is voluntary. There are no disadvantages to
+                  withholding or withdrawing your consent. You have the right to
+                  revoke your consent at any time. Revocation of consent does
+                  not affect the lawfulness of the processing of your personal
+                  data performed on the basis of the consent up to the time of
+                  revocation. You can revoke your consent here under the
+                  category "My communication" by clicking on the specific
+                  communication channel or at experience@fineyst.com.
                 </p>
               </div>
 
               {/* Save Button */}
               <div className="mt-8 flex justify-end">
-                <button type="button" className="bg-black text-white px-8 py-3 font-bold">
+                <button
+                  type="button"
+                  className="bg-black text-white px-8 py-3 font-bold"
+                >
                   SAVE
                 </button>
               </div>
@@ -283,5 +322,5 @@ export default function PreferencesPage() {
         </div>
       </div>
     </Container>
-  )
+  );
 }

@@ -4,8 +4,8 @@
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { User, Sliders, Package, Heart, ArrowRight } from "lucide-react"
-import useAuth from "@/hooks/use-auth"
-import Container from "@/components/ui/container"
+import useAuth from "@/src/app/hooks/use-auth"
+import Container from "@/src/app/ui/container"
 import Link from "next/link"
 
 // Import the TrendingProducts component directly
