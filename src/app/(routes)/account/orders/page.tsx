@@ -320,7 +320,7 @@ export default function OrderHistoryPage() {
                               <div className="mb-2 md:mb-0">
                                 <p className="text-sm text-gray-500">Total</p>
                                 <p className="font-medium">
-                                  <Currency value={order.total} />
+                                  ${order.total}
                                 </p>
                               </div>
                               <div className="flex space-x-2">
@@ -357,7 +357,7 @@ export default function OrderHistoryPage() {
                                           </Link>
                                         </h3>
                                         <p className="ml-4">
-                                          <Currency value={item.price} />
+                                          ${item.price}
                                         </p>
                                       </div>
                                     </div>

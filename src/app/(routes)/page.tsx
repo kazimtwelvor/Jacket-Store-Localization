@@ -110,7 +110,7 @@ export default async function HomePage() {
       <div className="py-10 text-center">
         <h1 className="text-2xl font-bold mb-4">Something went wrong</h1>
         <p className="text-gray-500">
-          We're having trouble loading the store data. Please try again later.
+          We&apos;re having trouble loading the store data. Please try again later.
         </p>
       </div>
     );

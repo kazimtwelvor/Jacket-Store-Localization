@@ -219,9 +219,6 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
     const wasDraggedRef = useRef(false);
     const isDesktop = useMediaQuery('(min-width: 768px)');
     const [mounted, setMounted] = useState(false);
-    if (!category) {
-        return null;
-    }
     const currentSort = searchParams.get('sort') || 'popular'
     const urlSizes = searchParams.get('sizes')?.split(',').filter(Boolean) || []
     const urlColors = searchParams.get('colors')?.split(',').filter(Boolean) || []
@@ -236,7 +233,6 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
     })
     const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
     const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
-    const [colorDialogs, setColorDialogs] = useState<Record<string, boolean>>({})
     const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([])
     const [visibleProducts, setVisibleProducts] = useState<string[]>([])
     const [isFilterSticky, setIsFilterSticky] = useState(false)
@@ -247,20 +243,11 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
     const [loadingProducts, setLoadingProducts] = useState<Set<string>>(new Set())
     const [mobileCartModal, setMobileCartModal] = useState<{ isOpen: boolean; product: Product | null }>({ isOpen: false, product: null })
 
-    const [currentProducts, setCurrentProducts] = useState<Product[]>(products)
-    const [currentPage, setCurrentPage] = useState(1)
-    const productsPerPage = 28
-    const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
-    const [layoutMetrics, setLayoutMetrics] = useState({
-        startStickyPoint: 0,
-        endStickyPoint: 0,
-        filterBarHeight: 0,
-    });
-    const productRefs = useRef<(HTMLDivElement | null)[]>([])
-    const recentlyViewedScrollRef = useRef<HTMLDivElement>(null)
-    const filterBarWrapperRef = useRef<HTMLDivElement>(null);
-    const productsGridWrapperRef = useRef<HTMLDivElement>(null);
-    const paginationSectionRef = useRef<HTMLDivElement>(null);
+    // Early return after all hooks
+    if (!category) {
+        return null;
+    }
+
     const sizes = ["XS", "S", "M", "L", "XL", "XXL"]
     const colors = ["Black", "White", "Blue", "Red", "Green"]
     
@@ -420,6 +407,22 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
     }
     const { addToCart } = useCart()
     const wishlist = useWishlist()
+
+    // Move all hooks before early return
+    const [currentProducts, setCurrentProducts] = useState<Product[]>(products)
+    const [currentPage, setCurrentPage] = useState(1)
+    const productsPerPage = 28
+    const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
+    const [layoutMetrics, setLayoutMetrics] = useState({
+        startStickyPoint: 0,
+        endStickyPoint: 0,
+        filterBarHeight: 0,
+    });
+    const productRefs = useRef<(HTMLDivElement | null)[]>([])
+    const recentlyViewedScrollRef = useRef<HTMLDivElement>(null)
+    const filterBarWrapperRef = useRef<HTMLDivElement>(null);
+    const productsGridWrapperRef = useRef<HTMLDivElement>(null);
+    const paginationSectionRef = useRef<HTMLDivElement>(null);
 
     const handleSizeSelect = (productId: string, size: string) => {
         const product = currentProducts.find(p => p.id === productId) || recentlyViewed.find(p => p.id === productId);

@@ -75,15 +75,15 @@ const AddMoreOffer: React.FC<AddMoreOfferProps> = ({ onContinueShopping }) => {
 
 const CartPage = () => {
   const [isMounted, setIsMounted] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [activeStep, setActiveStep] = useState("shipping")
-  const [showOrderSummary, setShowOrderSummary] = useState(false)
+  // const [isLoading, setIsLoading] = useState(false)
+  // const [activeStep, setActiveStep] = useState("shipping")
+  // const [showOrderSummary, setShowOrderSummary] = useState(false)
   const { items, updateQuantity, removeFromCart, clearCart, totalPrice } = useCart()
   const wishlist = useWishlist()
   const router = useRouter()
-  const [checkoutAsGuest, setCheckoutAsGuest] = useState(true)
+  // const [checkoutAsGuest, setCheckoutAsGuest] = useState(true)
   const [couponCode, setCouponCode] = useState("")
-  const [isCouponApplied, setIsCouponApplied] = useState(false)
+  // const [isCouponApplied, setIsCouponApplied] = useState(false)
   const [showVoucherField, setShowVoucherField] = useState(false)
   const [showPaymentPopup, setShowPaymentPopup] = useState(false)
   const [isCheckoutFixed, setIsCheckoutFixed] = useState(false)
@@ -178,7 +178,7 @@ const CartPage = () => {
               </div>
               <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Cart is Empty</h1>
               <p className="text-gray-500 pt-4 mb-8">
-                Looks like you haven't added anything to your cart yet. Explore our collection and find something you'll
+                Looks like you haven&apos;t added anything to your cart yet. Explore our collection and find something you&apos;ll
                 love.
               </p>
               <Button onClick={() => router.push("/")} className="bg-[#B01E23] hover:bg-[#2b2b2b] text-white mt-4">
@@ -191,83 +191,83 @@ const CartPage = () => {
     )
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
-  }
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target
+  //   setFormData({
+  //     ...formData,
+  //     [name]: value,
+  //   })
+  // }
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target
-    setFormData({
-      ...formData,
-      [name]: checked,
-    })
-  }
+  // const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, checked } = e.target
+  //   setFormData({
+  //     ...formData,
+  //     [name]: checked,
+  //   })
+  // }
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
-  }
+  // const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const { name, value } = e.target
+  //   setFormData({
+  //     ...formData,
+  //     [name]: value,
+  //   })
+  // }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   setIsLoading(true)
 
-    try {
-      // In a real app, this would call your payment processing API
-      // For demo purposes, we'll simulate a successful payment
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+  //   try {
+  //     // In a real app, this would call your payment processing API
+  //     // For demo purposes, we'll simulate a successful payment
+  //     await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      // Clear cart and show success message
-      clearCart()
-      toast.success("Order placed successfully!")
-      router.push("/checkout/success")
-    } catch (error) {
-      toast.error("Something went wrong with your order.")
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  //     // Clear cart and show success message
+  //     clearCart()
+  //     toast.success("Order placed successfully!")
+  //     router.push("/checkout/success")
+  //   } catch (error) {
+  //     toast.error("Something went wrong with your order.")
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }
 
-  const handleExpressCheckout = async () => {
-    setIsLoading(true)
+  // const handleExpressCheckout = async () => {
+  //   setIsLoading(true)
 
-    try {
-      // In a real app, this would call your payment API
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+  //   try {
+  //     // In a real app, this would call your payment API
+  //     await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      // Clear cart and show success message
-      clearCart()
-      toast.success("Express checkout successful!")
-      router.push("/checkout/success")
-    } catch (error) {
-      toast.error("Express checkout failed. Please try again.")
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  //     // Clear cart and show success message
+  //     clearCart()
+  //     toast.success("Express checkout successful!")
+  //     router.push("/checkout/success")
+  //   } catch (error) {
+  //     toast.error("Express checkout failed. Please try again.")
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }
 
-  const isShippingComplete =
-    formData.firstName &&
-    formData.lastName &&
-    formData.email &&
-    formData.address &&
-    formData.city &&
-    formData.state &&
-    formData.zipCode &&
-    (checkoutAsGuest || formData.password)
+  // const isShippingComplete =
+  //   formData.firstName &&
+  //   formData.lastName &&
+  //   formData.email &&
+  //   formData.address &&
+  //   formData.city &&
+  //   formData.state &&
+  //   formData.zipCode &&
+  //   (checkoutAsGuest || formData.password)
 
-  const isPaymentComplete = formData.cardNumber && formData.cardName && formData.expiryDate && formData.cvv
+  // const isPaymentComplete = formData.cardNumber && formData.cardName && formData.expiryDate && formData.cvv
 
   const handleApplyCoupon = () => {
     // In a real app, this would validate the coupon code and apply the discount
-    setIsCouponApplied(true)
+    // setIsCouponApplied(true)
     toast.success("Coupon applied successfully!")
   }
 
@@ -547,10 +547,9 @@ const CartPage = () => {
                     {/* Checkout Button */}
                     <Button
                       onClick={handleCheckout}
-                      disabled={isLoading}
                       className="w-full bg-black hover:bg-gray-800 text-white py-4 mb-4 font-bold text-lg"
                     >
-                      {isLoading ? "Processing..." : "CHECKOUT"}
+                      CHECKOUT
                     </Button>
 
                     {/* Express Checkout */}

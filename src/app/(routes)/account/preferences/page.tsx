@@ -139,7 +139,7 @@ export default function PreferencesPage() {
                 <p className="text-sm">
                   I agree and authorize FINEYST Fashions, Inc. and its
                   affiliated companies and subsidiaries within FINEYST family of
-                  companies ("FINEYST") and otherwise in accordance with the
+                  companies (&quot;FINEYST&quot;) and otherwise in accordance with the
                   privacy policy to contact me through each of the communication
                   channels indicated below about its newsletters, events, new
                   products, launches, promotional offers and other FINEYST
@@ -227,9 +227,9 @@ export default function PreferencesPage() {
                       Sale), cart reminders, regional and local events and other
                       FINEYST initiatives, at the number provided. Consent not
                       required to purchase goods or services. Text STOP to
-                      cancel to 49982. Msg & data rates may apply. For more
-                      information about text messages, see our Terms &
-                      Conditions & Privacy Policy.
+                      cancel to 49982. Msg &amp; data rates may apply. For more
+                      information about text messages, see our Terms &amp;
+                      Conditions &amp; Privacy Policy.
                     </p>
                   </div>
                 </div>
@@ -290,7 +290,7 @@ export default function PreferencesPage() {
                 <p>
                   By providing my consent I authorize FINEYST Fashions, Inc. and
                   its affiliated companies and subsidiaries within FINEYST
-                  family of companies ("FINEYST") and otherwise in accordance
+                  family of companies (&quot;FINEYST&quot;) and otherwise in accordance
                   with the privacy policy to contact me through e-mail. I
                   understand that I am not obligated to provide this information
                   before making a purchase.
@@ -303,7 +303,7 @@ export default function PreferencesPage() {
                   not affect the lawfulness of the processing of your personal
                   data performed on the basis of the consent up to the time of
                   revocation. You can revoke your consent here under the
-                  category "My communication" by clicking on the specific
+                  category &quot;My communication&quot; by clicking on the specific
                   communication channel or at experience@fineyst.com.
                 </p>
               </div>
