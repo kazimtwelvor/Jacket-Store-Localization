@@ -6,6 +6,7 @@ import { motion, useMotionValue, animate } from "framer-motion"
 import { cn } from "@/src/app/lib/utils"
 import getProducts from "@/src/app/actions/get-products"
 import Currency from "@/src/app/ui/currency"
+import { avertaBlack, avertaBold } from "@/src/lib/fonts"
 
 export interface Product {
     id: string
@@ -45,7 +46,7 @@ function useMediaQuery(query: string): boolean {
     return matches
 }
 
-export default function ProductCarousel({ title = "Hand-picked for you", items = [] }: ProductCarouselProps) {
+export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items = [] }: ProductCarouselProps) {
     const [activeCategory, setActiveCategory] = useState<Category>("MEN")
     const [productItems, setProductItems] = useState<Product[]>(items)
     const [loading, setLoading] = useState(true)
@@ -212,7 +213,7 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
     return (
         <section className="w-full flex justify-center bg-white pb-8 sm:pb-12 md:pb-16">
             <section className="w-full max-w-[2000px] overflow-hidden relative">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 text-[#2b2b2b]">{title}</h2>
+                <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 text-[#2b2b2b] ${avertaBlack.className}`}>{title}</h2>
                 <section className="flex justify-center -mt-2 mb-4 md:mb-6 gap-1">
                     {CATEGORIES.map((category) => (
                         <button
@@ -223,7 +224,7 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
                         >
                             <span
                                 className={cn(
-                                    "inline-block border-b-2 pb-0.5 transition-colors",
+                                    `${avertaBold.className} inline-block border-b-2 pb-0.5 transition-colors`,
                                     activeCategory === category
                                         ? "border-[#2b2b2b] text-[#2b2b2b]"
                                         : "border-transparent"
@@ -236,14 +237,17 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
                 </section>
 
                 <section className="relative px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
-                    <section className="overflow-hidden">
+                    <section className="overflow-hidden relative min-h-[600px]">
                         {loading ? (
-                            <section className="absolute inset-0 flex items-center justify-center bg-white/50">
-                                <section className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-red-600"></section>
+                            <section className="absolute inset-0 flex items-center justify-center bg-white/90 z-50 w-full h-full">
+                                <section className="flex flex-col items-center gap-6">
+                                    <section className="w-20 h-20 border-4 border-dashed rounded-full animate-spin border-[#2b2b2b]"></section>
+                                    <p className="text-gray-700 font-semibold text-lg">Loading products...</p>
+                                </section>
                             </section>
                         ) : productItems.length === 0 ? (
-                            <section className="absolute inset-0 flex items-center justify-center">
-                                <p className="text-gray-500">No products available for this category.</p>
+                            <section className="absolute inset-0 flex items-center justify-center bg-white/90 z-50 w-full h-full">
+                                <p className="text-gray-500 text-lg">No products available for this category.</p>
                             </section>
                         ) : isMobile ? (
                             <section
@@ -365,13 +369,13 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
                                                         />
                                                     </section>
                                                     <section className="text-center mt-2 sm:mt-3 md:mt-4 px-1 sm:px-2">
-                                                        <h3 className="font-bold text-xs sm:text-sm md:text-base text-black uppercase leading-tight mb-1 whitespace-nowrap overflow-hidden  group-hover:text-[#2b2b2b] transition-colors">
+                                                        <h3 className={`font-bold text-xs sm:text-sm md:text-base text-black uppercase leading-tight mb-1 whitespace-nowrap overflow-hidden  group-hover:text-[#2b2b2b] transition-colors ${avertaBlack.className}`}>
                                                             {product.name}
                                                         </h3>
                                                         <section className="flex justify-center items-center gap-1 sm:gap-2 text-xs sm:text-sm md:text-base">
                                                             {product.salePrice ? (
                                                                 <>
-                                                                    <section className="text-red-800 font-bold">
+                                                                    <section className="text-black font-bold">
                                                                         <Currency value={product.salePrice} />
                                                                     </section>
                                                                     <section className="text-gray-500 line-through text-sm">
@@ -379,7 +383,7 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
                                                                     </section>
                                                                 </>
                                                             ) : (
-                                                                <section className="text-red-800 font-bold">
+                                                                <section className="text-black font-bold">
                                                                     <Currency value={product.price} />
                                                                 </section>
                                                             )}

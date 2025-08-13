@@ -6,6 +6,7 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { Star, ChevronLeft, ChevronRight } from "lucide-react"
+import { avertaBlack } from "@/src/lib/fonts"
 
 // Define the collection type
 interface Collection {
@@ -215,8 +216,8 @@ export default function JacketColorCollection() {
       <section className="container mx-auto px-4 pt-10 pb-12 md:pb-20 relative z-10">
         <section className="text-center mb-20">
          
-          <h2 className="text-2xl sm:text-3xl md:text-4xl mb-6 tracking-tight leading-tight ">
-            Our Color Collection
+          <h2 className={`text-2xl sm:text-3xl md:text-4xl mb-6 tracking-tight leading-tight ${avertaBlack.className}`}>
+            OUR COLOR COLLECTION
           </h2>
 
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed ">
@@ -267,10 +268,9 @@ export default function JacketColorCollection() {
                         <section className="absolute inset-x-0 bottom-0 p-4 group">
                           <section className="transition-all duration-500 ease-in-out group-hover:-translate-y-8">
                             {/* Title + Arrow */}
-                            <section className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
+                            <section className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300 mb-5">
                               <h3
-                                className="text-white text-lg md:text-xl lg:text-2xl font-bold text-left transition-all duration-500"
-                                style={{ fontFamily: "AvertaPe" }}
+                                className={`text-white text-lg md:text-xl lg:text-2xl font-bold text-left transition-all duration-500 ${avertaBlack.className}`}
                                 dangerouslySetInnerHTML={{
                                   __html: item.title.replace(' JACKETS', '<br />JACKETS')
                                 }}

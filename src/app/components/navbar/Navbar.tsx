@@ -374,7 +374,7 @@ const Navbar = () => {
           "top-0"
         )}
       >
-        <header className="flex items-center bg-[#2B2B2B] h-16 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] w-full">
+        <header className="flex items-center md:px-10 bg-[#2B2B2B] h-16 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] w-full">
           <div className="lg:hidden flex items-center space-x-2">
             <div className="w-10 h-10" />
           </div>

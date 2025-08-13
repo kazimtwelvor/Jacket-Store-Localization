@@ -3,11 +3,12 @@
 
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { avertaBlack } from "@/src/lib/fonts"
 
 const slides = [
     {
         id: 1,
-        title: "Unmatched Craftsmanship",
+        title: "UNMATCHED CRAFTSMANSHIP",
         description:
             "Hours of artisan detail go into every jacket. From reinforced stitching to premium hardware, we build jackets that stand the test of time.",
         features: [
@@ -20,7 +21,7 @@ const slides = [
     },
     {
         id: 3,
-        title: "Premium Materials",
+        title: "PREMIUM MATERIALS",
         description:
             "We don't mass-produce. We craft. Every FINEYST jacket starts with ethically sourced full-grain leather, precision cuts, and hours of artisan detail.",
         features: [
@@ -33,7 +34,7 @@ const slides = [
     },
     {
         id: 2,
-        title: "Tailored Fit",
+        title: "TAILORED FIT",
         description:
             "Whether you're buying a ready-to-wear bomber or designing a custom jacket from scratch, you're investing in precision-crafted fit.",
         features: [
@@ -46,7 +47,7 @@ const slides = [
     },
     {
         id: 4,
-        title: "USA Fulfillment",
+        title: "USA FULFILLMENT",
         description:
             "Fast, reliable shipping with hassle-free returns. We stand behind every jacket we make with comprehensive customer support.",
         features: [
@@ -124,7 +125,7 @@ export default function WhyChooseSlider() {
                             <section className="md:hidden space-y-6">
                                 <section className="text-center space-y-4 px-4">
                                     <section className="flex items-center justify-center gap-3">
-                                        <h2 className="text-white font-bold text-2xl sm:text-3xl leading-tight text-center">
+                                        <h2 className={`text-white font-bold text-2xl sm:text-3xl leading-tight text-center ${avertaBlack.className}`}>
                                             {slides[currentSlide].title}
                                         </h2>
                                     </section>
@@ -141,7 +142,7 @@ export default function WhyChooseSlider() {
                                 </section>
 
                                 <section className="space-y-2 pt-2 hidden">
-                                    <h4 className="text-xl font-semibold text-white">Key Features:</h4>
+                                    <h4 className={`text-xl font-semibold text-white ${avertaBlack.className}`}>Key Features:</h4>
                                     <section className="space-y-2">
                                         {slides[currentSlide].features.map((feature, index) => (
                                             <section key={index} className="flex items-center space-x-2">
@@ -156,13 +157,13 @@ export default function WhyChooseSlider() {
                             <section className="hidden md:grid md:grid-cols-2 gap-8 items-center">
                                 <section className="text-center md:text-left space-y-4">
                                     <section className="flex items-center gap-3 justify-center md:justify-start">
-                                        <h2 className="text-white font-bold text-[2.5rem] leading-none">
+                                        <h2 className={`text-white font-bold text-[2.5rem] leading-none ${avertaBlack.className}`}>
                                             {slides[currentSlide].title}
                                         </h2>
                                     </section>
                                     <p className="text-gray-300 leading-relaxed">{slides[currentSlide].description}</p>
                                     <section className="space-y-2 pt-2 hidden xl:block">
-                                        <h4 className="text-xl font-semibold text-white">Key Features:</h4>
+                                        <h4 className={`text-xl font-semibold text-white ${avertaBlack.className}`}>KEY FEATURES:</h4>
                                         <section className="space-y-2">
                                             {slides[currentSlide].features.map((feature, index) => (
                                                 <section key={index} className="flex items-center space-x-2">
