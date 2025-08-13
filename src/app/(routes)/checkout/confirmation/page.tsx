@@ -50,7 +50,6 @@ const ConfirmationPage = () => {
   const orderId = searchParams.get("orderId")
   const success = searchParams.get("success") === "1"
 
-  // Format date for estimated delivery (5 days from now)
   const estimatedDelivery = new Date()
   estimatedDelivery.setDate(estimatedDelivery.getDate() + 10)
   const formattedDeliveryDate = estimatedDelivery.toLocaleDateString("en-US", {
@@ -74,17 +73,11 @@ const ConfirmationPage = () => {
       return
     }
 
-    // Fetch order details from our Store API
     const fetchOrder = async () => {
       try {
 
-        // Extract storeId from the URL path or use a default
-        // This is just for the API route path, not for the actual API call
         const pathArray = window.location.pathname.split("/")
         const storeId = pathArray[1] === "checkout" ? "default" : pathArray[1]
-
-
-        // Use the Store API URL to fetch order details
         const response = await fetch(`/api/${storeId}/orders/${orderId}`)
 
         if (!response.ok) {
@@ -95,10 +88,8 @@ const ConfirmationPage = () => {
 
         const data = await response.json()
 
-        // Calculate the total price from items if totalPrice is missing or zero
         let calculatedTotalPrice = data.totalPrice
 
-        // If totalPrice is missing, zero, or "0", calculate from items
         if (!calculatedTotalPrice || calculatedTotalPrice === "0" || Number.parseFloat(calculatedTotalPrice) === 0) {
           if (data.orderItems && data.orderItems.length > 0) {
             calculatedTotalPrice = data.orderItems
@@ -112,7 +103,6 @@ const ConfirmationPage = () => {
           }
         }
 
-        // Format the order data if needed
         const formattedOrder = {
           id: data.id,
           orderNumber: data.id.substring(0, 8).toUpperCase(),
@@ -155,7 +145,6 @@ const ConfirmationPage = () => {
     fetchOrder()
   }, [orderId, success])
 
-  // Calculate subtotal from items for display
   const calculateSubtotal = () => {
     if (!order?.items || order.items.length === 0) {
       return order?.totalPrice || "0"
@@ -178,65 +167,64 @@ const ConfirmationPage = () => {
 
   if (error) {
     return (
-      <div className="bg-gray-50 min-h-screen">
+      <section className="bg-gray-50 min-h-screen">
         <Container>
-          <div className="px-4 py-16 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto text-center">
+          <section className="px-4 py-16 sm:px-6 lg:px-8">
+            <section className="max-w-3xl mx-auto text-center">
               <h1 className="text-3xl font-bold text-gray-900 mb-4">Something went wrong</h1>
               <p className="text-lg text-gray-600 mb-8">{error}</p>
               <Button onClick={() => router.push("/")} className="bg-[#B01E23] hover:bg-[#8a1a1e] text-white">
                 Return to home
               </Button>
-            </div>
-          </div>
+            </section>
+          </section>
         </Container>
-      </div>
+      </section>
     )
   }
 
-  // If we don't have order data yet, we can still show the confirmation with the order ID
   const orderNumber = order?.orderNumber || orderId?.substring(0, 8).toUpperCase() || "Unknown"
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <section className="bg-gray-50 min-h-screen">
       <Container>
-        <motion.div
+        <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="px-4 py-16 sm:px-6 lg:px-8"
         >
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
+          <section className="max-w-3xl mx-auto">
+            <section className="text-center mb-12">
+              <section className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
                 <CheckCircle className="h-10 w-10 text-green-600" />
-              </div>
+              </section>
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Order Confirmed!</h1>
               <p className="text-lg text-gray-600 mb-2">Thank you for your purchase. Your order has been received.</p>
               <p className="text-gray-500">
                 Order #<span className="font-medium">{orderNumber}</span>
               </p>
-            </div>
+            </section>
 
             {isLoading ? (
-              <div className="space-y-6">
+              <section className="space-y-6">
                 <Skeleton className="h-40 w-full rounded-lg" />
                 <Skeleton className="h-60 w-full rounded-lg" />
-              </div>
+              </section>
             ) : (
               <>
-                <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+                <section className="bg-white rounded-lg shadow-sm p-6 mb-8">
                   <h2 className="text-xl font-semibold mb-6 pb-4 border-b border-gray-200 flex items-center">
                     <Package className="h-5 w-5 mr-2 text-[#B01E23]" />
                     Order Details
                   </h2>
 
-                  <div className="space-y-6">
-                    <div className="flex items-start">
-                      <div className="flex-shrink-0 w-10 h-10 bg-[#B01E23]/10 rounded-full flex items-center justify-center">
+                  <section className="space-y-6">
+                    <section className="flex items-start">
+                      <section className="flex-shrink-0 w-10 h-10 bg-[#B01E23]/10 rounded-full flex items-center justify-center">
                         <Calendar className="h-5 w-5 text-[#B01E23]" />
-                      </div>
-                      <div className="ml-4">
+                      </section>
+                      <section className="ml-4">
                         <h3 className="text-sm font-medium text-gray-900">Order Date</h3>
                         <p className="text-sm text-gray-500">
                           {order?.createdAt
@@ -253,43 +241,42 @@ const ConfirmationPage = () => {
                                 day: "numeric",
                               })}
                         </p>
-                      </div>
-                    </div>
+                      </section>
+                    </section>
 
-                    <div className="flex items-start">
-                      <div className="flex-shrink-0 w-10 h-10 bg-[#B01E23]/10 rounded-full flex items-center justify-center">
+                    <section className="flex items-start">
+                      <section className="flex-shrink-0 w-10 h-10 bg-[#B01E23]/10 rounded-full flex items-center justify-center">
                         <Clock className="h-5 w-5 text-[#B01E23]" />
-                      </div>
-                      <div className="ml-4">
+                      </section>
+                      <section className="ml-4">
                         <h3 className="text-sm font-medium text-gray-900">Estimated Delivery</h3>
                         <p className="text-sm text-gray-500">{formattedDeliveryDate}</p>
-                      </div>
-                    </div>
+                      </section>
+                    </section>
 
-                    <div className="flex items-start">
-                      <div className="flex-shrink-0 w-10 h-10 bg-[#B01E23]/10 rounded-full flex items-center justify-center">
+                    <section className="flex items-start">
+                      <section className="flex-shrink-0 w-10 h-10 bg-[#B01E23]/10 rounded-full flex items-center justify-center">
                         <Package className="h-5 w-5 text-[#B01E23]" />
-                      </div>
-                      <div className="ml-4">
+                      </section>
+                      <section className="ml-4">
                         <h3 className="text-sm font-medium text-gray-900">Shipping Method</h3>
                         <p className="text-sm text-gray-500">Standard Shipping (3-5 business days)</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                      </section>
+                    </section>
+                  </section>
+                </section>
 
-                <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+                <section className="bg-white rounded-lg shadow-sm p-6 mb-8">
                   <h2 className="text-xl font-semibold mb-6 pb-4 border-b border-gray-200 flex items-center">
                     <ShoppingBag className="h-5 w-5 mr-2 text-[#B01E23]" />
                     Order Summary
                   </h2>
 
-                  <div className="divide-y divide-gray-200">
-                    {/* If we have order items, display them */}
+                  <section className="divide-y divide-gray-200">
                     {order?.items && order.items.length > 0 ? (
                       order.items.map((item, index) => (
-                        <div key={item.id || index} className="py-4 flex">
-                          <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded overflow-hidden">
+                        <section key={item.id || index} className="py-4 flex">
+                          <section className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded overflow-hidden">
                             {item.images && item.images[0] ? (
                               <img
                                 src={item.images[0].url || "/placeholder.svg"}
@@ -297,76 +284,76 @@ const ConfirmationPage = () => {
                                 className="w-full h-full object-cover"
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                              <section className="w-full h-full flex items-center justify-center text-gray-400">
                                 <Package className="h-8 w-8" />
-                              </div>
+                              </section>
                             )}
-                          </div>
-                          <div className="ml-4 flex-1">
+                          </section>
+                          <section className="ml-4 flex-1">
                             <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
-                            <div className="mt-1 flex text-xs text-gray-500">
+                            <section className="mt-1 flex text-xs text-gray-500">
                               {item.size && <span className="mr-2">Size: {item.size}</span>}
                               {item.color && <span>Color: {item.color}</span>}
-                            </div>
-                            <div className="mt-1 flex justify-between">
+                            </section>
+                            <section className="mt-1 flex justify-between">
                               <span className="text-sm text-gray-500">Qty: {item.quantity}</span>
                               <Currency value={item.price} />
-                            </div>
-                          </div>
-                        </div>
+                            </section>
+                          </section>
+                        </section>
                       ))
                     ) : (
-                      <div className="py-4">
+                      <section className="py-4">
                         <p className="text-sm text-gray-500">
                           Your order has been confirmed. Details will be available soon.
                         </p>
-                      </div>
+                      </section>
                     )}
 
-                    <div className="py-4">
-                      <div className="flex justify-between mb-2">
+                    <section className="py-4">
+                      <section className="flex justify-between mb-2">
                         <span className="text-sm text-gray-500">Subtotal</span>
                         <Currency value={subtotal} />
-                      </div>
-                      <div className="flex justify-between mb-2">
+                      </section>
+                      <section className="flex justify-between mb-2">
                         <span className="text-sm text-gray-500">Shipping</span>
                         <span className="text-sm text-gray-500">Free</span>
-                      </div>
-                      <div className="flex justify-between font-medium">
+                      </section>
+                      <section className="flex justify-between font-medium">
                         <span>Total</span>
                         <Currency value={subtotal} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                      </section>
+                    </section>
+                  </section>
+                </section>
 
-                <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+                <section className="bg-white rounded-lg shadow-sm p-6 mb-8">
                   <h2 className="text-xl font-semibold mb-4">What's Next?</h2>
-                  <div className="space-y-4">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                  <section className="space-y-4">
+                    <section className="flex items-center">
+                      <section className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
                         <span className="text-sm font-medium">1</span>
-                      </div>
+                      </section>
                       <p className="text-gray-600">You'll receive a confirmation email with your order details.</p>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                    </section>
+                    <section className="flex items-center">
+                      <section className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
                         <span className="text-sm font-medium">2</span>
-                      </div>
+                      </section>
                       <p className="text-gray-600">We'll notify you when your order ships.</p>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                    </section>
+                    <section className="flex items-center">
+                      <section className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
                         <span className="text-sm font-medium">3</span>
-                      </div>
+                      </section>
                       <p className="text-gray-600">
                         You can track your order in the "Order History" section of your account.
                       </p>
-                    </div>
-                  </div>
-                </div>
+                    </section>
+                  </section>
+                </section>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <section className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     onClick={() => router.push("/")}
                     className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -380,13 +367,13 @@ const ConfirmationPage = () => {
                     View Order History
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
-                </div>
+                </section>
               </>
             )}
-          </div>
-        </motion.div>
+          </section>
+        </motion.section>
       </Container>
-    </div>
+    </section>
   )
 }
 

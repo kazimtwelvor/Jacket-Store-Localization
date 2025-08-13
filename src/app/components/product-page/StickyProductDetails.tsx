@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Info from "./info"
 import type { Product } from "@/types"
 
@@ -12,25 +12,33 @@ const StickyProductDetails: React.FC<StickyProductDetailsProps> = ({ product }) 
   const [isFixed, setIsFixed] = useState(true)
 
   useEffect(() => {
-    // Enable smooth scrolling
     document.documentElement.style.scrollBehavior = 'smooth'
     
     const handleScroll = () => {
+      console.log('scrolling')
       const imagesSection = document.querySelector('.w-\\[60\\%\\]')
       if (imagesSection) {
+        console.log('imagesSection', imagesSection)
         const imagesSectionBottom = imagesSection.getBoundingClientRect().bottom + window.scrollY
         const currentScroll = window.scrollY + window.innerHeight
         
         if (currentScroll >= imagesSectionBottom) {
+          console.log('currentScrollNOTFIXED', currentScroll)
           setIsFixed(false)
         } else {
+          console.log('currentScrollFIXED', currentScroll)
           setIsFixed(true)
         }
       }
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('resize', handleScroll, { passive: true })
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
   }, [])
 
   return (

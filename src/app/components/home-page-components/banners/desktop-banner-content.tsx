@@ -27,7 +27,7 @@ export const DesktopBannerContent = () => {
             style={{ fontFamily: 'var(--font-averta-default)' }}
             className="text-sm sm:text-base md:text-lg text-black lg:text-xl mb-8 md:mb-10 max-w-3xl mx-auto"
           >
-            UP TO <span className={`${avertaBlack.className} font-black`}>50%</span> OFF + CODE: STREET<span className={`${avertaBlack.className} font-black`}>15</span>
+            UP TO <span className={`${avertaBlack.className} font-black`}>50% OFF</span> + CODE: <span className={`${avertaBlack.className} font-black`}>STREET15</span>
           </motion.p>
 
           <motion.section

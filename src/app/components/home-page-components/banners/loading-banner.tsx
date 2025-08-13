@@ -42,7 +42,7 @@ export const LoadingBanner = ({ heroImages, currentImageIndex }: LoadingBannerPr
                         FINEYST SALE
                     </h1>
                     <p className="text-sm sm:text-base px-6 mb-10 mx-auto text-center w-full" style={{ fontFamily: 'var(--font-averta-default)' }}>
-                        UP TO <span className="font-bold">50%</span> OFF + CODE: STREET<span className="font-black">15</span>
+                        UP TO <span className="font-bold">50%</span> OFF + CODE: STREET <span className="font-black">15</span>
                     </p>
                     <section className="flex justify-center gap-5 w-full">
                         <Link href="/shop" aria-label="Shop men's collection">

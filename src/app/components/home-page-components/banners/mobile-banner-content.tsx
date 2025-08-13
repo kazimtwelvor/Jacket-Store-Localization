@@ -28,7 +28,7 @@ export const MobileBannerContent = () => {
                     style={{ fontFamily: 'var(--font-averta-default)' }}
                     className="text-sm sm:text-base px-6 mb-10 mx-auto text-center w-full"
                 >
-                    UP TO <span className="font-black">50%</span> OFF + CODE: STREET<span className="font-black">15</span>
+                    UP TO <span className="font-black">50%</span> OFF + CODE: <span className="font-black">STREET15</span>
                 </motion.p>
 
                 <motion.section
