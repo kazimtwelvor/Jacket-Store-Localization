@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { Heart } from "lucide-react"
-import Currency from "@/components/ui/currency"
+import Currency from "@/src/app/ui/currency"
 import getProducts from "@/actions/get-products"
 import Link from "next/link"
 
