@@ -9,7 +9,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import { cn } from "@/src/app/lib/utils"
-import { avertaDefault } from "@/src/lib/fonts"
+import { avertaBlack, avertaBold, avertaDefault } from "@/src/lib/fonts"
 
 interface Category {
     id: string
@@ -285,7 +285,7 @@ export default function ProductCategory() {
     }, [isDragging, mouseStart, currentIndex, visibleItems, categories.length, handleMouseUp])
 
     return (
-        <section className={`w-full bg-white flex justify-center overflow-hidden ${avertaDefault.className}`}>
+        <section className={`w-full bg-white flex justify-center overflow-hidden ${avertaBold.className}`}>
             <section className="w-full max-w-[1896px] py-0 m-0 pl-4 md:pl-8 lg:pl-12">
                 <motion.section
                     initial={{ opacity: 0, y: 20 }}
@@ -373,8 +373,7 @@ export default function ProductCategory() {
                                                 <section className="transition-all duration-500 ease-in-out group-hover:-translate-y-12">
                                                     <section className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
                                                         <h3
-                                                            className="text-white text-lg md:text-xl lg:text-2xl font-bold text-left transition-all duration-500"
-                                                            style={{ fontFamily: "AvertaPe" }}
+                                                            className={`text-white text-lg md:text-xl lg:text-2xl font-bold text-left transition-all duration-500 ${avertaBlack.className}`}
                                                         >
                                                             {item.name}
                                                         </h3>

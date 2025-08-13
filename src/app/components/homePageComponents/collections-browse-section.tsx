@@ -6,6 +6,7 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { Star, ChevronLeft, ChevronRight } from "lucide-react"
+import { avertaBlack } from "@/src/lib/fonts"
 
 // Define the collection type
 interface Collection {
@@ -225,7 +226,6 @@ export default function JacketCollections() {
           
         </div>
 
-        {/* Collections Carousel */}
         <div className="w-full bg-transparent flex justify-end overflow-hidden">
           <div className="w-full max-w-[1896px]  py-0 m-0 pl-4 md:pl-8 lg:pl-12">
             <div
@@ -261,16 +261,12 @@ export default function JacketCollections() {
                           draggable={false}
                           onDragStart={(e) => e.preventDefault()}
                         />
-                        {/* Always visible dark overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-
                         <div className="absolute inset-x-0 bottom-0 p-4 group">
                           <div className="transition-all duration-500 ease-in-out group-hover:-translate-y-8">
-                            {/* Title + Arrow */}
                             <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
                               <h3
-                                className="text-white text-lg md:text-xl lg:text-2xl font-bold text-left transition-all duration-500"
-                                style={{ fontFamily: "AvertaPe" }}
+                                className={`text-white text-lg md:text-xl lg:text-2xl font-bold text-left transition-all duration-500 ${avertaBlack.className}`}
                                 dangerouslySetInnerHTML={{
                                   __html: item.title.replace(' JACKETS', '<br />JACKETS')
                                 }}
@@ -281,7 +277,6 @@ export default function JacketCollections() {
                             </div>
                           </div>
 
-                          {/* Paragraph appears below title after hover */}
                           <div className="absolute left-0 right-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
                             <p className="text-white/90 text-sm md:text-base">
                               {item.subtitle}

@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { Facebook, Twitter, Instagram, Linkedin, ChevronDown, Star, Phone, Mail } from "lucide-react"
 import Image from "next/image"
+import { avertaBlack, avertaBold } from "@/src/lib/fonts"
 
 
 
@@ -12,11 +13,11 @@ const Footer = () => {
     const [expandedSection, setExpandedSection] = useState("")
     const currentYear = new Date().getFullYear()
 
-    const toggleSection = (section) => {
+    const toggleSection = (section: string) => {
         setExpandedSection(expandedSection === section ? "" : section)
     }
 
-    const handleSubscribe = (e) => {
+    const handleSubscribe = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         alert("Thank you for subscribing to our newsletter!")
         setEmailInput("")
@@ -27,12 +28,8 @@ const Footer = () => {
     }
 
     return (
-        <footer className="bg-[#F6F6F6] text-black pt-16 pb-8 relative">
-
-
-            <section className="container mx-auto px-4">
-
-
+        <footer className={` bg-[#F6F6F6] text-black pt-16 pb-8 relative`}>
+            <section className="container mx-auto">
                 <section className="flex flex-col md:flex-row md:justify-start md:gap-14 gap-14 mb-8">
                     <section className="space-y-4 flex-shrink-0 md:w-64 flex flex-col items-center md:items-start">
                         <section className="flex flex-col items-center md:items-start">
@@ -43,9 +40,8 @@ const Footer = () => {
                                     style={{ display: 'block', maxWidth: '250px', width: '100%', height: 'auto' }}
                                 />
                             </section>
-                            <p className="text-black font-semibold text-sm mt-2 text-center md:text-left">Experience the finest quality and timeless design. Your destination for luxury.</p>
+                            <p className={`text-black ${avertaBold.className} text-sm mt-2 text-center md:text-left`}>Experience the finest quality and timeless design. Your destination for luxury.</p>
                         </section>
-
                         <section className="space-y-3 w-full flex flex-col items-center md:items-start">
                             <section className="flex items-center md:items-start">
                                 <section className="text-black mr-3 mt-1 flex-shrink-0">
@@ -63,7 +59,7 @@ const Footer = () => {
                                         <circle cx="12" cy="10" r="3"></circle>
                                     </svg>
                                 </section>
-                                <span className="text-black font-semibold text-sm text-center md:text-left">123 Fineyst St, Luxury City, LC 12345</span>
+                                <span className="text-black text-sm font-semibold text-center md:text-left">123 Fineyst St, Luxury City, LC 12345</span>
                             </section>
 
                             <section className="flex items-center md:items-start">
@@ -85,19 +81,16 @@ const Footer = () => {
                             </section>
                         </section>
                     </section>
-
-                    {/* Links Container */}
                     <section className="flex flex-col sm:grid sm:grid-cols-2 md:grid md:grid-cols-3 lg:flex lg:flex-row gap-1 sm:gap-18 md:gap-16 lg:gap-20 xl:gap-24 2xl:gap-28 justify-center sm:justify-start md:justify-center lg:justify-end flex-1 mt-6 sm:mt-4 md:mt-6 lg:mt-0 md:mr-4 lg:mr-6">
-                        {/* Shop Links */}
                         <section className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
                             <button
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('shop')}
                             >
-                                <h3 className="w-full text-center md:text-left">SHOP</h3>
+                                <h3 className={`w-full text-center md:text-left ${avertaBlack.className}`}>SHOP</h3>
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'shop' ? 'rotate-180' : ''}`} />
                             </button>
-                            <ul className={`space-y-2 ${expandedSection === 'shop' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
+                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'shop' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
                                     <Link href="/size-guide" className="text-black font-semibold hover:font-bold transition-all" >
                                         Size Guide
@@ -114,20 +107,17 @@ const Footer = () => {
                                         Customer Reviews
                                     </Link>
                                 </li>
-
                             </ul>
                         </section>
-
-                        {/* Categories */}
                         <section className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
                             <button
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('categories')}
                             >
-                                <h3 className="w-full text-center md:text-left">CATEGORIES</h3>
+                                <h3 className={`w-full text-center md:text-left ${avertaBlack.className}`}>CATEGORIES</h3>
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'categories' ? 'rotate-180' : ''}`} />
                             </button>
-                            <ul className={`space-y-2 ${expandedSection === 'categories' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
+                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'categories' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
                                     <Link href="/collections/varsity" className="text-black font-semibold hover:font-bold transition-all">
                                         Varsity Jackets
@@ -143,7 +133,6 @@ const Footer = () => {
                                         Leather Jackets
                                     </Link>
                                 </li>
-
                                 <li>
                                     <Link href="/collections/puffer" className="text-black font-semibold hover:font-bold transition-all">
                                         Puffer Jackets
@@ -151,17 +140,15 @@ const Footer = () => {
                                 </li>
                             </ul>
                         </section>
-
-                        {/* Company Links */}
                         <section className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
                             <button
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('company')}
                             >
-                                <h3 className="w-full text-center md:text-left">COMPANY</h3>
+                                <h3 className={`w-full text-center md:text-left ${avertaBlack.className}`}>COMPANY</h3>
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'company' ? 'rotate-180' : ''}`} />
                             </button>
-                            <ul className={`space-y-2 ${expandedSection === 'company' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
+                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'company' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
                                     <Link href="/blogs" className="text-black font-semibold hover:font-bold transition-all">
                                         Blogs
@@ -174,17 +161,15 @@ const Footer = () => {
                                 </li>
                             </ul>
                         </section>
-
-                        {/* Support */}
                         <section className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
                             <button
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('support')}
                             >
-                                <h3 className="w-full text-center md:text-left">SUPPORT</h3>
+                                <h3 className={`w-full text-center md:text-left ${avertaBlack.className}`}>SUPPORT</h3>
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'support' ? 'rotate-180' : ''}`} />
                             </button>
-                            <ul className={`space-y-2 ${expandedSection === 'support' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
+                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'support' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
                                     <Link href="/faqs" className="text-black  font-semibold hover:font-bold transition-all">
                                         FAQs
@@ -209,17 +194,15 @@ const Footer = () => {
 
                             </ul>
                         </section>
-
-                        {/* Help Links */}
                         <section className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
                             <button
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('help')}
                             >
-                                <h3 className="w-full text-center md:text-left">HELP</h3>
+                                <h3 className={`w-full text-center md:text-left ${avertaBlack.className}`}>HELP</h3>
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'help' ? 'rotate-180' : ''}`} />
                             </button>
-                            <ul className={`space-y-2 ${expandedSection === 'help' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
+                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'help' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
                                     <Link href="/privacy-policy" className="text-black font-semibold hover:font-bold transition-all">
                                         Privacy Policy
@@ -241,14 +224,7 @@ const Footer = () => {
                         </section>
                     </section>
                 </section>
-
-
-
-
-
-
-                {/* Social Media, Reviews and Newsletter */}
-                <section className="flex flex-col md:flex-row justify-between items-center mt-6 pt-6">
+                <section className="flex flex-col md:flex-row  items-center mt-6 pt-6">
                     <section className="flex flex-col md:flex-row items-center mb-4 md:mb-0">
                         <h3 className="text-black font-semibold mr-4 mb-3 md:mb-0">FOLLOW US</h3>
                         <section className="flex space-x-3">
@@ -300,7 +276,7 @@ const Footer = () => {
                     </section>
 
                     {/* Trust Signals Image */}
-                    <section className="flex flex-col items-center my-4 md:my-0 md:mx-auto">
+                    <section className="flex flex-col items-center my-4 md:my-0 md:mx-auto pl-0 md:pl-40">
                         <img
                             src="/images/trust-signals.webp"
                             alt="Trust Signals"
@@ -331,10 +307,6 @@ const Footer = () => {
                         </form>
                     </section>
                 </section>
-
-
-
-                {/* Combined Footer Bottom Section */}
                 <section className="border-t border-gray-600 mt-6 pt-4 px-4 md:px-0">
                     {/* Three-column layout for bottom footer */}
                     <section className="flex flex-col md:flex-row justify-between items-center">

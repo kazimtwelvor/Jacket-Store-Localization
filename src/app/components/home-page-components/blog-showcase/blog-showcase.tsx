@@ -7,6 +7,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
+import { avertaBlack } from "@/src/lib/fonts"
 
 interface BlogItem {
     id: string
@@ -38,7 +39,7 @@ const BlogsShowcase = () => {
     const blogItems: BlogItem[] = [
         {
             id: "tech-innovation-2024",
-            title: "The Future of Technology Innovation",
+            title: "THE FUTURE OF TECHNOLOGY INNOVATION",
             excerpt: "Exploring Tomorrow's Tech",
             description: "Discover how emerging technologies are reshaping our digital landscape.",
             image: "https://jacket.us.com/uploads/2025/women-wearing-leather-jacket-homepage.jpg",
@@ -50,7 +51,7 @@ const BlogsShowcase = () => {
         },
         {
             id: "business-strategy-guide",
-            title: "Strategic Business Growth in 2025",
+            title: "STRATEGIC BUSINESS GROWTH IN 2025",
             excerpt: "Growth Strategies",
             description: "Essential strategies for scaling your business in the modern economy.",
             image: "https://jacket.us.com/uploads/2025/Whisk_5a021bacd5.jpg",
@@ -62,7 +63,7 @@ const BlogsShowcase = () => {
         },
         {
             id: "design-trends-2025",
-            title: "Design Trends Shaping 2025",
+            title: "DESIGN TRENDS SHAPING 2025",
             excerpt: "Creative Vision",
             description: "The latest design trends that will define the creative landscape ahead.",
             image: "https://jacket.us.com/uploads/2025/aviator_2.jpg",
@@ -74,7 +75,7 @@ const BlogsShowcase = () => {
         },
         {
             id: "sustainability-impact",
-            title: "Sustainability in Modern Business",
+            title: "SUSTAINABILITY IN MODERN BUSINESS",
             excerpt: "Green Innovation",
             description: "How sustainable practices are becoming essential for business success.",
             image: "/images/blog-sustainability.webp",
@@ -86,7 +87,7 @@ const BlogsShowcase = () => {
         },
         {
             id: "digital-transformation",
-            title: "Digital Transformation Essentials",
+            title: "DIGITAL TRANSFORMATION ESSENTIALS",
             excerpt: "Tech Evolution",
             description: "Navigate the digital revolution with proven transformation strategies.",
             image: "/images/blog-digital.webp",
@@ -98,7 +99,7 @@ const BlogsShowcase = () => {
         },
         {
             id: "leadership-insights",
-            title: "Leadership in the Digital Age",
+            title: "LEADERSHIP IN THE DIGITAL AGE",
             excerpt: "Modern Leadership",
             description: "Essential leadership skills for navigating today's complex business environment.",
             image: "/images/blog-leadership.webp",
@@ -292,7 +293,7 @@ const BlogsShowcase = () => {
                     transition={{ duration: 0.5 }}
                     className="text-center mb-12"
                 >
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight mb-6 text-black" style={{ fontFamily: 'AvertaPe Black' }}>
+                    <h2 className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight mb-6 text-black ${avertaBlack.className}`}>
                         <span className="text-[#2b2b2b]">LATEST</span>
                         <span className="text-black"> INSIGHTS</span>
                     </h2>
@@ -338,7 +339,7 @@ const BlogsShowcase = () => {
                                                 <span>{item.readTime}</span>
                                             </section>
 
-                                            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2b2b2b] transition-colors duration-300">
+                                            <h3 className={`text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2b2b2b] transition-colors duration-300 ${avertaBlack.className}`}>
                                                 {item.title}
                                             </h3>
 
@@ -442,7 +443,7 @@ const BlogsShowcase = () => {
                     </section>
                 )}
 
-                <section className="text-center mt-12 md:mt-16">
+                <section className={`text-center mt-12 md:mt-16 ${avertaBlack.className}`}>
                     <Link
                         href="/blogs"
                         className="inline-flex items-center gap-3 bg-black text-white px-8 py-4 font-bold text-lg hover:bg-[#2b2b2b] transition-colors duration-300"

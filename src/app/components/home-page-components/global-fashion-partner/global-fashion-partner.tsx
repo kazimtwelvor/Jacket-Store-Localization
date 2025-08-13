@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
+import { avertaBlack } from "@/src/lib/fonts"
 
 const GlobalFashionPartners = () => {
     const partners = [
@@ -53,7 +54,7 @@ const GlobalFashionPartners = () => {
                     className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-center mb-6 md:mb-8"
                     style={{ fontFamily: 'AvertaPe' }}
                 >
-                    <span className="text-black">AS FEATURED IN</span>
+                    <span className={`text-black ${avertaBlack.className}`}>AS FEATURED IN</span>
                 </motion.h2>
 
                 <section className="relative mb-6 md:mb-8">
