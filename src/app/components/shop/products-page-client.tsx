@@ -7,9 +7,7 @@ import type { Product, Category, Color, Size } from "@/types"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useCart } from "../../contexts/CartContext"
 import useWishlist from "../../hooks/use-wishlist"
-import { motion, AnimatePresence } from "framer-motion"
 import getProducts from "../../actions/get-products"
-import getKeywordCategories from "../../actions/get-keyword-categories"
 import MobileAddToCartModal from "../../modals/MobileAddToCartModal"
 import ShopCategories from "./ShopCategories"
 import RecentlyViewed from "../../category/RecentlyViewed"
@@ -20,7 +18,6 @@ import { PaginationControls } from "./components/PaginationControls"
 import { FilterSidebar } from "./components/FilterSidebar"
 import { CategorySlider } from "./components/CategorySlider"
 
-// Custom hook for media queries
 const useMediaQuery = (query: string): boolean => {
   const [matches, setMatches] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -40,7 +37,6 @@ const useMediaQuery = (query: string): boolean => {
   return mounted ? matches : false
 }
 
-// Helper functions
 const getMaterialsFromCategories = (categories?: Category[]) => 
   categories?.filter((cat) => cat.materials && cat.materials.length > 0) || []
 
@@ -98,7 +94,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   sizes, 
   keywordCategories = [] 
 }) => {
-  // State
   const [productsData, setProductsData] = useState<PaginatedProductsData>(initialProductsData)
   const [loading, setLoading] = useState(false)
   const [sizeModalOpen, setSizeModalOpen] = useState(false)
@@ -130,28 +125,24 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     filterBarHeight: 0,
   })
 
-  // Refs
   const filterBarWrapperRef = useRef<HTMLDivElement>(null)
   const paginationSectionRef = useRef<HTMLDivElement>(null)
   const filterBarRef = useRef<HTMLDivElement>(null)
   const wasDraggedRef = useRef(false)
   const productRefs = useRef<(HTMLDivElement | null)[]>([])
 
-  // Hooks
   const router = useRouter()
   const searchParams = useSearchParams()
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const { addToCart } = useCart()
   const wishlist = useWishlist()
 
-  // Derived state
   const materials = getMaterialsFromCategories(categories)
   const styles = getStylesFromCategories(categories)
   const genders = getGendersFromCategories(categories)
   const hasActiveFilters = selectedFilters.materials.length > 0 || selectedFilters.style.length > 0 || selectedFilters.gender.length > 0 || selectedFilters.colors.length > 0 || selectedFilters.sizes.length > 0
   const totalActiveFilters = selectedFilters.materials.length + selectedFilters.style.length + selectedFilters.gender.length + selectedFilters.colors.length + selectedFilters.sizes.length
 
-  // URL management
   const updateURL = useCallback(
     (newParams: Record<string, string | number>) => {
       const params = new URLSearchParams(searchParams.toString())
@@ -168,7 +159,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     [router, searchParams],
   )
 
-  // Product fetching
   const fetchProducts = useCallback(
     async (page: number, resetFilters = false) => {
       setLoading(true)
@@ -458,13 +448,13 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   if (!mounted) return null
 
   return (
-    <div className="bg-white">
+    <section className="bg-white">
       {/* Shop Categories Section */}
       <ShopCategories keywordCategories={keywordCategories} />
       
-      <div className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
+      <section className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
         {/* Filter Bar */}
-        <div ref={filterBarWrapperRef}>
+        <section ref={filterBarWrapperRef}>
           <FilterBar
             isFilterSticky={isFilterSticky}
             layoutMetrics={layoutMetrics}
@@ -480,26 +470,26 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             handleSortChange={handleSortChange}
             isDesktop={isDesktop}
           />
-        </div>
+        </section>
 
         {/* Loading indicator */}
         {loading && (
-          <div className="flex justify-center items-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black-600"></div>
+          <section className="flex justify-center items-center py-8">
+            <section className="animate-spin rounded-full h-8 w-8 border-b-2 border-black-600"></section>
             <span className="ml-2 text-gray-600">Loading products...</span>
-          </div>
+          </section>
         )}
 
         {/* Products Grid */}
-        <div className="w-full px-2 sm:px-4 md:px-8">
+        <section className="w-full px-2 sm:px-4 md:px-8">
           {!loading && productsData.products.length > 0 ? (
             <>
               {/* Page info */}
-              <div className="mb-4 text-sm text-gray-600 text-center">
+              <section className="mb-4 text-sm text-gray-600 text-center">
                 Showing {(productsData.pagination.currentPage - 1) * productsData.pagination.productsPerPage + 1} - {Math.min(productsData.pagination.currentPage * productsData.pagination.productsPerPage, productsData.pagination.totalProducts)} of {productsData.pagination.totalProducts} products
-              </div>
+              </section>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
+              <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
                 {currentProducts.map((product, index) => (
                   <ProductCard
                     key={product.id}
@@ -519,10 +509,10 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
                     wasDraggedRef={wasDraggedRef}
                   />
                 ))}
-              </div>
+              </section>
 
               {/* Pagination Controls */}
-              <div ref={paginationSectionRef}>
+              <section ref={paginationSectionRef}>
                 <PaginationControls
                   currentPage={productsData.pagination.currentPage}
                   totalPages={productsData.pagination.totalPages}
@@ -532,21 +522,21 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
                   onPageChange={handlePageChange}
                   isDesktop={isDesktop}
                 />
-              </div>
+              </section>
 
-              <div id="lower-content-section"></div>
+              <section id="lower-content-section"></section>
             </>
           ) : !loading ? (
-            <div className="text-center py-10">
+            <section className="text-center py-10">
               <p className="text-gray-500">No products found. Try adjusting your filters.</p>
               {hasActiveFilters && (
                 <button onClick={clearFilters} className="mt-2 text-black-600 hover:text-black underline">
                   Clear all filters
                 </button>
               )}
-            </div>
+            </section>
           ) : null}
-        </div>
+        </section>
 
         {/* We Think You Will Also Love Section */}
         {currentProducts.length > 0 && (
@@ -644,8 +634,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           }
           :global(.sticky.shadow-sm) { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
         `}</style>
-      </div>
-    </div>
+      </section>
+    </section>
   )
 }
 
