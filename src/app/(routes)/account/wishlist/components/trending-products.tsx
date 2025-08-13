@@ -1,8 +1,9 @@
-import Image from "next/image"
-import { Heart } from "lucide-react"
-import Currency from "@/src/app/ui/currency"
-import getProducts from "@/actions/get-products"
-import Link from "next/link"
+import Image from "next/image";
+import { Heart } from "lucide-react";
+import Currency from "@/src/app/ui/currency";
+// import getProducts from "@/actions/get-products"
+import Link from "next/link";
+import getProducts from "@/src/app/actions/get-products";
 
 // This is a Server Component (no 'use client' directive)
 export default async function TrendingProducts() {
@@ -14,7 +15,11 @@ export default async function TrendingProducts() {
       price: "399.00",
       images: [{ id: "img1", url: "/placeholder.svg?height=600&width=400" }],
       isFeatured: true,
-      category: { id: "cat1", name: "Shoes", billboard: { id: "bill1", label: "Shoes", imageUrl: "" } },
+      category: {
+        id: "cat1",
+        name: "Shoes",
+        billboard: { id: "bill1", label: "Shoes", imageUrl: "" },
+      },
       size: { id: "size1", name: "42", value: "42" },
       color: { id: "color1", name: "Black", value: "#000000" },
     },
@@ -24,7 +29,11 @@ export default async function TrendingProducts() {
       price: "129.00",
       images: [{ id: "img2", url: "/placeholder.svg?height=600&width=400" }],
       isFeatured: true,
-      category: { id: "cat2", name: "Shirts", billboard: { id: "bill2", label: "Shirts", imageUrl: "" } },
+      category: {
+        id: "cat2",
+        name: "Shirts",
+        billboard: { id: "bill2", label: "Shirts", imageUrl: "" },
+      },
       size: { id: "size2", name: "M", value: "M" },
       color: { id: "color2", name: "White", value: "#FFFFFF" },
     },
@@ -34,19 +43,27 @@ export default async function TrendingProducts() {
       price: "49.00",
       images: [{ id: "img3", url: "/placeholder.svg?height=600&width=400" }],
       isFeatured: true,
-      category: { id: "cat3", name: "Underwear", billboard: { id: "bill3", label: "Underwear", imageUrl: "" } },
+      category: {
+        id: "cat3",
+        name: "Underwear",
+        billboard: { id: "bill3", label: "Underwear", imageUrl: "" },
+      },
       size: { id: "size3", name: "L", value: "L" },
       color: { id: "color3", name: "Black", value: "#000000" },
     },
-  ]
+  ];
 
   try {
-    const fetchedProducts = await getProducts({ isFeatured: true })
-    if (fetchedProducts && fetchedProducts.products && fetchedProducts.products.length > 0) {
-      products = fetchedProducts.products.slice(0, 3) as any
+    const fetchedProducts = await getProducts({ isFeatured: true });
+    if (
+      fetchedProducts &&
+      fetchedProducts.products &&
+      fetchedProducts.products.length > 0
+    ) {
+      products = fetchedProducts.products.slice(0, 3) as any;
     }
   } catch (error) {
-    console.error("Error fetching trending products:", error)
+    console.error("Error fetching trending products:", error);
     // Use fallback data defined above
   }
 
@@ -79,9 +96,15 @@ export default async function TrendingProducts() {
             </button>
 
             {/* Product Image */}
-            <Link href={`/product/${product.id}`} className="block aspect-[3/4] w-full overflow-hidden bg-gray-100">
+            <Link
+              href={`/product/${product.id}`}
+              className="block aspect-[3/4] w-full overflow-hidden bg-gray-100"
+            >
               <Image
-                src={product.images[0]?.url || "/placeholder.svg?height=600&width=400"}
+                src={
+                  product.images[0]?.url ||
+                  "/placeholder.svg?height=600&width=400"
+                }
                 alt={product.name}
                 width={400}
                 height={600}
@@ -92,7 +115,9 @@ export default async function TrendingProducts() {
             {/* Product Info */}
             <div className="mt-4">
               <div className="text-center font-bold">BOSS</div>
-              <h3 className="text-sm text-center mt-1 uppercase line-clamp-2">{product.name}</h3>
+              <h3 className="text-sm text-center mt-1 uppercase line-clamp-2">
+                {product.name}
+              </h3>
 
               <div className="flex justify-center items-center mt-2 gap-2">
                 {index < 2 && (
@@ -144,5 +169,5 @@ export default async function TrendingProducts() {
         ))}
       </div>
     </div>
-  )
+  );
 }
