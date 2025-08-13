@@ -28,8 +28,8 @@ const Footer = () => {
     }
 
     return (
-        <footer className="bg-[#F6F6F6] text-black pt-16 pb-8 relative">
-            <section className="container mx-auto px-4">
+        <footer className={` bg-[#F6F6F6] text-black pt-16 pb-8 relative`}>
+            <section className="container mx-auto">
                 <section className="flex flex-col md:flex-row md:justify-start md:gap-14 gap-14 mb-8">
                     <section className="space-y-4 flex-shrink-0 md:w-64 flex flex-col items-center md:items-start">
                         <section className="flex flex-col items-center md:items-start">
@@ -40,7 +40,7 @@ const Footer = () => {
                                     style={{ display: 'block', maxWidth: '250px', width: '100%', height: 'auto' }}
                                 />
                             </section>
-                            <p className="text-black font-normal text-sm mt-2 text-center md:text-left">Experience the finest quality and timeless design. Your destination for luxury.</p>
+                            <p className={`text-black ${avertaBold.className} text-sm mt-2 text-center md:text-left`}>Experience the finest quality and timeless design. Your destination for luxury.</p>
                         </section>
                         <section className="space-y-3 w-full flex flex-col items-center md:items-start">
                             <section className="flex items-center md:items-start">
@@ -59,7 +59,7 @@ const Footer = () => {
                                         <circle cx="12" cy="10" r="3"></circle>
                                     </svg>
                                 </section>
-                                <span className="text-black font-semibold text-sm text-center md:text-left">123 Fineyst St, Luxury City, LC 12345</span>
+                                <span className="text-black text-sm font-semibold text-center md:text-left">123 Fineyst St, Luxury City, LC 12345</span>
                             </section>
 
                             <section className="flex items-center md:items-start">
@@ -224,7 +224,7 @@ const Footer = () => {
                         </section>
                     </section>
                 </section>
-                <section className="flex flex-col md:flex-row justify-between items-center mt-6 pt-6">
+                <section className="flex flex-col md:flex-row  items-center mt-6 pt-6">
                     <section className="flex flex-col md:flex-row items-center mb-4 md:mb-0">
                         <h3 className="text-black font-semibold mr-4 mb-3 md:mb-0">FOLLOW US</h3>
                         <section className="flex space-x-3">
@@ -276,7 +276,7 @@ const Footer = () => {
                     </section>
 
                     {/* Trust Signals Image */}
-                    <section className="flex flex-col items-center my-4 md:my-0 md:mx-auto">
+                    <section className="flex flex-col items-center my-4 md:my-0 md:mx-auto pl-0 md:pl-40">
                         <img
                             src="/images/trust-signals.webp"
                             alt="Trust Signals"
@@ -307,10 +307,6 @@ const Footer = () => {
                         </form>
                     </section>
                 </section>
-
-
-
-                {/* Combined Footer Bottom Section */}
                 <section className="border-t border-gray-600 mt-6 pt-4 px-4 md:px-0">
                     {/* Three-column layout for bottom footer */}
                     <section className="flex flex-col md:flex-row justify-between items-center">
