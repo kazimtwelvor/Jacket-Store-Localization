@@ -25,7 +25,12 @@ const Gallery: React.FC<GalleryProps> = ({ images = [], onAddToCart, onAddToWish
   const [isDragging, setIsDragging] = React.useState(false)
   const [dragStart, setDragStart] = React.useState({ x: 0, y: 0 })
   const [lastTap, setLastTap] = React.useState(0)
+  const [isMounted, setIsMounted] = React.useState(false)
   const imageRef = React.useRef<HTMLDivElement>(null)
+  
+  React.useEffect(() => {
+    setIsMounted(true)
+  }, [])
   
   // Sort images by order and prioritize primary image
   const sortedImages = React.useMemo(() => {
@@ -600,11 +605,11 @@ const Gallery: React.FC<GalleryProps> = ({ images = [], onAddToCart, onAddToWish
               onAddToWishlist?.()
             }}
             className={`w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 ${
-              isInWishlist ? "bg-[#B01E23] text-white" : "bg-white text-[#000000] border-2 border-[#000000]"
+              isMounted && isInWishlist ? "bg-[#B01E23] text-white" : "bg-white text-[#000000] border-2 border-[#000000]"
             }`}
             style={{ aspectRatio: '1/1' }}
           >
-            <Heart className="h-5 w-5" fill={isInWishlist ? "currentColor" : "none"} />
+            <Heart className="h-5 w-5" fill={isMounted && isInWishlist ? "currentColor" : "none"} />
           </button>
           
           {/* Add to Cart Button */}

@@ -272,8 +272,9 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
                     className="w-full h-full object-cover"
                     priority={category.isActive}
                     unoptimized={true}
-                    onError={() => {
-                      console.error(`Error loading image for category: ${category.name}, URL: ${category.icon}`);
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/placeholder.svg';
                     }}
                   />
                 </div>
