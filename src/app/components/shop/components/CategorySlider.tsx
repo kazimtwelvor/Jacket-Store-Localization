@@ -70,7 +70,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
           : "border-gray-200 bg-white hover:border-gray-400 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
       )}>
         {/* Category Image */}
-        <div className="relative h-48 w-full overflow-hidden">
+        <div className="relative h-32 w-full overflow-hidden">
           {category.imageUrl ? (
             <Image
               src={category.imageUrl}
@@ -80,7 +80,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-              <Grid3X3 className="w-12 h-12 text-gray-400" />
+              <Grid3X3 className="w-8 h-8 text-gray-400" />
             </div>
           )}
           
@@ -92,26 +92,13 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
               : "bg-black/20 group-hover:bg-black/30"
           )} />
           
-          {/* Category Badge */}
-          <div className="absolute top-3 left-3">
-            <span className={cn(
-              "px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm transition-colors",
-              currentCategory?.id === category.id
-                ? "bg-white/95 text-gray-900 border border-gray-200"
-                : "bg-white/90 text-gray-800"
-            )}>
-              {(category as any).productCount > 0 
-                ? `${(category as any).productCount} Product${(category as any).productCount !== 1 ? 's' : ''}`
-                : 'Coming Soon'
-              }
-            </span>
-          </div>
+          {/* Category Badge - Removed */}
         </div>
 
         {/* Category Info */}
-        <div className="p-4">
+        <div className="p-3">
           <h3 className={cn(
-            "font-bold text-lg mb-2 transition-colors",
+            "font-bold text-base mb-1 transition-colors",
             currentCategory?.id === category.id
               ? "text-gray-900"
               : "text-gray-800 group-hover:text-gray-900"
@@ -120,7 +107,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
           </h3>
           
           {category.description && (
-            <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+            <p className="text-xs text-gray-600 line-clamp-2 mb-2">
               {category.description}
             </p>
           )}
@@ -465,7 +452,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
                     </p>
                     
                     {viewMode === "grid" ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                         {filteredCategories.map((category) => (
                           <CategoryCard key={category.id} category={category} />
                         ))}
