@@ -405,7 +405,7 @@ const Navbar = () => {
                   <Link href="/shop?category=leather-jackets" prefetch={true}>
                     <Button
                       variant="ghost"
-                      className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
+                      className="h-full rounded-none text-white hover:bg-white/10 hover:text-white px-6 py-1 transition-colors"
                       onMouseEnter={() => {
                         if (megaMenuTimeout.current)
                           clearTimeout(megaMenuTimeout.current);
@@ -424,7 +424,7 @@ const Navbar = () => {
                   <Link href="/shop?category=womens-jackets" prefetch={true}>
                     <Button
                       variant="ghost"
-                      className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
+                      className="h-full rounded-none text-white hover:bg-white/10 hover:text-white px-6 py-1 transition-colors"
                       onMouseEnter={() => {
                         if (megaMenuTimeout.current)
                           clearTimeout(megaMenuTimeout.current);
@@ -443,7 +443,7 @@ const Navbar = () => {
                   <Link href="/shop?category=mens-jackets" prefetch={true}>
                     <Button
                       variant="ghost"
-                      className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
+                      className="h-full rounded-none text-white hover:bg-white/10 hover:text-white px-6 py-1 transition-colors"
                       onMouseEnter={() => {
                         if (megaMenuTimeout.current)
                           clearTimeout(megaMenuTimeout.current);
@@ -461,7 +461,7 @@ const Navbar = () => {
                 <div className="relative">
                   <Button
                     variant="ghost"
-                    className="h-full rounded-none text-white hover:bg-[#8B0000] hover:text-white px-6 py-1"
+                    className="h-full rounded-none text-white hover:bg-white/10 hover:text-white px-6 py-1 transition-colors"
                     onMouseEnter={() => {
                       if (megaMenuTimeout.current)
                         clearTimeout(megaMenuTimeout.current);

@@ -14,6 +14,7 @@ interface FilterBarProps {
   sortDropdownOpen: boolean
   setSortDropdownOpen: (open: boolean) => void
   setFilterSidebarOpen: (open: boolean) => void
+  setCategorySliderOpen: (open: boolean) => void
   setSizeModalOpen: (open: boolean) => void
   clearFilters: () => void
   handleSortChange: (sortValue: string) => void
@@ -29,6 +30,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   sortDropdownOpen,
   setSortDropdownOpen,
   setFilterSidebarOpen,
+  setCategorySliderOpen,
   setSizeModalOpen,
   clearFilters,
   handleSortChange,
@@ -169,9 +171,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               <div className="w-full bg-[#2b2b2b] text-white rounded-[15px] shadow-md flex items-center">
                 <button
                   className="flex-1 px-4 py-4 md:px-6 md:py-3 flex items-center cursor-pointer border-r border-white/30 hover:bg-white/10 transition-colors"
-                  onClick={() => setFilterSidebarOpen(true)}
+                  onClick={() => setCategorySliderOpen(true)}
                 >
-                  <span className="font-bold mr-1 text-xs md:text-sm">All Categories</span>
+                  <span className="font-bold mr-1 text-xs md:text-sm">Browse Categories</span>
                   <ChevronDown size={16} />
                 </button>
 

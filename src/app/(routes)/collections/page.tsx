@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from 'next';
 import CategoriesPage from './page-client';
-import getKeywordCategories from '@/actions/get-keyword-categories';
+import getKeywordCategories from '@/src/app/actions/get-keyword-categories';
 
 export const metadata: Metadata = {
   title: 'All Categories | Jackets Store',

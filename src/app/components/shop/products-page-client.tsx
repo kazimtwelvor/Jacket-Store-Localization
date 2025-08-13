@@ -18,6 +18,7 @@ import { ProductCard } from "./components/ProductCard"
 import { FilterBar } from "./components/FilterBar"
 import { PaginationControls } from "./components/PaginationControls"
 import { FilterSidebar } from "./components/FilterSidebar"
+import { CategorySlider } from "./components/CategorySlider"
 
 // Custom hook for media queries
 const useMediaQuery = (query: string): boolean => {
@@ -102,6 +103,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const [loading, setLoading] = useState(false)
   const [sizeModalOpen, setSizeModalOpen] = useState(false)
   const [filterSidebarOpen, setFilterSidebarOpen] = useState(false)
+  const [categorySliderOpen, setCategorySliderOpen] = useState(false)
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState("t-shirts")
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
@@ -472,6 +474,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             sortDropdownOpen={sortDropdownOpen}
             setSortDropdownOpen={setSortDropdownOpen}
             setFilterSidebarOpen={setFilterSidebarOpen}
+            setCategorySliderOpen={setCategorySliderOpen}
             setSizeModalOpen={setSizeModalOpen}
             clearFilters={clearFilters}
             handleSortChange={handleSortChange}
@@ -593,6 +596,18 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             toggleColor: toggleColorFilter,
           }}
           onClearFilters={clearFilters}
+        />
+
+        {/* Category Slider */}
+        <CategorySlider
+          isOpen={categorySliderOpen}
+          onClose={() => setCategorySliderOpen(false)}
+          categories={categories || []}
+          onCategorySelect={(category) => {
+            // Handle category selection - could navigate to category page or apply filters
+            console.log('Selected category:', category)
+            setCategorySliderOpen(false)
+          }}
         />
 
         {/* Mobile Add To Cart Modal */}

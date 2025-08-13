@@ -80,7 +80,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
             {/* Materials Section */}
             <div className="mb-6 mt-4">
               <h3 className="text-base font-semibold mb-3 flex items-center">
-                <span className="w-6 h-6 rounded-full bg-black100 text-black flex items-center justify-center mr-2">
+                <span className="w-6 h-6 rounded-full bg-gray-100 text-black flex items-center justify-center mr-2">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                     <circle cx="9" cy="9" r="2"></circle>
@@ -110,7 +110,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
             {/* Styles Section */}
             <div className="mb-6">
               <h3 className="text-base font-semibold mb-3 flex items-center">
-                <span className="w-6 h-6 rounded-full bg-black100 text-black-600 flex items-center justify-center mr-2">
+                <span className="w-6 h-6 rounded-full bg-gray-100 text-black-600 flex items-center justify-center mr-2">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                   </svg>
@@ -138,7 +138,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
             {/* Gender Section */}
             <div className="mb-6">
               <h3 className="text-base font-semibold mb-3 flex items-center">
-                <span className="w-6 h-6 rounded-full bg-black100 text-black-600 flex items-center justify-center mr-2">
+                <span className="w-6 h-6 rounded-full bg-gray-100 text-black-600 flex items-center justify-center mr-2">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 9V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2"></path>
                     <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V9s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
