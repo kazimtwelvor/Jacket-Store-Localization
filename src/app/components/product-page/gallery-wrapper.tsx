@@ -8,6 +8,7 @@ import type { ProductImage, Product } from "@/types"
 import { useCart } from "../../contexts/CartContext"
 import useWishlist from "../../hooks/use-wishlist"
 import Gallery from "../gallery"
+import React from "react"
 
 interface GalleryWrapperProps {
   images: ProductImage[]
@@ -17,8 +18,17 @@ interface GalleryWrapperProps {
 const GalleryWrapper: React.FC<GalleryWrapperProps> = ({ images, product }) => {
   const cart = useCart()
   const wishlist = useWishlist()
-  const isInWishlist = wishlist.isInWishlist(product.id)
+  const [hasMounted, setHasMounted] = useState(false)
+  
+  // Only access wishlist state after mounting to prevent hydration mismatches
+  const isInWishlist = hasMounted ? wishlist.isInWishlist(product.id) : false
+  
   const [showMobileSizeModal, setShowMobileSizeModal] = useState(false)
+
+  // Set mounted state after component mounts
+  React.useEffect(() => {
+    setHasMounted(true)
+  }, [])
 
   const handleAddToCart = () => {
     alert('Button clicked!')
