@@ -1,13 +1,11 @@
 "use client"
 
-// import Gallery from "../../gallery"
-// import useCart from "../../hooks/use-cart"
-// import useWishlist from "../../hooks/use-wishlist"
 import { useState } from "react"
 import type { ProductImage, Product } from "@/types"
 import { useCart } from "../../contexts/CartContext"
 import useWishlist from "../../hooks/use-wishlist"
 import Gallery from "../gallery"
+import React from "react"
 
 interface GalleryWrapperProps {
   images: ProductImage[]
@@ -17,8 +15,15 @@ interface GalleryWrapperProps {
 const GalleryWrapper: React.FC<GalleryWrapperProps> = ({ images, product }) => {
   const cart = useCart()
   const wishlist = useWishlist()
-  const isInWishlist = wishlist.isInWishlist(product.id)
+  const [hasMounted, setHasMounted] = useState(false)
+  
+  const isInWishlist = hasMounted ? wishlist.isInWishlist(product.id) : false
+  
   const [showMobileSizeModal, setShowMobileSizeModal] = useState(false)
+
+  React.useEffect(() => {
+    setHasMounted(true)
+  }, [])
 
   const handleAddToCart = () => {
     alert('Button clicked!')
@@ -38,7 +43,6 @@ const GalleryWrapper: React.FC<GalleryWrapperProps> = ({ images, product }) => {
         isInWishlist={isInWishlist}
       />
       
-      {/* Mobile Size Selection Modal */}
       {showMobileSizeModal && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-[99999]" 

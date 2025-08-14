@@ -6,7 +6,6 @@ import { Heart } from "lucide-react";
 import Currency from "@/src/app/ui/currency"
 import Link from "next/link";
 
-// Client component that fetches and displays trending products
 export default function TrendingProducts() {
   const [products, setProducts] = useState([
     {
@@ -71,7 +70,6 @@ export default function TrendingProducts() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      // Check if API URL is available and valid
       if (!process.env.NEXT_PUBLIC_API_URL) {
         setIsLoading(false);
         return;
@@ -88,7 +86,6 @@ export default function TrendingProducts() {
           if (response.ok) {
             const data = await response.json();
             if (data && data.length > 0) {
-              // Keep our local images but update other product data
               const updatedProducts = data
                 .slice(0, 3)
                 .map((product: any, index: number) => ({
@@ -105,50 +102,44 @@ export default function TrendingProducts() {
           }
         } catch (error) {
           console.error("Error fetching products:", error);
-          // Continue with local data
         }
       } finally {
         setIsLoading(false);
       }
     };
-
-    // Call the fetch function
     fetchProducts();
   }, []);
 
   if (isLoading) {
-    return <div className="py-8 text-center">Loading trending products...</div>;
+    return <section className="py-8 text-center">Loading trending products...</section>;
   }
 
   return (
-    <div className="mt-8">
+    <section className="mt-8">
       <h2 className="text-2xl font-bold mb-6">TRENDING NOW</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {products.map((product: any, index: number) => (
-          <div key={product.id} className="group relative">
-            {/* Sale Tag */}
+          <section key={product.id} className="group relative">
             {index === 0 && (
-              <div className="absolute top-2 left-2 z-10 bg-[#2b2b2b] text-white text-xs font-bold px-2 py-1">
+              <section className="absolute top-2 left-2 z-10 bg-[#2b2b2b] text-white text-xs font-bold px-2 py-1">
                 Sale-20%
-              </div>
+              </section>
             )}
             {index === 1 && (
-              <div className="absolute top-2 left-2 z-10 bg-[#2b2b2b] text-white text-xs font-bold px-2 py-1">
+              <section className="absolute top-2 left-2 z-10 bg-[#2b2b2b] text-white text-xs font-bold px-2 py-1">
                 Sale-30%
-              </div>
+              </section>
             )}
             {index === 2 && (
-              <div className="absolute top-2 left-2 z-10 bg-black text-white text-xs font-bold px-2 py-1">
+              <section className="absolute top-2 left-2 z-10 bg-black text-white text-xs font-bold px-2 py-1">
                 Bestseller
-              </div>
+              </section>
             )}
 
-            {/* Wishlist Button */}
             <button className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md">
               <Heart className="h-5 w-5" />
             </button>
 
-            {/* Product Image */}
             <Link
               href={`/product/${product.id}`}
               className="block aspect-[3/4] w-full overflow-hidden bg-gray-100"
@@ -162,14 +153,13 @@ export default function TrendingProducts() {
               />
             </Link>
 
-            {/* Product Info */}
-            <div className="mt-4">
-              <div className="text-center font-bold">FINEYST</div>
+            <section className="mt-4">
+              <section className="text-center font-bold">FINEYST</section>
               <h3 className="text-sm text-center mt-1 uppercase line-clamp-2">
                 {product.name}
               </h3>
 
-              <div className="flex justify-center items-center mt-2 gap-2">
+              <section className="flex justify-center items-center mt-2 gap-2">
                 {index < 2 && (
                   <>
                     <span className="text-gray-500 line-through">
@@ -185,39 +175,38 @@ export default function TrendingProducts() {
                     <Currency value="49.00" />
                   </span>
                 )}
-              </div>
+              </section>
 
-              {/* Color Options */}
-              <div className="flex justify-center mt-3">
+              <section className="flex justify-center mt-3">
                 {index === 0 && (
-                  <div className="border border-gray-300 px-3 py-1 text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full bg-black"></div>
+                  <section className="border border-gray-300 px-3 py-1 text-sm">
+                    <section className="flex items-center gap-2">
+                      <section className="w-4 h-4 rounded-full bg-black"></section>
                       <span>Black</span>
-                    </div>
-                  </div>
+                    </section>
+                  </section>
                 )}
                 {index === 1 && (
-                  <div className="border border-gray-300 px-3 py-1 text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full bg-gray-200"></div>
+                  <section className="border border-gray-300 px-3 py-1 text-sm">
+                    <section className="flex items-center gap-2">
+                      <section className="w-4 h-4 rounded-full bg-gray-200"></section>
                       <span>+ 4 Colors</span>
-                    </div>
-                  </div>
+                    </section>
+                  </section>
                 )}
                 {index === 2 && (
-                  <div className="border border-gray-300 px-3 py-1 text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full bg-black"></div>
+                  <section className="border border-gray-300 px-3 py-1 text-sm">
+                    <section className="flex items-center gap-2">
+                      <section className="w-4 h-4 rounded-full bg-black"></section>
                       <span>+ 1 Color</span>
-                    </div>
-                  </div>
+                    </section>
+                  </section>
                 )}
-              </div>
-            </div>
-          </div>
+              </section>
+            </section>
+          </section>
         ))}
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }

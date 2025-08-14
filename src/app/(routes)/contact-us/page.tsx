@@ -337,7 +337,7 @@ export default function ContactUsPage() {
           <ContactFAQ />
 
           <section className="mt-12 text-center">
-            <p className="text-black mb-4">
+            <p className="text-black mb-4"> 
               Still have questions? Our customer service team is here to help.
             </p>
             <Button className="bg-[#eaeaea] hover:bg-[#EAEAEA] text-black" asChild>

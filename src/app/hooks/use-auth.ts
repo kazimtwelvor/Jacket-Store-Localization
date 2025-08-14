@@ -39,11 +39,11 @@ interface RegisterData {
   country?: string
 }
 
-// Extract store ID from the API URL
+// Extract store ID from the API URL or use default
 const getStoreIdFromUrl = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || ""
   const matches = apiUrl.match(/\/api\/([^/]+)/)
-  return matches ? matches[1] : ""
+  return matches ? matches[1] : "jackets-new" // Default store ID
 }
 
 const storeId = getStoreIdFromUrl()

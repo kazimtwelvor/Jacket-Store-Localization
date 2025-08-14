@@ -1,3 +1,4 @@
+"use client";
 
 "use client"
 
@@ -9,25 +10,28 @@ import { useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
 
 const Summary = () => {
-  const searchParams = useSearchParams()
-  const { items, clearCart } = useCart()
-  const totalPrice = items.reduce((total, item) => total + Number(item.price), 0)
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
+  const searchParams = useSearchParams();
+  const { items, clearCart } = useCart();
+  const totalPrice = items.reduce(
+    (total, item) => total + Number(item.price),
+    0
+  );
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (searchParams.get("success")) {
-      toast.success("Payment completed.")
-      clearCart()
+      toast.success("Payment completed.");
+      clearCart();
     }
     if (searchParams.get("canceled")) {
-      toast.error("Something went wrong.")
+      toast.error("Something went wrong.");
     }
-  }, [searchParams, clearCart])
+  }, [searchParams, clearCart]);
 
   const onCheckout = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
         method: "POST",
@@ -41,23 +45,23 @@ const Summary = () => {
       })
 
       if (!response.ok) {
-        throw new Error("Checkout failed")
+        throw new Error("Checkout failed");
       }
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (data.url) {
-        window.location.href = data.url
+        window.location.href = data.url;
       } else {
         router.push("/checkout/success")
       }
     } catch (error) {
-      console.error("Checkout error:", error)
-      toast.error("Something went wrong")
+      console.error("Checkout error:", error);
+      toast.error("Something went wrong");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <section className="px-4 py-6 mt-16 rounded-lg bg-gray-50 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
@@ -75,4 +79,4 @@ const Summary = () => {
   )
 }
 
-export default Summary
+export default Summary;

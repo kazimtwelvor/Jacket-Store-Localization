@@ -6,7 +6,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { toast } from "react-hot-toast"
-import useAuth from "@/hooks/use-auth"
+import useAuth from "@/src/app/hooks/use-auth"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -38,22 +38,18 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
-      // Check if passwords match
       if (formData.password !== formData.confirmPassword) {
         toast.error("Passwords do not match")
         setIsLoading(false)
         return
       }
 
-      // Set a timeout to prevent the UI from being stuck if the request takes too long
       const timeoutId = setTimeout(() => {
-        // If this executes, the request is taking too long
         toast.success("Registration submitted! You may proceed to login.")
         router.push("/auth/login")
         setIsLoading(false)
-      }, 5000) // 5 seconds timeout
+      }, 5000)
 
-      // Call the register function from useAuth
       const result = await register({
         email: formData.email,
         password: formData.password,
@@ -67,7 +63,6 @@ export default function RegisterPage() {
         country: formData.country,
       })
 
-      // Clear the timeout since we got a response
       clearTimeout(timeoutId)
 
       if (result.success) {
@@ -80,8 +75,6 @@ export default function RegisterPage() {
       console.error("Registration error:", error)
       toast.error("An unexpected error occurred")
 
-      // If there's an error, still redirect to login after a short delay
-      // since we know the user was created in the database
       setTimeout(() => {
         toast.success("Your account was created. You may proceed to login.")
         router.push("/auth/login")
@@ -103,14 +96,14 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white p-8 rounded-lg shadow-md">
+    <section className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
+      <section className="w-full max-w-md">
+        <section className="bg-white p-8 rounded-lg shadow-md">
           <h1 className="text-2xl font-bold text-center mb-6">Create an Account</h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
+            <section className="grid grid-cols-2 gap-4">
+              <section>
                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
                   First Name
                 </label>
@@ -123,8 +116,8 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </div>
-              <div>
+              </section>
+              <section>
                 <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
                   Last Name
                 </label>
@@ -137,10 +130,10 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </div>
-            </div>
+              </section>
+            </section>
 
-            <div>
+            <section>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email
               </label>
@@ -153,9 +146,9 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
-            </div>
+            </section>
 
-            <div>
+            <section>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
@@ -168,9 +161,9 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
-            </div>
+            </section>
 
-            <div>
+            <section>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                 Confirm Password
               </label>
@@ -183,9 +176,9 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
-            </div>
+            </section>
 
-            <div>
+            <section>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                 Phone (optional)
               </label>
@@ -197,10 +190,10 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
-            </div>
+            </section>
 
-            <div className="grid grid-cols-1 gap-4">
-              <div>
+            <section className="grid grid-cols-1 gap-4">
+              <section>
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                   Address (optional)
                 </label>
@@ -212,11 +205,11 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </div>
-            </div>
+              </section>
+            </section>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
+            <section className="grid grid-cols-2 gap-4">
+              <section>
                 <label htmlFor="city" className="block text-sm font-medium text-gray-700">
                   City (optional)
                 </label>
@@ -228,8 +221,8 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </div>
-              <div>
+              </section>
+              <section>
                 <label htmlFor="state" className="block text-sm font-medium text-gray-700">
                   State (optional)
                 </label>
@@ -241,11 +234,11 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </div>
-            </div>
+              </section>
+            </section>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
+            <section className="grid grid-cols-2 gap-4">
+              <section>
                 <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700">
                   ZIP Code (optional)
                 </label>
@@ -257,8 +250,8 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </div>
-              <div>
+              </section>
+              <section>
                 <label htmlFor="country" className="block text-sm font-medium text-gray-700">
                   Country (optional)
                 </label>
@@ -270,10 +263,10 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </div>
-            </div>
+              </section>
+            </section>
 
-            <div>
+            <section>
               <button
                 type="submit"
                 disabled={isLoading}
@@ -281,21 +274,20 @@ export default function RegisterPage() {
               >
                 {isLoading ? "Creating Account..." : "Create Account"}
               </button>
-            </div>
+            </section>
           </form>
 
-          <div className="mt-4 text-center">
+          <section className="mt-4 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
               <Link href="/auth/login" className="font-medium text-indigo-600 hover:text-indigo-500">
                 Sign in
               </Link>
             </p>
-          </div>
+          </section>
 
-          {/* Debug section - only visible in development */}
           {process.env.NODE_ENV === "development" && (
-            <div className="mt-8 border-t pt-4">
+            <section className="mt-8 border-t pt-4">
               <button onClick={fetchDebugInfo} className="text-xs text-gray-500 underline">
                 Debug API Connection
               </button>
@@ -305,10 +297,10 @@ export default function RegisterPage() {
                   {JSON.stringify(debugInfo, null, 2)}
                 </pre>
               )}
-            </div>
+            </section>
           )}
-        </div>
-      </div>
-    </div>
+        </section>
+      </section>
+    </section>
   )
 }

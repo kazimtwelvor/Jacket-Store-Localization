@@ -9,7 +9,7 @@ import type { Category } from "@/types"
 import CategoryPageClient from "./page-client"
 import { notFound, redirect } from "next/navigation"
 import type { Metadata, ResolvingMetadata } from "next"
-import StructuredData from "../../../components/layout/structured-data"
+import StructuredData from "../../../components/layout/structured-data-layout"
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>

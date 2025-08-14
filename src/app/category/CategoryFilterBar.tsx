@@ -1,30 +1,29 @@
+"use client";
 
-
-"use client"
-
-import { useRef, useEffect, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { Filter, ChevronDown, HelpCircle } from "lucide-react"
-import { motion } from "framer-motion"
-import { cn } from "../lib/utils"
-import type { Category } from "@/types"
+import { useRef, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Filter, ChevronDown, HelpCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { cn } from "../lib/utils";
+import type { Category } from "@/types";
 
 interface CategoryFilterBarProps {
-  category: Category
-  hasActiveFilters: boolean
-  isFilterSticky: boolean
-  sortDropdownOpen: boolean
-  setSortDropdownOpen: (open: boolean) => void
-  setCategoriesSidebarOpen: (open: boolean) => void
-  setFilterSidebarOpen: (open: boolean) => void
-  setSizeModalOpen: (open: boolean) => void
-  clearFilters: () => void
+  category: Category;
+  hasActiveFilters: boolean;
+  isFilterSticky: boolean;
+  sortDropdownOpen: boolean;
+  setSortDropdownOpen: (open: boolean) => void;
+  setCategoriesSidebarOpen: (open: boolean) => void;
+  setCategorySliderOpen: (open: boolean) => void;
+  setFilterSidebarOpen: (open: boolean) => void;
+  setSizeModalOpen: (open: boolean) => void;
+  clearFilters: () => void;
   selectedFilters: {
-    sizes: string[]
-    colors: string[]
-  }
-  onSortChange?: (sortBy: string) => void
-  currentSort?: string
+    sizes: string[];
+    colors: string[];
+  };
+  onSortChange?: (sortBy: string) => void;
+  currentSort?: string;
 }
 
 const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
@@ -34,56 +33,68 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
   sortDropdownOpen,
   setSortDropdownOpen,
   setCategoriesSidebarOpen,
+  setCategorySliderOpen,
   setFilterSidebarOpen,
   setSizeModalOpen,
   clearFilters,
   selectedFilters,
   onSortChange,
-  currentSort = 'popular'
+  currentSort = "popular",
 }) => {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const filterBarRef = useRef<HTMLDivElement>(null)
-  const sortButtonRef = useRef<HTMLButtonElement>(null)
-  const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number } | null>(null)
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const filterBarRef = useRef<HTMLDivElement>(null);
+  const sortButtonRef = useRef<HTMLButtonElement>(null);
+  const [dropdownPosition, setDropdownPosition] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
 
   // Close sort dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (sortDropdownOpen && filterBarRef.current && !filterBarRef.current.contains(event.target as Node)) {
-        setSortDropdownOpen(false)
+      if (
+        sortDropdownOpen &&
+        filterBarRef.current &&
+        !filterBarRef.current.contains(event.target as Node)
+      ) {
+        setSortDropdownOpen(false);
       }
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [sortDropdownOpen, setSortDropdownOpen])
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [sortDropdownOpen, setSortDropdownOpen]);
 
   // Handle capsule nav visibility based on sticky state
   useEffect(() => {
     if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("filterBarSticky", { detail: { isSticky: isFilterSticky } }))
+      window.dispatchEvent(
+        new CustomEvent("filterBarSticky", {
+          detail: { isSticky: isFilterSticky },
+        })
+      );
     }
-  }, [isFilterSticky])
+  }, [isFilterSticky]);
 
   // Handle sort change with URL updates
   const handleSortChange = (sortValue: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-    params.set('sort', sortValue)
-    router.push(`?${params.toString()}`, { scroll: false })
-    onSortChange?.(sortValue)
-    setSortDropdownOpen(false)
-  }
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("sort", sortValue);
+    router.push(`?${params.toString()}`, { scroll: false });
+    onSortChange?.(sortValue);
+    setSortDropdownOpen(false);
+  };
 
   // Get sort display name
   const getSortDisplayName = (sortValue: string) => {
     const sortOptions = {
-      'popular': 'Most Popular',
-      'newest': 'Newest',
-      'price-high': 'Price (high-low)',
-      'price-low': 'Price (low-high)'
-    }
-    return sortOptions[sortValue as keyof typeof sortOptions] || 'Most Popular'
-  }
+      popular: "Most Popular",
+      newest: "Newest",
+      "price-high": "Price (high-low)",
+      "price-low": "Price (low-high)",
+    };
+    return sortOptions[sortValue as keyof typeof sortOptions] || "Most Popular";
+  };
 
   return (
     <>
@@ -182,7 +193,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
             padding: 0.625rem 1rem;
           }
           .filter-button span {
-            font-size: 0.800rem;
+            font-size: 0.8rem;
           }
           .sort-button {
             padding: 0.75rem 1rem;
@@ -218,25 +229,33 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
         ref={filterBarRef}
         className={cn(
           "w-full px-2 py-4 mb-6 transition-all duration-300",
-          isFilterSticky ? "fixed top-32 md:top-28 left-0 right-0 px-2 py-2 z-[9003] sticky-filter-bar" : "relative",
+          isFilterSticky
+            ? "fixed top-32 md:top-28 left-0 right-0 px-2 py-2 z-[9003] sticky-filter-bar"
+            : "relative",
           "md:px-6 md:py-3 md:mb-10",
           "lg:px-8 lg:py-3"
         )}
       >
-        <div className={cn(
-          "w-full flex flex-col justify-center items-center gap-3",
-          "md:flex-row md:justify-between md:items-center"
-        )}>
-          <div className={cn(
-            "w-full flex items-center relative",
-            "md:w-auto md:flex-row md:items-center"
-          )}>
+        <div
+          className={cn(
+            "w-full flex flex-col justify-center items-center gap-3",
+            "md:flex-row md:justify-between md:items-center"
+          )}
+        >
+          <div
+            className={cn(
+              "w-full flex items-center relative",
+              "md:w-auto md:flex-row md:items-center"
+            )}
+          >
             <div className="w-full bg-[#2b2b2b] text-white rounded-[15px] shadow-md flex items-center">
               <button
                 className="flex-1 px-4 py-4 md:px-6 md:py-3 flex items-center cursor-pointer border-r border-white/30 hover:bg-white/10 transition-colors"
-                onClick={() => setCategoriesSidebarOpen(true)}
+                onClick={() => setCategorySliderOpen(true)}
               >
-                <span className="font-bold mr-1 text-xs md:text-sm">{category.name}</span>
+                <span className="font-bold mr-1 text-xs md:text-sm">
+                  {category.name}
+                </span>
                 <ChevronDown size={16} />
               </button>
 
@@ -250,7 +269,10 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
                 <span>Filter</span>
                 {hasActiveFilters && (
                   <span className="filter-count">
-                    ({selectedFilters.sizes.length + selectedFilters.colors.length})
+                    (
+                    {selectedFilters.sizes.length +
+                      selectedFilters.colors.length}
+                    )
                   </span>
                 )}
                 <Filter size={14} />
@@ -259,20 +281,48 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
                 <button
                   className="sort-button"
                   onClick={(e) => {
-                    e.stopPropagation()
-                    setSortDropdownOpen(!sortDropdownOpen)
+                    e.stopPropagation();
+                    setSortDropdownOpen(!sortDropdownOpen);
                   }}
                 >
                   <span>{getSortDisplayName(currentSort)}</span>
                   <ChevronDown size={14} />
                 </button>
-                
+
                 {sortDropdownOpen && (
                   <div className="sort-dropdown">
-                    <button onClick={(e) => { e.stopPropagation(); handleSortChange('popular'); }}>Most Popular</button>
-                    <button onClick={(e) => { e.stopPropagation(); handleSortChange('newest'); }}>Newest</button>
-                    <button onClick={(e) => { e.stopPropagation(); handleSortChange('price-high'); }}>Price (high-low)</button>
-                    <button onClick={(e) => { e.stopPropagation(); handleSortChange('price-low'); }}>Price (low-high)</button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSortChange("popular");
+                      }}
+                    >
+                      Most Popular
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSortChange("newest");
+                      }}
+                    >
+                      Newest
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSortChange("price-high");
+                      }}
+                    >
+                      Price (high-low)
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSortChange("price-low");
+                      }}
+                    >
+                      Price (low-high)
+                    </button>
                   </div>
                 )}
               </div>
@@ -301,7 +351,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default CategoryFilterBar
+export default CategoryFilterBar;

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
-import useAuth from "@/hooks/use-auth"
+import useAuth from "@/src/app/hooks/use-auth"
 import { toast } from "react-hot-toast"
 
 export default function ResetPasswordPage() {
@@ -23,7 +23,6 @@ export default function ResetPasswordPage() {
   const { resetPassword } = useAuth()
 
   useEffect(() => {
-    // Get token from URL query parameter
     const tokenParam = searchParams?.get("token")
     if (tokenParam) {
       setToken(tokenParam)
@@ -34,7 +33,6 @@ export default function ResetPasswordPage() {
   }, [searchParams, router])
 
   const validatePassword = (password: string): boolean => {
-    // Password must be 8-20 characters, include uppercase, lowercase, number, and special char
     const hasUppercase = /[A-Z]/.test(password)
     const hasLowercase = /[a-z]/.test(password)
     const hasNumber = /[0-9]/.test(password)
@@ -92,16 +90,15 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-12 flex items-center justify-center">
-      <div className="w-[90%] md:w-[60%] lg:w-[40%] border border-gray-200">
-        <div className="p-8">
+    <section className="min-h-screen bg-white py-12 flex items-center justify-center">
+      <section className="w-[90%] md:w-[60%] lg:w-[40%] border border-gray-200">
+        <section className="p-8">
           <h1 className="text-2xl font-bold mb-2">RESET YOUR PASSWORD</h1>
           <p className="text-gray-700 mb-6">Please enter your new password below.</p>
 
           <form onSubmit={handleSubmit}>
-            {/* Password */}
-            <div className="mb-4">
-              <div className="relative">
+            <section className="mb-4">
+              <section className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
@@ -109,9 +106,8 @@ export default function ResetPasswordPage() {
                     setPassword(e.target.value)
                     validatePassword(e.target.value)
                   }}
-                  className={`w-full p-3 border ${
-                    passwordError ? "border-red-500" : "border-gray-300"
-                  } focus:outline-none focus:border-black`}
+                  className={`w-full p-3 border ${passwordError ? "border-red-500" : "border-gray-300"
+                    } focus:outline-none focus:border-black`}
                   placeholder="* New Password"
                   required
                 />
@@ -122,25 +118,23 @@ export default function ResetPasswordPage() {
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
-              </div>
+              </section>
               {passwordError && <p className="text-xs text-red-500 mt-1">{passwordError}</p>}
               <ul className="text-xs text-gray-600 mt-2 space-y-1 list-inside">
                 <li>• 8 - 20 characters</li>
                 <li>• At least one uppercase letter, one lowercase letter and one number</li>
                 <li>• At least one special character (!?%&@#$^*~)</li>
               </ul>
-            </div>
+            </section>
 
-            {/* Confirm Password */}
-            <div className="mb-6">
-              <div className="relative">
+            <section className="mb-6">
+              <section className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className={`w-full p-3 border ${
-                    password !== confirmPassword && confirmPassword ? "border-red-500" : "border-gray-300"
-                  } focus:outline-none focus:border-black`}
+                  className={`w-full p-3 border ${password !== confirmPassword && confirmPassword ? "border-red-500" : "border-gray-300"
+                    } focus:outline-none focus:border-black`}
                   placeholder="* Confirm New Password"
                   required
                 />
@@ -151,11 +145,11 @@ export default function ResetPasswordPage() {
                 >
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
-              </div>
+              </section>
               {password !== confirmPassword && confirmPassword && (
                 <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
               )}
-            </div>
+            </section>
 
             <button
               type="submit"
@@ -165,14 +159,14 @@ export default function ResetPasswordPage() {
               {isLoading ? "RESETTING..." : "RESET PASSWORD"}
             </button>
 
-            <div className="mt-4 text-center">
+            <section className="mt-4 text-center">
               <Link href="/auth/login" className="text-sm text-gray-700 hover:underline">
                 Back to login
               </Link>
-            </div>
+            </section>
           </form>
-        </div>
-      </div>
-    </div>
+        </section>
+      </section>
+    </section>
   )
 }

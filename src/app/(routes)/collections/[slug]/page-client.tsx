@@ -17,12 +17,13 @@ import JacketCategories from "@/src/app/category/JacketCategories"
 import WeThinkYouWillLove from "@/src/app/category/WeThinkYouWillLove"
 import RecentlyViewed from "@/src/app/category/RecentlyViewed"
 import CategoryFilterBar from "@/src/app/category/CategoryFilterBar"
-import StructuredData from "@/src/app/components/layout/structured-data"
+import StructuredData from "@/src/app/components/layout/structured-data-layout"
 import CartSidebar from "@/src/app/components/layout/cart-sidebar"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/src/app/ui/sheet"
 import { useCart } from "@/src/app/contexts/CartContext"
 import useWishlist from "@/src/app/hooks/use-wishlist"
 import MobileAddToCartModal from "@/src/app/modals/MobileAddToCartModal"
+import { CategorySlider } from "@/src/app/components/shop/components/CategorySlider"
 
 interface KeywordCategory {
     id: string;
@@ -218,14 +219,12 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
     const wasDraggedRef = useRef(false);
     const isDesktop = useMediaQuery('(min-width: 768px)');
     const [mounted, setMounted] = useState(false);
-    if (!category) {
-        return null;
-    }
     const currentSort = searchParams.get('sort') || 'popular'
     const urlSizes = searchParams.get('sizes')?.split(',').filter(Boolean) || []
     const urlColors = searchParams.get('colors')?.split(',').filter(Boolean) || []
     const [filterSidebarOpen, setFilterSidebarOpen] = useState(false)
     const [categoriesSidebarOpen, setCategoriesSidebarOpen] = useState(false)
+    const [categorySliderOpen, setCategorySliderOpen] = useState(false)
     const [sortDropdownOpen, setSortDropdownOpen] = useState(false)
     const [sizeModalOpen, setSizeModalOpen] = useState(false)
     const [selectedFilters, setSelectedFilters] = useState({
@@ -234,33 +233,40 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
     })
     const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
     const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
-    const [colorDialogs, setColorDialogs] = useState<Record<string, boolean>>({})
     const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([])
     const [visibleProducts, setVisibleProducts] = useState<string[]>([])
     const [isFilterSticky, setIsFilterSticky] = useState(false)
     const [productSidebarOpen, setProductSidebarOpen] = useState(false)
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
-    const [selectedProductSize, setSelectedProductSize] = useState<string>('')
     const [colorPopup, setColorPopup] = useState<{ productKey: string; rect: DOMRect } | null>(null)
     const [loadingProducts, setLoadingProducts] = useState<Set<string>>(new Set())
     const [mobileCartModal, setMobileCartModal] = useState<{ isOpen: boolean; product: Product | null }>({ isOpen: false, product: null })
-
-    const [currentProducts, setCurrentProducts] = useState<Product[]>(products)
-    const [currentPage, setCurrentPage] = useState(1)
-    const productsPerPage = 28
-    const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
     const [layoutMetrics, setLayoutMetrics] = useState({
         startStickyPoint: 0,
         endStickyPoint: 0,
         filterBarHeight: 0,
     });
-    const productRefs = useRef<(HTMLDivElement | null)[]>([])
-    const recentlyViewedScrollRef = useRef<HTMLDivElement>(null)
-    const filterBarWrapperRef = useRef<HTMLDivElement>(null);
-    const productsGridWrapperRef = useRef<HTMLDivElement>(null);
-    const paginationSectionRef = useRef<HTMLDivElement>(null);
+
+    if (!category) {
+        return null;
+    }
+
     const sizes = ["XS", "S", "M", "L", "XL", "XXL"]
     const colors = ["Black", "White", "Blue", "Red", "Green"]
+
+    const categoryIcons: Record<string, string> = {
+        'leather-jackets': '/images/leather.webp',
+        'womens-jackets': '/images/women-leather.webp',
+        'mens-jackets': '/images/leather.webp',
+        'coats': '/images/trench-coat.webp',
+        'denim-jackets': '/images/denim.webp',
+        'bomber-jackets': '/images/letterman.webp',
+        'puffer-jackets': '/images/puffer.webp',
+        'trench-coats': '/images/trench-coat.webp',
+        'aviator-jackets': '/images/aviator.webp',
+        'varsity-jackets': '/images/varsity.webp',
+        'suede-jackets': '/images/suede.webp'
+    }
+
     const hasActiveFilters = selectedFilters.sizes.length > 0 || selectedFilters.colors.length > 0
     useEffect(() => {
         setMounted(true)
@@ -345,12 +351,6 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
         handleScroll();
         return () => window.removeEventListener('scroll', handleScroll);
     }, [layoutMetrics]);
-    const handleFilterChange = (key: string, value: string[]) => {
-        setSelectedFilters((prev) => ({
-            ...prev,
-            [key]: value,
-        }))
-    }
     const toggleSizeFilter = (size: string) => {
         setSelectedFilters((prev) => {
             const newSizes = prev.sizes.includes(size) ? prev.sizes.filter((s) => s !== size) : [...prev.sizes, size]
@@ -396,12 +396,19 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
         }
         router.push(`?${params.toString()}`, { scroll: false })
     }
-    const handleCategorySelect = (categorySlug: string) => {
-        setCategoriesSidebarOpen(false)
-        router.push(`/collections/${categorySlug}`)
-    }
     const { addToCart } = useCart()
     const wishlist = useWishlist()
+
+    const [currentProducts, setCurrentProducts] = useState<Product[]>(products)
+    const [currentPage, setCurrentPage] = useState(1)
+    const productsPerPage = 28
+    const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
+    const productRefs = useRef<(HTMLDivElement | null)[]>([])
+    const recentlyViewedScrollRef = useRef<HTMLDivElement>(null)
+    const filterBarWrapperRef = useRef<HTMLDivElement>(null);
+    const productsGridWrapperRef = useRef<HTMLDivElement>(null);
+    const paginationSectionRef = useRef<HTMLDivElement>(null);
+    const [colorDialogs, setColorDialogs] = useState<Record<string, boolean>>({})
 
     const handleSizeSelect = (productId: string, size: string) => {
         const product = currentProducts.find(p => p.id === productId) || recentlyViewed.find(p => p.id === productId);
@@ -412,12 +419,6 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
         setSelectedSizes((prev) => ({
             ...prev,
             [productId]: size,
-        }))
-    }
-    const toggleColorDialog = (productId: string) => {
-        setColorDialogs((prev) => ({
-            ...prev,
-            [productId]: !prev[productId],
         }))
     }
     const addToRecentlyViewed = (product: Product) => {
@@ -459,38 +460,6 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
         setCurrentPage(page)
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
-    const categoryIcons: Record<string, string> = {
-        "leather-jackets": "/images/leather.webp",
-        "leather": "/images/leather.webp",
-        "bomber-jackets": "/placeholder.svg",
-        "bomber": "/placeholder.svg",
-        "aviator-jackets": "/images/aviator.webp",
-        "aviator": "/images/aviator.webp",
-        "varsity-jackets": "/images/varsity.webp",
-        "varsity": "/images/varsity.webp",
-        "denim-jackets": "/images/denim.webp",
-        "denim": "/images/denim.webp",
-        "puffer-jackets": "/images/puffer.webp",
-        "puffer": "/images/puffer.webp",
-        "suede-jackets": "/images/suede.webp",
-        "suede": "/images/suede.webp",
-        "trench-coats": "/images/trench-coat.webp",
-        "trench": "/images/trench-coat.webp",
-        "letterman-jackets": "/images/letterman.webp",
-        "letterman": "/images/letterman.webp",
-        "women-leather": "/images/women-leather.webp",
-        "women-aviator": "/images/women-aviator.webp",
-        "women-varsity": "/images/women-varsity.webp",
-        "women-denim": "/images/women-denim.webp",
-        "women-puffer": "/images/women-puffer.webp",
-        "women-suede": "/images/women-suede.webp",
-        "women-letterman": "/images/women-letterman.webp",
-        "women-biker": "/images/women-biker.webp",
-        "kids": "/images/kids.webp",
-        "coats": "/images/trench-coat.webp",
-        "jackets": "/images/aviator.webp",
-        "vests": "/images/varsity.webp"
-    };
     let parsedCategoryContent: any = category.categoryContent;
     if (typeof category.categoryContent === 'string') {
         try {
@@ -584,6 +553,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                         sortDropdownOpen={sortDropdownOpen}
                         setSortDropdownOpen={setSortDropdownOpen}
                         setCategoriesSidebarOpen={setCategoriesSidebarOpen}
+                        setCategorySliderOpen={setCategorySliderOpen}
                         setFilterSidebarOpen={setFilterSidebarOpen}
                         setSizeModalOpen={setSizeModalOpen}
                         clearFilters={clearFilters}
@@ -604,7 +574,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                     <motion.section
                                         key={product.id}
                                         id={`product-${product.id}`}
-                                        ref={(el) => { if (productRefs.current) productRefs.current[index] = el; }}
+                                        ref={(el) => { if (productRefs.current) productRefs.current[index] = el as HTMLDivElement | null; }}
                                         className="group relative cursor-pointer flex flex-col h-full"
                                         onClick={() => {
                                             if (!isDesktop && wasDraggedRef.current) return;
@@ -1425,6 +1395,106 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                     selectedColorId={(mobileCartModal.product as any).colorDetails?.[0]?.id || (mobileCartModal.product as any).colors?.[0]?.id || ''}
                 />
             )}
+
+            <CategorySlider
+                isOpen={categorySliderOpen}
+                onClose={() => setCategorySliderOpen(false)}
+                categories={allCategories.map(cat => {
+                    const productCount = products.filter(product => {
+                        if (!product.category) return false;
+
+                        const productCategoryName = product.category.name?.toLowerCase().trim();
+                        const targetCategoryName = cat.name?.toLowerCase().trim();
+
+                        if (productCategoryName === targetCategoryName) return true;
+
+                        if (productCategoryName?.includes(targetCategoryName) ||
+                            targetCategoryName?.includes(productCategoryName)) return true;
+
+                        if (targetCategoryName === 'leather jackets' &&
+                            (productCategoryName?.includes('leather') || productCategoryName?.includes('jacket'))) return true;
+
+                        if (targetCategoryName === "women's jackets" &&
+                            (productCategoryName?.includes('women') || productCategoryName?.includes('jacket'))) return true;
+
+                        if (targetCategoryName === "men's jackets" &&
+                            (productCategoryName?.includes('men') || productCategoryName?.includes('jacket'))) return true;
+
+                        if (targetCategoryName === 'coats' &&
+                            productCategoryName?.includes('coat')) return true;
+
+                        return false;
+                    }).length;
+
+                    return {
+                        id: cat.id,
+                        name: cat.name,
+                        slug: cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-'),
+                        description: cat.description || `Explore our premium collection of ${cat.name}`,
+                        imageUrl: (() => {
+                            const categoryName = cat.name.toLowerCase();
+                            const categorySlug = cat.slug?.toLowerCase() || categoryName.replace(/\s+/g, '-');
+
+                            let finalImageUrl = cat.imageUrl;
+
+                            if (!finalImageUrl) {
+                                if (categoryIcons[categorySlug]) {
+                                    finalImageUrl = categoryIcons[categorySlug];
+                                }
+                                else if (categoryName.includes('leather')) finalImageUrl = '/images/leather.webp';
+                                else if (categoryName.includes('denim')) finalImageUrl = '/images/denim.webp';
+                                else if (categoryName.includes('suede')) finalImageUrl = '/images/suede.webp';
+                                else if (categoryName.includes('puffer')) finalImageUrl = '/images/puffer.webp';
+                                else if (categoryName.includes('trench') || categoryName.includes('coat')) finalImageUrl = '/images/trench-coat.webp';
+                                else if (categoryName.includes('aviator')) finalImageUrl = '/images/aviator.webp';
+                                else if (categoryName.includes('varsity')) finalImageUrl = '/images/varsity.webp';
+                                else if (categoryName.includes('letterman') || categoryName.includes('bomber')) finalImageUrl = '/images/letterman.webp';
+                                else if (categoryName.includes('women')) finalImageUrl = '/images/women-leather.webp';
+                                else if (categoryName.includes('wool')) finalImageUrl = '/images/leather.webp'; // Fallback for wool
+                                else finalImageUrl = '/images/leather.webp'; // Default fallback
+                            }
+
+                            return finalImageUrl;
+                        })(),
+                        materials: cat.materials || ['Premium Quality'],
+                        styles: cat.styles || ['Classic', 'Modern'],
+                        colors: cat.colors || ['Black', 'Brown', 'Navy'],
+                        genders: cat.genders || ['Unisex'],
+                        productCount: productCount,
+                        billboard: cat.billboard,
+                        href: cat.href,
+                        gender: cat.gender,
+                        categoryContent: cat.categoryContent,
+                        seoTitle: cat.seoTitle,
+                        seoDescription: cat.seoDescription,
+                        focusKeyword: cat.focusKeyword,
+                        supportingKeywords: cat.supportingKeywords,
+                        ogTitle: cat.ogTitle,
+                        ogDescription: cat.ogDescription,
+                        twitterTitle: cat.twitterTitle,
+                        twitterDescription: cat.twitterDescription,
+                        canonicalUrl: cat.canonicalUrl,
+                        indexPage: cat.indexPage,
+                        followLinks: cat.followLinks,
+                        enableSchema: cat.enableSchema,
+                        schemaType: cat.schemaType,
+                        customSchema: cat.customSchema,
+                        isPublished: cat.isPublished,
+                        publishedAt: cat.publishedAt,
+                        createdAt: cat.createdAt,
+                        updatedAt: cat.updatedAt,
+                        apiSlug: cat.apiSlug,
+                        bannerImageUrl: cat.bannerImageUrl,
+                        currentCategory: cat.currentCategory
+                    };
+                })}
+                currentCategory={category}
+                onCategorySelect={(selectedCategory) => {
+                    const categorySlug = selectedCategory.slug || selectedCategory.name.toLowerCase().replace(/\s+/g, '-');
+                    router.push(`/collections/${categorySlug}`);
+                    setCategorySliderOpen(false);
+                }}
+            />
         </section>
     )
 }

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ShoppingBag, Minus, Plus, ArrowRight, X, ChevronLeft, ChevronRight, Truck, RotateCcw } from "lucide-react"
+import { ShoppingBag, ChevronLeft, ChevronRight, Truck, RotateCcw } from "lucide-react"
 import Container from "@/src/app/ui/container"
 import { useCart } from "@/src/app/contexts/CartContext"
 import useWishlist from "@/src/app/hooks/use-wishlist"
@@ -42,8 +42,7 @@ const AddMoreOffer: React.FC<AddMoreOfferProps> = ({ onContinueShopping }) => {
 
 const CartPage = () => {
   const [isMounted, setIsMounted] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const { items, updateQuantity, removeFromCart, clearCart, totalPrice } = useCart()
+  const { items, updateQuantity, removeFromCart, totalPrice } = useCart()
   const wishlist = useWishlist()
   const router = useRouter()
   const [couponCode, setCouponCode] = useState("")
@@ -122,7 +121,7 @@ const CartPage = () => {
               </section>
               <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Cart is Empty</h1>
               <p className="text-gray-500 pt-4 mb-8">
-                Looks like you haven't added anything to your cart yet. Explore our collection and find something you'll
+                Looks like you haven&apos;t added anything to your cart yet. Explore our collection and find something you&apos;ll
                 love.
               </p>
               <Button onClick={() => router.push("/")} className="bg-[#B01E23] hover:bg-[#2b2b2b] text-white mt-4">
@@ -134,9 +133,6 @@ const CartPage = () => {
       </section>
     )
   }
-
-
-
 
   const handleApplyCoupon = () => {
     setIsCouponApplied(true)
@@ -402,10 +398,9 @@ const CartPage = () => {
                   >
                     <Button
                       onClick={handleCheckout}
-                      disabled={isLoading}
                       className="w-full bg-black hover:bg-gray-800 text-white py-4 mb-4 font-bold text-lg"
                     >
-                      {isLoading ? "Processing..." : "CHECKOUT"}
+                      CHECKOUT
                     </Button>
 
                     <section className="mb-2 md:mb-6">

@@ -242,7 +242,7 @@ const BlogsPage = () => {
               <input
                 type="text"
                 placeholder="Search articles..."
-                className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 focus:ring-2 focus:ring-[#2b2b2b] focus:border-[#2b2b2b] transition-all"
+                className="w-full pl-10 pr-4 py-3 rounded-full border bg-white border-gray-200 focus:ring-2 focus:ring-[#2b2b2b] focus:border-[#2b2b2b] transition-all"
                 value={searchQuery}
                 onChange={handleSearchChange}
               />
@@ -259,8 +259,8 @@ const BlogsPage = () => {
               <button
                 key={category}
                 className={`text-sm font-medium whitespace-nowrap pb-2 border-b-2 transition-colors ${activeCategory === category
-                    ? "border-[#1b1b1b] text-[#2b2b2b]"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
+                  ? "border-[#1b1b1b] text-[#2b2b2b]"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
                   }`}
                 onClick={() => handleCategoryChange(category)}
               >
@@ -407,7 +407,7 @@ const BlogsPage = () => {
                 <input
                   type="email"
                   placeholder="Your email address"
-                  className={`w-full px-4 py-3 rounded-md border ${subscriptionStatus === "error" ? "border-black" : "border-gray-300"
+                  className={`w-full bg-white px-4 py-3 rounded-md border ${subscriptionStatus === "error" ? "border-black" : "border-gray-300"
                     } focus:outline-none focus:ring-2 focus:ring-[#2b2b2b]/50`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

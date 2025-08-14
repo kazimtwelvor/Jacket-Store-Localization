@@ -4,8 +4,6 @@ import { useState, useEffect } from "react"
 import type { Product } from "@/types"
 import WeThinkYouWillLove from "../../category/WeThinkYouWillLove"
 import RecentlyViewed from "../../category/RecentlyViewed"
-// import WeThinkYouWillLove from "@/src/app/components/category/WeThinkYouWillLove"
-// import RecentlyViewed from "@/src/app/components/category/RecentlyViewed"
 
 interface ProductSuggestionsSectionProps {
   suggestProducts: Product[]
@@ -17,13 +15,9 @@ export const ProductSuggestionsSection = ({ suggestProducts, isMobile }: Product
   const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
   const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([])
 
-
-
-  // Load recently viewed products from localStorage
   useEffect(() => {
-    // Enable smooth scrolling
     document.documentElement.style.scrollBehavior = 'smooth'
-    
+
     const stored = localStorage.getItem('recentlyViewed')
     if (stored) {
       try {
@@ -37,8 +31,7 @@ export const ProductSuggestionsSection = ({ suggestProducts, isMobile }: Product
     } else {
     }
   }, [])
-  
-  // Helper functions for product interactions
+
   const addToRecentlyViewed = (product: Product) => {
     const updated = [product, ...recentlyViewed.filter(p => p.id !== product.id)].slice(0, 10)
     setRecentlyViewed(updated)
@@ -55,13 +48,11 @@ export const ProductSuggestionsSection = ({ suggestProducts, isMobile }: Product
   }
 
   const handleAddToCart = (product: Product) => {
-    // Add to cart logic here
     console.log('Adding to cart:', product)
   }
 
   return (
-<div className="flex flex-col w-full min-h-0 space-y-4 pb-12 pt-5 md:space-y-8 lg:space-y-4 items-center ml-2 sm:ml-0" style={{ backgroundColor: '#F9F9F9', minHeight: 'fit-content', maxWidth: '100vw', overflow: 'hidden' }}>
-      {/* WeThinkYouWillLove Section */}
+    <div className="flex flex-col w-full min-h-0 space-y-4 pb-12 pt-5 md:space-y-8 lg:space-y-4 items-center ml-2 sm:ml-0" style={{ backgroundColor: '#F9F9F9', minHeight: 'fit-content', maxWidth: '100vw', overflow: 'hidden' }}>
       <WeThinkYouWillLove
         products={suggestProducts}
         hoveredProduct={hoveredProduct}
@@ -72,8 +63,7 @@ export const ProductSuggestionsSection = ({ suggestProducts, isMobile }: Product
         handleSizeSelect={handleSizeSelect}
         onAddToCartClick={handleAddToCart}
       />
-      
-      {/* RecentlyViewed Section */}
+
       <RecentlyViewed
         recentlyViewed={recentlyViewed}
         hoveredProduct={hoveredProduct}

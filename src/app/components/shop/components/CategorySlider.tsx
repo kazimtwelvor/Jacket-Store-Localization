@@ -14,6 +14,7 @@ interface CategorySliderProps {
   onClose: () => void
   categories: Category[]
   onCategorySelect?: (category: Category) => void
+  currentCategory?: Category
 }
 
 export const CategorySlider: React.FC<CategorySliderProps> = ({
@@ -21,6 +22,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
   onClose,
   categories,
   onCategorySelect,
+  currentCategory,
 }) => {
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
@@ -61,9 +63,14 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
       className="group cursor-pointer"
       onClick={() => handleCategoryClick(category)}
     >
-      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 hover:border-gray-300 transition-all duration-300">
+      <div className={cn(
+        "relative overflow-hidden rounded-xl border transition-all duration-300",
+        currentCategory?.id === category.id
+          ? "border-gray-800 bg-white shadow-[0_8px_32px_rgba(0,0,0,0.12)] ring-2 ring-gray-800/20"
+          : "border-gray-200 bg-white hover:border-gray-400 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+      )}>
         {/* Category Image */}
-        <div className="relative h-48 w-full overflow-hidden">
+        <div className="relative h-32 w-full overflow-hidden">
           {category.imageUrl ? (
             <Image
               src={category.imageUrl}
@@ -73,48 +80,89 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-              <Grid3X3 className="w-12 h-12 text-gray-400" />
+              <Grid3X3 className="w-8 h-8 text-gray-400" />
             </div>
           )}
           
           {/* Overlay */}
-          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300" />
+          <div className={cn(
+            "absolute inset-0 transition-colors duration-300",
+            currentCategory?.id === category.id
+              ? "bg-black/30"
+              : "bg-black/20 group-hover:bg-black/30"
+          )} />
           
-          {/* Category Badge */}
-          <div className="absolute top-3 left-3">
-            <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-semibold text-gray-800 rounded-full">
-              {category.materials?.length || 0} Materials
-            </span>
-          </div>
+          {/* Category Badge - Removed */}
         </div>
 
         {/* Category Info */}
-        <div className="p-4">
-          <h3 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-[#2b2b2b] transition-colors">
+        <div className="p-3">
+          <h3 className={cn(
+            "font-bold text-base mb-1 transition-colors",
+            currentCategory?.id === category.id
+              ? "text-gray-900"
+              : "text-gray-800 group-hover:text-gray-900"
+          )}>
             {category.name}
           </h3>
           
           {category.description && (
-            <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+            <p className="text-xs text-gray-600 line-clamp-2 mb-2">
               {category.description}
             </p>
           )}
-
+          
           {/* Tags */}
-          <div className="flex flex-wrap gap-2">
-            {category.styles?.slice(0, 3).map((style, index) => (
-              <span
-                key={index}
-                className="px-2 py-1 bg-gray-100 text-xs text-gray-700 rounded-md"
-              >
-                {style}
+          <div className="flex items-center gap-2 mt-2">
+            {category.materials && category.materials.length > 0 ? (
+              <>
+                {category.materials.slice(0, 2).map((material, index) => (
+                  <span
+                    key={index}
+                    className={cn(
+                      "px-2 py-1 text-xs rounded-full transition-colors",
+                      currentCategory?.id === category.id
+                        ? "bg-gray-100 text-gray-700 border border-gray-200"
+                        : "bg-gray-50 text-gray-600"
+                    )}
+                  >
+                    {material}
+                  </span>
+                ))}
+                {category.materials.length > 2 && (
+                  <span className="text-xs text-gray-500">
+                    +{category.materials.length - 2} more
+                  </span>
+                )}
+              </>
+            ) : category.styles && category.styles.length > 0 ? (
+              <>
+                {category.styles.slice(0, 2).map((style, index) => (
+                  <span
+                    key={index}
+                    className={cn(
+                      "px-2 py-1 text-xs rounded-full transition-colors",
+                      currentCategory?.id === category.id
+                        ? "bg-gray-100 text-gray-700 border border-gray-200"
+                        : "bg-gray-50 text-gray-600"
+                    )}
+                  >
+                    {style}
+                  </span>
+                ))}
+                {category.styles.length > 2 && (
+                  <span className="text-xs text-gray-500">
+                    +{category.styles.length - 2} more
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="text-xs text-gray-500 italic">
+                Premium Collection
               </span>
-            ))}
+            )}
           </div>
         </div>
-
-        {/* Hover Effect */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
     </motion.div>
   )
@@ -122,10 +170,15 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
   const CategoryListItem = ({ category }: { category: Category }) => (
     <motion.div
       whileHover={{ x: 4 }}
-      className="group cursor-pointer border-b border-gray-100 last:border-b-0"
+      className={cn(
+        "group cursor-pointer border-b transition-all duration-200",
+        currentCategory?.id === category.id
+          ? "border-gray-300 bg-gray-50/50"
+          : "border-gray-100 hover:bg-gray-50"
+      )}
       onClick={() => handleCategoryClick(category)}
     >
-      <div className="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors duration-200">
+      <div className="flex items-center gap-4 p-4 transition-colors duration-200">
         {/* Category Image */}
         <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
           {category.imageUrl ? (
@@ -144,9 +197,27 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
 
         {/* Category Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 group-hover:text-[#2b2b2b] transition-colors">
-            {category.name}
-          </h3>
+          <div className="flex items-center gap-2">
+            <h3 className={cn(
+              "font-semibold transition-colors",
+              currentCategory?.id === category.id
+                ? "text-gray-900"
+                : "text-gray-800 group-hover:text-gray-900"
+            )}>
+              {category.name}
+            </h3>
+            <span className={cn(
+              "px-2 py-1 text-xs font-medium rounded-full transition-colors",
+              currentCategory?.id === category.id
+                ? "bg-gray-200 text-gray-700"
+                : "bg-gray-100 text-gray-600"
+            )}>
+              {(category as any).productCount > 0 
+                ? `${(category as any).productCount} Product${(category as any).productCount !== 1 ? 's' : ''}`
+                : 'Coming Soon'
+              }
+            </span>
+          </div>
           {category.description && (
             <p className="text-sm text-gray-600 line-clamp-1 mt-1">
               {category.description}
@@ -155,17 +226,51 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
           
           {/* Tags */}
           <div className="flex items-center gap-2 mt-2">
-            {category.materials?.slice(0, 2).map((material, index) => (
-              <span
-                key={index}
-                className="px-2 py-1 bg-gray-100 text-xs text-gray-600 rounded-full"
-              >
-                {material}
-              </span>
-            ))}
-            {category.materials && category.materials.length > 2 && (
-              <span className="text-xs text-gray-500">
-                +{category.materials.length - 2} more
+            {category.materials && category.materials.length > 0 ? (
+              <>
+                {category.materials.slice(0, 2).map((material, index) => (
+                  <span
+                    key={index}
+                    className={cn(
+                      "px-2 py-1 text-xs rounded-full transition-colors",
+                      currentCategory?.id === category.id
+                        ? "bg-gray-100 text-gray-700 border border-gray-200"
+                        : "bg-gray-50 text-gray-600"
+                    )}
+                  >
+                    {material}
+                  </span>
+                ))}
+                {category.materials.length > 2 && (
+                  <span className="text-xs text-gray-500">
+                    +{category.materials.length - 2} more
+                  </span>
+                )}
+              </>
+            ) : category.styles && category.styles.length > 0 ? (
+              <>
+                {category.styles.slice(0, 2).map((style, index) => (
+                  <span
+                    key={index}
+                    className={cn(
+                      "px-2 py-1 text-xs rounded-full transition-colors",
+                      currentCategory?.id === category.id
+                        ? "bg-gray-100 text-gray-700 border border-gray-200"
+                        : "bg-gray-50 text-gray-600"
+                    )}
+                  >
+                    {style}
+                  </span>
+                ))}
+                {category.styles.length > 2 && (
+                  <span className="text-xs text-gray-500">
+                    +{category.styles.length - 2} more
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="text-xs text-gray-500 italic">
+                Premium Collection
               </span>
             )}
           </div>
@@ -182,9 +287,9 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
       <SheetContent side="left" className="w-[90vw] max-w-[800px] p-0">
         <div className="h-full flex flex-col">
           {/* Header */}
-          <SheetHeader className="px-6 py-6 border-b border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <SheetTitle className="text-2xl font-bold text-gray-900">
+          <SheetHeader className="px-6 py-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
+            <div className="flex items-center justify-between mb-6">
+              <SheetTitle className="text-3xl font-bold text-gray-900">
                 Browse Categories
               </SheetTitle>
               <button
@@ -196,25 +301,25 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
             </div>
 
             {/* Search Bar */}
-            <div className="relative">
+            <div className="relative mb-6">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search categories, materials, styles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b2b2b] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
               />
             </div>
 
             {/* View Mode Toggle */}
-            <div className="flex items-center gap-2 mt-4">
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => setViewMode("grid")}
                 className={cn(
-                  "p-2 rounded-lg transition-colors",
+                  "p-2 rounded-lg transition-all duration-200",
                   viewMode === "grid" 
-                    ? "bg-[#2b2b2b] text-white" 
+                    ? "bg-gray-800 text-white shadow-md" 
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 )}
               >
@@ -223,9 +328,9 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
               <button
                 onClick={() => setViewMode("list")}
                 className={cn(
-                  "p-2 rounded-lg transition-colors",
+                  "p-2 rounded-lg transition-all duration-200",
                   viewMode === "list" 
-                    ? "bg-[#2b2b2b] text-white" 
+                    ? "bg-gray-800 text-white shadow-md" 
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 )}
               >
@@ -329,7 +434,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
               </div>
             ) : (
               // Categories Grid/List View
-              <div className="p-6">
+              <div className="p-6 bg-white">
                 {filteredCategories.length === 0 ? (
                   <div className="text-center py-12">
                     <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -341,19 +446,19 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-4">
-                    <p className="text-sm text-gray-600">
-                      Found {filteredCategories.length} category{filteredCategories.length !== 1 ? 's' : ''}
+                  <div className="space-y-6">
+                    <p className="text-sm text-gray-600 font-medium">
+                      Found {filteredCategories.length} categor{filteredCategories.length !== 1 ? 'ies' : 'y'}
                     </p>
                     
                     {viewMode === "grid" ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                         {filteredCategories.map((category) => (
                           <CategoryCard key={category.id} category={category} />
                         ))}
                       </div>
                     ) : (
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         {filteredCategories.map((category) => (
                           <CategoryListItem key={category.id} category={category} />
                         ))}

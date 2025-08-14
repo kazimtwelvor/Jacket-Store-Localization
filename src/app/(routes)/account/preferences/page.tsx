@@ -10,8 +10,6 @@ import {
   ArrowRight,
   Container,
 } from "lucide-react";
-// import useAuth from "@/hooks/use-auth"
-// import Container from "@/components/ui/container"
 import Link from "next/link";
 import useAuth from "@/src/app/hooks/use-auth";
 
@@ -19,7 +17,6 @@ export default function PreferencesPage() {
   const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
 
-  // Mock user data
   const userData = {
     street: "Street 1",
     city: "Austin",
@@ -29,7 +26,6 @@ export default function PreferencesPage() {
     phone: "+12555551454",
   };
 
-  // Communication preferences state
   const [preferences, setPreferences] = useState({
     mail: false,
     call: false,
@@ -38,7 +34,6 @@ export default function PreferencesPage() {
     email: true,
   });
 
-  // Handle preference change
   const handlePreferenceChange = (channel: keyof typeof preferences) => {
     setPreferences((prev) => ({
       ...prev,
@@ -46,7 +41,6 @@ export default function PreferencesPage() {
     }));
   };
 
-  // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/auth/login");
@@ -59,13 +53,12 @@ export default function PreferencesPage() {
 
   return (
     <Container>
-      <div className="min-h-screen py-6 md:py-8 lg:py-10">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row">
-            {/* Sidebar Navigation */}
-            <div className="w-full md:w-64 mb-6 md:mb-0">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="flex flex-col space-y-1">
+      <section className="min-h-screen py-6 md:py-8 lg:py-10">
+        <section className="max-w-6xl mx-auto">
+          <section className="flex flex-col md:flex-row">
+            <section className="w-full md:w-64 mb-6 md:mb-0">
+              <section className="bg-gray-50 p-4 rounded-lg">
+                <section className="flex flex-col space-y-1">
                   <Link
                     href="/account"
                     className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium flex items-center"
@@ -110,36 +103,33 @@ export default function PreferencesPage() {
                     <span>Log Out</span>
                     <ArrowRight className="ml-auto h-4 w-4" />
                   </button>
-                </div>
-              </div>
-            </div>
+                </section>
+              </section>
+            </section>
 
-            {/* Main Content */}
-            <div className="flex-1 md:ml-8">
-              {/* Header */}
-              <div className="bg-gray-50 p-6 rounded-lg mb-6">
-                <div className="flex items-center">
-                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
+            <section className="flex-1 md:ml-8">
+              <section className="bg-gray-50 p-6 rounded-lg mb-6">
+                <section className="flex items-center">
+                  <section className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
                     <Sliders
                       className="h-10 w-10 text-black"
                       strokeWidth={1.5}
                     />
-                  </div>
-                  <div>
+                  </section>
+                  <section>
                     <h1 className="text-3xl font-bold">MY PREFERENCES</h1>
                     <p className="text-gray-600">
                       Choose your preferred communication channels
                     </p>
-                  </div>
-                </div>
-              </div>
+                  </section>
+                </section>
+              </section>
 
-              {/* Consent Text */}
-              <div className="mb-8">
+              <section className="mb-8">
                 <p className="text-sm">
                   I agree and authorize FINEYST Fashions, Inc. and its
                   affiliated companies and subsidiaries within FINEYST family of
-                  companies ("FINEYST") and otherwise in accordance with the
+                  companies (&quot;FINEYST&quot;) and otherwise in accordance with the
                   privacy policy to contact me through each of the communication
                   channels indicated below about its newsletters, events, new
                   products, launches, promotional offers and other FINEYST
@@ -151,13 +141,11 @@ export default function PreferencesPage() {
                 <p className="text-sm font-medium mt-4">
                   Please send me such information by:
                 </p>
-              </div>
+              </section>
 
-              {/* Communication Preferences */}
-              <div className="space-y-8">
-                {/* Mail */}
-                <div className="flex items-start">
-                  <div className="flex h-5 items-center">
+              <section className="space-y-8">
+                <section className="flex items-start">
+                  <section className="flex h-5 items-center">
                     <input
                       id="mail"
                       type="checkbox"
@@ -165,24 +153,23 @@ export default function PreferencesPage() {
                       checked={preferences.mail}
                       onChange={() => handlePreferenceChange("mail")}
                     />
-                  </div>
-                  <div className="ml-3">
+                  </section>
+                  <section className="ml-3">
                     <label htmlFor="mail" className="font-medium">
                       Mail
                     </label>
-                    <div className="text-sm text-gray-700 mt-1">
+                    <section className="text-sm text-gray-700 mt-1">
                       <p>{userData.street}</p>
                       <p>{userData.city}</p>
                       <p>{userData.state}</p>
                       <p>{userData.zipCode}</p>
                       <p>{userData.country}</p>
-                    </div>
-                  </div>
-                </div>
+                    </section>
+                  </section>
+                </section>
 
-                {/* Call */}
-                <div className="flex items-start">
-                  <div className="flex h-5 items-center">
+                <section className="flex items-start">
+                  <section className="flex h-5 items-center">
                     <input
                       id="call"
                       type="checkbox"
@@ -190,20 +177,19 @@ export default function PreferencesPage() {
                       checked={preferences.call}
                       onChange={() => handlePreferenceChange("call")}
                     />
-                  </div>
-                  <div className="ml-3">
+                  </section>
+                  <section className="ml-3">
                     <label htmlFor="call" className="font-medium">
                       Call
                     </label>
                     <p className="text-sm text-gray-700 mt-1">
                       {userData.phone}
                     </p>
-                  </div>
-                </div>
+                  </section>
+                </section>
 
-                {/* SMS/MMS */}
-                <div className="flex items-start">
-                  <div className="flex h-5 items-center">
+                <section className="flex items-start">
+                  <section className="flex h-5 items-center">
                     <input
                       id="sms"
                       type="checkbox"
@@ -211,8 +197,8 @@ export default function PreferencesPage() {
                       checked={preferences.sms}
                       onChange={() => handlePreferenceChange("sms")}
                     />
-                  </div>
-                  <div className="ml-3">
+                  </section>
+                  <section className="ml-3">
                     <label htmlFor="sms" className="font-medium">
                       SMS/MMS
                     </label>
@@ -227,16 +213,15 @@ export default function PreferencesPage() {
                       Sale), cart reminders, regional and local events and other
                       FINEYST initiatives, at the number provided. Consent not
                       required to purchase goods or services. Text STOP to
-                      cancel to 49982. Msg & data rates may apply. For more
-                      information about text messages, see our Terms &
-                      Conditions & Privacy Policy.
+                      cancel to 49982. Msg &amp; data rates may apply. For more
+                      information about text messages, see our Terms &amp;
+                      Conditions &amp; Privacy Policy.
                     </p>
-                  </div>
-                </div>
+                  </section>
+                </section>
 
-                {/* WhatsApp */}
-                <div className="flex items-start">
-                  <div className="flex h-5 items-center">
+                <section className="flex items-start">
+                  <section className="flex h-5 items-center">
                     <input
                       id="whatsapp"
                       type="checkbox"
@@ -244,8 +229,8 @@ export default function PreferencesPage() {
                       checked={preferences.whatsapp}
                       onChange={() => handlePreferenceChange("whatsapp")}
                     />
-                  </div>
-                  <div className="ml-3">
+                  </section>
+                  <section className="ml-3">
                     <label htmlFor="whatsapp" className="font-medium">
                       WhatsApp
                     </label>
@@ -258,12 +243,11 @@ export default function PreferencesPage() {
                       WhatsApp and send you marketing communications via
                       WhatsApp.
                     </p>
-                  </div>
-                </div>
+                  </section>
+                </section>
 
-                {/* E-Mail */}
-                <div className="flex items-start">
-                  <div className="flex h-5 items-center">
+                <section className="flex items-start">
+                  <section className="flex h-5 items-center">
                     <input
                       id="email"
                       type="checkbox"
@@ -271,8 +255,8 @@ export default function PreferencesPage() {
                       checked={preferences.email}
                       onChange={() => handlePreferenceChange("email")}
                     />
-                  </div>
-                  <div className="ml-3">
+                  </section>
+                  <section className="ml-3">
                     <label htmlFor="email" className="font-medium">
                       E-Mail
                     </label>
@@ -281,16 +265,15 @@ export default function PreferencesPage() {
                       launches, fashions shows, promotional offers, sales, new
                       arrivals and other communication initiatives.
                     </p>
-                  </div>
-                </div>
-              </div>
+                  </section>
+                </section>
+              </section>
 
-              {/* Consent Information */}
-              <div className="mt-8 space-y-6 text-sm">
+              <section className="mt-8 space-y-6 text-sm">
                 <p>
                   By providing my consent I authorize FINEYST Fashions, Inc. and
                   its affiliated companies and subsidiaries within FINEYST
-                  family of companies ("FINEYST") and otherwise in accordance
+                  family of companies (&quot;FINEYST&quot;) and otherwise in accordance
                   with the privacy policy to contact me through e-mail. I
                   understand that I am not obligated to provide this information
                   before making a purchase.
@@ -303,24 +286,23 @@ export default function PreferencesPage() {
                   not affect the lawfulness of the processing of your personal
                   data performed on the basis of the consent up to the time of
                   revocation. You can revoke your consent here under the
-                  category "My communication" by clicking on the specific
+                  category &quot;My communication&quot; by clicking on the specific
                   communication channel or at experience@fineyst.com.
                 </p>
-              </div>
+              </section>
 
-              {/* Save Button */}
-              <div className="mt-8 flex justify-end">
+              <section className="mt-8 flex justify-end">
                 <button
                   type="button"
                   className="bg-black text-white px-8 py-3 font-bold"
                 >
                   SAVE
                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              </section>
+            </section>
+          </section>
+        </section>
+      </section>
     </Container>
   );
 }

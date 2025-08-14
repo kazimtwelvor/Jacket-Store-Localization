@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import useAuth from "@/hooks/use-auth"
+import useAuth from "@/src/app/hooks/use-auth"
 import { CheckCircle, XCircle } from "lucide-react"
 
 export default function VerifyEmailPage() {
@@ -44,18 +44,18 @@ export default function VerifyEmailPage() {
   }, [searchParams, verifyEmail])
 
   return (
-    <div className="min-h-screen bg-white py-12 flex items-center justify-center">
-      <div className="w-[90%] md:w-[60%] lg:w-[40%] border border-gray-200">
-        <div className="p-8 text-center">
+    <section className="min-h-screen bg-white py-12 flex items-center justify-center">
+      <section className="w-[90%] md:w-[60%] lg:w-[40%] border border-gray-200">
+        <section className="p-8 text-center">
           <h1 className="text-2xl font-bold mb-6">EMAIL VERIFICATION</h1>
 
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-8">
-              <div className="w-12 h-12 border-4 border-t-black border-r-gray-200 border-b-gray-200 border-l-gray-200 rounded-full animate-spin"></div>
+            <section className="flex flex-col items-center justify-center py-8">
+              <section className="w-12 h-12 border-4 border-t-black border-r-gray-200 border-b-gray-200 border-l-gray-200 rounded-full animate-spin"></section>
               <p className="mt-4 text-gray-700">Verifying your email...</p>
-            </div>
+            </section>
           ) : isVerified ? (
-            <div className="flex flex-col items-center justify-center py-8">
+            <section className="flex flex-col items-center justify-center py-8">
               <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
               <h2 className="text-xl font-semibold mb-2">Email Verified Successfully!</h2>
               <p className="text-gray-700 mb-6">Your email has been verified. You can now log in to your account.</p>
@@ -65,9 +65,9 @@ export default function VerifyEmailPage() {
               >
                 LOG IN
               </Link>
-            </div>
+            </section>
           ) : (
-            <div className="flex flex-col items-center justify-center py-8">
+            <section className="flex flex-col items-center justify-center py-8">
               <XCircle className="w-16 h-16 text-red-500 mb-4" />
               <h2 className="text-xl font-semibold mb-2">Verification Failed</h2>
               <p className="text-gray-700 mb-6">
@@ -79,10 +79,10 @@ export default function VerifyEmailPage() {
               >
                 BACK TO LOGIN
               </Link>
-            </div>
+            </section>
           )}
-        </div>
-      </div>
-    </div>
+        </section>
+      </section>
+    </section>
   )
 }

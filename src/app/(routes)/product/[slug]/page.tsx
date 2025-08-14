@@ -7,7 +7,7 @@ import GalleryWrapper from "@/src/app/components/product-page/gallery-wrapper"
 import Info from "@/src/app/components/product-page/info"
 import StickyProductDetails from "@/src/app/components/product-page/StickyProductDetails"
 import { ProductSuggestionsSection } from "@/src/app/components/product-page/ProductSuggestionsSection"
-import StructuredData from "@/src/app/components/layout/structured-data"
+import StructuredData from "@/src/app/components/layout/structured-data-layout"
 import ProductPageClient from "./page-client"
 
 

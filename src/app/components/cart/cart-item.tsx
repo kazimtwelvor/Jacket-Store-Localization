@@ -8,15 +8,15 @@ import type { CartItem } from "@/src/app/contexts/CartContext"
 import Currency from "@/src/app/ui/currency"
 
 interface CartItemProps {
-  data: CartItem
+  data: CartItem;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ data }) => {
-  const { removeFromCart } = useCart()
+const CartItemComponent: React.FC<CartItemProps> = ({ data }) => {
+  const { removeFromCart } = useCart();
 
   const onRemove = () => {
-    removeFromCart(data.id)
-  }
+    removeFromCart(data.id);
+  };
 
   return (
     <li className="flex py-6 border-b">
@@ -39,7 +39,7 @@ const CartItem: React.FC<CartItemProps> = ({ data }) => {
         </section>
       </section>
     </li>
-  )
-}
+  );
+};
 
-export default CartItem
+export default CartItemComponent;

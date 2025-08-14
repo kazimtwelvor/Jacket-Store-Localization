@@ -5,8 +5,8 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import useAuth from "@/hooks/use-auth"
 import { toast } from "react-hot-toast"
+import useAuth from "@/src/app/hooks/use-auth"
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
@@ -36,9 +36,9 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-12 flex items-center justify-center">
-      <div className="w-[90%] md:w-[60%] lg:w-[40%] border border-gray-200">
-        <div className="p-8">
+    <section className="min-h-screen bg-white py-12 flex items-center justify-center">
+      <section className="w-[90%] md:w-[60%] lg:w-[40%] border border-gray-200">
+        <section className="p-8">
           <h1 className="text-2xl font-bold mb-2">FORGOT YOUR PASSWORD?</h1>
 
           {!isSubmitted ? (
@@ -48,8 +48,8 @@ export default function ForgotPasswordPage() {
               </p>
 
               <form onSubmit={handleSubmit}>
-                <div className="mb-6">
-                  <div className="relative">
+                <section className="mb-6">
+                  <section className="relative">
                     <input
                       type="email"
                       id="email"
@@ -59,8 +59,8 @@ export default function ForgotPasswordPage() {
                       placeholder="* Email Address"
                       required
                     />
-                  </div>
-                </div>
+                  </section>
+                </section>
 
                 <button
                   type="submit"
@@ -70,15 +70,15 @@ export default function ForgotPasswordPage() {
                   {isLoading ? "SENDING..." : "RESET PASSWORD"}
                 </button>
 
-                <div className="mt-4 text-center">
+                <section className="mt-4 text-center">
                   <Link href="/auth/login" className="text-sm text-gray-700 hover:underline">
                     Back to login
                   </Link>
-                </div>
+                </section>
               </form>
             </>
           ) : (
-            <div className="text-center">
+            <section className="text-center">
               <p className="text-gray-700 mb-4">
                 We've sent a password reset link to <strong>{email}</strong>.
               </p>
@@ -88,10 +88,10 @@ export default function ForgotPasswordPage() {
               <Link href="/auth/login" className="text-sm text-gray-700 hover:underline">
                 Back to login
               </Link>
-            </div>
+            </section>
           )}
-        </div>
-      </div>
-    </div>
+        </section>
+      </section>
+    </section>
   )
 }
