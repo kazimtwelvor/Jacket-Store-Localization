@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { ArrowRight } from 'lucide-react'
 
 interface CategoriesPageProps {
   categories: any[]
@@ -28,9 +29,7 @@ const CategoriesPage = ({ categories }: CategoriesPageProps) => {
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">All Collections</h1>
-          <p className="text-lg text-gray-600 mb-6">Discover our complete range of jacket categories</p>
-          
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">All Collections</h1>          
           <div className="max-w-md mx-auto">
             <input
               type="text"
@@ -47,38 +46,31 @@ const CategoriesPage = ({ categories }: CategoriesPageProps) => {
             <p className="text-gray-500 text-lg">No categories found matching your search.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredCategories.map((category) => (
-              <Link
-                key={category.id}
-                href={`/collections/${category.slug}`}
-                className="group block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
-              >
-                <div className="aspect-square relative overflow-hidden">
-                  {category.imageUrl ? (
+              <div key={category.id} className="group">
+                <Link href={`/collections/${category.slug}`}>
+                  <div className="relative overflow-hidden bg-white shadow-md w-full h-[290px] sm:h-[320px] md:h-[400px] lg:h-[430px] xl:h-[460px]">
                     <Image
-                      src={category.imageUrl}
+                      src={category.imageUrl || "/placeholder.svg"}
                       alt={category.name}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      unoptimized
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                  ) : (
-                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-400 text-sm">No Image</span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+
+                    <div className="absolute inset-x-0 bottom-0 p-4 group">
+                      <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
+                        <h3 className="text-white text-lg md:text-xl lg:text-2xl text-left transition-all duration-500" style={{ fontFamily: 'var(--font-averta-bold)' }}>
+                          {category.name}
+                        </h3>
+                        <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1" />
+                      </div>
                     </div>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-lg text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                    {category.name}
-                  </h3>
-                  {category.description && (
-                    <p className="text-gray-600 text-sm line-clamp-2">
-                      {category.description}
-                    </p>
-                  )}
-                </div>
-              </Link>
+                  </div>
+                </Link>
+              </div>
             ))}
           </div>
         )}
