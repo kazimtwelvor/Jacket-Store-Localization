@@ -12,6 +12,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/src/app/ui/d
 import type { Product, Category } from "@/types"
 
 import { cn } from "@/src/app/lib/utils"
+<<<<<<< HEAD
+=======
+import CategorySEOSection from "@/src/app/category/category-seo-section"
+>>>>>>> b8812f9f02e3ff0e1a030b1c925b2cc04b0564ef
 import JacketCategories from "@/src/app/category/JacketCategories"
 import WeThinkYouWillLove from "@/src/app/category/WeThinkYouWillLove"
 import RecentlyViewed from "@/src/app/category/RecentlyViewed"

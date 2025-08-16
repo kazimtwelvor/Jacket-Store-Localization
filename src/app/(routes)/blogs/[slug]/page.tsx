@@ -4,7 +4,7 @@ import Image from "next/image"
 import { notFound } from "next/navigation"
 import { ArrowUp, ArrowLeft, ArrowRight } from "lucide-react"
 import { getBlog } from "@/src/app/actions/get-blog"
-import BlogHeroSection from "../../../components/blogs/blog-hero-div"
+import BlogHeroSection from "../../../components/blogs/blog-hero-section"
 import BlogClientScripts from "../../../components/blogs/blog-client-scripts"
 
 interface BlogData {
