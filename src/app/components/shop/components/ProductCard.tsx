@@ -81,10 +81,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <ProductImageCarousel product={product} wasDragged={wasDraggedRef} />
         )}
 
-        <div className="absolute bottom-2 left-2 text-black-600 text-sm font-medium opacity-80">FINEYST</div>
 
         <button
-          className="absolute w-7 h-7 rounded-full bg-white flex items-center justify-center shadow-md z-10 top-3 right-3"
+          className="absolute w-7 h-7 rounded-full bg-white flex items-center justify-center shadow-md z-10 -bottom-4 right-10 md:top-- md:right-3"
           aria-label="Add to wishlist"
           onClick={(e) => {
             e.stopPropagation()
@@ -104,7 +103,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </button>
 
         <button
-          className="md:hidden absolute w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-md z-48 right-2 left-39 -bottom-4 md:top-3 md:right-3 md:bottom-auto"
+          className="md:hidden absolute w-7 h-7 rounded-full bg-black text-white flex items-center justify-center shadow-md z-48 right-2 left-38 -bottom-4 md:top-3 md:right-3 md:bottom-auto"
           aria-label="Add to cart"
           onClick={(e) => {
             e.stopPropagation()

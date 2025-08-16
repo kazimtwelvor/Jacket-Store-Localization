@@ -44,13 +44,20 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const filterBarRef = useRef<HTMLDivElement>(null);
-  const sortButtonRef = useRef<HTMLButtonElement>(null);
-  const [dropdownPosition, setDropdownPosition] = useState<{
-    top: number;
-    left: number;
-  } | null>(null);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
-  // Close sort dropdown when clicking outside
+  useEffect(() => {
+    const handleHeaderVisibility = (event: CustomEvent) => {
+      setIsHeaderVisible(event.detail.isVisible);
+    };
+
+    window.addEventListener("headerVisibilityChange", handleHeaderVisibility as EventListener);
+    
+    return () => {
+      window.removeEventListener("headerVisibilityChange", handleHeaderVisibility as EventListener);
+    };
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -65,7 +72,6 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [sortDropdownOpen, setSortDropdownOpen]);
 
-  // Handle capsule nav visibility based on sticky state
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.dispatchEvent(
@@ -76,7 +82,6 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
     }
   }, [isFilterSticky]);
 
-  // Handle sort change with URL updates
   const handleSortChange = (sortValue: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("sort", sortValue);
@@ -85,7 +90,6 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
     setSortDropdownOpen(false);
   };
 
-  // Get sort display name
   const getSortDisplayName = (sortValue: string) => {
     const sortOptions = {
       popular: "Most Popular",
@@ -94,6 +98,16 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
       "price-low": "Price (low-high)",
     };
     return sortOptions[sortValue as keyof typeof sortOptions] || "Most Popular";
+  };
+
+  const getStickyPosition = () => {
+    if (!isFilterSticky) return "relative";
+    
+    if (isHeaderVisible) {
+      return "fixed top-10 sm:top-16 md:top-0 left-0 right-0 px-2 py-2 z-[9003] sticky-filter-bar";
+    } else {
+      return "fixed top-0 left-0 right-0 px-2 py-2 z-[9003] sticky-filter-bar";
+    }
   };
 
   return (
@@ -229,9 +243,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
         ref={filterBarRef}
         className={cn(
           "w-full px-2 py-4 mb-6 transition-all duration-300",
-          isFilterSticky
-            ? "fixed top-32 md:top-28 left-0 right-0 px-2 py-2 z-[9003] sticky-filter-bar"
-            : "relative",
+          getStickyPosition(),
           "md:px-6 md:py-3 md:mb-10",
           "lg:px-8 lg:py-3"
         )}

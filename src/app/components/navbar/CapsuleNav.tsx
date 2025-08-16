@@ -5,8 +5,6 @@ import { useRouter, usePathname } from "next/navigation";
 import Button from "../../ui/button";
 import { cn } from "../../lib/utils";
 
-// import { cn } from "../lib/utils"
-// import Button from "../ui/button"
 
 const items = [
   { id: 1, label: "Leather", isActive: true, category: "leather-jackets" },
@@ -165,15 +163,12 @@ export function CapsuleNav() {
     <div
       className={cn(
         "mx-auto md:w-auto md:mx-0 transition-all duration-300",
-        // Conditionally apply width
         (isCategoryPage || isShopPage) && isMobileView && isExpanded
           ? "w-[95%]"
           : "w-[70%]",
-        // Base positioning: fixed on mobile product pages, relative otherwise.
         isProductPage && isMobileView
           ? "fixed top-[60px] left-0 right-0 z-40 px-4"
           : "relative",
-        // Visibility state: simply hide or show the component with a fade animation.
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       )}
     >

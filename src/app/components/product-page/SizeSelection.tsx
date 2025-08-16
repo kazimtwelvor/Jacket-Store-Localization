@@ -32,7 +32,6 @@ const SizeSelection = ({
 
   return (
     <div className="mb-6 sm:mb-8">
-      {/* Size selector */}
       <div id="size-selector" className="relative">
         <div className="relative">
           <div
@@ -43,7 +42,6 @@ const SizeSelection = ({
             "
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            {/* Selected Size Display */}
             <div className="px-3 sm:px-4 py-3 flex items-center justify-between">
               <span className="text-sm sm:text-[15px] text-gray-700 font-bold">
                 {selectedSizeId ? `SIZE ${availableSizes.find((size: Size) => size.id === selectedSizeId)?.name}` : "SIZE"}
@@ -59,7 +57,6 @@ const SizeSelection = ({
                 <p className="text-[10px] sm:text-xs text-black">Sizes shown are standard to your country</p>
               </div>
 
-              {/* Size Options */}
               <div className="max-h-48 overflow-y-auto">
                 {availableSizes.map((size: Size) => {
                   const isSelected = selectedSizeId === size.id;
@@ -127,7 +124,6 @@ const SizeSelection = ({
         </div>
       )}
 
-      {/* Add to Cart Button for Mobile - Below Size Selector */}
       {isMobile && (
         <div className="mt-4">
           <Button

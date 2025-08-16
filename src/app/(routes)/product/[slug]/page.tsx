@@ -193,7 +193,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         
 
         <div className="block lg:hidden">
-          <div className="pt-16 pb-2 px-4">
+          <div className="pt-4 pb-2 px-4">
             <nav className="flex items-center justify-center text-xs">
               <span className="text-gray-500 hover:text-black uppercase font-medium">SHOP</span>
               <span className="mx-1 text-gray-500">/</span>

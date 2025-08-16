@@ -1,11 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { X, Heart, Truck, ChevronRight } from "lucide-react"
-import { useCart } from "@/src/app/contexts/CartContext"
+import { X, Heart, Truck, RotateCcw, ChevronRight } from "lucide-react"
+import type { Product } from "@/types"
 import Currency from "../../ui/currency"
+import { useCart } from "../../contexts/CartContext"
+
 interface CartSidebarProps {
     isOpen: boolean
     onClose: () => void
@@ -18,37 +20,46 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
     const { items, updateQuantity, removeFromCart, totalPrice } = useCart()
     const [showVoucherField, setShowVoucherField] = useState(false)
     const [couponCode, setCouponCode] = useState("")
+
     const shippingPrice = totalPrice > 100 ? 0 : 10
     const taxRate = 0.08
     const taxAmount = totalPrice * taxRate
     const grandTotal = totalPrice + shippingPrice + taxAmount
 
+    useEffect(() => {
+        if (isOpen) {
+            const scrollY = window.scrollY
+            document.body.style.position = 'fixed'
+            document.body.style.top = `-${scrollY}px`
+            document.body.style.width = '100%'
+        } else {
+            const scrollY = document.body.style.top
+            document.body.style.position = ''
+            document.body.style.top = ''
+            document.body.style.width = ''
+            window.scrollTo(0, parseInt(scrollY || '0') * -1)
+        }
+        return () => {
+            document.body.style.position = ''
+            document.body.style.top = ''
+            document.body.style.width = ''
+        }
+    }, [isOpen])
+
     if (!isOpen) return null
 
     return (
-        <section className="fixed inset-0 z-[10000] flex" onClick={onClose}>
-            <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm" />
-            <div className="ml-auto w-full lg:w-[600px] h-full bg-white flex flex-col relative z-10" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/50 bg- z-[10000] hidden lg:flex" onClick={onClose}>
+            <div className="ml-auto w-[600px] h-full bg-white flex flex-col" onClick={(e) => e.stopPropagation()}>
+                {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b">
                     <h2 className="text-lg font-semibold">MY SHOPPING CART</h2>
                     <div className="flex items-center gap-4">
                         <button
-                            onClick={() => {
-                                onClose();
-                                window.location.href = '/cart';
-                            }}
-                            className="text-sm text-gray-600 hover:text-gray-800 lg:block hidden"
+                            onClick={() => window.location.href = '/cart'}
+                            className="text-sm text-gray-600 hover:text-gray-800"
                         >
                             SEE DETAILS
-                        </button>
-                        <button
-                            onClick={() => {
-                                onClose();
-                                window.location.href = '/cart';
-                            }}
-                            className="text-sm text-gray-600 hover:text-gray-800 lg:hidden block"
-                        >
-                            VIEW FULL CART
                         </button>
                         <button onClick={onClose} className="p-1">
                             <X size={20} />
@@ -172,7 +183,6 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                                     </div>
                                 </div>
                             ))}
-
                             <div className="p-4">
                                 <div className="bg-gray-100 p-4">
                                     <h2 className="text-sm font-bold text-black mb-4">
@@ -243,9 +253,6 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                                         </span> to see what payment options are available.
                                     </p>
                                 </div>
-
-
-
                             </div>
                         </>
                     )}
@@ -277,7 +284,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     )
 }
 

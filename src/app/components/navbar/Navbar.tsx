@@ -356,6 +356,26 @@ const Navbar = () => {
     setSearchQuery("");
   };
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("filterBarSticky", {
+          detail: { isSticky: isSticky },
+        })
+      );
+    }
+  }, [isSticky]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("headerVisibilityChange", {
+          detail: { isVisible: isHeaderVisible },
+        })
+      );
+    }
+  }, [isHeaderVisible]);
+
   return (
     <div className="relative w-full" ref={navRef}>
       <MegaMenuScrollbarStyle />

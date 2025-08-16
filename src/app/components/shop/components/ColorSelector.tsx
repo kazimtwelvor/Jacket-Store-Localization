@@ -98,7 +98,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
         )}
 
         {colorPopup?.productId === product.id && !isDesktop && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
+          <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-center z-50">
             <div className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto">
               <div className="flex items-center justify-between p-5">
                 <h2 className="text-lg font-bold">Select Color</h2>
