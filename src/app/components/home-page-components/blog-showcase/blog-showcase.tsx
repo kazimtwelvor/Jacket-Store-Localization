@@ -339,7 +339,7 @@ const BlogsShowcase = () => {
                                                 <span>{item.readTime}</span>
                                             </div>
 
-                                            <h3 className={`text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2b2b2b] transition-colors duration-300 ${avertaBlack.className}`}>
+                                            <h3 className={`${avertaBlack.className} text-xl text-gray-900 mb-3 group-hover:text-[#2b2b2b] transition-colors duration-300`}>
                                                 {item.title}
                                             </h3>
 
@@ -422,8 +422,8 @@ const BlogsShowcase = () => {
 
                                                     <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300 mb-3">
                                                         <h3
-                                                            className="text-black text-base md:text-lg font-bold text-left transition-all duration-500 line-clamp-2 group-hover:text-[#2b2b2b]"
-                                                            style={{ fontFamily: "AvertaPe" }}
+                                                            className={`${avertaBlack.className} text-black text-base md:text-lg font-bold text-left transition-all duration-500 line-clamp-2 group-hover:text-[#2b2b2b]`}
+
                                                         >
                                                             {item.title}
                                                         </h3>
