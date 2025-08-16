@@ -15,7 +15,6 @@ export const DesktopBannerContent = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className={`${avertaBlack.className} text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-4 sm:mb-6 md:mb-8 tracking-tight`}
-          // style={{ fontFamily: 'var(--font-averta-bold)' }}
           >
             FINEYST SALE
           </motion.div>
