@@ -239,7 +239,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
 
     return (
       <div className="min-h-screen bg-white p-8">
-        <h1 className="text-2xl font-bold text-red-600 mb-4">Error Loading Product</h1>
+        <h1 className="text-2xl font-bold text-black mb-4">Error Loading Product</h1>
         <p className="mb-4">We encountered an error while trying to load this product.</p>
         <div className="bg-gray-100 p-4 rounded-md">
           <h3 className="font-bold mb-2">Technical Details:</h3>
