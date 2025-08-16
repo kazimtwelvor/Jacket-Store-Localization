@@ -29,11 +29,11 @@ export default function WishlistPage() {
   return (
     <Container>
       <section className="min-h-screen py-6 md:py-8 lg:py-10">
-        <section className="max-w-6xl mx-auto">
-          <section className="flex flex-col md:flex-row">
-            <section className="w-full md:w-64 mb-6 md:mb-0">
-              <section className="bg-gray-50 p-4 rounded-lg">
-                <section className="flex flex-col space-y-1">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row">
+            <div className="w-full md:w-64 mb-6 md:mb-0">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="flex flex-col space-y-1">
                   <Link
                     href="/account"
                     className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium flex items-center"
@@ -78,31 +78,31 @@ export default function WishlistPage() {
                     <span>Log Out</span>
                     <ArrowRight className="ml-auto h-4 w-4" />
                   </button>
-                </section>
-              </section>
-            </section>
+                </div>
+              </div>
+            </div>
 
-            <section className="flex-1 md:ml-8">
-              <section className="bg-gray-50 p-6 rounded-lg mb-6">
-                <section className="flex items-center">
-                  <section className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
+            <div className="flex-1 md:ml-8">
+              <div className="bg-gray-50 p-6 rounded-lg mb-6">
+                <div className="flex items-center">
+                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
                     <Heart className="h-10 w-10 text-black" strokeWidth={1.5} />
-                  </section>
-                  <section>
+                  </div>
+                  <div>
                     <h1 className="text-3xl font-bold">WISHLIST OF {username}</h1>
                     <p className="text-gray-600">Save your favorite items</p>
-                  </section>
-                </section>
-              </section>
+                  </div>
+                </div>
+              </div>
 
-              <section className="py-6 border-b border-gray-200">
+              <div className="py-6 border-b border-gray-200">
                 <p className="text-gray-600">There are no items in your wishlist.</p>
-              </section>
+              </div>
 
               <TrendingProducts />
-            </section>
-          </section>
-        </section>
+            </div>
+          </div>
+        </div>
       </section>
     </Container>
   )

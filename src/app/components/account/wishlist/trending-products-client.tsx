@@ -111,29 +111,29 @@ export default function TrendingProducts() {
   }, []);
 
   if (isLoading) {
-    return <section className="py-8 text-center">Loading trending products...</section>;
+    return <div className="py-8 text-center">Loading trending products...</div>;
   }
 
   return (
     <section className="mt-8">
       <h2 className="text-2xl font-bold mb-6">TRENDING NOW</h2>
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {products.map((product: any, index: number) => (
-          <section key={product.id} className="group relative">
+          <div key={product.id} className="group relative">
             {index === 0 && (
-              <section className="absolute top-2 left-2 z-10 bg-[#2b2b2b] text-white text-xs font-bold px-2 py-1">
+              <div className="absolute top-2 left-2 z-10 bg-[#2b2b2b] text-white text-xs font-bold px-2 py-1">
                 Sale-20%
-              </section>
+              </div>
             )}
             {index === 1 && (
-              <section className="absolute top-2 left-2 z-10 bg-[#2b2b2b] text-white text-xs font-bold px-2 py-1">
+              <div className="absolute top-2 left-2 z-10 bg-[#2b2b2b] text-white text-xs font-bold px-2 py-1">
                 Sale-30%
-              </section>
+              </div>
             )}
             {index === 2 && (
-              <section className="absolute top-2 left-2 z-10 bg-black text-white text-xs font-bold px-2 py-1">
+              <div className="absolute top-2 left-2 z-10 bg-black text-white text-xs font-bold px-2 py-1">
                 Bestseller
-              </section>
+              </div>
             )}
 
             <button className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md">
@@ -153,13 +153,13 @@ export default function TrendingProducts() {
               />
             </Link>
 
-            <section className="mt-4">
-              <section className="text-center font-bold">FINEYST</section>
+            <div className="mt-4">
+              <div className="text-center font-bold">FINEYST</div>
               <h3 className="text-sm text-center mt-1 uppercase line-clamp-2">
                 {product.name}
               </h3>
 
-              <section className="flex justify-center items-center mt-2 gap-2">
+              <div className="flex justify-center items-center mt-2 gap-2">
                 {index < 2 && (
                   <>
                     <span className="text-gray-500 line-through">
@@ -175,38 +175,38 @@ export default function TrendingProducts() {
                     <Currency value="49.00" />
                   </span>
                 )}
-              </section>
+              </div>
 
-              <section className="flex justify-center mt-3">
+              <div className="flex justify-center mt-3">
                 {index === 0 && (
-                  <section className="border border-gray-300 px-3 py-1 text-sm">
-                    <section className="flex items-center gap-2">
-                      <section className="w-4 h-4 rounded-full bg-black"></section>
+                  <div className="border border-gray-300 px-3 py-1 text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-black"></div>
                       <span>Black</span>
-                    </section>
-                  </section>
+                    </div>
+                  </div>
                 )}
                 {index === 1 && (
-                  <section className="border border-gray-300 px-3 py-1 text-sm">
-                    <section className="flex items-center gap-2">
-                      <section className="w-4 h-4 rounded-full bg-gray-200"></section>
+                  <div className="border border-gray-300 px-3 py-1 text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-gray-200"></div>
                       <span>+ 4 Colors</span>
-                    </section>
-                  </section>
+                    </div>
+                  </div>
                 )}
                 {index === 2 && (
-                  <section className="border border-gray-300 px-3 py-1 text-sm">
-                    <section className="flex items-center gap-2">
-                      <section className="w-4 h-4 rounded-full bg-black"></section>
+                  <div className="border border-gray-300 px-3 py-1 text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-black"></div>
                       <span>+ 1 Color</span>
-                    </section>
-                  </section>
+                    </div>
+                  </div>
                 )}
-              </section>
-            </section>
-          </section>
+              </div>
+            </div>
+          </div>
         ))}
-      </section>
+      </div>
     </section>
   );
 }

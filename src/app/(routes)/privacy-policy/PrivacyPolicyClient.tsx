@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowUp } from "lucide-react"
-import Container from "@/components/ui/container"
-import { Button } from "@/components/ui/button"
+import Container from "@/src/app/ui/container"
+import { Button } from "@/src/app/ui/button"
 import Script from "next/script"
 
 export default function PrivacyPolicyClient() {
@@ -41,13 +41,13 @@ export default function PrivacyPolicyClient() {
   }, [])
 
   return (
-    <div className="bg-background pb-20">
+    <section className="bg-background pb-20">
       {/* Load jQuery and fixed-sticky scripts */}
       <Script src="https://code.jquery.com/jquery-3.6.0.min.js" strategy="beforeInteractive" />
       <Script src="https://cdn.jsdelivr.net/npm/fixed-sticky@0.1.7/fixedsticky.min.js" strategy="beforeInteractive" />
 
       {/* Hero Section */}
-      <div className="relative h-[40vh] w-full overflow-hidden mb-16 md:mb-24 hero-section">
+      <div className="relative h-[40vh] w-full overflow-hidden mb-16 md:mb-24 hero-div">
         <Image src="/placeholder.svg?key=5rrok" alt="Privacy Policy" fill className="object-cover" priority />
         <div className="absolute inset-0 flex items-center justify-center">
           <Container>
@@ -115,7 +115,7 @@ export default function PrivacyPolicyClient() {
           {/* Main Content */}
           <div className="lg:w-3/4 mb-12">
             <div className="prose prose-lg max-w-none">
-              <section id="information-we-collect" className="scroll-mt-24">
+              <div id="information-we-collect" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
                   <h2 className="text-2xl font-bold mb-4 border-black">1. Information We Collect</h2>
 
@@ -150,9 +150,9 @@ export default function PrivacyPolicyClient() {
                     </li>
                   </ul>
                 </div>
-              </section>
+              </div>
 
-              <section id="how-we-use-information" className="scroll-mt-24">
+              <div id="how-we-use-information" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
                   <h2 className="text-2xl font-bold mb-4 border-black">2. How We Use Your Information</h2>
 
@@ -177,9 +177,9 @@ export default function PrivacyPolicyClient() {
                     particular, your IP address), and more generally to improve and optimize our Site.
                   </p>
                 </div>
-              </section>
+              </div>
 
-              <section id="sharing-your-information" className="scroll-mt-24">
+              <div id="sharing-your-information" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
                   <h2 className="text-2xl font-bold mb-4 border-black">3. Sharing Your Information</h2>
 
@@ -206,9 +206,9 @@ export default function PrivacyPolicyClient() {
                     otherwise protect our rights.
                   </p>
                 </div>
-              </section>
+              </div>
 
-              <section id="cookies" className="scroll-mt-24">
+              <div id="cookies" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
                   <h2 className="text-2xl font-bold mb-4 border-black">4. Cookies and Tracking Technologies</h2>
 
@@ -223,9 +223,9 @@ export default function PrivacyPolicyClient() {
                     Track (DNT) browser mechanism is in place.
                   </p>
                 </div>
-              </section>
+              </div>
 
-              <section id="data-retention" className="scroll-mt-24">
+              <div id="data-retention" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
                   <h2 className="text-2xl font-bold mb-4 border-black">5. Data Retention</h2>
 
@@ -235,9 +235,9 @@ export default function PrivacyPolicyClient() {
                     long as needed to provide you with our services and to comply with our legal obligations.
                   </p>
                 </div>
-              </section>
+              </div>
 
-              <section id="your-rights" className="scroll-mt-24">
+              <div id="your-rights" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
                   <h2 className="text-2xl font-bold mb-4 border-black">6. Your Rights</h2>
 
@@ -259,9 +259,9 @@ export default function PrivacyPolicyClient() {
                     Privacy Notice for California Residents.
                   </p>
                 </div>
-              </section>
+              </div>
 
-              <section id="childrens-privacy" className="scroll-mt-24">
+              <div id="childrens-privacy" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
                   <h2 className="text-2xl font-bold mb-4 border-black">7. Children's Privacy</h2>
 
@@ -272,9 +272,9 @@ export default function PrivacyPolicyClient() {
                     actions.
                   </p>
                 </div>
-              </section>
+              </div>
 
-              <section id="changes" className="scroll-mt-24">
+              <div id="changes" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
                   <h2 className="text-2xl font-bold mb-4 border-black">8. Changes to This Privacy Policy</h2>
 
@@ -285,9 +285,9 @@ export default function PrivacyPolicyClient() {
                     this page.
                   </p>
                 </div>
-              </section>
+              </div>
 
-              <section id="contact-us" className="scroll-mt-24">
+              <div id="contact-us" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md border border-black hover:shadow-lg transition-shadow">
                   <h2 className="text-2xl font-bold mb-4 border-black">9. Contact Us</h2>
 
@@ -297,7 +297,7 @@ export default function PrivacyPolicyClient() {
                     provided below:
                   </p>
                 </div>
-              </section>
+              </div>
             </div>
 
             {/* Back to Top Button */}
@@ -349,7 +349,7 @@ export default function PrivacyPolicyClient() {
           display: block;
         }
       `}</style>
-    </div>
+    </section>
   )
 }
 

@@ -78,28 +78,27 @@ export default function SizeConversion() {
   if (!isMounted) {
     return (
       <section className="space-y-8">
-        <section className="mb-8">
+        <div className="mb-8">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">Size Conversion</h2>
           <p className="text-muted-foreground max-w-3xl">
             Convert between different international sizing systems to find your perfect fit.
           </p>
-        </section>
+        </div>
 
-        <section className="flex flex-wrap gap-2 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6">
           {categories.map((cat) => (
             <a
               key={cat.id}
               href={`#${cat.id}`}
-              className={`px-4 py-2 text-sm rounded-full transition-all ${
-                cat.id === "clothing" ? "bg-[#eaeaea] text-primary-foreground" : "bg-secondary hover:bg-secondary/80"
-              }`}
+              className={`px-4 py-2 text-sm rounded-full transition-all ${cat.id === "clothing" ? "bg-[#eaeaea] text-primary-foreground" : "bg-secondary hover:bg-secondary/80"
+                }`}
             >
               {cat.label}
             </a>
           ))}
-        </section>
+        </div>
 
-        <section className="bg-card rounded-lg border shadow-sm overflow-hidden">
+        <div className="bg-card rounded-lg border shadow-sm overflow-hidden">
           <table className="min-w-full divide-y divide-border">
             <thead>
               <tr className="bg-muted/50">
@@ -128,9 +127,9 @@ export default function SizeConversion() {
               ))}
             </tbody>
           </table>
-        </section>
+        </div>
 
-        <section className="bg-muted/20 rounded-lg border p-6 mt-8">
+        <div className="bg-muted/20 rounded-lg border p-6 mt-8">
           <h3 className="text-xl font-semibold mb-4">Size Conversion Tips</h3>
           <ul className="space-y-2">
             <li className="flex items-start">
@@ -152,13 +151,13 @@ export default function SizeConversion() {
               </span>
             </li>
           </ul>
-        </section>
+        </div>
       </section>
     )
   }
 
   return (
-    <motion.section
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -170,25 +169,24 @@ export default function SizeConversion() {
         Convert between different international sizing systems to find your perfect fit.
       </p>
 
-      <section className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-6">
         {categories.map((cat) => (
           <button
             key={cat.id}
             onClick={() => setCategory(cat.id)}
-            className={`px-4 py-2 text-sm rounded-full transition-all ${
-              category === cat.id ? "bg-[#eaeaea] text-black" : "bg-[#eaeaea] hover:bg-[#eaeaea]/80 text-black"
-            }`}
+            className={`px-4 py-2 text-sm rounded-full transition-all ${category === cat.id ? "bg-[#eaeaea] text-black" : "bg-[#eaeaea] hover:bg-[#eaeaea]/80 text-black"
+              }`}
           >
             {cat.label}
           </button>
         ))}
-      </section>
+      </div>
 
-      <section className="bg-white rounded-lg border border-[#2b2b2b] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-lg border border-[#2b2b2b] shadow-sm overflow-hidden">
         {renderTable(category)}
-      </section>
+      </div>
 
-      <section className="bg-white rounded-lg border border-[2b2b2b] p-6 mt-8">
+      <div className="bg-white rounded-lg border border-[2b2b2b] p-6 mt-8">
         <h3 className="text-xl font-semibold mb-4 text-">Size Conversion Tips</h3>
         <ul className="space-y-2">
           <li className="flex items-start">
@@ -210,7 +208,7 @@ export default function SizeConversion() {
             </span>
           </li>
         </ul>
-      </section>
-    </motion.section>
+      </div>
+    </motion.div>
   )
 }

@@ -46,8 +46,8 @@ const GlobalFashionPartners = () => {
 
     return (
         <section className="bg-gradient-to-br from-white to-gray-50 py-12 md:py-16 lg:py-20 relative overflow-hidden">
-            <section className="absolute inset-0 bg-[url('/pattern.png')] opacity-5"></section>
-            <section className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+            <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-5"></div>
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -57,13 +57,13 @@ const GlobalFashionPartners = () => {
                     <span className={`text-black ${avertaBlack.className}`}>AS FEATURED IN</span>
                 </motion.h2>
 
-                <section className="relative mb-6 md:mb-8">
-                    <section className="md:hidden">
-                        <section className="embla overflow-hidden" ref={emblaRef}>
-                            <section className="embla__container flex">
+                <div className="relative mb-6 md:mb-8">
+                    <div className="md:hidden">
+                        <div className="embla overflow-hidden" ref={emblaRef}>
+                            <div className="embla__container flex">
                                 {partners.map((partner, index) => (
-                                    <section key={index} className="embla__slide flex-[0_0_45%] min-w-0 mr-2">
-                                        <section className="flex justify-center">
+                                    <div key={index} className="embla__slide flex-[0_0_45%] min-w-0 mr-2">
+                                        <div className="flex justify-center">
                                             <img
                                                 src={partner.logoUrl}
                                                 alt={partner.brand}
@@ -74,17 +74,17 @@ const GlobalFashionPartners = () => {
                                                     e.currentTarget.style.display = 'none'
                                                 }}
                                             />
-                                        </section>
-                                    </section>
+                                        </div>
+                                    </div>
                                 ))}
-                            </section>
-                        </section>
-                    </section>
+                            </div>
+                        </div>
+                    </div>
 
-                    <section className="hidden md:flex justify-center items-center space-x-4 md:space-x-6 overflow-hidden">
+                    <div className="hidden md:flex justify-center items-center space-x-4 md:space-x-6 overflow-hidden">
                         <AnimatePresence mode="wait">
                             {partners.map((partner, index) => (
-                                <motion.section
+                                <motion.div
                                     key={index}
                                     initial={{ opacity: 0, scale: 0.8, y: 20 }}
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -109,27 +109,27 @@ const GlobalFashionPartners = () => {
                                     />
                                     <AnimatePresence>
                                         {hoveredBrand === index && (
-                                            <motion.section
+                                            <motion.div
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: 10 }}
                                                 className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-xs whitespace-nowrap z-20"
                                             >
                                                 {partner.specialty}
-                                            </motion.section>
+                                            </motion.div>
                                         )}
                                     </AnimatePresence>
-                                </motion.section>
+                                </motion.div>
                             ))}
                         </AnimatePresence>
-                    </section>
-                </section>
+                    </div>
+                </div>
 
-                <section className="relative hidden md:block">
-                    <section className="flex items-center justify-center">
-                        <section className="flex-1 text-center relative">
+                <div className="relative hidden md:block">
+                    <div className="flex items-center justify-center">
+                        <div className="flex-1 text-center relative">
                             <AnimatePresence mode="wait">
-                                <motion.section
+                                <motion.div
                                     key={currentPartner}
                                     initial={{ opacity: 0, x: 100 }}
                                     animate={{ opacity: 1, x: 0 }}
@@ -147,10 +147,10 @@ const GlobalFashionPartners = () => {
                                     <p className="text-sm text-gray-500 italic">
                                         {partners[currentPartner].specialty}
                                     </p>
-                                </motion.section>
+                                </motion.div>
                             </AnimatePresence>
 
-                            <section className="flex justify-center space-x-2 mt-6">
+                            <div className="flex justify-center space-x-2 mt-6">
                                 {partners.map((_, index) => (
                                     <motion.button
                                         key={index}
@@ -161,12 +161,12 @@ const GlobalFashionPartners = () => {
                                         whileTap={{ scale: 0.9 }}
                                     />
                                 ))}
-                            </section>
-                        </section>
-                    </section>
+                            </div>
+                        </div>
+                    </div>
 
-                </section>
-            </section>
+                </div>
+            </div>
         </section>
     )
 }

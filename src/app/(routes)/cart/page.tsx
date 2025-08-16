@@ -22,10 +22,10 @@ interface AddMoreOfferProps {
 
 const AddMoreOffer: React.FC<AddMoreOfferProps> = ({ onContinueShopping }) => {
   return (
-    <section className="relative overflow-hidden  shadow-md mt-4">
-      <section className="absolute inset-0 bg-black"></section>
+    <div className="relative overflow-hidden  shadow-md mt-4">
+      <div className="absolute inset-0 bg-black"></div>
 
-      <section className="relative p-4 flex flex-col items-center justify-center text-center">
+      <div className="relative p-4 flex flex-col items-center justify-center text-center">
         <p className="text-white text-base font-semibold pt13 mb-2">
           Add one more item to your cart and get <span className="text-[#F6F6F6]">10% off</span> your entire order!
         </p>
@@ -35,8 +35,8 @@ const AddMoreOffer: React.FC<AddMoreOfferProps> = ({ onContinueShopping }) => {
         >
           Discover More
         </Button>
-      </section>
-    </section>
+      </div>
+    </div>
   )
 }
 
@@ -107,18 +107,18 @@ const CartPage = () => {
 
   if (items.length === 0) {
     return (
-      <section className="bg-white">
+      <div className="bg-white">
         <Container>
-          <motion.section
+          <motion.div
             initial={{ opacity: 100, y: 20 }}
             animate={{ opacity: 100, y: 20 }}
             transition={{ duration: 0.5 }}
             className="px-4 py-16 sm:px-6 lg:px-8 min-h-[70vh] flex flex-col items-center justify-center"
           >
-            <section className="text-center max-w-md mx-auto">
-              <section className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="text-center max-w-md mx-auto">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <ShoppingBag className="h-10 w-10 text-gray-400" />
-              </section>
+              </div>
               <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Cart is Empty</h1>
               <p className="text-gray-500 pt-4 mb-8">
                 Looks like you haven&apos;t added anything to your cart yet. Explore our collection and find something you&apos;ll
@@ -127,10 +127,10 @@ const CartPage = () => {
               <Button onClick={() => router.push("/")} className="bg-[#B01E23] hover:bg-[#2b2b2b] text-white mt-4">
                 Continue Shopping
               </Button>
-            </section>
-          </motion.section>
+            </div>
+          </motion.div>
         </Container>
-      </section>
+      </div>
     )
   }
 
@@ -148,15 +148,15 @@ const CartPage = () => {
   }
 
   return (
-    <section className="bg-gray-50">
+    <div className="bg-gray-50">
       <Container>
-        <motion.section
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="px-0 py-12 sm:px-1 lg:px-8"
         >
-          <section className="max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto">
 
             <nav className="flex items-center text-sm text-gray-500 mb-8 mt-6">
 
@@ -167,11 +167,11 @@ const CartPage = () => {
               Your Shopping Cart
             </h1>
 
-            <section className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-x-12 gap-y-8 lg:gap-y-0 lg:items-start">
-              <section className="lg:col-span-7">
-                <section className="space-y-2 -mt-5">
+            <div className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-x-12 gap-y-8 lg:gap-y-0 lg:items-start">
+              <div className="lg:col-span-7">
+                <div className="space-y-2 -mt-5">
                   {items.map((item, index) => (
-                    <motion.section
+                    <motion.div
                       key={item.id}
                       initial={{ opacity: 100, y: 20 }}
                       animate={{ opacity: 100, y: 20 }}
@@ -186,7 +186,7 @@ const CartPage = () => {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                       </button>
-                      <section className="relative w-20 sm:w-24 md:w-28 aspect-[3/5] flex-shrink-0 self-center">
+                      <div className="relative w-20 sm:w-24 md:w-28 aspect-[3/5] flex-shrink-0 self-center">
                         <Image
                           src={item.product.images?.[0]?.url || "/placeholder.svg"}
                           alt={item.product.name}
@@ -204,27 +204,27 @@ const CartPage = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.682l-1.318-1.364a4.5 4.5 0 00-6.364 0z" />
                           </svg>
                         </button>
-                      </section>
+                      </div>
 
-                      <section className="flex-1">
+                      <div className="flex-1">
                         <h3 className="text-xs md:text-base font-bold text-black mb-2 md:mb-3 uppercase pr-10 md:pr-8 max-w-[240px] sm:max-w-[320px] md:max-w-[320px] lg:max-w-[380px] overflow-hidden relative" style={{ lineHeight: '1.2', height: '2.4em', wordBreak: 'break-word' }}>
                           <span style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to bottom, transparent 0%, transparent 85%, white 100%)', pointerEvents: 'none', zIndex: 1 }}></span>
                           <Link href={`/product/${item.product.id}`}>{item.product.name}</Link>
                         </h3>
 
-                        <section className="flex items-start justify-between pb-3 pt-3">
-                          <section className="space-y-0.5">
+                        <div className="flex items-start justify-between pb-3 pt-3">
+                          <div className="space-y-0.5">
                             <p className="text-xs sm:text-sm text-black">
                               <span className="font-medium">Color:</span> {item.selectedColor || item.product.color?.name || item.product.colors?.[0]?.name || 'Default'}
                             </p>
                             <p className="text-xs sm:text-sm text-black">
                               <span className="font-medium">Size:</span> {item.size || 'N/A'}
                             </p>
-                          </section>
+                          </div>
                           {item.quantity > 1 && (
-                            <section className="text-right">
+                            <div className="text-right">
                               <p className="text-xs text-gray-500">Unit Price</p>
-                              <section className="flex items-center gap-2">
+                              <div className="flex items-center gap-2">
                                 {item.product.salePrice && Number(item.product.salePrice) > 0 ? (
                                   <>
                                     <span className="text-xs text-gray-400 line-through">
@@ -239,13 +239,13 @@ const CartPage = () => {
                                     <Currency value={item.unitPrice || 0} />
                                   </span>
                                 )}
-                              </section>
-                            </section>
+                              </div>
+                            </div>
                           )}
-                        </section>
+                        </div>
 
-                        <section className="flex items-center justify-between pt-4">
-                          <section className="flex items-center border border-gray-300 w-fit">
+                        <div className="flex items-center justify-between pt-4">
+                          <div className="flex items-center border border-gray-300 w-fit">
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
                               className="px-2 sm:px-3 py-1 sm:py-2 text-gray-600 hover:text-[#B01E23] hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-bold text-sm sm:text-lg"
@@ -262,20 +262,20 @@ const CartPage = () => {
                             >
                               +
                             </button>
-                          </section>
-                          <section className="text-right">
+                          </div>
+                          <div className="text-right">
                             <p className="text-xs sm:text-sm text-gray-500">Total Price</p>
                             <p className="text-sm sm:text-base font-bold text-black">
                               <Currency value={(item.unitPrice || 0) * (item.quantity || 1)} />
                             </p>
-                          </section>
-                        </section>
-                      </section>
-                    </motion.section>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
                   ))}
-                </section>
+                </div>
 
-                <section className="mt-8">
+                <div className="mt-8">
                   <button
                     onClick={handleContinueShopping}
                     className="flex items-center text-[#00000] hover:text-[#2b2b2b] transition-colors"
@@ -283,50 +283,50 @@ const CartPage = () => {
                     <ChevronLeft className="h-5 w-5 mr-1" />
                     Continue Shopping
                   </button>
-                </section>
+                </div>
 
                 <AddMoreOffer onContinueShopping={handleContinueShopping} />
-              </section>
+              </div>
 
-              <section className="lg:col-span-5">
-                <section className="bg-gray-100 p-4 sm:p-6 sticky top-6 rounded-lg">
+              <div className="lg:col-span-5">
+                <div className="bg-gray-100 p-4 sm:p-6 sticky top-6 rounded-lg">
                   <h2 className="text-base sm:text-lg font-bold text-black mb-4">
                     Order Summary
                   </h2>
 
-                  <section className="space-y-3 mb-6">
-                    <section className="flex justify-between">
+                  <div className="space-y-3 mb-6">
+                    <div className="flex justify-between">
                       <p className="text-black">Subtotal</p>
                       <p className="font-bold text-black">
                         <Currency value={totalPrice} />
                       </p>
-                    </section>
-                    <section className="flex justify-between">
+                    </div>
+                    <div className="flex justify-between">
                       <p className="text-black">Shipping</p>
                       <p className="font-bold text-black">
                         {shippingPrice === 0 ? "Free" : <Currency value={shippingPrice} />}
                       </p>
-                    </section>
-                    <section className="flex justify-between">
+                    </div>
+                    <div className="flex justify-between">
                       <p className="text-black">Estimated Tax</p>
                       <p className="font-bold text-black">
                         <Currency value={taxAmount} />
                       </p>
-                    </section>
-                    <section className="border-t border-gray-300 pt-3 flex justify-between">
+                    </div>
+                    <div className="border-t border-gray-300 pt-3 flex justify-between">
                       <p className="text-lg font-bold text-black">Total price</p>
                       <p className="text-lg font-bold text-black">
                         <Currency value={grandTotal} />
                       </p>
-                    </section>
-                  </section>
+                    </div>
+                  </div>
 
-                  <section className="flex items-center gap-2 mb-6 text-sm text-black">
+                  <div className="flex items-center gap-2 mb-6 text-sm text-black">
                     <Truck className="h-4 w-4" />
                     <span>Delivery approx. <strong>August 06 - August 12</strong></span>
-                  </section>
+                  </div>
 
-                  <section className="mb-6">
+                  <div className="mb-6">
                     <button
                       onClick={() => setShowVoucherField(!showVoucherField)}
                       className="w-full text-left p-3 bg-gray-200 text-black font-medium flex justify-between items-center"
@@ -335,7 +335,7 @@ const CartPage = () => {
                       <ChevronRight className={`h-4 w-4 transition-transform ${showVoucherField ? 'rotate-90' : ''}`} />
                     </button>
                     {showVoucherField && (
-                      <section className="mt-3 flex space-x-2">
+                      <div className="mt-3 flex space-x-2">
                         <input
                           type="text"
                           placeholder="Enter voucher code"
@@ -349,11 +349,11 @@ const CartPage = () => {
                         >
                           Apply
                         </Button>
-                      </section>
+                      </div>
                     )}
-                  </section>
+                  </div>
 
-                  <section className="mb-6 relative">
+                  <div className="mb-6 relative">
                     <p className="text-sm text-black mb-2">
                       <span
                         className="underline cursor-pointer hover:text-gray-600"
@@ -364,35 +364,35 @@ const CartPage = () => {
                     </p>
 
                     {showPaymentPopup && (
-                      <section className="absolute bottom-full left-0 right-0 mb-2 bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-50">
-                        <section className="mb-4">
+                      <div className="absolute bottom-full left-0 right-0 mb-2 bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-50">
+                        <div className="mb-4">
                           <h3 className="font-bold text-black mb-3">Checkout</h3>
-                          <section className="flex flex-wrap gap-1 justify-center">
+                          <div className="flex flex-wrap gap-1 justify-center">
                             <img src="https://cdn.worldvectorlogo.com/logos/paypal-3.svg" alt="PayPal" className="w-9 h-6 object-contain rounded" />
                             <img src="https://cdn.worldvectorlogo.com/logos/visa-10.svg" alt="Visa" className="w-9 h-6 object-contain rounded" />
                             <img src="https://cdn.worldvectorlogo.com/logos/mastercard-6.svg" alt="Mastercard" className="w-9 h-6 object-contain rounded" />
                             <img src="https://cdn.worldvectorlogo.com/logos/american-express-3.svg" alt="American Express" className="w-9 h-6 object-contain rounded" />
                             <img src="https://cdn.worldvectorlogo.com/logos/apple-pay-2.svg" alt="Apple Pay" className="w-11 h-7 object-contain rounded" />
                             <img src="https://cdn.worldvectorlogo.com/logos/klarna.svg" alt="Klarna" className="w-9 h-6 object-contain rounded" />
-                          </section>
-                        </section>
+                          </div>
+                        </div>
 
-                        <section>
+                        <div>
                           <h3 className="font-bold text-black mb-3">Express checkout options</h3>
-                          <section className="flex gap-4 justify-start">
+                          <div className="flex gap-4 justify-start">
                             <img src="https://cdn.worldvectorlogo.com/logos/paypal-3.svg" alt="PayPal" className="h-5 object-contain" />
                             <img src="https://cdn.worldvectorlogo.com/logos/apple-pay-2.svg" alt="Apple Pay" className="h-5 object-contain" />
                             <img src="https://cdn.worldvectorlogo.com/logos/google-pay-2.svg" alt="Google Pay" className="h-5 object-contain" />
                             <img src="https://cdn.worldvectorlogo.com/logos/amazon-pay-1.svg" alt="Amazon Pay" className="h-5 object-contain" />
-                          </section>
-                        </section>
-                      </section>
+                          </div>
+                        </div>
+                      </div>
                     )}
-                  </section>
+                  </div>
 
-                  {isCheckoutFixed && <section className="md:hidden" style={{ height: `${checkoutHeight}px` }}></section>}
+                  {isCheckoutFixed && <div className="md:hidden" style={{ height: `${checkoutHeight}px` }}></div>}
 
-                  <section
+                  <div
                     ref={checkoutRef}
                     className={`md:static ${isCheckoutFixed ? 'fixed bottom-0 left-0 right-0 z-50' : 'relative'} bg-gray-100 md:bg-transparent p-4 md:p-0 ${isCheckoutFixed ? 'mx-0' : '-mx-4 md:mx-0'} border-t md:border-t-0 ${isCheckoutFixed ? 'shadow-lg' : ''} md:shadow-none`}
                   >
@@ -403,9 +403,9 @@ const CartPage = () => {
                       CHECKOUT
                     </Button>
 
-                    <section className="mb-2 md:mb-6">
+                    <div className="mb-2 md:mb-6">
                       <p className="text-center text-sm font-medium text-black mb-3">Express checkout options</p>
-                      <section className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-3 gap-2">
                         <button className="p-3 border bg-white flex items-center justify-center hover:bg-gray-50 hover:border-gray-400 hover:scale-105 transition-all duration-200">
                           <img src="https://cdn.worldvectorlogo.com/logos/paypal-3.svg" alt="PayPal" className="h-5 object-contain" />
                         </button>
@@ -415,35 +415,35 @@ const CartPage = () => {
                         <button className="p-3 border border-gray-300 bg-white flex items-center justify-center hover:bg-gray-50 hover:border-gray-400 hover:scale-105 transition-all duration-200">
                           <img src="https://cdn.worldvectorlogo.com/logos/amazon-pay-1.svg" alt="Amazon Pay" className="h-5 object-contain" />
                         </button>
-                      </section>
-                    </section>
-                  </section>
+                      </div>
+                    </div>
+                  </div>
 
-                  <section ref={sentinelTopRef} className="md:hidden h-px"></section>
+                  <div ref={sentinelTopRef} className="md:hidden h-px"></div>
 
-                  <section ref={sentinelBottomRef} className="md:hidden h-px"></section>
+                  <div ref={sentinelBottomRef} className="md:hidden h-px"></div>
 
-                  <section className="text-xs text-black mb-6">
+                  <div className="text-xs text-black mb-6">
                     <p>The <Link href="/terms-and-conditions" className="underline cursor-pointer hover:text-gray-600">General Terms and Conditions</Link> apply. The <Link href="/privacy-policy" className="underline cursor-pointer hover:text-gray-600">data protection regulations</Link> can be called up here.</p>
-                  </section>
+                  </div>
 
-                  <section className="space-y-3">
-                    <section className="flex items-center gap-2 text-sm text-black">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-sm text-black">
                       <Truck className="h-4 w-4" />
                       <Link href="/shipping-and-delivery-policy" className="underline cursor-pointer hover:text-gray-600">Free Shipping over 99 USD</Link>
-                    </section>
-                    <section className="flex items-center gap-2 text-sm text-black">
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-black">
                       <RotateCcw className="h-4 w-4" />
                       <Link href="/refund-and-returns-policy" className="underline cursor-pointer hover:text-gray-600">30 Days Free Return Policy</Link>
-                    </section>
-                  </section>
-                </section>
-              </section>
-            </section>
-          </section>
-        </motion.section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </Container>
-    </section>
+    </div>
   )
 }
 

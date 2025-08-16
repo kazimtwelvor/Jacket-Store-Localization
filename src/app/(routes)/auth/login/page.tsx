@@ -130,8 +130,8 @@ export default function LoginPage() {
 
   return (
     <section className="min-h-screen bg-white py-12 flex items-center justify-center">
-      <section className="w-[95%] md:w-[60%] lg:w-[50%] border border-gray-200">
-        <section className="flex">
+      <div className="w-[95%] md:w-[60%] lg:w-[50%] border border-gray-200">
+        <div className="flex">
           <button
             className={`flex-1 py-3 font-medium text-center ${activeTab === "login" ? "border-b-2 border-black" : ""}`}
             onClick={() => setActiveTab("login")}
@@ -145,11 +145,11 @@ export default function LoginPage() {
           >
             REGISTER
           </button>
-        </section>
+        </div>
 
-        <section className="p-8">
+        <div className="p-8">
           {activeTab === "login" && (
-            <section>
+            <div>
               <h1 className="text-2xl font-bold mb-2">LOG IN TO FINEYST EXPERIENCE</h1>
               <p className="text-gray-700 mb-6">
                 Login and enjoy member-only benefits and promotions with FINEYST EXPERIENCE.
@@ -158,8 +158,8 @@ export default function LoginPage() {
               <p className="text-gray-700 mb-4">Please complete all fields marked with an *.</p>
 
               <form onSubmit={handleSubmit}>
-                <section className="mb-4">
-                  <section className="relative">
+                <div className="mb-4">
+                  <div className="relative">
                     <input
                       type="email"
                       id="email"
@@ -169,11 +169,11 @@ export default function LoginPage() {
                       placeholder="* Email Address"
                       required
                     />
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="mb-6">
-                  <section className="relative">
+                <div className="mb-6">
+                  <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
                       id="password"
@@ -190,11 +190,11 @@ export default function LoginPage() {
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="flex items-center justify-between mb-6">
-                  <section className="flex items-center">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center">
                     <input
                       type="checkbox"
                       id="remember"
@@ -205,11 +205,11 @@ export default function LoginPage() {
                     <label htmlFor="remember" className="text-sm text-gray-700">
                       Remember me
                     </label>
-                  </section>
+                  </div>
                   <Link href="/auth/forgot-password" className="text-sm text-gray-700 hover:underline">
                     Forgot your password?
                   </Link>
-                </section>
+                </div>
 
                 <button
                   type="submit"
@@ -219,11 +219,11 @@ export default function LoginPage() {
                   {isLoading ? "LOGGING IN..." : "LOGIN"}
                 </button>
               </form>
-            </section>
+            </div>
           )}
 
           {activeTab === "register" && (
-            <section>
+            <div>
               <h1 className="text-2xl font-bold mb-2">SIGN UP TO FINEYST EXPERIENCE</h1>
               <p className="text-gray-700 mb-4">
                 Join FINEYST EXPERIENCE! Create your account now and enjoy all the benefits of membership, including
@@ -233,8 +233,8 @@ export default function LoginPage() {
               <p className="text-gray-700 mb-4">Please complete all fields marked with an *.</p>
 
               <form onSubmit={handleRegisterSubmit}>
-                <section className="mb-4">
-                  <section className="relative">
+                <div className="mb-4">
+                  <div className="relative">
                     <select
                       className="w-full p-3 border border-gray-300 focus:outline-none focus:border-black appearance-none"
                       defaultValue=""
@@ -251,11 +251,11 @@ export default function LoginPage() {
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                       size={20}
                     />
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="grid grid-cols-2 gap-4 mb-4">
-                  <section className="relative">
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="relative">
                     <input
                       type="text"
                       value={firstName}
@@ -264,8 +264,8 @@ export default function LoginPage() {
                       placeholder="* First Name"
                       required
                     />
-                  </section>
-                  <section className="relative">
+                  </div>
+                  <div className="relative">
                     <input
                       type="text"
                       value={lastName}
@@ -274,13 +274,13 @@ export default function LoginPage() {
                       placeholder="* Last Name"
                       required
                     />
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="mb-4">
+                <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-1">BIRTHDAY</label>
-                  <section className="grid grid-cols-3 gap-4">
-                    <section className="relative">
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="relative">
                       <select
                         className="w-full p-3 border border-gray-300 focus:outline-none focus:border-black appearance-none"
                         defaultValue=""
@@ -298,8 +298,8 @@ export default function LoginPage() {
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                         size={20}
                       />
-                    </section>
-                    <section className="relative">
+                    </div>
+                    <div className="relative">
                       <select
                         className="w-full p-3 border border-gray-300 focus:outline-none focus:border-black appearance-none"
                         defaultValue=""
@@ -317,8 +317,8 @@ export default function LoginPage() {
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                         size={20}
                       />
-                    </section>
-                    <section className="relative">
+                    </div>
+                    <div className="relative">
                       <select
                         className="w-full p-3 border border-gray-300 focus:outline-none focus:border-black appearance-none"
                         defaultValue=""
@@ -336,12 +336,12 @@ export default function LoginPage() {
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                         size={20}
                       />
-                    </section>
-                  </section>
-                </section>
+                    </div>
+                  </div>
+                </div>
 
-                <section className="mb-4">
-                  <section className="relative">
+                <div className="mb-4">
+                  <div className="relative">
                     <input
                       type="tel"
                       value={phone}
@@ -350,12 +350,12 @@ export default function LoginPage() {
                       placeholder="Phone"
                     />
                     <Info className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                  </section>
+                  </div>
                   <p className="text-xs text-gray-500 mt-1">Format: +1 123 456789</p>
-                </section>
+                </div>
 
-                <section className="mb-4">
-                  <section className="relative">
+                <div className="mb-4">
+                  <div className="relative">
                     <input
                       type="email"
                       value={email}
@@ -364,11 +364,11 @@ export default function LoginPage() {
                       placeholder="* Email"
                       required
                     />
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="mb-4">
-                  <section className="relative">
+                <div className="mb-4">
+                  <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
                       value={password}
@@ -388,17 +388,17 @@ export default function LoginPage() {
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
-                  </section>
+                  </div>
                   {passwordError && <p className="text-xs text-red-500 mt-1">{passwordError}</p>}
                   <ul className="text-xs text-gray-600 mt-2 space-y-1 list-inside">
                     <li>• 8 - 20 characters</li>
                     <li>• At least one uppercase letter, one lowercase letter and one number</li>
                     <li>• At least one special character (!?%&@#$^*~)</li>
                   </ul>
-                </section>
+                </div>
 
-                <section className="mb-4">
-                  <section className="relative">
+                <div className="mb-4">
+                  <div className="relative">
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       value={confirmPassword}
@@ -415,13 +415,13 @@ export default function LoginPage() {
                     >
                       {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
-                  </section>
+                  </div>
                   {password !== confirmPassword && confirmPassword && (
                     <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
                   )}
-                </section>
+                </div>
 
-                <section className="mb-4">
+                <div className="mb-4">
                   <input
                     type="text"
                     value={addressLine1}
@@ -429,10 +429,10 @@ export default function LoginPage() {
                     className="w-full p-3 border border-gray-300 focus:outline-none focus:border-black"
                     placeholder="Address Line 1"
                   />
-                </section>
+                </div>
 
-                <section className="mb-4">
-                  <section className="relative">
+                <div className="mb-4">
+                  <div className="relative">
                     <input
                       type="text"
                       value={addressDetails}
@@ -441,10 +441,10 @@ export default function LoginPage() {
                       placeholder="Additional address details"
                     />
                     <Info className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="mb-4">
+                <div className="mb-4">
                   <input
                     type="text"
                     value={city}
@@ -452,10 +452,10 @@ export default function LoginPage() {
                     className="w-full p-3 border border-gray-300 focus:outline-none focus:border-black"
                     placeholder="City"
                   />
-                </section>
+                </div>
 
-                <section className="mb-4">
-                  <section className="relative">
+                <div className="mb-4">
+                  <div className="relative">
                     <select
                       value={state}
                       onChange={(e) => setState(e.target.value)}
@@ -475,10 +475,10 @@ export default function LoginPage() {
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                       size={20}
                     />
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="mb-4">
+                <div className="mb-4">
                   <input
                     type="text"
                     value={zipCode}
@@ -486,10 +486,10 @@ export default function LoginPage() {
                     className="w-full p-3 border border-gray-300 focus:outline-none focus:border-black"
                     placeholder="Zip Code"
                   />
-                </section>
+                </div>
 
-                <section className="mb-6">
-                  <section className="relative">
+                <div className="mb-6">
+                  <div className="relative">
                     <select
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
@@ -507,10 +507,10 @@ export default function LoginPage() {
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                       size={20}
                     />
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="mb-4 text-sm">
+                <div className="mb-4 text-sm">
                   <p className="mb-2">
                     The{" "}
                     <Link href="#" className="underline">
@@ -527,7 +527,7 @@ export default function LoginPage() {
                     FINEYST EXPERIENCE.
                   </p>
 
-                  <section className="flex items-start mb-2">
+                  <div className="flex items-start mb-2">
                     <input
                       type="checkbox"
                       id="terms"
@@ -543,9 +543,9 @@ export default function LoginPage() {
                       </Link>{" "}
                       for participation in FINEYST BOSS EXPERIENCE.
                     </label>
-                  </section>
+                  </div>
 
-                  <section className="flex items-start mb-6">
+                  <div className="flex items-start mb-6">
                     <input
                       type="checkbox"
                       id="privacy"
@@ -561,8 +561,8 @@ export default function LoginPage() {
                       </Link>{" "}
                       of FINEYST USA.
                     </label>
-                  </section>
-                </section>
+                  </div>
+                </div>
 
                 <button
                   type="submit"
@@ -572,10 +572,10 @@ export default function LoginPage() {
                   {isLoading ? "CREATING ACCOUNT..." : "CREATE AN ACCOUNT"}
                 </button>
               </form>
-            </section>
+            </div>
           )}
-        </section>
-      </section>
+        </div>
+      </div>
     </section>
   )
 }

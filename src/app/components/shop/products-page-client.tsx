@@ -452,9 +452,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       {/* Shop Categories Section */}
       <ShopCategories keywordCategories={keywordCategories} />
       
-      <section className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
+      <div className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
         {/* Filter Bar */}
-        <section ref={filterBarWrapperRef}>
+        <div ref={filterBarWrapperRef}>
           <FilterBar
             isFilterSticky={isFilterSticky}
             layoutMetrics={layoutMetrics}
@@ -470,26 +470,26 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             handleSortChange={handleSortChange}
             isDesktop={isDesktop}
           />
-        </section>
+        </div>
 
         {/* Loading indicator */}
         {loading && (
-          <section className="flex justify-center items-center py-8">
-            <section className="animate-spin rounded-full h-8 w-8 border-b-2 border-black-600"></section>
+          <div className="flex justify-center items-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black-600"></div>
             <span className="ml-2 text-gray-600">Loading products...</span>
-          </section>
+          </div>
         )}
 
         {/* Products Grid */}
-        <section className="w-full px-2 sm:px-4 md:px-8">
+        <div className="w-full px-2 sm:px-4 md:px-8">
           {!loading && productsData.products.length > 0 ? (
             <>
               {/* Page info */}
-              <section className="mb-4 text-sm text-gray-600 text-center">
+              <div className="mb-4 text-sm text-gray-600 text-center">
                 Showing {(productsData.pagination.currentPage - 1) * productsData.pagination.productsPerPage + 1} - {Math.min(productsData.pagination.currentPage * productsData.pagination.productsPerPage, productsData.pagination.totalProducts)} of {productsData.pagination.totalProducts} products
-              </section>
+              </div>
 
-              <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
                 {currentProducts.map((product, index) => (
                   <ProductCard
                     key={product.id}
@@ -509,10 +509,10 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
                     wasDraggedRef={wasDraggedRef}
                   />
                 ))}
-              </section>
+              </div>
 
               {/* Pagination Controls */}
-              <section ref={paginationSectionRef}>
+              <div ref={paginationSectionRef}>
                 <PaginationControls
                   currentPage={productsData.pagination.currentPage}
                   totalPages={productsData.pagination.totalPages}
@@ -522,21 +522,21 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
                   onPageChange={handlePageChange}
                   isDesktop={isDesktop}
                 />
-              </section>
+              </div>
 
-              <section id="lower-content-section"></section>
+              <div id="lower-content-div"></div>
             </>
           ) : !loading ? (
-            <section className="text-center py-10">
+            <div className="text-center py-10">
               <p className="text-gray-500">No products found. Try adjusting your filters.</p>
               {hasActiveFilters && (
                 <button onClick={clearFilters} className="mt-2 text-black-600 hover:text-black underline">
                   Clear all filters
                 </button>
               )}
-            </section>
+            </div>
           ) : null}
-        </section>
+        </div>
 
         {/* We Think You Will Also Love Section */}
         {currentProducts.length > 0 && (
@@ -634,7 +634,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           }
           :global(.sticky.shadow-sm) { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
         `}</style>
-      </section>
+      </div>
     </section>
   )
 }

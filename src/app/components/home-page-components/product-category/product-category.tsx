@@ -191,13 +191,6 @@ export default function ProductCategory() {
         setTimeout(() => setIsAnimating(false), 500)
     }
 
-    const handleDotClick = (index: number) => {
-        if (isAnimating) return
-        setIsAnimating(true)
-        setCurrentIndex(index)
-        setTimeout(() => setIsAnimating(false), 300)
-    }
-
     const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
         setTouchStart(e.targetTouches[0].clientX)
         e.stopPropagation()
@@ -286,18 +279,18 @@ export default function ProductCategory() {
 
     return (
         <section className={`w-full bg-white flex justify-center overflow-hidden ${avertaBold.className}`}>
-            <section className="w-full max-w-[1896px] py-0 m-0 pl-4 md:pl-8 lg:pl-12">
-                <motion.section
+            <div className="w-full max-w-[1896px] py-0 m-0 pl-4 md:pl-8 lg:pl-12">
+                <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5 }}
                     className="text-center mb-0"
                 >
-                </motion.section>
+                </motion.div>
 
-                <section className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 -ml-4 md:-ml-8 lg:-ml-12">
-                    <section className="flex gap-4">
+                <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 -ml-4 md:-ml-8 lg:-ml-12">
+                    <div className="flex gap-4">
                         <button
                             onClick={() => setActiveTab("men")}
                             className={cn(
@@ -320,17 +313,17 @@ export default function ProductCategory() {
                         >
                             WOMEN
                         </button>
-                    </section>
-                </section>
-                <section
+                    </div>
+                </div>
+                <div
                     className="relative"
                     ref={carouselRef}
                     onTouchStart={handleTouchStart}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                 >
-                    <section className="overflow-hidden">
-                        <motion.section
+                    <div className="overflow-hidden">
+                        <motion.div
                             className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-6 cursor-grab active:cursor-grabbing"
                             animate={{
                                 x: -currentIndex * scrollAmount + dragOffset,
@@ -340,7 +333,7 @@ export default function ProductCategory() {
                             style={{ cursor: isDragging ? "grabbing" : "grab" }}
                         >
                             {categories.map((item) => (
-                                <section
+                                <div
                                     key={item.id}
                                     className="group flex-shrink-0"
                                     style={{ userSelect: "none" }}
@@ -356,7 +349,7 @@ export default function ProductCategory() {
                                         }}
                                         draggable="false"
                                     >
-                                        <section className="relative overflow-hidden bg-white shadow-md w-[270px] h-[390px] sm:w-[270px] sm:h-[420px] md:w-[320px] md:h-[500px] lg:w-[340px] lg:h-[530px] xl:w-[360px] xl:h-[560px]">
+                                        <div className="relative overflow-hidden bg-white shadow-md w-[270px] h-[390px] sm:w-[270px] sm:h-[420px] md:w-[320px] md:h-[500px] lg:w-[340px] lg:h-[530px] xl:w-[360px] xl:h-[560px]">
                                             <Image
                                                 src={item.imageUrl || "/placeholder.svg"}
                                                 alt={item.name}
@@ -367,34 +360,34 @@ export default function ProductCategory() {
                                                 draggable={false}
                                                 onDragStart={(e) => e.preventDefault()}
                                             />
-                                            <section className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></section>
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
-                                            <section className="absolute inset-x-0 bottom-0 p-4 group">
-                                                <section className="transition-all duration-500 ease-in-out group-hover:-translate-y-12">
-                                                    <section className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
+                                            <div className="absolute inset-x-0 bottom-0 p-4 group">
+                                                <div className="transition-all duration-500 ease-in-out group-hover:-translate-y-12">
+                                                    <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
                                                         <h3
                                                             className={`text-white text-lg md:text-xl lg:text-2xl font-bold text-left transition-all duration-500 ${avertaBlack.className}`}
                                                         >
                                                             {item.name}
                                                         </h3>
                                                         <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1" />
-                                                    </section>
-                                                </section>
+                                                    </div>
+                                                </div>
 
-                                                <section className="absolute left-0 right-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
+                                                <div className="absolute left-0 right-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
                                                     <p className="text-white/90 text-sm md:text-base">
                                                         Durable and stylish outerwear reimagined for the next generation.
                                                     </p>
-                                                </section>
-                                            </section>
-                                        </section>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </Link>
-                                </section>
+                                </div>
                             ))}
-                        </motion.section>
-                    </section>
-                </section>
-            </section>
+                        </motion.div>
+                    </div>
+                </div>
+            </div>
         </section>
     )
 }

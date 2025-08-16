@@ -37,8 +37,8 @@ export default function ForgotPasswordPage() {
 
   return (
     <section className="min-h-screen bg-white py-12 flex items-center justify-center">
-      <section className="w-[90%] md:w-[60%] lg:w-[40%] border border-gray-200">
-        <section className="p-8">
+      <div className="w-[90%] md:w-[60%] lg:w-[40%] border border-gray-200">
+        <div className="p-8">
           <h1 className="text-2xl font-bold mb-2">FORGOT YOUR PASSWORD?</h1>
 
           {!isSubmitted ? (
@@ -48,8 +48,8 @@ export default function ForgotPasswordPage() {
               </p>
 
               <form onSubmit={handleSubmit}>
-                <section className="mb-6">
-                  <section className="relative">
+                <div className="mb-6">
+                  <div className="relative">
                     <input
                       type="email"
                       id="email"
@@ -59,8 +59,8 @@ export default function ForgotPasswordPage() {
                       placeholder="* Email Address"
                       required
                     />
-                  </section>
-                </section>
+                  </div>
+                </div>
 
                 <button
                   type="submit"
@@ -70,15 +70,15 @@ export default function ForgotPasswordPage() {
                   {isLoading ? "SENDING..." : "RESET PASSWORD"}
                 </button>
 
-                <section className="mt-4 text-center">
+                <div className="mt-4 text-center">
                   <Link href="/auth/login" className="text-sm text-gray-700 hover:underline">
                     Back to login
                   </Link>
-                </section>
+                </div>
               </form>
             </>
           ) : (
-            <section className="text-center">
+            <div className="text-center">
               <p className="text-gray-700 mb-4">
                 We've sent a password reset link to <strong>{email}</strong>.
               </p>
@@ -88,10 +88,10 @@ export default function ForgotPasswordPage() {
               <Link href="/auth/login" className="text-sm text-gray-700 hover:underline">
                 Back to login
               </Link>
-            </section>
+            </div>
           )}
-        </section>
-      </section>
+        </div>
+      </div>
     </section>
   )
 }

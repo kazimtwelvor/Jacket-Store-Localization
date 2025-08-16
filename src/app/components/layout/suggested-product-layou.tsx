@@ -30,19 +30,19 @@ const SuggestedProducts: React.FC<SuggestedProductsProps> = ({
 
     return (
         <section className="fixed inset-0 bg-black bg-opacity-50 z-[10000] flex items-center justify-center">
-            <section className="bg-white w-[400px] max-h-[600px] overflow-hidden relative">
-                <section className="flex items-center justify-between p-4 border-b">
+            <div className="bg-white w-[400px] max-h-[600px] overflow-hidden relative">
+                <div className="flex items-center justify-between p-4 border-b">
                     <h3 className="text-lg font-semibold">SUGGESTED FOR YOU</h3>
                     <button onClick={onClose} className="p-1">
                         <X size={20} />
                     </button>
-                </section>
+                </div>
 
-                <section className="relative">
-                    <section className="flex transition-transform duration-300" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+                <div className="relative">
+                    <div className="flex transition-transform duration-300" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
                         {products.map((product, index) => (
-                            <section key={product.id} className="w-full flex-shrink-0 p-4">
-                                <section className="relative">
+                            <div key={product.id} className="w-full flex-shrink-0 p-4">
+                                <div className="relative">
                                     <Image
                                         src={product.images?.[0]?.image?.url || "/placeholder.svg"}
                                         alt={product.name}
@@ -54,16 +54,16 @@ const SuggestedProducts: React.FC<SuggestedProductsProps> = ({
                                         <Heart size={16} />
                                     </button>
                                     {product.salePrice && (
-                                        <section className="absolute top-2 left-2 bg-[#2b2b2b] text-white px-2 py-1 text-xs">
+                                        <div className="absolute top-2 left-2 bg-[#2b2b2b] text-white px-2 py-1 text-xs">
                                             Sale-{Math.round(((parseFloat(product.price) - parseFloat(product.salePrice)) / parseFloat(product.price)) * 100)}%
-                                        </section>
+                                        </div>
                                     )}
-                                </section>
+                                </div>
 
-                                <section className="mt-3">
+                                <div className="mt-3">
                                     <p className="font-semibold text-sm mb-1">{product.brandName || 'FINEYST'}</p>
                                     <h4 className="text-sm font-medium mb-2">{product.name}</h4>
-                                    <section className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2">
                                         {product.salePrice ? (
                                             <>
                                                 <span className="text-gray-500 line-through text-sm">${parseFloat(product.price).toFixed(2)}</span>
@@ -72,25 +72,25 @@ const SuggestedProducts: React.FC<SuggestedProductsProps> = ({
                                         ) : (
                                             <span className="font-semibold">${parseFloat(product.price).toFixed(2)}</span>
                                         )}
-                                    </section>
+                                    </div>
 
                                     {product.colorDetails && (
-                                        <section className="flex gap-1 mt-2">
+                                        <div className="flex gap-1 mt-2">
                                             {product.colorDetails.slice(0, 3).map((color, idx) => (
-                                                <section key={idx} className="flex items-center gap-1">
-                                                    <section
+                                                <div key={idx} className="flex items-center gap-1">
+                                                    <div
                                                         className="w-4 h-4 rounded-full border"
                                                         style={{ backgroundColor: color.hex || '#000' }}
                                                     />
                                                     <span className="text-xs">{color.name}</span>
-                                                </section>
+                                                </div>
                                             ))}
-                                        </section>
+                                        </div>
                                     )}
-                                </section>
-                            </section>
+                                </div>
+                            </div>
                         ))}
-                    </section>
+                    </div>
 
                     {products.length > 1 && (
                         <>
@@ -108,17 +108,17 @@ const SuggestedProducts: React.FC<SuggestedProductsProps> = ({
                             </button>
                         </>
                     )}
-                </section>
+                </div>
 
-                <section className="p-4 border-t">
+                <div className="p-4 border-t">
                     <button
                         onClick={onClose}
                         className="w-full bg-gray-900 text-white py-3 font-medium hover:bg-gray-800"
                     >
                         CONTINUE SHOPPING
                     </button>
-                </section>
-            </section>
+                </div>
+            </div>
         </section>
     )
 }

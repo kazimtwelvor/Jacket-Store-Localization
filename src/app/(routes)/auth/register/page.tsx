@@ -97,13 +97,13 @@ export default function RegisterPage() {
 
   return (
     <section className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
-      <section className="w-full max-w-md">
-        <section className="bg-white p-8 rounded-lg shadow-md">
+      <div className="w-full max-w-md">
+        <div className="bg-white p-8 rounded-lg shadow-md">
           <h1 className="text-2xl font-bold text-center mb-6">Create an Account</h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <section className="grid grid-cols-2 gap-4">
-              <section>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
                   First Name
                 </label>
@@ -116,8 +116,8 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </section>
-              <section>
+              </div>
+              <div>
                 <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
                   Last Name
                 </label>
@@ -130,10 +130,10 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </section>
-            </section>
+              </div>
+            </div>
 
-            <section>
+            <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email
               </label>
@@ -146,9 +146,9 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
-            </section>
+            </div>
 
-            <section>
+            <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
@@ -161,9 +161,9 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
-            </section>
+            </div>
 
-            <section>
+            <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                 Confirm Password
               </label>
@@ -176,9 +176,9 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
-            </section>
+            </div>
 
-            <section>
+            <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                 Phone (optional)
               </label>
@@ -190,10 +190,10 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               />
-            </section>
+            </div>
 
-            <section className="grid grid-cols-1 gap-4">
-              <section>
+            <div className="grid grid-cols-1 gap-4">
+              <div>
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                   Address (optional)
                 </label>
@@ -205,11 +205,11 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </section>
-            </section>
+              </div>
+            </div>
 
-            <section className="grid grid-cols-2 gap-4">
-              <section>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
                 <label htmlFor="city" className="block text-sm font-medium text-gray-700">
                   City (optional)
                 </label>
@@ -221,8 +221,8 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </section>
-              <section>
+              </div>
+              <div>
                 <label htmlFor="state" className="block text-sm font-medium text-gray-700">
                   State (optional)
                 </label>
@@ -234,11 +234,11 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </section>
-            </section>
+              </div>
+            </div>
 
-            <section className="grid grid-cols-2 gap-4">
-              <section>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
                 <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700">
                   ZIP Code (optional)
                 </label>
@@ -250,8 +250,8 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </section>
-              <section>
+              </div>
+              <div>
                 <label htmlFor="country" className="block text-sm font-medium text-gray-700">
                   Country (optional)
                 </label>
@@ -263,10 +263,10 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
-              </section>
-            </section>
+              </div>
+            </div>
 
-            <section>
+            <div>
               <button
                 type="submit"
                 disabled={isLoading}
@@ -274,20 +274,20 @@ export default function RegisterPage() {
               >
                 {isLoading ? "Creating Account..." : "Create Account"}
               </button>
-            </section>
+            </div>
           </form>
 
-          <section className="mt-4 text-center">
+          <div className="mt-4 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
               <Link href="/auth/login" className="font-medium text-indigo-600 hover:text-indigo-500">
                 Sign in
               </Link>
             </p>
-          </section>
+          </div>
 
           {process.env.NODE_ENV === "development" && (
-            <section className="mt-8 border-t pt-4">
+            <div className="mt-8 border-t pt-4">
               <button onClick={fetchDebugInfo} className="text-xs text-gray-500 underline">
                 Debug API Connection
               </button>
@@ -297,10 +297,10 @@ export default function RegisterPage() {
                   {JSON.stringify(debugInfo, null, 2)}
                 </pre>
               )}
-            </section>
+            </div>
           )}
-        </section>
-      </section>
+        </div>
+      </div>
     </section>
   )
 }

@@ -21,7 +21,7 @@ export default function ShippingPolicyClient() {
 
   if (!isMounted) {
     return (
-      <div className="min-h-screen bg-white">
+      <section className="min-h-screen bg-white">
         <div className="relative overflow-hidden bg-gradient-to-b from-red-50 to-white border-b border-red-100">
           <div className="relative z-10 container mx-auto px-4 pt-16 pb-8 md:pt-20 md:pb-8 max-w-7xl">
             <div className="text-center max-w-3xl mx-auto">
@@ -50,7 +50,7 @@ export default function ShippingPolicyClient() {
 
         <div className="container mx-auto px-4 pt-0 pb-8 max-w-7xl">
           {/* Static versions of all components */}
-          <section className="pt-6 pb-12">
+          <div className="pt-6 pb-12">
             <div className="mb-6 text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Shipping Methods</h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -90,9 +90,9 @@ export default function ShippingPolicyClient() {
                 </div>
               ))}
             </div>
-          </section>
+          </div>
 
-          <section className="py-16">
+          <div className="py-16">
             <div className="mb-12 text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Delivery Zones</h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -179,9 +179,9 @@ export default function ShippingPolicyClient() {
                 </tbody>
               </table>
             </div>
-          </section>
+          </div>
 
-          <section className="py-16">
+          <div className="py-16">
             <div className="mb-16 text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Shipping Process</h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -243,9 +243,9 @@ export default function ShippingPolicyClient() {
                 ))}
               </div>
             </div>
-          </section>
+          </div>
 
-          <section className="py-16">
+          <div className="py-16">
             <div className="mb-12 text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Shipping Costs</h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -311,9 +311,9 @@ export default function ShippingPolicyClient() {
                 ))}
               </div>
             </div>
-          </section>
+          </div>
 
-          <section className="py-16">
+          <div className="py-16">
             <div className="mb-12 text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -357,9 +357,9 @@ export default function ShippingPolicyClient() {
                 </div>
               ))}
             </div>
-          </section>
+          </div>
 
-          <section className="py-16">
+          <div className="py-16">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Need Help?</h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -406,9 +406,9 @@ export default function ShippingPolicyClient() {
                 ))}
               </div>
             </div>
-          </section>
+          </div>
         </div>
-      </div>
+      </section>
     )
   }
 

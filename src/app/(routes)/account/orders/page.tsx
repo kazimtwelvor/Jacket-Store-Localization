@@ -131,11 +131,11 @@ export default function OrderHistoryPage() {
   return (
     <Container>
       <section className="min-h-screen py-6 md:py-8 lg:py-10">
-        <section className="max-w-6xl mx-auto">
-          <section className="flex flex-col md:flex-row">
-            <section className="w-full md:w-64 mb-6 md:mb-0">
-              <section className="bg-gray-50 p-4 rounded-lg">
-                <section className="flex flex-col space-y-1">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row">
+            <div className="w-full md:w-64 mb-6 md:mb-0">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="flex flex-col space-y-1">
                   <Link
                     href="/account"
                     className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium flex items-center"
@@ -180,28 +180,28 @@ export default function OrderHistoryPage() {
                     <span>Log Out</span>
                     <ArrowRight className="ml-auto h-4 w-4" />
                   </button>
-                </section>
-              </section>
-            </section>
+                </div>
+              </div>
+            </div>
 
-            <section className="flex-1 md:ml-8">
-              <section className="bg-gray-50 p-6 rounded-lg mb-6">
-                <section className="flex items-center">
-                  <section className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
+            <div className="flex-1 md:ml-8">
+              <div className="bg-gray-50 p-6 rounded-lg mb-6">
+                <div className="flex items-center">
+                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
                     <Package
                       className="h-10 w-10 text-black"
                       strokeWidth={1.5}
                     />
-                  </section>
-                  <section>
+                  </div>
+                  <div>
                     <h1 className="text-3xl font-bold">ORDER HISTORY</h1>
                     <p className="text-gray-600">Review your past orders</p>
-                  </section>
-                </section>
-              </section>
+                  </div>
+                </div>
+              </div>
 
-              <section className="border-b border-gray-200 mb-6">
-                <section className="flex">
+              <div className="border-b border-gray-200 mb-6">
+                <div className="flex">
                   <button
                     className={`py-3 px-6 font-medium text-sm uppercase ${
                       activeTab === "online"
@@ -222,35 +222,35 @@ export default function OrderHistoryPage() {
                   >
                     Retail
                   </button>
-                </section>
-              </section>
+                </div>
+              </div>
 
-              <section className="py-4">
+              <div className="py-4">
                 {activeTab === "online" && (
                   <>
                     {isLoading ? (
-                      <section className="space-y-6">
+                      <div className="space-y-6">
                         {[1, 2, 3].map((i) => (
-                          <section key={i} className="border rounded-lg p-4">
-                            <section className="flex justify-between mb-4">
+                          <div key={i} className="border rounded-lg p-4">
+                            <div className="flex justify-between mb-4">
                               <Skeleton className="h-6 w-32" />
                               <Skeleton className="h-6 w-24" />
-                            </section>
-                            <section className="border-t pt-4">
-                              <section className="flex items-center">
+                            </div>
+                            <div className="border-t pt-4">
+                              <div className="flex items-center">
                                 <Skeleton className="h-16 w-16 rounded" />
-                                <section className="ml-4 flex-1">
+                                <div className="ml-4 flex-1">
                                   <Skeleton className="h-4 w-3/4 mb-2" />
                                   <Skeleton className="h-4 w-1/2" />
-                                </section>
+                                </div>
                                 <Skeleton className="h-6 w-20" />
-                              </section>
-                            </section>
-                          </section>
+                              </div>
+                            </div>
+                          </div>
                         ))}
-                      </section>
+                      </div>
                     ) : error ? (
-                      <section className="text-center py-8">
+                      <div className="text-center py-8">
                         <XCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
                         <p className="text-gray-600">{error}</p>
                         <button
@@ -259,9 +259,9 @@ export default function OrderHistoryPage() {
                         >
                           Try Again
                         </button>
-                      </section>
+                      </div>
                     ) : orders.length === 0 ? (
-                      <section className="text-center py-12">
+                      <div className="text-center py-12">
                         <Package
                           className="mx-auto h-16 w-16 text-gray-400 mb-4"
                           strokeWidth={1}
@@ -275,16 +275,16 @@ export default function OrderHistoryPage() {
                         >
                           Start Shopping
                         </Link>
-                      </section>
+                      </div>
                     ) : (
-                      <section className="space-y-6">
+                      <div className="space-y-6">
                         {orders.map((order) => (
-                          <section
+                          <div
                             key={order.id}
                             className="border rounded-lg overflow-hidden"
                           >
-                            <section className="bg-gray-50 p-4 flex flex-col md:flex-row md:items-center md:justify-between">
-                              <section className="mb-2 md:mb-0">
+                            <div className="bg-gray-50 p-4 flex flex-col md:flex-row md:items-center md:justify-between">
+                              <div className="mb-2 md:mb-0">
                                 <p className="text-sm text-gray-500">
                                   Order placed
                                 </p>
@@ -294,34 +294,34 @@ export default function OrderHistoryPage() {
                                     "MMMM d, yyyy"
                                   )}
                                 </p>
-                              </section>
-                              <section className="mb-2 md:mb-0">
+                              </div>
+                              <div className="mb-2 md:mb-0">
                                 <p className="text-sm text-gray-500">
                                   Order number
                                 </p>
                                 <p className="font-medium">
                                   {order.id.substring(0, 8).toUpperCase()}
                                 </p>
-                              </section>
-                              <section className="mb-2 md:mb-0">
+                              </div>
+                              <div className="mb-2 md:mb-0">
                                 <p className="text-sm text-gray-500">Total</p>
                                 <p className="font-medium">
                                   ${order.total}
                                 </p>
-                              </section>
-                              <section className="flex space-x-2">
+                              </div>
+                              <div className="flex space-x-2">
                                 {getStatusBadge(order.status)}
                                 {getPaymentStatusBadge(order.paymentStatus)}
-                              </section>
-                            </section>
+                              </div>
+                            </div>
 
-                            <section className="p-4">
+                            <div className="p-4">
                               {order.orderItems.map((item) => (
-                                <section
+                                <div
                                   key={item.id}
                                   className="flex py-4 border-b last:border-b-0"
                                 >
-                                  <section className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                     <img
                                       src={
                                         item.product.images[0]?.url ||
@@ -330,10 +330,10 @@ export default function OrderHistoryPage() {
                                       alt={item.product.name}
                                       className="h-full w-full object-cover object-center"
                                     />
-                                  </section>
-                                  <section className="ml-4 flex flex-1 flex-col">
-                                    <section>
-                                      <section className="flex justify-between text-base font-medium text-gray-900">
+                                  </div>
+                                  <div className="ml-4 flex flex-1 flex-col">
+                                    <div>
+                                      <div className="flex justify-between text-base font-medium text-gray-900">
                                         <h3>
                                           <Link
                                             href={`/product/${item.productId}`}
@@ -344,39 +344,39 @@ export default function OrderHistoryPage() {
                                         <p className="ml-4">
                                           ${item.price}
                                         </p>
-                                      </section>
-                                    </section>
-                                    <section className="flex flex-1 items-end justify-between text-sm">
+                                      </div>
+                                    </div>
+                                    <div className="flex flex-1 items-end justify-between text-sm">
                                       <p className="text-gray-500">
                                         Qty {item.quantity}
                                       </p>
-                                    </section>
-                                  </section>
-                                </section>
+                                    </div>
+                                  </div>
+                                </div>
                               ))}
-                            </section>
+                            </div>
 
-                            <section className="bg-gray-50 p-4 flex flex-wrap gap-4 items-center justify-between">
-                              <section className="flex items-center">
+                            <div className="bg-gray-50 p-4 flex flex-wrap gap-4 items-center justify-between">
+                              <div className="flex items-center">
                                 {order.paymentMethod && (
-                                  <section className="flex items-center mr-4">
+                                  <div className="flex items-center mr-4">
                                     <Clock className="h-4 w-4 mr-1 text-gray-500" />
                                     <span className="text-sm text-gray-600">
                                       {order.paymentMethod.toUpperCase()}
                                     </span>
-                                  </section>
+                                  </div>
                                 )}
                                 {order.trackingNumber && (
-                                  <section className="flex items-center">
+                                  <div className="flex items-center">
                                     <Truck className="h-4 w-4 mr-1 text-gray-500" />
                                     <span className="text-sm text-gray-600">
                                       Tracking: {order.trackingNumber}
                                     </span>
-                                  </section>
+                                  </div>
                                 )}
-                              </section>
+                              </div>
                               {order.estimatedDelivery && (
-                                <section className="flex items-center">
+                                <div className="flex items-center">
                                   <Calendar className="h-4 w-4 mr-1 text-gray-500" />
                                   <span className="text-sm text-gray-600">
                                     Est. delivery:{" "}
@@ -385,7 +385,7 @@ export default function OrderHistoryPage() {
                                       "MMM d, yyyy"
                                     )}
                                   </span>
-                                </section>
+                                </div>
                               )}
                               <Link
                                 href={`/account/orders/${order.id}`}
@@ -393,25 +393,25 @@ export default function OrderHistoryPage() {
                               >
                                 View order details
                               </Link>
-                            </section>
-                          </section>
+                            </div>
+                          </div>
                         ))}
-                      </section>
+                      </div>
                     )}
                   </>
                 )}
 
                 {activeTab === "retail" && (
-                  <section className="text-center py-12">
+                  <div className="text-center py-12">
                     <p className="text-gray-600">
                       You have not placed any retail orders yet.
                     </p>
-                  </section>
+                  </div>
                 )}
-              </section>
-            </section>
-          </section>
-        </section>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </Container>
   );

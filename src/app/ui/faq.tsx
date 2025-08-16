@@ -34,50 +34,50 @@ export default function FAQ({
     const rightItems = maxColumns === 2 ? items.slice(Math.ceil(items.length / 2)) : []
 
     const renderFAQItem = (item: FAQItem, index: number, isOpen: boolean, onToggle: () => void) => (
-        <section key={index} className={`relative ${avertaBold.className} bg-transparent`}>
-            <section
+        <div key={index} className={`relative ${avertaBold.className} bg-transparent`}>
+            <div
                 className={`border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 ${isOpen ? "shadow-md" : "hover:shadow-sm"
                     }`}
             >
-                <section className="absolute left-0 top-0 bottom-0 w-1 bg-[#EAEAEA] rounded-l-lg" />
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#EAEAEA] rounded-l-lg" />
                 <button
                     className="flex justify-between items-center w-full p-4 pl-5 text-left font-medium"
                     onClick={onToggle}
                 >
                     <span>{item.question}</span>
-                    <motion.section
+                    <motion.div
                         animate={{ rotate: isOpen ? 180 : 0 }}
                         transition={{ duration: 0.3 }}
                         className={`flex items-center justify-center h-6 w-6 rounded-full ${isOpen ? "bg-black text-white" : "bg-[#F6F6F6]"
                             }`}
                     >
                         <ChevronDown className="h-4 w-4" />
-                    </motion.section>
+                    </motion.div>
                 </button>
                 <AnimatePresence>
                     {isOpen && (
-                        <motion.section
+                        <motion.div
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.3 }}
                             className="overflow-hidden"
                         >
-                            <section className="px-4 py-5 bg-[#F6F6F6] text-gray-600 border-t border-gray-100 min-h-[80px] flex items-center">
+                            <div className="px-4 py-5 bg-[#F6F6F6] text-gray-600 border-t border-gray-100 min-h-[80px] flex items-center">
                                 <p className="my-2">{item.answer}</p>
-                            </section>
-                        </motion.section>
+                            </div>
+                        </motion.div>
                     )}
                 </AnimatePresence>
-            </section>
-        </section>
+            </div>
+        </div>
     )
 
     return (
         <section className={`py-8 overflow-hidden ${className}`}>
-            <section className={`max-w-6xl mx-auto ${containerClassName}`}>
-                <section className={`grid grid-cols-1 ${maxColumns === 2 ? 'md:grid-cols-2' : ''} gap-6 md:gap-8`}>
-                    <section className="space-y-4">
+            <div className={`max-w-6xl mx-auto ${containerClassName}`}>
+                <div className={`grid grid-cols-1 ${maxColumns === 2 ? 'md:grid-cols-2' : ''} gap-6 md:gap-8`}>
+                    <div className="space-y-4">
                         {leftItems.map((item, index) =>
                             renderFAQItem(
                                 item,
@@ -86,10 +86,10 @@ export default function FAQ({
                                 () => toggleFAQ(index)
                             )
                         )}
-                    </section>
+                    </div>
 
                     {maxColumns === 2 && rightItems.length > 0 && (
-                        <section className="space-y-4">
+                        <div className="space-y-4">
                             {rightItems.map((item, index) =>
                                 renderFAQItem(
                                     item,
@@ -98,10 +98,10 @@ export default function FAQ({
                                     () => toggleFAQ(index + leftItems.length)
                                 )
                             )}
-                        </section>
+                        </div>
                     )}
-                </section>
-            </section>
+                </div>
+            </div>
         </section>
     )
 }

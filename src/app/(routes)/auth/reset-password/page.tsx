@@ -91,14 +91,14 @@ export default function ResetPasswordPage() {
 
   return (
     <section className="min-h-screen bg-white py-12 flex items-center justify-center">
-      <section className="w-[90%] md:w-[60%] lg:w-[40%] border border-gray-200">
-        <section className="p-8">
+      <div className="w-[90%] md:w-[60%] lg:w-[40%] border border-gray-200">
+        <div className="p-8">
           <h1 className="text-2xl font-bold mb-2">RESET YOUR PASSWORD</h1>
           <p className="text-gray-700 mb-6">Please enter your new password below.</p>
 
           <form onSubmit={handleSubmit}>
-            <section className="mb-4">
-              <section className="relative">
+            <div className="mb-4">
+              <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
@@ -118,17 +118,17 @@ export default function ResetPasswordPage() {
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
-              </section>
+              </div>
               {passwordError && <p className="text-xs text-red-500 mt-1">{passwordError}</p>}
               <ul className="text-xs text-gray-600 mt-2 space-y-1 list-inside">
                 <li>• 8 - 20 characters</li>
                 <li>• At least one uppercase letter, one lowercase letter and one number</li>
                 <li>• At least one special character (!?%&@#$^*~)</li>
               </ul>
-            </section>
+            </div>
 
-            <section className="mb-6">
-              <section className="relative">
+            <div className="mb-6">
+              <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
@@ -145,11 +145,11 @@ export default function ResetPasswordPage() {
                 >
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
-              </section>
+              </div>
               {password !== confirmPassword && confirmPassword && (
                 <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
               )}
-            </section>
+            </div>
 
             <button
               type="submit"
@@ -159,14 +159,14 @@ export default function ResetPasswordPage() {
               {isLoading ? "RESETTING..." : "RESET PASSWORD"}
             </button>
 
-            <section className="mt-4 text-center">
+            <div className="mt-4 text-center">
               <Link href="/auth/login" className="text-sm text-gray-700 hover:underline">
                 Back to login
               </Link>
-            </section>
+            </div>
           </form>
-        </section>
-      </section>
+        </div>
+      </div>
     </section>
   )
 }

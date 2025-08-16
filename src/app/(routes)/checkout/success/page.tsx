@@ -20,10 +20,10 @@ export default function SuccessPage() {
 
   return (
     <section className="flex items-center justify-center min-h-screen">
-      <section className="text-center">
+      <div className="text-center">
         <h2 className="text-lg font-medium">Redirecting to your order confirmation...</h2>
         <p className="text-sm text-gray-500 mt-2">Please wait a moment</p>
-      </section>
+      </div>
     </section>
   )
 }

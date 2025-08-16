@@ -54,11 +54,11 @@ export default function PreferencesPage() {
   return (
     <Container>
       <section className="min-h-screen py-6 md:py-8 lg:py-10">
-        <section className="max-w-6xl mx-auto">
-          <section className="flex flex-col md:flex-row">
-            <section className="w-full md:w-64 mb-6 md:mb-0">
-              <section className="bg-gray-50 p-4 rounded-lg">
-                <section className="flex flex-col space-y-1">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row">
+            <div className="w-full md:w-64 mb-6 md:mb-0">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="flex flex-col space-y-1">
                   <Link
                     href="/account"
                     className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium flex items-center"
@@ -103,29 +103,29 @@ export default function PreferencesPage() {
                     <span>Log Out</span>
                     <ArrowRight className="ml-auto h-4 w-4" />
                   </button>
-                </section>
-              </section>
-            </section>
+                </div>
+              </div>
+            </div>
 
-            <section className="flex-1 md:ml-8">
-              <section className="bg-gray-50 p-6 rounded-lg mb-6">
-                <section className="flex items-center">
-                  <section className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
+            <div className="flex-1 md:ml-8">
+              <div className="bg-gray-50 p-6 rounded-lg mb-6">
+                <div className="flex items-center">
+                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
                     <Sliders
                       className="h-10 w-10 text-black"
                       strokeWidth={1.5}
                     />
-                  </section>
-                  <section>
+                  </div>
+                  <div>
                     <h1 className="text-3xl font-bold">MY PREFERENCES</h1>
                     <p className="text-gray-600">
                       Choose your preferred communication channels
                     </p>
-                  </section>
-                </section>
-              </section>
+                  </div>
+                </div>
+              </div>
 
-              <section className="mb-8">
+              <div className="mb-8">
                 <p className="text-sm">
                   I agree and authorize FINEYST Fashions, Inc. and its
                   affiliated companies and subsidiaries within FINEYST family of
@@ -141,11 +141,11 @@ export default function PreferencesPage() {
                 <p className="text-sm font-medium mt-4">
                   Please send me such information by:
                 </p>
-              </section>
+              </div>
 
-              <section className="space-y-8">
-                <section className="flex items-start">
-                  <section className="flex h-5 items-center">
+              <div className="space-y-8">
+                <div className="flex items-start">
+                  <div className="flex h-5 items-center">
                     <input
                       id="mail"
                       type="checkbox"
@@ -153,23 +153,23 @@ export default function PreferencesPage() {
                       checked={preferences.mail}
                       onChange={() => handlePreferenceChange("mail")}
                     />
-                  </section>
-                  <section className="ml-3">
+                  </div>
+                  <div className="ml-3">
                     <label htmlFor="mail" className="font-medium">
                       Mail
                     </label>
-                    <section className="text-sm text-gray-700 mt-1">
+                    <div className="text-sm text-gray-700 mt-1">
                       <p>{userData.street}</p>
                       <p>{userData.city}</p>
                       <p>{userData.state}</p>
                       <p>{userData.zipCode}</p>
                       <p>{userData.country}</p>
-                    </section>
-                  </section>
-                </section>
+                    </div>
+                  </div>
+                </div>
 
-                <section className="flex items-start">
-                  <section className="flex h-5 items-center">
+                <div className="flex items-start">
+                  <div className="flex h-5 items-center">
                     <input
                       id="call"
                       type="checkbox"
@@ -177,19 +177,19 @@ export default function PreferencesPage() {
                       checked={preferences.call}
                       onChange={() => handlePreferenceChange("call")}
                     />
-                  </section>
-                  <section className="ml-3">
+                  </div>
+                  <div className="ml-3">
                     <label htmlFor="call" className="font-medium">
                       Call
                     </label>
                     <p className="text-sm text-gray-700 mt-1">
                       {userData.phone}
                     </p>
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="flex items-start">
-                  <section className="flex h-5 items-center">
+                <div className="flex items-start">
+                  <div className="flex h-5 items-center">
                     <input
                       id="sms"
                       type="checkbox"
@@ -197,8 +197,8 @@ export default function PreferencesPage() {
                       checked={preferences.sms}
                       onChange={() => handlePreferenceChange("sms")}
                     />
-                  </section>
-                  <section className="ml-3">
+                  </div>
+                  <div className="ml-3">
                     <label htmlFor="sms" className="font-medium">
                       SMS/MMS
                     </label>
@@ -217,11 +217,11 @@ export default function PreferencesPage() {
                       information about text messages, see our Terms &amp;
                       Conditions &amp; Privacy Policy.
                     </p>
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="flex items-start">
-                  <section className="flex h-5 items-center">
+                <div className="flex items-start">
+                  <div className="flex h-5 items-center">
                     <input
                       id="whatsapp"
                       type="checkbox"
@@ -229,8 +229,8 @@ export default function PreferencesPage() {
                       checked={preferences.whatsapp}
                       onChange={() => handlePreferenceChange("whatsapp")}
                     />
-                  </section>
-                  <section className="ml-3">
+                  </div>
+                  <div className="ml-3">
                     <label htmlFor="whatsapp" className="font-medium">
                       WhatsApp
                     </label>
@@ -243,11 +243,11 @@ export default function PreferencesPage() {
                       WhatsApp and send you marketing communications via
                       WhatsApp.
                     </p>
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="flex items-start">
-                  <section className="flex h-5 items-center">
+                <div className="flex items-start">
+                  <div className="flex h-5 items-center">
                     <input
                       id="email"
                       type="checkbox"
@@ -255,8 +255,8 @@ export default function PreferencesPage() {
                       checked={preferences.email}
                       onChange={() => handlePreferenceChange("email")}
                     />
-                  </section>
-                  <section className="ml-3">
+                  </div>
+                  <div className="ml-3">
                     <label htmlFor="email" className="font-medium">
                       E-Mail
                     </label>
@@ -265,11 +265,11 @@ export default function PreferencesPage() {
                       launches, fashions shows, promotional offers, sales, new
                       arrivals and other communication initiatives.
                     </p>
-                  </section>
-                </section>
-              </section>
+                  </div>
+                </div>
+              </div>
 
-              <section className="mt-8 space-y-6 text-sm">
+              <div className="mt-8 space-y-6 text-sm">
                 <p>
                   By providing my consent I authorize FINEYST Fashions, Inc. and
                   its affiliated companies and subsidiaries within FINEYST
@@ -289,19 +289,19 @@ export default function PreferencesPage() {
                   category &quot;My communication&quot; by clicking on the specific
                   communication channel or at experience@fineyst.com.
                 </p>
-              </section>
+              </div>
 
-              <section className="mt-8 flex justify-end">
+              <div className="mt-8 flex justify-end">
                 <button
                   type="button"
                   className="bg-black text-white px-8 py-3 font-bold"
                 >
                   SAVE
                 </button>
-              </section>
-            </section>
-          </section>
-        </section>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </Container>
   );

@@ -13,47 +13,47 @@ export const metadata: Metadata = {
 export default function AboutUsPage() {
   return (
     <section className="bg-background pb-20">
-      <section className="relative overflow-hidden bg-white">
-        <section className="absolute inset-0 opacity-10">
-          <section
+      <div className="relative overflow-hidden bg-white">
+        <div className="absolute inset-0 opacity-10">
+          <div
             style={{
               backgroundImage: `linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)`,
               backgroundSize: `40px 40px`,
             }}
             className="w-full h-full"
           />
-        </section>
-        <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <section className="text-center max-w-3xl mx-auto">
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-4">
               Our Story
             </h1>
             <p className="text-lg md:text-xl text-[#333333] mb-6">
               Crafting exceptional fashion experiences since 2010
             </p>
-            <section className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {[
                 { icon: Award, text: "Quality Crafted" },
                 { icon: Globe, text: "Sustainable" },
                 { icon: Users, text: "Global Reach" },
                 { icon: Heart, text: "Customer First" },
               ].map((item, i) => (
-                <section key={i} className="flex flex-col items-center">
-                  <section className="w-14 h-14 rounded-full bg-[#F6F6F6] flex items-center justify-center mb-3 shadow-md">
+                <div key={i} className="flex flex-col items-center">
+                  <div className="w-14 h-14 rounded-full bg-[#F6F6F6] flex items-center justify-center mb-3 shadow-md">
                     <item.icon className="w-7 h-7 text-black" />
-                  </section>
+                  </div>
                   <p className="font-medium text-black">{item.text}</p>
-                </section>
+                </div>
               ))}
-            </section>
-          </section>
-        </section>
-      </section>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <Container>
         <section className="py-16 md:py-24">
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <section>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Mission</h2>
               <p className="text-muted-foreground text-lg mb-6 rounded-non">
                 At FINEYST, we believe that fashion is more than just clothing—it's a form of self-expression, a
@@ -63,7 +63,7 @@ export default function AboutUsPage() {
                 Our mission is to provide high-quality, sustainable fashion that empowers people to express themselves
                 authentically while minimizing our environmental footprint.
               </p>
-              <section className="mt-8">
+              <div className="mt-8">
                 <Button size="lg" className="mr-4 bg-[#eaeaea] hover:bg-[#f6f6f6] text-black rounded-none" asChild>
                   <Link href="/shop">Shop Collection</Link>
                 </Button>
@@ -75,30 +75,30 @@ export default function AboutUsPage() {
                 >
                   <Link href="/blogs">Learn More</Link>
                 </Button>
-              </section>
-            </section>
-            <section className="relative h-[400px] rounded-lg overflow-hidden shadow-xl">
+              </div>
+            </div>
+            <div className="relative h-[400px] rounded-lg overflow-hidden shadow-xl">
               <Image
                 src="/sustainable-fashion-production.png"
                 alt="Our sustainable practices"
                 fill
                 className="object-cover"
               />
-            </section>
-          </section>
+            </div>
+          </div>
         </section>
       </Container>
 
       <section className="bg-background py-16 md:py-24">
         <Container>
-          <section className="text-center mb-16">
+          <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Values</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               These core principles guide everything we do, from design to delivery.
             </p>
-          </section>
+          </div>
 
-          <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 title: "Sustainability",
@@ -119,29 +119,29 @@ export default function AboutUsPage() {
                 icon: "🤝",
               },
             ].map((value, index) => (
-              <section
+              <div
                 key={index}
                 className="bg-white rounded-lg p-8 shadow-md transition-all duration-300 hover:shadow-xl"
               >
-                <section className="text-4xl mb-4">{value.icon}</section>
+                <div className="text-4xl mb-4">{value.icon}</div>
                 <h3 className="text-xl font-bold mb-3">{value.title}</h3>
                 <p className="text-muted-foreground">{value.description}</p>
-              </section>
+              </div>
             ))}
-          </section>
+          </div>
         </Container>
       </section>
 
       <Container>
         <section className="py-16 md:py-24">
-          <section className="text-center mb-16">
+          <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Meet Our Team</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               The passionate individuals behind FINEYST who bring our vision to life every day.
             </p>
-          </section>
+          </div>
 
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
                 name: "Alex Johnson",
@@ -164,43 +164,43 @@ export default function AboutUsPage() {
                 image: "/professional-headshot-4.png",
               },
             ].map((member, index) => (
-              <section key={index} className="group">
-                <section className="relative h-[300px] rounded-lg overflow-hidden mb-4 transition-all duration-300 group-hover:shadow-xl">
+              <div key={index} className="group">
+                <div className="relative h-[300px] rounded-lg overflow-hidden mb-4 transition-all duration-300 group-hover:shadow-xl">
                   <Image
                     src={member.image || "/placeholder.svg"}
                     alt={member.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <section className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></section>
-                </section>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
                 <h3 className="text-xl font-bold">{member.name}</h3>
                 <p className="text-muted-foreground">{member.role}</p>
-              </section>
+              </div>
             ))}
-          </section>
+          </div>
         </section>
       </Container>
 
       <section className="bg-background py-16 md:py-24">
         <Container>
-          <section className="text-center mb-16">
+          <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Journey</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               From humble beginnings to where we are today.
             </p>
-          </section>
+          </div>
 
-          <section className="relative">
+          <div className="relative">
             {/* Timeline line */}
-            <section className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-black hidden md:block"></section>
+            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-black hidden md:block"></div>
 
             {/* Timeline events */}
-            <section className="space-y-16">
+            <div className="space-y-16">
               {/* 2010 - Left */}
-              <section className="relative md:grid md:grid-cols-2 items-center">
-                <section className="hidden md:block">
-                  <section className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mr-8 ml-auto">
+              <div className="relative md:grid md:grid-cols-2 items-center">
+                <div className="hidden md:block">
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mr-8 ml-auto">
                     <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
                       2010
                     </span>
@@ -209,15 +209,15 @@ export default function AboutUsPage() {
                       FINEYST was founded with a simple mission: to create sustainable fashion that doesn't compromise
                       on style.
                     </p>
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#2b2b2b] rounded-full hidden md:block"></section>
+                <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#2b2b2b] rounded-full hidden md:block"></div>
 
-                <section className="hidden md:block"></section>
+                <div className="hidden md:block"></div>
 
-                <section className="md:hidden">
-                  <section className="bg-white p-6 rounded-lg shadow-md">
+                <div className="md:hidden">
+                  <div className="bg-white p-6 rounded-lg shadow-md">
                     <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
                       2010
                     </span>
@@ -226,17 +226,17 @@ export default function AboutUsPage() {
                       FINEYST was founded with a simple mission: to create sustainable fashion that doesn't compromise
                       on style.
                     </p>
-                  </section>
-                </section>
-              </section>
+                  </div>
+                </div>
+              </div>
 
-              <section className="relative md:grid md:grid-cols-2 items-center">
-                <section className="hidden md:block"></section>
+              <div className="relative md:grid md:grid-cols-2 items-center">
+                <div className="hidden md:block"></div>
 
-                <section className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#2b2b2b] rounded-full hidden md:block"></section>
+                <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#2b2b2b] rounded-full hidden md:block"></div>
 
-                <section className="hidden md:block">
-                  <section className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ml-8">
+                <div className="hidden md:block">
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ml-8">
                     <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
                       2015
                     </span>
@@ -245,11 +245,11 @@ export default function AboutUsPage() {
                       We expanded our operations to reach customers worldwide, bringing our sustainable fashion to new
                       markets.
                     </p>
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="md:hidden">
-                  <section className="bg-white p-6 rounded-lg shadow-md">
+                <div className="md:hidden">
+                  <div className="bg-white p-6 rounded-lg shadow-md">
                     <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
                       2015
                     </span>
@@ -258,13 +258,13 @@ export default function AboutUsPage() {
                       We expanded our operations to reach customers worldwide, bringing our sustainable fashion to new
                       markets.
                     </p>
-                  </section>
-                </section>
-              </section>
+                  </div>
+                </div>
+              </div>
 
-              <section className="relative md:grid md:grid-cols-2 items-center">
-                <section className="hidden md:block">
-                  <section className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mr-8 ml-auto">
+              <div className="relative md:grid md:grid-cols-2 items-center">
+                <div className="hidden md:block">
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mr-8 ml-auto">
                     <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
                       2018
                     </span>
@@ -272,15 +272,15 @@ export default function AboutUsPage() {
                     <p className="text-muted-foreground">
                       We committed to using 100% sustainable materials by 2025, setting a new standard in the industry.
                     </p>
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full hidden md:block"></section>
+                <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full hidden md:block"></div>
 
-                <section className="hidden md:block"></section>
+                <div className="hidden md:block"></div>
 
-                <section className="md:hidden">
-                  <section className="bg-white p-6 rounded-lg shadow-md">
+                <div className="md:hidden">
+                  <div className="bg-white p-6 rounded-lg shadow-md">
                     <span className="inline-block px-3 py-1 bg-[#EAEAEA] text-black rounded-full text-sm font-medium mb-3">
                       2018
                     </span>
@@ -288,17 +288,17 @@ export default function AboutUsPage() {
                     <p className="text-muted-foreground">
                       We committed to using 100% sustainable materials by 2025, setting a new standard in the industry.
                     </p>
-                  </section>
-                </section>
-              </section>
+                  </div>
+                </div>
+              </div>
 
-              <section className="relative md:grid md:grid-cols-2 items-center">
-                <section className="hidden md:block"></section>
+              <div className="relative md:grid md:grid-cols-2 items-center">
+                <div className="hidden md:block"></div>
 
-                <section className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full hidden md:block"></section>
+                <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full hidden md:block"></div>
 
-                <section className="hidden md:block">
-                  <section className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ml-8">
+                <div className="hidden md:block">
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ml-8">
                     <span className="inline-block px-3 py-1 bg-[#EAEAEA] text-black rounded-full text-sm font-medium mb-3">
                       2023
                     </span>
@@ -306,11 +306,11 @@ export default function AboutUsPage() {
                     <p className="text-muted-foreground">
                       We launched our innovation center to develop new sustainable fabrics and manufacturing processes.
                     </p>
-                  </section>
-                </section>
+                  </div>
+                </div>
 
-                <section className="md:hidden">
-                  <section className="bg-white p-6 rounded-lg shadow-md">
+                <div className="md:hidden">
+                  <div className="bg-white p-6 rounded-lg shadow-md">
                     <span className="inline-block px-3 py-1 bg-[#EAEAEA] text-black rounded-full text-sm font-medium mb-3">
                       2023
                     </span>
@@ -318,11 +318,11 @@ export default function AboutUsPage() {
                     <p className="text-muted-foreground">
                       We launched our innovation center to develop new sustainable fabrics and manufacturing processes.
                     </p>
-                  </section>
-                </section>
-              </section>
-            </section>
-          </section>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </Container>
       </section>
 
@@ -332,9 +332,9 @@ export default function AboutUsPage() {
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
             Be part of our story as we continue to redefine sustainable fashion for the future.
           </p>
-          <section className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             <Button size="lg" className="bg-[#EAEAEA] hover:bg-[#eaeaea] text-black rounded-none" asChild>
-            <Link href="/shop">Explore Collection</Link>
+              <Link href="/shop">Explore Collection</Link>
             </Button>
             <Button
               variant="outline"
@@ -342,9 +342,9 @@ export default function AboutUsPage() {
               className="border-[#2b2b2b] text-[#2b2b2b] hover:bg-[#EAEAEA] hover:bg-[#EAEAEA]/10 rounded-none"
               asChild
             >
-          <Link href="/contact-us">Get in Touch</Link>
-          </Button>
-          </section>
+              <Link href="/contact-us">Get in Touch</Link>
+            </Button>
+          </div>
         </section>
       </Container>
     </section>

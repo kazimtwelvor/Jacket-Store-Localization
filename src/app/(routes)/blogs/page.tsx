@@ -231,14 +231,14 @@ const BlogsPage = () => {
 
   return (
     <section className="min-h-screen bg-white">
-      <section className="bg-[#eaeaea] py-16 md:py-24">
+      <div className="bg-[#eaeaea] py-16 md:py-24">
         <Container>
-          <section className="max-w-2xl mx-auto text-center">
+          <div className="max-w-2xl mx-auto text-center">
             <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#2b2b2b]">Fashion Insights & Style Guide</h1>
             <p className="text-lg text-muted-foreground mb-8">
               Discover the latest trends, styling tips, and expert advice on premium fashion.
             </p>
-            <section className="relative max-w-md mx-auto">
+            <div className="relative max-w-md mx-auto">
               <input
                 type="text"
                 placeholder="Search articles..."
@@ -247,14 +247,14 @@ const BlogsPage = () => {
                 onChange={handleSearchChange}
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-            </section>
-          </section>
+            </div>
+          </div>
         </Container>
-      </section>
+      </div>
 
       <Container>
-        <section className="py-8 border-b overflow-x-auto scrollbar-hide">
-          <section className="flex space-x-6 min-w-max">
+        <div className="py-8 border-b overflow-x-auto scrollbar-hide">
+          <div className="flex space-x-6 min-w-max">
             {CATEGORIES.map((category) => (
               <button
                 key={category}
@@ -267,14 +267,14 @@ const BlogsPage = () => {
                 {category}
               </button>
             ))}
-          </section>
-        </section>
+          </div>
+        </div>
       </Container>
       {featuredPost && (
         <Container>
-          <section className="py-12">
-            <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              <section className="relative h-[300px] md:h-[400px] lg:h-full rounded-lg overflow-hidden shadow-md">
+          <div className="py-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+              <div className="relative h-[300px] md:h-[400px] lg:h-full rounded-lg overflow-hidden shadow-md">
                 <Image
                   src={
                     featuredPost.image ||
@@ -286,20 +286,20 @@ const BlogsPage = () => {
                   fill
                   className="object-cover"
                 />
-              </section>
-              <section>
-                <section className="flex items-center gap-4 mb-4">
+              </div>
+              <div>
+                <div className="flex items-center gap-4 mb-4">
                   <span className="bg-[#1b1b1b]/10 text-[#2b2b2b] text-xs font-medium px-3 py-1 rounded-full">
                     {featuredPost.category}
                   </span>
-                  <section className="flex items-center text-muted-foreground text-sm">
+                  <div className="flex items-center text-muted-foreground text-sm">
                     <Calendar className="h-4 w-4 mr-1" />
                     {featuredPost.date}
-                  </section>
-                </section>
+                  </div>
+                </div>
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">{featuredPost.title}</h2>
                 <p className="text-muted-foreground mb-6">{featuredPost.excerpt}</p>
-                <section className="flex items-center justify-between">
+                <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">{featuredPost.readTime}</span>
                   <Link href={`/blogs/${featuredPost.id}`}>
                     <Button className="bg-[#2b2b2b] hover:bg-[#eaeaea]/90 text-white">
@@ -307,19 +307,19 @@ const BlogsPage = () => {
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
-                </section>
-              </section>
-            </section>
-          </section>
+                </div>
+              </div>
+            </div>
+          </div>
         </Container>
       )}
 
       <Container>
-        <section className="py-12">
+        <div className="py-12">
           <h2 className="text-2xl font-bold mb-8 text-[#2b2b2b]">Latest Articles</h2>
 
           {filteredPosts.length === 0 ? (
-            <section className="text-center py-12">
+            <div className="text-center py-12">
               <p className="text-muted-foreground">No articles found matching your criteria.</p>
               <Button
                 variant="outline"
@@ -331,13 +331,13 @@ const BlogsPage = () => {
               >
                 Reset Filters
               </Button>
-            </section>
+            </div>
           ) : (
-            <section id="posts-container" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div id="posts-container" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {currentlyVisiblePosts.map((post) => (
                 <Link href={`/blogs/${post.id}`} key={post.id} className="group">
-                  <section className="h-full flex flex-col border border-[#eaeaea] rounded-lg overflow-hidden transition-all hover:shadow-md">
-                    <section className="relative h-48 overflow-hidden">
+                  <div className="h-full flex flex-col border border-[#eaeaea] rounded-lg overflow-hidden transition-all hover:shadow-md">
+                    <div className="relative h-48 overflow-hidden">
                       <Image
                         src={
                           post.image || `/placeholder.svg?height=400&width=600&query=${encodeURIComponent(post.title)}`
@@ -346,34 +346,34 @@ const BlogsPage = () => {
                         fill
                         className="object-cover transition-transform group-hover:scale-105"
                       />
-                    </section>
-                    <section className="flex-1 p-6 flex flex-col">
-                      <section className="flex items-center gap-4 mb-3">
+                    </div>
+                    <div className="flex-1 p-6 flex flex-col">
+                      <div className="flex items-center gap-4 mb-3">
                         <span className="bg-[#eaeaea]/10 text-[#2b2b2b] text-xs font-medium px-2 py-1 rounded-full">
                           {post.category}
                         </span>
                         <span className="text-xs text-muted-foreground">{post.date}</span>
-                      </section>
+                      </div>
                       <h3 className="text-lg font-semibold mb-3 group-hover:text-[#1b1b1b] transition-colors">
                         {post.title}
                       </h3>
                       <p className="text-muted-foreground text-sm mb-4 flex-1">{post.excerpt}</p>
-                      <section className="flex items-center justify-between mt-auto">
+                      <div className="flex items-center justify-between mt-auto">
                         <span className="text-xs text-muted-foreground">{post.readTime}</span>
                         <span className="text-sm font-medium text-[#2b2b2b] flex items-center">
                           Read More
                           <ArrowRight className="ml-1 h-3 w-3" />
                         </span>
-                      </section>
-                    </section>
-                  </section>
+                      </div>
+                    </div>
+                  </div>
                 </Link>
               ))}
-            </section>
+            </div>
           )}
 
           {hasMorePosts && (
-            <section className="mt-12 text-center">
+            <div className="mt-12 text-center">
               <Button
                 variant="outline"
                 className="border-[#2b2b2b] text-[#2b2b2b] hover:bg-[#eaeaea]/10"
@@ -389,21 +389,21 @@ const BlogsPage = () => {
                   "Load More Articles"
                 )}
               </Button>
-            </section>
+            </div>
           )}
-        </section>
+        </div>
       </Container>
 
-      <section className="bg-[#eaeaea] py-16">
+      <div className="bg-[#eaeaea] py-16">
         <Container>
-          <section className="max-w-2xl mx-auto text-center">
+          <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#2b2b2b]">Stay Updated with Fashion Insights</h2>
             <p className="text-muted-foreground mb-8">
               Subscribe to our newsletter to receive the latest articles, style guides, and exclusive offers directly to
               your inbox.
             </p>
             <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <section className="flex-1 relative">
+              <div className="flex-1 relative">
                 <input
                   type="email"
                   placeholder="Your email address"
@@ -414,16 +414,16 @@ const BlogsPage = () => {
                   required
                 />
                 {subscriptionStatus === "success" && (
-                  <section className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     <Check className="h-5 w-5 text-green-500" />
-                  </section>
+                  </div>
                 )}
                 {subscriptionStatus === "error" && (
-                  <section className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     <X className="h-5 w-5 text-black" />
-                  </section>
+                  </div>
                 )}
-              </section>
+              </div>
               <Button type="submit" disabled={isSubmitting} className="bg-[#2b2b2b] hover:bg-[#1b1b1b] text-white">
                 {isSubmitting ? "Subscribing..." : "Subscribe"}
               </Button>
@@ -433,9 +433,9 @@ const BlogsPage = () => {
                 Thank you for subscribing! You'll receive our next newsletter soon.
               </p>
             )}
-          </section>
+          </div>
         </Container>
-      </section>
+      </div>
     </section>
   )
 }

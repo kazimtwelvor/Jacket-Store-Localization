@@ -2,15 +2,14 @@
 import type { Metadata } from "next"
 import TermsConditionsClient from "./terms-conditions-client"
 import { termsData } from "./data/terms-data"
-import Container from "@/components/ui/container"
+import Container from "@/src/app/ui/container"
 
 export const metadata: Metadata = {
   title: "Terms & Conditions | Fineyst",
   description: "Read our terms and conditions to understand your rights and responsibilities when using our services.",
 }
 
-// Server component for rendering terms sections
-function ServerTermsSection({
+ function ServerTermsSection({
   title,
   content,
   subsections,

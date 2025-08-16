@@ -40,13 +40,13 @@ export default function SizeGuideClientPage() {
                 setScrollProgress(progress)
             }
 
-            const sections = document.querySelectorAll("section[id]")
+            const sections = document.querySelectorAll("div[id]")
             let currentSection = activeSection
 
-            sections.forEach((section) => {
-                const sectionTop = section.getBoundingClientRect().top
+            sections.forEach((div) => {
+                const sectionTop = div.getBoundingClientRect().top
                 if (sectionTop < 200) {
-                    currentSection = section.id
+                    currentSection = div.id
                 }
             })
 
@@ -59,9 +59,9 @@ export default function SizeGuideClientPage() {
         return () => window.removeEventListener("scroll", handleScroll)
     }, [activeSection])
 
-    const handleNavClick = (section: string) => {
-        setActiveSection(section)
-        const element = document.getElementById(section)
+    const handleNavClick = (div: string) => {
+        setActiveSection(div)
+        const element = document.getElementById(div)
         if (element) {
             const yOffset = -100
             const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
@@ -74,7 +74,7 @@ export default function SizeGuideClientPage() {
     }
 
     return (
-        <div className="bg-white min-h-screen">
+        <section className="bg-white min-h-screen">
             <div className="relative overflow-hidden bg-gradient-to-r from-[#2b2b2b] via-white to-[#2b2b2b]">
                 <BgGridPattern />
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-24">
@@ -103,27 +103,27 @@ export default function SizeGuideClientPage() {
             </div>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" ref={contentRef}>
                 <div className="space-y-24 mt-8">
-                    <section id="size-charts" className="scroll-mt-32">
+                    <div id="size-charts" className="scroll-mt-32">
                         <SizeChart />
-                    </section>
-                    <section id="measurement-guide" className="scroll-mt-32">
+                    </div>
+                    <div id="measurement-guide" className="scroll-mt-32">
                         <MeasurementGuide />
-                    </section>
-                    <section id="size-conversion" className="scroll-mt-32">
+                    </div>
+                    <div id="size-conversion" className="scroll-mt-32">
                         <SizeConversion />
-                    </section>
-                    <section id="fit-guide" className="scroll-mt-32">
+                    </div>
+                    <div id="fit-guide" className="scroll-mt-32">
                         <FitGuide />
-                    </section>
-                    <section id="interactive-model" className="scroll-mt-32">
+                    </div>
+                    <div id="interactive-model" className="scroll-mt-32">
                         <InteractiveModel />
-                    </section>
-                    <section id="faq" className="scroll-mt-32">
+                    </div>
+                    <div id="faq" className="scroll-mt-32">
                         <SizeFAQ />
-                    </section>
+                    </div>
                 </div>
             </div>
             <SizeGuideCTA />
-        </div>
+        </section>
     )
 }

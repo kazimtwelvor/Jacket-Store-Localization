@@ -32,9 +32,9 @@ export default function SizeGuideClient() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const handleNavClick = (section: string) => {
-    setActiveSection(section)
-    const element = document.getElementById(section)
+  const handleNavClick = (div: string) => {
+    setActiveSection(div)
+    const element = document.getElementById(div)
     if (element) {
       const yOffset = -100
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
@@ -49,12 +49,11 @@ export default function SizeGuideClient() {
   return (
     <SizeGuideContextProvider>
       <SizeGuideProvider>
-        <div className="bg-background min-h-screen">
+        <section className="bg-background min-h-screen">
           <SizeGuideHero />
           <div
-            className={`sticky top-0 z-10 bg-background/80 backdrop-blur-md transition-all duration-300 ${
-              scrollY > 300 ? "shadow-md" : ""
-            }`}
+            className={`sticky top-0 z-10 bg-background/80 backdrop-blur-md transition-all duration-300 ${scrollY > 300 ? "shadow-md" : ""
+              }`}
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <SizeGuideNav activeSection={activeSection} onNavClick={handleNavClick} />
@@ -63,28 +62,28 @@ export default function SizeGuideClient() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <SizeGuideTabs activeTab={activeSection} onTabChange={setActiveSection} />
             <div className="space-y-24 mt-16">
-              <section id="size-charts">
+              <div id="size-charts">
                 <SizeChart />
-              </section>
-              <section id="measurement-guide">
+              </div>
+              <div id="measurement-guide">
                 <MeasurementGuide />
-              </section>
-              <section id="size-conversion">
+              </div>
+              <div id="size-conversion">
                 <SizeConversion />
-              </section>
-              <section id="fit-guide">
+              </div>
+              <div id="fit-guide">
                 <FitGuide />
-              </section>
-              <section id="interactive-model">
+              </div>
+              <div id="interactive-model">
                 <InteractiveModel />
-              </section>
-              <section id="faq">
+              </div>
+              <div id="faq">
                 <SizeFAQ />
-              </section>
+              </div>
             </div>
           </div>
           <SizeGuideCTA />
-        </div>
+        </section>
       </SizeGuideProvider>
     </SizeGuideContextProvider>
   )

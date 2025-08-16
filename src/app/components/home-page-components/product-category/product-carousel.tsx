@@ -212,9 +212,9 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
 
     return (
         <section className="w-full flex justify-center bg-white pb-8 sm:pb-12 md:pb-16">
-            <section className="w-full max-w-[2000px] overflow-hidden relative">
+            <div className="w-full max-w-[2000px] overflow-hidden relative">
                 <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-6 text-[#2b2b2b] ${avertaBlack.className}`}>{title}</h2>
-                <section className="flex justify-center -mt-2 mb-4 md:mb-6 gap-1">
+                <div className="flex justify-center -mt-2 mb-4 md:mb-6 gap-1">
                     {CATEGORIES.map((category) => (
                         <button
                             key={category}
@@ -234,23 +234,23 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                             </span>
                         </button>
                     ))}
-                </section>
+                </div>
 
-                <section className="relative px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
-                    <section className="overflow-hidden relative min-h-[600px]">
+                <div className="relative px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+                    <div className="overflow-hidden relative min-h-[600px]">
                         {loading ? (
-                            <section className="absolute inset-0 flex items-center justify-center bg-white/90 z-50 w-full h-full">
-                                <section className="flex flex-col items-center gap-6">
-                                    <section className="w-20 h-20 border-4 border-dashed rounded-full animate-spin border-[#2b2b2b]"></section>
+                            <div className="absolute inset-0 flex items-center justify-center bg-white/90 z-50 w-full h-full">
+                                <div className="flex flex-col items-center gap-6">
+                                    <div className="w-20 h-20 border-4 border-dashed rounded-full animate-spin border-[#2b2b2b]"></div>
                                     <p className="text-gray-700 font-semibold text-lg">Loading products...</p>
-                                </section>
-                            </section>
+                                </div>
+                            </div>
                         ) : productItems.length === 0 ? (
-                            <section className="absolute inset-0 flex items-center justify-center bg-white/90 z-50 w-full h-full">
+                            <div className="absolute inset-0 flex items-center justify-center bg-white/90 z-50 w-full h-full">
                                 <p className="text-gray-500 text-lg">No products available for this category.</p>
-                            </section>
+                            </div>
                         ) : isMobile ? (
-                            <section
+                            <div
                                 className="relative flex items-center justify-center h-[550px]"
                                 onTouchStart={handleTouchStart}
                                 onTouchEnd={handleTouchEnd}
@@ -270,15 +270,15 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                                     : { x: '130%', scale: 0.7, opacity: 0, zIndex: 1, y: 10 }
 
                                     return (
-                                        <motion.section
+                                        <motion.div
                                             key={`${product.id}-${i}`}
                                             className="absolute top-0 bottom-0 w-[65%] max-w-[280px]"
                                             animate={animateProps}
                                             transition={isJumping ? { duration: 0 } : SPRING_OPTIONS}
                                             onAnimationComplete={() => i === activeIndex && handleJump()}
                                         >
-                                            <section className="flex flex-col items-center justify-center h-full">
-                                                <motion.section
+                                            <div className="flex flex-col items-center justify-center h-full">
+                                                <motion.div
                                                     className="relative cursor-pointer group overflow-hidden w-full"
                                                     style={{ aspectRatio: '252.7 / 383.3' }}
                                                     onTap={() => {
@@ -298,34 +298,34 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                                         onError={(e) => { e.currentTarget.src = "/placeholder.svg" }}
                                                         draggable="false"
                                                     />
-                                                </motion.section>
-                                                <section className="text-center mt-3 sm:mt-4 w-full px-1">
+                                                </motion.div>
+                                                <div className="text-center mt-3 sm:mt-4 w-full px-1">
                                                     <h3 className="font-semibold text-xs sm:text-sm text-gray-800 whitespace-nowrap overflow-hidden ">{product.name}</h3>
-                                                    <section className="flex justify-center items-center gap-1 sm:gap-2 text-sm sm:text-base mt-1">
+                                                    <div className="flex justify-center items-center gap-1 sm:gap-2 text-sm sm:text-base mt-1">
                                                         {product.salePrice ? (
                                                             <>
-                                                                <section className="text-red-800 font-bold">
+                                                                <div className="text-red-800 font-bold">
                                                                     <Currency value={product.salePrice} />
-                                                                </section>
-                                                                <section className="text-gray-500 line-through text-sm">
+                                                                </div>
+                                                                <div className="text-gray-500 line-through text-sm">
                                                                     <Currency value={product.originalPrice || product.price} />
-                                                                </section>
+                                                                </div>
                                                             </>
                                                         ) : (
-                                                            <section className="text-red-800 font-bold">
+                                                            <div className="text-red-800 font-bold">
                                                                 <Currency value={product.price} />
-                                                            </section>
+                                                            </div>
                                                         )}
-                                                    </section>
-                                                </section>
-                                            </section>
-                                        </motion.section>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </motion.div>
                                     )
                                 })}
-                            </section>
+                            </div>
                         ) : (
-                            <section className="py-4 sm:py-6 md:py-8">
-                                <motion.section
+                            <div className="py-4 sm:py-6 md:py-8">
+                                <motion.div
                                     ref={trackRef}
                                     className="flex items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4"
                                     style={{ x }}
@@ -347,7 +347,7 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                         }
 
                                         return (
-                                            <section
+                                            <div
                                                 key={`${product.id}-${i}`}
                                                 className="flex-shrink-0 cursor-pointer"
                                                 style={{ width: widthExpression, marginLeft, marginRight }}
@@ -355,11 +355,11 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                                     window.location.href = `/product/${product.slug}`
                                                 }}
                                             >
-                                                <motion.section
+                                                <motion.div
                                                     animate={{ scale: isCenter ? 1.05 : 0.85, y: isCenter ? 20 : 10 }}
                                                     transition={isJumping ? { duration: 0 } : SPRING_OPTIONS}
                                                 >
-                                                    <section className="relative group overflow-hidden bg-gray-100" style={{ aspectRatio: '280/420' }}>
+                                                    <div className="relative group overflow-hidden bg-gray-100" style={{ aspectRatio: '280/420' }}>
                                                         <img
                                                             src={getImageUrl(product)}
                                                             alt={product.name}
@@ -367,36 +367,36 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                                             onError={(e) => { e.currentTarget.src = "/placeholder.svg" }}
                                                             draggable="false"
                                                         />
-                                                    </section>
-                                                    <section className="text-center mt-2 sm:mt-3 md:mt-4 px-1 sm:px-2">
+                                                    </div>
+                                                    <div className="text-center mt-2 sm:mt-3 md:mt-4 px-1 sm:px-2">
                                                         <h3 className={`font-bold text-xs sm:text-sm md:text-base text-black uppercase leading-tight mb-1 whitespace-nowrap overflow-hidden  group-hover:text-[#2b2b2b] transition-colors ${avertaBlack.className}`}>
                                                             {product.name}
                                                         </h3>
-                                                        <section className="flex justify-center items-center gap-1 sm:gap-2 text-xs sm:text-sm md:text-base">
+                                                        <div className="flex justify-center items-center gap-1 sm:gap-2 text-xs sm:text-sm md:text-base">
                                                             {product.salePrice ? (
                                                                 <>
-                                                                    <section className="text-black font-bold">
+                                                                    <div className="text-black font-bold">
                                                                         <Currency value={product.salePrice} />
-                                                                    </section>
-                                                                    <section className="text-gray-500 line-through text-sm">
+                                                                    </div>
+                                                                    <div className="text-gray-500 line-through text-sm">
                                                                         <Currency value={product.originalPrice || product.price} />
-                                                                    </section>
+                                                                    </div>
                                                                 </>
                                                             ) : (
-                                                                <section className="text-black font-bold">
+                                                                <div className="text-black font-bold">
                                                                     <Currency value={product.price} />
-                                                                </section>
+                                                                </div>
                                                             )}
-                                                        </section>
-                                                    </section>
-                                                </motion.section>
-                                            </section>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            </div>
                                         )
                                     })}
-                                </motion.section>
-                            </section>
+                                </motion.div>
+                            </div>
                         )}
-                    </section>
+                    </div>
 
                     <button
                         className="absolute left-3 top-1/2 -translate-y-1/2 bg-black text-white p-2 md:p-3 shadow-lg hover:bg-gray-800 transition-all duration-300 z-10 hidden md:flex"
@@ -414,8 +414,8 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                     >
                         <ChevronRight className="h-6 w-6" />
                     </button>
-                </section>
-            </section>
+                </div>
+            </div>
         </section>
     )
 }

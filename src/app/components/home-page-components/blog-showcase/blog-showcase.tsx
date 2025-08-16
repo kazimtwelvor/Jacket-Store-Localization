@@ -285,8 +285,8 @@ const BlogsShowcase = () => {
 
     return (
         <section className="w-full bg-white flex justify-center overflow-hidden py-16 md:py-24">
-            <section className="w-full max-w-[1896px] py-0 m-0 pl-4 md:pl-8 lg:pl-12">
-                <motion.section
+            <div className="w-full max-w-[1896px] py-0 m-0 pl-4 md:pl-8 lg:pl-12">
+                <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -298,12 +298,12 @@ const BlogsShowcase = () => {
                         <span className="text-black"> INSIGHTS</span>
                     </h2>
                     <p className="text-gray-600 max-w-3xl mx-auto px-4 text-lg leading-relaxed">Discover our latest articles, insights, and stories that matter. Stay informed with our expert perspectives on industry trends and innovations.</p>
-                </motion.section>
+                </motion.div>
 
                 {isDesktop ? (
-                    <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-8 lg:px-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-8 lg:px-12">
                         {blogItems.slice(0, 3).map((item) => (
-                            <motion.section
+                            <motion.div
                                 key={item.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -312,8 +312,8 @@ const BlogsShowcase = () => {
                                 className="group"
                             >
                                 <Link href={item.link}>
-                                    <section className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                                        <section className="relative w-full aspect-[4/3] overflow-hidden">
+                                    <div className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                                        <div className="relative w-full aspect-[4/3] overflow-hidden">
                                             <Image
                                                 src={item.image || "/placeholder.svg"}
                                                 alt={item.title}
@@ -323,21 +323,21 @@ const BlogsShowcase = () => {
                                                 className="object-cover transition-transform duration-700 group-hover:scale-110"
                                             />
 
-                                            <section className="absolute top-4 left-4">
+                                            <div className="absolute top-4 left-4">
                                                 <span className="bg-[#2b2b2b] text-white px-3 py-1 text-xs font-bold uppercase tracking-wider rounded">
                                                     {item.category}
                                                 </span>
-                                            </section>
-                                        </section>
+                                            </div>
+                                        </div>
 
-                                        <section className="p-6">
-                                            <section className="flex items-center gap-2 mb-3 text-sm text-gray-500">
+                                        <div className="p-6">
+                                            <div className="flex items-center gap-2 mb-3 text-sm text-gray-500">
                                                 <span>{item.author}</span>
                                                 <span>•</span>
                                                 <span>{item.date}</span>
                                                 <span>•</span>
                                                 <span>{item.readTime}</span>
-                                            </section>
+                                            </div>
 
                                             <h3 className={`text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2b2b2b] transition-colors duration-300 ${avertaBlack.className}`}>
                                                 {item.title}
@@ -347,18 +347,18 @@ const BlogsShowcase = () => {
                                                 {item.description}
                                             </p>
 
-                                            <section className="flex items-center text-[#2b2b2b] font-semibold text-sm group-hover:gap-2 transition-all duration-300">
+                                            <div className="flex items-center text-[#2b2b2b] font-semibold text-sm group-hover:gap-2 transition-all duration-300">
                                                 <span>Read More</span>
                                                 <ArrowRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-300" />
-                                            </section>
-                                        </section>
-                                    </section>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </Link>
-                            </motion.section>
+                            </motion.div>
                         ))}
-                    </section>
+                    </div>
                 ) : (
-                    <section
+                    <div
                         className="relative"
                         ref={carouselRef}
                         onTouchStart={handleTouchStart}
@@ -366,8 +366,8 @@ const BlogsShowcase = () => {
                         onTouchEnd={handleTouchEnd}
                         style={{ touchAction: 'pan-y' }}
                     >
-                        <section className="overflow-hidden">
-                            <motion.section
+                        <div className="overflow-hidden">
+                            <motion.div
                                 className="flex gap-3 sm:gap-4 md:gap-5 cursor-grab active:cursor-grabbing"
                                 animate={{
                                     x: -currentIndex * scrollAmount + (typeof window !== 'undefined' && 'ontouchstart' in window ? 0 : dragOffset),
@@ -377,7 +377,7 @@ const BlogsShowcase = () => {
                                 style={{ cursor: isDragging ? "grabbing" : "grab" }}
                             >
                                 {blogItems.slice(0, 3).map((item) => (
-                                    <section
+                                    <div
                                         key={item.id}
                                         className="group flex-shrink-0"
                                         style={{ userSelect: "none" }}
@@ -393,8 +393,8 @@ const BlogsShowcase = () => {
                                             }}
                                             draggable="false"
                                         >
-                                            <section className="bg-white shadow-md overflow-hidden w-[270px] sm:w-[270px] md:w-[320px]">
-                                                <section className="relative w-full aspect-[4/3] overflow-hidden">
+                                            <div className="bg-white shadow-md overflow-hidden w-[270px] sm:w-[270px] md:w-[320px]">
+                                                <div className="relative w-full aspect-[4/3] overflow-hidden">
                                                     <Image
                                                         src={item.image || "/placeholder.svg"}
                                                         alt={item.title}
@@ -406,21 +406,21 @@ const BlogsShowcase = () => {
                                                         onDragStart={(e) => e.preventDefault()}
                                                     />
 
-                                                    <section className="absolute top-4 left-4">
+                                                    <div className="absolute top-4 left-4">
                                                         <span className="bg-[#2b2b2b] text-white px-3 py-1 text-xs font-bold uppercase tracking-wider">
                                                             {item.category}
                                                         </span>
-                                                    </section>
-                                                </section>
+                                                    </div>
+                                                </div>
 
-                                                <section className="p-4 bg-white">
-                                                    <section className="flex items-center gap-2 mb-3 text-sm text-gray-500">
+                                                <div className="p-4 bg-white">
+                                                    <div className="flex items-center gap-2 mb-3 text-sm text-gray-500">
                                                         <span>{item.author}</span>
                                                         <span>•</span>
                                                         <span>{item.date}</span>
-                                                    </section>
+                                                    </div>
 
-                                                    <section className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300 mb-3">
+                                                    <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300 mb-3">
                                                         <h3
                                                             className="text-black text-base md:text-lg font-bold text-left transition-all duration-500 line-clamp-2 group-hover:text-[#2b2b2b]"
                                                             style={{ fontFamily: "AvertaPe" }}
@@ -428,22 +428,22 @@ const BlogsShowcase = () => {
                                                             {item.title}
                                                         </h3>
                                                         <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-[#2b2b2b] opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1 flex-shrink-0" />
-                                                    </section>
+                                                    </div>
 
                                                     <p className="text-gray-600 text-sm md:text-base line-clamp-3">
                                                         {item.description}
                                                     </p>
-                                                </section>
-                                            </section>
+                                                </div>
+                                            </div>
                                         </Link>
-                                    </section>
+                                    </div>
                                 ))}
-                            </motion.section>
-                        </section>
-                    </section>
+                            </motion.div>
+                        </div>
+                    </div>
                 )}
 
-                <section className={`text-center mt-12 md:mt-16 ${avertaBlack.className}`}>
+                <div className={`text-center mt-12 md:mt-16 ${avertaBlack.className}`}>
                     <Link
                         href="/blogs"
                         className="inline-flex items-center gap-3 bg-black text-white px-8 py-4 font-bold text-lg hover:bg-[#2b2b2b] transition-colors duration-300"
@@ -453,8 +453,8 @@ const BlogsShowcase = () => {
                             <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </Link>
-                </section>
-            </section>
+                </div>
+            </div>
         </section>
     )
 }
