@@ -161,7 +161,7 @@ export default function WhyChooseSlider() {
                                             {slides[currentSlide].title}
                                         </h2>
                                     </div>
-                                    <p className="text-gray-300 leading-relaxed">{slides[currentSlide].description}</p>
+                                    <p className="text-gray-300 leading-relaxed max-w-2xl">{slides[currentSlide].description}</p>
                                     <div className="space-y-2 pt-2 hidden xl:block">
                                         <h4 className={`text-xl font-semibold text-white ${avertaBlack.className}`}>KEY FEATURES:</h4>
                                         <div className="space-y-2">

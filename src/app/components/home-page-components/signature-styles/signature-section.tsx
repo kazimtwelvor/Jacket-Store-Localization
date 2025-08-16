@@ -81,7 +81,7 @@ export default function SignatureStylesSection() {
                                         <TruncatedText
                                             text={menDesc}
                                             limit={characterLimit}
-                                            className="mt-2 text-sm md:text-sm lg:text-base text-center"
+                                            className="mt-2 ml-2 text-sm md:text-sm lg:text-base text-center"
                                             onToggle={setMenDropdownOpen}
                                         />
                                         <div className="mt-6 text-center">
