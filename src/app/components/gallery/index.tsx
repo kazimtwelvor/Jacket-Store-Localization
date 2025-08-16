@@ -38,6 +38,7 @@ const Gallery: React.FC<GalleryProps> = ({
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStart, setDragStart] = React.useState({ x: 0, y: 0 });
   const [lastTap, setLastTap] = React.useState(0);
+  const [hasMounted, setHasMounted] = React.useState(false);
   const imageRef = React.useRef<HTMLDivElement>(null);
 
   // Sort images by order and prioritize primary image
@@ -190,6 +191,11 @@ const Gallery: React.FC<GalleryProps> = ({
     setZoomLevel(1);
     setImagePosition({ x: 0, y: 0 });
   };
+
+  // Set mounted state
+  React.useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   // Keyboard navigation and wheel zoom for viewer
   React.useEffect(() => {

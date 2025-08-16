@@ -5,7 +5,7 @@ import { FontProvider } from "@/src/components/font-provider";
 import { CartProvider } from "@/src/app/contexts/CartContext";
 import { avertaBold, avertaDefault } from "@/src/lib/fonts";
 import Footer from "./components/home-page-components/footer/footer";
-
+import CartSidebarWrapper from "./components/layout/cart-sidebar-wrapper";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,6 +19,7 @@ export default function RootLayout({
             <Navbar />
             {children}
             <Footer />
+            <CartSidebarWrapper />
           </CartProvider>
         </FontProvider>
       </body>

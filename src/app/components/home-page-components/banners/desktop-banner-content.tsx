@@ -9,8 +9,8 @@ export const DesktopBannerContent = () => {
   return (
     <ResponsiveContainer>
       <section className="py-24 sm:py-32 md:py-40 lg:py-48 text-center relative">
-        <section className="relative z-10">
-          <motion.section
+        <div className="relative z-10">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -18,7 +18,7 @@ export const DesktopBannerContent = () => {
           // style={{ fontFamily: 'var(--font-averta-bold)' }}
           >
             FINEYST SALE
-          </motion.section>
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -27,10 +27,10 @@ export const DesktopBannerContent = () => {
             style={{ fontFamily: 'var(--font-averta-default)' }}
             className="text-sm sm:text-base md:text-lg text-black lg:text-xl mb-8 md:mb-10 max-w-3xl mx-auto"
           >
-            UP TO <span className={`${avertaBlack.className} font-black`}>50%</span> OFF + CODE: STREET<span className={`${avertaBlack.className} font-black`}>15</span>
+            UP TO <span className={`${avertaBlack.className} font-black`}>50% OFF</span> + CODE: <span className={`${avertaBlack.className} font-black`}>STREET15</span>
           </motion.p>
 
-          <motion.section
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -39,17 +39,17 @@ export const DesktopBannerContent = () => {
             <Link href="/shop" aria-label="Shop men's collection">
               <button className="relative overflow-hidden bg-[#2b2b2b] text-white font-bold py-4 px-8 md:px-10 text-sm md:text-base uppercase w-full sm:w-auto min-w-[180px] hover:shadow-lg transition-all duration-300 group">
                 <span className="relative z-10">Shop Men</span>
-                <section className="absolute inset-0 w-0 bg-[#2b2b2b] transition-all duration-300 group-hover:w-full"></section>
+                <div className="absolute inset-0 w-0 bg-[#2b2b2b] transition-all duration-300 group-hover:w-full"></div>
               </button>
             </Link>
             <Link href="/shop" aria-label="Shop women's collection">
               <button className="relative overflow-hidden bg-[#2b2b2b] text-white font-bold py-4 px-8 md:px-10 text-sm md:text-base uppercase w-full sm:w-auto min-w-[180px] hover:shadow-lg transition-all duration-300 group">
                 <span className="relative z-10">Shop Women</span>
-                <section className="absolute inset-0 w-0 bg-[#2b2b2b] transition-all duration-300 group-hover:w-full"></section>
+                <div className="absolute inset-0 w-0 bg-[#2b2b2b] transition-all duration-300 group-hover:w-full"></div>
               </button>
             </Link>
-          </motion.section>
-        </section>
+          </motion.div>
+        </div>
       </section>
     </ResponsiveContainer>
   )

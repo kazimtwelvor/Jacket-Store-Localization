@@ -154,46 +154,46 @@ const ReviewCard = ({ review, showH3 = true }: { review: (typeof reviews)[0]; sh
                 }
             }}
         >
-            <section className="flex justify-between items-center mb-4">
-                <section className="flex items-left ">
-                    <section className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
+            <div className="flex justify-between items-center mb-4">
+                <div className="flex items-left ">
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
                         <Image src={review.image || "/placeholder.svg"} alt={review.name} fill className="object-cover" />
-                    </section>
-                    <section>
-                        <section className="flex mb-1">
+                    </div>
+                    <div>
+                        <div className="flex mb-1">
                             {[...Array(5)].map((_, i) => (
                                 <Star key={i} size={14} className={i < review.rating ? "text-[#1B1B1B] fill-[#1B1B1B]" : "text-gray-600"} />
                             ))}
-                        </section>
+                        </div>
                         {showH3 ? (
-                            <section className="font-extrabold text-black " style={{ fontFamily: 'AvertaPe, sans-serif' }}>{review.name.toUpperCase()}</section>
+                            <div className="font-extrabold text-black " style={{ fontFamily: 'AvertaPe, sans-serif' }}>{review.name.toUpperCase()}</div>
                         ) : (
-                            <section className="font-extrabold text-black" style={{ fontFamily: 'AvertaPe, sans-serif' }}>{review.name.toUpperCase()}</section>
+                            <div className="font-extrabold text-black" style={{ fontFamily: 'AvertaPe, sans-serif' }}>{review.name.toUpperCase()}</div>
                         )}
-                    </section>
-                </section>
-                <section className="relative w-20 h-12">
+                    </div>
+                </div>
+                <div className="relative w-20 h-12">
                     <Image src="/images/reviews/google-trusted-badge.png" alt="Google Trusted Reviews" fill className="object-contain" />
-                </section>
-            </section>
-            <section className="mb-3 mt-3">
-                <section className="flex items-center text-sm w-fit gap-2">
-                    <section className="relative w-5 h-5">
+                </div>
+            </div>
+            <div className="mb-3 mt-3">
+                <div className="flex items-center text-sm w-fit gap-2">
+                    <div className="relative w-5 h-5">
                         <svg className="w-5 h-5 text-[#1B1B1B]" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-5.83l-2.83-2.83-1.41 1.41L12 17.17l6.24-6.24-1.41-1.41L12 14.17z" />
                         </svg>
-                        <section className="absolute inset-0 flex items-center justify-center">
+                        <div className="absolute inset-0 flex items-center justify-center">
                             <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor" strokeWidth="4">
                                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                             </svg>
-                        </section>
-                    </section>
+                        </div>
+                    </div>
                     <span className={`text-black ${avertaBold.className}`}>Verified buyer</span>
-                </section>
-            </section>
-            <section className="flex-grow flex items-center">
+                </div>
+            </div>
+            <div className="flex-grow flex items-center">
                 <p className="text-black text-sm line-clamp-4">{review.text}</p>
-            </section>
+            </div>
         </section>
     )
 }
@@ -240,23 +240,23 @@ export default function AnimatedReviewsSection() {
 
     if (!isMounted) {
         return (
-            <section className="py-16 bg-[#EAEAEA]">
-                <section className="container mx-auto px-4">
-                    <section className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-12 text-black">OUR PRODUCTS BACKED BY INCREDIBLE REVIEWS</section>
+            <div className="py-16 bg-[#EAEAEA]">
+                <div className="container mx-auto px-4">
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-12 text-black">OUR PRODUCTS BACKED BY INCREDIBLE REVIEWS</div>
                     <p className="text-center text-black mb-12">Verified Feedback From Authentic Customers</p>
-                    <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {reviews.slice(0, 6).map((review) => (
-                            <section key={review.id} className="bg-[#1a1a1a] p-6 rounded-lg shadow-md">
-                                <section className="flex items-center mb-4">
-                                    <section className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
+                            <div key={review.id} className="bg-[#1a1a1a] p-6 rounded-lg shadow-md">
+                                <div className="flex items-center mb-4">
+                                    <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
                                         <Image src={review.image || "/placeholder.svg"} alt={review.name} fill className="object-cover" />
-                                    </section>
-                                    <section>
+                                    </div>
+                                    <div>
                                         <h3 className="font-semibold text-white">{review.name}</h3>
                                         <p className="text-xs text-gray-400">{review.date}</p>
-                                    </section>
-                                </section>
-                                <section className="flex mb-3">
+                                    </div>
+                                </div>
+                                <div className="flex mb-3">
                                     {[...Array(5)].map((_, i) => (
                                         <Star
                                             key={i}
@@ -264,25 +264,25 @@ export default function AnimatedReviewsSection() {
                                             className={i < review.rating ? "text-[#1B1B1B] fill-[#1B1B1B]" : "text-gray-600"}
                                         />
                                     ))}
-                                </section>
+                                </div>
                                 <p className="text-gray-300 text-sm">{review.text}</p>
-                            </section>
+                            </div>
                         ))}
-                    </section>
-                </section>
-            </section>
+                    </div>
+                </div>
+            </div>
         )
     }
 
     return (
         <section className="py-16 bg-[#EAEAEA] overflow-hidden">
-            <section className="container mx-auto px-4 mb-12">
+            <div className="container mx-auto px-4 mb-12">
                 <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold text-center text-black mb-2 ${avertaBlack.className}`}>OUR PRODUCTS BACKED BY INCREDIBLE REVIEWS</h2>
                 <p className="text-center text-gray-600 mb-12">Verified Feedback from Authentic Customers</p>
-            </section>
+            </div>
 
-            <section className="relative mb-4 md:mb-8 overflow-hidden">
-                <section
+            <div className="relative mb-4 md:mb-8 overflow-hidden">
+                <div
                     ref={topRowRef}
                     className="flex animate-scroll-left"
                     style={{
@@ -301,11 +301,11 @@ export default function AnimatedReviewsSection() {
                             />
                         )
                     })}
-                </section>
-            </section>
+                </div>
+            </div>
 
-            <section className="relative overflow-hidden">
-                <section
+            <div className="relative overflow-hidden">
+                <div
                     ref={bottomRowRef}
                     className="flex animate-scroll-right"
                     style={{
@@ -326,8 +326,8 @@ export default function AnimatedReviewsSection() {
                             )
                         }
                     )}
-                </section>
-            </section>
+                </div>
+            </div>
 
             <style jsx global>{`
         @keyframes scroll-left {

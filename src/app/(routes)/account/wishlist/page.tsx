@@ -8,14 +8,12 @@ import useAuth from "@/src/app/hooks/use-auth"
 import Container from "@/src/app/ui/container"
 import Link from "next/link"
 
-// Import the TrendingProducts component directly
-import TrendingProducts from "./components/trending-products-client"
+import TrendingProducts from "../../../components/account/wishlist/trending-products-client"
 
 export default function WishlistPage() {
   const { user, isAuthenticated, logout } = useAuth()
   const router = useRouter()
 
-  // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/auth/login")
@@ -26,15 +24,13 @@ export default function WishlistPage() {
     return null
   }
 
-  // Get username from email
   const username = user?.email?.split("@")[0]?.toUpperCase() || "USER"
 
   return (
     <Container>
-      <div className="min-h-screen py-6 md:py-8 lg:py-10">
+      <section className="min-h-screen py-6 md:py-8 lg:py-10">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row">
-            {/* Sidebar Navigation */}
             <div className="w-full md:w-64 mb-6 md:mb-0">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="flex flex-col space-y-1">
@@ -86,9 +82,7 @@ export default function WishlistPage() {
               </div>
             </div>
 
-            {/* Main Content */}
             <div className="flex-1 md:ml-8">
-              {/* Header */}
               <div className="bg-gray-50 p-6 rounded-lg mb-6">
                 <div className="flex items-center">
                   <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
@@ -101,17 +95,15 @@ export default function WishlistPage() {
                 </div>
               </div>
 
-              {/* Empty Wishlist Message */}
               <div className="py-6 border-b border-gray-200">
                 <p className="text-gray-600">There are no items in your wishlist.</p>
               </div>
 
-              {/* Trending Now Section - Using Server Component */}
               <TrendingProducts />
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </Container>
   )
 }

@@ -18,7 +18,6 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
     const { items, updateQuantity, removeFromCart, totalPrice } = useCart()
     const [showVoucherField, setShowVoucherField] = useState(false)
     const [couponCode, setCouponCode] = useState("")
-
     const shippingPrice = totalPrice > 100 ? 0 : 10
     const taxRate = 0.08
     const taxAmount = totalPrice * taxRate
@@ -27,50 +26,62 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
     if (!isOpen) return null
 
     return (
-        <section className="fixed inset-0 bg-black bg-opacity-50 z-[10000] hidden lg:flex" onClick={onClose}>
-            <section className="ml-auto w-[600px] h-full bg-white flex flex-col" onClick={(e) => e.stopPropagation()}>
-                {/* Header */}
-                <section className="flex items-center justify-between p-4 border-b">
+        <section className="fixed inset-0 z-[10000] flex" onClick={onClose}>
+            <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm" />
+            <div className="ml-auto w-full lg:w-[600px] h-full bg-white flex flex-col relative z-10" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between p-4 border-b">
                     <h2 className="text-lg font-semibold">MY SHOPPING CART</h2>
-                    <section className="flex items-center gap-4">
+                    <div className="flex items-center gap-4">
                         <button
-                            onClick={() => window.location.href = '/cart'}
-                            className="text-sm text-gray-600 hover:text-gray-800"
+                            onClick={() => {
+                                onClose();
+                                window.location.href = '/cart';
+                            }}
+                            className="text-sm text-gray-600 hover:text-gray-800 lg:block hidden"
                         >
                             SEE DETAILS
+                        </button>
+                        <button
+                            onClick={() => {
+                                onClose();
+                                window.location.href = '/cart';
+                            }}
+                            className="text-sm text-gray-600 hover:text-gray-800 lg:hidden block"
+                        >
+                            VIEW FULL CART
                         </button>
                         <button onClick={onClose} className="p-1">
                             <X size={20} />
                         </button>
-                    </section>
-                </section>
+                    </div>
+                </div>
 
 
 
-                <section className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto">
 
                     {items.length > 0 && (
-                        <section className="bg-gray-400 p-3 flex items-center gap-3">
-                            <section className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                        <div className="bg-gray-400 p-3 flex items-center gap-3">
+                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
                                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                 </svg>
-                            </section>
-                            <section>
+                            </div>
+                            <div>
                                 <p className="font-semibold text-black">GOOD CHOICE!</p>
                                 <p className="text-sm text-black">Your item was added to the shopping cart</p>
-                            </section>
-                        </section>
+                            </div>
+                        </div>
                     )}
 
                     {items.length === 0 ? (
-                        <section className="p-6 text-center text-gray-500">
+                        <div className="p-6 text-center text-gray-500">
                             Your cart is empty
-                        </section>
+                        </div>
                     ) : (
                         <>
                             {items.map((item) => (
-                                <section key={item.id} className="p-4 border-b border-gray-200 relative">
+                                <div key={item.id} className="p-4 border-b border-gray-200 relative">
                                     <button
                                         onClick={() => removeFromCart(item.id)}
                                         className="absolute top-2 right-2 p-1 hover:bg-gray-100 rounded z-10"
@@ -80,8 +91,8 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                                         </svg>
                                     </button>
 
-                                    <section className="flex gap-4">
-                                        <section className="relative w-32 aspect-[3/5] flex-shrink-0">
+                                    <div className="flex gap-4">
+                                        <div className="relative w-32 aspect-[3/5] flex-shrink-0">
                                             <Image
                                                 src={item.product.images?.[0]?.url || "/placeholder.svg"}
                                                 alt={item.product.name}
@@ -91,24 +102,24 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                                             <button className="absolute top-1 left-1 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm">
                                                 <Heart className="w-3 h-3" />
                                             </button>
-                                        </section>
+                                        </div>
 
-                                        <section className="flex-1">
+                                        <div className="flex-1">
                                             <h3 className="font-bold text-black mb-2 uppercase text-sm">
                                                 <Link href={`/product/${item.product.id}`}>{item.product.name}</Link>
                                             </h3>
 
-                                            <section className="space-y-1 mb-3">
+                                            <div className="space-y-1 mb-3">
                                                 <p className="text-xs text-black">
                                                     <span className="font-medium">Color:</span> {item.selectedColor || (item.product as any).color?.name || (item.product as any).colors?.[0]?.name || 'Default'}
                                                 </p>
                                                 <p className="text-xs text-black">
                                                     <span className="font-medium">Size:</span> {item.size}
                                                 </p>
-                                            </section>
+                                            </div>
 
-                                            <section className="mb-3">
-                                                <section className="flex items-center border border-gray-300 w-fit">
+                                            <div className="mb-3">
+                                                <div className="flex items-center border border-gray-300 w-fit">
                                                     <button
                                                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                                         className="px-2 py-1 text-gray-600 hover:text-black hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
@@ -125,14 +136,13 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                                                     >
                                                         +
                                                     </button>
-                                                </section>
-                                            </section>
+                                                </div>
+                                            </div>
 
-                                            {/* Price Section */}
-                                            <section className="text-left">
-                                                <section className="mb-2">
+                                            <div className="text-left">
+                                                <div className="mb-2">
                                                     <p className="text-xs text-black">Unit Price</p>
-                                                    <section className="flex items-center gap-2">
+                                                    <div className="flex items-center gap-2">
                                                         {item.product.salePrice ? (
                                                             <>
                                                                 <span className="text-xs text-gray-400 line-through">
@@ -147,65 +157,62 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                                                                 <Currency value={item.unitPrice} />
                                                             </span>
                                                         )}
-                                                    </section>
-                                                </section>
-                                                <section>
+                                                    </div>
+                                                </div>
+                                                <div>
                                                     <p className="text-xs text-gray-500">Total Price</p>
                                                     <p className="text-sm font-bold text-black">
                                                         <Currency value={item.unitPrice * item.quantity} />
                                                     </p>
-                                                </section>
-                                            </section>
+                                                </div>
+                                            </div>
 
 
-                                        </section>
-                                    </section>
-                                </section>
+                                        </div>
+                                    </div>
+                                </div>
                             ))}
 
-                            {/* Order Summary - Inside scrollable area */}
-                            <section className="p-4">
-                                <section className="bg-gray-100 p-4">
+                            <div className="p-4">
+                                <div className="bg-gray-100 p-4">
                                     <h2 className="text-sm font-bold text-black mb-4">
                                         ORDER OVERVIEW
                                     </h2>
 
-                                    <section className="space-y-1 mb-6">
-                                        <section className="flex justify-between">
+                                    <div className="space-y-1 mb-6">
+                                        <div className="flex justify-between">
                                             <p className="text-sm text-black">Subtotal</p>
                                             <p className="font-bold text-sm text-black">
                                                 <Currency value={totalPrice} />
                                             </p>
-                                        </section>
-                                        <section className="flex justify-between">
+                                        </div>
+                                        <div className="flex justify-between">
                                             <p className="text-sm text-black">Shipping</p>
                                             <p className="font-bold text-sm text-black">
                                                 {shippingPrice === 0 ? "Free" : <Currency value={shippingPrice} />}
                                             </p>
-                                        </section>
-                                        <section className="flex justify-between">
+                                        </div>
+                                        <div className="flex justify-between">
                                             <p className="text-sm text-black">Estimated Tax</p>
                                             <p className="font-bold text-sm text-black">
                                                 <Currency value={taxAmount} />
                                             </p>
-                                        </section>
-                                        <section className="border-t border-gray-300 pt-3 flex justify-between">
+                                        </div>
+                                        <div className="border-t border-gray-300 pt-3 flex justify-between">
                                             <p className="text-sm font-bold text-black">Total price</p>
                                             <p className="text-sm font-bold text-black">
                                                 <Currency value={grandTotal} />
                                             </p>
-                                        </section>
-                                    </section>
-                                </section>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                {/* Delivery Info */}
-                                <section className="flex items-center justify-center gap-2 p-6 text-xs text-black">
+                                <div className="flex items-center justify-center gap-2 p-6 text-xs text-black">
                                     <Truck className="h-3 w-3" />
                                     <span>Delivery approx. <strong>August 06 - August 12</strong></span>
-                                </section>
+                                </div>
 
-                                {/* Redeem Voucher */}
-                                <section className="mb-6">
+                                <div className="mb-6">
                                     <button
                                         onClick={() => setShowVoucherField(!showVoucherField)}
                                         className="w-full text-left p-3 bg-gray-100 text-sm font-extrabold text-black flex justify-between items-center"
@@ -214,7 +221,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                                         <ChevronRight className={`h-4 w-4 transition-transform ${showVoucherField ? 'rotate-90' : ''}`} />
                                     </button>
                                     {showVoucherField && (
-                                        <section className="mt-3 flex space-x-2">
+                                        <div className="mt-3 flex space-x-2">
                                             <input
                                                 type="text"
                                                 placeholder="Enter voucher code"
@@ -225,28 +232,26 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                                             <button className="bg-black hover:bg-gray-800 text-white px-4">
                                                 Apply
                                             </button>
-                                        </section>
+                                        </div>
                                     )}
-                                </section>
+                                </div>
 
-                                {/* Payment Options */}
-                                <section className="mb-6 relative">
+                                <div className="mb-6 relative">
                                     <p className="text-xs text-black mb-2">
                                         <span className="underline cursor-pointer hover:text-gray-600">
                                             Click
                                         </span> to see what payment options are available.
                                     </p>
-                                </section>
+                                </div>
 
 
 
-                            </section>
+                            </div>
                         </>
                     )}
-                </section>
+                </div>
 
-                {/* Sticky Checkout Section */}
-                <section className="border-t  p-4">
+                <div className="border-t  p-4">
                     <button
                         onClick={() => {
                             onClose()
@@ -259,7 +264,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
 
                     <p className="text-center text-sm text-gray-600 mb-4">Express checkout options</p>
 
-                    <section className="grid grid-cols-3 gap-2 mb-4">
+                    <div className="grid grid-cols-3 gap-2 mb-4">
                         <button className="border border-gray-300 py-2 px-3 text-sm font-medium flex items-center justify-center bg-white hover:bg-gray-50">
                             PayPal
                         </button>
@@ -269,9 +274,9 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                         <button className="border border-gray-300 py-2 px-3 text-sm font-medium flex items-center justify-center bg-white hover:bg-gray-50">
                             amazon pay
                         </button>
-                    </section>
-                </section>
-            </section>
+                    </div>
+                </div>
+            </div>
         </section>
     )
 }

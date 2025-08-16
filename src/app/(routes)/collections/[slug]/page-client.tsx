@@ -12,12 +12,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/src/app/ui/d
 import type { Product, Category } from "@/types"
 
 import { cn } from "@/src/app/lib/utils"
-import CategorySEOSection from "@/src/app/category/category-seo-section"
+import CategorySEOSection from "@/src/app/category/category-seo-div"
 import JacketCategories from "@/src/app/category/JacketCategories"
 import WeThinkYouWillLove from "@/src/app/category/WeThinkYouWillLove"
 import RecentlyViewed from "@/src/app/category/RecentlyViewed"
 import CategoryFilterBar from "@/src/app/category/CategoryFilterBar"
-import StructuredData from "@/src/app/components/layout/structured-data"
+import StructuredData from "@/src/app/components/layout/structured-data-layout"
 import CartSidebar from "@/src/app/components/layout/cart-sidebar"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/src/app/ui/sheet"
 import { useCart } from "@/src/app/contexts/CartContext"
@@ -114,7 +114,7 @@ const ProductImageCarousel = ({ product, wasDragged }: { product: Product; wasDr
 
     if (images.length <= 1) {
         return (
-            <section className="w-full h-full overflow-hidden">
+            <div className="w-full h-full overflow-hidden">
                 <Image
                     src={(images[0] as any).url}
                     alt={product.name}
@@ -123,13 +123,13 @@ const ProductImageCarousel = ({ product, wasDragged }: { product: Product; wasDr
                     sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw"
                     draggable={false}
                 />
-            </section>
+            </div>
         );
     }
 
     return (
-        <section ref={containerRef} className="w-full h-full overflow-hidden relative cursor-grab active:cursor-grabbing">
-            <motion.section
+        <div ref={containerRef} className="w-full h-full overflow-hidden relative cursor-grab active:cursor-grabbing">
+            <motion.div
                 className="flex h-full"
                 style={{ x: dragX }}
                 drag="x"
@@ -139,7 +139,7 @@ const ProductImageCarousel = ({ product, wasDragged }: { product: Product; wasDr
                 onDragEnd={onDragEnd}
             >
                 {images.map((image, i) => (
-                    <section key={image.id || i} className="relative flex-shrink-0 w-full h-full">
+                    <div key={image.id || i} className="relative flex-shrink-0 w-full h-full">
                         <Image
                             src={(image as any).url}
                             alt={product.name}
@@ -149,12 +149,12 @@ const ProductImageCarousel = ({ product, wasDragged }: { product: Product; wasDr
                             draggable={false}
                             onDragStart={(e) => e.preventDefault()}
                         />
-                    </section>
+                    </div>
                 ))}
-            </motion.section>
-            <section className="absolute top-3 right-3 flex gap-1.5 z-10">
+            </motion.div>
+            <div className="absolute top-3 right-3 flex gap-1.5 z-10">
                 {images.map((_, i) => (
-                    <section
+                    <div
                         key={`dot-${i}`}
                         onClick={(e) => {
                             e.stopPropagation();
@@ -166,8 +166,8 @@ const ProductImageCarousel = ({ product, wasDragged }: { product: Product; wasDr
                         )}
                     />
                 ))}
-            </section>
-        </section>
+            </div>
+        </div>
     );
 };
 
@@ -237,21 +237,22 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
     const [visibleProducts, setVisibleProducts] = useState<string[]>([])
     const [isFilterSticky, setIsFilterSticky] = useState(false)
     const [productSidebarOpen, setProductSidebarOpen] = useState(false)
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
-    const [selectedProductSize, setSelectedProductSize] = useState<string>('')
     const [colorPopup, setColorPopup] = useState<{ productKey: string; rect: DOMRect } | null>(null)
     const [loadingProducts, setLoadingProducts] = useState<Set<string>>(new Set())
     const [mobileCartModal, setMobileCartModal] = useState<{ isOpen: boolean; product: Product | null }>({ isOpen: false, product: null })
+    const [layoutMetrics, setLayoutMetrics] = useState({
+        startStickyPoint: 0,
+        endStickyPoint: 0,
+        filterBarHeight: 0,
+    });
 
-    // Early return after all hooks
     if (!category) {
         return null;
     }
 
     const sizes = ["XS", "S", "M", "L", "XL", "XXL"]
     const colors = ["Black", "White", "Blue", "Red", "Green"]
-    
-    // Category icons mapping for fallback images
+
     const categoryIcons: Record<string, string> = {
         'leather-jackets': '/images/leather.webp',
         'womens-jackets': '/images/women-leather.webp',
@@ -265,7 +266,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
         'varsity-jackets': '/images/varsity.webp',
         'suede-jackets': '/images/suede.webp'
     }
-    
+
     const hasActiveFilters = selectedFilters.sizes.length > 0 || selectedFilters.colors.length > 0
     useEffect(() => {
         setMounted(true)
@@ -350,12 +351,6 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
         handleScroll();
         return () => window.removeEventListener('scroll', handleScroll);
     }, [layoutMetrics]);
-    const handleFilterChange = (key: string, value: string[]) => {
-        setSelectedFilters((prev) => ({
-            ...prev,
-            [key]: value,
-        }))
-    }
     const toggleSizeFilter = (size: string) => {
         setSelectedFilters((prev) => {
             const newSizes = prev.sizes.includes(size) ? prev.sizes.filter((s) => s !== size) : [...prev.sizes, size]
@@ -401,28 +396,19 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
         }
         router.push(`?${params.toString()}`, { scroll: false })
     }
-    const handleCategorySelect = (categorySlug: string) => {
-        setCategoriesSidebarOpen(false)
-        router.push(`/collections/${categorySlug}`)
-    }
     const { addToCart } = useCart()
     const wishlist = useWishlist()
 
-    // Move all hooks before early return
     const [currentProducts, setCurrentProducts] = useState<Product[]>(products)
     const [currentPage, setCurrentPage] = useState(1)
     const productsPerPage = 28
     const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
-    const [layoutMetrics, setLayoutMetrics] = useState({
-        startStickyPoint: 0,
-        endStickyPoint: 0,
-        filterBarHeight: 0,
-    });
     const productRefs = useRef<(HTMLDivElement | null)[]>([])
     const recentlyViewedScrollRef = useRef<HTMLDivElement>(null)
     const filterBarWrapperRef = useRef<HTMLDivElement>(null);
     const productsGridWrapperRef = useRef<HTMLDivElement>(null);
     const paginationSectionRef = useRef<HTMLDivElement>(null);
+    const [colorDialogs, setColorDialogs] = useState<Record<string, boolean>>({})
 
     const handleSizeSelect = (productId: string, size: string) => {
         const product = currentProducts.find(p => p.id === productId) || recentlyViewed.find(p => p.id === productId);
@@ -433,12 +419,6 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
         setSelectedSizes((prev) => ({
             ...prev,
             [productId]: size,
-        }))
-    }
-    const toggleColorDialog = (productId: string) => {
-        setColorDialogs((prev) => ({
-            ...prev,
-            [productId]: !prev[productId],
         }))
     }
     const addToRecentlyViewed = (product: Product) => {
@@ -554,18 +534,18 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
     return (
         <section className="bg-white overflow-x-hidden">
             <StructuredData data={structuredData} />
-            <section className="container mx-auto pt-24 sm:pt-22 md:pt-20 lg:pt-20 xl:pt-20 pb-0 sm:pb-2 md:pb-6 lg:pb-6 xl:pb-6 text-center">
+            <div className="container mx-auto pt-24 sm:pt-22 md:pt-20 lg:pt-20 xl:pt-20 pb-0 sm:pb-2 md:pb-6 lg:pb-6 xl:pb-6 text-center">
                 <JacketCategories
                     categories={categories}
                     onCategoryClick={(categorySlug) => router.push(`/collections/${categorySlug}`)}
                     currentCategory={currentCategory || undefined}
                 />
-                <section className="mt-0.1 sm:mt-6 md:mt-8 lg:mt-8 xl:mt-8 mb-0 sm:mb-2 md:mb-6 lg:mb-6 xl:mb-6">
+                <div className="mt-0.1 sm:mt-6 md:mt-8 lg:mt-8 xl:mt-8 mb-0 sm:mb-2 md:mb-6 lg:mb-6 xl:mb-6">
                     <h1 className="text-3xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-4xl font-bold text-gray-900">{category.name}</h1>
-                </section>
-            </section>
-            <section className="mx-auto w-full px-2 sm:px-6 md:px-6 lg:px-8 xl:px-8 py-3 sm:py-3 md:py-6 lg:py-6 xl:py-6">
-                <section ref={filterBarWrapperRef} style={{ height: isFilterSticky ? `${layoutMetrics.filterBarHeight}px` : 'auto' }}>
+                </div>
+            </div>
+            <div className="mx-auto w-full px-2 sm:px-6 md:px-6 lg:px-8 xl:px-8 py-3 sm:py-3 md:py-6 lg:py-6 xl:py-6">
+                <div ref={filterBarWrapperRef} style={{ height: isFilterSticky ? `${layoutMetrics.filterBarHeight}px` : 'auto' }}>
                     <CategoryFilterBar
                         category={category}
                         hasActiveFilters={hasActiveFilters}
@@ -581,20 +561,20 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                         onSortChange={handleSortChange}
                         currentSort={currentSort}
                     />
-                </section>
-                <section ref={productsGridWrapperRef} className="w-full px-0 xs:px-0 sm:px-0 md:px-4 lg:px-6 xl:px-8 2xl:px-8">
+                </div>
+                <div ref={productsGridWrapperRef} className="w-full px-0 xs:px-0 sm:px-0 md:px-4 lg:px-6 xl:px-8 2xl:px-8">
                     {currentProducts.length > 0 ? (
                         <>
-                            <section className="mb-4 text-sm text-gray-600 text-center">
+                            <div className="mb-4 text-sm text-gray-600 text-center">
                                 Showing {(currentPage - 1) * productsPerPage + 1} - {Math.min(currentPage * productsPerPage, products.length)} of {products.length} products
-                            </section>
+                            </div>
 
-                            <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
                                 {currentProducts.map((product, index) => (
-                                    <motion.section
+                                    <motion.div
                                         key={product.id}
                                         id={`product-${product.id}`}
-                                        ref={(el) => { if (productRefs.current) productRefs.current[index] = el; }}
+                                        ref={(el) => { if (productRefs.current) productRefs.current[index] = el as HTMLDivElement | null; }}
                                         className="group relative cursor-pointer flex flex-col h-full"
                                         onClick={() => {
                                             if (!isDesktop && wasDraggedRef.current) return;
@@ -607,12 +587,12 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                         animate={loadingProducts.has(product.id) ? { opacity: 1, y: 0 } : (visibleProducts.includes(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 })}
                                         transition={{ duration: 0 }}
                                     >
-                                        <section
+                                        <div
                                             className="relative w-full aspect-[3/5] bg-gray-100 overflow-visible md:overflow-hidden"
                                         >
                                             {mounted ? (
                                                 isDesktop ? (
-                                                    <section className="w-full h-full overflow-hidden relative">
+                                                    <div className="w-full h-full overflow-hidden relative">
                                                         <Image
                                                             src={
                                                                 hoveredProduct === `grid-${product.id}-${index}` && (product.images?.[1] as any)?.url
@@ -628,20 +608,20 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                             sizes="(max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
                                                         />
                                                         {loadingProducts.has(product.id) && (
-                                                            <section className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
-                                                                <section className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-gray-400"></section>
-                                                            </section>
+                                                            <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
+                                                                <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-gray-400"></div>
+                                                            </div>
                                                         )}
-                                                    </section>
+                                                    </div>
                                                 ) : (
                                                     <ProductImageCarousel product={product} wasDragged={wasDraggedRef} />
                                                 )
                                             ) : (
-                                                <section className="w-full h-full overflow-hidden bg-gray-100" />
+                                                <div className="w-full h-full overflow-hidden bg-gray-100" />
                                             )}
-                                            <section className="absolute bottom-2 left-2 text-red-600 text-sm font-medium opacity-80">
+                                            <div className="absolute bottom-2 left-2 text-red-600 text-sm font-medium opacity-80">
                                                 FINEYST
-                                            </section>
+                                            </div>
                                             <button
                                                 className=" absolute w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 right-12  md:top-3 md:right-3  -bottom-4 left-33"
                                                 aria-label="Add to wishlist"
@@ -679,22 +659,22 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                 </svg>
                                             </button>
                                             {product.isFeatured && (
-                                                <motion.section
+                                                <motion.div
                                                     className="absolute top-3 left-0 z-10"
                                                     initial={{ x: -50, opacity: 0 }}
                                                     animate={{ x: 0, opacity: 1 }}
                                                     transition={{ duration: 0.3, delay: 0.1 }}
                                                 >
-                                                    <section className="relative">
-                                                        <section className="bg-black text-white py-0.5 px-2 shadow-md flex items-center">
+                                                    <div className="relative">
+                                                        <div className="bg-black text-white py-0.5 px-2 shadow-md flex items-center">
                                                             <span className="font-semibold tracking-wide text-[8px] md:text-xs">BEST SELLING</span>
-                                                        </section>
-                                                    </section>
-                                                </motion.section>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
                                             )}
                                             <AnimatePresence>
                                                 {isDesktop && hoveredProduct === `grid-${product.id}-${index}` && ((product as any).sizeDetails || (product as any).sizes) && ((product as any).sizeDetails || (product as any).sizes).length > 0 && (
-                                                    <motion.section
+                                                    <motion.div
                                                         className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 z-20"
                                                         initial={{ opacity: 0, y: 20 }}
                                                         animate={{ opacity: 1, y: 0 }}
@@ -702,11 +682,11 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                         transition={{ duration: 0.15 }}
                                                         onClick={(e) => e.stopPropagation()}
                                                     >
-                                                        <section className="p-3">
-                                                            <section className="text-xs mb-2">
+                                                        <div className="p-3">
+                                                            <div className="text-xs mb-2">
                                                                 Quick Shop <span className="text-gray-500">(Select your Size)</span>
-                                                            </section>
-                                                            <section className="flex flex-wrap gap-1">
+                                                            </div>
+                                                            <div className="flex flex-wrap gap-1">
                                                                 {((product as any).sizeDetails || (product as any).sizes).map((size: any) => (
                                                                     <button
                                                                         key={size.id}
@@ -722,37 +702,37 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                                         {size.name}
                                                                     </button>
                                                                 ))}
-                                                            </section>
-                                                        </section>
-                                                    </motion.section>
+                                                            </div>
+                                                        </div>
+                                                    </motion.div>
                                                 )}
                                             </AnimatePresence>
-                                        </section>
-                                        <section className="mt-6 xs:mt-6 sm:mt-6 md:mt-4 lg:mt-4 xl:mt-4 2xl:mt-4">
+                                        </div>
+                                        <div className="mt-6 xs:mt-6 sm:mt-6 md:mt-4 lg:mt-4 xl:mt-4 2xl:mt-4">
                                             <h3 className="text-sm line-clamp-1">{product.name}</h3>
-                                            <section className="mt-1 xs:mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-1 2xl:mt-1">
+                                            <div className="mt-1 xs:mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-1 2xl:mt-1">
                                                 {product.salePrice && Number(product.salePrice) > 0 ? (
-                                                    <section className="flex items-center gap-1">
+                                                    <div className="flex items-center gap-1">
                                                         <span className="text-sm line-through text-black-500">${product.price}</span>
                                                         <span className="text-sm font-bold text-[#B61f28]">${product.salePrice}</span>
-                                                    </section>
+                                                    </div>
                                                 ) : (
                                                     <span className="text-sm font-bold text-[#B61f28]">${product.price}</span>
                                                 )}
-                                            </section>
-                                            <section className="mt-2">
-                                                <section
+                                            </div>
+                                            <div className="mt-2">
+                                                <div
                                                     className="relative inline-flex items-center gap-2 px-3 py-2 bg-gray-50 border border-black"
                                                     onClick={(e) => e.stopPropagation()}
                                                 >
                                                     {((product as any).colorDetails || (product as any).colors || [{ value: '#000000', name: 'Black' }]).slice(0, 1).map((color: any, index: number) => (
-                                                        <section key={index} className="flex items-center gap-1">
-                                                            <section
+                                                        <div key={index} className="flex items-center gap-1">
+                                                            <div
                                                                 className="w-4 h-4 rounded-full border border-black/30"
                                                                 style={{ backgroundColor: color.value || '#000000' }}
                                                             />
                                                             <span className="text-xs text-gray-700">{color.name || 'Black'}</span>
-                                                        </section>
+                                                        </div>
                                                     ))}
                                                     {((product as any).colorDetails || (product as any).colors || []).length > 1 && (
                                                         <>
@@ -787,23 +767,23 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
 
                                                             {/* Color Popup inside the color box container */}
                                                             {colorPopup?.productKey === `${product.id}-${index}` && isDesktop && (
-                                                                <section className="absolute -top-32 left-0 z-50 bg-white border-2 border-gray-600 shadow-2xl w-52">
-                                                                    <section className="p-3">
-                                                                        <section className="flex items-center justify-between mb-3 pb-2 border-b border-black-200">
+                                                                <div className="absolute -top-32 left-0 z-50 bg-white border-2 border-gray-600 shadow-2xl w-52">
+                                                                    <div className="p-3">
+                                                                        <div className="flex items-center justify-between mb-3 pb-2 border-b border-black-200">
                                                                             <h4 className="text-sm font-semibold text-grey">
                                                                                 Color: {(() => {
                                                                                     const colors = (product as any)?.colorDetails || (product as any)?.colors || []
                                                                                     return colors[0]?.name || 'Black'
                                                                                 })()}
                                                                             </h4>
-                                                                        </section>
-                                                                        <section className="flex gap-2 mb-2">
+                                                                        </div>
+                                                                        <div className="flex gap-2 mb-2">
                                                                             {((product as any)?.colorDetails || (product as any)?.colors || []).map((color: any) => {
                                                                                 const colorLinks = product?.colorLinks || {}
                                                                                 const colorLink = colorLinks[color.name]
 
                                                                                 return (
-                                                                                    <section
+                                                                                    <div
                                                                                         key={color.id}
                                                                                         className="cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-md"
                                                                                         onClick={async (e) => {
@@ -841,25 +821,25 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                                                             setColorPopup(null)
                                                                                         }}
                                                                                     >
-                                                                                        <section className="w-10 h-10 rounded-full border-2 border-gray-600 shadow-sm">
-                                                                                            <section
+                                                                                        <div className="w-10 h-10 rounded-full border-2 border-gray-600 shadow-sm">
+                                                                                            <div
                                                                                                 className="w-full h-full rounded-full border-2 border-white"
                                                                                                 style={{ backgroundColor: color.value }}
                                                                                             />
-                                                                                        </section>
-                                                                                    </section>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 )
                                                                             })}
-                                                                        </section>
-                                                                    </section>
-                                                                </section>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             )}
 
                                                             {colorPopup?.productKey === `${product.id}-${index}` && !isDesktop && (
-                                                                <section className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
-                                                                    <section className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto">
+                                                                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
+                                                                    <div className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto">
                                                                         {/* Header */}
-                                                                        <section className="flex items-center justify-between p-5 ">
+                                                                        <div className="flex items-center justify-between p-5 ">
                                                                             <h2 className="text-lg font-bold">Select Color</h2>
                                                                             <button
                                                                                 onClick={() => setColorPopup(null)}
@@ -867,16 +847,16 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                                             >
                                                                                 <X size={20} />
                                                                             </button>
-                                                                        </section>
+                                                                        </div>
 
-                                                                        <section className="p-4">
-                                                                            <section className="grid grid-cols-4 gap-4">
+                                                                        <div className="p-4">
+                                                                            <div className="grid grid-cols-4 gap-4">
                                                                                 {((product as any)?.colorDetails || (product as any)?.colors || []).map((color: any) => {
                                                                                     const colorLinks = product?.colorLinks || {}
                                                                                     const colorLink = colorLinks[color.name]
 
                                                                                     return (
-                                                                                        <section
+                                                                                        <div
                                                                                             key={color.id}
                                                                                             className="flex flex-col items-center gap-2 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
                                                                                             onClick={async (e) => {
@@ -914,36 +894,36 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                                                                 setColorPopup(null)
                                                                                             }}
                                                                                         >
-                                                                                            <section className="w-12 h-12 rounded-full border-2 border-gray-300">
-                                                                                                <section
+                                                                                            <div className="w-12 h-12 rounded-full border-2 border-gray-300">
+                                                                                                <div
                                                                                                     className="w-full h-full rounded-full border-2 border-white"
                                                                                                     style={{ backgroundColor: color.value }}
                                                                                                 />
-                                                                                            </section>
+                                                                                            </div>
                                                                                             <span className="text-xs text-center font-medium">{color.name}</span>
-                                                                                        </section>
+                                                                                        </div>
                                                                                     )
                                                                                 })}
-                                                                            </section>
-                                                                        </section>
-                                                                    </section>
-                                                                </section>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             )}
                                                         </>
                                                     )}
-                                                </section>
-                                            </section>
-                                        </section>
-                                    </motion.section>))}
-                            </section>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </motion.div>))}
+                            </div>
                         </>
                     ) : (
-                        <section className="text-center py-10">No products found in this category.</section>
+                        <div className="text-center py-10">No products found in this category.</div>
                     )}
-                </section>
-                <section ref={paginationSectionRef}>
+                </div>
+                <div ref={paginationSectionRef}>
                     {totalPages > 1 && (
-                        <section className="flex items-center justify-center gap-2 mt-8 mb-4">
+                        <div className="flex items-center justify-center gap-2 mt-8 mb-4">
                             <button
                                 onClick={() => handlePageChange(currentPage - 1)}
                                 disabled={!hasPreviousPage}
@@ -975,9 +955,9 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                             >
                                 Next
                             </button>
-                        </section>
+                        </div>
                     )}
-                </section>
+                </div>
                 <style jsx global>{`
           .hide-scrollbar {
             -webkit-overflow-scrolling: touch;
@@ -991,7 +971,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
             }
           }
         `}</style>
-                <section id="lower-content-section">
+                <div id="lower-content-div">
                     {currentProducts.length > 0 && (
                         <WeThinkYouWillLove
                             products={currentProducts}
@@ -1027,15 +1007,15 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                             `Explore our premium collection of ${category.name.toLowerCase()} designed with quality and style in mind. Our carefully curated selection offers something for everyone.`
                         }
                     />
-                </section>
+                </div>
                 <Sheet open={categoriesSidebarOpen} onOpenChange={setCategoriesSidebarOpen}>
                     <SheetContent side="left" className="w-[85vw] max-w-[300px] p-0 z-[9999]" style={{ zIndex: 9999 }}>
-                        <section className="h-full flex flex-col">
+                        <div className="h-full flex flex-col">
                             <SheetHeader className="text-left px-4 pt-4 pb-2 border-b">
                                 <SheetTitle className="text-xl font-bold">Categories</SheetTitle>
                             </SheetHeader>
-                            <section className="flex-1 overflow-y-auto p-4">
-                                <section className="grid grid-cols-2 gap-2">
+                            <div className="flex-1 overflow-y-auto p-4">
+                                <div className="grid grid-cols-2 gap-2">
                                     {allCategories.map((cat) => {
                                         const categorySlug = cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-');
                                         return (
@@ -1056,16 +1036,16 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                             </button>
                                         )
                                     })}
-                                </section>
-                            </section>
-                        </section>
+                                </div>
+                            </div>
+                        </div>
                     </SheetContent>
                 </Sheet>
                 <Sheet open={filterSidebarOpen} onOpenChange={setFilterSidebarOpen}>
                     <SheetContent side="left" className="w-[85vw] max-w-[300px] p-0 z-[9999]" style={{ zIndex: 9999 }}>
-                        <section className="h-full flex flex-col">
+                        <div className="h-full flex flex-col">
                             <SheetHeader className="text-left px-4 pt-4 pb-2 border-b">
-                                <section className="flex justify-between items-center">
+                                <div className="flex justify-between items-center">
                                     <SheetTitle className="text-xl font-bold">Filters</SheetTitle>
                                     {hasActiveFilters && (
                                         <button
@@ -1075,10 +1055,10 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                             Clear all
                                         </button>
                                     )}
-                                </section>
+                                </div>
                             </SheetHeader>
-                            <section className="flex-1 overflow-y-auto p-4">
-                                <section className="mb-6">
+                            <div className="flex-1 overflow-y-auto p-4">
+                                <div className="mb-6">
                                     <h3 className="text-base font-semibold mb-3 flex items-center">
                                         <span className="w-6 h-6 rounded-full bg-black-100 text-red-600 flex items-center justify-center mr-2">
                                             <svg
@@ -1097,7 +1077,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                         </span>
                                         Sizes
                                     </h3>
-                                    <section className="grid grid-cols-3 gap-2">
+                                    <div className="grid grid-cols-3 gap-2">
                                         {sizes.map((size) => (
                                             <button
                                                 key={size}
@@ -1112,9 +1092,9 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                 {size}
                                             </button>
                                         ))}
-                                    </section>
-                                </section>
-                                <section className="mb-6">
+                                    </div>
+                                </div>
+                                <div className="mb-6">
                                     <h3 className="text-base font-semibold mb-3 flex items-center">
                                         <span className="w-6 h-6 rounded-full bg-black-100 text-red-600 flex items-center justify-center mr-2">
                                             <svg
@@ -1136,7 +1116,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                         </span>
                                         Colors
                                     </h3>
-                                    <section className="grid grid-cols-2 gap-2">
+                                    <div className="grid grid-cols-2 gap-2">
                                         {colors.map((color) => (
                                             <button
                                                 key={color}
@@ -1155,26 +1135,26 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                 {color}
                                             </button>
                                         ))}
-                                    </section>
-                                </section>
-                            </section>
-                            <section className="border-t p-4">
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="border-t p-4">
                                 <button
                                     onClick={() => setFilterSidebarOpen(false)}
                                     className="w-full bg-[#2b2b2b] text-white py-3 rounded-md font-medium hover:bg-black-700 transition-colors"
                                 >
                                     Apply Filters
                                 </button>
-                            </section>
-                        </section>
+                            </div>
+                        </div>
                     </SheetContent>
                 </Sheet>
                 <Dialog open={sizeModalOpen} onOpenChange={setSizeModalOpen}>
                     <DialogContent className="sm:max-w-[600px] z-[9999]" style={{ zIndex: 9999 }}>
                         <DialogHeader>
                             <DialogTitle className="flex items-center justify-between">
-                                <section className="text-xl pl-5 font-bold">FINEYST</section>
-                                <section className="flex items-center">
+                                <div className="text-xl pl-5 font-bold">FINEYST</div>
+                                <div className="flex items-center">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="20"
@@ -1192,11 +1172,11 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                         <path d="M8 16l8-8"></path>
                                     </svg>
                                     <span className="text-base font-medium">FIT FINDER</span>
-                                </section>
+                                </div>
                                 <button className="text-sm pr-9 text-gray-600 hover:underline">Privacy</button>
                             </DialogTitle>
                         </DialogHeader>
-                        <section className="py-4">
+                        <div className="py-4">
                             <motion.h2
                                 className="text-xl font-bold text-center mb-4"
                                 initial={{ opacity: 0, y: -10 }}
@@ -1213,7 +1193,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                             >
                                 Receive size recommendations by entering your data for each category
                             </motion.p>
-                            <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 {[
                                     {
                                         title: "Tops",
@@ -1279,7 +1259,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                         description: "Size recommendations for shoes",
                                     },
                                 ].map((category, index) => (
-                                    <motion.section
+                                    <motion.div
                                         key={index}
                                         className="border rounded-md p-4 flex flex-col"
                                         initial={{ opacity: 0, y: 20 }}
@@ -1291,13 +1271,13 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                             transition: { duration: 0.2 },
                                         }}
                                     >
-                                        <section className="flex flex-col flex-grow items-center text-center">
-                                            <motion.section className="mb-2" whileHover={{ rotate: 5 }}>
+                                        <div className="flex flex-col flex-grow items-center text-center">
+                                            <motion.div className="mb-2" whileHover={{ rotate: 5 }}>
                                                 {category.icon}
-                                            </motion.section>
+                                            </motion.div>
                                             <h3 className="font-bold mb-2">{category.title}</h3>
                                             <p className="text-sm text-gray-600 mb-4">{category.description}</p>
-                                        </section>
+                                        </div>
                                         <motion.button
                                             className="bg-black text-white hover:bg-gray-800 w-full py-2 rounded flex items-center justify-center flex-shrink-0"
                                             whileHover={{ scale: 1.03 }}
@@ -1319,10 +1299,10 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                 <polyline points="9 18 15 12 9 6"></polyline>
                                             </svg>
                                         </motion.button>
-                                    </motion.section>
+                                    </motion.div>
                                 ))}
-                            </section>
-                        </section>
+                            </div>
+                        </div>
                     </DialogContent>
                 </Dialog>
                 <CartSidebar
@@ -1365,7 +1345,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
           .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #9ca3af;
           }
-          /* Hide scrollbar for recently viewed section */
+          /* Hide scrollbar for recently viewed div */
           .hide-scrollbar::-webkit-scrollbar {
             display: none;
           }
@@ -1401,7 +1381,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
           }
         `}</style>
-            </section>
+            </div>
 
 
 
@@ -1416,61 +1396,51 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                 />
             )}
 
-            {/* CategorySlider */}
             <CategorySlider
                 isOpen={categorySliderOpen}
                 onClose={() => setCategorySliderOpen(false)}
                 categories={allCategories.map(cat => {
-                    // Count products in this category with more flexible matching
                     const productCount = products.filter(product => {
-                        // Check if product has a category
                         if (!product.category) return false;
-                        
-                        // Simple name matching - check if category names are similar
+
                         const productCategoryName = product.category.name?.toLowerCase().trim();
                         const targetCategoryName = cat.name?.toLowerCase().trim();
-                        
-                        // Direct match
+
                         if (productCategoryName === targetCategoryName) return true;
-                        
-                        // Partial match - check if one contains the other
-                        if (productCategoryName?.includes(targetCategoryName) || 
+
+                        if (productCategoryName?.includes(targetCategoryName) ||
                             targetCategoryName?.includes(productCategoryName)) return true;
-                        
-                        // Check for common variations
-                        if (targetCategoryName === 'leather jackets' && 
+
+                        if (targetCategoryName === 'leather jackets' &&
                             (productCategoryName?.includes('leather') || productCategoryName?.includes('jacket'))) return true;
-                        
-                        if (targetCategoryName === "women's jackets" && 
+
+                        if (targetCategoryName === "women's jackets" &&
                             (productCategoryName?.includes('women') || productCategoryName?.includes('jacket'))) return true;
-                        
-                        if (targetCategoryName === "men's jackets" && 
+
+                        if (targetCategoryName === "men's jackets" &&
                             (productCategoryName?.includes('men') || productCategoryName?.includes('jacket'))) return true;
-                        
-                        if (targetCategoryName === 'coats' && 
+
+                        if (targetCategoryName === 'coats' &&
                             productCategoryName?.includes('coat')) return true;
-                        
+
                         return false;
                     }).length;
-                    
+
                     return {
                         id: cat.id,
                         name: cat.name,
                         slug: cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-'),
                         description: cat.description || `Explore our premium collection of ${cat.name}`,
                         imageUrl: (() => {
-                            // Try to find a matching image based on category name
                             const categoryName = cat.name.toLowerCase();
                             const categorySlug = cat.slug?.toLowerCase() || categoryName.replace(/\s+/g, '-');
-                            
+
                             let finalImageUrl = cat.imageUrl;
-                            
+
                             if (!finalImageUrl) {
-                                // Check for exact matches first
                                 if (categoryIcons[categorySlug]) {
                                     finalImageUrl = categoryIcons[categorySlug];
                                 }
-                                // Check for partial matches in category name
                                 else if (categoryName.includes('leather')) finalImageUrl = '/images/leather.webp';
                                 else if (categoryName.includes('denim')) finalImageUrl = '/images/denim.webp';
                                 else if (categoryName.includes('suede')) finalImageUrl = '/images/suede.webp';
@@ -1483,10 +1453,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                 else if (categoryName.includes('wool')) finalImageUrl = '/images/leather.webp'; // Fallback for wool
                                 else finalImageUrl = '/images/leather.webp'; // Default fallback
                             }
-                            
-                            // Debug logging
-                            console.log(`Category: ${cat.name}, Image URL: ${finalImageUrl}`);
-                            
+
                             return finalImageUrl;
                         })(),
                         materials: cat.materials || ['Premium Quality'],

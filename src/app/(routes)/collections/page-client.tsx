@@ -8,7 +8,7 @@ import type { Category } from "@/types"
 import CategoryPageClient from "./page-client"
 import { notFound } from "next/navigation"
 import type { Metadata, ResolvingMetadata } from "next"
-import StructuredData from "@/src/app/components/layout/structured-data"
+import StructuredData from "@/src/app/components/layout/structured-data-layout"
 
 interface CategoryPageProps {
   params: { slug: string }
@@ -187,7 +187,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
       }
       
       return (
-        <section className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white">
           <StructuredData data={keywordStructuredData} />
           <CategoryPageClient 
             category={categoryForClient} 
@@ -197,7 +197,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
             keywordCategories={keywordCategories}
             isKeywordCategory={true}
           />
-        </section>
+        </div>
       )
     }
 
@@ -242,7 +242,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
     }
     
     return (
-      <section className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white">
         <StructuredData data={categoryStructuredData} />
         <CategoryPageClient 
           category={category} 
@@ -252,7 +252,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
           keywordCategories={keywordCategories}
           isKeywordCategory={false}
         />
-      </section>
+      </div>
     )
   } catch (error) {
     console.error("Error rendering category page:", error)
@@ -261,15 +261,15 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
       <section className="min-h-screen bg-white p-8">
         <h1 className="text-2xl font-bold text-red-600 mb-4">Error Loading Category</h1>
         <p className="mb-4">We encountered an error while trying to load this category.</p>
-        <section className="bg-gray-100 p-4 rounded-md">
+        <div className="bg-gray-100 p-4 rounded-md">
           <h3 className="font-bold mb-2">Technical Details:</h3>
           <p className="font-mono text-sm">{error instanceof Error ? error.message : "Unknown error"}</p>
-        </section>
-        <section className="mt-8">
+        </div>
+        <div className="mt-8">
           <a href="/" className="text-blue-600 hover:underline">
             Return to Home Page
           </a>
-        </section>
+        </div>
       </section>
     )
   }

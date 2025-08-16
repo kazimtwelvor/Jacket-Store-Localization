@@ -12,7 +12,6 @@ export default function MyDataPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("my-data");
 
-  // Mock user data - in a real app, this would come from an API
   const userData = {
     name: "Admin User",
     email: "admin@example.com",
@@ -21,7 +20,6 @@ export default function MyDataPage() {
     customerNumber: "12754689",
   };
 
-  // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/auth/login");
@@ -34,10 +32,9 @@ export default function MyDataPage() {
 
   return (
     <Container>
-      <div className="min-h-screen py-6 md:py-8 lg:py-10">
+      <section className="min-h-screen py-6 md:py-8 lg:py-10">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row">
-            {/* Sidebar Navigation */}
             <div className="w-full md:w-64 mb-6 md:mb-0">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="flex flex-col space-y-1">
@@ -84,7 +81,6 @@ export default function MyDataPage() {
               </div>
             </div>
 
-            {/* Main Content */}
             <div className="flex-1 md:ml-8">
               <div className="flex items-center mb-8">
                 <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mr-6">
@@ -112,7 +108,6 @@ export default function MyDataPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Personal Data Section */}
                 <div className="bg-gray-50 p-6 rounded-lg">
                   <h2 className="font-bold text-lg mb-4">MY DATA</h2>
                   <div className="space-y-2 mb-6">
@@ -131,7 +126,6 @@ export default function MyDataPage() {
                   </button>
                 </div>
 
-                {/* Membership Section */}
                 <div className="bg-gray-50 p-6 rounded-lg">
                   <div className="flex justify-center mb-4">
                     <div className="w-24 h-24">
@@ -154,7 +148,7 @@ export default function MyDataPage() {
                   </div>
                 </div>
 
-                {/* Invoice Address Section */}
+                {/* Invoice Address div */}
                 <div className="bg-gray-50 p-6 rounded-lg">
                   <h2 className="font-bold text-lg mb-4">INVOICE ADDRESS</h2>
                   <div className="mb-2">
@@ -182,7 +176,7 @@ export default function MyDataPage() {
                   </div>
                 </div>
 
-                {/* Credit Card Section */}
+                {/* Credit Card div */}
                 <div className="bg-gray-50 p-6 rounded-lg">
                   <h2 className="font-bold text-lg mb-4">
                     CREDIT CARD INFORMATION
@@ -198,7 +192,7 @@ export default function MyDataPage() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </Container>
   );
 }

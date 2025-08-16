@@ -1,8 +1,5 @@
 "use client"
 
-// import Gallery from "../../gallery"
-// import useCart from "../../hooks/use-cart"
-// import useWishlist from "../../hooks/use-wishlist"
 import { useState } from "react"
 import type { ProductImage, Product } from "@/types"
 import { useCart } from "../../contexts/CartContext"
@@ -20,12 +17,10 @@ const GalleryWrapper: React.FC<GalleryWrapperProps> = ({ images, product }) => {
   const wishlist = useWishlist()
   const [hasMounted, setHasMounted] = useState(false)
   
-  // Only access wishlist state after mounting to prevent hydration mismatches
   const isInWishlist = hasMounted ? wishlist.isInWishlist(product.id) : false
   
   const [showMobileSizeModal, setShowMobileSizeModal] = useState(false)
 
-  // Set mounted state after component mounts
   React.useEffect(() => {
     setHasMounted(true)
   }, [])
@@ -48,7 +43,6 @@ const GalleryWrapper: React.FC<GalleryWrapperProps> = ({ images, product }) => {
         isInWishlist={isInWishlist}
       />
       
-      {/* Mobile Size Selection Modal */}
       {showMobileSizeModal && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-[99999]" 

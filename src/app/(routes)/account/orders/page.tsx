@@ -14,17 +14,11 @@ import {
   Calendar,
   Container,
   Badge,
-  Currency,
 } from "lucide-react";
-// import useAuth from "@/hooks/use-auth"
-// import Container from "@/components/ui/container"
 import Link from "next/link";
 import { format } from "date-fns";
 import useAuth from "@/src/app/hooks/use-auth";
 import { Skeleton } from "@/src/app/ui/skeleton";
-// import { Skeleton } from "@/components/ui/skeleton"
-// import { Badge } from "@/components/ui/badge"
-// import Currency from "@/components/ui/currency"
 
 interface OrderItem {
   id: string;
@@ -65,14 +59,12 @@ export default function OrderHistoryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/auth/login");
     }
   }, [isAuthenticated, router]);
 
-  // Fetch orders when component mounts
   useEffect(() => {
     const fetchOrders = async () => {
       if (!isAuthenticated || !token) return;
@@ -138,10 +130,9 @@ export default function OrderHistoryPage() {
 
   return (
     <Container>
-      <div className="min-h-screen py-6 md:py-8 lg:py-10">
+      <section className="min-h-screen py-6 md:py-8 lg:py-10">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row">
-            {/* Sidebar Navigation */}
             <div className="w-full md:w-64 mb-6 md:mb-0">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="flex flex-col space-y-1">
@@ -193,9 +184,7 @@ export default function OrderHistoryPage() {
               </div>
             </div>
 
-            {/* Main Content */}
             <div className="flex-1 md:ml-8">
-              {/* Header */}
               <div className="bg-gray-50 p-6 rounded-lg mb-6">
                 <div className="flex items-center">
                   <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
@@ -211,7 +200,6 @@ export default function OrderHistoryPage() {
                 </div>
               </div>
 
-              {/* Tabs */}
               <div className="border-b border-gray-200 mb-6">
                 <div className="flex">
                   <button
@@ -237,7 +225,6 @@ export default function OrderHistoryPage() {
                 </div>
               </div>
 
-              {/* Content */}
               <div className="py-4">
                 {activeTab === "online" && (
                   <>
@@ -296,7 +283,6 @@ export default function OrderHistoryPage() {
                             key={order.id}
                             className="border rounded-lg overflow-hidden"
                           >
-                            {/* Order Header */}
                             <div className="bg-gray-50 p-4 flex flex-col md:flex-row md:items-center md:justify-between">
                               <div className="mb-2 md:mb-0">
                                 <p className="text-sm text-gray-500">
@@ -329,7 +315,6 @@ export default function OrderHistoryPage() {
                               </div>
                             </div>
 
-                            {/* Order Items */}
                             <div className="p-4">
                               {order.orderItems.map((item) => (
                                 <div
@@ -371,7 +356,6 @@ export default function OrderHistoryPage() {
                               ))}
                             </div>
 
-                            {/* Order Footer */}
                             <div className="bg-gray-50 p-4 flex flex-wrap gap-4 items-center justify-between">
                               <div className="flex items-center">
                                 {order.paymentMethod && (
@@ -428,7 +412,7 @@ export default function OrderHistoryPage() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </Container>
   );
 }

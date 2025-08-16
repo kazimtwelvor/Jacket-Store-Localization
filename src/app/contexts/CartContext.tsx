@@ -2,7 +2,6 @@
 
 import { Product } from '@/types'
 import { createContext, useContext, useState, ReactNode } from 'react'
-// import type { Product } from '../types'
 
 export interface CartItem {
   id: string
@@ -34,7 +33,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       if (saved) {
         try {
           const cartData = JSON.parse(saved)
-          // Check if cart has timestamp (new format)
           if (cartData.timestamp) {
             const isExpired = Date.now() - cartData.timestamp > (CART_EXPIRY_DAYS * 24 * 60 * 60 * 1000)
             if (!isExpired) {
@@ -42,7 +40,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             }
             localStorage.removeItem('cart-items')
           } else {
-            // Old format without timestamp, treat as expired
             localStorage.removeItem('cart-items')
           }
         } catch (error) {
@@ -55,10 +52,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addToCart = (product: Product, size: string, selectedColor?: string) => {
     const itemId = `${product.id}-${size}-${selectedColor || 'default'}`
-    const unitPrice = product.salePrice && Number(product.salePrice) > 0 
-      ? Number(product.salePrice) 
+    const unitPrice = product.salePrice && Number(product.salePrice) > 0
+      ? Number(product.salePrice)
       : Number(product.price || 0)
-    
+
     setItems(prev => {
       const existingItem = prev.find(item => item.id === itemId)
       let newItems
@@ -69,17 +66,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             : item
         )
       } else {
-        newItems = [...prev, { 
-          id: itemId, 
+        newItems = [...prev, {
+          id: itemId,
           product: {
             ...product,
             price: Number(product.price || 0),
             salePrice: product.salePrice && Number(product.salePrice) > 0 ? Number(product.salePrice) : undefined
-          }, 
+          },
           size,
-          selectedColor, 
-          quantity: 1, 
-          unitPrice 
+          selectedColor,
+          quantity: 1,
+          unitPrice
         }]
       }
       const cartData = {

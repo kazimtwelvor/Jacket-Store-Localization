@@ -209,35 +209,35 @@ export default function JacketColorCollection() {
 
   return (
     <section className="bg-gradient-to-br from-zinc-950 via-black to-zinc-900 text-white relative overflow-hidden">
-      <section className="absolute inset-0 opacity-5">
-        <section className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]"></section>
-      </section>
-      
-      <section className="container mx-auto px-4 pt-10 pb-12 md:pb-20 relative z-10">
-        <section className="text-center mb-20">
-         
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]"></div>
+      </div>
+
+      <div className="container mx-auto px-4 pt-10 pb-12 md:pb-20 relative z-10">
+        <div className="text-center mb-20">
+
           <h2 className={`text-2xl sm:text-3xl md:text-4xl mb-6 tracking-tight leading-tight ${avertaBlack.className}`}>
             OUR COLOR COLLECTION
           </h2>
 
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed ">
-            Discover our exclusive range of premium jackets across different styles. 
+            Discover our exclusive range of premium jackets across different styles.
           </p>
-          
-        </section>
+
+        </div>
 
         {/* Collections Carousel */}
-        <section className="w-full bg-transparent flex justify-end overflow-hidden">
-          <section className="w-full max-w-[1896px]  py-0 m-0 pl-4 md:pl-8 lg:pl-12">
-            <section
+        <div className="w-full bg-transparent flex justify-end overflow-hidden">
+          <div className="w-full max-w-[1896px]  py-0 m-0 pl-4 md:pl-8 lg:pl-12">
+            <div
               className="relative"
               ref={carouselRef}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
             >
-              <section className="overflow-hidden">
-                <motion.section
+              <div className="overflow-hidden">
+                <motion.div
                   className="flex gap-3 sm:gap-4 md:gap-5 lg:gap-6 cursor-grab active:cursor-grabbing"
                   animate={{
                     x: -currentIndex * scrollAmount + dragOffset,
@@ -247,14 +247,14 @@ export default function JacketColorCollection() {
                   style={{ cursor: isDragging ? "grabbing" : "grab" }}
                 >
                   {colorCollections.map((item) => (
-                    <section
+                    <div
                       key={item.id}
                       className="group flex-shrink-0"
                       style={{ userSelect: "none" }}
                       onMouseUp={handleMouseUp}
                       onContextMenu={(e) => hasDragged && e.preventDefault()}
                     >
-                      <section className="relative overflow-hidden bg-white shadow-md w-[270px] h-[390px] sm:w-[270px] sm:h-[420px] md:w-[320px] md:h-[500px] lg:w-[340px] lg:h-[530px] xl:w-[360px] xl:h-[560px]">
+                      <div className="relative overflow-hidden bg-white shadow-md w-[270px] h-[390px] sm:w-[270px] sm:h-[420px] md:w-[320px] md:h-[500px] lg:w-[340px] lg:h-[530px] xl:w-[360px] xl:h-[560px]">
                         <img
                           src={item.imageUrl || "/placeholder.svg"}
                           alt={item.title}
@@ -263,12 +263,12 @@ export default function JacketColorCollection() {
                           onDragStart={(e) => e.preventDefault()}
                         />
                         {/* Always visible dark overlay */}
-                        <section className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></section>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
-                        <section className="absolute inset-x-0 bottom-0 p-4 group">
-                          <section className="transition-all duration-500 ease-in-out group-hover:-translate-y-8">
+                        <div className="absolute inset-x-0 bottom-0 p-4 group">
+                          <div className="transition-all duration-500 ease-in-out group-hover:-translate-y-8">
                             {/* Title + Arrow */}
-                            <section className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300 mb-5">
+                            <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300 mb-5">
                               <h3
                                 className={`text-white text-lg md:text-xl lg:text-2xl font-bold text-left transition-all duration-500 ${avertaBlack.className}`}
                                 dangerouslySetInnerHTML={{
@@ -278,25 +278,25 @@ export default function JacketColorCollection() {
                               <svg className="h-4 w-4 md:h-5 md:w-5 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                               </svg>
-                            </section>
-                          </section>
+                            </div>
+                          </div>
 
                           {/* Paragraph appears below title after hover */}
-                          <section className="absolute left-0 right-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
+                          <div className="absolute left-0 right-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
                             <p className="text-white/90 text-sm md:text-base">
                               {item.subtitle}
                             </p>
-                          </section>
-                        </section>
-                      </section>
-                    </section>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   ))}
-                </motion.section>
-              </section>
-            </section>
-          </section>
-        </section>
-      </section>
+                </motion.div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   )
 }

@@ -116,7 +116,7 @@ export default function HolidaySaleBanner() {
             </h1>
 
             <p className="text-sm sm:text-base px-6 mb-10 mx-auto text-center w-full">
-              UP TO <span className="font-bold">50%</span> OFF + CODE: STREET<span className="font-black">15</span>
+              UP TO <span className="font-bold">50%</span> OFF + CODE: STREET <span className="font-black">15</span>
             </p>
 
             <div className="flex justify-center gap-5 w-full">

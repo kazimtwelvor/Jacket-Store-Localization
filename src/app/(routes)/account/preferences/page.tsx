@@ -10,8 +10,6 @@ import {
   ArrowRight,
   Container,
 } from "lucide-react";
-// import useAuth from "@/hooks/use-auth"
-// import Container from "@/components/ui/container"
 import Link from "next/link";
 import useAuth from "@/src/app/hooks/use-auth";
 
@@ -19,7 +17,6 @@ export default function PreferencesPage() {
   const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
 
-  // Mock user data
   const userData = {
     street: "Street 1",
     city: "Austin",
@@ -29,7 +26,6 @@ export default function PreferencesPage() {
     phone: "+12555551454",
   };
 
-  // Communication preferences state
   const [preferences, setPreferences] = useState({
     mail: false,
     call: false,
@@ -38,7 +34,6 @@ export default function PreferencesPage() {
     email: true,
   });
 
-  // Handle preference change
   const handlePreferenceChange = (channel: keyof typeof preferences) => {
     setPreferences((prev) => ({
       ...prev,
@@ -46,7 +41,6 @@ export default function PreferencesPage() {
     }));
   };
 
-  // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/auth/login");
@@ -59,10 +53,9 @@ export default function PreferencesPage() {
 
   return (
     <Container>
-      <div className="min-h-screen py-6 md:py-8 lg:py-10">
+      <section className="min-h-screen py-6 md:py-8 lg:py-10">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row">
-            {/* Sidebar Navigation */}
             <div className="w-full md:w-64 mb-6 md:mb-0">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="flex flex-col space-y-1">
@@ -114,9 +107,7 @@ export default function PreferencesPage() {
               </div>
             </div>
 
-            {/* Main Content */}
             <div className="flex-1 md:ml-8">
-              {/* Header */}
               <div className="bg-gray-50 p-6 rounded-lg mb-6">
                 <div className="flex items-center">
                   <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
@@ -134,7 +125,6 @@ export default function PreferencesPage() {
                 </div>
               </div>
 
-              {/* Consent Text */}
               <div className="mb-8">
                 <p className="text-sm">
                   I agree and authorize FINEYST Fashions, Inc. and its
@@ -153,9 +143,7 @@ export default function PreferencesPage() {
                 </p>
               </div>
 
-              {/* Communication Preferences */}
               <div className="space-y-8">
-                {/* Mail */}
                 <div className="flex items-start">
                   <div className="flex h-5 items-center">
                     <input
@@ -180,7 +168,6 @@ export default function PreferencesPage() {
                   </div>
                 </div>
 
-                {/* Call */}
                 <div className="flex items-start">
                   <div className="flex h-5 items-center">
                     <input
@@ -201,7 +188,6 @@ export default function PreferencesPage() {
                   </div>
                 </div>
 
-                {/* SMS/MMS */}
                 <div className="flex items-start">
                   <div className="flex h-5 items-center">
                     <input
@@ -234,7 +220,6 @@ export default function PreferencesPage() {
                   </div>
                 </div>
 
-                {/* WhatsApp */}
                 <div className="flex items-start">
                   <div className="flex h-5 items-center">
                     <input
@@ -261,7 +246,6 @@ export default function PreferencesPage() {
                   </div>
                 </div>
 
-                {/* E-Mail */}
                 <div className="flex items-start">
                   <div className="flex h-5 items-center">
                     <input
@@ -285,7 +269,6 @@ export default function PreferencesPage() {
                 </div>
               </div>
 
-              {/* Consent Information */}
               <div className="mt-8 space-y-6 text-sm">
                 <p>
                   By providing my consent I authorize FINEYST Fashions, Inc. and
@@ -308,7 +291,6 @@ export default function PreferencesPage() {
                 </p>
               </div>
 
-              {/* Save Button */}
               <div className="mt-8 flex justify-end">
                 <button
                   type="button"
@@ -320,7 +302,7 @@ export default function PreferencesPage() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </Container>
   );
 }

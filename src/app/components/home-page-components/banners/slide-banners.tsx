@@ -56,24 +56,24 @@ export default function SlideBanners({
     }
 
     return (
-        <>
-            <section
+        <section>
+            <div
                 ref={bannerRef}
                 id="holiday-sale-banner-mobile"
                 className={`md:hidden w-full text-white overflow-hidden holiday-sale-banner relative transform-gpu z-5 ${className}`}
             >
                 <AnimatedBackground images={heroImages} currentIndex={currentImageIndex} />
-                <section className="absolute inset-0 bg-black/20"></section>
+                <div className="absolute inset-0 bg-black/20"></div>
                 <MobileBannerContent />
-            </section>
+            </div>
 
-            <section
+            <div
                 className={`hidden md:block w-full text-white overflow-hidden holiday-sale-banner relative will-change-transform z-5 ${className}`}
             >
                 <AnimatedBackground images={heroImages} currentIndex={currentImageIndex} />
-                <section className="absolute inset-0"></section>
+                <div className="absolute inset-0"></div>
                 <DesktopBannerContent />
-            </section>
-        </>
+            </div>
+        </section>
     )
 }

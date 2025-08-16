@@ -7,10 +7,9 @@ import useAuth from "@/src/app/hooks/use-auth"
 import Container from "@/src/app/ui/container"
 
 export default function AccountPage() {
-  const { user, isAuthenticated, logout } = useAuth()
+  const { isAuthenticated, logout } = useAuth()
   const router = useRouter()
 
-  // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/auth/login")
@@ -28,10 +27,8 @@ export default function AccountPage() {
 
   return (
     <Container>
-      <div className="min-h-screen py-6 md:py-8 lg:py-10">
-        {/* Header with black background */}
+      <section className="min-h-screen py-6 md:py-8 lg:py-10">
         <div className="bg-black text-white py-10 md:py-12 lg:py-16 px-4 text-center mb-8 md:mb-10 lg:mb-12 w-full md:w-full lg:w-[65%] mx-auto relative">
-          {/* Logout button - moved outside the inner div and positioned relative to the black header */}
           <div className="absolute top-4 right-4 md:top-6 md:right-6 lg:top-8 lg:right-8">
             <button
               onClick={handleLogout}
@@ -48,7 +45,6 @@ export default function AccountPage() {
               Members!
             </p>
 
-            {/* Sweepstakes buttons */}
             <div className="flex flex-col md:flex-row justify-center gap-4 mt-6 md:mt-8">
               <button className="bg-white text-black px-4 md:px-8 py-2 md:py-3 text-sm md:text-base font-bold hover:bg-gray-100 transition">
                 FINEYST X SUITS LA SWEEPS
@@ -60,10 +56,8 @@ export default function AccountPage() {
           </div>
         </div>
 
-        {/* Account options with circular icons */}
         <div className="max-w-5xl mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {/* My Data */}
             <div
               className="flex flex-col items-center text-center cursor-pointer"
               onClick={() => router.push("/account/my-data")}
@@ -75,7 +69,6 @@ export default function AccountPage() {
               <p className="text-gray-600 text-sm md:text-base">Personal data, address and payment methods</p>
             </div>
 
-            {/* My Preferences */}
             <div
               className="flex flex-col items-center text-center cursor-pointer"
               onClick={() => router.push("/account/preferences")}
@@ -87,7 +80,6 @@ export default function AccountPage() {
               <p className="text-gray-600 text-sm md:text-base">Choose your preferred communication channels</p>
             </div>
 
-            {/* Order History */}
             <div
               className="flex flex-col items-center text-center cursor-pointer"
               onClick={() => router.push("/account/orders")}
@@ -99,7 +91,6 @@ export default function AccountPage() {
               <p className="text-gray-600 text-sm md:text-base">Review your past orders</p>
             </div>
 
-            {/* My Wishlist */}
             <div
               className="flex flex-col items-center text-center cursor-pointer"
               onClick={() => router.push("/account/wishlist")}
@@ -112,7 +103,7 @@ export default function AccountPage() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </Container>
   )
 }

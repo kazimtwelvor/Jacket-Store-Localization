@@ -50,7 +50,6 @@ const ConfirmationPage = () => {
   const orderId = searchParams.get("orderId")
   const success = searchParams.get("success") === "1"
 
-  // Format date for estimated delivery (5 days from now)
   const estimatedDelivery = new Date()
   estimatedDelivery.setDate(estimatedDelivery.getDate() + 10)
   const formattedDeliveryDate = estimatedDelivery.toLocaleDateString("en-US", {
@@ -74,17 +73,11 @@ const ConfirmationPage = () => {
       return
     }
 
-    // Fetch order details from our Store API
     const fetchOrder = async () => {
       try {
 
-        // Extract storeId from the URL path or use a default
-        // This is just for the API route path, not for the actual API call
         const pathArray = window.location.pathname.split("/")
         const storeId = pathArray[1] === "checkout" ? "default" : pathArray[1]
-
-
-        // Use the Store API URL to fetch order details
         const response = await fetch(`/api/${storeId}/orders/${orderId}`)
 
         if (!response.ok) {
@@ -95,10 +88,8 @@ const ConfirmationPage = () => {
 
         const data = await response.json()
 
-        // Calculate the total price from items if totalPrice is missing or zero
         let calculatedTotalPrice = data.totalPrice
 
-        // If totalPrice is missing, zero, or "0", calculate from items
         if (!calculatedTotalPrice || calculatedTotalPrice === "0" || Number.parseFloat(calculatedTotalPrice) === 0) {
           if (data.orderItems && data.orderItems.length > 0) {
             calculatedTotalPrice = data.orderItems
@@ -112,7 +103,6 @@ const ConfirmationPage = () => {
           }
         }
 
-        // Format the order data if needed
         const formattedOrder = {
           id: data.id,
           orderNumber: data.id.substring(0, 8).toUpperCase(),
@@ -155,7 +145,6 @@ const ConfirmationPage = () => {
     fetchOrder()
   }, [orderId, success])
 
-  // Calculate subtotal from items for display
   const calculateSubtotal = () => {
     if (!order?.items || order.items.length === 0) {
       return order?.totalPrice || "0"
@@ -194,11 +183,10 @@ const ConfirmationPage = () => {
     )
   }
 
-  // If we don't have order data yet, we can still show the confirmation with the order ID
   const orderNumber = order?.orderNumber || orderId?.substring(0, 8).toUpperCase() || "Unknown"
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <section className="bg-gray-50 min-h-screen">
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -285,7 +273,6 @@ const ConfirmationPage = () => {
                   </h2>
 
                   <div className="divide-y divide-gray-200">
-                    {/* If we have order items, display them */}
                     {order?.items && order.items.length > 0 ? (
                       order.items.map((item, index) => (
                         <div key={item.id || index} className="py-4 flex">
@@ -360,7 +347,7 @@ const ConfirmationPage = () => {
                         <span className="text-sm font-medium">3</span>
                       </div>
                       <p className="text-gray-600">
-                        You can track your order in the "Order History" section of your account.
+                        You can track your order in the "Order History" div of your account.
                       </p>
                     </div>
                   </div>
@@ -386,7 +373,7 @@ const ConfirmationPage = () => {
           </div>
         </motion.div>
       </Container>
-    </div>
+    </section>
   )
 }
 

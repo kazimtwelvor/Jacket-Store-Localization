@@ -91,21 +91,21 @@ export default function WhyChooseSlider() {
 
     return (
         <section className="py-12 bg-black text-white relative">
-            <section className="absolute inset-0 z-0 hidden md:block">
+            <div className="absolute inset-0 z-0 hidden md:block">
                 <img
                     src={slides[currentSlide].imageUrl}
                     alt={slides[currentSlide].title}
                     className="w-full h-full object-contain object-right transition-all duration-500"
                 />
-                <section className="absolute inset-0 bg-black/10"></section>
-            </section>
+                <div className="absolute inset-0 bg-black/10"></div>
+            </div>
 
-            <section className="absolute inset-0 z-10 opacity-10">
-                <section className="absolute inset-0 bg-gradient-to-r from-[#2b2b2b]/20 to-transparent"></section>
-                <section className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width=60 height=60 viewBox=0 0 60 60 xmlns=http://www.w3.org/2000/svg%3E%3Cg fill=none fillRule=evenodd%3E%3Cg fill=%23ffffff fillOpacity=0.05%3E%3Ccircle cx=30 cy=30 r=2/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></section>
-            </section>
+            <div className="absolute inset-0 z-10 opacity-10">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#2b2b2b]/20 to-transparent"></div>
+                <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width=60 height=60 viewBox=0 0 60 60 xmlns=http://www.w3.org/2000/svg%3E%3Cg fill=none fillRule=evenodd%3E%3Cg fill=%23ffffff fillOpacity=0.05%3E%3Ccircle cx=30 cy=30 r=2/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+            </div>
 
-            <section className="relative w-full z-20">
+            <div className="relative w-full z-20">
                 <button
                     onClick={prevSlide}
                     className="absolute left-5 md:top-1/2 top-[68%] -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2 transition-all duration-300 group z-30"
@@ -119,67 +119,67 @@ export default function WhyChooseSlider() {
                     <ChevronRight className="w-5 h-5 text-white group-hover:text-[#2b2b2b]" />
                 </button>
 
-                <section className="relative">
-                    <section className="min-h-[500px] flex items-center">
-                        <section className="container mx-auto px-4">
-                            <section className="md:hidden space-y-6">
-                                <section className="text-center space-y-4 px-4">
-                                    <section className="flex items-center justify-center gap-3">
+                <div className="relative">
+                    <div className="min-h-[500px] flex items-center">
+                        <div className="container mx-auto px-4">
+                            <div className="md:hidden space-y-6">
+                                <div className="text-center space-y-4 px-4">
+                                    <div className="flex items-center justify-center gap-3">
                                         <h2 className={`text-white font-bold text-2xl sm:text-3xl leading-tight text-center ${avertaBlack.className}`}>
                                             {slides[currentSlide].title}
                                         </h2>
-                                    </section>
+                                    </div>
 
                                     <p className="text-gray-300 leading-relaxed text-center max-w-lg mx-auto">{slides[currentSlide].description}</p>
-                                </section>
+                                </div>
 
-                                <section className="w-full h-64 sm:h-80 bg-gray-800 overflow-hidden">
+                                <div className="w-full h-64 sm:h-80 bg-gray-800 overflow-hidden">
                                     <img
                                         src={slides[currentSlide].imageUrl}
                                         alt={slides[currentSlide].title}
                                         className="w-full h-full object-cover object-right"
                                     />
-                                </section>
+                                </div>
 
-                                <section className="space-y-2 pt-2 hidden">
+                                <div className="space-y-2 pt-2 hidden">
                                     <h4 className={`text-xl font-semibold text-white ${avertaBlack.className}`}>Key Features:</h4>
-                                    <section className="space-y-2">
+                                    <div className="space-y-2">
                                         {slides[currentSlide].features.map((feature, index) => (
-                                            <section key={index} className="flex items-center space-x-2">
-                                                <section className="w-2 h-2 bg-[#2b2b2b] rounded-full flex-shrink-0"></section>
+                                            <div key={index} className="flex items-center space-x-2">
+                                                <div className="w-2 h-2 bg-[#2b2b2b] rounded-full flex-shrink-0"></div>
                                                 <span className="text-gray-300">{feature}</span>
-                                            </section>
+                                            </div>
                                         ))}
-                                    </section>
-                                </section>
-                            </section>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <section className="hidden md:grid md:grid-cols-2 gap-8 items-center">
-                                <section className="text-center md:text-left space-y-4">
-                                    <section className="flex items-center gap-3 justify-center md:justify-start">
+                            <div className="hidden md:grid md:grid-cols-2 gap-8 items-center">
+                                <div className="text-center md:text-left space-y-4">
+                                    <div className="flex items-center gap-3 justify-center md:justify-start">
                                         <h2 className={`text-white font-bold text-[2.5rem] leading-none ${avertaBlack.className}`}>
                                             {slides[currentSlide].title}
                                         </h2>
-                                    </section>
+                                    </div>
                                     <p className="text-gray-300 leading-relaxed">{slides[currentSlide].description}</p>
-                                    <section className="space-y-2 pt-2 hidden xl:block">
+                                    <div className="space-y-2 pt-2 hidden xl:block">
                                         <h4 className={`text-xl font-semibold text-white ${avertaBlack.className}`}>KEY FEATURES:</h4>
-                                        <section className="space-y-2">
+                                        <div className="space-y-2">
                                             {slides[currentSlide].features.map((feature, index) => (
-                                                <section key={index} className="flex items-center space-x-2">
-                                                    <section className="w-2 h-2 bg-[#2b2b2b] rounded-full flex-shrink-0"></section>
+                                                <div key={index} className="flex items-center space-x-2">
+                                                    <div className="w-2 h-2 bg-[#2b2b2b] rounded-full flex-shrink-0"></div>
                                                     <span className="text-gray-300">{feature}</span>
-                                                </section>
+                                                </div>
                                             ))}
-                                        </section>
-                                    </section>
-                                </section>
-                                <section className="hidden md:block"></section>
-                            </section>
-                        </section>
-                    </section>
-                </section>
-                <section className="hidden lg:flex justify-center space-x-2 mt-8 relative z-20">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="hidden md:block"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="hidden lg:flex justify-center space-x-2 mt-8 relative z-20">
                     {slides.map((_, index) => (
                         <button
                             key={index}
@@ -188,8 +188,8 @@ export default function WhyChooseSlider() {
                                 }`}
                         />
                     ))}
-                </section>
-            </section>
+                </div>
+            </div>
         </section>
     )
 }

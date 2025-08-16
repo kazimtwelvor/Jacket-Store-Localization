@@ -997,8 +997,7 @@ const Navbar = () => {
                                         className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
                                         onClick={() => {
                                           router.push(
-                                            `/shop?category=${
-                                              product.category
+                                            `/shop?category=${product.category
                                             }&product=${product.name
                                               .toLowerCase()
                                               .replace(/\s+/g, "-")}`
@@ -1301,9 +1300,9 @@ const Navbar = () => {
                         </h2>
 
                         {searchQuery &&
-                        searchResults &&
-                        searchResults.products &&
-                        searchResults.products.length > 0 ? (
+                          searchResults &&
+                          searchResults.products &&
+                          searchResults.products.length > 0 ? (
                           /* Dynamic Search Results */
                           <div className="space-y-4">
                             {searchResults.products.map((product: any) => (
@@ -1312,8 +1311,7 @@ const Navbar = () => {
                                 className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
                                 onClick={() => {
                                   router.push(
-                                    `/shop?category=${
-                                      product.category
+                                    `/shop?category=${product.category
                                     }&product=${product.name
                                       .toLowerCase()
                                       .replace(/\s+/g, "-")}`

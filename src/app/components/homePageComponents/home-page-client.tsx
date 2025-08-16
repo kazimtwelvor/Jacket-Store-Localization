@@ -5,13 +5,13 @@ import { Truck, CreditCard, RefreshCw, Shield, Gift, HeadphonesIcon } from "luci
 import ProductCarousel from "./product-carousel"
 import DesktopCategoryCarousel from "./desktop-category-carousel"
 import HolidaySaleBanner from "./holiday-sale-banner"
-import AnimatedReviewsSection from "./animated-reviews-section"
-import AboutSection from "./about-section"
+import AnimatedReviewsSection from "./animated-reviews-div"
+import AboutSection from "./about-div"
 import { useMediaQuery } from "../../hooks/use-mobile"
 import GlobalFashionPartners from "./global-fashion-partners"
-import WelcomeAccordionSection from "./welcome-accordion-section"
-import SignatureStylesSection from "./signature-styles-section"
-import CollectionsBrowseSection from "./collections-browse-section"
+import WelcomeAccordionSection from "./welcome-accordion-div"
+import SignatureStylesSection from "./signature-styles-div"
+import CollectionsBrowseSection from "./collections-browse-div"
 import FAQ from "./faq"
 import WhyChooseFineystSlider from "./why-choose-fineyst-slider"
 import BlogsShowcase from "./BlogsShowcase"
@@ -62,9 +62,9 @@ export default function HomePageClient({ billboard, products, showcaseItems, fea
       { threshold: 0.1, rootMargin: "100px" },
     )
 
-    // Observe all section elements
-    document.querySelectorAll("section[id]").forEach((section) => {
-      observer.observe(section)
+    // Observe all div elements
+    document.querySelectorAll("div[id]").forEach((div) => {
+      observer.observe(div)
     })
 
     return () => {
@@ -101,28 +101,28 @@ export default function HomePageClient({ billboard, products, showcaseItems, fea
     <main className="flex flex-col w-full overflow-hidden">
       <h1 className="sr-only">Fineyst - Premium Leather Jackets and Streetwear</h1>
       {/* Holiday Banner */}
-      <section id="holiday-banner" className="w-full">
+      <div id="holiday-banner" className="w-full">
         <HolidaySaleBanner />
-      </section>
+      </div>
 
       {/* Welcome Accordion */}
-      <section id="welcome-accordion" className="w-full mb-0 pb-0">
+      <div id="welcome-accordion" className="w-full mb-0 pb-0">
         <WelcomeAccordionSection />
-      </section>
+      </div>
 
       {/* Category Carousel */}
-      {/* <section id="category-carousel" className="w-full mt-0 pt-0">
+      {/* <div id="category-carousel" className="w-full mt-0 pt-0">
         <DesktopCategoryCarousel />
-      </section> */}
+      </div> */}
 
        
 {/* Signature Styles */}
-      <section id="signature-styles" className="w-full">
+      <div id="signature-styles" className="w-full">
         <SignatureStylesSection />
-      </section>
+      </div>
       
        {/* Product Carousel */}
-      <section id="product-carousel" className="w-full">
+      <div id="product-carousel" className="w-full">
         {memoizedProducts && memoizedProducts.length > 0 ? (
           <ProductCarousel items={memoizedProducts} />
         ) : (
@@ -130,43 +130,43 @@ export default function HomePageClient({ billboard, products, showcaseItems, fea
             <p className="text-gray-500">No featured products available</p>
           </div>
         )}
-      </section>
+      </div>
 
 {/* Collections Browse */}
-      <section id="collections-browse" className="w-full">
+      <div id="collections-browse" className="w-full">
         <CollectionsBrowseSection />
-      </section>
+      </div>
       
      
     {/* About Section */}
-      <section id="about" className="w-full">
+      <div id="about" className="w-full">
         <AboutSection />
-      </section>
+      </div>
      
 {/* Why Choose FINEYST */}
-      <section id="why-choose-fineyst" className="w-full">
+      <div id="why-choose-fineyst" className="w-full">
         <WhyChooseFineystSlider />
-      </section>
+      </div>
 
       {/* FAQ Leather */}
-      <section id="faq-leather" className="w-full">
+      <div id="faq-leather" className="w-full">
         <FAQ/>
-      </section>
+      </div>
 
       {/* Blogs Showcase */}
-      <section id="blogs-showcase" className="w-full">
+      <div id="blogs-showcase" className="w-full">
         <BlogsShowcase />
-      </section>
+      </div>
 
  {/* Global Fashion Partners */}
-      <section id="GFP" className="w-full">
+      <div id="GFP" className="w-full">
         <GlobalFashionPartners />
-      </section>
+      </div>
 
       {/* Animated Reviews */}
-      <section id="reviews" className="w-full">
+      <div id="reviews" className="w-full">
         <AnimatedReviewsSection />
-      </section>
+      </div>
     </main>
   )
 }

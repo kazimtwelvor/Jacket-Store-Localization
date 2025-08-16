@@ -22,20 +22,20 @@ const TruncatedText = ({ text, limit, className, onToggle }: { text: string; lim
     };
 
     return (
-        <section className={className}>
-            <section className="md:hidden">
+        <div className={className}>
+            <div className="md:hidden">
                 {isLongText && (
                     <button onClick={handleToggle} className="flex items-center justify-center w-full mb-2 text-white hover:text-white/80 transition-colors">
                         {isExpanded ? <FaChevronUp className="w-4 h-4" /> : <FaChevronDown className="w-4 h-4" />}
                     </button>
                 )}
                 {isExpanded && <p className="text-white/90 leading-relaxed text-sm">{text}</p>}
-            </section>
+            </div>
 
             <p className="hidden md:inline text-white/90 leading-relaxed">
                 {text}
             </p>
-        </section>
+        </div>
     );
 };
 
@@ -48,96 +48,96 @@ export default function SignatureStylesSection() {
 
     return (
         <section className="pt-10 pb-8 bg-white relative">
-            <section className="absolute inset-0 opacity-5">
-                <section className="absolute top-10 left-10 w-32 h-32 bg-[#2b2b2b] rounded-full blur-3xl animate-pulse"></section>
-                <section className="absolute bottom-10 right-10 w-40 h-40 bg-[#2b2b2b] rounded-full blur-3xl animate-pulse delay-1000"></section>
-            </section>
+            <div className="absolute inset-0 opacity-5">
+                <div className="absolute top-10 left-10 w-32 h-32 bg-[#2b2b2b] rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute bottom-10 right-10 w-40 h-40 bg-[#2b2b2b] rounded-full blur-3xl animate-pulse delay-1000"></div>
+            </div>
 
 
 
-            <section className="flex w-full -mx-0">
-                <section className="flex-1">
+            <div className="flex w-full -mx-0">
+                <div className="flex-1">
                     <Link href="/collections/male" className="block">
                         <Card className="group hover:shadow-xl border-0 shadow-none overflow-hidden relative h-[360px] md:h-[500px] lg:h-[700px] rounded-none m-0">
-                            <section className="relative h-full bg-[#151B1B] overflow-hidden rounded-none">
-                                <section className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
-                                {menDropdownOpen && <section className="absolute inset-0 bg-black/80 z-[15] md:hidden" />}
-                                <section className="absolute inset-0 flex items-start justify-center">
+                            <div className="relative h-full bg-[#151B1B] overflow-hidden rounded-none">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
+                                {menDropdownOpen && <div className="absolute inset-0 bg-black/80 z-[15] md:hidden" />}
+                                <div className="absolute inset-0 flex items-start justify-center">
                                     <img
                                         src="https://jacket.us.com/uploads/2025/Untitled_design__10_.png"
                                         alt="Men's Leather Jacket"
                                         className="w-full h-full object-cover object-[5%] md:object-[5%] lg:object-[5%] group-hover:scale-110 transition-transform duration-500 block"
                                     />
-                                </section>
-                                <section
+                                </div>
+                                <div
                                     className="absolute inset-0 flex items-end justify-center pb-6 md:items-end md:justify-center md:pb-6 lg:justify-end lg:pb-24 z-[25]"
                                 >
-                                    <section className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pr-20">
-                                        <section>
+                                    <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pr-20">
+                                        <div>
                                             <h2 className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}>
                                                 MEN'S<br />LEATHER<br />JACKET
                                             </h2>
-                                        </section>
+                                        </div>
                                         <TruncatedText
                                             text={menDesc}
                                             limit={characterLimit}
                                             className="mt-2 text-sm md:text-sm lg:text-base text-center"
                                             onToggle={setMenDropdownOpen}
                                         />
-                                        <section className="mt-6 text-center">
-                                            <section className="group/button cursor-pointer inline-flex items-center bg-[#2b2b2b] border-b border border- text-white font-bold py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6 hover:bg-[#2b2b2b] transition-colors duration-300">
+                                        <div className="mt-6 text-center">
+                                            <div className="group/button cursor-pointer inline-flex items-center bg-[#2b2b2b] border-b border border- text-white font-bold py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6 hover:bg-[#2b2b2b] transition-colors duration-300">
                                                 <span className={`text-center md:text-center lg:text-left ${avertaBold.className}`}>Shop Mens</span>
                                                 <FaArrowRight className="hidden lg:block ml-2 opacity-0 group-hover/button:opacity-100 transition-all duration-400 transform group-hover/button:translate-x-1" />
-                                            </section>
-                                        </section>
-                                    </section>
-                                </section>
-                            </section>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </Card>
                     </Link>
-                </section>
+                </div>
 
-                <section className="flex-1">
+                <div className="flex-1">
                     <Link href="/collections/female" className="block">
                         <Card className="group hover:shadow-xl border-0 shadow-none overflow-hidden relative h-[360px] md:h-[500px] lg:h-[700px] rounded-none m-0">
-                            <section className="relative h-full bg-[#151B1B] overflow-hidden rounded-none">
-                                <section className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
-                                {womenDropdownOpen && <section className="absolute inset-0 bg-black/80 z-[15] md:hidden" />}
-                                <section className="absolute inset-0 flex items-center justify-center">
+                            <div className="relative h-full bg-[#151B1B] overflow-hidden rounded-none">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
+                                {womenDropdownOpen && <div className="absolute inset-0 bg-black/80 z-[15] md:hidden" />}
+                                <div className="absolute inset-0 flex items-center justify-center">
                                     <img
                                         src={useImageForView("https://jacket.us.com/uploads/2025/uadYfG.webp", "/images/tablet-image.jpg")}
                                         alt="Women's Leather Jacket"
                                         className="w-full h-full object-cover object-[100%] md:object-[100%] lg:object-[100%] group-hover:scale-110 transition-transform duration-500 block"
                                     />
-                                </section>
-                                <section
+                                </div>
+                                <div
                                     className="absolute inset-0 flex items-end justify-center pb-6 md:items-end md:justify-center md:pb-6 lg:justify-start lg:pb-24 z-[25]"
                                 >
-                                    <section className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pl-20">
-                                        <section>
+                                    <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pl-20">
+                                        <div>
                                             <h2 className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}>
                                                 WOMEN'S<br />LEATHER<br />JACKET
                                             </h2>
-                                        </section>
+                                        </div>
                                         <TruncatedText
                                             text={womenDesc}
                                             limit={characterLimit}
                                             className="mt-2 text-sm md:text-sm lg:text-base text-center"
                                             onToggle={setWomenDropdownOpen}
                                         />
-                                        <section className="mt-6 text-center">
-                                            <section className={`group/button cursor-pointer inline-flex items-center bg-[#2b2b2b] border-b border border- text-white font-bold py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6 hover:bg-[#2b2b2b] transition-colors duration-300 ${avertaBold.className}`}>
+                                        <div className="mt-6 text-center">
+                                            <div className={`group/button cursor-pointer inline-flex items-center bg-[#2b2b2b] border-b border border- text-white font-bold py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6 hover:bg-[#2b2b2b] transition-colors duration-300 ${avertaBold.className}`}>
                                                 <span>Shop Womens</span>
                                                 <FaArrowRight className="hidden lg:block ml-2 opacity-0 group-hover/button:opacity-100 transition-all duration-400 transform group-hover/button:translate-x-1" />
-                                            </section>
-                                        </section>
-                                    </section>
-                                </section>
-                            </section>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </Card>
                     </Link>
-                </section>
-            </section>
+                </div>
+            </div>
         </section>
     );
 }

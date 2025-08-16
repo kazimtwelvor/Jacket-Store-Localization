@@ -7,7 +7,6 @@ export default function ProductPageClient() {
   const router = useRouter();
   
   useEffect(() => {
-    // Store the referrer URL when the product page loads
     if (typeof window !== 'undefined' && document.referrer.includes('/shop')) {
       sessionStorage.setItem('lastShopUrl', document.referrer);
     }
