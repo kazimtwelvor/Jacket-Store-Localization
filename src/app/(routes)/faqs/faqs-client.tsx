@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react"
 import { Search, ShoppingBag, Truck, RotateCcw, CreditCard, HelpCircle } from "lucide-react"
-import Container from "@/components/ui/container"
+import Container from "@/src/app/ui/container"
 import FAQItem from "./components/faq-item"
 import { faqData } from "./data/faq-data"
 import FAQHero from "./components/faq-hero"
 import FAQCategory from "./components/faq-category"
-import { Input } from "@/components/ui/input"
+import { Input } from "@/src/app/ui/input"
 
 export default function FAQsClient() {
   const [activeCategory, setActiveCategory] = useState("all")

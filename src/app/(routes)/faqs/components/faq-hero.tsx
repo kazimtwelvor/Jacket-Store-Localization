@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Container from "@/components/ui/container"
+import Container from "@/src/app/ui/container"
 import { HelpCircle } from "lucide-react"
 
 export default function FAQHero() {
