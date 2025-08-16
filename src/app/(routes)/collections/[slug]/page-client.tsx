@@ -12,7 +12,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/src/app/ui/d
 import type { Product, Category } from "@/types"
 
 import { cn } from "@/src/app/lib/utils"
-import CategorySEOSection from "@/src/app/category/category-seo-div"
 import JacketCategories from "@/src/app/category/JacketCategories"
 import WeThinkYouWillLove from "@/src/app/category/WeThinkYouWillLove"
 import RecentlyViewed from "@/src/app/category/RecentlyViewed"
@@ -24,6 +23,7 @@ import { useCart } from "@/src/app/contexts/CartContext"
 import useWishlist from "@/src/app/hooks/use-wishlist"
 import MobileAddToCartModal from "@/src/app/modals/MobileAddToCartModal"
 import { CategorySlider } from "@/src/app/components/shop/components/CategorySlider"
+import CategorySEOSection from "@/src/app/category/category-seo-section"
 
 interface KeywordCategory {
     id: string;

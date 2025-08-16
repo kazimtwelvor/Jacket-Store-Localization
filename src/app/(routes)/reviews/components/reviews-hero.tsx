@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Star, ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/src/app/ui/button"
 
 export default function ReviewsHero() {
   const [isMounted, setIsMounted] = useState(false)
