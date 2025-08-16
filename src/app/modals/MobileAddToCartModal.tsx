@@ -79,7 +79,7 @@ export default function MobileAddToCartModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50 z-[9999] block lg:hidden"
+          className="fixed inset-0 bg-black/50  bg-opacity-50 z-[9999] block lg:hidden"
           onClick={handleClose}
         >
           <motion.div
@@ -106,17 +106,17 @@ export default function MobileAddToCartModal({
                       {product.name}
                     </h3>
                     <div className="flex items-center gap-2">
-                      {product.salePrice ? (
+                      {product.salePrice !== "0" ? (
                         <>
                           <span className="text-base font-bold line-through text-gray-400">
                             ${product.price}
                           </span>
-                          <span className="text-base font-bold text-[#B01E23]">
+                          <span className="text-base font-bold text-[#2b2b2b]">
                             ${product.salePrice}
                           </span>
                         </>
                       ) : (
-                        <span className="text-base font-bold text-[#B01E23]">
+                        <span className="text-base font-bold text-[#2b2b2b]">
                           ${product.price}
                         </span>
                       )}
@@ -140,8 +140,8 @@ export default function MobileAddToCartModal({
                             (size as any).stock === 0
                               ? "notify"
                               : (size as any).stock <= 5
-                              ? "few"
-                              : "available";
+                                ? "few"
+                                : "available";
                         }
 
                         return (
@@ -157,7 +157,7 @@ export default function MobileAddToCartModal({
                               "w-full flex items-center gap-3 p-3 border-t border-b",
                               "border-gray-300",
                               stockStatus === "notify" &&
-                                "opacity-50 cursor-not-allowed"
+                              "opacity-50 cursor-not-allowed"
                             )}
                           >
                             <div
@@ -199,7 +199,7 @@ export default function MobileAddToCartModal({
                       onClick={handleAddToCart}
                       disabled={!mobileSizeId}
                       className={cn(
-                        "w-full py-4 rounded-lg font-bold transition-colors",
+                        "w-full py-4  font-bold transition-colors",
                         mobileSizeId
                           ? "bg-black hover:bg-gray-800 text-white"
                           : "bg-gray-200 text-gray-400 cursor-not-allowed"
@@ -221,9 +221,9 @@ export default function MobileAddToCartModal({
                   <div className="border-t border-gray-200 mb-6"></div>
 
                   {/* Product Details */}
-                  <div className=" flex gap-2 mb-8 p-4 bg-gray-50 rounded-lg mx-5">
+                  <div className=" flex gap-2 mb-8 p-4 bg-gray-50  mx-5">
                     {/* Product Image */}
-                    <div className="w-32 h-48 bg-white rounded-lg flex-shrink-0 overflow-hidden">
+                    <div className="w-32 h-48 bg-white  flex-shrink-0 overflow-hidden">
                       <img
                         src={
                           (product.images?.[0] as any)?.url ||
@@ -240,22 +240,22 @@ export default function MobileAddToCartModal({
 
                     {/* Product Info */}
                     <div className="flex-1">
-                      <h4 className="text-xs font-bold text-black mb-1 line-clamp-2">
+                      <h4 className="text-base font-bold text-black mb-1 line-clamp-2">
                         {product.name}
                       </h4>
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          {product.salePrice ? (
+                          {product.salePrice !== "0" ? (
                             <>
                               <span className="text-sm line-through text-gray-400">
                                 ${product.price}
                               </span>
-                              <span className="text-lg font-bold text-[#B01E23]">
+                              <span className="text-base font-bold text-[#2b2b2b]">
                                 ${product.salePrice}
                               </span>
                             </>
                           ) : (
-                            <span className="text-lg font-bold text-[#B01E23]">
+                            <span className="text-base font-bold text-[#2b2b2b]">
                               ${product.price}
                             </span>
                           )}
@@ -289,7 +289,7 @@ export default function MobileAddToCartModal({
                         handleClose();
                         router.push("/cart");
                       }}
-                      className="w-full py-4 bg-white border-2 border-black text-black font-bold rounded-lg hover:bg-gray-50 transition-colors"
+                      className="w-full py-4 bg-white border-2 border-black text-black font-bold  hover:bg-gray-50 transition-colors"
                     >
                       VIEW CART
                     </button>
@@ -298,7 +298,7 @@ export default function MobileAddToCartModal({
                         handleClose();
                         router.push("/checkout");
                       }}
-                      className="w-full py-4 bg-black text-white font-bold rounded-lg hover:bg-gray-800 transition-colors"
+                      className="w-full py-4 bg-black text-white font-bold  hover:bg-gray-800 transition-colors"
                     >
                       CHECKOUT
                     </button>
@@ -339,84 +339,79 @@ export default function MobileAddToCartModal({
               </div>
 
               <div className="px-6 pb-4 pt-16">
-                <h3 className="text-xl font-bold text-[#B01E23] mb-2">
+                <h3 className="text-xl font-bold text-[#2b2b2b] mb-2">
                   Size Chart
                 </h3>
                 <p className="text-sm text-gray-600">Find your perfect fit</p>
               </div>
 
-              <div className="border-t border-[#B01E23]/20 mb-6"></div>
+              <div className="border-t border-[#2b2b2b]/20 mb-6"></div>
 
-              <div className="flex-1 px-6 mb-6 overflow-y-auto">
+              <div className="flex-1 px-6 mb-8 overflow-y-auto">
                 {/* Size Chart Table */}
-                <div className="bg-gradient-to-br from-red-50 to-white p-4 rounded-lg border border-[#B01E23]/20 shadow-sm">
+                <div className="bg-gradient-to-br from-red-50 to-white p-4 border border-[#2b2b2b]/20 shadow-sm">
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="bg-[#B01E23] text-white">
-                          <th className="text-left py-3 px-3 font-bold rounded-tl-lg">
+                        <tr className="bg-[#2b2b2b] text-white">
+                          <th className="text-left py-3 px-3 font-bold ">
                             US
                           </th>
-                          <th className="text-left py-3 px-3 font-bold">UK</th>
-                          <th className="text-left py-3 px-3 font-bold">EU</th>
+                          {/* <th className="text-left py-3 px-3 font-bold">UK</th>
+                          <th className="text-left py-3 px-3 font-bold">EU</th> */}
                           <th className="text-left py-3 px-3 font-bold">
                             Chest (in)
                           </th>
                           <th className="text-left py-3 px-3 font-bold">
                             Waist (in)
                           </th>
-                          <th className="text-left py-3 px-3 font-bold rounded-tr-lg">
+                          <th className="text-left py-3 px-3 font-bold ">
                             Hip (in)
                           </th>
                         </tr>
                       </thead>
                       <tbody className="bg-white">
-                        <tr className="border-b border-[#B01E23]/10 hover:bg-black-50 transition-colors">
-                          <td className="py-3 px-3 font-semibold text-[#B01E23]">
+                        <tr className="border-b border-[#2b2b2b]/10 hover:bg-black-50 transition-colors">
+                          <td className="py-3 px-3 font-semibold text-[#2b2b2b]">
                             XS
                           </td>
-                          <td className="py-3 px-3">6</td>
-                          <td className="py-3 px-3">34</td>
+
                           <td className="py-3 px-3">32-34</td>
                           <td className="py-3 px-3">24-26</td>
                           <td className="py-3 px-3">34-36</td>
                         </tr>
-                        <tr className="border-b border-[#B01E23]/10 hover:bg-black-50 transition-colors">
-                          <td className="py-3 px-3 font-semibold text-[#B01E23]">
+                        <tr className="border-b border-[#2b2b2b]/10 hover:bg-black-50 transition-colors">
+                          <td className="py-3 px-3 font-semibold text-[#2b2b2b]">
                             S
                           </td>
-                          <td className="py-3 px-3">8</td>
-                          <td className="py-3 px-3">36</td>
+
                           <td className="py-3 px-3">34-36</td>
                           <td className="py-3 px-3">26-28</td>
                           <td className="py-3 px-3">36-38</td>
                         </tr>
-                        <tr className="border-b border-[#B01E23]/10 hover:bg-black-50 transition-colors">
-                          <td className="py-3 px-3 font-semibold text-[#B01E23]">
+                        <tr className="border-b border-[#2b2b2b]/10 hover:bg-black-50 transition-colors">
+                          <td className="py-3 px-3 font-semibold text-[#2b2b2b]">
                             M
                           </td>
-                          <td className="py-3 px-3">10</td>
-                          <td className="py-3 px-3">38</td>
+
                           <td className="py-3 px-3">36-38</td>
                           <td className="py-3 px-3">28-30</td>
                           <td className="py-3 px-3">38-40</td>
                         </tr>
-                        <tr className="border-b border-[#B01E23]/10 hover:bg-black-50 transition-colors">
-                          <td className="py-3 px-3 font-semibold text-[#B01E23]">
+                        <tr className="border-b border-[#2b2b2b]/10 hover:bg-black-50 transition-colors">
+                          <td className="py-3 px-3 font-semibold text-[#2b2b2b]">
                             L
                           </td>
-                          <td className="py-3 px-3">12</td>
-                          <td className="py-3 px-3">40</td>
+
                           <td className="py-3 px-3">38-40</td>
                           <td className="py-3 px-3">30-32</td>
                           <td className="py-3 px-3">40-42</td>
                         </tr>
                         <tr className="hover:bg-black-50 transition-colors">
-                          <td className="py-3 px-3 font-semibold text-[#B01E23] rounded-bl-lg">
+                          <td className="py-3 px-3 font-semibold text-[#2b2b2b] rounded-bl-lg">
                             XL
                           </td>
-                          <td className="py-3 px-3">14</td>
-                          <td className="py-3 px-3">42</td>
+
                           <td className="py-3 px-3">40-42</td>
                           <td className="py-3 px-3">32-34</td>
                           <td className="py-3 px-3 rounded-br-lg">42-44</td>
@@ -426,8 +421,8 @@ export default function MobileAddToCartModal({
                   </div>
                 </div>
 
-                <div className="mt-6 p-4 bg-[#B01E23]/5 border-l-4 border-[#B01E23] rounded-r-lg">
-                  <p className="text-sm text-[#B01E23] font-medium mb-1">
+                <div className="mt-6 p-4 bg-[#2b2b2b]/5 border-l-4 border-[#2b2b2b] ">
+                  <p className="text-sm text-[#2b2b2b] font-medium mb-1">
                     📏 Measurement Guide
                   </p>
                   <p className="text-xs text-gray-600">

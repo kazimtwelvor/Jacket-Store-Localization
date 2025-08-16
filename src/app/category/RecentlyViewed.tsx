@@ -260,12 +260,12 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                       <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-black"></div>
                     </div>
                   )}
-                  <div className="absolute bottom-2 left-2 text-red-600 text-sm font-medium opacity-80">
+                  {/* <div className="absolute bottom-2 left-2 text-red-600 text-sm font-medium opacity-80">
                     FINEYST
-                  </div>
+                  </div> */}
                   {/* Wishlist icon */}
                   <button
-                      className="absolute w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 right-12 -bottom-4"
+                      className="absolute w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md z-10 right-12 -bottom-4"
                       aria-label="Add to wishlist"
                       onClick={(e) => {
                         e.stopPropagation()

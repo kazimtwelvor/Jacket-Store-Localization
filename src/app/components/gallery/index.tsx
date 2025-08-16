@@ -371,14 +371,14 @@ const Gallery: React.FC<GalleryProps> = ({
         >
           <div className="relative flex-1 flex items-center justify-center pt-0 sm:pt-20 pb-12 sm:pb-16">
             {/* Brand Name - Hidden on mobile */}
-            <div className="absolute top-6 left-6 z-10 hidden sm:block">
+            {/* <div className="absolute top-6 left-6 z-10 hidden sm:block">
               <h1
                 className="text-red-600 text-2xl font-bold tracking-wide"
                 style={{ fontFamily: "AvertaPE, sans-serif" }}
               >
                 FINEYST
               </h1>
-            </div>
+            </div> */}
 
             {/* Close Button */}
             <button
@@ -542,7 +542,6 @@ const Gallery: React.FC<GalleryProps> = ({
       {typeof window !== "undefined" &&
         createPortal(imageViewerModal, document.body)}
 
-      {/* Desktop view - scrollable 2 column grid */}
       <div
         className="hidden lg:grid grid-cols-2 gap-0"
         style={{ paddingTop: "26px" }}
@@ -582,12 +581,16 @@ const Gallery: React.FC<GalleryProps> = ({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  // Add wishlist functionality here
+                  onAddToWishlist?.();
                 }}
                 className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-md z-10 hover:bg-black-50 transition-colors"
                 aria-label="Add to wishlist"
               >
-                <Heart className="w-5 h-5 text-gray-600" />
+                <Heart 
+                  className={`w-5 h-5 transition-colors ${
+                    isInWishlist ? "text-black fill-black" : "text-gray-600"
+                  }`} 
+                />
               </button>
             )}
           </div>
@@ -617,7 +620,7 @@ const Gallery: React.FC<GalleryProps> = ({
             priority
             draggable={false}
           />
-          <div className="absolute inset-0 bg-black bg-opacity-0 group-active:bg-opacity-5 transition-all duration-200"></div>
+          <div className="absolute inset-0 bg-transparent bg-opacity-0 group-active:bg-opacity-5 transition-all duration-200"></div>
 
           {/* Image Counter - Mobile Only */}
           <div className="absolute top-3 left-3 bg-white/60 text-black px-3 py-2  text-xs font-medium backdrop-blur-sm">
@@ -636,7 +639,7 @@ const Gallery: React.FC<GalleryProps> = ({
               }}
               className={`w-3 h-3 rounded-full transition-all duration-300 shadow-lg ${
                 hasMounted && idx === currentIndex
-                  ? "bg-[#B01E23] scale-125 ring-2 ring-white ring-offset-1"
+                  ? "bg-black scale-125 ring-2 ring-white ring-offset-1"
                   : "bg-white/70 hover:bg-white/90 backdrop-blur-sm"
               }`}
               aria-label={`Go to image ${idx + 1}`}
@@ -657,14 +660,15 @@ const Gallery: React.FC<GalleryProps> = ({
             }}
             className={`w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 ${
               isInWishlist
-                ? "bg-[#B01E23] text-white"
-                : "bg-white text-[#000000] border-2 border-[#000000]"
+                ? "bg-white text-black"
+                : "bg-white text-black"
             }`}
             style={{ aspectRatio: "1/1" }}
           >
             <Heart
-              className="h-5 w-5"
-              fill={isInWishlist ? "currentColor" : "none"}
+              className={`h-5 w-5 transition-colors ${
+                isInWishlist ? "fill-black" : "fill-none"
+              }`}
             />
           </button>
 

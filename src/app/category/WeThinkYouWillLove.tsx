@@ -79,12 +79,12 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
       if (width < 768) {
         setVisibleItems(1)
         if (mobileCarouselRef.current) {
-            const item = mobileCarouselRef.current.querySelector<HTMLElement>(':scope > div')
-            if (item) {
-                const itemWidth = item.offsetWidth
-                const gap = parseFloat(window.getComputedStyle(mobileCarouselRef.current).gap)
-                setMobileScrollAmount(itemWidth + (isNaN(gap) ? 16 : gap)) // Default gap 16px if parsing fails
-            }
+          const item = mobileCarouselRef.current.querySelector<HTMLElement>(':scope > div')
+          if (item) {
+            const itemWidth = item.offsetWidth
+            const gap = parseFloat(window.getComputedStyle(mobileCarouselRef.current).gap)
+            setMobileScrollAmount(itemWidth + (isNaN(gap) ? 16 : gap)) // Default gap 16px if parsing fails
+          }
         }
       } else {
         setVisibleItems(4)
@@ -150,14 +150,14 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
   }
 
   const handleMouseUp = (e: React.MouseEvent) => {
-     if ((e.target as HTMLElement).closest('button')) {
+    if ((e.target as HTMLElement).closest('button')) {
       setIsDragging(false)
       return
     }
     // Prevent click if there was significant mouse movement (indicating a drag)
     if (!mouseStart || Math.abs(e.clientX - mouseStart) < 10) {
-        setIsDragging(false)
-        return
+      setIsDragging(false)
+      return
     }
     if (!mouseEnd || !isDragging) {
       setIsDragging(false)
@@ -220,7 +220,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
 
           {/* Desktop Arrows - REMOVED from here (this block is now empty and can be deleted if desired) */}
           <div className="hidden md:flex items-center gap-2">
-             {/* Arrows removed from this location */}
+            {/* Arrows removed from this location */}
           </div>
         </div>
 
@@ -263,34 +263,34 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                   </div>
                   {/* Wishlist icon */}
                   <button
-                      className="absolute w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 right-12 -bottom-4"
-                      aria-label="Add to wishlist"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        if (wishlist.isInWishlist(product.id)) {
-                          wishlist.removeItem(product.id)
-                        } else {
-                          wishlist.addItem(product)
-                        }
-                      }}
+                    className="absolute w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 right-12 -bottom-4"
+                    aria-label="Add to wishlist"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      if (wishlist.isInWishlist(product.id)) {
+                        wishlist.removeItem(product.id)
+                      } else {
+                        wishlist.addItem(product)
+                      }
+                    }}
                   >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="black" strokeWidth="2" fill={mounted && wishlistItems.includes(product.id) ? "black" : "none"} strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="black" strokeWidth="2" fill={mounted && wishlistItems.includes(product.id) ? "black" : "none"} strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </button>
                   {/* Cart icon */}
                   <button
-                      className="absolute w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-md z-10 right-2 -bottom-4"
-                      aria-label="Add to cart"
-                      onClick={(e) => {
-                          e.stopPropagation();
-                          onAddToCartClick(product);
-                      }}
+                    className="absolute w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-md z-10 right-2 -bottom-4"
+                    aria-label="Add to cart"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAddToCartClick(product);
+                    }}
                   >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M6.5 9h11L19 21H5L6.5 9z" />
-                          <path d="M9 9c0-2.76 1.38-5 3-5s3 2.24 3 5" />
-                      </svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6.5 9h11L19 21H5L6.5 9z" />
+                      <path d="M9 9c0-2.76 1.38-5 3-5s3 2.24 3 5" />
+                    </svg>
                   </button>
                   {product.isFeatured && (
                     // Keep motion.div for initial animation
@@ -323,11 +323,11 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                     )}
                   </div>
                   <div className="mt-2">
-                    <div 
+                    <div
                       className="relative inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-black"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      {((product as any).colorDetails || (product as any).colors || [{value: '#000000', name: 'Black'}]).slice(0, 1).map((color: any, index: number) => (
+                      {((product as any).colorDetails || (product as any).colors || [{ value: '#000000', name: 'Black' }]).slice(0, 1).map((color: any, index: number) => (
                         <div key={index} className="flex items-center gap-1">
                           <div
                             className="w-4 h-4 rounded-full border border-black/30"
@@ -337,7 +337,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                         </div>
                       ))}
                       {((product as any).colorDetails || (product as any).colors || []).length > 1 && (
-                        <button 
+                        <button
                           onClick={(e) => {
                             e.stopPropagation()
                             const productKey = `${product.id}-${index}`
@@ -363,7 +363,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
           <div className="overflow-hidden" ref={desktopCarouselRef}>
             <motion.div
               className="flex gap-3 sm:gap-4 md:gap-4 lg:gap-5 xl:gap-6"
-              animate={{ x: `calc(-${currentIndex * (100 / visibleItems)}% - ${currentIndex * (20 / visibleItems)}px)`}}
+              animate={{ x: `calc(-${currentIndex * (100 / visibleItems)}% - ${currentIndex * (20 / visibleItems)}px)` }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
@@ -398,9 +398,9 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                         <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-black"></div>
                       </div>
                     )}
-                    <div className="absolute bottom-2 left-2 text-red-600 text-sm font-medium opacity-80">
+                    {/* <div className="absolute bottom-2 left-2 text-red-600 text-sm font-medium opacity-80">
                       FINEYST
-                    </div>
+                    </div> */}
                     <motion.button
                       className="absolute top-2 right-2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm z-10"
                       aria-label="Add to wishlist"
@@ -468,10 +468,10 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                       )}
                     </AnimatePresence>
                   </div>
-                  
+
 
                   <div className="mt-6 xs:mt-6 sm:mt-6 md:mt-4 lg:mt-4 xl:mt-4 2xl:mt-4">
-                                                    <h3 className="text-sm line-clamp-1">{product.name.toUpperCase()}</h3>
+                    <h3 className="text-sm line-clamp-1">{product.name.toUpperCase()}</h3>
                     <div className="mt-1 xs:mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-1 2xl:mt-1">
                       {product.salePrice && Number(product.salePrice) > 0 ? (
                         <div className="flex items-center gap-1">
@@ -484,7 +484,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                     </div>
                     {/* Color Options */}
                     <div className="mt-2">
-                      <div 
+                      <div
                         className="relative inline-flex items-center gap-2 px-3 py-2 bg-gray-50 border border-black"
                         onClick={(e) => e.stopPropagation()}
                       >
@@ -499,7 +499,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                         ))}
                         {((product as any).colorDetails || (product as any).colors || []).length > 1 && (
                           <>
-                            <button 
+                            <button
                               ref={(el) => {
                                 if (el) colorTriggerRefs.current[`love-${product.id}-${index}`] = el
                               }}
@@ -518,17 +518,17 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                               className={cn(
                                 "text-xs transition-colors",
                                 colorPopup?.productKey === `${product.id}-${index}` && isDesktop
-                                  ? "absolute inset-0 flex items-center justify-center bg-black text-white border border-black font-medium" 
+                                  ? "absolute inset-0 flex items-center justify-center bg-black text-white border border-black font-medium"
                                   : "text-gray-500 hover:text-gray-700 underline"
                               )}
                             >
                               {colorPopup?.productKey === `${product.id}-${index}` && isDesktop
-                                ? "Hide colors" 
+                                ? "Hide colors"
                                 : `+${((product as any).colorDetails || (product as any).colors || []).length - 1} more`
                               }
                             </button>
-                            
-                           {/* Color Popup inside the color box container */}
+
+                            {/* Color Popup inside the color box container */}
                             {colorPopup?.productKey === `${product.id}-${index}` && isDesktop && (
                               <div className="absolute -top-32 left-0 z-50 bg-white border-2 border-gray-600 shadow-2xl w-52">
                                 <div className="p-3">
@@ -544,27 +544,27 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                     {((product as any)?.colorDetails || (product as any)?.colors || []).map((color: any) => {
                                       const colorLinks = product?.colorLinks || {}
                                       const colorLink = colorLinks[color.name]
-                                      
+
                                       return (
-                                        <div 
-                                          key={color.id} 
+                                        <div
+                                          key={color.id}
                                           className="cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-md"
                                           onClick={async (e) => {
                                             e.preventDefault()
                                             e.stopPropagation()
-                                            
+
                                             if (colorLink && colorLink.trim() !== '') {
                                               try {
                                                 const currentProductIndex = currentProducts.findIndex(p => p.id === product.id)
                                                 if (currentProductIndex === -1) return
-                                                
+
                                                 setLoadingProducts(prev => new Set([...prev, product.id]))
-                                                
+
                                                 const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
-                                                
+
                                                 if (response.ok) {
                                                   const newProduct = await response.json()
-                                                  
+
                                                   if (newProduct && newProduct.name && newProduct.id) {
                                                     setCurrentProducts(prev => {
                                                       const updated = [...prev]
@@ -583,7 +583,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                                 })
                                               }
                                             }
-                                            
+
                                             setColorPopup(null)
                                           }}
                                         >
@@ -600,10 +600,10 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                 </div>
                               </div>
                             )}
-                            
+
                             {/* Color Popup - Mobile/Tablet Modal */}
                             {colorPopup?.productKey === `${product.id}-${index}` && !isDesktop && (
-                              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
+                              <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-center z-50">
                                 <div className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto">
                                   {/* Header */}
                                   <div className="flex items-center justify-between p-5 ">
@@ -615,14 +615,14 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                       <X size={20} />
                                     </button>
                                   </div>
-                                  
+
                                   {/* Colors Grid */}
                                   <div className="p-4">
                                     <div className="grid grid-cols-4 gap-4">
                                       {((product as any)?.colorDetails || (product as any)?.colors || []).map((color: any) => {
                                         const colorLinks = product?.colorLinks || {}
                                         const colorLink = colorLinks[color.name]
-                                        
+
                                         return (
                                           <div
                                             key={color.id}
@@ -630,19 +630,19 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                             onClick={async (e) => {
                                               e.preventDefault()
                                               e.stopPropagation()
-                                              
+
                                               if (colorLink && colorLink.trim() !== '') {
                                                 try {
                                                   const currentProductIndex = currentProducts.findIndex(p => p.id === product.id)
                                                   if (currentProductIndex === -1) return
-                                                  
+
                                                   setLoadingProducts(prev => new Set([...prev, product.id]))
-                                                  
+
                                                   const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
-                                                  
+
                                                   if (response.ok) {
                                                     const newProduct = await response.json()
-                                                    
+
                                                     if (newProduct && newProduct.name && newProduct.id) {
                                                       setCurrentProducts(prev => {
                                                         const updated = [...prev]
@@ -661,7 +661,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                                   })
                                                 }
                                               }
-                                              
+
                                               setColorPopup(null)
                                             }}
                                           >
@@ -689,28 +689,28 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
               ))}
             </motion.div>
           </div>
-            {/* Desktop Navigation Buttons */}
-            {currentIndex > 0 && (
-              <button
-                onClick={handlePrev}
-                className="absolute -left-4 lg:-left-6 top-1/2 -translate-y-1/2 bg-black text-white p-2 shadow-lg hover:bg-gray-800 transition-colors z-10 flex items-center justify-center"
-                aria-label="Previous"
-              >
-                <ChevronLeft className="h-6 w-6" />
-              </button>
-            )}
-            {currentIndex < maxIndex && (
-              <button
-                onClick={handleNext}
-                className="absolute -right-4 lg:-right-6 top-1/2 -translate-y-1/2 bg-black text-white p-2 shadow-lg hover:bg-gray-800 transition-colors z-10 flex items-center justify-center"
-                aria-label="Next"
-              >
-                <ChevronRight className="h-6 w-6" />
-              </button>
-            )}
+          {/* Desktop Navigation Buttons */}
+          {currentIndex > 0 && (
+            <button
+              onClick={handlePrev}
+              className="absolute -left-4 lg:-left-6 top-1/2 -translate-y-1/2 bg-black text-white p-2 shadow-lg hover:bg-gray-800 transition-colors z-10 flex items-center justify-center"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+          )}
+          {currentIndex < maxIndex && (
+            <button
+              onClick={handleNext}
+              className="absolute -right-4 lg:-right-6 top-1/2 -translate-y-1/2 bg-black text-white p-2 shadow-lg hover:bg-gray-800 transition-colors z-10 flex items-center justify-center"
+              aria-label="Next"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
+          )}
         </div>
       </div>
-      
+
 
 
     </div>

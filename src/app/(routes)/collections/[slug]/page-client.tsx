@@ -619,11 +619,11 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                             ) : (
                                                 <div className="w-full h-full overflow-hidden bg-gray-100" />
                                             )}
-                                            <div className="absolute bottom-2 left-2 text-black text-sm font-medium opacity-80">
+                                            {/* <div className="absolute bottom-2 left-2 text-black text-sm font-medium opacity-80">
                                                 FINEYST
-                                            </div>
+                                            </div> */}
                                             <button
-                                                className="absolute w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 top-2 right-3"
+                                                className="absolute w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md z-10 -bottom-4  right-12"
                                                 aria-label="Add to wishlist"
                                                 onClick={(e) => {
                                                     e.stopPropagation()
@@ -634,7 +634,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                     }
                                                 }}
                                             >
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path
                                                         d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                                                         stroke="black"
@@ -646,7 +646,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                 </svg>
                                             </button>
                                             <button
-                                                className=" md:hidden absolute w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-md z-48 right-2 left-39 -bottom-4 md:top-3 md:right-3 md:bottom-auto"
+                                                className=" md:hidden absolute w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-md z-48 right-2 -bottom-4 md:top-3 md:right-3 md:bottom-auto"
                                                 aria-label="Add to cart"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
@@ -836,7 +836,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                             )}
 
                                                             {colorPopup?.productKey === `${product.id}-${index}` && !isDesktop && (
-                                                                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
+                                                                <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-center z-50">
                                                                     <div className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto">
                                                                         {/* Header */}
                                                                         <div className="flex items-center justify-between p-5 ">

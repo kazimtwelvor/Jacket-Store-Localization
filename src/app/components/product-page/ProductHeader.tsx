@@ -13,14 +13,7 @@ interface ProductHeaderProps {
 const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
   return (
     <>
-      {/* Brand Name - Desktop Only */}
-      {/* {!isMobile && (
-        <div className="flex justify-end mb-2">
-          <span className="text-red-600 text-lg font-extrabold uppercase tracking-wide">FIINEYST</span>
-        </div>
-      )} */}
-
-      {/* Breadcrumb - Desktop Only */}
+    
       {!isMobile && (
         <div className="pt-20 text-sm">
           <nav className="flex items-center">
