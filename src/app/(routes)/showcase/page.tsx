@@ -1,6 +1,6 @@
-import Container from "@/components/ui/container"
-import getProducts from "@/actions/get-products"
-import ProductShowcaseSection from "@/components/ui/product-showcase-section"
+import Container from "@/src/app/ui/container"
+import getProducts from "@/src/app/actions/get-products"
+import ProductShowcaseSection from "@/src/app/ui/product-showcase-section"
 
 export const revalidate = 0
 

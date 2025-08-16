@@ -6,9 +6,9 @@ import { useState, useRef, useEffect } from "react"
 import { Star, X, Camera, CheckCircle } from "lucide-react"
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment } from "react"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/hooks/use-toast"
+import { Input } from "@/src/app/ui/input"
+import { Textarea } from "@/src/app/ui/textarea"
+import { useToast } from "@/src/app/hooks/use-toast"
 
 interface ReviewFormModalProps {
   isOpen: boolean
