@@ -83,7 +83,7 @@ const ProductCardNew = ({ product }: ProductCardProps) => {
         </div>
 
         <div className="mt-4">
-          <h3 className="text-base font-bold line-clamp-1">{product.name}</h3>
+          <h3 className="text-base font-bold line-clamp-1">{product.name.toUpperCase()}</h3>
           <p className="text-lg font-bold mt-1">
             ${Number.parseFloat(product.price?.toString() || "0").toFixed(2)}
           </p>

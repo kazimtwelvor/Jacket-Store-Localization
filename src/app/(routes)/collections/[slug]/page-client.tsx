@@ -12,7 +12,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/src/app/ui/d
 import type { Product, Category } from "@/types"
 
 import { cn } from "@/src/app/lib/utils"
-import CategorySEOSection from "@/src/app/category/category-seo-section"
 import JacketCategories from "@/src/app/category/JacketCategories"
 import WeThinkYouWillLove from "@/src/app/category/WeThinkYouWillLove"
 import RecentlyViewed from "@/src/app/category/RecentlyViewed"
@@ -24,6 +23,7 @@ import { useCart } from "@/src/app/contexts/CartContext"
 import useWishlist from "@/src/app/hooks/use-wishlist"
 import MobileAddToCartModal from "@/src/app/modals/MobileAddToCartModal"
 import { CategorySlider } from "@/src/app/components/shop/components/CategorySlider"
+import CategorySEOSection from "@/src/app/category/category-seo-section"
 
 interface KeywordCategory {
     id: string;
@@ -619,11 +619,11 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                             ) : (
                                                 <div className="w-full h-full overflow-hidden bg-gray-100" />
                                             )}
-                                            <div className="absolute bottom-2 left-2 text-red-600 text-sm font-medium opacity-80">
+                                            <div className="absolute bottom-2 left-2 text-black text-sm font-medium opacity-80">
                                                 FINEYST
                                             </div>
                                             <button
-                                                className=" absolute w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 right-12  md:top-3 md:right-3  -bottom-4 left-33"
+                                                className="absolute w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 top-2 right-3"
                                                 aria-label="Add to wishlist"
                                                 onClick={(e) => {
                                                     e.stopPropagation()
@@ -709,15 +709,15 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                             </AnimatePresence>
                                         </div>
                                         <div className="mt-6 xs:mt-6 sm:mt-6 md:mt-4 lg:mt-4 xl:mt-4 2xl:mt-4">
-                                            <h3 className="text-sm line-clamp-1">{product.name}</h3>
+                                            <h3 className="text-sm line-clamp-1">{product.name.toUpperCase()}</h3>
                                             <div className="mt-1 xs:mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-1 2xl:mt-1">
                                                 {product.salePrice && Number(product.salePrice) > 0 ? (
                                                     <div className="flex items-center gap-1">
                                                         <span className="text-sm line-through text-black-500">${product.price}</span>
-                                                        <span className="text-sm font-bold text-[#B61f28]">${product.salePrice}</span>
+                                                        <span className="text-sm font-bold text-black">${product.salePrice}</span>
                                                     </div>
                                                 ) : (
-                                                    <span className="text-sm font-bold text-[#B61f28]">${product.price}</span>
+                                                    <span className="text-sm font-bold text-black">${product.price}</span>
                                                 )}
                                             </div>
                                             <div className="mt-2">
@@ -1028,8 +1028,8 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                 className={cn(
                                                     "px-2 py-2 border rounded-md text-sm font-medium transition-colors",
                                                     categorySlug === slug
-                                                        ? "bg-[#2b2b2b] text-white border-red-600"
-                                                        : "border-gray-300 hover:border-red-600"
+                                                        ? "bg-[#2b2b2b] text-white border-black"
+                                                        : "border-gray-300 hover:border-black"
                                                 )}
                                             >
                                                 {cat.name}
@@ -1050,7 +1050,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                     {hasActiveFilters && (
                                         <button
                                             onClick={clearFilters}
-                                            className="text-xs font-medium text-red-600 hover:text-red-800 underline"
+                                            className="text-xs font-medium text-black hover:text-red-800 underline"
                                         >
                                             Clear all
                                         </button>
@@ -1060,7 +1060,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                             <div className="flex-1 overflow-y-auto p-4">
                                 <div className="mb-6">
                                     <h3 className="text-base font-semibold mb-3 flex items-center">
-                                        <span className="w-6 h-6 rounded-full bg-black-100 text-red-600 flex items-center justify-center mr-2">
+                                        <span className="w-6 h-6 rounded-full bg-black-100 text-black flex items-center justify-center mr-2">
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 width="14"
@@ -1085,8 +1085,8 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                 className={cn(
                                                     "px-2 py-2 border rounded-md text-sm font-medium transition-colors",
                                                     selectedFilters.sizes.includes(size)
-                                                        ? "bg-[#2b2b2b] text-white border-red-600"
-                                                        : "border-gray-300 hover:border-red-600"
+                                                        ? "bg-[#2b2b2b] text-white border-bla"
+                                                        : "border-gray-300 hover:border-black"
                                                 )}
                                             >
                                                 {size}
@@ -1096,7 +1096,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                 </div>
                                 <div className="mb-6">
                                     <h3 className="text-base font-semibold mb-3 flex items-center">
-                                        <span className="w-6 h-6 rounded-full bg-black-100 text-red-600 flex items-center justify-center mr-2">
+                                        <span className="w-6 h-6 rounded-full bg-black-100 text-black flex items-center justify-center mr-2">
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 width="14"
@@ -1124,8 +1124,8 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                 className={cn(
                                                     "flex items-center px-3 py-2 border rounded-md text-sm transition-colors",
                                                     selectedFilters.colors.includes(color)
-                                                        ? "bg-[#2b2b2b] text-white border-red-600"
-                                                        : "border-gray-300 hover:border-red-600"
+                                                        ? "bg-[#2b2b2b] text-white border-black"
+                                                        : "border-gray-300 hover:border-black"
                                                 )}
                                             >
                                                 <span

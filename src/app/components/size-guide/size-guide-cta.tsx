@@ -10,18 +10,14 @@ export default function SizeGuideCTA() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/collections/women"
+            href="/collections/female"
             className="inline-flex items-center justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b2b2b] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#2b2b2b] text-white hover:bg-[#2b2b2b]/90 h-11 px-8 py-2"
           >
             Shop Women's Collection
           </Link>
           <Link
-
-            href="/category/men"
+            href="/collections/male"
             className="inline-flex items-center justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b2b2b] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-[#2b2b2b] bg-white hover:bg-[#2b2b2b] text-[#333333] h-11 px-8 py-2"
-
-            href="/collections/men"
-            className="inline-flex items-center justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b2b2b] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-[#E5D3D3] bg-white hover:bg-[#2b2b2b] text-[#333333] h-11 px-8 py-2"
 
           >
             Shop Men's Collection

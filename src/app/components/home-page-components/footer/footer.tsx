@@ -28,7 +28,7 @@ const Footer = () => {
     }
 
     return (
-        <footer className={` bg-[#F6F6F6] text-black pt-16 pb-8 relative`}>
+        <footer className={` bg-[#F6F6F6] text-black pt-16 pb-8 px-5 md:px-0 relative`}>
             <section className="container mx-auto">
                 <div className="flex flex-col md:flex-row md:justify-start md:gap-14 gap-14 mb-8">
                     <div className="space-y-4 flex-shrink-0 md:w-64 flex flex-col items-center md:items-start">

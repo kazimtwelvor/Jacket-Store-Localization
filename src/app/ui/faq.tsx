@@ -74,7 +74,7 @@ export default function FAQ({
     )
 
     return (
-        <section className={`py-8 overflow-hidden ${className}`}>
+        <section className={`mx-5 md:mx-0 py-8 overflow-hidden ${className}`}>
             <div className={`max-w-6xl mx-auto ${containerClassName}`}>
                 <div className={`grid grid-cols-1 ${maxColumns === 2 ? 'md:grid-cols-2' : ''} gap-6 md:gap-8`}>
                     <div className="space-y-4">

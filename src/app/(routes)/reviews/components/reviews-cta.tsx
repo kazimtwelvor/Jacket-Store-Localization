@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/src/app/ui/button"
 import ReviewFormModal from "./review-form-modal"
-import { toast } from "sonner" // Import toast from sonner
+import { toast } from "sonner" 
 
 export default function ReviewsCTA() {
   const [isMounted, setIsMounted] = useState(false)

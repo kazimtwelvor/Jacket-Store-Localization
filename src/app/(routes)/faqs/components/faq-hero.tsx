@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Container from "@/src/app/ui/container"
 import { HelpCircle } from "lucide-react"
+import Container from "@/src/app/ui/container"
 
 export default function FAQHero() {
   const [isMounted, setIsMounted] = useState(false)

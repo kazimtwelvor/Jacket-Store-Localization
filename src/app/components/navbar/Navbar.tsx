@@ -96,7 +96,6 @@ const Navbar = () => {
   const pathname = usePathname();
   const wishlist = useWishlist();
 
-  // ✅ Unified visibility state for fade animation
   const [isCapsuleVisible, setIsCapsuleVisible] = useState(true);
 
   const toggleMobileMenu = () => {
@@ -137,7 +136,6 @@ const Navbar = () => {
           const isCollectionsPage = pathname.startsWith("/collections/");
           const isMobileView = window.innerWidth < 1024;
 
-          // ===== Header Visibility (mobile only) =====
           if (isMobileView) {
             if (isShopPage) {
               const scrollDiff = Math.abs(scrollTop - lastScrollY.current);
@@ -178,7 +176,6 @@ const Navbar = () => {
             setIsHeaderVisible(true);
           }
 
-          // ===== CapsuleNav: Show when at the top of any page (except excluded ones) =====
           if (
             !pathname.startsWith("/auth") &&
             !pathname.startsWith("/checkout") &&
@@ -214,7 +211,6 @@ const Navbar = () => {
     }
   }, [isSearchOpen]);
 
-  // Debounced search as user types
   useEffect(() => {
     if (!searchQuery.trim()) {
       setSearchResults(null);
@@ -240,14 +236,12 @@ const Navbar = () => {
     };
   }, [isSearchOpen]);
 
-  // Reset active nav item when mega menu is closed
   useEffect(() => {
     if (!showMegaMenu) {
       setActiveNavItem(null);
     }
   }, [showMegaMenu]);
 
-  // Close mega menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (showMegaMenu && megaMenuRef.current && !megaMenuRef.current.contains(event.target as Node)) {
@@ -265,7 +259,6 @@ const Navbar = () => {
     };
   }, [showMegaMenu]);
 
-  // Reset active nav item and close mega menu on route change
   useEffect(() => {
     setShowMegaMenu(false);
     setActiveNavItem(null);
@@ -333,7 +326,6 @@ const Navbar = () => {
     if (searchQuery.trim()) {
       await performSearch(searchQuery);
 
-      // Navigate to shop page with search query
       const currentPath = window.location.pathname;
       const currentSearch = new URLSearchParams(window.location.search).get(
         "search"
@@ -398,7 +390,7 @@ const Navbar = () => {
           "top-0"
         )}
       >
-        <header className="flex items-center md:px-10 bg-[#2B2B2B] h-16 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] w-full">
+        <header className="flex items-center px-5 md:px-10 bg-[#2B2B2B] h-16 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] w-full">
           <div className="lg:hidden flex items-center space-x-2">
             <div className="w-10 h-10" />
           </div>

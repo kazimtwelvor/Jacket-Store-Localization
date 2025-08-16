@@ -313,15 +313,15 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                   {/* Removed the entire AnimatePresence block for quick shop on mobile */}
                 </div>
                 <div className="mt-8">
-                  <h3 className="text-sm line-clamp-1">{product.name}</h3>
+                  <h3 className="text-sm line-clamp-1">{product.name.toUpperCase()}</h3>
                   <div className="mt-1">
                     {product.salePrice && Number(product.salePrice) > 0 ? (
                       <div className="flex items-center gap-1">
                         <span className="text-sm font-bold line-through text-black-500">${product.price}</span>
-                        <span className="text-lg font-bold text-[#B61f28]">${product.salePrice}</span>
+                        <span className="text-lg font-bold text-black">${product.salePrice}</span>
                       </div>
                     ) : (
-                      <span className="text-lg font-bold text-black">${product.price}</span>
+                      <span className="text-lg font-bold text-black">${product.price}</span> 
                     )}
                   </div>
                   <div className="mt-2">
@@ -476,15 +476,15 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                 
 
                   <div className="mt-6 xs:mt-6 sm:mt-6 md:mt-4 lg:mt-4 xl:mt-4 2xl:mt-4">
-                    <h3 className="text-sm line-clamp-1">{product.name}</h3>
+                    <h3 className="text-sm line-clamp-1">{product.name.toUpperCase()}</h3>
                     <div className="mt-1 xs:mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-1 2xl:mt-1">
                       {product.salePrice && Number(product.salePrice) > 0 ? (
                         <div className="flex items-center gap-1">
                           <span className="text-sm line-through text-black-500">${product.price}</span>
-                          <span className="text-sm font-bold text-[#B61f28]">${product.salePrice}</span>
+                          <span className="text-sm font-bold text-black">${product.salePrice}</span>
                         </div>
                       ) : (
-                        <span className="text-sm font-bold text-[#B61f28]">${product.price}</span>
+                        <span className="text-sm font-bold text-black">${product.price}</span>
                       )}
                     </div>
                     {/* Color Options */}

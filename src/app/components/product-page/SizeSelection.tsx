@@ -17,7 +17,7 @@ interface SizeSelectionProps {
   setShowMobileSizeModal: (show: boolean) => void
 }
 
-const SizeSelection = ({ 
+const SizeSelection = ({
   availableSizes,
   selectedSizeId,
   setSelectedSizeId,
@@ -35,7 +35,7 @@ const SizeSelection = ({
       {/* Size selector */}
       <div id="size-selector" className="relative">
         <div className="relative">
-          <div 
+          <div
             className="w-full border-2 bg-black/[0.04]   
              
             cursor-pointer transition-colors
@@ -51,14 +51,14 @@ const SizeSelection = ({
               <ChevronDown size={16} className={cn("text-gray-700 transition-transform sm:w-[18px] sm:h-[18px]", isDropdownOpen && "rotate-180")} />
             </div>
           </div>
-          
+
           {isDropdownOpen && (
             <div className="absolute z-10 w-full mt-1 bg-white border-2 border-black/[0.15] rounded-md shadow-lg">
               {/* Footer Note */}
-              <div className="px-3 sm:px-4 py-2 bg-red-50 border-b-2 border-black/[0.15]">
-                <p className="text-[10px] sm:text-xs text-[#B01E23]">Sizes shown are standard to your country</p>
+              <div className="px-3 sm:px-4 py-2 bg-black/[0.04] border-b-2 border-black/[0.15]">
+                <p className="text-[10px] sm:text-xs text-black">Sizes shown are standard to your country</p>
               </div>
-              
+
               {/* Size Options */}
               <div className="max-h-48 overflow-y-auto">
                 {availableSizes.map((size: Size) => {
@@ -67,7 +67,7 @@ const SizeSelection = ({
                   if (typeof (size as any).stock === "number") {
                     stockStatus = (size as any).stock === 0 ? "notify" : (size as any).stock <= 5 ? "few" : "available";
                   }
-                  
+
                   return (
                     <div
                       key={size.id}
@@ -78,20 +78,20 @@ const SizeSelection = ({
                         }
                       }}
                       className={cn(
-                        "flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 hover:bg-red-50 cursor-pointer border-b-2 border-black/[0.15] last:border-b-0 transition-colors",
+                        "flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 hover:bg-gray-100 cursor-pointer border-b-2 border-black/[0.15] last:border-b-0 transition-colors",
                         stockStatus === "notify" && "cursor-not-allowed opacity-60",
-                        isSelected && "bg-red-50"
+                        isSelected && "bg-black/[0.04]"
                       )}
                     >
                       <span className={cn(
                         "text-sm sm:text-[15px] font-medium",
-                        isSelected && "text-[#B01E23]"
+                        isSelected && "text-black"
                       )}>
                         {size.name}
                       </span>
-                      
+
                       {stockStatus === "notify" ? (
-                        <div className="flex items-center gap-1 sm:gap-2 text-[#B01E23]">
+                        <div className="flex items-center gap-1 sm:gap-2 text-black">
                           <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5-5-5h5v-5a7.5 7.5 0 1 0-15 0v5h5" />
                           </svg>
@@ -99,15 +99,15 @@ const SizeSelection = ({
                         </div>
                       ) : stockStatus === "few" ? (
                         <div className="flex items-center gap-1 sm:gap-2">
-                          <span className="text-xs text-[#B01E23] font-medium">Few items left</span>
+                          <span className="text-xs text-black font-medium">Few items left</span>
                           {isSelected && (
-                            <Check size={14} className="text-[#B01E23]" />
+                            <Check size={14} className="text-black" />
                           )}
                         </div>
                       ) : (
                         <div className="flex items-center gap-1 sm:gap-2">
                           {isSelected && (
-                            <Check size={14} className="text-[#B01E23]" />
+                            <Check size={14} className="text-black" />
                           )}
                         </div>
                       )}
@@ -126,7 +126,7 @@ const SizeSelection = ({
           <span className="text-xs text-gray-600">In stock - Ready to ship</span>
         </div>
       )}
-      
+
       {/* Add to Cart Button for Mobile - Below Size Selector */}
       {isMobile && (
         <div className="mt-4">

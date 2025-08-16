@@ -187,7 +187,7 @@ const ProductDropdowns = ({
             )}>
               <div className="flex items-center gap-2 mb-2">
                 <div className={cn("bg-gray rounded-full p-1.5", isMobile && "p-1")}>
-                  <svg className={cn("text-red", isMobile ? "w-3 h-3" : "w-4 h-4")} fill="white" stroke="black" viewBox="0 0 24 24">
+                  <svg className={cn("text-black", isMobile ? "w-3 h-3" : "w-4 h-4")} fill="white" stroke="black" viewBox="0 0 24 24">
                     <path strokeLinecap="round"  strokeLinejoin="round" strokeWidth={2} d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0h6m-6 0l-2 13a2 2 0 002 2h6a2 2 0 002-2L16 7" />
                   </svg>
                 </div>
