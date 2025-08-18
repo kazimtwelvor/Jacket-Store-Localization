@@ -7,6 +7,8 @@ import { cn } from "@/src/app/lib/utils"
 import getProducts from "@/src/app/actions/get-products"
 import Currency from "@/src/app/ui/currency"
 import { avertaBlack, avertaBold } from "@/src/lib/fonts"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export interface Product {
     id: string
@@ -47,6 +49,7 @@ function useMediaQuery(query: string): boolean {
 }
 
 export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items = [] }: ProductCarouselProps) {
+    const router = useRouter()
     const [activeCategory, setActiveCategory] = useState<Category>("MEN")
     const [productItems, setProductItems] = useState<Product[]>(items)
     const [loading, setLoading] = useState(true)
@@ -208,7 +211,7 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
         const touchCurrentY = e.targetTouches[0].clientY
         const distanceX = Math.abs(touchStart - touchCurrent)
         const distanceY = Math.abs(touchStartY - touchCurrentY)
-        
+
         if (distanceX > 10 && distanceX > distanceY) {
             setIsScrolling(true)
         }
@@ -220,11 +223,11 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
         const touchEndY = e.changedTouches[0].clientY
         const distanceX = touchStart - touchEnd
         const distanceY = Math.abs(touchStartY - touchEndY)
-        
+
         if (Math.abs(distanceX) > 50 && Math.abs(distanceX) > distanceY) {
             distanceX > 0 ? nextSlide() : prevSlide()
         }
-        
+
         // Reset scrolling state after a delay
         setTimeout(() => setIsScrolling(false), 100)
         setTouchStart(null)
@@ -312,8 +315,8 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                                             if (isTransitioning.current) return
                                                             isTransitioning.current = true
                                                             setActiveIndex(i)
-                                                        } else {
-                                                            window.location.href = `/product/${product.slug}`
+                                                                                                                } else {
+                                                            router.push(`/product/${product.slug}`)
                                                         }
                                                     }}
                                                 >
@@ -391,7 +394,7 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                                 style={{ width: widthExpression, marginLeft, marginRight }}
                                                 onClick={() => {
                                                     if (isScrolling) return
-                                                    window.location.href = `/product/${product.slug}`
+                                                    router.push(`/product/${product.slug}`)
                                                 }}
                                             >
                                                 <motion.div
