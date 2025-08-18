@@ -7,6 +7,8 @@ import { cn } from "@/src/app/lib/utils"
 import getProducts from "@/src/app/actions/get-products"
 import Currency from "@/src/app/ui/currency"
 import { avertaBlack, avertaBold } from "@/src/lib/fonts"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export interface Product {
     id: string
@@ -47,6 +49,7 @@ function useMediaQuery(query: string): boolean {
 }
 
 export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items = [] }: ProductCarouselProps) {
+    const router = useRouter()
     const [activeCategory, setActiveCategory] = useState<Category>("MEN")
     const [productItems, setProductItems] = useState<Product[]>(items)
     const [loading, setLoading] = useState(true)
@@ -56,6 +59,8 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
     const [isJumping, setIsJumping] = useState(false)
     const isMobile = useMediaQuery("(max-width: 768px)")
     const [touchStart, setTouchStart] = useState<number | null>(null)
+    const [touchStartY, setTouchStartY] = useState<number | null>(null)
+    const [isScrolling, setIsScrolling] = useState(false)
 
     useEffect(() => {
         const fetchCategoryProducts = async () => {
@@ -196,16 +201,37 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
     const handleTouchStart = (e: React.TouchEvent) => {
         if (isTransitioning.current || !canLoop) return
         setTouchStart(e.targetTouches[0].clientX)
+        setTouchStartY(e.targetTouches[0].clientY)
+        setIsScrolling(false)
+    }
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (touchStart === null || touchStartY === null) return
+        const touchCurrent = e.targetTouches[0].clientX
+        const touchCurrentY = e.targetTouches[0].clientY
+        const distanceX = Math.abs(touchStart - touchCurrent)
+        const distanceY = Math.abs(touchStartY - touchCurrentY)
+
+        if (distanceX > 10 && distanceX > distanceY) {
+            setIsScrolling(true)
+        }
     }
 
     const handleTouchEnd = (e: React.TouchEvent) => {
-        if (touchStart === null) return
+        if (touchStart === null || touchStartY === null) return
         const touchEnd = e.changedTouches[0].clientX
-        const distance = touchStart - touchEnd
-        if (Math.abs(distance) > 50) {
-            distance > 0 ? nextSlide() : prevSlide()
+        const touchEndY = e.changedTouches[0].clientY
+        const distanceX = touchStart - touchEnd
+        const distanceY = Math.abs(touchStartY - touchEndY)
+
+        if (Math.abs(distanceX) > 50 && Math.abs(distanceX) > distanceY) {
+            distanceX > 0 ? nextSlide() : prevSlide()
         }
+
+        // Reset scrolling state after a delay
+        setTimeout(() => setIsScrolling(false), 100)
         setTouchStart(null)
+        setTouchStartY(null)
     }
 
     const widthExpression = 'calc(23% - 14px)'
@@ -251,9 +277,11 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                             </div>
                         ) : isMobile ? (
                             <div
-                                className="relative flex items-center justify-center h-[550px]"
+                                className="relative flex items-center justify-center h-[550px] overflow-hidden"
                                 onTouchStart={handleTouchStart}
+                                onTouchMove={handleTouchMove}
                                 onTouchEnd={handleTouchEnd}
+                                style={{ touchAction: 'pan-y' }}
                             >
                                 {displayItems.map((product, i) => {
                                     const isCenter = i === activeIndex
@@ -282,12 +310,13 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                                     className="relative cursor-pointer group overflow-hidden w-full"
                                                     style={{ aspectRatio: '252.7 / 383.3' }}
                                                     onTap={() => {
+                                                        if (isScrolling) return
                                                         if (!isCenter) {
                                                             if (isTransitioning.current) return
                                                             isTransitioning.current = true
                                                             setActiveIndex(i)
-                                                        } else {
-                                                            window.location.href = `/product/${product.slug}`
+                                                                                                                } else {
+                                                            router.push(`/product/${product.slug}`)
                                                         }
                                                     }}
                                                 >
@@ -324,11 +353,23 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                 })}
                             </div>
                         ) : (
-                            <div className="py-4 sm:py-6 md:py-8">
+                            <div className="py-4 sm:py-6 md:py-8 overflow-hidden">
                                 <motion.div
                                     ref={trackRef}
                                     className="flex items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4"
                                     style={{ x }}
+                                    onWheel={(e) => {
+                                        e.preventDefault()
+                                        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                                            if (e.deltaX > 0) {
+                                                nextSlide()
+                                            } else {
+                                                prevSlide()
+                                            }
+                                        }
+                                    }}
+                                    onMouseDown={() => setIsScrolling(true)}
+                                    onMouseUp={() => setTimeout(() => setIsScrolling(false), 100)}
                                 >
                                     {displayItems.map((product, i) => {
                                         const isCenter = i === activeIndex
@@ -352,7 +393,8 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                                 className="flex-shrink-0 cursor-pointer"
                                                 style={{ width: widthExpression, marginLeft, marginRight }}
                                                 onClick={() => {
-                                                    window.location.href = `/product/${product.slug}`
+                                                    if (isScrolling) return
+                                                    router.push(`/product/${product.slug}`)
                                                 }}
                                             >
                                                 <motion.div
