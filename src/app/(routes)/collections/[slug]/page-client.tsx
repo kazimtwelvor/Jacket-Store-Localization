@@ -1450,8 +1450,8 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                 else if (categoryName.includes('varsity')) finalImageUrl = '/images/varsity.webp';
                                 else if (categoryName.includes('letterman') || categoryName.includes('bomber')) finalImageUrl = '/images/letterman.webp';
                                 else if (categoryName.includes('women')) finalImageUrl = '/images/women-leather.webp';
-                                else if (categoryName.includes('wool')) finalImageUrl = '/images/leather.webp'; // Fallback for wool
-                                else finalImageUrl = '/images/leather.webp'; // Default fallback
+                                else if (categoryName.includes('wool')) finalImageUrl = '/images/leather.webp'; 
+                                else finalImageUrl = '/images/leather.webp'; 
                             }
 
                             return finalImageUrl;

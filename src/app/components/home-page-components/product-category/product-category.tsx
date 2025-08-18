@@ -116,7 +116,25 @@ const womenCategories: Category[] = [
   },
 ];
 
-export default function ProductCategory() {
+interface ProductCategoryProps {
+  bg?: string;
+  arrowBgColor?: string;
+  arrowTextColor?: string;
+  arrowHoverBgColor?: string;
+  tabTextColor?: string;
+  tabActiveColor?: string;
+  tabHoverColor?: string;
+}
+
+export default function ProductCategory({
+  bg = "bg-white",
+  arrowBgColor = "bg-black",
+  arrowTextColor = "text-white",
+  arrowHoverBgColor = "hover:bg-black",
+  tabTextColor = "text-gray-700",
+  tabActiveColor = "border-[#2b2b2b] text-[#2b2b2b]",
+  tabHoverColor = "hover:text-[#2b2b2b]"
+}: ProductCategoryProps) {
   const [activeTab, setActiveTab] = useState<"men" | "women">("men");
   const [currentStartIndex, setCurrentStartIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -133,7 +151,6 @@ export default function ProductCategory() {
     if (el) {
       const hasOverflow = el.scrollWidth > el.clientWidth;
       setCanScrollLeft(el.scrollLeft > 5);
-      // Hide right arrow a bit earlier so it disappears before the next click would be ineffective
       const nextClickAmount = el.clientWidth * 0.75;
       const remainingScrollable =
         el.scrollWidth - el.clientWidth - el.scrollLeft;
@@ -207,17 +224,18 @@ export default function ProductCategory() {
     }
   };
 
-  const showArrows = isDesktop && categories.length > visibleCount;
+  const showArrows = isDesktop
+    ? categories.length > visibleCount
+    : canScrollLeft || canScrollRight;
 
   const canGoLeft = isDesktop ? currentStartIndex > 0 : canScrollLeft;
-
   const canGoRight = isDesktop
     ? currentStartIndex + visibleCount + 1 < categories.length
     : canScrollRight;
 
   return (
     <section
-      className={`w-full bg-white flex justify-center overflow-hidden ${avertaBold.className}`}
+      className={`w-full ${bg} flex justify-center overflow-hidden ${avertaBold.className}`}
     >
       <div className="w-full max-w-[1896px] py-0 m-0  md:pl-8 lg:pl-[57px]">
         <motion.div
@@ -227,16 +245,16 @@ export default function ProductCategory() {
           transition={{ duration: 0.5 }}
           className="text-center mb-0"
         ></motion.div>
+        <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 -ml-4 md:-ml-8 lg:-ml-12">
 
-        <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 ml-2 lg:-ml-4">
           <div className="flex gap-4">
             <button
               onClick={() => setActiveTab("men")}
               className={cn(
                 "px-3 pb-1 text-base font-semibold transition-colors border-b-2 text-center",
                 activeTab === "men"
-                  ? "border-[#2b2b2b] text-[#2b2b2b]"
-                  : "border-transparent text-gray-700 hover:text-[#2b2b2b]"
+                  ? tabActiveColor
+                  : `border-transparent ${tabTextColor} ${tabHoverColor}`
               )}
             >
               MEN
@@ -246,8 +264,8 @@ export default function ProductCategory() {
               className={cn(
                 "px-3 pb-1 text-base font-semibold transition-colors border-b-2 text-center",
                 activeTab === "women"
-                  ? "border-[#2b2b2b] text-[#2b2b2b]"
-                  : "border-transparent text-gray-700 hover:text-[#2b2b2b]"
+                  ? tabActiveColor
+                  : `border-transparent ${tabTextColor} ${tabHoverColor}`
               )}
             >
               WOMEN
@@ -255,26 +273,32 @@ export default function ProductCategory() {
           </div>
         </div>
         {showArrows && (
-          <div className="w-full flex justify-end items-center gap-2 sm:gap-3 mb-2 md:mb-3 pr-2 sm:pr-3">
+          <div className="w-full flex justify-end items-center gap-2 sm:gap-3 mb-2 md:mb-3">
             <button
               onClick={() => scroll("left")}
-              className={`block bg-black rounded-none p-2 sm:p-3 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-black  focus:outline-none ${
+              className={cn(
+                "block rounded-none p-2 sm:p-3 shadow-lg backdrop-blur-sm transition-all duration-300 focus:outline-none",
+                arrowBgColor,
+                arrowHoverBgColor,
                 !canGoLeft ? "hidden" : ""
-              }`}
+              )}
               aria-label="Scroll left"
               disabled={!canGoLeft}
             >
-              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              <ChevronLeft className={cn("w-5 h-5 sm:w-6 sm:h-6", arrowTextColor)} />
             </button>
             <button
               onClick={() => scroll("right")}
-              className={`block bg-black rounded-none p-2 sm:p-3 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-black  focus:outline-none  disabled:opacity-50 ${
+              className={cn(
+                "block rounded-none p-2 sm:p-3 shadow-lg backdrop-blur-sm transition-all duration-300 disabled:opacity-50",
+                arrowBgColor,
+                arrowHoverBgColor,
                 !canGoRight ? "hidden" : ""
-              }`}
+              )}
               aria-label="Scroll right"
               disabled={!canGoRight}
             >
-              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              <ChevronRight className={cn("w-5 h-5 sm:w-6 sm:h-6", arrowTextColor)} />
             </button>
           </div>
         )}
@@ -288,11 +312,10 @@ export default function ProductCategory() {
           `}</style>
           <div
             ref={scrollContainerRef}
-            className={`${
-              isDesktop && categories.length > visibleCount
-                ? "overflow-hidden"
-                : "overflow-x-auto overflow-y-hidden scroll-smooth"
-            } hide-scrollbar`}
+            className={`${isDesktop && categories.length > visibleCount
+              ? "overflow-hidden"
+              : "overflow-x-auto overflow-y-hidden scroll-smooth"
+              } hide-scrollbar`}
             style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
           >
             <div
@@ -301,10 +324,9 @@ export default function ProductCategory() {
               style={
                 isDesktop && categories.length > visibleCount
                   ? {
-                      transform: `translateX(-${
-                        currentStartIndex * (360 + 24)
+                    transform: `translateX(-${currentStartIndex * (360 + 24)
                       }px)`,
-                    }
+                  }
                   : {}
               }
             >

@@ -14,7 +14,7 @@ interface FilterBarProps {
   sortDropdownOpen: boolean
   setSortDropdownOpen: (open: boolean) => void
   setFilterSidebarOpen: (open: boolean) => void
-  setCategorySliderOpen: (open: boolean) => void
+  setCategorySliderOpen: (open: boolean) => void  
   setSizeModalOpen: (open: boolean) => void
   clearFilters: () => void
   handleSortChange: (sortValue: string) => void
@@ -95,7 +95,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           top: 100%;
           left: 0;
           margin-top: 0.5rem;
-          background-color: black;
+          // background-color: black;
           border-radius: 0.375rem;
           box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
           border: 1px solid #e5e7eb;
@@ -154,7 +154,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         <div
           className={cn(
             "w-full px-2 py-4 mb-6 transition-all duration-300",
-            isFilterSticky ? "fixed left-0 right-0 px-2 py-2 z-[9003] sticky-filter-bar" : "relative",
+            isFilterSticky ? "fixed left-0 right-0 px-2 py-2 z-[9003] sticky-filter-bar bg-transparent "  : "relative",
             isFilterSticky ? "top-16 md:top-[6.5rem]" : "",
             "md:px-6 md:py-3 md:mb-10",
             "lg:px-8 lg:py-3"

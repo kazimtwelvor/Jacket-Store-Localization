@@ -102,9 +102,8 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
 
   const getStickyPosition = () => {
     if (!isFilterSticky) return "relative";
-    
     if (isHeaderVisible) {
-      return "fixed top-10 sm:top-16 md:top-0 left-0 right-0 px-2 py-2 z-[9003] sticky-filter-bar";
+      return "fixed top-10 sm:top-16 md:top-20 left-0 right-0 px-2 py-2 z-[8000] sticky-filter-bar";
     } else {
       return "fixed top-0 left-0 right-0 px-2 py-2 z-[9003] sticky-filter-bar";
     }
