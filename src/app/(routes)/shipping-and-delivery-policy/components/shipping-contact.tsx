@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Mail, MessageSquare, Phone } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function ShippingContact() {
   const [isMounted, setIsMounted] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     setIsMounted(true)
@@ -14,13 +16,12 @@ export default function ShippingContact() {
   const handleContactAction = (type: string) => {
     switch (type) {
       case "email":
-        window.location.href = "mailto:support@fashionstore.com"
+        router.push("mailto:support@fashionstore.com")
         break
       case "phone":
-        window.location.href = "tel:+18001234567"
+        router.push("tel:+18001234567")
         break
       case "chat":
-        // Open chat window - this is a placeholder
         alert("Live chat would open here. This is a placeholder.")
         break
       default:

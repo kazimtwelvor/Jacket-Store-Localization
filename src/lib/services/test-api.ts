@@ -1,16 +1,13 @@
 import ProductService from './product-service'
 
-// Test function to verify API setup
 export async function testApiConnection() {
   console.log('🧪 Testing API Connection...')
   
   try {
-    // Test 1: Get featured products
     console.log('📦 Testing getFeaturedProducts...')
     const featuredProducts = await ProductService.getFeaturedProducts(3)
     console.log('✅ Featured products fetched:', featuredProducts.length)
     
-    // Test 2: Get products with filters
     console.log('🔍 Testing getProducts with filters...')
     const products = await ProductService.getProducts({
       limit: 5,
@@ -34,7 +31,6 @@ export async function testApiConnection() {
   }
 }
 
-// Function to test in browser console
 if (typeof window !== 'undefined') {
   (window as any).testApi = testApiConnection
 }

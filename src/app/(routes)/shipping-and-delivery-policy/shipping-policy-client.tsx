@@ -13,7 +13,6 @@ import { motion } from "framer-motion"
 export default function ShippingPolicyClient() {
   const [isMounted, setIsMounted] = useState(false)
 
-  // Scroll to top on component mount
   useEffect(() => {
     window.scrollTo(0, 0)
     setIsMounted(true)
@@ -148,7 +147,6 @@ export default function ShippingPolicyClient() {
               </div>
             </div>
 
-            {/* Hidden content for SEO */}
             <div className="sr-only" aria-hidden="true">
               <h3>International Shipping</h3>
               <p>Global shipping to over 180 countries</p>

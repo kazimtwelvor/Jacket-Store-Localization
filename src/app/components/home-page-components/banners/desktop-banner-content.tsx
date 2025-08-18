@@ -4,6 +4,8 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import ResponsiveContainer from "@/src/app/ui/responsive-container"
 import { avertaBlack } from "@/src/lib/fonts"
+import ShopButton from "@/src/app/components/shop-button"
+import { tr } from "zod/v4/locales"
 
 export const DesktopBannerContent = () => {
   return (
@@ -35,18 +37,26 @@ export const DesktopBannerContent = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className={`${avertaBlack.className} flex flex-col sm:flex-row justify-center gap-4 sm:gap-5`}
           >
-            <Link href="/shop" aria-label="Shop men's collection">
-              <button className="relative overflow-hidden bg-[#2b2b2b] text-white font-bold py-4 px-8 md:px-10 text-sm md:text-base uppercase w-full sm:w-auto min-w-[180px] hover:shadow-lg transition-all duration-300 group">
-                <span className="relative z-10">Shop Men</span>
-                <div className="absolute inset-0 w-0 bg-[#2b2b2b] transition-all duration-300 group-hover:w-full"></div>
-              </button>
-            </Link>
-            <Link href="/shop" aria-label="Shop women's collection">
-              <button className="relative overflow-hidden bg-[#2b2b2b] text-white font-bold py-4 px-8 md:px-10 text-sm md:text-base uppercase w-full sm:w-auto min-w-[180px] hover:shadow-lg transition-all duration-300 group">
-                <span className="relative z-10">Shop Women</span>
-                <div className="absolute inset-0 w-0 bg-[#2b2b2b] transition-all duration-300 group-hover:w-full"></div>
-              </button>
-            </Link>
+            <ShopButton
+              variant="filled"
+              href="/shop"
+              size="lg"
+              showArrow={true}
+              ariaLabel="Shop men's collection"
+              className="w-full sm:w-auto min-w-[180px]"
+            >
+              Shop Men
+            </ShopButton>
+            <ShopButton
+              variant="filled"
+              href="/shop"
+              size="lg"
+              showArrow={true}
+              ariaLabel="Shop women's collection"
+              className="w-full sm:w-auto min-w-[180px]"
+            >
+              Shop Women
+            </ShopButton>
           </motion.div>
         </div>
       </section>

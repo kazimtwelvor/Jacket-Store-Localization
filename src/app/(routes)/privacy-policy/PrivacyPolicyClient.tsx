@@ -9,44 +9,33 @@ import { Button } from "@/src/app/ui/button"
 import Script from "next/script"
 
 export default function PrivacyPolicyClient() {
-  const lastUpdated = "April 19, 2025"
   const sidebarRef = useRef<HTMLDivElement>(null)
 
-  // Initialize fixed-sticky when scripts are loaded
   useEffect(() => {
-    // Function to initialize fixed-sticky
     const initFixedSticky = () => {
       if (window.jQuery && sidebarRef.current) {
         window.jQuery(sidebarRef.current).fixedsticky()
       }
     }
 
-    // Check if jQuery is already loaded
     if (window.jQuery) {
-      // Wait for fixed-sticky to load
       const checkFixedStickyInterval = setInterval(() => {
         if (window.jQuery.fn.fixedsticky) {
           clearInterval(checkFixedStickyInterval)
           initFixedSticky()
         }
       }, 100)
-
-      // Clear interval after 5 seconds to prevent infinite checking
       setTimeout(() => clearInterval(checkFixedStickyInterval), 5000)
     }
 
     return () => {
-      // Cleanup if needed
     }
   }, [])
 
   return (
     <section className="bg-background pb-20">
-      {/* Load jQuery and fixed-sticky scripts */}
       <Script src="https://code.jquery.com/jquery-3.6.0.min.js" strategy="beforeInteractive" />
       <Script src="https://cdn.jsdelivr.net/npm/fixed-sticky@0.1.7/fixedsticky.min.js" strategy="beforeInteractive" />
-
-      {/* Hero Section */}
       <div className="relative h-[40vh] w-full overflow-hidden mb-16 md:mb-24 hero-div">
         <Image src="/placeholder.svg?key=5rrok" alt="Privacy Policy" fill className="object-cover" priority />
         <div className="absolute inset-0 flex items-center justify-center">
@@ -63,9 +52,7 @@ export default function PrivacyPolicyClient() {
 
       <Container>
         <div className="flex flex-col lg:flex-row gap-12">
-          {/* Sidebar container */}
           <aside className="lg:w-1/4">
-            {/* Contents sidebar with fixedsticky class */}
             <div
               ref={sidebarRef}
               className="sidebar fixedsticky bg-muted p-6 rounded-lg shadow-md border border-black"
@@ -112,7 +99,6 @@ export default function PrivacyPolicyClient() {
             </div>
           </aside>
 
-          {/* Main Content */}
           <div className="lg:w-3/4 mb-12">
             <div className="prose prose-lg max-w-none">
               <div id="information-we-collect" className="scroll-mt-24">

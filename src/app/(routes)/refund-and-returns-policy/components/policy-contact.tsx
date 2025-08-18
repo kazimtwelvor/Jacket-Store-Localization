@@ -3,22 +3,23 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Mail, MessageSquare, Phone } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function PolicyContact() {
   const [isMounted, setIsMounted] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  // Function to handle contact actions
   const handleContactAction = (type: "email" | "phone" | "chat") => {
     switch (type) {
       case "email":
-        window.location.href = "mailto:support@fashionstore.com"
+        router.push("mailto:support@fashionstore.com")
         break
       case "phone":
-        window.location.href = "tel:+18001234567"
+        router.push("tel:+18001234567")
         break
       case "chat":
         alert("Live chat would open here. This is a placeholder.")
@@ -26,14 +27,12 @@ export default function PolicyContact() {
     }
   }
 
-  // Non-JavaScript fallback
   if (!isMounted) {
     return (
       <div className="mt-8 bg-white rounded-xl border border-[#2b2b2b] shadow-sm overflow-hidden">
         <div className="bg-[#2b2b2b] p-4 border-b border-[#2b2b2b]">
           <h3 className="font-semibold text-[#2b2b2b]">Need Help?</h3>
         </div>
-
         <div className="p-4 space-y-4">
           <p className="text-sm text-[#666666]">
             If you have any questions about our return policy or need assistance with a return, our customer service
@@ -76,7 +75,6 @@ export default function PolicyContact() {
     )
   }
 
-  // Enhanced version with JavaScript
   return (
     <motion.div
       className="mt-8 bg-white rounded-xl border border-[#2b2b2b] shadow-sm overflow-hidden"

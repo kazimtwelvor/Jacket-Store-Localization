@@ -151,7 +151,7 @@ export default function ProductCategory() {
 
       if (isDesktopView) {
         const containerWidth = screenWidth * 0.8;
-        const categoryWidth = 360 + 24; // item width + gap
+        const categoryWidth = 360 + 24;
         const count = Math.floor(containerWidth / categoryWidth);
         setVisibleCount(Math.max(1, count));
       }

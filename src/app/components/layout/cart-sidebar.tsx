@@ -7,6 +7,7 @@ import { X, Heart, Truck, RotateCcw, ChevronRight } from "lucide-react"
 import type { Product } from "@/types"
 import Currency from "../../ui/currency"
 import { useCart } from "../../contexts/CartContext"
+import { useRouter } from "next/navigation"
 
 interface CartSidebarProps {
     isOpen: boolean
@@ -20,7 +21,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
     const { items, updateQuantity, removeFromCart, totalPrice } = useCart()
     const [showVoucherField, setShowVoucherField] = useState(false)
     const [couponCode, setCouponCode] = useState("")
-
+    const router = useRouter()
     const shippingPrice = totalPrice > 100 ? 0 : 10
     const taxRate = 0.08
     const taxAmount = totalPrice * taxRate
@@ -56,7 +57,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                     <h2 className="text-lg font-semibold">MY SHOPPING CART</h2>
                     <div className="flex items-center gap-4">
                         <button
-                            onClick={() => window.location.href = '/cart'}
+                            onClick={() => router.push('/cart')}
                             className="text-sm text-gray-600 hover:text-gray-800"
                         >
                             SEE DETAILS
@@ -262,7 +263,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                     <button
                         onClick={() => {
                             onClose()
-                            window.location.href = '/checkout'
+                            router.push('/checkout')
                         }}
                         className="w-full bg-black text-white py-3 font-semibold text-lg mb-3"
                     >

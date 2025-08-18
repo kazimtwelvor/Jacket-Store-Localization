@@ -254,7 +254,7 @@ export default function OrderHistoryPage() {
                         <XCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
                         <p className="text-gray-600">{error}</p>
                         <button
-                          onClick={() => window.location.reload()}
+                          onClick={() => router.refresh()}
                           className="mt-4 px-4 py-2 bg-black text-white rounded-md"
                         >
                           Try Again

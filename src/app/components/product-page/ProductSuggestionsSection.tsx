@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import type { Product } from "@/types"
 import WeThinkYouWillLove from "../../category/WeThinkYouWillLove"
 import RecentlyViewed from "../../category/RecentlyViewed"
+import { useRouter } from "next/navigation"
 
 interface ProductSuggestionsSectionProps {
   suggestProducts: Product[]
@@ -14,6 +15,7 @@ export const ProductSuggestionsSection = ({ suggestProducts, isMobile }: Product
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
   const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
   const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = 'smooth'
@@ -40,7 +42,7 @@ export const ProductSuggestionsSection = ({ suggestProducts, isMobile }: Product
 
   const handleProductClick = (product: Product) => {
     addToRecentlyViewed(product)
-    window.location.href = `/product/${product.slug || product.id}`
+    router.push(`/product/${product.slug || product.id}`)
   }
 
   const handleSizeSelect = (productId: string, size: string) => {

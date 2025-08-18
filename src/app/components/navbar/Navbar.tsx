@@ -336,9 +336,9 @@ const Navbar = () => {
         currentSearch &&
         currentSearch !== searchQuery.trim()
       ) {
-        window.location.href = `/shop?search=${encodeURIComponent(
+        router.push(`/shop?search=${encodeURIComponent(
           searchQuery.trim()
-        )}`;
+        )}`);
       } else {
         router.push(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
       }

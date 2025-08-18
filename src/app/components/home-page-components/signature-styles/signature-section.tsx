@@ -7,6 +7,7 @@ import { FaArrowRight, FaChevronDown, FaChevronUp } from "react-icons/fa"
 import React, { useState } from "react"
 import { Card } from "@/src/app/ui/card"
 import { avertaBlack, avertaBold } from "@/src/lib/fonts"
+import ShopButton from "@/src/app/components/shop-button"
 
 const TruncatedText = ({ text, limit, className, onToggle }: { text: string; limit: number; className?: string; onToggle?: (expanded: boolean) => void }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -72,7 +73,7 @@ export default function SignatureStylesSection() {
                                 <div
                                     className="absolute inset-0 flex items-end justify-center pb-6 md:items-end md:justify-center md:pb-6 lg:justify-end lg:pb-24 z-[25]"
                                 >
-                                    <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pr-20">
+                                    <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pr-20 mb-10">
                                         <div>
                                             <h2 className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}>
                                                 MEN'S<br />LEATHER<br />JACKET
@@ -85,10 +86,15 @@ export default function SignatureStylesSection() {
                                             onToggle={setMenDropdownOpen}
                                         />
                                         <div className="mt-6 text-center">
-                                            <div className="group/button cursor-pointer inline-flex items-center bg-[#2b2b2b] border-b border border- text-white font-bold py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6 hover:bg-[#2b2b2b] transition-colors duration-300">
-                                                <span className={`text-center md:text-center lg:text-left ${avertaBold.className}`}>Shop Mens</span>
-                                                <FaArrowRight className="hidden lg:block ml-2 opacity-0 group-hover/button:opacity-100 transition-all duration-400 transform group-hover/button:translate-x-1" />
-                                            </div>
+                                            <ShopButton
+                                                variant="bordered"
+                                                href="/collections/male"
+                                                size="sm"
+                                                showArrow={true}
+                                                className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}
+                                            >
+                                                Shop Mens
+                                            </ShopButton>
                                         </div>
                                     </div>
                                 </div>
@@ -113,7 +119,7 @@ export default function SignatureStylesSection() {
                                 <div
                                     className="absolute inset-0 flex items-end justify-center pb-6 md:items-end md:justify-center md:pb-6 lg:justify-start lg:pb-24 z-[25]"
                                 >
-                                    <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pl-20">
+                                    <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pl-20 mb-10">
                                         <div>
                                             <h2 className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}>
                                                 WOMEN'S<br />LEATHER<br />JACKET
@@ -126,10 +132,15 @@ export default function SignatureStylesSection() {
                                             onToggle={setWomenDropdownOpen}
                                         />
                                         <div className="mt-6 text-center">
-                                            <div className={`group/button cursor-pointer inline-flex items-center bg-[#2b2b2b] border-b border border- text-white font-bold py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6 hover:bg-[#2b2b2b] transition-colors duration-300 ${avertaBold.className}`}>
-                                                <span>Shop Womens</span>
-                                                <FaArrowRight className="hidden lg:block ml-2 opacity-0 group-hover/button:opacity-100 transition-all duration-400 transform group-hover/button:translate-x-1" />
-                                            </div>
+                                            <ShopButton
+                                                variant="bordered"
+                                                href="/collections/female"
+                                                size="sm"
+                                                showArrow={true}
+                                                className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}
+                                            >
+                                                Shop Womens
+                                            </ShopButton>
                                         </div>
                                     </div>
                                 </div>

@@ -51,7 +51,7 @@ const Summary = () => {
       const data = await response.json();
 
       if (data.url) {
-        window.location.href = data.url;
+        router.push(data.url);
       } else {
         router.push("/checkout/success")
       }
