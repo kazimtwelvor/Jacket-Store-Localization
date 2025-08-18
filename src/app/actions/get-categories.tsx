@@ -8,6 +8,9 @@ const fallbackCategories: Category[] = [
   {
     id: "category_jackets",
     name: "Jackets",
+    materials: ["Leather", "Denim", "Cotton"],
+    styles: ["Bomber", "Biker", "Varsity"],
+    genders: ["Men", "Women"],
     billboard: {
       id: "billboard_1",
       label: "Premium Jackets Collection",
@@ -17,6 +20,9 @@ const fallbackCategories: Category[] = [
   {
     id: "category_coats",
     name: "Coats",
+    materials: ["Wool", "Cashmere", "Polyester"],
+    styles: ["Trench", "Pea Coat", "Overcoat"],
+    genders: ["Men", "Women", "Unisex"],
     billboard: {
       id: "billboard_2",
       label: "Luxury Coats",
@@ -26,6 +32,9 @@ const fallbackCategories: Category[] = [
   {
     id: "category_leather",
     name: "Leather",
+    materials: ["Genuine Leather", "Faux Leather", "Suede"],
+    styles: ["Classic", "Vintage", "Modern"],
+    genders: ["Men", "Women"],
     billboard: {
       id: "billboard_3",
       label: "Finest Leather Collection",
@@ -36,18 +45,27 @@ const fallbackCategories: Category[] = [
 
 const getCategories = async (): Promise<Category[]> => {
   try {
-    // Check if API URL is available
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.warn("API URL not configured. Using fallback categories data.")
       return fallbackCategories
     }
 
-    return await fetchJson<Category[]>("/categories", {
-      query: { include: "billboard" },
-    })
+    console.log("🔄 Fetching categories from API:", `${process.env.NEXT_PUBLIC_API_URL}/categories`)
+    
+    const categories = await fetchJson<Category[]>("/categories")
+    
+    console.log("✅ Categories fetched from API:", categories)
+    console.log("✅ Categories length:", categories?.length)
+    
+    if (!categories || categories.length === 0) {
+      console.warn("⚠️ No categories returned from API, using fallback")
+      return fallbackCategories
+    }
+    
+    return categories
   } catch (error) {
-    console.error("Error fetching categories:", error)
-    // Return fallback data when API call fails
+    console.error("❌ Error fetching categories:", error)
+    console.log("⚠️ Using fallback categories data")
     return fallbackCategories
   }
 }

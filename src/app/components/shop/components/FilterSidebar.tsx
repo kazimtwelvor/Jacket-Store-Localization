@@ -15,9 +15,9 @@ interface FilterSidebarProps {
     colors: string[]
     sizes: string[]
   }
-  materials: Category[]
-  styles: Category[]
-  genders: Category[]
+  materials: { id: string; name: string }[]
+  styles: { id: string; name: string }[]
+  genders: { id: string; name: string }[]
   colors: Color[]
   sizes: Size[]
   onFilterChange: {
