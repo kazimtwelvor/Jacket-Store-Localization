@@ -34,11 +34,13 @@ const Footer = () => {
                     <div className="space-y-4 flex-shrink-0 md:w-64 flex flex-col items-center md:items-start">
                         <div className="flex flex-col items-center md:items-start">
                             <div className="mb-3 flex justify-center md:justify-start">
-                                <img
-                                    src="/images/logo-footer.webp"
-                                    alt="Fineyst Logo"
-                                    style={{ display: 'block', maxWidth: '250px', width: '100%', height: 'auto' }}
-                                />
+                                <Link href="/" className="flex items-center justify-center">
+                                    <img
+                                        src="/images/logo-footer.webp"
+                                        alt="Fineyst Logo"
+                                        style={{ display: 'block', maxWidth: '250px', width: '100%', height: 'auto' }}
+                                    />
+                                </Link>
                             </div>
                             <p className={`text-black ${avertaBold.className} text-sm mt-2 text-center md:text-left`}>Experience the finest quality and timeless design. Your destination for luxury.</p>
                         </div>

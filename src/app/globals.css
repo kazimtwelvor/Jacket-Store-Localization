@@ -14,7 +14,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Removed dark mode media query to prevent automatic dark theme */
 
 body {
   background: var(--background);
@@ -29,6 +28,21 @@ html {
   margin: 0;
   padding: 0;
   width: 100%;
-  /* Ensure UA components (scrollbars, form controls) use light styling */
   color-scheme: light;
+}
+
+a, button, [role="button"], 
+input[type="button"], input[type="submit"], input[type="reset"],
+select, summary, 
+[tabindex]:not([tabindex="-1"]),
+.clickable, .cursor-pointer {
+  cursor: pointer !important;
+}
+
+a:hover, button:hover, [role="button"]:hover,
+input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover,
+select:hover, summary:hover,
+[tabindex]:not([tabindex="-1"]):hover,
+.clickable:hover, .cursor-pointer:hover {
+  cursor: pointer !important;
 }

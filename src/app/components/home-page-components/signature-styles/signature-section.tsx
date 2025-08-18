@@ -73,7 +73,7 @@ export default function SignatureStylesSection() {
                                 <div
                                     className="absolute inset-0 flex items-end justify-center pb-6 md:items-end md:justify-center md:pb-6 lg:justify-end lg:pb-24 z-[25]"
                                 >
-                                    <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pr-20 mb-15">
+                                    <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pr-20 mb-10">
                                         <div>
                                             <h2 className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}>
                                                 MEN'S<br />LEATHER<br />JACKET
@@ -119,7 +119,7 @@ export default function SignatureStylesSection() {
                                 <div
                                     className="absolute inset-0 flex items-end justify-center pb-6 md:items-end md:justify-center md:pb-6 lg:justify-start lg:pb-24 z-[25]"
                                 >
-                                    <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pl-20 mb-15">
+                                    <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pl-20 mb-10">
                                         <div>
                                             <h2 className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}>
                                                 WOMEN'S<br />LEATHER<br />JACKET

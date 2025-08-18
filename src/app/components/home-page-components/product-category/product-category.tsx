@@ -135,9 +135,11 @@ export default function ProductCategory() {
     if (el) {
       const hasOverflow = el.scrollWidth > el.clientWidth;
       setCanScrollLeft(el.scrollLeft > 5);
-      setCanScrollRight(
-        hasOverflow && el.scrollLeft < el.scrollWidth - el.clientWidth - 5
-      );
+      // Hide right arrow a bit earlier so it disappears before the next click would be ineffective
+      const nextClickAmount = el.clientWidth * 0.75;
+      const remainingScrollable =
+        el.scrollWidth - el.clientWidth - el.scrollLeft;
+      setCanScrollRight(hasOverflow && remainingScrollable > nextClickAmount);
     }
   }, []);
 
@@ -214,14 +216,14 @@ export default function ProductCategory() {
   const canGoLeft = isDesktop ? currentStartIndex > 0 : canScrollLeft;
 
   const canGoRight = isDesktop
-    ? currentStartIndex + visibleCount < categories.length
+    ? currentStartIndex + visibleCount + 1 < categories.length
     : canScrollRight;
 
   return (
     <section
       className={`w-full bg-white flex justify-center overflow-hidden ${avertaBold.className}`}
     >
-      <div className="w-full max-w-[1896px] py-0 m-0  md:pl-8 lg:pl-12">
+      <div className="w-full max-w-[1896px] py-0 m-0  md:pl-8 lg:pl-[57px]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -260,23 +262,23 @@ export default function ProductCategory() {
           <div className="w-full flex justify-end items-center gap-2 sm:gap-3 mb-2 md:mb-3 pr-2 sm:pr-3">
             <button
               onClick={() => scroll("left")}
-              className={`block bg-white/90 rounded-none p-2 sm:p-3 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:cursor-not-allowed ${
+              className={`block bg-black rounded-none p-2 sm:p-3 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-black  focus:outline-none ${
                 !canGoLeft ? "hidden" : ""
               }`}
               aria-label="Scroll left"
               disabled={!canGoLeft}
             >
-              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
+              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </button>
             <button
               onClick={() => scroll("right")}
-              className={`block bg-white/90 rounded-none p-2 sm:p-3 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50 disabled:cursor-not-allowed ${
-                !canGoRight && "opacity-50"
+              className={`block bg-black rounded-none p-2 sm:p-3 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-black  focus:outline-none  disabled:opacity-50 ${
+                !canGoRight ? "hidden" : ""
               }`}
               aria-label="Scroll right"
               disabled={!canGoRight}
             >
-              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
+              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </button>
           </div>
         )}

@@ -47,6 +47,7 @@ export default function JacketColorCollection() {
   const [isAnimating, setIsAnimating] = useState(false)
   const [visibleItems, setVisibleItems] = useState(4)
   const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchStartY, setTouchStartY] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [mouseStart, setMouseStart] = useState<number | null>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -54,6 +55,7 @@ export default function JacketColorCollection() {
   const [hasDragged, setHasDragged] = useState(false)
   const carouselRef = useRef<HTMLDivElement>(null)
   const [scrollAmount, setScrollAmount] = useState(0)
+  const [isScrolling, setIsScrolling] = useState(false)
 
   useEffect(() => {
     const calculateLayout = () => {
@@ -119,30 +121,49 @@ export default function JacketColorCollection() {
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     setTouchStart(e.targetTouches[0].clientX)
+    setTouchStartY(e.targetTouches[0].clientY)
+    setIsScrolling(false)
     e.stopPropagation()
   }
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    setTouchEnd(e.targetTouches[0].clientX)
+    if (touchStart === null || touchStartY === null) return
+    
+    const touchEndX = e.targetTouches[0].clientX
+    const touchEndY = e.targetTouches[0].clientY
+    const distanceX = Math.abs(touchStart - touchEndX)
+    const distanceY = Math.abs(touchStartY - touchEndY)
+    
+    if (distanceX > distanceY && distanceX > 10) {
+      setIsScrolling(true)
+      e.preventDefault()
+    }
+    
+    setTouchEnd(touchEndX)
     e.stopPropagation()
   }
 
   const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    if (!touchStart || !touchEnd) return
+    if (!touchStart || !touchEnd || !touchStartY) return
 
-    const distance = touchStart - touchEnd
-    const isLeftSwipe = distance > 50
-    const isRightSwipe = distance < -50
+    const distanceX = touchStart - touchEnd
+    const distanceY = Math.abs(touchStartY - e.changedTouches[0].clientY)
+    const isLeftSwipe = distanceX > 50
+    const isRightSwipe = distanceX < -50
 
-    if (isLeftSwipe) {
-      handleNext()
-    } else if (isRightSwipe) {
-      handlePrev()
+    if (Math.abs(distanceX) > distanceY && (isLeftSwipe || isRightSwipe)) {
+      if (isLeftSwipe) {
+        handleNext()
+      } else if (isRightSwipe) {
+        handlePrev()
+      }
     }
 
     setTouchStart(null)
+    setTouchStartY(null)
     setTouchEnd(null)
+    setTimeout(() => setIsScrolling(false), 100)
   }
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -226,6 +247,7 @@ export default function JacketColorCollection() {
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
+              style={{ touchAction: 'pan-y' }}
             >
               <div className="overflow-hidden">
                 <motion.div
@@ -235,6 +257,16 @@ export default function JacketColorCollection() {
                   }}
                   transition={isDragging ? { duration: 0, type: "tween" } : { type: "spring", stiffness: 300, damping: 30 }}
                   onMouseDown={handleMouseDown}
+                  onWheel={(e) => {
+                    e.preventDefault()
+                    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                      if (e.deltaX > 0) {
+                        handleNext()
+                      } else {
+                        handlePrev()
+                      }
+                    }
+                  }}
                   style={{ cursor: isDragging ? "grabbing" : "grab" }}
                 >
                   {colorCollections.map((item) => (
@@ -245,7 +277,15 @@ export default function JacketColorCollection() {
                       onMouseUp={handleMouseUp}
                       onContextMenu={(e) => hasDragged && e.preventDefault()}
                     >
-                      <div className="relative overflow-hidden bg-white shadow-md w-[270px] h-[390px] sm:w-[270px] sm:h-[420px] md:w-[320px] md:h-[500px] lg:w-[340px] lg:h-[530px] xl:w-[360px] xl:h-[560px]">
+                      <div 
+                        className="relative overflow-hidden bg-white shadow-md w-[270px] h-[390px] sm:w-[270px] sm:h-[420px] md:w-[320px] md:h-[500px] lg:w-[340px] lg:h-[530px] xl:w-[360px] xl:h-[560px]"
+                        onClick={(e) => {
+                          if (isScrolling) {
+                            e.preventDefault()
+                            e.stopPropagation()
+                          }
+                        }}
+                      >
                         <img
                           src={item.imageUrl || "/placeholder.svg"}
                           alt={item.title}
