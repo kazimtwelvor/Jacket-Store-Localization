@@ -15,6 +15,7 @@ interface SizeSelectionProps {
   isLoading: boolean
   onAddToCart: () => void
   setShowMobileSizeModal: (show: boolean) => void
+  errorMessage?: string
 }
 
 const SizeSelection = ({
@@ -26,7 +27,8 @@ const SizeSelection = ({
   isMobile,
   isLoading,
   onAddToCart,
-  setShowMobileSizeModal
+  setShowMobileSizeModal,
+  errorMessage
 }: SizeSelectionProps) => {
   if (availableSizes.length === 0) return null
 
@@ -35,11 +37,10 @@ const SizeSelection = ({
       <div id="size-selector" className="relative">
         <div className="relative">
           <div
-            className="w-full border-2 bg-black/[0.04]   
-             
-            cursor-pointer transition-colors
-            
-            "
+            className={cn(
+              "w-full border-2 bg-black/[0.04] cursor-pointer transition-colors",
+              errorMessage ? "border-red-500" : "border-black/[0.15]"
+            )}
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             <div className="px-3 sm:px-4 py-3 flex items-center justify-between">
@@ -116,6 +117,10 @@ const SizeSelection = ({
           )}
         </div>
       </div>
+
+      {errorMessage && (
+        <p className="mt-2 text-xs text-red-600">{errorMessage}</p>
+      )}
 
       {!isMobile && (
         <div className="mt-2 flex items-center gap-2">
