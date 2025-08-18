@@ -264,14 +264,14 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
 
     return (
       <section className="min-h-screen bg-white p-8">
-        <h1 className="text-2xl font-bold text-red-600 mb-4">Error Loading Category</h1>
+        <h1 className="text-2xl font-bold text-black mb-4">Error Loading Category</h1>
         <p className="mb-4">We encountered an error while trying to load this category.</p>
         <div className="bg-gray-100 p-4 rounded-md">
           <h3 className="font-bold mb-2">Technical Details:</h3>
           <p className="font-mono text-sm">{error instanceof Error ? error.message : "Unknown error"}</p>
         </div>
         <div className="mt-8">
-          <a href="/" className="text-blue-600 hover:underline">
+          <a href="/" className="text-black hover:underline">
             Return to Home Page
           </a>
         </div>

@@ -250,7 +250,6 @@ export default function ProductCarousel({
       distanceX > 0 ? nextSlide() : prevSlide();
     }
 
-    // Reset scrolling state after a delay
     setTimeout(() => setIsScrolling(false), 100);
     setTouchStart(null);
     setTouchStartY(null);
@@ -369,7 +368,7 @@ export default function ProductCarousel({
                           <div className="flex justify-center items-center gap-1 sm:gap-2 text-sm sm:text-base mt-1">
                             {product.salePrice ? (
                               <>
-                                <div className="text-red-800 font-bold">
+                                <div className="text-black font-bold">
                                   <Currency value={product.salePrice} />
                                 </div>
                                 <div className="text-gray-500 line-through text-sm">
@@ -381,7 +380,7 @@ export default function ProductCarousel({
                                 </div>
                               </>
                             ) : (
-                              <div className="text-red-800 font-bold">
+                              <div className="text-black font-bold">
                                 <Currency value={product.price} />
                               </div>
                             )}

@@ -396,7 +396,6 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
             )}
           </div>
 
-          {/* Arrows */}
           <button
             className="absolute left-3 top-1/2 -translate-y-1/2 bg-black text-white p-2 md:p-3 shadow-lg hover:bg-gray-800 transition-all duration-300 z-10 hidden md:flex"
             onClick={prevSlide}

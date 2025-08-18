@@ -37,13 +37,13 @@ const useMediaQuery = (query: string): boolean => {
   return mounted ? matches : false
 }
 
-const getMaterialsFromCategories = (categories?: Category[]) => 
+const getMaterialsFromCategories = (categories?: Category[]) =>
   categories?.filter((cat) => cat.materials && cat.materials.length > 0) || []
 
-const getStylesFromCategories = (categories?: Category[]) => 
+const getStylesFromCategories = (categories?: Category[]) =>
   categories?.filter((cat) => cat.styles && cat.styles.length > 0) || []
 
-const getGendersFromCategories = (categories?: Category[]) => 
+const getGendersFromCategories = (categories?: Category[]) =>
   categories?.filter((cat) => cat.genders && cat.genders.length > 0) || []
 
 const getProductSlug = (product: Product): string => {
@@ -87,12 +87,12 @@ type ProductsPageClientProps = {
   keywordCategories?: KeywordCategory[]
 }
 
-const ProductsPageClient: React.FC<ProductsPageClientProps> = ({ 
-  initialProductsData, 
-  categories, 
-  colors, 
-  sizes, 
-  keywordCategories = [] 
+const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
+  initialProductsData,
+  categories,
+  colors,
+  sizes,
+  keywordCategories = []
 }) => {
   const [productsData, setProductsData] = useState<PaginatedProductsData>(initialProductsData)
   const [loading, setLoading] = useState(false)
@@ -175,7 +175,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         }
 
         const newProductsData = await getProducts(queryParams)
-        
+
         setProductsData(newProductsData)
         setCurrentProducts(newProductsData.products)
         setCurrentPage(page)
@@ -209,7 +209,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     [activeCategory, selectedFilters, updateURL],
   )
 
-  // Event handlers
   const handlePageChange = useCallback(
     (page: number) => {
       fetchProducts(page)
@@ -260,7 +259,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     }))
   }
 
-  // Filter toggle functions
   const toggleMaterialFilter = (material: string) => {
     setSelectedFilters((prev) => {
       const newMaterials = prev.materials.includes(material) ? prev.materials.filter((m) => m !== material) : [...prev.materials, material]
@@ -306,7 +304,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     })
   }
 
-  // Effects
   useEffect(() => {
     setMounted(true)
     setCurrentProducts(initialProductsData.products)
@@ -335,9 +332,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         sizes: urlSize ? urlSize.split(",") : [],
       }))
     }
-
     const needsFetch = urlPage !== initialProductsData.pagination.currentPage || urlCategoryId !== "t-shirts" || urlMaterials || urlStyle || urlGender || urlColor || urlSize || urlPage > 1
-
     if (needsFetch) {
       fetchProducts(urlPage)
     }
@@ -367,7 +362,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     }
   }, [])
 
-  // Intersection observer for product visibility
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -395,7 +389,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     }
   }, [productsData.products])
 
-  // Click outside handler for dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (sortDropdownOpen && filterBarRef.current && !filterBarRef.current.contains(event.target as Node)) {
@@ -406,37 +399,33 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [sortDropdownOpen])
 
-  // Layout measurements
-  useLayoutEffect(() => {
-    const filterBarWrapper = filterBarWrapperRef.current
-    const paginationSection = paginationSectionRef.current
-    if (filterBarWrapper && paginationSection && filterBarWrapper.firstElementChild) {
-      const filterBarElement = filterBarWrapper.firstElementChild as HTMLElement
-      const style = window.getComputedStyle(filterBarElement)
-      const marginBottom = parseFloat(style.marginBottom)
-      const height = filterBarElement.offsetHeight + marginBottom
-      const stickyBarTopPosition = window.matchMedia("(min-width: 768px)").matches ? 112 : 128
-      setLayoutMetrics({
-        startStickyPoint: filterBarWrapper.offsetTop,
-        endStickyPoint: paginationSection.offsetTop - stickyBarTopPosition - height,
-        filterBarHeight: height,
-      })
-    }
-  }, [])
-
-  // Sticky filter bar logic
   useEffect(() => {
-    if (layoutMetrics.startStickyPoint === 0) return
     const handleScroll = () => {
+      const filterBarWrapper = filterBarWrapperRef.current
+      if (!filterBarWrapper) return
+
+      const filterBarTop = filterBarWrapper.offsetTop
       const scrollY = window.scrollY
-      const { startStickyPoint } = layoutMetrics
-      const shouldBeSticky = scrollY >= startStickyPoint
-      setIsFilterSticky(current => current !== shouldBeSticky ? shouldBeSticky : current)
+      const headerHeight = window.matchMedia("(min-width: 768px)").matches ? 80 : 64
+
+      const shouldBeSticky = scrollY >= (filterBarTop - headerHeight)
+
+      if (isFilterSticky !== shouldBeSticky) {
+        console.log('Sticky state change:', {
+          scrollY,
+          filterBarTop,
+          headerHeight,
+          shouldBeSticky
+        })
+        setIsFilterSticky(shouldBeSticky)
+      }
     }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
+
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [layoutMetrics])
+  }, [isFilterSticky])
 
   // Capsule nav visibility
   useEffect(() => {
@@ -451,9 +440,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     <section className="bg-white">
       {/* Shop Categories Section */}
       <ShopCategories keywordCategories={keywordCategories} />
-      
+
       <div className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
-        {/* Filter Bar */}
         <div ref={filterBarWrapperRef}>
           <FilterBar
             isFilterSticky={isFilterSticky}
@@ -602,13 +590,13 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
         {/* Mobile Add To Cart Modal */}
         {mobileCartModal.product && (
-          <MobileAddToCartModal 
-            isOpen={mobileCartModal.isOpen} 
-            onClose={() => setMobileCartModal({ isOpen: false, product: null })} 
-            product={mobileCartModal.product} 
-            availableSizes={mobileCartModal.product.sizeDetails || []} 
-            availableColors={mobileCartModal.product.colorDetails || []} 
-            selectedColorId={mobileCartModal.product.colorDetails?.[0]?.id || ""} 
+          <MobileAddToCartModal
+            isOpen={mobileCartModal.isOpen}
+            onClose={() => setMobileCartModal({ isOpen: false, product: null })}
+            product={mobileCartModal.product}
+            availableSizes={mobileCartModal.product.sizeDetails || []}
+            availableColors={mobileCartModal.product.colorDetails || []}
+            selectedColorId={mobileCartModal.product.colorDetails?.[0]?.id || ""}
           />
         )}
 
@@ -624,15 +612,16 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           @media (max-width: 768px) { :global(.hide-scrollbar) { scroll-snap-type: x mandatory; } }
           @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
           :global(.bg-\[\#2b2b2b\]) { animation: pulse 2s infinite; }
-          :global(.sticky) { 
-            backdrop-filter: saturate(180%) blur(5px);
-            background-color: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s ease-in-out;
-            will-change: transform;
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
-          }
-          :global(.sticky.shadow-sm) { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
+                     :global(.sticky-filter-bar) { 
+             transition: all 0.3s ease-in-out;
+             will-change: transform;
+             transform: translateZ(0);
+             -webkit-transform: translateZ(0);
+             position: fixed !important;
+             left: 0 !important;
+             right: 0 !important;
+             z-index: 9003 !important;
+           }
         `}</style>
       </div>
     </section>
