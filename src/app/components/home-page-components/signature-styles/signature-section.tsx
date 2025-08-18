@@ -87,6 +87,7 @@ export default function SignatureStylesSection() {
                                         />
                                         <div className="mt-6 text-center">
                                             <ShopButton
+                                                as="div"
                                                 variant="bordered"
                                                 href="/collections/male"
                                                 size="sm"
@@ -133,6 +134,7 @@ export default function SignatureStylesSection() {
                                         />
                                         <div className="mt-6 text-center">
                                             <ShopButton
+                                                as="div"
                                                 variant="bordered"
                                                 href="/collections/female"
                                                 size="sm"
