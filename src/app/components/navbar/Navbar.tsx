@@ -1,5 +1,6 @@
 "use client";
 
+// Fixed HMR error
 import type React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -66,16 +67,7 @@ const MegaMenuScrollbarStyle = () => (
 );
 
 const Navbar = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  const [isSticky, setIsSticky] = useState(false);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-  const [windowHeight, setWindowHeight] = useState(0);
-  const [scrollY, setScrollY] = useState(0);
-  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
-  const navRef = useRef<HTMLDivElement>(null);
-  const navHeight = useRef(0);
-  const lastScrollY = useRef(0);
-  const lastScrollYRef = useRef(0);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
@@ -84,10 +76,10 @@ const Navbar = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchResults, setSearchResults] = useState<any>(null);
   const [isSearching, setIsSearching] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
-
-  const [isMegaMenuHovered, setIsMegaMenuHovered] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
 
   const { items } = useCart();
   const totalItems = items.length;
@@ -95,8 +87,6 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const wishlist = useWishlist();
-
-  const [isCapsuleVisible, setIsCapsuleVisible] = useState(true);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -107,103 +97,14 @@ const Navbar = () => {
     toggleMobileMenu();
   };
 
+
+
+  // Mount effect to prevent hydration mismatch
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (!isMounted) return;
-
-    setWindowHeight(window.innerHeight);
-    if (navRef.current) {
-      navHeight.current = navRef.current.offsetHeight;
-    }
-
-    const handleResize = () => {
-      setWindowHeight(window.innerHeight);
-      if (navRef.current) {
-        navHeight.current = navRef.current.offsetHeight;
-      }
-    };
-
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollTop = window.scrollY;
-          const isCategoryPage = pathname.startsWith("/category/");
-          const isShopPage = pathname === "/shop";
-          const isCollectionsPage = pathname.startsWith("/collections/");
-          const isMobileView = window.innerWidth < 1024;
-
-          if (isMobileView) {
-            if (isShopPage) {
-              const scrollDiff = Math.abs(scrollTop - lastScrollY.current);
-              if (scrollDiff > 5) {
-                if (scrollTop > lastScrollY.current && scrollTop > 20) {
-                  setScrollDirection("down");
-                  setIsHeaderVisible(false);
-                } else if (scrollTop < lastScrollY.current) {
-                  setScrollDirection("up");
-                  setIsHeaderVisible(true);
-                }
-              }
-            } else if (isCategoryPage || isCollectionsPage) {
-              const lowerContentSection = document.getElementById(
-                "lower-content-section"
-              );
-              if (lowerContentSection) {
-                const sectionTop = lowerContentSection.offsetTop;
-                const headerHeight = navHeight.current || 88;
-                if (scrollTop >= sectionTop - headerHeight) {
-                  setIsHeaderVisible(false);
-                } else {
-                  if (scrollTop > lastScrollY.current && scrollTop > 100) {
-                    setIsHeaderVisible(false);
-                  } else {
-                    setIsHeaderVisible(true);
-                  }
-                }
-              } else {
-                if (scrollTop > lastScrollY.current && scrollTop > 100) {
-                  setIsHeaderVisible(false);
-                } else {
-                  setIsHeaderVisible(true);
-                }
-              }
-            }
-          } else {
-            setIsHeaderVisible(true);
-          }
-
-          if (
-            !pathname.startsWith("/auth") &&
-            !pathname.startsWith("/checkout") &&
-            pathname !== "/cart"
-          ) {
-            setIsCapsuleVisible(scrollTop <= 10);
-          }
-
-          setIsSticky(true);
-          setScrollY(scrollTop);
-          lastScrollY.current = scrollTop <= 0 ? 0 : scrollTop;
-          lastScrollYRef.current = scrollTop;
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("touchmove", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("touchmove", handleScroll);
-    };
-  }, [pathname, isMounted]);
+  // Removed heavy scroll handler for better performance
 
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
@@ -219,7 +120,7 @@ const Navbar = () => {
 
     const timeoutId = setTimeout(() => {
       performSearch(searchQuery);
-    }, 300);
+    }, 500); // Increased debounce time
 
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
@@ -266,7 +167,7 @@ const Navbar = () => {
 
 
 
-  const itemCount = isMounted ? totalItems : 0;
+  const itemCount = totalItems;
 
   const handleLoginClick = () => {
     router.push("/auth/login");
@@ -356,25 +257,7 @@ const Navbar = () => {
     setSearchQuery("");
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("filterBarSticky", {
-          detail: { isSticky: isSticky },
-        })
-      );
-    }
-  }, [isSticky]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("headerVisibilityChange", {
-          detail: { isVisible: isHeaderVisible },
-        })
-      );
-    }
-  }, [isHeaderVisible]);
+  // Removed heavy custom event dispatchers
 
   return (
     <div className="relative w-full" ref={navRef}>
@@ -392,25 +275,13 @@ const Navbar = () => {
         <AnimatedMenuIcon
           isOpen={isMobileMenuOpen}
           onClick={toggleMobileMenu}
-          className={cn(
-            "fixed left-4 z-[9992] lg:hidden p-2 transition-all duration-300",
-            isMobileMenuOpen ? "top-[0.8rem]" : "top-[0.8rem]",
-            !isHeaderVisible && "hidden"
-          )}
+          className="fixed left-4 z-[9992] lg:hidden p-2 transition-all duration-300 top-[0.8rem]"
           color="white"
         />
       )}
 
-      <div
-        className={cn(
-          "fixed left-0 right-0 z-[9001] w-full",
-          isMounted && !isHeaderVisible
-            ? "transform -translate-y-full transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
-            : "transform translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]",
-          "top-0"
-        )}
-      >
-        <header className="flex items-center px-5 md:px-10 bg-[#2B2B2B] h-16 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] w-full">
+      <div className="fixed left-0 right-0 z-[9001] w-full top-0">
+        <header className="flex items-center px-5 md:px-10 bg-[#2B2B2B] h-16 w-full">
           <div className="lg:hidden flex items-center space-x-2">
             <div className="w-10 h-10" />
           </div>
@@ -429,75 +300,64 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div
-            className={cn(
-              "absolute left-0 right-0 mb-3 mx-auto hidden h-full items-center justify-center lg:flex lg:w-auto lg:max-w-[70%] lg:left-1/2 lg:-translate-x-1/2 transition-all duration-500",
-              isSticky ? "nav_animate" : ""
-            )}
-          >
+          <div className="absolute left-0 right-0 mb-3 mx-auto hidden h-full items-center justify-center lg:flex lg:w-auto lg:max-w-[70%] lg:left-1/2 lg:-translate-x-1/2">
             <nav>
               <div className="flex space-x-8 text-xl">
                 <div className="relative">
-                  <Link href="/shop?category=leather-jackets" prefetch={true}>
-                    <Button
-                      variant="ghost"
-                      className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
-                      onClick={() => {
-                        setShowMegaMenu(true);
-                        setActiveNavItem("leather-jackets");
-                      }}
-                      onMouseEnter={() => setActiveNavItem("leather-jackets")}
-                      onMouseLeave={() => {
-                        if (!showMegaMenu) {
-                          setActiveNavItem(null);
-                        }
-                      }}
-                    >
-                      LEATHER JACKETS
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="ghost"
+                    className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
+                    onClick={() => {
+                      setShowMegaMenu(true);
+                      setActiveNavItem("leather-jackets");
+                    }}
+                    onMouseEnter={() => setActiveNavItem("leather-jackets")}
+                    onMouseLeave={() => {
+                      if (!showMegaMenu) {
+                        setActiveNavItem(null);
+                      }
+                    }}
+                  >
+                    LEATHER JACKETS
+                  </Button>
                   <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "leather-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
                 </div>
                 <div className="relative">
-                  <Link href="/shop?category=womens-jackets" prefetch={true}>
-                    <Button
-                      variant="ghost"
-                      className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
-                      onClick={() => {
-                        setShowMegaMenu(true);
-                        setActiveNavItem("womens-jackets");
-                      }}
-                      onMouseEnter={() => setActiveNavItem("womens-jackets")}
-                      onMouseLeave={() => {
-                        if (!showMegaMenu) {
-                          setActiveNavItem(null);
-                        }
-                      }}
-                    >
-                      WOMEN'S JACKETS
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="ghost"
+                    className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
+                    onClick={() => {
+                      setShowMegaMenu(true);
+                      setActiveNavItem("womens-jackets");
+                    }}
+                    onMouseEnter={() => setActiveNavItem("womens-jackets")}
+                    onMouseLeave={() => {
+                      if (!showMegaMenu) {
+                        setActiveNavItem(null);
+                      }
+                    }}
+                  >
+                    WOMEN'S JACKETS
+                  </Button>
                   <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "womens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
                 </div>
                 <div className="relative">
-                  <Link href="/shop?category=mens-jackets" prefetch={true}>
-                    <Button
-                      variant="ghost"
-                      className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
-                      onClick={() => {
-                        setShowMegaMenu(true);
-                        setActiveNavItem("mens-jackets");
-                      }}
-                      onMouseEnter={() => setActiveNavItem("mens-jackets")}
-                      onMouseLeave={() => {
-                        if (!showMegaMenu) {
-                          setActiveNavItem(null);
-                        }
-                      }}
-                    >
-                      MEN'S JACKETS
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="ghost"
+                    className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
+                    onClick={() => {
+                      setShowMegaMenu(true);
+                      setActiveNavItem("mens-jackets");
+                    }}
+                    onMouseEnter={() => setActiveNavItem("mens-jackets")}
+                    onMouseLeave={() => {
+                      if (!showMegaMenu) {
+                        setActiveNavItem(null);
+                      }
+                    }}
+                  >
+                    MEN'S JACKETS
+                  </Button>
                   <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "mens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
                 </div>
                 <div className="relative">
@@ -604,7 +464,7 @@ const Navbar = () => {
         </header>
       </div>
 
-      {isMounted && showMegaMenu && (
+      {showMegaMenu && (
         <div
           className="fixed left-0 right-0 top-16 w-screen z-[9001]"
         >
@@ -629,6 +489,18 @@ const Navbar = () => {
                     LEATHER JACKETS
                   </h3>
                   <ul className="space-y-3">
+                    <li>
+                      <Link
+                        href="/shop?category=leather-jackets"
+                        className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                        onClick={() => {
+                          setShowMegaMenu(false);
+                          setActiveNavItem(null);
+                        }}
+                      >
+                        All Leather Jackets
+                      </Link>
+                    </li>
                     <li>
                       <Link
                         href="/shop?category=biker-jackets"
@@ -696,6 +568,18 @@ const Navbar = () => {
                     COATS & OUTERWEAR
                   </h3>
                   <ul className="space-y-3">
+                    <li>
+                      <Link
+                        href="/shop?category=coats"
+                        className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                        onClick={() => {
+                          setShowMegaMenu(false);
+                          setActiveNavItem(null);
+                        }}
+                      >
+                        All Coats & Outerwear
+                      </Link>
+                    </li>
                     <li>
                       <Link
                         href="/shop?category=trench-coats"
@@ -839,7 +723,7 @@ const Navbar = () => {
                           setActiveNavItem(null);
                         }}
                       >
-                        Men's Collection
+                        All Men's Jackets
                       </Link>
                     </li>
                     <li>
@@ -851,7 +735,7 @@ const Navbar = () => {
                           setActiveNavItem(null);
                         }}
                       >
-                        Women's Collection
+                        All Women's Jackets
                       </Link>
                     </li>
                     <li>
@@ -905,7 +789,7 @@ const Navbar = () => {
       )}
 
       {/* Search Overlay */}
-      {isMounted && isSearchOpen && (
+      {isSearchOpen && (
         <div className="fixed inset-0 bg-black max-h-[800px] z-[9999] animate-in fade-in duration-300">
           <div className="fixed inset-0 flex items-start justify-center pt-8">
             <div className="w-full max-w-4xl mx-auto px-4">
@@ -1227,7 +1111,12 @@ const Navbar = () => {
                             </div>
                             <div
                               className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() => handleCategorySelect("Size Guide")}
+                              onClick={() => {
+                                setIsSearchOpen(false);
+                                setSelectedCategory(null);
+                                setSearchQuery("");
+                                setTimeout(() => router.push("/size-guide"), 100);
+                              }}
                             >
                               <span className="text-white font-medium">
                                 Size Guide
@@ -1366,147 +1255,11 @@ const Navbar = () => {
                             ))}
                           </div>
                         ) : (
-                          /* Default Products View */
-                          <div className="space-y-4">
-                            {/* Product 1 */}
-                            <div
-                              className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() => {
-                                router.push(
-                                  "/shop?category=biker-jackets&product=classic-biker-leather-jacket"
-                                );
-                                setIsSearchOpen(false);
-                                setSelectedCategory(null);
-                                setSearchQuery("");
-                              }}
-                            >
-                              <div className="w-16 h-16 rounded flex-shrink-0 overflow-hidden">
-                                <Image
-                                  src="/images/women-biker.webp"
-                                  alt="Classic Biker Leather Jacket"
-                                  width={64}
-                                  height={64}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = "/images/women-leather.webp";
-                                  }}
-                                />
-                              </div>
-                              <div className="flex-1">
-                                <p className="text-white font-medium text-sm">
-                                  CLASSIC BIKER LEATHER JACKET
-                                </p>
-                                <p className="text-gray-400 text-xs">
-                                  Premium Leather
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* Product 2 */}
-                            <div
-                              className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() => {
-                                router.push(
-                                  "/shop?category=bomber-jackets&product=vintage-bomber-jacket"
-                                );
-                                setIsSearchOpen(false);
-                                setSelectedCategory(null);
-                                setSearchQuery("");
-                              }}
-                            >
-                              <div className="w-16 h-16 rounded flex-shrink-0 overflow-hidden">
-                                <Image
-                                  src="/images/women-puffer.webp"
-                                  alt="Vintage Bomber Jacket"
-                                  width={64}
-                                  height={64}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = "/images/women-leather.webp";
-                                  }}
-                                />
-                              </div>
-                              <div className="flex-1">
-                                <p className="text-white font-medium text-sm">
-                                  VINTAGE BOMBER JACKET
-                                </p>
-                                <p className="text-gray-400 text-xs">
-                                  Authentic Style
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* Product 3 */}
-                            <div
-                              className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() => {
-                                router.push(
-                                  "/shop?category=racing-jackets&product=racing-motorcycle-jacket"
-                                );
-                                setIsSearchOpen(false);
-                                setSelectedCategory(null);
-                                setSearchQuery("");
-                              }}
-                            >
-                              <div className="w-16 h-16 rounded flex-shrink-0 overflow-hidden">
-                                <Image
-                                  src="/images/women-leather.webp"
-                                  alt="Racing Motorcycle Jacket"
-                                  width={64}
-                                  height={64}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = "/images/women-leather.webp";
-                                  }}
-                                />
-                              </div>
-                              <div className="flex-1">
-                                <p className="text-white font-medium text-sm">
-                                  RACING MOTORCYCLE JACKET
-                                </p>
-                                <p className="text-gray-400 text-xs">
-                                  Performance Gear
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* Product 4 */}
-                            <div
-                              className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() => {
-                                router.push(
-                                  "/shop?category=trench-coats&product=luxury-trench-coat"
-                                );
-                                setIsSearchOpen(false);
-                                setSelectedCategory(null);
-                                setSearchQuery("");
-                              }}
-                            >
-                              <div className="w-16 h-16 rounded flex-shrink-0 overflow-hidden">
-                                <Image
-                                  src="/images/trench-coat.webp"
-                                  alt="Luxury Trench Coat"
-                                  width={64}
-                                  height={64}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
-                                    target.src = "/images/women-leather.webp";
-                                  }}
-                                />
-                              </div>
-                              <div className="flex-1">
-                                <p className="text-white font-medium text-sm">
-                                  LUXURY TRENCH COAT
-                                </p>
-                                <p className="text-gray-400 text-xs">
-                                  Elegant Design
-                                </p>
-                              </div>
-                            </div>
+                          /* No products to show */
+                          <div className="text-center py-8">
+                            <p className="text-gray-400">
+                              No products found
+                            </p>
                           </div>
                         )}
 
@@ -1536,23 +1289,12 @@ const Navbar = () => {
         </div>
       )}
 
-      {/* ✅ CapsuleNav: Show on all pages except excluded ones */}
-      {isMounted &&
-        !isMobileMenuOpen &&
-        !pathname.startsWith("/auth") &&
-        !pathname.startsWith("/checkout") &&
-        pathname !== "/cart" && (
-          <div
-            className={cn(
-              "fixed left-0 right-0 z-[9002] w-full flex justify-center",
-              "top-16 transition-opacity duration-500 ease-in-out",
-              isCapsuleVisible ? "opacity-100" : "opacity-0"
-            )}
-            style={{ pointerEvents: isCapsuleVisible ? "auto" : "none" }}
-          >
-            <CapsuleNav />
-          </div>
-        )}
+      {/* CapsuleNav: Simplified rendering */}
+      {!isMobileMenuOpen && (
+        <div className="fixed left-0 right-0 z-[9002] w-full flex justify-center top-16">
+          <CapsuleNav />
+        </div>
+      )}
 
       {/* Spacer */}
       <div style={{ height: "60px" }}></div>
