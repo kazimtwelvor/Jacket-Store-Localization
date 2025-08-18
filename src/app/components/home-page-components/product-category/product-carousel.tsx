@@ -56,6 +56,7 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
     const [isJumping, setIsJumping] = useState(false)
     const isMobile = useMediaQuery("(max-width: 768px)")
     const [touchStart, setTouchStart] = useState<number | null>(null)
+    const [touchStartY, setTouchStartY] = useState<number | null>(null)
 
     useEffect(() => {
         const fetchCategoryProducts = async () => {
@@ -196,16 +197,21 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
     const handleTouchStart = (e: React.TouchEvent) => {
         if (isTransitioning.current || !canLoop) return
         setTouchStart(e.targetTouches[0].clientX)
+        setTouchStartY(e.targetTouches[0].clientY)
     }
 
     const handleTouchEnd = (e: React.TouchEvent) => {
-        if (touchStart === null) return
+        if (touchStart === null || touchStartY === null) return
         const touchEnd = e.changedTouches[0].clientX
-        const distance = touchStart - touchEnd
-        if (Math.abs(distance) > 50) {
-            distance > 0 ? nextSlide() : prevSlide()
+        const touchEndY = e.changedTouches[0].clientY
+        const distanceX = touchStart - touchEnd
+        const distanceY = Math.abs(touchStartY - touchEndY)
+        
+        if (Math.abs(distanceX) > 50 && Math.abs(distanceX) > distanceY) {
+            distanceX > 0 ? nextSlide() : prevSlide()
         }
         setTouchStart(null)
+        setTouchStartY(null)
     }
 
     const widthExpression = 'calc(23% - 14px)'
@@ -251,9 +257,10 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                             </div>
                         ) : isMobile ? (
                             <div
-                                className="relative flex items-center justify-center h-[550px]"
+                                className="relative flex items-center justify-center h-[550px] overflow-hidden"
                                 onTouchStart={handleTouchStart}
                                 onTouchEnd={handleTouchEnd}
+                                style={{ touchAction: 'pan-y' }}
                             >
                                 {displayItems.map((product, i) => {
                                     const isCenter = i === activeIndex
@@ -324,11 +331,21 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                 })}
                             </div>
                         ) : (
-                            <div className="py-4 sm:py-6 md:py-8">
+                            <div className="py-4 sm:py-6 md:py-8 overflow-hidden">
                                 <motion.div
                                     ref={trackRef}
                                     className="flex items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4"
                                     style={{ x }}
+                                    onWheel={(e) => {
+                                        e.preventDefault()
+                                        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                                            if (e.deltaX > 0) {
+                                                nextSlide()
+                                            } else {
+                                                prevSlide()
+                                            }
+                                        }
+                                    }}
                                 >
                                     {displayItems.map((product, i) => {
                                         const isCenter = i === activeIndex
