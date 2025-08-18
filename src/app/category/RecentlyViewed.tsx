@@ -313,7 +313,7 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                   {/* Removed the entire AnimatePresence block for quick shop on mobile */}
                 </div>
                 <div className="mt-8">
-                  <h3 className="text-sm line-clamp-1">{product.name.toUpperCase()}</h3>
+                  <h3 className="text-sm line-clamp-1">{product.name?.toUpperCase() || 'PRODUCT NAME'}</h3>
                   <div className="mt-1">
                     {product.salePrice && Number(product.salePrice) > 0 ? (
                       <div className="flex items-center gap-1">
@@ -476,7 +476,7 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                 
 
                   <div className="mt-6 xs:mt-6 sm:mt-6 md:mt-4 lg:mt-4 xl:mt-4 2xl:mt-4">
-                    <h3 className="text-sm line-clamp-1">{product.name.toUpperCase()}</h3>
+                    <h3 className="text-sm line-clamp-1">{product.name?.toUpperCase() || 'PRODUCT NAME'}</h3>
                     <div className="mt-1 xs:mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-1 2xl:mt-1">
                       {product.salePrice && Number(product.salePrice) > 0 ? (
                         <div className="flex items-center gap-1">

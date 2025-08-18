@@ -37,14 +37,26 @@ const useMediaQuery = (query: string): boolean => {
   return mounted ? matches : false
 }
 
-const getMaterialsFromCategories = (categories?: Category[]) => 
-  categories?.filter((cat) => cat.materials && cat.materials.length > 0) || []
+const getMaterialsFromCategories = (categories?: Category[]) => {
+  if (!categories) return []
+  return categories
+    .filter(cat => (cat as any).type === 'material')
+    .map(cat => ({ id: cat.id, name: cat.name }))
+}
 
-const getStylesFromCategories = (categories?: Category[]) => 
-  categories?.filter((cat) => cat.styles && cat.styles.length > 0) || []
+const getStylesFromCategories = (categories?: Category[]) => {
+  if (!categories) return []
+  return categories
+    .filter(cat => (cat as any).type === 'style')
+    .map(cat => ({ id: cat.id, name: cat.name }))
+}
 
-const getGendersFromCategories = (categories?: Category[]) => 
-  categories?.filter((cat) => cat.genders && cat.genders.length > 0) || []
+const getGendersFromCategories = (categories?: Category[]) => {
+  if (!categories) return []
+  return categories
+    .filter(cat => (cat as any).type === 'gender')
+    .map(cat => ({ id: cat.id, name: cat.name }))
+}
 
 const getProductSlug = (product: Product): string => {
   if (product.slug) return product.slug
@@ -140,6 +152,11 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const materials = getMaterialsFromCategories(categories)
   const styles = getStylesFromCategories(categories)
   const genders = getGendersFromCategories(categories)
+  
+  console.log("✅ Categories received:", categories)
+  console.log("✅ Extracted materials:", materials)
+  console.log("✅ Extracted styles:", styles)
+  console.log("✅ Extracted genders:", genders)
   const hasActiveFilters = selectedFilters.materials.length > 0 || selectedFilters.style.length > 0 || selectedFilters.gender.length > 0 || selectedFilters.colors.length > 0 || selectedFilters.sizes.length > 0
   const totalActiveFilters = selectedFilters.materials.length + selectedFilters.style.length + selectedFilters.gender.length + selectedFilters.colors.length + selectedFilters.sizes.length
 
@@ -592,7 +609,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         <CategorySlider
           isOpen={categorySliderOpen}
           onClose={() => setCategorySliderOpen(false)}
-          categories={categories || []}
+          keywordCategories={keywordCategories || []}
           onCategorySelect={(category) => {
             // Handle category selection - could navigate to category page or apply filters
             console.log('Selected category:', category)
