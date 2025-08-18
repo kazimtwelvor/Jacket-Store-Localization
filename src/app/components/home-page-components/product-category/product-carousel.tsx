@@ -57,6 +57,7 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
     const isMobile = useMediaQuery("(max-width: 768px)")
     const [touchStart, setTouchStart] = useState<number | null>(null)
     const [touchStartY, setTouchStartY] = useState<number | null>(null)
+    const [isScrolling, setIsScrolling] = useState(false)
 
     useEffect(() => {
         const fetchCategoryProducts = async () => {
@@ -198,6 +199,19 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
         if (isTransitioning.current || !canLoop) return
         setTouchStart(e.targetTouches[0].clientX)
         setTouchStartY(e.targetTouches[0].clientY)
+        setIsScrolling(false)
+    }
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (touchStart === null || touchStartY === null) return
+        const touchCurrent = e.targetTouches[0].clientX
+        const touchCurrentY = e.targetTouches[0].clientY
+        const distanceX = Math.abs(touchStart - touchCurrent)
+        const distanceY = Math.abs(touchStartY - touchCurrentY)
+        
+        if (distanceX > 10 && distanceX > distanceY) {
+            setIsScrolling(true)
+        }
     }
 
     const handleTouchEnd = (e: React.TouchEvent) => {
@@ -210,6 +224,9 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
         if (Math.abs(distanceX) > 50 && Math.abs(distanceX) > distanceY) {
             distanceX > 0 ? nextSlide() : prevSlide()
         }
+        
+        // Reset scrolling state after a delay
+        setTimeout(() => setIsScrolling(false), 100)
         setTouchStart(null)
         setTouchStartY(null)
     }
@@ -259,6 +276,7 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                             <div
                                 className="relative flex items-center justify-center h-[550px] overflow-hidden"
                                 onTouchStart={handleTouchStart}
+                                onTouchMove={handleTouchMove}
                                 onTouchEnd={handleTouchEnd}
                                 style={{ touchAction: 'pan-y' }}
                             >
@@ -289,6 +307,7 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                                     className="relative cursor-pointer group overflow-hidden w-full"
                                                     style={{ aspectRatio: '252.7 / 383.3' }}
                                                     onTap={() => {
+                                                        if (isScrolling) return
                                                         if (!isCenter) {
                                                             if (isTransitioning.current) return
                                                             isTransitioning.current = true
@@ -346,6 +365,8 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                             }
                                         }
                                     }}
+                                    onMouseDown={() => setIsScrolling(true)}
+                                    onMouseUp={() => setTimeout(() => setIsScrolling(false), 100)}
                                 >
                                     {displayItems.map((product, i) => {
                                         const isCenter = i === activeIndex
@@ -369,6 +390,7 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                                 className="flex-shrink-0 cursor-pointer"
                                                 style={{ width: widthExpression, marginLeft, marginRight }}
                                                 onClick={() => {
+                                                    if (isScrolling) return
                                                     window.location.href = `/product/${product.slug}`
                                                 }}
                                             >
