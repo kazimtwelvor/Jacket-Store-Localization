@@ -9,7 +9,6 @@ import { Heart, ChevronLeft, ChevronRight, X } from "lucide-react"
 import type { Product } from "@/types"
 import useWishlist from "../hooks/use-wishlist"
 import { cn } from "../lib/utils"
-// import useWishlist from "@/hooks/use-wishlist"
 
 
 interface WeThinkYouWillLoveProps {
@@ -236,15 +235,12 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
             onTouchEnd={handleTouchEnd}
           >
             {displayedProducts.map((product, index) => (
-              // Changed from motion.div to div and removed whileHover, onMouseEnter, onMouseLeave
               <div
                 key={`love-mobile-${product.id}-${index}`}
                 className="flex-shrink-0 w-[calc(58vw-16px)] cursor-pointer flex flex-col h-full"
-                // Removed whileHover and onMouseEnter/onMouseLeave for mobile
                 onClick={(e) => handleCardClick(product, e)}
               >
                 <div className="relative flex-1 aspect-[3/5] overflow-visible bg-gray-100">
-                  {/* Simplified image logic for mobile - no hover swap */}
                   <Image
                     src={(product.images?.[0] as any)?.url || "/placeholder.svg"}
                     alt={product.name}
@@ -252,18 +248,14 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                     className="object-cover object-top transition-all duration-300"
                     sizes="250px"
                   />
-                  {/* Loading Spinner */}
                   {loadingProducts.has(product.id) && (
                     <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
                       <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-black"></div>
                     </div>
                   )}
-                  <div className="absolute bottom-2 left-2 text-red-600 text-sm font-medium opacity-80">
-                    FINEYST
-                  </div>
-                  {/* Wishlist icon */}
+             
                   <button
-                    className="absolute w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 right-12 -bottom-4"
+                    className="absolute w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md z-10 right-12 -bottom-4"
                     aria-label="Add to wishlist"
                     onClick={(e) => {
                       e.stopPropagation()
@@ -278,7 +270,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="black" strokeWidth="2" fill={mounted && wishlistItems.includes(product.id) ? "black" : "none"} strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </button>
-                  {/* Cart icon */}
                   <button
                     className="absolute w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-md z-10 right-2 -bottom-4"
                     aria-label="Add to cart"
@@ -287,13 +278,12 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                       onAddToCartClick(product);
                     }}
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
                       <path d="M6.5 9h11L19 21H5L6.5 9z" />
                       <path d="M9 9c0-2.76 1.38-5 3-5s3 2.24 3 5" />
                     </svg>
                   </button>
                   {product.isFeatured && (
-                    // Keep motion.div for initial animation
                     <motion.div
                       className="absolute top-2 left-0 z-10 scale-90"
                       initial={{ x: -50, opacity: 0 }}
@@ -308,7 +298,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                       </div>
                     </motion.div>
                   )}
-                  {/* Removed the entire AnimatePresence block for quick shop on mobile */}
                 </div>
                 <div className="mt-8">
                   <h3 className="text-sm truncate">{product.name}</h3>
@@ -358,7 +347,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
           </motion.div>
         </div>
 
-        {/* Desktop/Tablet Carousel */}
         <div className="hidden md:block relative group">
           <div className="overflow-hidden" ref={desktopCarouselRef}>
             <motion.div
@@ -392,15 +380,12 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                       draggable={false}
                       onDragStart={(e) => e.preventDefault()}
                     />
-                    {/* Loading Spinner */}
                     {loadingProducts.has(product.id) && (
                       <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
                         <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-black"></div>
                       </div>
                     )}
-                    {/* <div className="absolute bottom-2 left-2 text-red-600 text-sm font-medium opacity-80">
-                      FINEYST
-                    </div> */}
+             
                     <motion.button
                       className="absolute top-2 right-2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm z-10"
                       aria-label="Add to wishlist"
@@ -482,7 +467,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                         <span className="text-sm font-bold text-black">${product.price}</span>
                       )}
                     </div>
-                    {/* Color Options */}
                     <div className="mt-2">
                       <div
                         className="relative inline-flex items-center gap-2 px-3 py-2 bg-gray-50 border border-black"
@@ -601,11 +585,9 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                               </div>
                             )}
 
-                            {/* Color Popup - Mobile/Tablet Modal */}
                             {colorPopup?.productKey === `${product.id}-${index}` && !isDesktop && (
                               <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-center z-50">
                                 <div className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto">
-                                  {/* Header */}
                                   <div className="flex items-center justify-between p-5 ">
                                     <h2 className="text-lg font-bold">Select Color</h2>
                                     <button
@@ -616,7 +598,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                     </button>
                                   </div>
 
-                                  {/* Colors Grid */}
                                   <div className="p-4">
                                     <div className="grid grid-cols-4 gap-4">
                                       {((product as any)?.colorDetails || (product as any)?.colors || []).map((color: any) => {
@@ -689,7 +670,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
               ))}
             </motion.div>
           </div>
-          {/* Desktop Navigation Buttons */}
           {currentIndex > 0 && (
             <button
               onClick={handlePrev}
