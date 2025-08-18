@@ -7,6 +7,14 @@ import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
 import type { Category } from "@/types";
 
+interface KeywordCategory {
+  id: string;
+  name: string;
+  slug: string;
+  imageUrl?: string;
+  description?: string;
+}
+
 interface CategoryFilterBarProps {
   category: Category;
   hasActiveFilters: boolean;
@@ -24,6 +32,7 @@ interface CategoryFilterBarProps {
   };
   onSortChange?: (sortBy: string) => void;
   currentSort?: string;
+  keywordCategories?: KeywordCategory[];
 }
 
 const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
@@ -40,6 +49,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
   selectedFilters,
   onSortChange,
   currentSort = "popular",
+  keywordCategories = [],
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
