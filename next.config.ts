@@ -12,7 +12,7 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ["res.cloudinary.com", "outjackets.com", "d1.fineyst.com", "jacket.us.com", "192.168.100.8", "images.unsplash.com"],
+    domains: ["res.cloudinary.com", "outjackets.com", "d1.fineyst.com", "jacket.us.com", "192.168.100.8", "images.unsplash.com","localhost"],
     remotePatterns: [
       {
         protocol: 'https',
@@ -29,7 +29,13 @@ const nextConfig = {
         hostname: 'images.unsplash.com',
         pathname: '/**',
       },
+       {
+        protocol: 'https',
+        hostname: 'localhost:3001',
+        pathname: '/**',
+      },
     ],
+
   },
   async headers() {
     return [

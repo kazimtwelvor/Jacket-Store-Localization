@@ -11,7 +11,18 @@ export const metadata: Metadata = {
 };
 
 export default async function Categories() {
-  const categories = await getKeywordCategories();
-  
-  return <CategoriesPage categories={categories} />;
+  try {
+    const keywordCategories = await getKeywordCategories();
+    console.log('Collections page - keyword categories:', keywordCategories.length);
+    
+    // If no keyword categories, we could also fetch regular categories as fallback
+    if (keywordCategories.length === 0) {
+      console.log('No keyword categories found, this is expected if none are configured');
+    }
+    
+    return <CategoriesPage categories={keywordCategories} />;
+  } catch (error) {
+    console.error('Error in Collections page:', error);
+    return <CategoriesPage categories={[]} />;
+  }
 }
