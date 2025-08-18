@@ -256,7 +256,31 @@ export default function ProductCategory() {
             </button>
           </div>
         </div>
-        <div className="relative w-full group">
+        {showArrows && (
+          <div className="w-full flex justify-end items-center gap-2 sm:gap-3 mb-2 md:mb-3 pr-2 sm:pr-3">
+            <button
+              onClick={() => scroll("left")}
+              className={`block bg-white/90 rounded-none p-2 sm:p-3 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:cursor-not-allowed ${
+                !canGoLeft ? "hidden" : ""
+              }`}
+              aria-label="Scroll left"
+              disabled={!canGoLeft}
+            >
+              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              className={`block bg-white/90 rounded-none p-2 sm:p-3 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50 disabled:cursor-not-allowed ${
+                !canGoRight && "opacity-50"
+              }`}
+              aria-label="Scroll right"
+              disabled={!canGoRight}
+            >
+              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
+            </button>
+          </div>
+        )}
+        <div className="relative w-full">
           <style jsx>{`
             .hide-scrollbar::-webkit-scrollbar {
               display: none;
@@ -326,31 +350,7 @@ export default function ProductCategory() {
             </div>
           </div>
 
-          {showArrows && (
-            <>
-              <button
-                onClick={() => scroll("left")}
-                className={`hidden sm:block absolute top-1/2 -translate-y-1/2 -left-12 z-20 bg-white/90 rounded-full p-3 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50 disabled:cursor-not-allowed ${
-                  !canGoLeft && "opacity-50"
-                }`}
-                aria-label="Scroll left"
-                disabled={!canGoLeft}
-              >
-                <ChevronLeft className="w-6 h-6 text-gray-700" />
-              </button>
-
-              <button
-                onClick={() => scroll("right")}
-                className={`hidden sm:block absolute top-1/2 -translate-y-1/2 -right-12 z-20 bg-white/90 rounded-full p-3 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50 disabled:cursor-not-allowed ${
-                  !canGoRight && "opacity-50"
-                }`}
-                aria-label="Scroll right"
-                disabled={!canGoRight}
-              >
-                <ChevronRight className="w-6 h-6 text-gray-700" />
-              </button>
-            </>
-          )}
+          {/* Arrows moved above container */}
         </div>
       </div>
     </section>
