@@ -6,10 +6,8 @@ import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 
-// Define the blog type
 interface BlogItem {
   id: string
   title: string
@@ -112,7 +110,6 @@ const BlogsShowcase = () => {
     }
   ]
 
-  // Check if desktop and calculate layout properties
   useEffect(() => {
     const checkDesktop = () => {
       setIsDesktop(window.innerWidth >= 1024)
@@ -148,17 +145,16 @@ const BlogsShowcase = () => {
 
     checkDesktop()
     calculateLayout()
-    
+
     const handleResize = () => {
       checkDesktop()
       calculateLayout()
     }
-    
+
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
   }, [isDesktop])
 
-  // Adjust currentIndex if it becomes invalid after layout change
   useEffect(() => {
     const maxIndex = Math.max(0, blogItems.length - visibleItems)
     if (currentIndex > maxIndex) {
@@ -180,14 +176,7 @@ const BlogsShowcase = () => {
     setTimeout(() => setIsAnimating(false), 500)
   }
 
-  const handleDotClick = (index: number) => {
-    if (isAnimating) return
-    setIsAnimating(true)
-    setCurrentIndex(index)
-    setTimeout(() => setIsAnimating(false), 300)
-  }
-
-  // Handle touch events for mobile swiping
+ 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     setTouchStart(e.targetTouches[0].clientX)
     e.stopPropagation()
@@ -197,11 +186,11 @@ const BlogsShowcase = () => {
     if (!touchStart) return
     const currentTouch = e.targetTouches[0].clientX
     const diff = Math.abs(currentTouch - touchStart)
-    
+
     if (diff > 10) {
       e.preventDefault()
     }
-    
+
     setTouchEnd(currentTouch)
     e.stopPropagation()
   }
@@ -229,7 +218,7 @@ const BlogsShowcase = () => {
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if ('ontouchstart' in window) return
-    
+
     e.preventDefault()
     setMouseStart(e.clientX)
     setIsDragging(true)
@@ -298,7 +287,7 @@ const BlogsShowcase = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight mb-6 text-black" style={{fontFamily: 'AvertaPe Black'}}>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight mb-6 text-black" style={{ fontFamily: 'AvertaPe Black' }}>
             <span className="text-[#2b2b2b]">LATEST</span>
             <span className="text-black"> INSIGHTS</span>
           </h2>
@@ -330,7 +319,7 @@ const BlogsShowcase = () => {
                         sizes="(max-width: 1024px) 50vw, 33vw"
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                       />
-                      
+
                       {/* Category badge */}
                       <div className="absolute top-4 left-4">
                         <span className="bg-[#2b2b2b] text-white px-3 py-1 text-xs font-bold uppercase tracking-wider rounded">
@@ -338,7 +327,7 @@ const BlogsShowcase = () => {
                         </span>
                       </div>
                     </div>
-                    
+
                     {/* Content Section */}
                     <div className="p-6">
                       {/* Author and date */}
@@ -349,17 +338,17 @@ const BlogsShowcase = () => {
                         <span>•</span>
                         <span>{item.readTime}</span>
                       </div>
-                      
+
                       {/* Title */}
                       <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2b2b2b] transition-colors duration-300">
                         {item.title}
                       </h3>
-                      
+
                       {/* Description */}
                       <p className="text-gray-600 text-sm line-clamp-3 mb-4">
                         {item.description}
                       </p>
-                      
+
                       {/* Read More */}
                       <div className="flex items-center text-[#2b2b2b] font-semibold text-sm group-hover:gap-2 transition-all duration-300">
                         <span>Read More</span>
@@ -421,7 +410,7 @@ const BlogsShowcase = () => {
                             draggable={false}
                             onDragStart={(e) => e.preventDefault()}
                           />
-                          
+
                           {/* Category badge */}
                           <div className="absolute top-4 left-4">
                             <span className="bg-[#2b2b2b] text-white px-3 py-1 text-xs font-bold uppercase tracking-wider">
@@ -429,7 +418,7 @@ const BlogsShowcase = () => {
                             </span>
                           </div>
                         </div>
-                        
+
                         {/* Content Section Below Image */}
                         <div className="p-4 bg-white">
                           {/* Author and date */}
@@ -438,7 +427,7 @@ const BlogsShowcase = () => {
                             <span>•</span>
                             <span>{item.date}</span>
                           </div>
-                          
+
                           {/* Title + Arrow */}
                           <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300 mb-3">
                             <h3
@@ -449,7 +438,7 @@ const BlogsShowcase = () => {
                             </h3>
                             <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-[#2b2b2b] opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1 flex-shrink-0" />
                           </div>
-                          
+
                           {/* Description */}
                           <p className="text-gray-600 text-sm md:text-base line-clamp-3">
                             {item.description}
@@ -463,16 +452,16 @@ const BlogsShowcase = () => {
             </div>
           </div>
         )}
-        
+
         {/* View All Button */}
         <div className="text-center mt-12 md:mt-16">
-          <Link 
+          <Link
             href="/blogs"
             className="inline-flex items-center gap-3 bg-black text-white px-8 py-4 font-bold text-lg hover:bg-[#2b2b2b] transition-colors duration-300"
           >
             VIEW ALL ARTICLES
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
         </div>

@@ -22,7 +22,6 @@ export default function TermsConditionsClient() {
 
   useEffect(() => {
     setIsMounted(true)
-    // Initialize section visibility tracking
     const initialVisibility: { [key: string]: number } = {}
     allSections.forEach((section) => {
       initialVisibility[section] = 0
@@ -30,19 +29,16 @@ export default function TermsConditionsClient() {
     setSectionVisibility(initialVisibility)
   }, [])
 
-  // Update the active section based on scroll position
   useEffect(() => {
     if (!isMounted) return
 
     const handleScroll = () => {
-      // Show/hide scroll to top button
       if (window.scrollY > 500) {
         setShowScrollTop(true)
       } else {
         setShowScrollTop(false)
       }
 
-      // Track section visibility
       const updatedVisibility = { ...sectionVisibility }
       let currentActiveSection = activeSection
 
@@ -52,31 +48,25 @@ export default function TermsConditionsClient() {
           const rect = ref.getBoundingClientRect()
           const sectionHeight = rect.height
 
-          // Calculate how much of the section is visible in the viewport
           const visibleTop = Math.max(0, rect.top)
           const visibleBottom = Math.min(window.innerHeight, rect.bottom)
           const visibleHeight = Math.max(0, visibleBottom - visibleTop)
 
-          // Calculate visibility percentage (0-100)
           const visibilityPercentage = Math.min(100, Math.round((visibleHeight / sectionHeight) * 100))
 
-          // Update visibility tracking
           if (visibilityPercentage > updatedVisibility[sectionId]) {
             updatedVisibility[sectionId] = visibilityPercentage
           }
 
-          // Determine active section (the one most visible in viewport)
           if (rect.top <= 150 && rect.bottom > 150) {
             currentActiveSection = sectionId
           }
         }
       })
 
-      // Update state only if there are changes
       setSectionVisibility(updatedVisibility)
       setActiveSection(currentActiveSection)
 
-      // Update completed sections - a section is complete when it's been 90% visible
       const newCompletedSections = allSections.filter((section) => updatedVisibility[section] >= 90)
 
       if (
@@ -94,18 +84,15 @@ export default function TermsConditionsClient() {
   const scrollToSection = (sectionId: string) => {
     const section = sectionRefs.current[sectionId]
     if (section) {
-      // Expand the section if it's not already expanded
       if (!expanded.includes(sectionId)) {
         setExpanded((prev) => [...prev, sectionId])
       }
 
-      // Scroll to section with smooth behavior
       window.scrollTo({
         top: section.offsetTop - 100,
         behavior: "smooth",
       })
 
-      // Set as active section
       setActiveSection(sectionId)
     }
   }
@@ -125,15 +112,12 @@ export default function TermsConditionsClient() {
     }
   }
 
-  // Calculate completion percentage based on sections read
   const totalSections = allSections.length
   const completionPercentage = Math.min(100, Math.round((completedSections.length / totalSections) * 100))
 
-  // Non-JavaScript fallback - render all sections expanded
   if (!isMounted) {
     return (
       <div className="min-h-screen bg-white">
-        {/* Hero Section - Static version */}
         <div className="relative bg-white ">
           <div
             className="absolute inset-0 opacity-[0.03]"
@@ -151,7 +135,6 @@ export default function TermsConditionsClient() {
                 to each other.
               </p>
 
-              {/* Info cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-8">
                 <div className="bg-white p-6 rounded-lg shadow-sm border border-black flex items-center">
                   <div className="mr-4 bg-[#2b2b2b] p-3 rounded-full">
@@ -208,9 +191,7 @@ export default function TermsConditionsClient() {
           </div>
         </div>
 
-        {/* Main Content - Static version with all sections expanded */}
         <div className="container mx-auto px-4 py-12 flex flex-col lg:flex-row gap-8">
-          {/* Static Sidebar Navigation */}
           <div className="hidden lg:block lg:w-1/4 self-start">
             <div className="bg-white rounded-lg shadow-sm border  border-[#2b2b2b] p-6">
               <h2 className="text-xl font-bold mb-4 text-black">Table of Contents</h2>
@@ -231,7 +212,6 @@ export default function TermsConditionsClient() {
             </div>
           </div>
 
-          {/* Main Content */}
           <div className="lg:w-3/4 w-full">
             <div className="bg-white rounded-lg shadow-sm border  border-[#2b2b2b] p-6 md:p-8">
               <div className="prose prose-slate max-w-none">
@@ -245,7 +225,6 @@ export default function TermsConditionsClient() {
                   </p>
                 </div>
 
-                {/* Content Sections - All expanded */}
                 {Object.entries(termsData).map(([sectionId, section]) => (
                   <div key={sectionId} id={sectionId} className="mb-8 scroll-mt-24">
                     <div className="border  border-[#2b2b2b] rounded-lg">
@@ -292,7 +271,6 @@ export default function TermsConditionsClient() {
                   </div>
                 ))}
 
-                {/* Agreement Section */}
                 <div className="mt-12 p-6 border  border-[#2b2b2b] rounded-lg bg-[#f6f6f6]">
                   <h3 className="text-xl font-semibold mb-4 text-black">Agreement to Terms</h3>
                   <p className="text-[#333333]">
@@ -313,7 +291,6 @@ export default function TermsConditionsClient() {
               </div>
             </div>
 
-            {/* Footer with links to related legal pages */}
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
               <Link href="/privacy-policy" className="block">
                 <div className="bg-white p-6 rounded-lg border  border-[#2b2b2b] shadow-sm hover:border-[#2b2b2b]/20 h-full">
@@ -407,12 +384,9 @@ export default function TermsConditionsClient() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
       <TermsHero completionPercentage={completionPercentage} />
 
-      {/* Main Content */}
       <div className="container mx-auto px-4 py-12 flex flex-col lg:flex-row gap-8">
-        {/* Sidebar Navigation - Fixed on desktop, sliding drawer on mobile */}
         <TermsNavigation
           termsData={termsData}
           activeSection={activeSection}
@@ -420,7 +394,6 @@ export default function TermsConditionsClient() {
           scrollToSection={scrollToSection}
         />
 
-        {/* Main Content */}
         <div className="lg:w-3/4 w-full">
           <div className="bg-white rounded-lg shadow-sm border  border-[#2b2b2b] p-6 md:p-8">
             <motion.div
@@ -439,7 +412,6 @@ export default function TermsConditionsClient() {
                 </p>
               </div>
 
-              {/* Content Sections */}
               {Object.entries(termsData).map(([sectionId, section]) => (
                 <div
                   key={sectionId}
@@ -460,7 +432,6 @@ export default function TermsConditionsClient() {
                 </div>
               ))}
 
-              {/* Agreement Section */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -486,12 +457,10 @@ export default function TermsConditionsClient() {
             </motion.div>
           </div>
 
-          {/* Footer with links to related legal pages */}
           <TermsFooter />
         </div>
       </div>
 
-      {/* Scroll to top button */}
       <AnimatePresence>
         {showScrollTop && (
           <motion.button
@@ -508,7 +477,6 @@ export default function TermsConditionsClient() {
         )}
       </AnimatePresence>
 
-      {/* Reading progress indicator */}
       <div className="fixed bottom-0 left-0 w-full h-1 bg-[#2b2b2b]">
         <motion.div
           className="h-full bg-[#2b2b2b]"

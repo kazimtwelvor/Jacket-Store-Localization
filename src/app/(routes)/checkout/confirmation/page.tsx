@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import { CheckCircle, Package, ArrowRight, Clock, Calendar, ShoppingBag } from "lucide-react"
 import Container from "@/src/app/ui/container"
@@ -76,7 +76,7 @@ const ConfirmationPage = () => {
     const fetchOrder = async () => {
       try {
 
-        const pathArray = window.location.pathname.split("/")
+        const pathArray = usePathname().split("/")
         const storeId = pathArray[1] === "checkout" ? "default" : pathArray[1]
         const response = await fetch(`/api/${storeId}/orders/${orderId}`)
 

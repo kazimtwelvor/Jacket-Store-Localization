@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef, useMemo, useLayoutEffect, useCallback } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { motion, useMotionValue, animate } from "framer-motion"
-import { cn } from "@/lib/utils"
-import Currency from "@/components/ui/currency"
-import getProducts from "@/actions/get-products"
+import Currency from "@/src/app/ui/currency"
+import getProducts from "@/src/app/actions/get-products"
+import { cn } from "../../lib/utils"
+import { useRouter } from "next/navigation"
 
 export interface Product {
   id: string
@@ -55,8 +56,8 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
   const [isJumping, setIsJumping] = useState(false)
   const isMobile = useMediaQuery("(max-width: 768px)")
   const [touchStart, setTouchStart] = useState<number | null>(null)
+  const router = useRouter()
 
-  // Fetch products
   useEffect(() => {
     const fetchCategoryProducts = async () => {
       setLoading(true)
@@ -107,7 +108,6 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
 
   const [activeIndex, setActiveIndex] = useState(canLoop ? BUFFER : 0)
 
-  // Memoize offset calculation
   const getOffsetForIndex = useCallback((index: number): number => {
     if (isMobile || !trackRef.current || !trackRef.current.children[index]) return 0
     const track = trackRef.current
@@ -118,14 +118,12 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
     return trackWidth / 2 - cardLeft - cardWidth / 2
   }, [isMobile]);
 
-  // Reset on category change
   useEffect(() => {
     const newIndex = canLoop ? BUFFER : 0;
     setActiveIndex(newIndex);
     x.set(getOffsetForIndex(newIndex));
   }, [activeCategory, canLoop, BUFFER, getOffsetForIndex, x])
 
-  // Memoize jump handler
   const handleJump = useCallback(() => {
     if (!canLoop) {
       isTransitioning.current = false
@@ -146,7 +144,6 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
     }
   }, [canLoop, productItems.length, BUFFER, activeIndex]);
 
-  // Animate to center the active card
   useLayoutEffect(() => {
     if (isMobile || isJumping) return
 
@@ -166,18 +163,11 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
     return () => animation.stop()
   }, [activeIndex, x, isJumping, isMobile, handleJump, getOffsetForIndex])
 
-  // Perform and Finalize jump
   useLayoutEffect(() => {
     if (isJumping) {
-      // This effect runs AFTER the re-render from handleJump's setActiveIndex.
-      // The DOM layout now reflects the new activeIndex (and new margins).
-      // So, calculating the offset here will be correct for the final layout.
       const targetOffset = getOffsetForIndex(activeIndex);
       x.set(targetOffset);
 
-      // Defer resetting isJumping to the next event loop cycle.
-      // This ensures the instantaneous jump via x.set() has been rendered
-      // before any subsequent animation logic runs, preventing a visual flicker.
       const timer = setTimeout(() => {
         setIsJumping(false);
         isTransitioning.current = false;
@@ -188,7 +178,6 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
   }, [isJumping, activeIndex, getOffsetForIndex, x]);
 
 
-  // Navigation
   const nextSlide = () => {
     if (isTransitioning.current || !canLoop) return
     isTransitioning.current = true
@@ -205,7 +194,6 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
     return product.images?.[0]?.url || product.imageUrl || "/placeholder.svg"
   }
 
-  // Mobile touch handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     if (isTransitioning.current || !canLoop) return
     setTouchStart(e.targetTouches[0].clientX)
@@ -260,7 +248,6 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
                 <p className="text-gray-500">No products available for this category.</p>
               </div>
             ) : isMobile ? (
-              // Mobile View
               <div
                 className="relative flex items-center justify-center h-[550px]"
                 onTouchStart={handleTouchStart}
@@ -298,7 +285,7 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
                               isTransitioning.current = true
                               setActiveIndex(i)
                             } else {
-                              window.location.href = `/product/${product.slug}`
+                              router.push(`/product/${product.slug}`)
                             }
                           }}
                         >
@@ -335,7 +322,6 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
                 })}
               </div>
             ) : (
-              // Desktop View (No Drag)
               <div className="py-4 sm:py-6 md:py-8">
                 <motion.div
                   ref={trackRef}
@@ -364,7 +350,7 @@ export default function ProductCarousel({ title = "Hand-picked for you", items =
                       className="flex-shrink-0 cursor-pointer"
                       style={{ width: widthExpression, marginLeft, marginRight }}
                       onClick={() => {
-                        window.location.href = `/product/${product.slug}`
+                        router.push(`/product/${product.slug}`)
                       }}
                     >
                       <motion.div

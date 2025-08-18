@@ -7,7 +7,6 @@ import { cn } from "@/src/app/lib/utils"
 import getProducts from "@/src/app/actions/get-products"
 import Currency from "@/src/app/ui/currency"
 import { avertaBlack, avertaBold } from "@/src/lib/fonts"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 export interface Product {
@@ -368,8 +367,7 @@ export default function ProductCarousel({ title = "HAND-PICKED FOR YOU", items =
                                             }
                                         }
                                     }}
-                                    onMouseDown={() => setIsScrolling(true)}
-                                    onMouseUp={() => setTimeout(() => setIsScrolling(false), 100)}
+
                                 >
                                     {displayItems.map((product, i) => {
                                         const isCenter = i === activeIndex

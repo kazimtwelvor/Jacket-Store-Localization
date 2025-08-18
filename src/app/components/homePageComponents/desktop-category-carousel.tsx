@@ -8,7 +8,6 @@ import { motion } from "framer-motion"
 import { cn } from "../../lib/utils"
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react"
 
-// Define the category type
 interface Category {
   id: string
   name: string
@@ -16,7 +15,6 @@ interface Category {
   href: string
 }
 
-// Men's categories with jacket types
 const menCategories: Category[] = [
   {
     id: "leather-men",
@@ -68,7 +66,6 @@ const menCategories: Category[] = [
   },
 ]
 
-// Women's categories with jacket types
 const womenCategories: Category[] = [
   {
     id: "leather-women",
@@ -136,10 +133,8 @@ export default function DesktopCategoryCarousel() {
 
   const categories = activeTab === "men" ? menCategories : womenCategories
 
-  // Dynamically calculate layout properties on resize or tab change
   useEffect(() => {
     const calculateLayout = () => {
-      // Use a small timeout to ensure DOM is ready after render/resize
       setTimeout(() => {
         if (carouselRef.current) {
           const viewport = carouselRef.current.querySelector(
@@ -159,7 +154,6 @@ export default function DesktopCategoryCarousel() {
 
             if (totalItemWidth > 0) {
               setScrollAmount(totalItemWidth)
-              // Calculate how many items are actually visible in the viewport
               const newVisibleItems = Math.max(1, Math.floor(viewportWidth / totalItemWidth))
               setVisibleItems(newVisibleItems)
             }
@@ -173,7 +167,6 @@ export default function DesktopCategoryCarousel() {
     return () => window.removeEventListener("resize", calculateLayout)
   }, [activeTab])
 
-  // Adjust currentIndex if it becomes invalid after layout change
   useEffect(() => {
     const maxIndex = Math.max(0, categories.length - visibleItems)
     if (currentIndex > maxIndex) {
@@ -203,7 +196,6 @@ export default function DesktopCategoryCarousel() {
     setTimeout(() => setIsAnimating(false), 300)
   }
 
-  // Handle touch events for mobile swiping
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     setTouchStart(e.targetTouches[0].clientX)
     e.stopPropagation()
@@ -256,9 +248,6 @@ export default function DesktopCategoryCarousel() {
       handlePrev()
     }
 
-    // Animate the carousel back to a non-offset position.
-    // This will smoothly animate to the new currentIndex if one was set,
-    // or snap back to the current index if the drag was not significant.
     setDragOffset(0)
     setMouseStart(null)
   }
@@ -296,7 +285,6 @@ export default function DesktopCategoryCarousel() {
   return (
     <div className="w-full bg-white flex justify-end overflow-hidden">
       <div className="w-full max-w-[1896px] py-0 m-0 pl-4 md:pl-8 lg:pl-12">
-        {/* Section Title */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -306,7 +294,6 @@ export default function DesktopCategoryCarousel() {
         >
         </motion.div>
 
-        {/* Gender Tabs */}
         <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 -ml-4 md:-ml-8 lg:-ml-12">
           <div className="flex gap-4">
             <button
@@ -333,7 +320,6 @@ export default function DesktopCategoryCarousel() {
             </button>
           </div>
         </div>
-        {/* Category Carousel */}
         <div
           className="relative"
           ref={carouselRef}
@@ -356,9 +342,7 @@ export default function DesktopCategoryCarousel() {
                   key={item.id}
                   className="group flex-shrink-0"
                   style={{ userSelect: "none" }}
-                  // Add onMouseUp to the item to ensure it's captured
                   onMouseUp={handleMouseUp}
-                  // Prevent context menu on long press drag
                   onContextMenu={(e) => hasDragged && e.preventDefault()}
                 >
                   <Link
@@ -381,12 +365,10 @@ export default function DesktopCategoryCarousel() {
                         draggable={false}
                         onDragStart={(e) => e.preventDefault()}
                       />
-                      {/* Always visible dark overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
                       <div className="absolute inset-x-0 bottom-0 p-4 group">
                         <div className="transition-all duration-500 ease-in-out group-hover:-translate-y-12">
-                          {/* Title + Arrow */}
                           <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
                             <h3
                               className="text-white text-lg md:text-xl lg:text-2xl font-bold text-left transition-all duration-500"
@@ -398,15 +380,12 @@ export default function DesktopCategoryCarousel() {
                           </div>
                         </div>
 
-                        {/* Paragraph appears below title after hover */}
                         <div className="absolute left-0 right-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
                           <p className="text-white/90 text-sm md:text-base">
                             Durable and stylish outerwear reimagined for the next generation.
                           </p>
                         </div>
                       </div>
-
-
                     </div>
                   </Link>
                 </div>

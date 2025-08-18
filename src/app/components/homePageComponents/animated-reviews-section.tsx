@@ -241,7 +241,6 @@ export default function AnimatedReviewsSection() {
     }
   }, [isMounted, isMobile])
 
-  // Non-JavaScript fallback
   if (!isMounted) {
     return (
       <section className="py-16 bg-[#EAEAEA]">

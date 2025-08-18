@@ -27,23 +27,19 @@ export default function SizeGuideClientLayout() {
         const handleScroll = () => {
             setScrollY(window.scrollY)
 
-            // Calculate scroll progress
             if (contentRef.current) {
                 const contentStart = contentRef.current.offsetTop
                 const contentHeight = contentRef.current.scrollHeight
                 const viewportHeight = window.innerHeight
                 const scrollPosition = window.scrollY
 
-                // Calculate how far we've scrolled into the content
                 const scrolled = scrollPosition - contentStart + viewportHeight / 2
 
-                // Calculate progress as a percentage (0 to 100)
                 const progress = Math.min(Math.max((scrolled / contentHeight) * 100, 0), 100)
 
                 setScrollProgress(progress)
             }
 
-            // Update active div based on scroll position
             const sections = document.querySelectorAll("div[id]")
             let currentSection = activeSection
 
@@ -73,7 +69,6 @@ export default function SizeGuideClientLayout() {
         }
     }
 
-    // This ensures the component is only rendered client-side
     if (!isMounted) {
         return null
     }
@@ -93,7 +88,6 @@ export default function SizeGuideClientLayout() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <SizeGuideNav activeSection={activeSection} onNavClick={handleNavClick} />
 
-                    {/* Scroll Progress Indicator */}
                     <div className="h-1 w-full bg-[#EAEAEA] rounded-full overflow-hidden">
                         <div
                             className="h-full bg-[#2b2b2b] transition-all duration-300 ease-out"

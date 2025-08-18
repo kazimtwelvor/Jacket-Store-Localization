@@ -8,7 +8,6 @@ import { motion } from "framer-motion"
 import { Star, ChevronLeft, ChevronRight } from "lucide-react"
 import { avertaBlack } from "@/src/lib/fonts"
 
-// Define the collection type
 interface Collection {
   id: string
   title: string
@@ -56,7 +55,6 @@ export default function JacketColorCollection() {
   const carouselRef = useRef<HTMLDivElement>(null)
   const [scrollAmount, setScrollAmount] = useState(0)
 
-  // Dynamically calculate layout properties on resize
   useEffect(() => {
     const calculateLayout = () => {
       setTimeout(() => {
@@ -91,7 +89,6 @@ export default function JacketColorCollection() {
     return () => window.removeEventListener("resize", calculateLayout)
   }, [])
 
-  // Adjust currentIndex if it becomes invalid after layout change
   useEffect(() => {
     const maxIndex = Math.max(0, colorCollections.length - visibleItems)
     if (currentIndex > maxIndex) {
@@ -120,7 +117,6 @@ export default function JacketColorCollection() {
     setTimeout(() => setIsAnimating(false), 300)
   }
 
-  // Handle touch events for mobile swiping
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     setTouchStart(e.targetTouches[0].clientX)
     e.stopPropagation()
@@ -212,21 +208,16 @@ export default function JacketColorCollection() {
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]"></div>
       </div>
-
       <div className="container mx-auto px-4 pt-10 pb-12 md:pb-20 relative z-10">
         <div className="text-center mb-20">
-
           <h2 className={`text-2xl sm:text-3xl md:text-4xl mb-6 tracking-tight leading-tight ${avertaBlack.className}`}>
             OUR COLOR COLLECTION
           </h2>
-
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed ">
             Discover our exclusive range of premium jackets across different styles.
           </p>
-
         </div>
 
-        {/* Collections Carousel */}
         <div className="w-full bg-transparent flex justify-end overflow-hidden">
           <div className="w-full max-w-[1896px]  py-0 m-0 pl-4 md:pl-8 lg:pl-12">
             <div
@@ -262,12 +253,10 @@ export default function JacketColorCollection() {
                           draggable={false}
                           onDragStart={(e) => e.preventDefault()}
                         />
-                        {/* Always visible dark overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
                         <div className="absolute inset-x-0 bottom-0 p-4 group">
                           <div className="transition-all duration-500 ease-in-out group-hover:-translate-y-8">
-                            {/* Title + Arrow */}
                             <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300 mb-5">
                               <h3
                                 className={`text-white text-lg md:text-xl lg:text-2xl font-bold text-left transition-all duration-500 ${avertaBlack.className}`}
@@ -281,7 +270,6 @@ export default function JacketColorCollection() {
                             </div>
                           </div>
 
-                          {/* Paragraph appears below title after hover */}
                           <div className="absolute left-0 right-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
                             <p className="text-white/90 text-sm md:text-base">
                               {item.subtitle}
