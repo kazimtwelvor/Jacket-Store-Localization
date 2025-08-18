@@ -263,18 +263,22 @@ const Navbar = () => {
     <div className="relative w-full" ref={navRef}>
       <MegaMenuScrollbarStyle />
 
-      <MobileMenu
-        isOpen={isMobileMenuOpen}
-        onClose={toggleMobileMenu}
-        onNavigate={handleMobileNav}
-      />
+      {isMounted && (
+        <MobileMenu
+          isOpen={isMobileMenuOpen}
+          onClose={toggleMobileMenu}
+          onNavigate={handleMobileNav}
+        />
+      )}
 
-      <AnimatedMenuIcon
-        isOpen={isMobileMenuOpen}
-        onClick={toggleMobileMenu}
-        className="fixed left-4 z-[9992] lg:hidden p-2 transition-all duration-300 top-[0.8rem]"
-        color="white"
-      />
+      {isMounted && (
+        <AnimatedMenuIcon
+          isOpen={isMobileMenuOpen}
+          onClick={toggleMobileMenu}
+          className="fixed left-4 z-[9992] lg:hidden p-2 transition-all duration-300 top-[0.8rem]"
+          color="white"
+        />
+      )}
 
       <div className="fixed left-0 right-0 z-[9001] w-full top-0">
         <header className="flex items-center px-5 md:px-10 bg-[#2B2B2B] h-16 w-full">
@@ -300,66 +304,60 @@ const Navbar = () => {
             <nav>
               <div className="flex space-x-8 text-xl">
                 <div className="relative">
-                  <Link href="/shop?category=leather-jackets" prefetch={true}>
-                    <Button
-                      variant="ghost"
-                      className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
-                      onClick={() => {
-                        setShowMegaMenu(true);
-                        setActiveNavItem("leather-jackets");
-                      }}
-                      onMouseEnter={() => setActiveNavItem("leather-jackets")}
-                      onMouseLeave={() => {
-                        if (!showMegaMenu) {
-                          setActiveNavItem(null);
-                        }
-                      }}
-                    >
-                      LEATHER JACKETS
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="ghost"
+                    className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
+                    onClick={() => {
+                      setShowMegaMenu(true);
+                      setActiveNavItem("leather-jackets");
+                    }}
+                    onMouseEnter={() => setActiveNavItem("leather-jackets")}
+                    onMouseLeave={() => {
+                      if (!showMegaMenu) {
+                        setActiveNavItem(null);
+                      }
+                    }}
+                  >
+                    LEATHER JACKETS
+                  </Button>
                   <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "leather-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
                 </div>
                 <div className="relative">
-                  <Link href="/shop?category=womens-jackets" prefetch={true}>
-                    <Button
-                      variant="ghost"
-                      className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
-                      onClick={() => {
-                        setShowMegaMenu(true);
-                        setActiveNavItem("womens-jackets");
-                      }}
-                      onMouseEnter={() => setActiveNavItem("womens-jackets")}
-                      onMouseLeave={() => {
-                        if (!showMegaMenu) {
-                          setActiveNavItem(null);
-                        }
-                      }}
-                    >
-                      WOMEN'S JACKETS
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="ghost"
+                    className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
+                    onClick={() => {
+                      setShowMegaMenu(true);
+                      setActiveNavItem("womens-jackets");
+                    }}
+                    onMouseEnter={() => setActiveNavItem("womens-jackets")}
+                    onMouseLeave={() => {
+                      if (!showMegaMenu) {
+                        setActiveNavItem(null);
+                      }
+                    }}
+                  >
+                    WOMEN'S JACKETS
+                  </Button>
                   <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "womens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
                 </div>
                 <div className="relative">
-                  <Link href="/shop?category=mens-jackets" prefetch={true}>
-                    <Button
-                      variant="ghost"
-                      className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
-                      onClick={() => {
-                        setShowMegaMenu(true);
-                        setActiveNavItem("mens-jackets");
-                      }}
-                      onMouseEnter={() => setActiveNavItem("mens-jackets")}
-                      onMouseLeave={() => {
-                        if (!showMegaMenu) {
-                          setActiveNavItem(null);
-                        }
-                      }}
-                    >
-                      MEN'S JACKETS
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="ghost"
+                    className="h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300"
+                    onClick={() => {
+                      setShowMegaMenu(true);
+                      setActiveNavItem("mens-jackets");
+                    }}
+                    onMouseEnter={() => setActiveNavItem("mens-jackets")}
+                    onMouseLeave={() => {
+                      if (!showMegaMenu) {
+                        setActiveNavItem(null);
+                      }
+                    }}
+                  >
+                    MEN'S JACKETS
+                  </Button>
                   <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "mens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
                 </div>
                 <div className="relative">
@@ -493,6 +491,18 @@ const Navbar = () => {
                   <ul className="space-y-3">
                     <li>
                       <Link
+                        href="/shop?category=leather-jackets"
+                        className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                        onClick={() => {
+                          setShowMegaMenu(false);
+                          setActiveNavItem(null);
+                        }}
+                      >
+                        All Leather Jackets
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
                         href="/shop?category=biker-jackets"
                         className="mega-menu-link text-gray-200 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                         onClick={() => {
@@ -558,6 +568,18 @@ const Navbar = () => {
                     COATS & OUTERWEAR
                   </h3>
                   <ul className="space-y-3">
+                    <li>
+                      <Link
+                        href="/shop?category=coats"
+                        className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                        onClick={() => {
+                          setShowMegaMenu(false);
+                          setActiveNavItem(null);
+                        }}
+                      >
+                        All Coats & Outerwear
+                      </Link>
+                    </li>
                     <li>
                       <Link
                         href="/shop?category=trench-coats"
@@ -701,7 +723,7 @@ const Navbar = () => {
                           setActiveNavItem(null);
                         }}
                       >
-                        Men's Collection
+                        All Men's Jackets
                       </Link>
                     </li>
                     <li>
@@ -713,7 +735,7 @@ const Navbar = () => {
                           setActiveNavItem(null);
                         }}
                       >
-                        Women's Collection
+                        All Women's Jackets
                       </Link>
                     </li>
                     <li>

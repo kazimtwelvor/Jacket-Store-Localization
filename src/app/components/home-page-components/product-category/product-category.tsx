@@ -1,8 +1,6 @@
 "use client";
 
-import type React from "react";
-
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -209,9 +207,7 @@ export default function ProductCategory() {
     }
   };
 
-  const showArrows = isDesktop
-    ? categories.length > visibleCount
-    : canScrollLeft || canScrollRight;
+  const showArrows = isDesktop && categories.length > visibleCount;
 
   const canGoLeft = isDesktop ? currentStartIndex > 0 : canScrollLeft;
 
@@ -232,7 +228,7 @@ export default function ProductCategory() {
           className="text-center mb-0"
         ></motion.div>
 
-        <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 -ml-4 md:-ml-8 lg:-ml-12">
+        <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 ml-2 lg:-ml-4">
           <div className="flex gap-4">
             <button
               onClick={() => setActiveTab("men")}
