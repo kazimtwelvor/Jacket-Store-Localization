@@ -193,7 +193,15 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   <Filter size={14} />
                 </div>
                 
-                <div className="sort-button-container">
+                <div
+                  className="sort-button-container"
+                  tabIndex={-1}
+                  onBlur={(e) => {
+                    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                      setSortDropdownOpen(false)
+                    }
+                  }}
+                >
                   <button
                     className="sort-button"
                     onClick={(e) => {
