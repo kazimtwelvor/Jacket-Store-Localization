@@ -5,7 +5,7 @@ import getCategories from "../../actions/get-categories";
 import getSizes from "../../actions/get-sizes";
 import getColors from "../../actions/get-colors";
 import getKeywordCategories from "../../actions/get-keyword-categories";
-import DesktopCategoryCarousel from "../homePageComponents/desktop-category-carousel";
+import ProductCategory from "../home-page-components/product-category/product-category";
 
 export const metadata = {
   title: "Shop | Fineyst",
@@ -67,7 +67,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         </Suspense>
       </main>
 
-      <DesktopCategoryCarousel />
+      <ProductCategory />
     </div>
   );
 }

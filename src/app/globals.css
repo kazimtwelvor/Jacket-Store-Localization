@@ -3,6 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Enforce light color scheme across the app */
+  color-scheme: light;
 }
 
 @theme inline {
@@ -12,12 +14,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Removed dark mode media query to prevent automatic dark theme */
 
 body {
   background: var(--background);
@@ -32,4 +29,6 @@ html {
   margin: 0;
   padding: 0;
   width: 100%;
+  /* Ensure UA components (scrollbars, form controls) use light styling */
+  color-scheme: light;
 }
