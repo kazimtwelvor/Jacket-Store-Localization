@@ -17,6 +17,7 @@ import { FilterBar } from "./components/FilterBar"
 import { PaginationControls } from "./components/PaginationControls"
 import { FilterSidebar } from "./components/FilterSidebar"
 import { CategorySlider } from "./components/CategorySlider"
+import WhatsMySize from "@/src/components/WhatsMySize"
 
 const useMediaQuery = (query: string): boolean => {
   const [matches, setMatches] = useState(false)
@@ -141,15 +142,11 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const materials = getMaterialsFromCategories(categories)
   const styles = getStylesFromCategories(categories)
   const genders = getGendersFromCategories(categories)
-  
+
   useEffect(() => {
     setMounted(true)
   }, [])
-  
-  console.log("✅ Categories received:", categories)
-  console.log("✅ Extracted materials:", materials)
-  console.log("✅ Extracted styles:", styles)
-  console.log("✅ Extracted genders:", genders)
+
   const hasActiveFilters = selectedFilters.materials.length > 0 || selectedFilters.style.length > 0 || selectedFilters.gender.length > 0 || selectedFilters.colors.length > 0 || selectedFilters.sizes.length > 0
   const totalActiveFilters = selectedFilters.materials.length + selectedFilters.style.length + selectedFilters.gender.length + selectedFilters.colors.length + selectedFilters.sizes.length
 
@@ -395,7 +392,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     handleFilterChange()
   }, [selectedFilters])
 
-  // Apply client-side sort when sort changes without re-fetching
   useEffect(() => {
     setCurrentProducts(prev => sortProductsClient(prev, activeSort))
   }, [activeSort])
@@ -652,6 +648,14 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           }}
         />
 
+        <WhatsMySize 
+          open={sizeModalOpen} 
+          onOpenChange={setSizeModalOpen}
+          onCategorySelect={(category) => {
+            console.log('Selected category:', category)
+          }}
+        />
+
         {mobileCartModal.product && (
           <MobileAddToCartModal
             isOpen={mobileCartModal.isOpen}
@@ -675,7 +679,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           @media (max-width: 768px) { :global(.hide-scrollbar) { scroll-snap-type: x mandatory; } }
           @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
           :global(.bg-\[\#2b2b2b\]) { animation: pulse 2s infinite; }
-                                                                                                                                                                               :global(.sticky-filter-bar) { 
                transition: all 0.3s ease-in-out;
                will-change: transform;
                transform: translateZ(0);

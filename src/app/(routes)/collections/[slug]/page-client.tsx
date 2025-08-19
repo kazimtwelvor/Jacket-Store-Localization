@@ -1234,9 +1234,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                     isOpen={productSidebarOpen}
                     onClose={() => setProductSidebarOpen(false)}
                 />
-
-
-
+                
                 <style jsx global>{`
           /* Custom scrollbar for the filter sidebar */
           .custom-scrollbar::-webkit-scrollbar {
