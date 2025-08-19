@@ -33,6 +33,9 @@ export function CapsuleNav() {
   const isShopPage = pathname === "/shop";
   const lastScrollY = useRef(0);
 
+  const isMobileView = typeof window !== "undefined" ? window.innerWidth < 1024 : false;
+  const shouldHideOnShopPage = isShopPage && isMobileView;
+
   useEffect(() => {
     setIsMounted(true);
 
@@ -157,7 +160,9 @@ export function CapsuleNav() {
 
   if (!isMounted) return null;
 
-  const isMobileView = window.innerWidth < 1024;
+  if (shouldHideOnShopPage) {
+    return null;
+  }
 
   return (
     <div

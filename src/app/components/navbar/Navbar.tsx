@@ -77,9 +77,11 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState<any>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const lastScrollY = useRef(0);
 
   const { items } = useCart();
   const totalItems = items.length;
@@ -99,12 +101,40 @@ const Navbar = () => {
 
 
 
-  // Mount effect to prevent hydration mismatch
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Removed heavy scroll handler for better performance
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const isMobileView = window.innerWidth < 1024;
+      const isShopPage = pathname === "/shop";
+
+      if (isMobileView && !isShopPage) {
+        if (currentScrollY > 100 && currentScrollY > lastScrollY.current) {
+          setIsHeaderVisible(false); // Scrolling down
+          document.body.classList.add('header-hidden');
+        } else {
+          setIsHeaderVisible(true); // Scrolling up or at the top
+          document.body.classList.remove('header-hidden');
+        }
+      } else {
+        setIsHeaderVisible(true);
+        document.body.classList.remove('header-hidden');
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [pathname]);
+
 
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
@@ -281,7 +311,10 @@ const Navbar = () => {
       )}
 
       <div className="fixed left-0 right-0 z-[9001] w-full top-0">
-        <header className="flex items-center px-5 md:px-10 bg-[#2B2B2B] h-16 w-full">
+        <header className={cn(
+          "flex items-center px-5 md:px-10 bg-[#2B2B2B] h-16 w-full transition-transform duration-300",
+          !isHeaderVisible && "transform -translate-y-full"
+        )}>
           <div className="lg:hidden flex items-center space-x-2">
             <div className="w-10 h-10" />
           </div>
