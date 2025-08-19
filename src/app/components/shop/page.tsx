@@ -46,6 +46,9 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const sizes = await getSizes();
   const keywordCategories = await getKeywordCategories();
 
+  console.log("🔍 Server: Categories being passed to client:", categories?.length, "categories");
+  console.log("🔍 Server: First few category names:", categories?.slice(0, 5).map(c => c.name));
+
   return (
     <div className="bg-white min-h-screen flex flex-col">
       <main className="flex-1">

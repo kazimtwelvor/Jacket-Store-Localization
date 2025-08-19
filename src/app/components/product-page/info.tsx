@@ -41,6 +41,7 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
   const [showMobileCartModal, setShowMobileCartModal] = useState(false)
   const [mobileSizeId, setMobileSizeId] = useState<string>("")
   const [showNavbar, setShowNavbar] = useState(false)
+  const [sizeError, setSizeError] = useState<string>("")
   
 
   
@@ -232,9 +233,10 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
     
     if (!selectedSizeId && availableSizes.length > 0) {
       // Highlight size selector if no size is selected
-      document.getElementById("size-selector")?.classList.add("ring-2", "ring-black")
+      document.getElementById("size-selector")?.classList.add("ring-2", "ring-red-500")
+      setSizeError("Please select a size")
       setTimeout(() => {
-        document.getElementById("size-selector")?.classList.remove("ring-2", "ring-black")
+        document.getElementById("size-selector")?.classList.remove("ring-2", "ring-red-500")
       }, 2000)
       return
     }
@@ -323,13 +325,14 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
       <SizeSelection 
         availableSizes={availableSizes}
         selectedSizeId={selectedSizeId}
-        setSelectedSizeId={setSelectedSizeId}
+        setSelectedSizeId={(id: string) => { setSelectedSizeId(id); setSizeError("") }}
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
         isMobile={isMobile}
         isLoading={isLoading}
         onAddToCart={onAddToCart}
         setShowMobileSizeModal={setShowMobileSizeModal}
+        errorMessage={sizeError}
       />
 
       <AddToCartButton onAddToCart={onAddToCart} isLoading={isLoading} isMobile={isMobile} />

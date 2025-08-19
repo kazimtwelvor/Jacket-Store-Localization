@@ -46,6 +46,7 @@ const getStylesFromCategories = (categories?: Category[]) =>
 const getGendersFromCategories = (categories?: Category[]) =>
   categories?.filter((cat) => cat.genders && cat.genders.length > 0) || []
 
+
 const getProductSlug = (product: Product): string => {
   if (product.slug) return product.slug
   if (product.name) {
@@ -140,6 +141,11 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const materials = getMaterialsFromCategories(categories)
   const styles = getStylesFromCategories(categories)
   const genders = getGendersFromCategories(categories)
+  
+  console.log("✅ Categories received:", categories)
+  console.log("✅ Extracted materials:", materials)
+  console.log("✅ Extracted styles:", styles)
+  console.log("✅ Extracted genders:", genders)
   const hasActiveFilters = selectedFilters.materials.length > 0 || selectedFilters.style.length > 0 || selectedFilters.gender.length > 0 || selectedFilters.colors.length > 0 || selectedFilters.sizes.length > 0
   const totalActiveFilters = selectedFilters.materials.length + selectedFilters.style.length + selectedFilters.gender.length + selectedFilters.colors.length + selectedFilters.sizes.length
 
@@ -577,7 +583,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         <CategorySlider
           isOpen={categorySliderOpen}
           onClose={() => setCategorySliderOpen(false)}
-          categories={categories || []}
+          keywordCategories={keywordCategories || []}
           onCategorySelect={(category) => {
             console.log('Selected category:', category)
             setCategorySliderOpen(false)

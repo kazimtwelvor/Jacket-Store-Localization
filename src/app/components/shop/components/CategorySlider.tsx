@@ -9,42 +9,45 @@ import type { Category } from "@/types"
 import Image from "next/image"
 import Link from "next/link"
 
+interface KeywordCategory {
+  id: string
+  name: string
+  slug: string
+  imageUrl?: string
+  description?: string
+}
+
 interface CategorySliderProps {
   isOpen: boolean
   onClose: () => void
-  categories: Category[]
-  onCategorySelect?: (category: Category) => void
-  currentCategory?: Category
+  keywordCategories: KeywordCategory[]
+  onCategorySelect?: (category: KeywordCategory) => void
+  currentCategory?: KeywordCategory
 }
 
 export const CategorySlider: React.FC<CategorySliderProps> = ({
   isOpen,
   onClose,
-  categories,
+  keywordCategories,
   onCategorySelect,
   currentCategory,
 }) => {
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<KeywordCategory | null>(null)
 
   // Filter categories based on search query
   const filteredCategories = useMemo(() => {
-    if (!searchQuery.trim()) return categories
+    if (!keywordCategories || !Array.isArray(keywordCategories)) return []
+    if (!searchQuery.trim()) return keywordCategories
     
-    return categories.filter(category =>
+    return keywordCategories.filter(category =>
       category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      category.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      category.materials?.some(material => 
-        material.toLowerCase().includes(searchQuery.toLowerCase())
-      ) ||
-      category.styles?.some(style => 
-        style.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+      category.description?.toLowerCase().includes(searchQuery.toLowerCase())
     )
-  }, [categories, searchQuery])
+  }, [keywordCategories, searchQuery])
 
-  const handleCategoryClick = (category: Category) => {
+  const handleCategoryClick = (category: KeywordCategory) => {
     setSelectedCategory(category)
     onCategorySelect?.(category)
     // Don't close immediately to show category details
@@ -56,7 +59,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
     onClose()
   }
 
-  const CategoryCard = ({ category }: { category: Category }) => (
+  const CategoryCard = ({ category }: { category: KeywordCategory }) => (
     <motion.div
       whileHover={{ scale: 1.02, y: -4 }}
       whileTap={{ scale: 0.98 }}
@@ -167,7 +170,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
     </motion.div>
   )
 
-  const CategoryListItem = ({ category }: { category: Category }) => (
+  const CategoryListItem = ({ category }: { category: KeywordCategory }) => (
     <motion.div
       whileHover={{ x: 4 }}
       className={cn(
