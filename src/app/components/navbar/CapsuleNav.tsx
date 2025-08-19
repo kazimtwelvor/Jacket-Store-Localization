@@ -7,11 +7,11 @@ import { cn } from "../../lib/utils";
 
 
 const items = [
-  { id: 1, label: "Men Leather", isActive: true, category: "leather-jackets" },
-  { id: 2, label: "Men Puffer", isActive: false, category: "puffer-jackets" },
-  { id: 3, label: "Men Bomber", isActive: false, category: "bomber-jackets" },
-  { id: 4, label: "Men Varsity", isActive: false, category: "varsity-jackets" },
-  { id: 5, label: "Men Lettermen", isActive: false, category: "lettermen-jackets" },
+  { id: 1, label: "Leather", isActive: true, category: "leather-bomber-jacket-mens" },
+  { id: 2, label: "Puffer", isActive: false, category: "mens-puffer-jackets" },
+  { id: 3, label: "Bomber", isActive: false, category: "leather-bomber-jacket-mens" },
+  { id: 4, label: "Varsity", isActive: false, category: "mens-varsity-jackets" },
+  { id: 5, label: "Lettermen", isActive: false, category: "lettermen-jackets" },
 ];
 
 export function CapsuleNav() {
@@ -127,7 +127,8 @@ export function CapsuleNav() {
 
   const handleItemClick = (id: number, category: string) => {
     setActiveItem(id);
-    router.push(`/shop?category=${category}`);
+        router.push(`/collections/${category}`);
+
   };
 
   if (!isMounted) {
