@@ -65,7 +65,7 @@ const discoverData: Record<string, { title: string; items: string[]; links: stri
     {
       title: "COLLECTIONS",
       items: ["Men's Collection", "Women's Collection", "Unisex Styles", "Luxury Collection", "Size Guide"],
-      links: ["/shop?gender=mens", "/shop?gender=womens", "/shop?category=unisex", "/shop?price=luxury", "/size-guide"]
+      links: ["/shop?genders=Male", "/shop?genders=Female", "/shop?category=unisex", "/shop?price=luxury", "/size-guide"]
     }
   ]
 };

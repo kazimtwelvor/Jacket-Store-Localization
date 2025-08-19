@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Container, Pencil, Plus } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
+import Container from "@/src/app/ui/container";
 import Link from "next/link";
 import Image from "next/image";
 import useAuth from "@/src/app/hooks/use-auth";

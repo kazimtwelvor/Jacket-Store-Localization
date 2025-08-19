@@ -470,14 +470,39 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
 
 
     useEffect(() => {
+        const deriveCategoryGender = (): string => {
+            const basis = `${category?.name || ''} ${slug || ''}`.toLowerCase()
+            if (basis.includes('women')) return 'female'
+            if (basis.includes('woman')) return 'female'
+            if (basis.includes('ladies')) return 'female'
+            if (basis.includes('men')) return 'male'
+            if (basis.includes('man')) return 'male'
+            return ''
+        }
+
+        const normalizeGender = (value: string): string => {
+            const v = String(value || '').trim().toLowerCase()
+            if (v.startsWith('women')) return 'female'
+            if (v.startsWith('female')) return 'female'
+            if (v.startsWith('ladies')) return 'female'
+            if (v.startsWith('men')) return 'male'
+            if (v.startsWith('male')) return 'male'
+            if (v.startsWith('man')) return 'male'
+            return v
+        }
+
+        const categoryGender = deriveCategoryGender()
+
         const filterBySelections = (p: Product) => {
             const productColors = ((p as any).colorDetails || (p as any).colors || []).map((c: any) => c.name || c)
             const productSizes = ((p as any).sizeDetails || (p as any).sizes || []).map((s: any) => s.name || s)
+            const productGender = normalizeGender((p as any).gender || '')
 
             const matchesColors = selectedFilters.colors.length === 0 || selectedFilters.colors.some(color => productColors.includes(color))
             const matchesSizes = selectedFilters.sizes.length === 0 || selectedFilters.sizes.some(size => productSizes.includes(size))
+            const matchesGender = categoryGender === '' || productGender === categoryGender
 
-            return matchesColors && matchesSizes
+            return matchesColors && matchesSizes && matchesGender
         }
 
         let filtered = products.filter(filterBySelections)

@@ -12,11 +12,11 @@ import {
   XCircle,
   Truck,
   Calendar,
-  Container,
-  Badge,
 } from "lucide-react";
+import Container from "@/src/app/ui/container";
+import { Badge } from "@/src/app/ui/badge";
 import Link from "next/link";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import useAuth from "@/src/app/hooks/use-auth";
 import { Skeleton } from "@/src/app/ui/skeleton";
 
@@ -289,10 +289,7 @@ export default function OrderHistoryPage() {
                                   Order placed
                                 </p>
                                 <p className="font-medium">
-                                  {format(
-                                    new Date(order.createdAt),
-                                    "MMMM d, yyyy"
-                                  )}
+                                  {new Date(order.createdAt).toLocaleDateString()}
                                 </p>
                               </div>
                               <div className="mb-2 md:mb-0">
@@ -380,10 +377,7 @@ export default function OrderHistoryPage() {
                                   <Calendar className="h-4 w-4 mr-1 text-gray-500" />
                                   <span className="text-sm text-gray-600">
                                     Est. delivery:{" "}
-                                    {format(
-                                      new Date(order.estimatedDelivery),
-                                      "MMM d, yyyy"
-                                    )}
+                                    {new Date(order.estimatedDelivery).toLocaleDateString()}
                                   </span>
                                 </div>
                               )}

@@ -31,7 +31,7 @@ const menCategories: Category[] = [
     id: "denim-men",
     name: "DENIM JACKETS",
     imageUrl: "/images/denim.webp",
-    href: "/collections/womens-denim-jackets",
+    href: "/collections/mens-denim-jackets",
   },
   {
     id: "suede-men",

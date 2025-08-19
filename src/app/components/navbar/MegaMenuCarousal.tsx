@@ -43,7 +43,7 @@ const carouselItems = [
     id: "mens-collection",
     title: "Men's Collection",
     imageUrl: "/images/mega-carousel-men.jpg",
-    href: "/shop?gender=men",
+    href: "/shop?genders=Male",
   },
 ]
 
