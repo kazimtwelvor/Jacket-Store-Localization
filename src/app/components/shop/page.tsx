@@ -32,22 +32,38 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const page = Number.parseInt(resolvedSearchParams.page || "1");
   const limit = Number.parseInt(resolvedSearchParams.limit || "28");
 
-  const productsData = await getProducts({
-    page,
-    limit,
-    categoryId: resolvedSearchParams.categoryId,
-    colorId: resolvedSearchParams.colorId,
-    sizeId: resolvedSearchParams.sizeId,
-    search: resolvedSearchParams.search,
-  });
+  const [productsData, categories, colors, sizes, keywordCategories] = await Promise.allSettled([
+    getProducts({
+      page,
+      limit,
+      categoryId: resolvedSearchParams.categoryId,
+      colorId: resolvedSearchParams.colorId,
+      sizeId: resolvedSearchParams.sizeId,
+      search: resolvedSearchParams.search,
+    }),
+    getCategories(),
+    getColors(),
+    getSizes(),
+    getKeywordCategories(),
+  ]);
 
-  const categories = await getCategories();
-  const colors = await getColors();
-  const sizes = await getSizes();
-  const keywordCategories = await getKeywordCategories();
+  const finalProductsData = productsData.status === 'fulfilled' ? productsData.value : {
+    products: [],
+    pagination: {
+      currentPage: page,
+      totalPages: 0,
+      totalProducts: 0,
+      productsPerPage: limit,
+      hasNextPage: false,
+      hasPreviousPage: false,
+    },
+  };
 
-  console.log("🔍 Server: Categories being passed to client:", categories?.length, "categories");
-  console.log("🔍 Server: First few category names:", categories?.slice(0, 5).map(c => c.name));
+  const finalCategories = categories.status === 'fulfilled' ? categories.value : [];
+  const finalColors = colors.status === 'fulfilled' ? colors.value : [];
+  const finalSizes = sizes.status === 'fulfilled' ? sizes.value : [];
+  const finalKeywordCategories = keywordCategories.status === 'fulfilled' ? keywordCategories.value : [];
+
 
   return (
     <div className="bg-white min-h-screen flex flex-col">
@@ -61,11 +77,11 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           }
         >
           <ProductsPageClient
-            initialProductsData={productsData}
-            categories={categories}
-            colors={colors}
-            sizes={sizes}
-            keywordCategories={keywordCategories}
+            initialProductsData={finalProductsData}
+            categories={finalCategories}
+            colors={finalColors}
+            sizes={finalSizes}
+            keywordCategories={finalKeywordCategories}
           />
         </Suspense>
       </main>

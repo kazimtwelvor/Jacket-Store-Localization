@@ -2,12 +2,19 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { useRouter } from "next/navigation"
 import ResponsiveContainer from "@/src/app/ui/responsive-container"
 import { avertaBlack } from "@/src/lib/fonts"
 import ShopButton from "@/src/app/components/shop-button"
-import { tr } from "zod/v4/locales"
 
 export const DesktopBannerContent = () => {
+  const router = useRouter()
+
+  const handleShopClick = (gender: string) => {
+    const url = `/shop?genders=${gender}`
+    router.push(url)
+  }
+
   return (
     <ResponsiveContainer>
       <section className="py-24 sm:py-32 md:py-40 lg:py-48 text-center relative">
@@ -44,8 +51,11 @@ export const DesktopBannerContent = () => {
               showArrow={true}
               ariaLabel="Shop men's collection"
               className="w-full sm:w-auto min-w-[180px]"
+              as="div"
             >
-              Shop Men
+              <button onClick={() => handleShopClick('men')} className="w-full h-full">
+                Shop Men
+              </button>
             </ShopButton>
             <ShopButton
               variant="filled"
@@ -54,8 +64,11 @@ export const DesktopBannerContent = () => {
               showArrow={true}
               ariaLabel="Shop women's collection"
               className="w-full sm:w-auto min-w-[180px]"
+              as="div"
             >
-              Shop Women
+              <button onClick={() => handleShopClick('women')} className="w-full h-full">
+                Shop Women
+              </button>
             </ShopButton>
           </motion.div>
         </div>
