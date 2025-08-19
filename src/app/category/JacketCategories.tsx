@@ -201,11 +201,13 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
     if (!imageUrl || !name) return;
     if (currentCategory && id === currentCategory.categoryId) return;
     imageUrl = getCleanImageUrl(imageUrl);
+    // Ensure we use the proper slug from the category object
+    const categorySlug = category.slug || id;
     displayCategories.push({
       name,
       icon: imageUrl,
       categoryId: id,
-      slug: category.slug || id,
+      slug: categorySlug,
       isActive: false,
     });
   });
@@ -248,15 +250,16 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
           aria-label="Product Categories"
         >
           {categoriesToShow.map((category, index) => {
-            const slug = category.slug || category.categoryId || category.name?.toLowerCase().replace(/\s+/g, '-');
+            // Use the slug that was already determined when creating the category object
+            const categorySlug = category.slug
             return (
               <div
-                key={slug || index}
-                onClick={() => handleCategoryClick(slug || '')}
+                key={categorySlug || index}
+                onClick={() => handleCategoryClick(categorySlug || '')}
                 className={`relative flex flex-col items-center flex-shrink-0 w-[23vw] sm:w-28 text-center cursor-pointer py-2 ${category.isActive ? 'sticky left-3 z-10 sticky-mask' : ''}`}
                 role="button"
                 tabIndex={0}
-                onKeyPress={(e) => e.key === 'Enter' && handleCategoryClick(slug || '')}
+                onKeyPress={(e) => e.key === 'Enter' && handleCategoryClick(categorySlug || '')}
                 aria-current={category.isActive ? 'page' : undefined}
               >
                 <div
