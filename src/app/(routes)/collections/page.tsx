@@ -1,5 +1,5 @@
 export const dynamic = "force-dynamic";
-
+export const runtime = 'nodejs';
 
 import type { Metadata } from 'next';
 import CategoriesPage from './page-client';
@@ -13,16 +13,15 @@ export const metadata: Metadata = {
 export default async function Categories() {
   try {
     const keywordCategories = await getKeywordCategories();
-    console.log('Collections page - keyword categories:', keywordCategories.length);
-    
-    // If no keyword categories, we could also fetch regular categories as fallback
-    if (keywordCategories.length === 0) {
-      console.log('No keyword categories found, this is expected if none are configured');
-    }
-    
-    return <CategoriesPage categories={keywordCategories} />;
+    return <CategoriesPage categories={keywordCategories || []} />;
   } catch (error) {
-    console.error('Error in Collections page:', error);
-    return <CategoriesPage categories={[]} />;
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Collections</h1>
+          <p className="text-gray-600">Unable to load collections at this time.</p>
+        </div>
+      </div>
+    );
   }
 }

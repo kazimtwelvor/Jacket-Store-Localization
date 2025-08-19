@@ -29,7 +29,7 @@ const CategoriesPage = ({ categories }: CategoriesPageProps) => {
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">All Collections</h1>          
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">All Collections</h1>
           <div className="max-w-md mx-auto">
             <input
               type="text"
@@ -41,7 +41,12 @@ const CategoriesPage = ({ categories }: CategoriesPageProps) => {
           </div>
         </div>
 
-        {filteredCategories.length === 0 ? (
+        {!categories || categories.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No collections available at the moment.</p>
+            <p className="text-gray-400 text-sm mt-2">Please check back later or contact support if this issue persists.</p>
+          </div>
+        ) : filteredCategories.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">No categories found matching your search.</p>
           </div>

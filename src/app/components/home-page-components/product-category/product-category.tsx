@@ -19,49 +19,49 @@ const menCategories: Category[] = [
     id: "leather-men",
     name: "LEATHER JACKETS",
     imageUrl: "/images/leather.webp",
-    href: "/collections/leather",
+    href: "/collections/leather-bomber-jacket-mens",
   },
   {
     id: "puffer-men",
     name: "PUFFER JACKETS",
     imageUrl: "/images/puffer.webp",
-    href: "/collections/puffer",
+    href: "/collections/mens-puffer-jackets",
   },
   {
     id: "denim-men",
     name: "DENIM JACKETS",
     imageUrl: "/images/denim.webp",
-    href: "/collections/denim",
+    href: "/collections/womens-denim-jackets",
   },
   {
     id: "suede-men",
     name: "SUEDE JACKETS",
     imageUrl: "/images/suede.webp",
-    href: "/collections/suede",
+    href: "/collections/mens-suede-jackets",
   },
   {
     id: "aviator-men",
     name: "AVIATOR JACKETS",
     imageUrl: "/images/aviator.webp",
-    href: "/collections/aviator",
+    href: "/collections/mens-aviator-jackets",
   },
   {
     id: "biker-men",
     name: "BIKER JACKETS",
     imageUrl: "/images/leather.webp",
-    href: "/collections/biker",
+    href: "/collections/biker-jacket-men",
   },
   {
     id: "varsity-men",
     name: "VARSITY JACKETS",
     imageUrl: "/images/varsity.webp",
-    href: "/collections/varsity",
+    href: "/collections/mens-varsity-jackets",
   },
   {
     id: "letterman-men",
     name: "LETTERMAN JACKETS",
     imageUrl: "/images/letterman.webp",
-    href: "/collections/letterman",
+    href: "/collections/mens-aviator-jackets",
   },
 ];
 
@@ -70,49 +70,49 @@ const womenCategories: Category[] = [
     id: "leather-women",
     name: "LEATHER JACKETS",
     imageUrl: "/images/women-leather.webp",
-    href: "/collections/leather",
+    href: "/collections/womens-leather-bomber-jackets",
   },
   {
     id: "puffer-women",
     name: "PUFFER JACKETS",
     imageUrl: "/images/women-puffer.webp",
-    href: "/collections/puffer",
+    href: "/collections/womens-puffer-vests",
   },
   {
     id: "denim-women",
     name: "DENIM JACKETS",
     imageUrl: "/images/women-denim.webp",
-    href: "/collections/denim",
+    href: "/collections/womens-denim-jackets",
   },
   {
     id: "suede-women",
     name: "SUEDE JACKETS",
     imageUrl: "/images/women-suede.webp",
-    href: "/collections/suede",
+    href: "/collections/womens-suede-leather-jackets",
   },
   {
     id: "aviator-women",
     name: "AVIATOR JACKETS",
     imageUrl: "/images/women-aviator.webp",
-    href: "/collections/aviator",
+    href: "/collections/womens-pilot-jackets",
   },
   {
     id: "biker-women",
     name: "BIKER JACKETS",
     imageUrl: "/images/women-biker.webp",
-    href: "/collections/biker",
+    href: "/collections/womens-leather-biker-jackets",
   },
   {
     id: "varsity-women",
     name: "VARSITY JACKETS",
     imageUrl: "/images/women-varsity.webp",
-    href: "/collections/varsity",
+    href: "/collections/womens-varsity-jackets",
   },
   {
     id: "letterman-women",
     name: "LETTERMAN JACKETS",
     imageUrl: "/images/women-letterman.webp",
-    href: "/collections/letterman",
+    href: "/collections/womens-letterman-jackets",
   },
 ];
 
@@ -245,7 +245,7 @@ export default function ProductCategory({
           transition={{ duration: 0.5 }}
           className="text-center mb-0"
         ></motion.div>
-        <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 -ml-4 md:-ml-8 lg:-ml-12">
+        <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 -ml-4 ml-3 md:-ml-4">
 
           <div className="flex gap-4">
             <button
