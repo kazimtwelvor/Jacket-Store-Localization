@@ -304,7 +304,10 @@ const Navbar = () => {
         <AnimatedMenuIcon
           isOpen={isMobileMenuOpen}
           onClick={toggleMobileMenu}
-          className="fixed left-4 z-[9992] lg:hidden p-2 transition-all duration-300 top-[0.8rem]"
+          className={cn(
+            "fixed left-4 z-[9992] lg:hidden p-2 transition-all duration-300 top-[0.8rem]",
+            !isHeaderVisible && "opacity-0 pointer-events-none"
+          )}
           color="white"
         />
       )}

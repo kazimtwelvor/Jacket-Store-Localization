@@ -142,6 +142,10 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const styles = getStylesFromCategories(categories)
   const genders = getGendersFromCategories(categories)
   
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  
   console.log("✅ Categories received:", categories)
   console.log("✅ Extracted materials:", materials)
   console.log("✅ Extracted styles:", styles)
@@ -487,7 +491,20 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     }
   }, [isFilterSticky])
 
-  if (!mounted) return null
+  if (!mounted) {
+    return (
+      <div className="bg-white min-h-screen flex flex-col">
+        <main className="flex-1">
+          <div className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+              <span className="ml-3 text-gray-600">Loading products...</span>
+            </div>
+          </div>
+        </main>
+      </div>
+    )
+  }
 
   return (
     <section className="bg-white">

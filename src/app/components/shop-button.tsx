@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
 import { FaArrowRight } from "react-icons/fa"
 import { avertaBold } from "@/src/lib/fonts"
 import { cn } from "@/src/app/lib/utils"
@@ -26,6 +27,7 @@ export default function ShopButton({
   ariaLabel,
   as = "link"
 }: ShopButtonProps) {
+  const [isLoading, setIsLoading] = useState(false)
   const sizeClasses = {
     sm: "py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6",
     md: "py-2 px-4",
@@ -52,13 +54,22 @@ export default function ShopButton({
 
   if (as === "link") {
     return (
-      <Link href={href} aria-label={ariaLabel}>
+      <Link href={href} aria-label={ariaLabel} prefetch={true}>
         <div className={buttonClasses}>
-          <span className="relative z-10">{children}</span>
+          <span className="relative z-10">
+            {isLoading ? (
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Loading...
+              </div>
+            ) : (
+              children
+            )}
+          </span>
           {variant === "filled" && (
             <div className="absolute inset-0 w-0 bg-[#1a1a1a] transition-all duration-300 group-hover:w-full"></div>
           )}
-          {showArrow && (
+          {showArrow && !isLoading && (
             <FaArrowRight className="hidden lg:block ml-2 opacity-0 group-hover:opacity-100 transition-all duration-400 transform group-hover:translate-x-1" />
           )}
         </div>
