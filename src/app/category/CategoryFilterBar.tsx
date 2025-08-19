@@ -61,10 +61,16 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
       setIsHeaderVisible(event.detail.isVisible);
     };
 
-    window.addEventListener("headerVisibilityChange", handleHeaderVisibility as EventListener);
-    
+    window.addEventListener(
+      "headerVisibilityChange",
+      handleHeaderVisibility as EventListener
+    );
+
     return () => {
-      window.removeEventListener("headerVisibilityChange", handleHeaderVisibility as EventListener);
+      window.removeEventListener(
+        "headerVisibilityChange",
+        handleHeaderVisibility as EventListener
+      );
     };
   }, []);
 
@@ -369,12 +375,14 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
               </motion.button>
             )}
             <motion.button
-              onClick={() => setSizeModalOpen(true)}
-              className="hidden sm:flex items-center  top-33 md:top-28 px-4 py-3 rounded-[15px] bg-black text-white hover:bg-black transition-colors"
+              onClick={() => {
+                setSizeModalOpen(true);
+              }}
+              className="flex items-center px-4 py-3 rounded-[15px]  text-white hover:bg-red-600 transition-colors z-50"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="text-sm font-medium">What's my size?</span>
+              <span className="text-sm font-medium">What's my size? </span>
             </motion.button>
           </div>
         </div>

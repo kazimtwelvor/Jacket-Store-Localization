@@ -1,5 +1,4 @@
-export const dynamic = "force-dynamic";
-export const runtime = 'nodejs';
+export const revalidate = 1800; // ISR: Revalidate every 30 minutes
 
 import type { Metadata } from 'next';
 import CategoriesPage from './page-client';

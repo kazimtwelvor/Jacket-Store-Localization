@@ -11,7 +11,6 @@ import {
   Heart,
   X,
   ChevronRight,
-  Menu,
 } from "lucide-react";
 import Button from "../../ui/button";
 import { useCart } from "../../contexts/CartContext";
@@ -826,7 +825,17 @@ const Navbar = () => {
 
       {isMounted && isSearchOpen && (
         <div className="fixed inset-0 bg-black max-h-[800px] z-[9999] animate-in fade-in duration-300">
-          <div className="fixed inset-0 flex items-start justify-center pt-8">
+          <div
+            className="fixed inset-0 flex items-start justify-center pt-8"
+            onMouseDown={(e) => {
+              if (e.target === e.currentTarget) {
+                setIsSearchOpen(false);
+                setSelectedCategory(null);
+                setSearchQuery("");
+                setSearchResults(null);
+              }
+            }}
+          >
             <div className="w-full max-w-4xl mx-auto px-4">
               <div className="bg-black w-full overflow-y-auto">
                 <div className="flex flex-col w-full">
@@ -835,7 +844,7 @@ const Navbar = () => {
                     onSubmit={handleSearch}
                     className="relative w-full mb-8"
                   >
-                    <div className="relative flex items-center border border-gray-600 rounded-lg bg-gray-800 p-4">
+                    <div className="relative flex items-center border border-gray-600 rounded-lg bg-gray-800 p-3 md:p-4">
                       {selectedCategory && (
                         <button
                           type="button"
@@ -855,8 +864,8 @@ const Navbar = () => {
                             : "Search for jackets, coats, and more..."
                         }
                         className={cn(
-                          "w-full bg-transparent text-white text-lg outline-none placeholder-gray-400",
-                          selectedCategory ? "pl-12 pr-20" : "pr-20"
+                          "w-full bg-transparent text-white text-base md:text-lg outline-none placeholder-gray-400",
+                          selectedCategory ? "pl-10 pr-16" : "pr-16"
                         )}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -868,11 +877,11 @@ const Navbar = () => {
                         }}
                       />
                       {isSearching && (
-                        <div className="absolute right-20 text-gray-400">
+                        <div className="absolute right-16 text-gray-400">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-400"></div>
                         </div>
                       )}
-                      <div className="absolute right-4 flex items-center space-x-3">
+                      <div className="absolute right-3 md:right-4 flex items-center space-x-2 md:space-x-3">
                         <button
                           type="submit"
                           className="text-white p-2 hover:bg-gray-700 rounded-full transition-colors"
@@ -891,12 +900,6 @@ const Navbar = () => {
                           aria-label="Close search"
                         >
                           <X className="h-5 w-5" />
-                        </button>
-                        <button
-                          type="button"
-                          className="text-white p-2 hover:bg-gray-700 rounded-full transition-colors"
-                        >
-                          <Menu className="h-5 w-5" />
                         </button>
                       </div>
                     </div>

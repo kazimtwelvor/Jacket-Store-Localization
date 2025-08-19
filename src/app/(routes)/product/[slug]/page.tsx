@@ -11,10 +11,24 @@ import StructuredData from "@/src/app/components/layout/structured-data-layout"
 import ProductPageClient from "./page-client"
 
 
+export const revalidate = 3600; // ISR: Revalidate every hour
+export const dynamicParams = true; // Generate new pages on-demand
+
 interface ProductPageProps {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateStaticParams() {
+  try {
+    const productsResult = await getProducts({ limit: 20 });
+    return productsResult.products?.slice(0, 20).map((product: any) => ({
+      slug: product.slug || product.id,
+    })) || [];
+  } catch (error) {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: ProductPageProps, parent: ResolvingMetadata): Promise<Metadata> {

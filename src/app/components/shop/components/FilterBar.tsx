@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react"
-import { cn } from "../../../lib/utils"
-import { ChevronDown, Filter, ChevronLeft, ChevronRight } from "lucide-react"
-import { motion } from "framer-motion"
+import React, { useState, useEffect } from "react";
+import { cn } from "../../../lib/utils";
+import { ChevronDown, Filter, ChevronLeft, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface FilterBarProps {
-  isFilterSticky: boolean
+  isFilterSticky: boolean;
   layoutMetrics: {
-    filterBarHeight: number
-  }
-  hasActiveFilters: boolean
-  totalActiveFilters: number
-  activeSort: string
-  sortDropdownOpen: boolean
-  setSortDropdownOpen: (open: boolean) => void
-  setFilterSidebarOpen: (open: boolean) => void
-  setCategorySliderOpen: (open: boolean) => void
-  setSizeModalOpen: (open: boolean) => void
-  clearFilters: () => void
-  handleSortChange: (sortValue: string) => void
-  isDesktop: boolean
+    filterBarHeight: number;
+  };
+  hasActiveFilters: boolean;
+  totalActiveFilters: number;
+  activeSort: string;
+  sortDropdownOpen: boolean;
+  setSortDropdownOpen: (open: boolean) => void;
+  setFilterSidebarOpen: (open: boolean) => void;
+  setCategorySliderOpen: (open: boolean) => void;
+  setSizeModalOpen: (open: boolean) => void;
+  clearFilters: () => void;
+  handleSortChange: (sortValue: string) => void;
+  isDesktop: boolean;
 }
 
 export const FilterBar: React.FC<FilterBarProps> = ({
@@ -43,22 +43,28 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       setIsHeaderVisible(event.detail.isVisible);
     };
 
-    window.addEventListener("headerVisibilityChange", handleHeaderVisibility as EventListener);
-    
+    window.addEventListener(
+      "headerVisibilityChange",
+      handleHeaderVisibility as EventListener
+    );
+
     return () => {
-      window.removeEventListener("headerVisibilityChange", handleHeaderVisibility as EventListener);
+      window.removeEventListener(
+        "headerVisibilityChange",
+        handleHeaderVisibility as EventListener
+      );
     };
   }, []);
 
   const getSortDisplayName = (sortValue: string) => {
     const sortOptions = {
-      'popular': 'Most Popular',
-      'newest': 'Newest',
-      'price_desc': 'Price (high-low)',
-      'price_asc': 'Price (low-high)'
-    }
-    return (sortOptions as any)[sortValue] || 'Most Popular'
-  }
+      popular: "Most Popular",
+      newest: "Newest",
+      "price-high": "Price (high-low)",
+      "price-low": "Price (low-high)",
+    };
+    return (sortOptions as any)[sortValue] || "Most Popular";
+  };
 
   return (
     <>
@@ -183,37 +189,55 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             margin-left: 1rem;
           }
         }
-             `}</style>
-       <style jsx global>{`
-         body.header-hidden .sticky-filter-bar {
-           top: 0px;
-         }
-       `}</style>
+      `}</style>
+      <style jsx global>{`
+        body.header-hidden .sticky-filter-bar {
+          top: 0px;
+        }
+      `}</style>
 
-               <div style={{ height: isFilterSticky ? `${layoutMetrics.filterBarHeight}px` : "auto" }}>
+      <div
+        style={{
+          height: isFilterSticky
+            ? `${layoutMetrics.filterBarHeight}px`
+            : "auto",
+        }}
+      >
+        <div
+          className={cn(
+            "w-full px-2 py-4 mb-6",
+            isFilterSticky
+              ? "fixed left-0 right-0 px-2 py-2 z-[50] sticky-filter-bar bg-transparent"
+              : "relative",
+            isFilterSticky
+              ? isHeaderVisible
+                ? "top-10 sm:top-16 md:top-20"
+                : "top-0"
+              : "",
+            "md:px-6 md:py-3 md:mb-10",
+            "lg:px-8 lg:py-3"
+          )}
+        >
           <div
             className={cn(
-              "w-full px-2 py-4 mb-6",
-              isFilterSticky ? "fixed left-0 right-0 px-2 py-2 z-[50] sticky-filter-bar bg-transparent" : "relative",
-              isFilterSticky ? (isHeaderVisible ? "top-10 sm:top-16 md:top-20" : "top-0") : "",
-              "md:px-6 md:py-3 md:mb-10",
-              "lg:px-8 lg:py-3"
+              "w-full flex flex-col justify-center items-center gap-3",
+              "md:flex-row md:justify-between md:items-center"
             )}
           >
-          <div className={cn(
-            "w-full flex flex-col justify-center items-center gap-3",
-            "md:flex-row md:justify-between md:items-center"
-          )}>
-            <div className={cn(
-              "w-full flex items-center relative",
-              "md:w-auto md:flex-row md:items-center"
-            )}>
+            <div
+              className={cn(
+                "w-full flex items-center relative",
+                "md:w-auto md:flex-row md:items-center"
+              )}
+            >
               <div className="w-full bg-[#2b2b2b] text-white rounded-[15px] shadow-md flex items-center">
                 <button
                   className="flex-1 px-4 py-4 md:px-6 md:py-3 flex items-center cursor-pointer border-r border-white/30 hover:bg-white/10 transition-colors"
                   onClick={() => setCategorySliderOpen(true)}
                 >
-                  <span className="font-bold mr-1 text-xs md:text-sm">Browse Categories</span>
+                  <span className="font-bold mr-1 text-xs md:text-sm">
+                    Browse Categories
+                  </span>
                   <ChevronDown size={16} />
                 </button>
 
@@ -226,9 +250,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 >
                   <span>Filter</span>
                   {hasActiveFilters && (
-                    <span className="filter-count">
-                      ({totalActiveFilters})
-                    </span>
+                    <span className="filter-count">({totalActiveFilters})</span>
                   )}
                   <Filter size={14} />
                 </div>
@@ -238,15 +260,15 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   tabIndex={-1}
                   onBlur={(e) => {
                     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                      setSortDropdownOpen(false)
+                      setSortDropdownOpen(false);
                     }
                   }}
                 >
                   <button
                     className="sort-button"
                     onClick={(e) => {
-                      e.stopPropagation()
-                      setSortDropdownOpen(!sortDropdownOpen)
+                      e.stopPropagation();
+                      setSortDropdownOpen(!sortDropdownOpen);
                     }}
                   >
                     <span>{getSortDisplayName(activeSort)}</span>
@@ -255,10 +277,38 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
                   {sortDropdownOpen && (
                     <div className="sort-dropdown">
-                      <button onClick={(e) => { e.stopPropagation(); handleSortChange('popular'); }}>Most Popular</button>
-                      <button onClick={(e) => { e.stopPropagation(); handleSortChange('newest'); }}>Newest</button>
-                      <button onClick={(e) => { e.stopPropagation(); handleSortChange('price_desc'); }}>Price (high-low)</button>
-                      <button onClick={(e) => { e.stopPropagation(); handleSortChange('price_asc'); }}>Price (low-high)</button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSortChange("popular");
+                        }}
+                      >
+                        Most Popular
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSortChange("newest");
+                        }}
+                      >
+                        Newest
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSortChange("price-high");
+                        }}
+                      >
+                        Price (high-low)
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSortChange("price-low");
+                        }}
+                      >
+                        Price (low-high)
+                      </button>
                     </div>
                   )}
                 </div>
@@ -282,12 +332,14 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="text-sm font-medium">What's my size?</span>
+                <span className="text-sm font-medium">
+                  What's my size? ululu
+                </span>
               </motion.button>
             </div>
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
