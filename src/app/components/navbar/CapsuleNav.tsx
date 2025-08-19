@@ -7,11 +7,11 @@ import { cn } from "../../lib/utils";
 
 
 const items = [
-  { id: 1, label: "Leather", isActive: true, category: "leather-jackets" },
-  { id: 2, label: "Puffer", isActive: false, category: "puffer-jackets" },
-  { id: 3, label: "Bomber", isActive: false, category: "bomber-jackets" },
-  { id: 4, label: "Varsity", isActive: false, category: "varsity-jackets" },
-  { id: 5, label: "Lettermen", isActive: false, category: "lettermen-jackets" },
+  { id: 1, label: "Men Leather", isActive: true, category: "leather-jackets" },
+  { id: 2, label: "Men Puffer", isActive: false, category: "puffer-jackets" },
+  { id: 3, label: "Men Bomber", isActive: false, category: "bomber-jackets" },
+  { id: 4, label: "Men Varsity", isActive: false, category: "varsity-jackets" },
+  { id: 5, label: "Men Lettermen", isActive: false, category: "lettermen-jackets" },
 ];
 
 export function CapsuleNav() {

@@ -540,6 +540,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                         selectedFilters={selectedFilters}
                         onSortChange={handleSortChange}
                         currentSort={currentSort}
+                        keywordCategories={keywordCategories}
                     />
                 </div>
                 <div ref={productsGridWrapperRef} className="w-full px-0 xs:px-0 sm:px-0 md:px-4 lg:px-6 xl:px-8 2xl:px-8">
@@ -1360,99 +1361,22 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
             <CategorySlider
                 isOpen={categorySliderOpen}
                 onClose={() => setCategorySliderOpen(false)}
-                categories={allCategories.map(cat => {
-                    const productCount = products.filter(product => {
-                        if (!product.category) return false;
-
-                        const productCategoryName = product.category.name?.toLowerCase().trim();
-                        const targetCategoryName = cat.name?.toLowerCase().trim();
-
-                        if (productCategoryName === targetCategoryName) return true;
-
-                        if (productCategoryName?.includes(targetCategoryName) ||
-                            targetCategoryName?.includes(productCategoryName)) return true;
-
-                        if (targetCategoryName === 'leather jackets' &&
-                            (productCategoryName?.includes('leather') || productCategoryName?.includes('jacket'))) return true;
-
-                        if (targetCategoryName === "women's jackets" &&
-                            (productCategoryName?.includes('women') || productCategoryName?.includes('jacket'))) return true;
-
-                        if (targetCategoryName === "men's jackets" &&
-                            (productCategoryName?.includes('men') || productCategoryName?.includes('jacket'))) return true;
-
-                        if (targetCategoryName === 'coats' &&
-                            productCategoryName?.includes('coat')) return true;
-
-                        return false;
-                    }).length;
-
-                    return {
-                        id: cat.id,
-                        name: cat.name,
-                        slug: cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-'),
-                        description: cat.description || `Explore our premium collection of ${cat.name}`,
-                        imageUrl: (() => {
-                            const categoryName = cat.name.toLowerCase();
-                            const categorySlug = cat.slug?.toLowerCase() || categoryName.replace(/\s+/g, '-');
-
-                            let finalImageUrl = cat.imageUrl;
-
-                            if (!finalImageUrl) {
-                                if (categoryIcons[categorySlug]) {
-                                    finalImageUrl = categoryIcons[categorySlug];
-                                }
-                                else if (categoryName.includes('leather')) finalImageUrl = '/images/leather.webp';
-                                else if (categoryName.includes('denim')) finalImageUrl = '/images/denim.webp';
-                                else if (categoryName.includes('suede')) finalImageUrl = '/images/suede.webp';
-                                else if (categoryName.includes('puffer')) finalImageUrl = '/images/puffer.webp';
-                                else if (categoryName.includes('trench') || categoryName.includes('coat')) finalImageUrl = '/images/trench-coat.webp';
-                                else if (categoryName.includes('aviator')) finalImageUrl = '/images/aviator.webp';
-                                else if (categoryName.includes('varsity')) finalImageUrl = '/images/varsity.webp';
-                                else if (categoryName.includes('letterman') || categoryName.includes('bomber')) finalImageUrl = '/images/letterman.webp';
-                                else if (categoryName.includes('women')) finalImageUrl = '/images/women-leather.webp';
-                                else if (categoryName.includes('wool')) finalImageUrl = '/images/leather.webp';
-                                else finalImageUrl = '/images/leather.webp';
-                            }
-
-                            return finalImageUrl;
-                        })(),
-                        materials: cat.materials || ['Premium Quality'],
-                        styles: cat.styles || ['Classic', 'Modern'],
-                        colors: cat.colors || ['Black', 'Brown', 'Navy'],
-                        genders: cat.genders || ['Unisex'],
-                        productCount: productCount,
-                        billboard: cat.billboard,
-                        href: cat.href,
-                        gender: cat.gender,
-                        categoryContent: cat.categoryContent,
-                        seoTitle: cat.seoTitle,
-                        seoDescription: cat.seoDescription,
-                        focusKeyword: cat.focusKeyword,
-                        supportingKeywords: cat.supportingKeywords,
-                        ogTitle: cat.ogTitle,
-                        ogDescription: cat.ogDescription,
-                        twitterTitle: cat.twitterTitle,
-                        twitterDescription: cat.twitterDescription,
-                        canonicalUrl: cat.canonicalUrl,
-                        indexPage: cat.indexPage,
-                        followLinks: cat.followLinks,
-                        enableSchema: cat.enableSchema,
-                        schemaType: cat.schemaType,
-                        customSchema: cat.customSchema,
-                        isPublished: cat.isPublished,
-                        publishedAt: cat.publishedAt,
-                        createdAt: cat.createdAt,
-                        updatedAt: cat.updatedAt,
-                        apiSlug: cat.apiSlug,
-                        bannerImageUrl: cat.bannerImageUrl,
-                        currentCategory: cat.currentCategory
-                    };
-                })}
-                currentCategory={category}
+                keywordCategories={keywordCategories.map(cat => ({
+                    id: cat.id,
+                    name: cat.name,
+                    slug: cat.slug,
+                    imageUrl: cat.imageUrl,
+                    description: cat.description
+                }))}
+                currentCategory={{
+                    id: category.id,
+                    name: category.name,
+                    slug: category.slug || '',
+                    imageUrl: category.currentCategory?.imageUrl,
+                    description: ''
+                }}
                 onCategorySelect={(selectedCategory) => {
-                    const categorySlug = selectedCategory.slug || selectedCategory.name.toLowerCase().replace(/\s+/g, '-');
-                    router.push(`/collections/${categorySlug}`);
+                    router.push(`/collections/${selectedCategory.slug}`);
                     setCategorySliderOpen(false);
                 }}
             />
