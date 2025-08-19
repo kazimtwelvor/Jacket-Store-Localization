@@ -193,26 +193,6 @@ const getProductSlug = (product: Product): string => {
     return product.id
 }
 
-const JacketIcon = (props: React.SVGProps<SVGSVGElement> & { size?: number }) => {
-    const { size = 24, ...rest } = props;
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={size}
-            height={size}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            {...rest}
-        >
-            <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
-        </svg>
-    );
-};
-
 const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, products, slug, allCategories, keywordCategories = [], isKeywordCategory = false }) => {
     const router = useRouter()
     const searchParams = useSearchParams()
@@ -620,12 +600,11 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                             ) : (
                                                 <div className="w-full h-full overflow-hidden bg-gray-100" />
                                             )}
-                                            {/* <div className="absolute bottom-2 left-2 text-black text-sm font-medium opacity-80">
-                                                FINEYST
-                                            </div> */}
-                                            <button
-                                                className="absolute w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md z-10 -bottom-4  right-12"
+                                            <motion.button
+                                                className="absolute w-8 h-8 md:w-9 md:h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 -bottom-4 md:top-2 right-12 md:right-2"
                                                 aria-label="Add to wishlist"
+                                                whileHover={{ scale: 1.2, backgroundColor: "#f8f8f8" }}
+                                                whileTap={{ scale: 0.9 }}
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     if (wishlist.isInWishlist(product.id)) {
@@ -635,7 +614,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                     }
                                                 }}
                                             >
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className=" md:w-6 md:h-6">
                                                     <path
                                                         d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                                                         stroke="black"
@@ -645,7 +624,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                         strokeLinejoin="round"
                                                     />
                                                 </svg>
-                                            </button>
+                                            </motion.button>
                                             <button
                                                 className=" md:hidden absolute w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-md z-48 right-2 -bottom-4 md:top-3 md:right-3 md:bottom-auto"
                                                 aria-label="Add to cart"
@@ -1313,24 +1292,6 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
 
 
 
-
-                <AnimatePresence>
-                    {!isDesktop && (
-                        <motion.button
-                            onClick={() => setSizeModalOpen(true)}
-                            className="fixed bottom-20 right-4 w-14 h-14 bg-black-700 rounded-2xl text-white flex items-center justify-center shadow-lg z-40"
-                            aria-label="What's my size?"
-                            initial={{ opacity: 0, y: 100 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 100 }}
-                            transition={{ duration: 0.3 }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            <JacketIcon size={24} />
-                        </motion.button>
-                    )}
-                </AnimatePresence>
                 <style jsx global>{`
           /* Custom scrollbar for the filter sidebar */
           .custom-scrollbar::-webkit-scrollbar {

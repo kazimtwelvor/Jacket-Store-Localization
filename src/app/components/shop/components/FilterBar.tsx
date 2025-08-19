@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { cn } from "../../../lib/utils"
 import { ChevronDown, Filter, ChevronLeft, ChevronRight } from "lucide-react"
 import { motion } from "framer-motion"
@@ -14,7 +14,7 @@ interface FilterBarProps {
   sortDropdownOpen: boolean
   setSortDropdownOpen: (open: boolean) => void
   setFilterSidebarOpen: (open: boolean) => void
-  setCategorySliderOpen: (open: boolean) => void  
+  setCategorySliderOpen: (open: boolean) => void
   setSizeModalOpen: (open: boolean) => void
   clearFilters: () => void
   handleSortChange: (sortValue: string) => void
@@ -36,6 +36,20 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   handleSortChange,
   isDesktop,
 }) => {
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+
+  useEffect(() => {
+    const handleHeaderVisibility = (event: CustomEvent) => {
+      setIsHeaderVisible(event.detail.isVisible);
+    };
+
+    window.addEventListener("headerVisibilityChange", handleHeaderVisibility as EventListener);
+    
+    return () => {
+      window.removeEventListener("headerVisibilityChange", handleHeaderVisibility as EventListener);
+    };
+  }, []);
+
   const getSortDisplayName = (sortValue: string) => {
     const sortOptions = {
       'popular': 'Most Popular',
@@ -95,7 +109,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           top: 100%;
           left: 0;
           margin-top: 0.5rem;
-          // background-color: black;
+          background-color: black;
           border-radius: 0.375rem;
           box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
           border: 1px solid #e5e7eb;
@@ -112,7 +126,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           transition: color 0.2s;
         }
         .sort-dropdown button:hover {
-          color: #2b2b2b;
+          color: #666;
         }
         .clear-filters-button {
           margin-left: 0.5rem;
@@ -124,12 +138,26 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         .clear-filters-button:hover {
           color: black;
         }
-        @media (min-width: 640px) {
+        .size-guide-button {
+          display: none;
+          align-items: center;
+          border: 1px solid #d1d5db;
+          padding: 0.375rem 0.5rem;
+          border-radius: 0.375rem;
+          transition: background-color 0.2s;
+        }
+        .size-guide-button:hover {
+          background-color: #f9fafb;
+        }
+        .size-guide-button span {
+          font-size: 0.75rem;
+        }
+        @media (min-width: 340px) {
           .filter-button {
-            padding: 0.625rem 1rem;
+            padding: 0.9rem 1rem;
           }
           .filter-button span {
-            font-size: 0.800rem;
+            font-size: 0.8rem;
           }
           .sort-button {
             padding: 0.75rem 1rem;
@@ -142,24 +170,36 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             margin-left: 0.75rem;
             font-size: 0.875rem;
           }
+          .size-guide-button {
+            display: flex;
+            padding: 0.5rem 0.75rem;
+          }
+          .size-guide-button span {
+            font-size: 0.875rem;
+          }
         }
         @media (min-width: 768px) {
           .clear-filters-button {
             margin-left: 1rem;
           }
         }
-      `}</style>
-      
-      <div style={{ height: isFilterSticky ? `${layoutMetrics.filterBarHeight}px` : "auto" }}>
-        <div
-          className={cn(
-            "w-full px-2 py-4 mb-6 transition-all duration-300",
-            isFilterSticky ? "fixed left-0 right-0 px-2 py-2 z-[9003] sticky-filter-bar bg-transparent "  : "relative",
-            isFilterSticky ? "top-16 md:top-[6.5rem]" : "",
-            "md:px-6 md:py-3 md:mb-10",
-            "lg:px-8 lg:py-3"
-          )}
-        >
+             `}</style>
+       <style jsx global>{`
+         body.header-hidden .sticky-filter-bar {
+           top: 0px;
+         }
+       `}</style>
+
+               <div style={{ height: isFilterSticky ? `${layoutMetrics.filterBarHeight}px` : "auto" }}>
+          <div
+            className={cn(
+              "w-full px-2 py-4 mb-6",
+              isFilterSticky ? "fixed left-0 right-0 px-2 py-2 z-[50] sticky-filter-bar bg-transparent" : "relative",
+              isFilterSticky ? (isHeaderVisible ? "top-10 sm:top-16 md:top-20" : "top-0") : "",
+              "md:px-6 md:py-3 md:mb-10",
+              "lg:px-8 lg:py-3"
+            )}
+          >
           <div className={cn(
             "w-full flex flex-col justify-center items-center gap-3",
             "md:flex-row md:justify-between md:items-center"
@@ -192,7 +232,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   )}
                   <Filter size={14} />
                 </div>
-                
+
                 <div
                   className="sort-button-container"
                   tabIndex={-1}
@@ -212,7 +252,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                     <span>{getSortDisplayName(activeSort)}</span>
                     <ChevronDown size={14} />
                   </button>
-                  
+
                   {sortDropdownOpen && (
                     <div className="sort-dropdown">
                       <button onClick={(e) => { e.stopPropagation(); handleSortChange('popular'); }}>Most Popular</button>
@@ -224,7 +264,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 </div>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
               {hasActiveFilters && (
                 <motion.button

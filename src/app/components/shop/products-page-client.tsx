@@ -405,35 +405,41 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [sortDropdownOpen])
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const filterBarWrapper = filterBarWrapperRef.current
-      if (!filterBarWrapper) return
-
-      const filterBarTop = filterBarWrapper.offsetTop
-      const scrollY = window.scrollY
-      const headerHeight = window.matchMedia("(min-width: 768px)").matches ? 80 : 64
-
-      const shouldBeSticky = scrollY >= (filterBarTop - headerHeight)
-
-      if (isFilterSticky !== shouldBeSticky) {
-        console.log('Sticky state change:', {
-          scrollY,
-          filterBarTop,
-          headerHeight,
-          shouldBeSticky
-        })
-        setIsFilterSticky(shouldBeSticky)
+  useLayoutEffect(() => {
+    const updateLayout = () => {
+      const filterBarWrapper = filterBarWrapperRef.current;
+      const paginationSection = paginationSectionRef.current;
+      if (filterBarWrapper && paginationSection && filterBarWrapper.firstElementChild) {
+        const filterBarElement = filterBarWrapper.firstElementChild as HTMLElement;
+        const style = window.getComputedStyle(filterBarElement);
+        const marginBottom = parseFloat(style.marginBottom);
+        const height = filterBarElement.offsetHeight + marginBottom;
+        const stickyBarTopPosition = window.matchMedia('(min-width: 768px)').matches ? 112 : 128;
+        setLayoutMetrics({
+          startStickyPoint: filterBarWrapper.offsetTop,
+          endStickyPoint: paginationSection.offsetTop - stickyBarTopPosition - height,
+          filterBarHeight: height,
+        });
       }
-    }
+    };
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
+    const timeoutId = setTimeout(updateLayout, 100);
+    return () => clearTimeout(timeoutId);
+  }, [productsData.products, loading]);
 
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [isFilterSticky])
+  useEffect(() => {
+    if (layoutMetrics.startStickyPoint === 0) return;
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const { startStickyPoint, endStickyPoint } = layoutMetrics;
+      const shouldBeSticky = scrollY >= startStickyPoint && scrollY < endStickyPoint;
+      setIsFilterSticky(current => current !== shouldBeSticky ? shouldBeSticky : current);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [layoutMetrics]);
 
-  // Capsule nav visibility
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent("filterBarSticky", { detail: { isSticky: isFilterSticky } }))
@@ -444,7 +450,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
   return (
     <section className="bg-white">
-      {/* Shop Categories Section */}
       <ShopCategories keywordCategories={keywordCategories} />
 
       <div className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
@@ -466,7 +471,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           />
         </div>
 
-        {/* Loading indicator */}
         {loading && (
           <div className="flex justify-center items-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black-600"></div>
@@ -474,11 +478,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           </div>
         )}
 
-        {/* Products Grid */}
         <div className="w-full px-2 sm:px-4 md:px-8">
           {!loading && productsData.products.length > 0 ? (
             <>
-              {/* Page info */}
               <div className="mb-4 text-sm text-gray-600 text-center">
                 Showing {(productsData.pagination.currentPage - 1) * productsData.pagination.productsPerPage + 1} - {Math.min(productsData.pagination.currentPage * productsData.pagination.productsPerPage, productsData.pagination.totalProducts)} of {productsData.pagination.totalProducts} products
               </div>
@@ -505,7 +507,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
                 ))}
               </div>
 
-              {/* Pagination Controls */}
               <div ref={paginationSectionRef}>
                 <PaginationControls
                   currentPage={productsData.pagination.currentPage}
@@ -532,7 +533,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           ) : null}
         </div>
 
-        {/* We Think You Will Also Love Section */}
         {currentProducts.length > 0 && (
           <WeThinkYouWillLove
             products={currentProducts}
@@ -546,7 +546,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           />
         )}
 
-        {/* Recently Viewed Section */}
         {recentlyViewed.length > 0 && (
           <RecentlyViewed
             recentlyViewed={recentlyViewed}
@@ -560,7 +559,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           />
         )}
 
-        {/* Filter Sidebar */}
         <FilterSidebar
           isOpen={filterSidebarOpen}
           onClose={() => setFilterSidebarOpen(false)}
@@ -582,19 +580,16 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           onClearFilters={clearFilters}
         />
 
-        {/* Category Slider */}
         <CategorySlider
           isOpen={categorySliderOpen}
           onClose={() => setCategorySliderOpen(false)}
           keywordCategories={keywordCategories || []}
           onCategorySelect={(category) => {
-            // Handle category selection - could navigate to category page or apply filters
             console.log('Selected category:', category)
             setCategorySliderOpen(false)
           }}
         />
 
-        {/* Mobile Add To Cart Modal */}
         {mobileCartModal.product && (
           <MobileAddToCartModal
             isOpen={mobileCartModal.isOpen}
@@ -618,16 +613,16 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           @media (max-width: 768px) { :global(.hide-scrollbar) { scroll-snap-type: x mandatory; } }
           @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
           :global(.bg-\[\#2b2b2b\]) { animation: pulse 2s infinite; }
-                     :global(.sticky-filter-bar) { 
-             transition: all 0.3s ease-in-out;
-             will-change: transform;
-             transform: translateZ(0);
-             -webkit-transform: translateZ(0);
-             position: fixed !important;
-             left: 0 !important;
-             right: 0 !important;
-             z-index: 9003 !important;
-           }
+                                                                                                                                                                               :global(.sticky-filter-bar) { 
+               transition: all 0.3s ease-in-out;
+               will-change: transform;
+               transform: translateZ(0);
+               -webkit-transform: translateZ(0);
+               position: fixed !important;
+               left: 0 !important;
+               right: 0 !important;
+               z-index: 50 !important;
+             }
         `}</style>
       </div>
     </section>

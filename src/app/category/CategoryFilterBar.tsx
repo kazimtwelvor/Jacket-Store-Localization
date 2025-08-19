@@ -113,9 +113,9 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
   const getStickyPosition = () => {
     if (!isFilterSticky) return "relative";
     if (isHeaderVisible) {
-      return "fixed top-10 sm:top-16 md:top-20 left-0 right-0 px-2 py-2 z-[8000] sticky-filter-bar";
+      return "fixed top-10 sm:top-16 md:top-20 left-0 right-0 px-2 py-2 z-[50] sticky-filter-bar";
     } else {
-      return "fixed top-0 left-0 right-0 px-2 py-2 z-[9003] sticky-filter-bar";
+      return "fixed top-0 left-0 right-0 px-2 py-2 z-[50] sticky-filter-bar";
     }
   };
 
@@ -211,9 +211,9 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
         .size-guide-button span {
           font-size: 0.75rem;
         }
-        @media (min-width: 640px) {
+        @media (min-width: 340px) {
           .filter-button {
-            padding: 0.625rem 1rem;
+            padding: 0.9rem 1rem;
           }
           .filter-button span {
             font-size: 0.8rem;
