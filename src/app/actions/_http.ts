@@ -50,8 +50,8 @@ export async function fetchJson<T>(
         "Content-Type": "application/json",
         ...(init.headers || {}),
       },
-      cache: init.cache ?? "no-store",
-      next: init.next ?? { revalidate: 0 },
+      cache: init.cache ?? "force-cache",
+      next: init.next ?? { revalidate: 1800 },
       signal: controller.signal,
     } as RequestInit)
 

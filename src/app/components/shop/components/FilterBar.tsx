@@ -332,9 +332,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="text-sm font-medium">
-                  What's my size? ululu
-                </span>
+                <span className="text-sm font-medium">What's my size?</span>
               </motion.button>
             </div>
           </div>

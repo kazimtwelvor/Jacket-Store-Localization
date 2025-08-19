@@ -378,7 +378,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
               onClick={() => {
                 setSizeModalOpen(true);
               }}
-              className="flex items-center px-4 py-3 rounded-[15px]  text-white hover:bg-red-600 transition-colors z-50"
+              className="flex items-center px-4 py-3 rounded-[15px]  text-white  bg-black text-white hover:bg-gray-800 transition-colors z-50"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

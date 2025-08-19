@@ -1,7 +1,7 @@
 
 
 "use client"
-import React, { useState, useRef, useEffect, useLayoutEffect } from "react"
+import React, { useState, useRef, useEffect, useLayoutEffect, Suspense } from "react"
 import Image from "next/image"
 
 import { useRouter, useSearchParams } from "next/navigation"
@@ -210,7 +210,7 @@ const getProductSlug = (product: Product): string => {
     return product.id
 }
 
-const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, products, slug, allCategories, keywordCategories = [], isKeywordCategory = false }) => {
+const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category, products, slug, allCategories, keywordCategories = [], isKeywordCategory = false }) => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const wasDraggedRef = useRef(false);
@@ -1328,4 +1328,13 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
         </section>
     )
 }
+
+const CategoryPageClient: React.FC<CategoryPageClientProps> = (props) => {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-gray-600"></div></div>}>
+            <CategoryPageClientContent {...props} />
+        </Suspense>
+    )
+}
+
 export default CategoryPageClient
