@@ -1,14 +1,14 @@
 
 
 "use client"
-import { useState, useRef, useEffect, useLayoutEffect } from "react"
-import type React from "react"
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react"
 import Image from "next/image"
 
 import { useRouter, useSearchParams } from "next/navigation"
 import { X } from "lucide-react"
 import { motion, AnimatePresence, useMotionValue, animate, PanInfo } from "framer-motion"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/src/app/ui/dialog"
+import WhatsMySize from "@/src/components/WhatsMySize"
 import type { Product, Category } from "@/types"
 
 import { cn } from "@/src/app/lib/utils"
@@ -29,6 +29,8 @@ interface KeywordCategory {
     id: string;
     name: string;
     slug: string;
+    imageUrl?: string;
+    description?: string;
 }
 interface CategoryPageClientProps {
     category: Category & {
@@ -46,6 +48,17 @@ interface CategoryPageClientProps {
 }
 
 const DRAG_BUFFER = 10;
+
+const throttle = (func: Function, limit: number) => {
+    let inThrottle: boolean;
+    return function(this: any, ...args: any[]) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+};
 
 const useMediaQuery = (query: string): boolean => {
     const [matches, setMatches] = useState(false);
@@ -66,7 +79,7 @@ const useMediaQuery = (query: string): boolean => {
     return mounted ? matches : false;
 };
 
-const ProductImageCarousel = ({ product, wasDragged }: { product: Product; wasDragged: React.MutableRefObject<boolean> }) => {
+const ProductImageCarousel = React.memo(({ product, wasDragged }: { product: Product; wasDragged: React.MutableRefObject<boolean> }) => {
     const images = (product.images && product.images.length > 0)
         ? product.images
         : [{ id: 'placeholder', url: '/placeholder.svg' }];
@@ -121,6 +134,8 @@ const ProductImageCarousel = ({ product, wasDragged }: { product: Product; wasDr
                     fill
                     className="object-cover object-top"
                     sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw"
+                    priority={false}
+                    loading="lazy"
                     draggable={false}
                 />
             </div>
@@ -146,6 +161,8 @@ const ProductImageCarousel = ({ product, wasDragged }: { product: Product; wasDr
                             fill
                             className="object-cover object-top pointer-events-none"
                             sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw"
+                            priority={i === 0}
+                            loading={i === 0 ? "eager" : "lazy"}
                             draggable={false}
                             onDragStart={(e) => e.preventDefault()}
                         />
@@ -169,7 +186,7 @@ const ProductImageCarousel = ({ product, wasDragged }: { product: Product; wasDr
             </div>
         </div>
     );
-};
+});
 
 const getLocalImageUrl = (imageUrl: string): string => {
     if (!imageUrl) return "/placeholder.svg"
@@ -199,7 +216,8 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
     const wasDraggedRef = useRef(false);
     const isDesktop = useMediaQuery('(min-width: 768px)');
     const [mounted, setMounted] = useState(false);
-    const currentSort = searchParams.get('sort') || 'popular'
+    const initialSort = searchParams.get('sort') || 'popular'
+    const [currentSort, setCurrentSort] = useState(initialSort)
     const urlSizes = searchParams.get('sizes')?.split(',').filter(Boolean) || []
     const urlColors = searchParams.get('colors')?.split(',').filter(Boolean) || []
     const [filterSidebarOpen, setFilterSidebarOpen] = useState(false)
@@ -219,12 +237,28 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
     const [productSidebarOpen, setProductSidebarOpen] = useState(false)
     const [colorPopup, setColorPopup] = useState<{ productKey: string; rect: DOMRect } | null>(null)
     const [loadingProducts, setLoadingProducts] = useState<Set<string>>(new Set())
+    const [isPageLoading, setIsPageLoading] = useState(false)
     const [mobileCartModal, setMobileCartModal] = useState<{ isOpen: boolean; product: Product | null }>({ isOpen: false, product: null })
     const [layoutMetrics, setLayoutMetrics] = useState({
         startStickyPoint: 0,
         endStickyPoint: 0,
         filterBarHeight: 0,
     });
+
+    // Constants and hooks
+    const { addToCart } = useCart()
+    const wishlist = useWishlist()
+    const productsPerPage = 20 // Reduced for better performance
+    const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
+    const [currentProducts, setCurrentProducts] = useState<Product[]>(products)
+    const [currentPage, setCurrentPage] = useState(1)
+    const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
+    const productRefs = useRef<(HTMLDivElement | null)[]>([])
+    const recentlyViewedScrollRef = useRef<HTMLDivElement>(null)
+    const filterBarWrapperRef = useRef<HTMLDivElement>(null);
+    const productsGridWrapperRef = useRef<HTMLDivElement>(null);
+    const paginationSectionRef = useRef<HTMLDivElement>(null);
+    const [colorDialogs, setColorDialogs] = useState<Record<string, boolean>>({})
 
     if (!category) {
         return null;
@@ -248,9 +282,19 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
     }
 
     const hasActiveFilters = selectedFilters.sizes.length > 0 || selectedFilters.colors.length > 0
+    
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            updateFiltersInURL(selectedFilters)
+        }, 300) // Debounce filter updates
+        return () => clearTimeout(timeoutId)
+    }, [selectedFilters.sizes, selectedFilters.colors])
+    
     useEffect(() => {
         setMounted(true)
-        setVisibleProducts(currentProducts.map((p) => p.id))
+        if (products && products.length > 0) {
+            setVisibleProducts(products.slice(0, productsPerPage).map((p) => p.id))
+        }
         if (typeof window !== 'undefined') {
             const savedRecentlyViewed = localStorage.getItem('recentlyViewed')
             if (savedRecentlyViewed) {
@@ -264,19 +308,26 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                 }
             }
         }
-    }, [products])
+    }, [products, productsPerPage])
     useEffect(() => {
         if (currentProducts.length > 0) {
             const observer = new IntersectionObserver(
                 (entries) => {
+                    const newVisibleIds: string[] = []
                     entries.forEach((entry) => {
                         if (entry.isIntersecting) {
                             const productId = entry.target.id.replace("product-", "")
-                            setVisibleProducts((prev) => (prev.includes(productId) ? prev : [...prev, productId]))
+                            newVisibleIds.push(productId)
                         }
                     })
+                    if (newVisibleIds.length > 0) {
+                        setVisibleProducts((prev) => {
+                            const combined = [...new Set([...prev, ...newVisibleIds])]
+                            return combined.length !== prev.length ? combined : prev
+                        })
+                    }
                 },
-                { threshold: 0.1 },
+                { threshold: 0.1, rootMargin: '50px' },
             )
             productRefs.current.forEach((ref) => {
                 if (ref) observer.observe(ref)
@@ -287,7 +338,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                 })
             }
         }
-    }, [products])
+    }, [filteredProducts.length])
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as HTMLElement
@@ -327,24 +378,21 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
             const shouldBeSticky = scrollY >= startStickyPoint && scrollY < endStickyPoint;
             setIsFilterSticky(current => current !== shouldBeSticky ? shouldBeSticky : current);
         };
-        window.addEventListener('scroll', handleScroll, { passive: true });
+        const throttledHandleScroll = throttle(handleScroll, 16); // ~60fps
+        window.addEventListener('scroll', throttledHandleScroll, { passive: true });
         handleScroll();
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [layoutMetrics]);
+        return () => window.removeEventListener('scroll', throttledHandleScroll);
+    }, [layoutMetrics.startStickyPoint, layoutMetrics.endStickyPoint, layoutMetrics.filterBarHeight]);
     const toggleSizeFilter = (size: string) => {
         setSelectedFilters((prev) => {
             const newSizes = prev.sizes.includes(size) ? prev.sizes.filter((s) => s !== size) : [...prev.sizes, size]
-            const newFilters = { ...prev, sizes: newSizes }
-            updateFiltersInURL(newFilters)
-            return newFilters
+            return { ...prev, sizes: newSizes }
         })
     }
     const toggleColorFilter = (color: string) => {
         setSelectedFilters((prev) => {
             const newColors = prev.colors.includes(color) ? prev.colors.filter((c) => c !== color) : [...prev.colors, color]
-            const newFilters = { ...prev, colors: newColors }
-            updateFiltersInURL(newFilters)
-            return newFilters
+            return { ...prev, colors: newColors }
         })
     }
     const clearFilters = () => {
@@ -358,10 +406,17 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
         router.push(`?${params.toString()}`, { scroll: false })
     }
     const handleSortChange = (sortBy: string) => {
+        setCurrentSort(sortBy)
         const params = new URLSearchParams(searchParams.toString())
         params.set('sort', sortBy)
         router.push(`?${params.toString()}`, { scroll: false })
     }
+
+    useEffect(() => {
+        const s = searchParams.get('sort') || 'popular'
+        if (s !== currentSort) setCurrentSort(s)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchParams])
     const updateFiltersInURL = (newFilters: { sizes: string[], colors: string[] }) => {
         const params = new URLSearchParams(searchParams.toString())
         if (newFilters.sizes.length > 0) {
@@ -376,19 +431,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
         }
         router.push(`?${params.toString()}`, { scroll: false })
     }
-    const { addToCart } = useCart()
-    const wishlist = useWishlist()
 
-    const [currentProducts, setCurrentProducts] = useState<Product[]>(products)
-    const [currentPage, setCurrentPage] = useState(1)
-    const productsPerPage = 28
-    const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
-    const productRefs = useRef<(HTMLDivElement | null)[]>([])
-    const recentlyViewedScrollRef = useRef<HTMLDivElement>(null)
-    const filterBarWrapperRef = useRef<HTMLDivElement>(null);
-    const productsGridWrapperRef = useRef<HTMLDivElement>(null);
-    const paginationSectionRef = useRef<HTMLDivElement>(null);
-    const [colorDialogs, setColorDialogs] = useState<Record<string, boolean>>({})
 
     const handleSizeSelect = (productId: string, size: string) => {
         const product = currentProducts.find(p => p.id === productId) || recentlyViewed.find(p => p.id === productId);
@@ -427,18 +470,62 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
 
 
     useEffect(() => {
+        const filterBySelections = (p: Product) => {
+            const productColors = ((p as any).colorDetails || (p as any).colors || []).map((c: any) => c.name || c)
+            const productSizes = ((p as any).sizeDetails || (p as any).sizes || []).map((s: any) => s.name || s)
+
+            const matchesColors = selectedFilters.colors.length === 0 || selectedFilters.colors.some(color => productColors.includes(color))
+            const matchesSizes = selectedFilters.sizes.length === 0 || selectedFilters.sizes.some(size => productSizes.includes(size))
+
+            return matchesColors && matchesSizes
+        }
+
+        let filtered = products.filter(filterBySelections)
+
+        // Apply sort from URL (robust price parsing)
+        const parsePriceValue = (raw: any): number => {
+            if (raw === undefined || raw === null) return 0
+            if (typeof raw === 'number') return raw
+            const cleaned = String(raw).replace(/[^0-9.]/g, '')
+            const num = Number.parseFloat(cleaned)
+            return Number.isFinite(num) ? num : 0
+        }
+        const priceOf = (p: Product) => {
+            const sale = parsePriceValue((p as any).salePrice)
+            const base = parsePriceValue((p as any).price)
+            return sale > 0 ? sale : base
+        }
+        if (currentSort === 'newest') {
+            filtered = [...filtered].sort((a, b) => {
+                const aTime = new Date((a as any).createdAt || 0).getTime()
+                const bTime = new Date((b as any).createdAt || 0).getTime()
+                return bTime - aTime
+            })
+        } else if (currentSort === 'price-high') {
+            filtered = [...filtered].sort((a, b) => priceOf(b) - priceOf(a))
+        } else if (currentSort === 'price-low') {
+            filtered = [...filtered].sort((a, b) => priceOf(a) - priceOf(b))
+        }
+
+        setFilteredProducts(filtered)
+        setCurrentPage(1)
+    }, [products, selectedFilters, currentSort])
+
+    useEffect(() => {
         const startIndex = (currentPage - 1) * productsPerPage
         const endIndex = startIndex + productsPerPage
-        setCurrentProducts(products.slice(startIndex, endIndex))
-    }, [products, currentPage, productsPerPage])
+        setCurrentProducts(filteredProducts.slice(startIndex, endIndex))
+    }, [filteredProducts, currentPage, productsPerPage])
 
-    const totalPages = Math.ceil(products.length / productsPerPage)
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage)
     const hasNextPage = currentPage < totalPages
     const hasPreviousPage = currentPage > 1
 
     const handlePageChange = (page: number) => {
+        setIsPageLoading(true)
         setCurrentPage(page)
         window.scrollTo({ top: 0, behavior: 'smooth' })
+        setTimeout(() => setIsPageLoading(false), 100)
     }
     let parsedCategoryContent: any = category.categoryContent;
     if (typeof category.categoryContent === 'string') {
@@ -543,7 +630,12 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                         keywordCategories={keywordCategories}
                     />
                 </div>
-                <div ref={productsGridWrapperRef} className="w-full px-0 xs:px-0 sm:px-0 md:px-4 lg:px-6 xl:px-8 2xl:px-8">
+                <div ref={productsGridWrapperRef} className="w-full px-0 xs:px-0 sm:px-0 md:px-4 lg:px-6 xl:px-8 2xl:px-8 relative">
+                    {isPageLoading && (
+                        <div className="absolute inset-0 bg-white/80 flex items-center justify-center z-10">
+                            <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-gray-600"></div>
+                        </div>
+                    )}
                     {currentProducts.length > 0 ? (
                         <>
                             <div className="mb-4 text-sm text-gray-600 text-center">
@@ -566,7 +658,7 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                         onMouseLeave={() => isDesktop && setHoveredProduct(null)}
                                         initial={loadingProducts.has(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                                         animate={loadingProducts.has(product.id) ? { opacity: 1, y: 0 } : (visibleProducts.includes(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 })}
-                                        transition={{ duration: 0 }}
+                                        transition={{ duration: 0.2, ease: "easeOut" }}
                                     >
                                         <div
                                             className="relative w-full aspect-[3/5] bg-gray-100 overflow-visible md:overflow-hidden"
@@ -587,6 +679,8 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                                                                 hoveredProduct === `grid-${product.id}-${index}` && (product.images?.[1] as any)?.url ? "scale-110" : "scale-100"
                                                             )}
                                                             sizes="(max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+                                                            priority={index < 4}
+                                                            loading={index < 4 ? "eager" : "lazy"}
                                                         />
                                                         {loadingProducts.has(product.id) && (
                                                             <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
@@ -1129,162 +1223,13 @@ const CategoryPageClient: React.FC<CategoryPageClientProps> = ({ category, produ
                         </div>
                     </SheetContent>
                 </Sheet>
-                <Dialog open={sizeModalOpen} onOpenChange={setSizeModalOpen}>
-                    <DialogContent className="sm:max-w-[600px] z-[9999]" style={{ zIndex: 9999 }}>
-                        <DialogHeader>
-                            <DialogTitle className="flex items-center justify-between">
-                                <div className="text-xl pl-5 font-bold">FINEYST</div>
-                                <div className="flex items-center">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="mr-2"
-                                    >
-                                        <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"></path>
-                                        <path d="M16 8h.01"></path>
-                                        <path d="M8 16l8-8"></path>
-                                    </svg>
-                                    <span className="text-base font-medium">FIT FINDER</span>
-                                </div>
-                                <button className="text-sm pr-9 text-gray-600 hover:underline">Privacy</button>
-                            </DialogTitle>
-                        </DialogHeader>
-                        <div className="py-4">
-                            <motion.h2
-                                className="text-xl font-bold text-center mb-4"
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.1 }}
-                            >
-                                Find your best fits
-                            </motion.h2>
-                            <motion.p
-                                className="text-center text-sm mb-8"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.15 }}
-                            >
-                                Receive size recommendations by entering your data for each category
-                            </motion.p>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {[
-                                    {
-                                        title: "Tops",
-                                        icon: (
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="48"
-                                                height="48"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="1.5"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            >
-                                                <path
-                                                    d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h
-2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"
-                                                ></path>
-                                            </svg>
-                                        ),
-                                        description: "Size recommendations for shirts, coats, jackets, etc",
-                                    },
-                                    {
-                                        title: "Pants",
-                                        icon: (
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="48"
-                                                height="48"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="1.5"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            >
-                                                <path d="M7 13h10v8H7z"></path>
-                                                <path d="M7 13h10"></path>
-                                                <path d="M7 13 4 3h16l-3 10"></path>
-                                            </svg>
-                                        ),
-                                        description: "Size recommendations for pants, shorts, etc",
-                                    },
-                                    {
-                                        title: "Footwear",
-                                        icon: (
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="48"
-                                                height="48"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="1.5"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            >
-                                                <path d="M2 14h20"></path>
-                                                <path d="M2 14c0 2.5 2 4 5 4h11c2 0 4-1 4-3.5S20.2 10 19 9c-1-1-4-1-4-1s-1-1-2.5-1c-1 0-2 0-3.5.5-2 .5-3.5 2-4.5 3.5-1.7 2.5-2.5 3-2.5 3Z"></path>
-                                            </svg>
-                                        ),
-                                        description: "Size recommendations for shoes",
-                                    },
-                                ].map((category, index) => (
-                                    <motion.div
-                                        key={index}
-                                        className="border rounded-md p-4 flex flex-col"
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 0.2 + index * 0.05 }}
-                                        whileHover={{
-                                            y: -5,
-                                            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
-                                            transition: { duration: 0.2 },
-                                        }}
-                                    >
-                                        <div className="flex flex-col flex-grow items-center text-center">
-                                            <motion.div className="mb-2" whileHover={{ rotate: 5 }}>
-                                                {category.icon}
-                                            </motion.div>
-                                            <h3 className="font-bold mb-2">{category.title}</h3>
-                                            <p className="text-sm text-gray-600 mb-4">{category.description}</p>
-                                        </div>
-                                        <motion.button
-                                            className="bg-black text-white hover:bg-gray-800 w-full py-2 rounded flex items-center justify-center flex-shrink-0"
-                                            whileHover={{ scale: 1.03 }}
-                                            whileTap={{ scale: 0.97 }}
-                                        >
-                                            Select{" "}
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                className="ml-2"
-                                            >
-                                                <polyline points="9 18 15 12 9 6"></polyline>
-                                            </svg>
-                                        </motion.button>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                <WhatsMySize 
+                  open={sizeModalOpen} 
+                  onOpenChange={setSizeModalOpen}
+                  onCategorySelect={(category) => {
+                    console.log('Selected category:', category)
+                  }}
+                />
                 <CartSidebar
                     isOpen={productSidebarOpen}
                     onClose={() => setProductSidebarOpen(false)}

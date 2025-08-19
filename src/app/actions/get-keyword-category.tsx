@@ -11,8 +11,7 @@ const getKeywordCategory = async (
     }
 
     const res = await fetch(URL, {
-      next: { revalidate: 0 },
-      cache: "no-store",
+      next: { revalidate: 300 },
       headers: {
         "Content-Type": "application/json",
       },

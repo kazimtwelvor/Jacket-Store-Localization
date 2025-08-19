@@ -28,6 +28,7 @@ interface FilterSidebarProps {
     toggleColor: (color: string) => void
   }
   onClearFilters: () => void
+  onApplyFilters?: () => void
 }
 
 export const FilterSidebar: React.FC<FilterSidebarProps> = ({
@@ -43,6 +44,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   sizes,
   onFilterChange,
   onClearFilters,
+  onApplyFilters,
 }) => {
   const handleClearAndClose = () => {
     onClearFilters()
@@ -241,7 +243,13 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
           <div className="border-t p-4">
             <button 
-              onClick={onClose} 
+              onClick={() => {
+                if (onApplyFilters) {
+                  onApplyFilters()
+                } else {
+                  onClose()
+                }
+              }} 
               className="w-full bg-[#2b2b2b] text-white py-3 rounded-md font-medium hover:bg-black-700 transition-colors"
             >
               Apply Filters

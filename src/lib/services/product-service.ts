@@ -11,6 +11,7 @@ interface Query {
     genders?: string[] | string
     colors?: string[] | string
     sizes?: string[] | string
+    sort?: string
     page?: number
     limit?: number
     search?: string
@@ -54,6 +55,7 @@ const buildQueryParams = (query: Query): Record<string, any> => {
     if (query.genders) params.genders = query.genders
     if (query.colors) params.colors = query.colors
     if (query.sizes) params.sizes = query.sizes
+    if (query.sort) params.sort = query.sort
     if (query.limit) params.limit = query.limit
 
     return params
@@ -65,7 +67,8 @@ export class ProductService {
             const params = buildQueryParams(query)
 
             const response = await apiClient.get('/products', {
-                params
+                params,
+                timeout: 10000
             })
 
             let responseData: PaginatedResponse = response.data

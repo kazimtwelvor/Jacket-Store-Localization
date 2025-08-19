@@ -10,6 +10,7 @@ export interface Query {
   genders?: string[] | string
   colors?: string[] | string
   sizes?: string[] | string
+  sort?: string
   page?: number
   limit?: number
   search?: string

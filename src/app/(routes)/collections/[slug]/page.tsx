@@ -1,4 +1,5 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // ISR: Revalidate every 30 minutes
+export const dynamicParams = true; // Generate new pages on-demand
 import getCategories from "../../../actions/get-categories";
 import getKeywordCategory from "../../../actions/get-keyword-category";
 import getKeywordCategories from "../../../actions/get-keyword-categories";
@@ -11,6 +12,17 @@ import StructuredData from "../../../components/layout/structured-data-layout";
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  try {
+    const keywordCategories = await getKeywordCategories();
+    return keywordCategories.slice(0, 10).map((category: any) => ({
+      slug: category.slug,
+    }));
+  } catch (error) {
+    return [];
+  }
 }
 
 export async function generateMetadata(
@@ -127,17 +139,19 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
 
     const filterParams = parseApiSlug(keywordCategory.apiSlug || "");
 
-    const products = await getProducts({
-      materials: filterParams.materials,
-      styles: filterParams.styles,
-      colors: filterParams.colors,
-      genders: filterParams.genders,
-      limit: 28,
-      page: 1,
-    });
-
-    const allCategories = await getCategories();
-    const keywordCategories = await getKeywordCategories();
+    // Parallel fetch for better performance
+    const [products, allCategories, keywordCategories] = await Promise.all([
+      getProducts({
+        materials: filterParams.materials,
+        styles: filterParams.styles,
+        colors: filterParams.colors,
+        genders: filterParams.genders,
+        limit: 28,
+        page: 1,
+      }),
+      getCategories(),
+      getKeywordCategories()
+    ]);
 
     const categoryForClient: Category & { currentCategory?: any } = {
       id: keywordCategory.id,

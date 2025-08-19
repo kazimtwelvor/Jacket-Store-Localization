@@ -103,7 +103,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState("t-shirts")
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
-  const [activeSort, setActiveSort] = useState<string>("newest")
+  const [activeSort, setActiveSort] = useState<string>("popular")
   const [selectedFilters, setSelectedFilters] = useState({
     materials: [] as string[],
     style: [] as string[],
@@ -149,6 +149,37 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const hasActiveFilters = selectedFilters.materials.length > 0 || selectedFilters.style.length > 0 || selectedFilters.gender.length > 0 || selectedFilters.colors.length > 0 || selectedFilters.sizes.length > 0
   const totalActiveFilters = selectedFilters.materials.length + selectedFilters.style.length + selectedFilters.gender.length + selectedFilters.colors.length + selectedFilters.sizes.length
 
+  const sortProductsClient = useCallback((list: Product[], sortKey: string): Product[] => {
+    if (!Array.isArray(list)) return []
+    const normalized = sortKey.replace('_', '-').toLowerCase()
+    const parsePriceValue = (raw: any): number => {
+      if (raw === undefined || raw === null) return 0
+      if (typeof raw === 'number') return raw
+      const cleaned = String(raw).replace(/[^0-9.]/g, '')
+      const num = Number.parseFloat(cleaned)
+      return Number.isFinite(num) ? num : 0
+    }
+    const priceOf = (p: Product) => {
+      const sale = parsePriceValue((p as any).salePrice)
+      const base = parsePriceValue((p as any).price)
+      return sale > 0 ? sale : base
+    }
+    if (normalized === 'newest') {
+      return [...list].sort((a, b) => {
+        const aTime = new Date((a as any).createdAt || 0).getTime()
+        const bTime = new Date((b as any).createdAt || 0).getTime()
+        return bTime - aTime
+      })
+    }
+    if (normalized === 'price-desc' || normalized === 'price-high') {
+      return [...list].sort((a, b) => priceOf(b) - priceOf(a))
+    }
+    if (normalized === 'price-asc' || normalized === 'price-low') {
+      return [...list].sort((a, b) => priceOf(a) - priceOf(b))
+    }
+    return list
+  }, [])
+
   const updateURL = useCallback(
     (newParams: Record<string, string | number>) => {
       const params = new URLSearchParams(searchParams.toString())
@@ -166,7 +197,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   )
 
   const fetchProducts = useCallback(
-    async (page: number, resetFilters = false) => {
+    async (page: number, resetFilters = false, sortOverride?: string) => {
       setLoading(true)
       try {
         const queryParams = {
@@ -177,13 +208,14 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           styles: selectedFilters.style.length > 0 ? selectedFilters.style.join(",") : undefined,
           genders: selectedFilters.gender.length > 0 ? selectedFilters.gender.join(",") : undefined,
           colors: selectedFilters.colors.length > 0 ? selectedFilters.colors.join(",") : undefined,
-          size: selectedFilters.sizes.length > 0 ? selectedFilters.sizes.join(",") : undefined,
+          sizes: selectedFilters.sizes.length > 0 ? selectedFilters.sizes.join(",") : undefined,
+          sort: sortOverride ?? activeSort,
         }
 
         const newProductsData = await getProducts(queryParams)
 
         setProductsData(newProductsData)
-        setCurrentProducts(newProductsData.products)
+        setCurrentProducts(sortProductsClient(newProductsData.products, sortOverride ?? activeSort))
         setCurrentPage(page)
 
         updateURL({
@@ -193,10 +225,10 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           styles: selectedFilters.style.length > 0 ? selectedFilters.style.join(",") : "",
           genders: selectedFilters.gender.length > 0 ? selectedFilters.gender.join(",") : "",
           colors: selectedFilters.colors.length > 0 ? selectedFilters.colors.join(",") : "",
-          size: selectedFilters.sizes.length > 0 ? selectedFilters.sizes.join(",") : "",
+          sizes: selectedFilters.sizes.length > 0 ? selectedFilters.sizes.join(",") : "",
+          sort: sortOverride ?? activeSort,
         })
       } catch (error) {
-        console.error("❌ Error fetching products:", error)
         setProductsData({
           products: [],
           pagination: {
@@ -212,7 +244,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         setLoading(false)
       }
     },
-    [activeCategory, selectedFilters, updateURL],
+    [activeCategory, selectedFilters, updateURL, activeSort],
   )
 
   const handlePageChange = useCallback(
@@ -238,6 +270,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const handleSortChange = (sortValue: string) => {
     setActiveSort(sortValue)
     setSortDropdownOpen(false)
+    fetchProducts(1, true, sortValue)
   }
 
   const handleClick = (product: Product) => {
@@ -312,8 +345,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
   useEffect(() => {
     setMounted(true)
-    setCurrentProducts(initialProductsData.products)
-    setVisibleProducts(initialProductsData.products.map((p) => p.id))
+    const sortedInitial = sortProductsClient(initialProductsData.products, activeSort)
+    setCurrentProducts(sortedInitial)
+    setVisibleProducts(sortedInitial.map((p) => p.id))
   }, [initialProductsData.products])
 
   useEffect(() => {
@@ -323,10 +357,12 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     const urlStyle = searchParams.get("styles")
     const urlGender = searchParams.get("genders")
     const urlColor = searchParams.get("colors")
-    const urlSize = searchParams.get("size")
+    const urlSize = searchParams.get("sizes")
+    const urlSort = searchParams.get("sort") || "popular"
 
     setActiveCategory(urlCategoryId)
     setCurrentPage(urlPage)
+    setActiveSort(urlSort)
 
     if (urlMaterials || urlStyle || urlGender || urlColor || urlSize) {
       setSelectedFilters((prev) => ({
@@ -338,7 +374,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         sizes: urlSize ? urlSize.split(",") : [],
       }))
     }
-    const needsFetch = urlPage !== initialProductsData.pagination.currentPage || urlCategoryId !== "t-shirts" || urlMaterials || urlStyle || urlGender || urlColor || urlSize || urlPage > 1
+    const needsFetch = urlPage !== initialProductsData.pagination.currentPage || urlCategoryId !== "t-shirts" || urlMaterials || urlStyle || urlGender || urlColor || urlSize || urlSort !== "popular" || urlPage > 1
     if (needsFetch) {
       fetchProducts(urlPage)
     }
@@ -354,6 +390,11 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   useEffect(() => {
     handleFilterChange()
   }, [selectedFilters])
+
+  // Apply client-side sort when sort changes without re-fetching
+  useEffect(() => {
+    setCurrentProducts(prev => sortProductsClient(prev, activeSort))
+  }, [activeSort])
 
   useEffect(() => {
     const stoblackRecentlyViewed = localStorage.getItem("recentlyViewedProducts")
@@ -578,6 +619,10 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             toggleColor: toggleColorFilter,
           }}
           onClearFilters={clearFilters}
+          onApplyFilters={() => {
+            fetchProducts(1, true)
+            setFilterSidebarOpen(false)
+          }}
         />
 
         <CategorySlider

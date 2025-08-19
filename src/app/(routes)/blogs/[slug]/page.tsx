@@ -7,6 +7,9 @@ import { getBlog } from "@/src/app/actions/get-blog"
 import BlogHeroSection from "../../../components/blogs/blog-hero-section"
 import BlogClientScripts from "../../../components/blogs/blog-client-scripts"
 
+export const revalidate = 3600; // ISR: Revalidate every hour
+export const dynamicParams = true; // Generate new pages on-demand
+
 interface BlogData {
   id: string
   slug: string
