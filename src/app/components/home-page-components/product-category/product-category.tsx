@@ -100,7 +100,7 @@ const womenCategories: Category[] = [
     id: "biker-women",
     name: "BIKER JACKETS",
     imageUrl: "/images/women-biker.webp",
-    href: "/collections/womens-leather-biker-jackets",
+    href: "/collections/womens-biker-jackets",
   },
   {
     id: "varsity-women",
@@ -133,7 +133,7 @@ export default function ProductCategory({
   arrowHoverBgColor = "hover:bg-black",
   tabTextColor = "text-gray-700",
   tabActiveColor = "border-[#2b2b2b] text-[#2b2b2b]",
-  tabHoverColor = "hover:text-[#2b2b2b]"
+  tabHoverColor = "hover:text-[#2b2b2b]",
 }: ProductCategoryProps) {
   const [activeTab, setActiveTab] = useState<"men" | "women">("men");
   const [currentStartIndex, setCurrentStartIndex] = useState(0);
@@ -246,7 +246,6 @@ export default function ProductCategory({
           className="text-center mb-0"
         ></motion.div>
         <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 -ml-4 ml-3 md:-ml-4">
-
           <div className="flex gap-4">
             <button
               onClick={() => setActiveTab("men")}
@@ -285,7 +284,9 @@ export default function ProductCategory({
               aria-label="Scroll left"
               disabled={!canGoLeft}
             >
-              <ChevronLeft className={cn("w-5 h-5 sm:w-6 sm:h-6", arrowTextColor)} />
+              <ChevronLeft
+                className={cn("w-5 h-5 sm:w-6 sm:h-6", arrowTextColor)}
+              />
             </button>
             <button
               onClick={() => scroll("right")}
@@ -298,7 +299,9 @@ export default function ProductCategory({
               aria-label="Scroll right"
               disabled={!canGoRight}
             >
-              <ChevronRight className={cn("w-5 h-5 sm:w-6 sm:h-6", arrowTextColor)} />
+              <ChevronRight
+                className={cn("w-5 h-5 sm:w-6 sm:h-6", arrowTextColor)}
+              />
             </button>
           </div>
         )}
@@ -312,10 +315,11 @@ export default function ProductCategory({
           `}</style>
           <div
             ref={scrollContainerRef}
-            className={`${isDesktop && categories.length > visibleCount
-              ? "overflow-hidden"
-              : "overflow-x-auto overflow-y-hidden scroll-smooth"
-              } hide-scrollbar`}
+            className={`${
+              isDesktop && categories.length > visibleCount
+                ? "overflow-hidden"
+                : "overflow-x-auto overflow-y-hidden scroll-smooth"
+            } hide-scrollbar`}
             style={{ msOverflowStyle: "none", scrollbarWidth: "none" }}
           >
             <div
@@ -324,9 +328,10 @@ export default function ProductCategory({
               style={
                 isDesktop && categories.length > visibleCount
                   ? {
-                    transform: `translateX(-${currentStartIndex * (360 + 24)
+                      transform: `translateX(-${
+                        currentStartIndex * (360 + 24)
                       }px)`,
-                  }
+                    }
                   : {}
               }
             >
@@ -357,7 +362,7 @@ export default function ProductCategory({
                         </div>
 
                         <div className="absolute left-0 right-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-in-out">
-                          <p className="text-white/90 text-sm md:text-base">
+                          <p className="text-white/90 text-sm md:text-base pb-[2px] pl-[2px]">
                             Durable and stylish outerwear reimagined for the
                             next generation.
                           </p>
