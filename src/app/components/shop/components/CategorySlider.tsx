@@ -275,8 +275,6 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
             )}
           </div>
         </div>
-
-        {/* Arrow */}
         <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
       </div>
     </motion.div>
@@ -286,21 +284,13 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent side="left" className="w-[90vw] max-w-[800px] p-0">
         <div className="h-full flex flex-col">
-          {/* Header */}
           <SheetHeader className="px-6 py-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
             <div className="flex items-center justify-between mb-6">
               <SheetTitle className="text-3xl font-bold text-gray-900">
                 Browse Categories
               </SheetTitle>
-              <button
-                onClick={handleClose}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
             </div>
 
-            {/* Search Bar */}
             <div className="relative mb-6">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
@@ -312,7 +302,6 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
               />
             </div>
 
-            {/* View Mode Toggle */}
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setViewMode("grid")}
@@ -339,10 +328,8 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
             </div>
           </SheetHeader>
 
-          {/* Content */}
           <div className="flex-1 overflow-y-auto">
             {selectedCategory ? (
-              // Category Detail View
               <div className="p-6">
                 <button
                   onClick={() => setSelectedCategory(null)}
@@ -353,7 +340,6 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
                 </button>
 
                 <div className="space-y-6">
-                  {/* Category Header */}
                   <div className="text-center">
                     <h2 className="text-3xl font-bold text-gray-900 mb-2">
                       {selectedCategory.name}
@@ -365,7 +351,6 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
                     )}
                   </div>
 
-                  {/* Category Image */}
                   {selectedCategory.imageUrl && (
                     <div className="relative h-64 w-full rounded-xl overflow-hidden">
                       <Image
@@ -377,9 +362,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
                     </div>
                   )}
 
-                  {/* Category Details */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Materials */}
                     {selectedCategory.materials && selectedCategory.materials.length > 0 && (
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
@@ -399,7 +382,6 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
                       </div>
                     )}
 
-                    {/* Styles */}
                     {selectedCategory.styles && selectedCategory.styles.length > 0 && (
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
@@ -420,7 +402,6 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
                     )}
                   </div>
 
-                  {/* Action Button */}
                   <div className="text-center">
                     <Link
                       href={`/collections/${selectedCategory.slug || selectedCategory.id}`}
@@ -433,7 +414,6 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
                 </div>
               </div>
             ) : (
-              // Categories Grid/List View
               <div className="p-6 bg-white">
                 {filteredCategories.length === 0 ? (
                   <div className="text-center py-12">

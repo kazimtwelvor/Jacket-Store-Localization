@@ -904,7 +904,6 @@ const Navbar = () => {
         </div>
       )}
 
-      {/* Search Overlay */}
       {isMounted && isSearchOpen && (
         <div className="fixed inset-0 bg-black max-h-[800px] z-[9999] animate-in fade-in duration-300">
           <div className="fixed inset-0 flex items-start justify-center pt-8">
@@ -983,18 +982,14 @@ const Navbar = () => {
                     </div>
                   </form>
 
-                  {/* Conditional Content Based on Selection */}
                   {!selectedCategory ? (
-                    /* Initial Suggestions View */
                     <div className="text-white">
                       {searchQuery && searchResults ? (
-                        /* Search Results View */
                         <div>
                           <h2 className="text-sm font-bold mb-6 tracking-wider uppercase">
                             SEARCH RESULTS FOR "{searchQuery.toUpperCase()}"
                           </h2>
 
-                          {/* Products Section */}
                           {searchResults.products &&
                             searchResults.products.length > 0 && (
                               <div className="mb-8">
@@ -1056,7 +1051,6 @@ const Navbar = () => {
                               </div>
                             )}
 
-                          {/* Categories Section */}
                           {searchResults.categories &&
                             searchResults.categories.length > 0 && (
                               <div className="mb-8">
@@ -1100,7 +1094,6 @@ const Navbar = () => {
                             )}
                         </div>
                       ) : (
-                        /* Default Suggestions View */
                         <div>
                           <h2 className="text-sm font-bold mb-6 tracking-wider uppercase">
                             SUGGESTIONS
