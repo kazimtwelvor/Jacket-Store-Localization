@@ -39,7 +39,7 @@ export const DesktopBannerContent = () => {
           >
             <ShopButton
               variant="filled"
-              href="/shop"
+              href="/shop?genders=men"
               size="lg"
               showArrow={true}
               ariaLabel="Shop men's collection"
@@ -49,7 +49,7 @@ export const DesktopBannerContent = () => {
             </ShopButton>
             <ShopButton
               variant="filled"
-              href="/shop"
+              href="/shop?genders=women"
               size="lg"
               showArrow={true}
               ariaLabel="Shop women's collection"
