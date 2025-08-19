@@ -5,6 +5,7 @@ import { FontProvider } from "@/src/components/font-provider";
 import { CartProvider } from "@/src/app/contexts/CartContext";
 import { avertaBold, avertaDefault } from "@/src/lib/fonts";
 import Footer from "./components/home-page-components/footer/footer";
+import RouteLoadingOverlay from "@/src/app/components/layout/route-loading-overlay";
 import CartSidebarWrapper from "./components/layout/cart-sidebar-wrapper";
 export default function RootLayout({
   children,
@@ -17,6 +18,7 @@ export default function RootLayout({
         <FontProvider>
           <CartProvider>
             <Navbar />
+            <RouteLoadingOverlay />
             {children}
             <Footer />
             <CartSidebarWrapper />

@@ -24,7 +24,6 @@ type ShopPageProps = {
     colorId?: string;
     sizeId?: string;
     search?: string;
-    genders?: string;
   }>;
 };
 
@@ -41,7 +40,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       colorId: resolvedSearchParams.colorId,
       sizeId: resolvedSearchParams.sizeId,
       search: resolvedSearchParams.search,
-      genders: resolvedSearchParams.genders,
     }),
     getCategories(),
     getColors(),

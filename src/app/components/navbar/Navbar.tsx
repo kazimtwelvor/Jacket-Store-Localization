@@ -751,7 +751,7 @@ const Navbar = () => {
                   <ul className="space-y-3">
                     <li>
                       <Link
-                        href="/shop?genders=Male"
+                        href="/shop?gender=mens"
                         className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
                         onClick={() => {
                           setShowMegaMenu(false);
@@ -763,7 +763,7 @@ const Navbar = () => {
                     </li>
                     <li>
                       <Link
-                        href="/shop?genders=Female"
+                        href="/shop?gender=womens"
                         className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
                         onClick={() => {
                           setShowMegaMenu(false);

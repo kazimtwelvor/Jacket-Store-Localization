@@ -18,6 +18,7 @@ import { PaginationControls } from "./components/PaginationControls"
 import { FilterSidebar } from "./components/FilterSidebar"
 import { CategorySlider } from "./components/CategorySlider"
 import WhatsMySize from "@/src/components/WhatsMySize"
+import { Loader2 } from "lucide-react"
 
 const useMediaQuery = (query: string): boolean => {
   const [matches, setMatches] = useState(false)
@@ -504,6 +505,11 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
   return (
     <section className="bg-white">
+      {loading && (
+        <div className="fixed inset-0 z-[9998] bg-white/30 flex items-center justify-center">
+          <Loader2 className="h-10 w-10 text-black animate-spin" />
+        </div>
+      )}
       <ShopCategories keywordCategories={keywordCategories} />
 
       <div className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
@@ -525,12 +531,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           />
         </div>
 
-        {loading && (
-          <div className="flex justify-center items-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black-600"></div>
-            <span className="ml-2 text-gray-600">Loading products...</span>
-          </div>
-        )}
+        
 
         <div className="w-full px-2 sm:px-4 md:px-8">
           {!loading && productsData.products.length > 0 ? (
