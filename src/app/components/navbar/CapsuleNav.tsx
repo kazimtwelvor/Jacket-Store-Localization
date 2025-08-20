@@ -30,11 +30,12 @@ export function CapsuleNav() {
 
   const isProductPage = pathname?.startsWith("/product/");
   const isCategoryPage = pathname?.startsWith("/category/");
+  const isCollectionsPage = pathname?.startsWith("/collections/");
   const isShopPage = pathname === "/shop";
   const lastScrollY = useRef(0);
 
   const isMobileView = typeof window !== "undefined" ? window.innerWidth < 1024 : false;
-  const shouldHideOnShopPage = isShopPage && isMobileView;
+  const shouldHideOnShopPage = (isShopPage || isCollectionsPage) && isMobileView;
 
   useEffect(() => {
     setIsMounted(true);
@@ -43,7 +44,7 @@ export function CapsuleNav() {
       setIsFilterBarSticky(event.detail.isSticky);
     };
 
-    if (isCategoryPage || isShopPage) {
+    if (isCategoryPage || isShopPage || isCollectionsPage) {
       window.addEventListener(
         "filterBarSticky",
         handleFilterBarSticky as EventListener
@@ -65,10 +66,10 @@ export function CapsuleNav() {
           // Show nav only when scrolled past the product image
           setIsVisible(imageRect.bottom <= navbarHeight);
         }
-      } else if ((isCategoryPage || isShopPage) && isMobileView) {
+      } else if ((isCategoryPage || isShopPage || isCollectionsPage) && isMobileView) {
         const lowerContentSection = document.getElementById(
           "lower-content-section"
-        );
+        ) || document.getElementById("lower-content-div");
         const navbar = document.querySelector("header");
         const navBarHeight = navbar?.getBoundingClientRect().height || 64;
 
@@ -116,14 +117,14 @@ export function CapsuleNav() {
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (isCategoryPage || isShopPage) {
+      if (isCategoryPage || isShopPage || isCollectionsPage) {
         window.removeEventListener(
           "filterBarsticky",
           handleFilterBarSticky as EventListener
         );
       }
     };
-  }, [isProductPage, isCategoryPage, isShopPage]);
+  }, [isProductPage, isCategoryPage, isShopPage, isCollectionsPage]);
 
   const handleItemClick = (id: number, category: string) => {
     setActiveItem(id);
@@ -169,7 +170,7 @@ export function CapsuleNav() {
     <div
       className={cn(
         "mx-auto md:w-auto md:mx-0 transition-all duration-300",
-        (isCategoryPage || isShopPage) && isMobileView && isExpanded
+        (isCategoryPage || isShopPage || isCollectionsPage) && isMobileView && isExpanded
           ? "w-[95%]"
           : "w-[70%]",
         isProductPage && isMobileView
