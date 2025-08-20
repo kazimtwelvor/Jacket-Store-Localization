@@ -7,7 +7,6 @@ import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { X } from "lucide-react"
 import { motion, AnimatePresence, useMotionValue, animate, PanInfo } from "framer-motion"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/src/app/ui/dialog"
 import WhatsMySize from "@/src/components/WhatsMySize"
 import type { Product, Category } from "@/types"
 
@@ -245,10 +244,9 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
         filterBarHeight: 0,
     });
 
-    // Constants and hooks
     const { addToCart } = useCart()
     const wishlist = useWishlist()
-    const productsPerPage = 20 // Reduced for better performance
+    const productsPerPage = 20 
     const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
     const [currentProducts, setCurrentProducts] = useState<Product[]>(products)
     const [currentPage, setCurrentPage] = useState(1)
@@ -415,7 +413,6 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
     useEffect(() => {
         const s = searchParams.get('sort') || 'popular'
         if (s !== currentSort) setCurrentSort(s)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams])
     const updateFiltersInURL = (newFilters: { sizes: string[], colors: string[] }) => {
         const params = new URLSearchParams(searchParams.toString())
@@ -452,15 +449,6 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                 localStorage.setItem('recentlyViewed', JSON.stringify(updated))
             }
             return updated
-        })
-    }
-    const scrollRecentlyViewed = (direction: "left" | "right") => {
-        if (!recentlyViewedScrollRef.current) return
-        const scrollAmount = 300
-        const currentScroll = recentlyViewedScrollRef.current.scrollLeft
-        recentlyViewedScrollRef.current.scrollTo({
-            left: direction === "left" ? currentScroll - scrollAmount : currentScroll + scrollAmount,
-            behavior: "smooth",
         })
     }
     const handleClick = (product: Product) => {
@@ -507,7 +495,6 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
 
         let filtered = products.filter(filterBySelections)
 
-        // Apply sort from URL (robust price parsing)
         const parsePriceValue = (raw: any): number => {
             if (raw === undefined || raw === null) return 0
             if (typeof raw === 'number') return raw

@@ -65,7 +65,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const finalKeywordCategories = keywordCategories.status === 'fulfilled' ? keywordCategories.value : [];
 
 
-  return (
+  return (  
     <div className="bg-white min-h-screen flex flex-col">
       <main className="flex-1">
         <Suspense

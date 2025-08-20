@@ -12,7 +12,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
   const [colorPopup, setColorPopup] = useState<{ productId: string; rect: DOMRect } | null>(null)
   const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
   
-  const availableColors = product.colorDetails || product.colors || [{ value: "#000000", name: "Black" }]
+  const availableColors = product.colorDetails || [{ value: "#000000", name: "Black" }]
   const hasMultipleColors = availableColors.length > 1
 
   if (!hasMultipleColors) {

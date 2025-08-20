@@ -64,7 +64,6 @@ const CategoriesPage = ({ categories }: CategoriesPageProps) => {
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-
                     <div className="absolute inset-x-0 bottom-0 p-4 group">
                       <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
                         <h3 className="text-white text-lg md:text-xl lg:text-2xl text-left transition-all duration-500" style={{ fontFamily: 'var(--font-averta-bold)' }}>
