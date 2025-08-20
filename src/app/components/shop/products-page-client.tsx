@@ -678,8 +678,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           :global(.custom-scrollbar::-webkit-scrollbar-thumb:hover) { background: #9ca3af; }
           :global(.hide-scrollbar::-webkit-scrollbar) { display: none; }
           @media (max-width: 768px) { :global(.hide-scrollbar) { scroll-snap-type: x mandatory; } }
-          @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); } }
-          :global(.bg-\[\#2b2b2b\]) { animation: pulse 2s infinite; }
+          /* removed global red pulse animation */
                transition: all 0.3s ease-in-out;
                will-change: transform;
                transform: translateZ(0);

@@ -1291,21 +1291,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
           .hide-scrollbar::-webkit-scrollbar {
             display: none;
           }
-          /* Pulse animation for popular badge */
-          @keyframes pulse {
-            0% {
-              box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
-            }
-            70% {
-              box-shadow: 0 0 0 6px rgba(220, 38, 38, 0);
-            }
-            100% {
-              box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
-            }
-          }
-          .bg-[#2b2b2b] {
-            animation: pulse 2s infinite;
-          }
+          /* removed global red pulse animation */
           /* Sticky header styles */
           .sticky {
             backdrop-filter: saturate(180%) blur(5px);
