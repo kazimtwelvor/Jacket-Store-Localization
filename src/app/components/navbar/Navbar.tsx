@@ -346,12 +346,7 @@ const Navbar = () => {
                       setShowMegaMenu(true);
                       setActiveNavItem("leather-jackets");
                     }}
-                    onMouseEnter={() => setActiveNavItem("leather-jackets")}
-                    onMouseLeave={() => {
-                      if (!showMegaMenu) {
-                        setActiveNavItem(null);
-                      }
-                    }}
+                    
                   >
                     LEATHER JACKETS
                   </Button>
@@ -365,12 +360,7 @@ const Navbar = () => {
                       setShowMegaMenu(true);
                       setActiveNavItem("womens-jackets");
                     }}
-                    onMouseEnter={() => setActiveNavItem("womens-jackets")}
-                    onMouseLeave={() => {
-                      if (!showMegaMenu) {
-                        setActiveNavItem(null);
-                      }
-                    }}
+                    
                   >
                     WOMEN'S JACKETS
                   </Button>
@@ -384,12 +374,7 @@ const Navbar = () => {
                       setShowMegaMenu(true);
                       setActiveNavItem("mens-jackets");
                     }}
-                    onMouseEnter={() => setActiveNavItem("mens-jackets")}
-                    onMouseLeave={() => {
-                      if (!showMegaMenu) {
-                        setActiveNavItem(null);
-                      }
-                    }}
+                   
                   >
                     MEN'S JACKETS
                   </Button>
@@ -403,12 +388,7 @@ const Navbar = () => {
                       setShowMegaMenu(true);
                       setActiveNavItem("coats");
                     }}
-                    onMouseEnter={() => setActiveNavItem("coats")}
-                    onMouseLeave={() => {
-                      if (!showMegaMenu) {
-                        setActiveNavItem(null);
-                      }
-                    }}
+                  
                   >
                     COATS
                   </Button>
