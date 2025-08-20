@@ -82,12 +82,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         )}
 
 
-        <button
-          className="absolute md:top-2 md:right-2 w-8 h-8 md:w-9 md:h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 -bottom-4 right-12 "
+        <motion.button
+          className="absolute md:top-2 md:right-2 w-8 h-8 md:w-9 md:h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 -bottom-4 right-12"
           aria-label="Add to wishlist"
+          whileHover={{ scale: 1.2, backgroundColor: "#f8f8f8" }}
+          whileTap={{ scale: 0.9 }}
           onClick={(e) => {
             e.stopPropagation()
-            wishlist.addItem(product)
+            if (wishlist.isInWishlist(product.id)) {
+              wishlist.removeItem(product.id)
+            } else {
+              wishlist.addItem(product)
+            }
           }}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -100,7 +106,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               strokeLinejoin="round"
             />
           </svg>
-        </button>
+        </motion.button>
 
         <button
           className="md:hidden absolute w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-md z-48 right-2  -bottom-4 md:top-3 md:right-3 md:bottom-auto"

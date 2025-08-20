@@ -199,7 +199,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   )
 
   const fetchProducts = useCallback(
-    async (page: number, resetFilters = false, sortOverride?: string) => {
+    async (page: number, resetFilters = false, sortOverride?: string, skipURLUpdate = false) => {
       setLoading(true)
       try {
         const queryParams = {
@@ -220,16 +220,18 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         setCurrentProducts(sortProductsClient(newProductsData.products, sortOverride ?? activeSort))
         setCurrentPage(page)
 
-        updateURL({
-          page: page > 1 ? page : "",
-          categoryId: activeCategory !== "t-shirts" ? activeCategory : "",
-          materials: selectedFilters.materials.length > 0 ? selectedFilters.materials.join(",") : "",
-          styles: selectedFilters.style.length > 0 ? selectedFilters.style.join(",") : "",
-          genders: selectedFilters.gender.length > 0 ? selectedFilters.gender.join(",") : "",
-          colors: selectedFilters.colors.length > 0 ? selectedFilters.colors.join(",") : "",
-          sizes: selectedFilters.sizes.length > 0 ? selectedFilters.sizes.join(",") : "",
-          sort: sortOverride ?? activeSort,
-        })
+        if (!skipURLUpdate) {
+          updateURL({
+            page: page > 1 ? page : "",
+            categoryId: activeCategory !== "t-shirts" ? activeCategory : "",
+            materials: selectedFilters.materials.length > 0 ? selectedFilters.materials.join(",") : "",
+            styles: selectedFilters.style.length > 0 ? selectedFilters.style.join(",") : "",
+            genders: selectedFilters.gender.length > 0 ? selectedFilters.gender.join(",") : "",
+            colors: selectedFilters.colors.length > 0 ? selectedFilters.colors.join(",") : "",
+            sizes: selectedFilters.sizes.length > 0 ? selectedFilters.sizes.join(",") : "",
+            sort: sortOverride ?? activeSort,
+          })
+        }
       } catch (error) {
         setProductsData({
           products: [],
@@ -378,7 +380,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     }
     const needsFetch = urlPage !== initialProductsData.pagination.currentPage || urlCategoryId !== "t-shirts" || urlMaterials || urlStyle || urlGender || urlColor || urlSize || urlSort !== "popular" || urlPage > 1
     if (needsFetch) {
-      fetchProducts(urlPage)
+      fetchProducts(urlPage, false, undefined, true) 
     }
   }, [])
 

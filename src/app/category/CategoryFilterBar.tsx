@@ -364,7 +364,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            {hasActiveFilters && (
+            {/* {hasActiveFilters && (
               <motion.button
                 onClick={clearFilters}
                 className="clear-filters-button"
@@ -373,12 +373,12 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
               >
                 CLEAR FILTERS
               </motion.button>
-            )}
+            )} */}
             <motion.button
               onClick={() => {
                 setSizeModalOpen(true);
               }}
-              className="flex items-center px-4 py-3 rounded-[15px]  text-white  bg-black text-white hover:bg-gray-800 transition-colors z-50"
+              className="hidden md:flex items-center px-4 py-3 rounded-[15px] bg-black text-white hover:bg-gray-800 transition-colors z-50"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
