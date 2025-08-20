@@ -46,29 +46,25 @@ export const DesktopBannerContent = () => {
           >
             <ShopButton
               variant="filled"
-              href="/shop?genders=men"
               size="lg"
               showArrow={true}
               ariaLabel="Shop men's collection"
               className="w-full sm:w-auto min-w-[180px]"
               as="div"
+              onClick={() => handleShopClick('men')}
             >
-              <button onClick={() => handleShopClick('men')} className="w-full h-full">
-                Shop Men
-              </button>
+              Shop Men
             </ShopButton>
             <ShopButton
               variant="filled"
-              href="/shop?genders=women"
               size="lg"
               showArrow={true}
               ariaLabel="Shop women's collection"
               className="w-full sm:w-auto min-w-[180px]"
               as="div"
+              onClick={() => handleShopClick('women')}
             >
-              <button onClick={() => handleShopClick('women')} className="w-full h-full">
-                Shop Women
-              </button>
+              Shop Women
             </ShopButton>
           </motion.div>
         </div>

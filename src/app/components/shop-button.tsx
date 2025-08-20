@@ -8,13 +8,14 @@ import { cn } from "@/src/app/lib/utils"
 
 interface ShopButtonProps {
   variant?: "filled" | "bordered"
-  href: string
+  href?: string
   children: React.ReactNode
   className?: string
   size?: "sm" | "md" | "lg"
   showArrow?: boolean
   ariaLabel?: string
   as?: "link" | "div"
+  onClick?: () => void
 }
 
 export default function ShopButton({
@@ -25,7 +26,8 @@ export default function ShopButton({
   size = "md",
   showArrow = false,
   ariaLabel,
-  as = "link"
+  as = "link",
+  onClick
 }: ShopButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
   const sizeClasses = {
@@ -52,7 +54,7 @@ export default function ShopButton({
 
   const buttonClasses = variant === "filled" ? filledClasses : borderedClasses
 
-  if (as === "link") {
+  if (as === "link" && href) {
     return (
       <Link href={href} aria-label={ariaLabel} prefetch={true}>
         <div className={buttonClasses}>
@@ -78,7 +80,7 @@ export default function ShopButton({
   }
 
   return (
-    <div className={buttonClasses} role="link" aria-label={ariaLabel}>
+    <div className={buttonClasses} role="button" aria-label={ariaLabel} onClick={onClick}>
       <span className="relative z-10">{children}</span>
       {variant === "filled" && (
         <div className="absolute inset-0 w-0 bg-[#1a1a1a] transition-all duration-300 group-hover:w-full"></div>
