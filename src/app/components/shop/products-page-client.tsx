@@ -13,7 +13,7 @@ import ShopCategories from "./ShopCategories"
 import RecentlyViewed from "../../category/RecentlyViewed"
 import WeThinkYouWillLove from "../../category/WeThinkYouWillLove"
 import { ProductCard } from "./components/ProductCard"
-import { FilterBar } from "./components/FilterBar"
+import { FilterBar } from "../common/FilterBar"
 import { PaginationControls } from "./components/PaginationControls"
 import { FilterSidebar } from "./components/FilterSidebar"
 import { CategorySlider } from "./components/CategorySlider"
@@ -39,14 +39,20 @@ const useMediaQuery = (query: string): boolean => {
   return mounted ? matches : false
 }
 
-const getMaterialsFromCategories = (categories?: Category[]) =>
-  categories?.filter((cat) => cat.materials && cat.materials.length > 0) || []
+const getMaterialsFromCategories = (categories?: Category[]) => {
+  const materials = ["Leather", "Denim", "Cotton", "Polyester", "Wool", "Suede"]
+  return materials.map((name, index) => ({ id: `material-${index}`, name }))
+}
 
-const getStylesFromCategories = (categories?: Category[]) =>
-  categories?.filter((cat) => cat.styles && cat.styles.length > 0) || []
+const getStylesFromCategories = (categories?: Category[]) => {
+  const styles = ["Bomber", "Biker", "Varsity", "Aviator", "Puffer", "Trench"]
+  return styles.map((name, index) => ({ id: `style-${index}`, name }))
+}
 
-const getGendersFromCategories = (categories?: Category[]) =>
-  categories?.filter((cat) => cat.genders && cat.genders.length > 0) || []
+const getGendersFromCategories = (categories?: Category[]) => {
+  const genders = ["Male", "Female", "Unisex"]
+  return genders.map((name, index) => ({ id: `gender-${index}`, name }))
+}
 
 
 const getProductSlug = (product: Product): string => {
@@ -105,7 +111,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState("t-shirts")
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
-  const [activeSort, setActiveSort] = useState<string>("popular")
+  const [activeSort, setActiveSort] = useState<string>("")
   const [selectedFilters, setSelectedFilters] = useState({
     materials: [] as string[],
     style: [] as string[],
@@ -202,17 +208,22 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     async (page: number, resetFilters = false, sortOverride?: string, skipURLUpdate = false) => {
       setLoading(true)
       try {
+        const hasFilters = selectedFilters.materials.length > 0 || selectedFilters.style.length > 0 || selectedFilters.gender.length > 0 || selectedFilters.colors.length > 0 || selectedFilters.sizes.length > 0
+        
         const queryParams = {
           page,
           limit: 28,
           categoryId: activeCategory !== "t-shirts" ? activeCategory : undefined,
           materials: selectedFilters.materials.length > 0 ? selectedFilters.materials.join(",") : undefined,
           styles: selectedFilters.style.length > 0 ? selectedFilters.style.join(",") : undefined,
-          genders: selectedFilters.gender.length > 0 ? selectedFilters.gender.join(",") : undefined,
+          genders: selectedFilters.gender.length > 0 ? Array.from(new Set(selectedFilters.gender.map(g => g.trim().toLowerCase()))).join(",") : undefined,
           colors: selectedFilters.colors.length > 0 ? selectedFilters.colors.join(",") : undefined,
           sizes: selectedFilters.sizes.length > 0 ? selectedFilters.sizes.join(",") : undefined,
-          sort: sortOverride ?? activeSort,
+          sort: hasFilters ? (sortOverride ?? activeSort) : undefined,
         }
+        
+        console.log('Fetching products with params:', queryParams)
+        console.log('Selected filters:', selectedFilters)
 
         const newProductsData = await getProducts(queryParams)
 
@@ -221,12 +232,13 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         setCurrentPage(page)
 
         if (!skipURLUpdate) {
+          const normalizedGender = Array.from(new Set(selectedFilters.gender.map(g => g.trim().toLowerCase()))).join(",")
           updateURL({
             page: page > 1 ? page : "",
             categoryId: activeCategory !== "t-shirts" ? activeCategory : "",
             materials: selectedFilters.materials.length > 0 ? selectedFilters.materials.join(",") : "",
             styles: selectedFilters.style.length > 0 ? selectedFilters.style.join(",") : "",
-            genders: selectedFilters.gender.length > 0 ? selectedFilters.gender.join(",") : "",
+            genders: normalizedGender || "",
             colors: selectedFilters.colors.length > 0 ? selectedFilters.colors.join(",") : "",
             sizes: selectedFilters.sizes.length > 0 ? selectedFilters.sizes.join(",") : "",
             sort: sortOverride ?? activeSort,
@@ -365,25 +377,34 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     const urlGender = searchParams.get("genders")
     const urlColor = searchParams.get("colors")
     const urlSize = searchParams.get("sizes")
-    const urlSort = searchParams.get("sort") || "popular"
+    const urlSort = searchParams.get("sort")
+    
+    console.log('URL params:', { urlGender, urlMaterials, urlStyle, urlColor, urlSize })
 
     setActiveCategory(urlCategoryId)
     setCurrentPage(urlPage)
-    setActiveSort(urlSort)
+    setActiveSort(urlSort || "")
+
+    const mapGenderToTitle = (g: string) => {
+      const v = g.trim().toLowerCase()
+      if (v === "men") return "Male"
+      if (v === "women") return "Female"
+      if (v === "unisex") return "Unisex"
+      return g
+    }
 
     if (urlMaterials || urlStyle || urlGender || urlColor || urlSize) {
-      setSelectedFilters((prev) => ({
-        ...prev,
+      setSelectedFilters({
         materials: urlMaterials ? urlMaterials.split(",") : [],
         style: urlStyle ? urlStyle.split(",") : [],
-        gender: urlGender ? urlGender.split(",") : [],
+        gender: urlGender ? urlGender.split(",").map(mapGenderToTitle) : [],
         colors: urlColor ? urlColor.split(",") : [],
         sizes: urlSize ? urlSize.split(",") : [],
-      }))
+      })
     }
-    const needsFetch = urlPage !== initialProductsData.pagination.currentPage || urlCategoryId !== "t-shirts" || urlMaterials || urlStyle || urlGender || urlColor || urlSize || urlSort !== "popular" || urlPage > 1
-    if (needsFetch) {
-      fetchProducts(urlPage, false, undefined, true) 
+    
+    if (urlMaterials || urlStyle || urlGender || urlColor || urlSize || urlPage > 1 || urlCategoryId !== "t-shirts") {
+      setTimeout(() => fetchProducts(urlPage, false, undefined, true), 100)
     }
   }, [])
 
@@ -394,9 +415,12 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     }
   }, [searchParams])
 
-  useEffect(() => {
-    handleFilterChange()
-  }, [selectedFilters])
+  // Disabled automatic filter effect to prevent conflicts with URL-based filtering
+  // useEffect(() => {
+  //   if (selectedFilters.materials.length > 0 || selectedFilters.style.length > 0 || selectedFilters.gender.length > 0 || selectedFilters.colors.length > 0 || selectedFilters.sizes.length > 0) {
+  //     handleFilterChange()
+  //   }
+  // }, [selectedFilters])
 
   useEffect(() => {
     setCurrentProducts(prev => sortProductsClient(prev, activeSort))
@@ -524,7 +548,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             layoutMetrics={layoutMetrics}
             hasActiveFilters={hasActiveFilters}
             totalActiveFilters={totalActiveFilters}
-            activeSort={activeSort}
+            currentSort={activeSort}
             sortDropdownOpen={sortDropdownOpen}
             setSortDropdownOpen={setSortDropdownOpen}
             setFilterSidebarOpen={setFilterSidebarOpen}

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 import ProductsPageClient from "./products-page-client";
 import getProducts from "../../actions/get-products";
 import getCategories from "../../actions/get-categories";
@@ -24,11 +25,16 @@ type ShopPageProps = {
     colorId?: string;
     sizeId?: string;
     search?: string;
+    genders?: string;
   }>;
 };
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const resolvedSearchParams = await searchParams;
+  const gendersParam = resolvedSearchParams.genders;
+  if (!gendersParam || (gendersParam !== "men" && gendersParam !== "women")) {
+    notFound();
+  }
   const page = Number.parseInt(resolvedSearchParams.page || "1");
   const limit = Number.parseInt(resolvedSearchParams.limit || "28");
 
@@ -40,6 +46,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       colorId: resolvedSearchParams.colorId,
       sizeId: resolvedSearchParams.sizeId,
       search: resolvedSearchParams.search,
+      genders: resolvedSearchParams.genders,
     }),
     getCategories(),
     getColors(),

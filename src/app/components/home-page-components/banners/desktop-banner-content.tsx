@@ -1,19 +1,27 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { useRouter } from "next/navigation"
-import ResponsiveContainer from "@/src/app/ui/responsive-container"
-import { avertaBlack } from "@/src/lib/fonts"
-import ShopButton from "@/src/app/components/shop-button"
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { notFound, useRouter } from "next/navigation";
+import ResponsiveContainer from "@/src/app/ui/responsive-container";
+import { avertaBlack } from "@/src/lib/fonts";
+import ShopButton from "@/src/app/components/shop-button";
 
+export interface typeGender {
+  male: string;
+  female: string;
+}
 export const DesktopBannerContent = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   const handleShopClick = (gender: string) => {
-    const url = `/shop?genders=${gender}`
-    router.push(url)
-  }
+    if (gender === "men" || gender === "women") {
+      const url = `/shop?genders=${gender}`;
+      router.push(url);
+    } else {
+      notFound();
+    }
+  };
 
   return (
     <ResponsiveContainer>
@@ -32,10 +40,17 @@ export const DesktopBannerContent = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            style={{ fontFamily: 'var(--font-averta-default)' }}
+            style={{ fontFamily: "var(--font-averta-default)" }}
             className="text-sm sm:text-base md:text-lg text-black lg:text-xl mb-8 md:mb-10 max-w-3xl mx-auto"
           >
-            UP TO <span className={`${avertaBlack.className} font-black`}>50% OFF</span> + CODE: <span className={`${avertaBlack.className} font-black`}>STREET15</span>
+            UP TO{" "}
+            <span className={`${avertaBlack.className} font-black`}>
+              50% OFF
+            </span>{" "}
+            + CODE:{" "}
+            <span className={`${avertaBlack.className} font-black`}>
+              STREET15
+            </span>
           </motion.p>
 
           <motion.div
@@ -51,7 +66,7 @@ export const DesktopBannerContent = () => {
               ariaLabel="Shop men's collection"
               className="w-full sm:w-auto min-w-[180px]"
               as="div"
-              onClick={() => handleShopClick('men')}
+              onClick={() => handleShopClick("men")}
             >
               Shop Men
             </ShopButton>
@@ -62,7 +77,7 @@ export const DesktopBannerContent = () => {
               ariaLabel="Shop women's collection"
               className="w-full sm:w-auto min-w-[180px]"
               as="div"
-              onClick={() => handleShopClick('women')}
+              onClick={() => handleShopClick("women")}
             >
               Shop Women
             </ShopButton>
@@ -70,5 +85,5 @@ export const DesktopBannerContent = () => {
         </div>
       </section>
     </ResponsiveContainer>
-  )
-}
+  );
+};

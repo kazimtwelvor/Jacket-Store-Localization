@@ -14,10 +14,11 @@ import { cn } from "@/src/app/lib/utils"
 import JacketCategories from "@/src/app/category/JacketCategories"
 import WeThinkYouWillLove from "@/src/app/category/WeThinkYouWillLove"
 import RecentlyViewed from "@/src/app/category/RecentlyViewed"
-import CategoryFilterBar from "@/src/app/category/CategoryFilterBar"
+import { FilterBar } from "@/src/app/components/common/FilterBar"
 import StructuredData from "@/src/app/components/layout/structured-data-layout"
 import CartSidebar from "@/src/app/components/layout/cart-sidebar"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/src/app/ui/sheet"
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/src/app/ui/accordion"
 import { useCart } from "@/src/app/contexts/CartContext"
 import useWishlist from "@/src/app/hooks/use-wishlist"
 import MobileAddToCartModal from "@/src/app/modals/MobileAddToCartModal"
@@ -224,9 +225,15 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
     const [categorySliderOpen, setCategorySliderOpen] = useState(false)
     const [sortDropdownOpen, setSortDropdownOpen] = useState(false)
     const [sizeModalOpen, setSizeModalOpen] = useState(false)
+    const urlMaterials = searchParams.get('materials')?.split(',').filter(Boolean) || []
+    const urlStyles = searchParams.get('styles')?.split(',').filter(Boolean) || []
+    const urlGenders = searchParams.get('genders')?.split(',').filter(Boolean) || []
     const [selectedFilters, setSelectedFilters] = useState({
         sizes: urlSizes,
         colors: urlColors,
+        materials: urlMaterials,
+        styles: urlStyles,
+        genders: urlGenders,
     })
     const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
     const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
@@ -243,6 +250,8 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
         endStickyPoint: 0,
         filterBarHeight: 0,
     });
+    const [materialQuery, setMaterialQuery] = useState("")
+    const [styleQuery, setStyleQuery] = useState("")
 
     const { addToCart } = useCart()
     const wishlist = useWishlist()
@@ -263,7 +272,37 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
     }
 
     const sizes = ["XS", "S", "M", "L", "XL", "XXL"]
-    const colors = ["Black", "White", "Blue", "Red", "Green"]
+    
+    // Colors: build name->value map from products (if available), but expose names list to UI to keep logic unchanged
+    const buildColorNameToValueMap = (): Map<string, string> => {
+        const map = new Map<string, string>()
+        const fallback: Record<string, string> = {
+            Black: '#000000', White: '#FFFFFF', Blue: '#0000FF', Red: '#FF0000', Green: '#00FF00',
+            Brown: '#8B4513', Gray: '#808080', Navy: '#000080', Beige: '#F5F5DC', Pink: '#FFC0CB',
+            Purple: '#800080', Orange: '#FFA500', Yellow: '#FFFF00'
+        }
+        products.forEach(p => {
+            const productColors = (p as any).colorDetails || (p as any).colors || []
+            productColors.forEach((c: any) => {
+                const name = (c?.name ?? '').toString()
+                const value = (c?.value ?? fallback[name]) as string | undefined
+                if (name) map.set(name, value || '#CCCCCC')
+            })
+        })
+        if (map.size === 0) {
+            Object.entries(fallback).forEach(([name, value]) => map.set(name, value))
+        }
+        return map
+    }
+    const colorNameToValue = buildColorNameToValueMap()
+    const colors = Array.from(colorNameToValue.keys())
+    
+    const materials = ["Leather", "Denim", "Cotton", "Polyester", "Wool", "Suede"]
+    const styles = ["Bomber", "Biker", "Varsity", "Aviator", "Puffer", "Trench"]
+    const genders = ["Men", "Women", "Unisex"]
+
+    const filteredMaterials = materials.filter(m => m.toLowerCase().includes(materialQuery.toLowerCase()))
+    const filteredStyles = styles.filter(s => s.toLowerCase().includes(styleQuery.toLowerCase()))
 
     const categoryIcons: Record<string, string> = {
         'leather-jackets': '/images/leather.webp',
@@ -279,14 +318,15 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
         'suede-jackets': '/images/suede.webp'
     }
 
-    const hasActiveFilters = selectedFilters.sizes.length > 0 || selectedFilters.colors.length > 0
+    const hasActiveFilters = selectedFilters.materials.length > 0 || selectedFilters.styles.length > 0 || selectedFilters.genders.length > 0 || selectedFilters.sizes.length > 0 || selectedFilters.colors.length > 0
+    const totalActiveFiltersCount = selectedFilters.materials.length + selectedFilters.styles.length + selectedFilters.genders.length + selectedFilters.sizes.length + selectedFilters.colors.length
     
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             updateFiltersInURL(selectedFilters)
         }, 300) // Debounce filter updates
         return () => clearTimeout(timeoutId)
-    }, [selectedFilters.sizes, selectedFilters.colors])
+    }, [selectedFilters.materials, selectedFilters.styles, selectedFilters.genders, selectedFilters.sizes, selectedFilters.colors])
     
     useEffect(() => {
         setMounted(true)
@@ -393,12 +433,36 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
             return { ...prev, colors: newColors }
         })
     }
+    const toggleMaterialFilter = (material: string) => {
+        setSelectedFilters((prev) => {
+            const newMaterials = prev.materials.includes(material) ? prev.materials.filter((m) => m !== material) : [...prev.materials, material]
+            return { ...prev, materials: newMaterials }
+        })
+    }
+    const toggleStyleFilter = (style: string) => {
+        setSelectedFilters((prev) => {
+            const newStyles = prev.styles.includes(style) ? prev.styles.filter((s) => s !== style) : [...prev.styles, style]
+            return { ...prev, styles: newStyles }
+        })
+    }
+    const toggleGenderFilter = (gender: string) => {
+        setSelectedFilters((prev) => {
+            const newGenders = prev.genders.includes(gender) ? prev.genders.filter((g) => g !== gender) : [...prev.genders, gender]
+            return { ...prev, genders: newGenders }
+        })
+    }
     const clearFilters = () => {
         setSelectedFilters({
+            materials: [],
+            styles: [],
+            genders: [],
             sizes: [],
             colors: [],
         })
         const params = new URLSearchParams(searchParams.toString())
+        params.delete('materials')
+        params.delete('styles')
+        params.delete('genders')
         params.delete('sizes')
         params.delete('colors')
         router.push(`?${params.toString()}`, { scroll: false })
@@ -414,8 +478,23 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
         const s = searchParams.get('sort') || 'popular'
         if (s !== currentSort) setCurrentSort(s)
     }, [searchParams])
-    const updateFiltersInURL = (newFilters: { sizes: string[], colors: string[] }) => {
+    const updateFiltersInURL = (newFilters: { materials: string[], styles: string[], genders: string[], sizes: string[], colors: string[] }) => {
         const params = new URLSearchParams(searchParams.toString())
+        if (newFilters.materials.length > 0) {
+            params.set('materials', newFilters.materials.join(','))
+        } else {
+            params.delete('materials')
+        }
+        if (newFilters.styles.length > 0) {
+            params.set('styles', newFilters.styles.join(','))
+        } else {
+            params.delete('styles')
+        }
+        if (newFilters.genders.length > 0) {
+            params.set('genders', newFilters.genders.join(','))
+        } else {
+            params.delete('genders')
+        }
         if (newFilters.sizes.length > 0) {
             params.set('sizes', newFilters.sizes.join(','))
         } else {
@@ -485,15 +564,26 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
         const categoryGender = deriveCategoryGender()
 
         const filterBySelections = (p: Product) => {
-            const productColors = ((p as any).colorDetails || (p as any).colors || []).map((c: any) => c.name || c)
-            const productSizes = ((p as any).sizeDetails || (p as any).sizes || []).map((s: any) => s.name || s)
+            const productColors = ((p as any).colorDetails || (p as any).colors || []).map((c: any) => String(c.name || c).trim().toLowerCase())
+            const productSizes = ((p as any).sizeDetails || (p as any).sizes || []).map((s: any) => String(s.name || s).trim().toLowerCase())
+            const productMaterials = ((p as any).materials || []).map((m: any) => String(m.name || m).trim().toLowerCase())
+            const productStyles = ((p as any).styles || []).map((s: any) => String(s.name || s).trim().toLowerCase())
             const productGender = normalizeGender((p as any).gender || '')
 
-            const matchesColors = selectedFilters.colors.length === 0 || selectedFilters.colors.some(color => productColors.includes(color))
-            const matchesSizes = selectedFilters.sizes.length === 0 || selectedFilters.sizes.some(size => productSizes.includes(size))
+            const wantedMaterials = selectedFilters.materials.map(v => String(v).trim().toLowerCase())
+            const wantedStyles = selectedFilters.styles.map(v => String(v).trim().toLowerCase())
+            const wantedGenders = selectedFilters.genders.map(v => String(v).trim().toLowerCase())
+            const wantedSizes = selectedFilters.sizes.map(v => String(v).trim().toLowerCase())
+            const wantedColors = selectedFilters.colors.map(v => String(v).trim().toLowerCase())
+
+            const matchesMaterials = wantedMaterials.length === 0 || wantedMaterials.some(material => productMaterials.includes(material))
+            const matchesStyles = wantedStyles.length === 0 || wantedStyles.some(style => productStyles.includes(style))
+            const matchesGenders = wantedGenders.length === 0 || wantedGenders.some(gender => normalizeGender(gender) === productGender)
+            const matchesSizes = wantedSizes.length === 0 || wantedSizes.some(size => productSizes.includes(size))
+            const matchesColors = wantedColors.length === 0 || wantedColors.some(color => productColors.includes(color))
             const matchesGender = categoryGender === '' || productGender === categoryGender
 
-            return matchesColors && matchesSizes && matchesGender
+            return matchesMaterials && matchesStyles && matchesGenders && matchesSizes && matchesColors && matchesGender
         }
 
         let filtered = products.filter(filterBySelections)
@@ -640,21 +730,20 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
             </div>
             <div className="mx-auto w-full px-2 sm:px-6 md:px-6 lg:px-8 xl:px-8 py-3 sm:py-3 md:py-6 lg:py-6 xl:py-6">
                 <div ref={filterBarWrapperRef} style={{ height: isFilterSticky ? `${layoutMetrics.filterBarHeight}px` : 'auto' }}>
-                    <CategoryFilterBar
+                    <FilterBar
                         category={category}
                         hasActiveFilters={hasActiveFilters}
                         isFilterSticky={isFilterSticky}
                         sortDropdownOpen={sortDropdownOpen}
                         setSortDropdownOpen={setSortDropdownOpen}
-                        setCategoriesSidebarOpen={setCategoriesSidebarOpen}
                         setCategorySliderOpen={setCategorySliderOpen}
                         setFilterSidebarOpen={setFilterSidebarOpen}
                         setSizeModalOpen={setSizeModalOpen}
                         clearFilters={clearFilters}
                         selectedFilters={selectedFilters}
+                        totalActiveFilters={totalActiveFiltersCount}
                         onSortChange={handleSortChange}
                         currentSort={currentSort}
-                        keywordCategories={keywordCategories}
                     />
                 </div>
                 <div ref={productsGridWrapperRef} className="w-full px-0 xs:px-0 sm:px-0 md:px-4 lg:px-6 xl:px-8 2xl:px-8 relative">
@@ -666,7 +755,12 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                     {currentProducts.length > 0 ? (
                         <>
                             <div className="mb-4 text-sm text-gray-600 text-center">
-                                Showing {(currentPage - 1) * productsPerPage + 1} - {Math.min(currentPage * productsPerPage, products.length)} of {products.length} products
+                                {(() => {
+                                    const totalCount = filteredProducts.length
+                                    const start = totalCount === 0 ? 0 : (currentPage - 1) * productsPerPage + 1
+                                    const end = Math.min(currentPage * productsPerPage, totalCount)
+                                    return `Showing ${start} - ${end} of ${totalCount} products`
+                                })()}
                             </div>
 
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
@@ -1143,51 +1237,130 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                     </SheetContent>
                 </Sheet>
                 <Sheet open={filterSidebarOpen} onOpenChange={setFilterSidebarOpen}>
-                    <SheetContent side="left" className="w-[85vw] max-w-[300px] p-0 z-[9999]" style={{ zIndex: 9999 }}>
-                        <div className="h-full flex flex-col">
-                            <SheetHeader className="text-left px-4 pt-4 pb-2 border-b">
-                                <div className="flex justify-between items-center">
-                                    <SheetTitle className="text-xl font-bold">Filters</SheetTitle>
-                                    {hasActiveFilters && (
+                    <SheetContent side="left" className="w-[90vw] max-w-[380px] p-0 z-[9999]" style={{ zIndex: 9999 }}>
+                        <SheetHeader className="px-6 py-6 bg-white border-b border-gray-100">
+                            <SheetTitle className="text-xl font-semibold text-gray-900">Filters</SheetTitle>
+                        </SheetHeader>
+                        <div className="h-full flex flex-col bg-gray-50">
+                            {/* Active Filter Chips */}
+                            {hasActiveFilters && (
+                                <div className="px-6 py-3 bg-white border-b border-gray-100">
+                                    <div className="flex items-start justify-between gap-3">
+                                        <div className="flex flex-wrap gap-2 flex-1">
+                                            {(['materials','styles','genders','sizes','colors'] as const).map(group => 
+                                                selectedFilters[group].map((value) => (
+                                                    <span 
+                                                        key={`${group}-${value}`} 
+                                                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs bg-gray-100 text-gray-800 border border-gray-300"
+                                                    >
+                                                        {value}
+                                                        <button 
+                                                            onClick={() => {
+                                                                if (group === 'materials') toggleMaterialFilter(value)
+                                                                if (group === 'styles') toggleStyleFilter(value)
+                                                                if (group === 'genders') toggleGenderFilter(value)
+                                                                if (group === 'sizes') toggleSizeFilter(value)
+                                                                if (group === 'colors') toggleColorFilter(value)
+                                                            }}
+                                                            className="w-4 h-4  bg-gray-300 text-gray-700 hover:bg-gray-400 transition-colors flex items-center justify-center"
+                                                        >
+                                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                            </svg>
+                                                        </button>
+                                                    </span>
+                                                ))
+                                            )}
+                                        </div>
                                         <button
                                             onClick={clearFilters}
-                                            className="text-xs font-medium text-black hover:text-red-800 underline"
+                                            className="text-sm text-red-600 hover:text-red-700 font-medium whitespace-nowrap"
                                         >
                                             Clear all
                                         </button>
-                                    )}
+                                    </div>
                                 </div>
-                            </SheetHeader>
-                            <div className="flex-1 overflow-y-auto p-4">
-                                <div className="mb-6">
-                                    <h3 className="text-base font-semibold mb-3 flex items-center">
-                                        <span className="w-6 h-6 rounded-full bg-black-100 text-black flex items-center justify-center mr-2">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="14"
-                                                height="14"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
+                            )}
+
+                            {/* Filter Content */}
+                            <div className="flex-1 overflow-y-auto p-6 space-y-7">
+                                {/* Materials */}
+                                <div>
+                                    <h3 className="text-base font-semibold text-gray-900 mb-3">Materials</h3>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                        {materials.map((material) => (
+                                            <button
+                                                key={material}
+                                                onClick={() => toggleMaterialFilter(material)}
+                                                className={cn(
+                                                    "px-3 py-2 text-sm font-medium transition-colors border",
+                                                    selectedFilters.materials.includes(material)
+                                                        ? "bg-gray-900 text-white border-gray-900"
+                                                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                                                )}
                                             >
-                                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                                            </svg>
-                                        </span>
-                                        Sizes
-                                    </h3>
+                                                {material}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Styles */}
+                                <div>
+                                    <h3 className="text-base font-semibold text-gray-900 mb-3">Styles</h3>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                        {styles.map((style) => (
+                                            <button
+                                                key={style}
+                                                onClick={() => toggleStyleFilter(style)}
+                                                className={cn(
+                                                    "px-3 py-2  text-sm font-medium transition-colors border",
+                                                    selectedFilters.styles.includes(style)
+                                                        ? "bg-gray-900 text-white border-gray-900"
+                                                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                                                )}
+                                            >
+                                                {style}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Gender */}
+                                <div>
+                                    <h3 className="text-base font-semibold text-gray-900 mb-3">Gender</h3>
                                     <div className="grid grid-cols-3 gap-2">
+                                        {genders.map((gender) => (
+                                            <button
+                                                key={gender}
+                                                onClick={() => toggleGenderFilter(gender)}
+                                                className={cn(
+                                                    "px-3 py-2  text-sm font-medium transition-colors border",
+                                                    selectedFilters.genders.includes(gender)
+                                                        ? "bg-gray-900 text-white border-gray-900"
+                                                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                                                )}
+                                            >
+                                                {gender}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Sizes */}
+                                <div>
+                                    <h3 className="text-base font-semibold text-gray-900 mb-3">Sizes</h3>
+                                    <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
                                         {sizes.map((size) => (
                                             <button
                                                 key={size}
                                                 onClick={() => toggleSizeFilter(size)}
                                                 className={cn(
-                                                    "px-2 py-2 border rounded-md text-sm font-medium transition-colors",
+                                                    "px-2.5 py-1.5  text-xs font-semibold transition-colors border",
                                                     selectedFilters.sizes.includes(size)
-                                                        ? "bg-[#2b2b2b] text-white border-bla"
-                                                        : "border-gray-300 hover:border-black"
+                                                        ? "bg-gray-900 text-white border-gray-900"
+                                                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
                                                 )}
                                             >
                                                 {size}
@@ -1195,57 +1368,54 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                                         ))}
                                     </div>
                                 </div>
-                                <div className="mb-6">
-                                    <h3 className="text-base font-semibold mb-3 flex items-center">
-                                        <span className="w-6 h-6 rounded-full bg-black-100 text-black flex items-center justify-center mr-2">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="14"
-                                                height="14"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            >
-                                                <circle cx="13.5" cy="6.5" r="2.5"></circle>
-                                                <circle cx="19" cy="17" r="2"></circle>
-                                                <circle cx="9" cy="17" r="2.5"></circle>
-                                                <circle cx="4.5" cy="12" r="1.5"></circle>
-                                            </svg>
-                                        </span>
-                                        Colors
-                                    </h3>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        {colors.map((color) => (
+
+                                {/* Colors */}
+                                <div>
+                                    <h3 className="text-base font-semibold text-gray-900 mb-3">Colors</h3>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                        {colors.map((colorName) => (
                                             <button
-                                                key={color}
-                                                onClick={() => toggleColorFilter(color)}
+                                                key={colorName}
+                                                onClick={() => toggleColorFilter(colorName)}
                                                 className={cn(
-                                                    "flex items-center px-3 py-2 border rounded-md text-sm transition-colors",
-                                                    selectedFilters.colors.includes(color)
-                                                        ? "bg-[#2b2b2b] text-white border-black"
-                                                        : "border-gray-300 hover:border-black"
+                                                    "flex items-center gap-2.5 px-3 py-2  text-sm font-medium transition-colors border",
+                                                    selectedFilters.colors.includes(colorName)
+                                                        ? "bg-gray-900 text-white border-gray-900"
+                                                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
                                                 )}
                                             >
-                                                <span
-                                                    className="w-4 h-4 rounded-full mr-2 border border-gray-300"
-                                                    style={{ backgroundColor: color.toLowerCase() }}
-                                                ></span>
-                                                {color}
+                                                <span 
+                                                    className={cn(
+                                                        "w-3.5 h-3.5  border",
+                                                        selectedFilters.colors.includes(colorName) 
+                                                            ? "border-white" 
+                                                            : "border-gray-300"
+                                                    )}
+                                                    style={{ backgroundColor: colorNameToValue.get(colorName) || colorName.toLowerCase() }}
+                                                />
+                                                {colorName}
                                             </button>
                                         ))}
                                     </div>
                                 </div>
                             </div>
-                            <div className="border-t p-4">
-                                <button
-                                    onClick={() => setFilterSidebarOpen(false)}
-                                    className="w-full bg-[#2b2b2b] text-white py-3 rounded-md font-medium hover:bg-black-700 transition-colors"
-                                >
-                                    Apply Filters
-                                </button>
+
+                            {/* Footer */}
+                            <div className="border-t border-gray-200 bg-white p-4">
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={clearFilters}
+                                        className="flex-1 px-3 py-2 border border-gray-300 text-gray-700  text-sm font-medium hover:bg-gray-50 hover:border-gray-400 transition-colors"
+                                    >
+                                        Reset
+                                    </button>
+                                    <button
+                                        onClick={() => setFilterSidebarOpen(false)}
+                                        className="flex-1 px-3 py-2 bg-gray-900 text-white  text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm"
+                                    >
+                                        Apply ({filteredProducts.length})
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </SheetContent>
