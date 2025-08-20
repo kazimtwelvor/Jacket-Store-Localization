@@ -542,10 +542,7 @@ const Gallery: React.FC<GalleryProps> = ({
       {typeof window !== "undefined" &&
         createPortal(imageViewerModal, document.body)}
 
-      <div
-        className="hidden lg:grid grid-cols-2 gap-0"
-        style={{ paddingTop: "26px" }}
-      >
+      <div className="hidden lg:grid grid-cols-2 gap-0">
         {sortedImages.map((image, idx) => (
           <div
             key={image.id}
@@ -586,10 +583,10 @@ const Gallery: React.FC<GalleryProps> = ({
                 className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-md z-10 hover:bg-black-50 transition-colors"
                 aria-label="Add to wishlist"
               >
-                <Heart 
+                <Heart
                   className={`w-5 h-5 transition-colors ${
                     isInWishlist ? "text-black fill-black" : "text-gray-600"
-                  }`} 
+                  }`}
                 />
               </button>
             )}
@@ -659,9 +656,7 @@ const Gallery: React.FC<GalleryProps> = ({
               onAddToWishlist?.();
             }}
             className={`w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 ${
-              isInWishlist
-                ? "bg-white text-black"
-                : "bg-white text-black"
+              isInWishlist ? "bg-white text-black" : "bg-white text-black"
             }`}
             style={{ aspectRatio: "1/1" }}
           >

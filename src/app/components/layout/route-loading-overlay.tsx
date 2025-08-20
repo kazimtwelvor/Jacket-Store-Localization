@@ -30,6 +30,8 @@ export default function RouteLoadingOverlay() {
         const toPath = url.pathname + url.search + url.hash
         const fromPath = location.pathname + location.search + location.hash
         if (toPath === fromPath) return
+        // Don't show loader when going to home page
+        if (url.pathname === '/') return
         
         if (!loadingRef.current) {
           loadingRef.current = true
@@ -45,6 +47,22 @@ export default function RouteLoadingOverlay() {
     document.addEventListener("click", handleClick, { capture: true, passive: true })
     return () => {
       document.removeEventListener("click", handleClick, { capture: true } as any)
+    }
+  }, [])
+
+  // Support programmatic navigations (e.g., router.push) via a custom event
+  useEffect(() => {
+    const handleProgrammaticStart = () => {
+      if (!loadingRef.current) {
+        loadingRef.current = true
+        startTransition(() => {
+          setIsLoading(true)
+        })
+      }
+    }
+    window.addEventListener("route-loading:start", handleProgrammaticStart)
+    return () => {
+      window.removeEventListener("route-loading:start", handleProgrammaticStart)
     }
   }, [])
 

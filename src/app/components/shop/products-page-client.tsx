@@ -279,6 +279,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
   const handleClick = (product: Product) => {
     const slug = getProductSlug(product)
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('route-loading:start'))
+    }
     router.push(`/product/${slug}`)
   }
 
