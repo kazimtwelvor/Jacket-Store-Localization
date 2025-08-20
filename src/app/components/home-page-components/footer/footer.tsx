@@ -89,23 +89,23 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('shop')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBlack.className}`}>SHOP</h3>
+                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>SHOP</h3>
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'shop' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'shop' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/size-guide" className="text-black font-semibold hover:font-bold transition-all" >
+                                    <Link href="/size-guide" className="text-black  hover:font-bold transition-all" >
                                         Size Guide
                                     </Link>
                                 </li>
 
                                 <li>
-                                    <Link href="/shop" className="text-black font-semibold hover:font-bold transition-all" >
+                                    <Link href="/shop" className="text-black  hover:font-semibold transition-all" >
                                         Collections
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/reviews" className="text-black font-semibold hover:font-bold transition-all">
+                                    <Link href="/reviews" className="text-black font-normal hover:font-bold transition-all">
                                         Customer Reviews
                                     </Link>
                                 </li>
