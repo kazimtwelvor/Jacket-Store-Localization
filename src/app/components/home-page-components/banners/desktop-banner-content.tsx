@@ -17,6 +17,9 @@ export const DesktopBannerContent = () => {
   const handleShopClick = (gender: string) => {
     if (gender === "men" || gender === "women") {
       const url = `/shop?genders=${gender}`;
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('route-loading:start'));
+      }
       router.push(url);
     } else {
       notFound();

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Facebook, Twitter, Instagram, Linkedin, ChevronDown, Star, Phone, Mail } from "lucide-react"
 import Image from "next/image"
@@ -11,6 +11,7 @@ import { avertaBlack, avertaBold } from "@/src/lib/fonts"
 const Footer = () => {
     const [emailInput, setEmailInput] = useState("")
     const [expandedSection, setExpandedSection] = useState("")
+    const [categories, setCategories] = useState<any[]>([])
     const currentYear = new Date().getFullYear()
 
     const toggleSection = (div: string) => {
@@ -26,6 +27,30 @@ const Footer = () => {
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: "smooth" })
     }
+
+    useEffect(() => {
+        const loadCategories = async () => {
+            try {
+                const baseUrl = process.env.NEXT_PUBLIC_API_URL
+                if (!baseUrl) return
+                const res = await fetch(`${baseUrl}/category-pages?all=true`, {
+                    next: { revalidate: 0 },
+                    cache: "no-store",
+                    headers: { "Content-Type": "application/json" },
+                })
+                if (!res.ok) return
+                const contentType = res.headers.get("content-type") || ""
+                if (!contentType.includes("application/json")) return
+                const data = await res.json()
+                if (Array.isArray(data)) {
+                    setCategories(data.slice(0, 8))
+                }
+            } catch {
+                // ignore
+            }
+        }
+        loadCategories()
+    }, [])
 
     return (
         <footer className={` bg-[#F6F6F6] text-black pt-16 pb-8 px-5 md:px-0 relative`}>
@@ -120,26 +145,38 @@ const Footer = () => {
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'categories' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'categories' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
-                                <li>
-                                    <Link href="/collections/varsity" className="text-black font-semibold hover:font-bold transition-all">
-                                        Varsity Jackets
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/collections/puffer" className="text-black font-semibold hover:font-bold transition-all">
-                                        Puffer Jackets
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/collections/leather" className="text-black font-semibold hover:font-bold transition-all">
-                                        Leather Jackets
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/collections/puffer" className="text-black font-semibold hover:font-bold transition-all">
-                                        Puffer Jackets
-                                    </Link>
-                                </li>
+                                {categories && categories.length > 0 ? (
+                                    categories.map((cat: any) => (
+                                        <li key={cat.slug}>
+                                            <Link href={`/collections/${cat.slug}`} className="text-black font-semibold hover:font-bold transition-all">
+                                                {cat.name}
+                                            </Link>
+                                        </li>
+                                    ))
+                                ) : (
+                                    <>
+                                        <li>
+                                            <Link href="/collections/varsity" className="text-black font-semibold hover:font-bold transition-all">
+                                                Varsity Jackets
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/collections/puffer" className="text-black font-semibold hover:font-bold transition-all">
+                                                Puffer Jackets
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/collections/leather" className="text-black font-semibold hover:font-bold transition-all">
+                                                Leather Jackets
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/collections/denim" className="text-black font-semibold hover:font-bold transition-all">
+                                                Denim Jackets
+                                            </Link>
+                                        </li>
+                                    </>
+                                )}
                             </ul>
                         </div>
                         <div className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">

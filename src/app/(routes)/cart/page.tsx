@@ -285,7 +285,7 @@ const CartPage = () => {
                   </button>
                 </div>
 
-                <AddMoreOffer onContinueShopping={handleContinueShopping} />
+                <AddMoreOffer onContinueShopping={() => router.push("/shop")} />
               </div>
 
               <div className="lg:col-span-5">

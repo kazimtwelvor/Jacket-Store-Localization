@@ -20,8 +20,8 @@ const ToastProvider = () => {
         error: {
           style: {
             background: "#fff",
-            color: "#e53e3e",
-            border: "1px solid #fed7d7",
+            color: "#000000",
+            border: "1px solid #e2e8f0",
           },
         },
       }}

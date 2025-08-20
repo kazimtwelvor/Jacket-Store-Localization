@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronDown, Check } from "lucide-react"
+import { ChevronDown, Check, AlertCircle } from "lucide-react"
 import { cn } from "../../lib/utils"
 import Button from "../../ui/button"
 import type { Size } from "@/types"
@@ -38,8 +38,7 @@ const SizeSelection = ({
         <div className="relative">
           <div
             className={cn(
-              "w-full border-2 bg-black/[0.04] cursor-pointer transition-colors",
-              errorMessage ? "border-red-500" : "border-black/[0.15]"
+              "w-full border-2 bg-black/[0.04] cursor-pointer transition-colors border-black/[0.15]"
             )}
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
@@ -119,7 +118,10 @@ const SizeSelection = ({
       </div>
 
       {errorMessage && (
-        <p className="mt-2 text-xs text-red-600">{errorMessage}</p>
+        <div className="mt-2 flex items-center gap-2 text-xs text-red-600" role="alert" aria-live="polite">
+          <AlertCircle size={14} className="text-red-600" aria-hidden="true" />
+          <span>{errorMessage}</span>
+        </div>
       )}
 
       {!isMobile && (

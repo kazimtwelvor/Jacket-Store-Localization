@@ -65,6 +65,9 @@ const ShopCategories: React.FC<ShopCategoriesProps> = ({ keywordCategories }) =>
   }));
 
   const handleCategoryClick = (slug: string) => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('route-loading:start'))
+    }
     router.push(`/category/${slug}`)
   }
 

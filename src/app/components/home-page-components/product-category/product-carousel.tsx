@@ -347,6 +347,9 @@ export default function ProductCarousel({
                               isTransitioning.current = true;
                               setActiveIndex(i);
                             } else {
+                              if (typeof window !== 'undefined') {
+                                window.dispatchEvent(new CustomEvent('route-loading:start'));
+                              }
                               router.push(`/product/${product.slug}`);
                             }
                           }}
@@ -408,7 +411,8 @@ export default function ProductCarousel({
                     }
                   }}
                   onMouseDown={() => setIsScrolling(true)}
-                  onMouseUp={() => setTimeout(() => setIsScrolling(false), 100)}
+                  onMouseUp={() => setIsScrolling(false)}
+                  onMouseLeave={() => setIsScrolling(false)}
                 >
                   {displayItems.map((product, i) => {
                     const isCenter = i === activeIndex;
@@ -437,6 +441,9 @@ export default function ProductCarousel({
                         }}
                         onClick={() => {
                           if (isScrolling) return;
+                          if (typeof window !== 'undefined') {
+                            window.dispatchEvent(new CustomEvent('route-loading:start'));
+                          }
                           router.push(`/product/${product.slug}`);
                         }}
                       >

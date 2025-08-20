@@ -56,6 +56,7 @@ const ProductCard = ({ data, onMouseEnter }: ProductCardProps) => {
       const urlParams = new URLSearchParams(window.location.search);
       const currentPage = parseInt(urlParams.get('page') || '1', 10);
       setShopPage(currentPage);
+      window.dispatchEvent(new CustomEvent('route-loading:start'))
     }
     router.push(`/product/${data.slug || data.id}`)
   }

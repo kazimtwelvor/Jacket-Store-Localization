@@ -32,9 +32,7 @@ type ShopPageProps = {
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const resolvedSearchParams = await searchParams;
   const gendersParam = resolvedSearchParams.genders;
-  if (!gendersParam || (gendersParam !== "men" && gendersParam !== "women")) {
-    notFound();
-  }
+  const gendersFilter = gendersParam === "men" || gendersParam === "women" ? gendersParam : undefined;
   const page = Number.parseInt(resolvedSearchParams.page || "1");
   const limit = Number.parseInt(resolvedSearchParams.limit || "28");
 
@@ -46,7 +44,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       colorId: resolvedSearchParams.colorId,
       sizeId: resolvedSearchParams.sizeId,
       search: resolvedSearchParams.search,
-      genders: resolvedSearchParams.genders,
+      genders: gendersFilter,
     }),
     getCategories(),
     getColors(),
