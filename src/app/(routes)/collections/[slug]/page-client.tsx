@@ -571,7 +571,17 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
     if (parsedCategoryContent?.otherCategories && parsedCategoryContent.otherCategories.length > 0) {
         categories = parsedCategoryContent.otherCategories.map((cat: any) => {
             const foundCategory = allCategories.find(c => c.id === cat.categoryId);
-            const categorySlug = foundCategory?.slug || cat.categoryName.toLowerCase().replace(/\s+/g, '-');
+            // First try to find a matching keyword category by name or ID
+            const matchingKeywordCategory = keywordCategories.find(kc => 
+                kc.id === cat.categoryId || 
+                kc.name.toLowerCase() === cat.categoryName.toLowerCase()
+            );
+            
+            // Prioritize keyword category slug, then regular category slug, then generate one
+            const categorySlug = matchingKeywordCategory?.slug || 
+                                foundCategory?.slug || 
+                                cat.categoryName.toLowerCase().replace(/\s+/g, '-');
+            
             let iconUrl = "";
             iconUrl = getLocalImageUrl(cat.imageUrl);
             if (iconUrl === "/placeholder.svg") {
@@ -588,7 +598,9 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
             };
         });
     } else {
-        categories = allCategories.slice(0, 5).map(cat => {
+        // When no otherCategories, prioritize keyword categories over regular categories
+        const categoriesToUse = keywordCategories.length > 0 ? keywordCategories.slice(0, 5) : allCategories.slice(0, 5);
+        categories = categoriesToUse.map(cat => {
             const categorySlug = cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-');
             const iconUrl = categoryIcons[categorySlug] || categoryIcons[cat.name.toLowerCase()] || "/placeholder.svg";
             return {

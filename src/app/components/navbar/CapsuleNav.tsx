@@ -1,7 +1,9 @@
+
 "use client";
 import { useState, useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import Button from "../../ui/button";
 import { cn } from "../../lib/utils";
 
@@ -20,7 +22,7 @@ export function CapsuleNav() {
   const [isVisible, setIsVisible] = useState(true);
   const [isFilterBarSticky, setIsFilterBarSticky] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const router = useRouter();
+
   const pathname = usePathname();
   const [emblaRef] = useEmblaCarousel({
     align: "start",
@@ -126,10 +128,8 @@ export function CapsuleNav() {
     };
   }, [isProductPage, isCategoryPage, isShopPage, isCollectionsPage]);
 
-  const handleItemClick = (id: number, category: string) => {
+  const handleItemClick = (id: number) => {
     setActiveItem(id);
-        router.push(`/collections/${category}`);
-
   };
 
   if (!isMounted) {
@@ -140,17 +140,19 @@ export function CapsuleNav() {
             <div className="flex touch-pan-y">
               {items.map((item) => (
                 <div key={item.id} className="relative mr-1">
-                  <Button
-                    variant={item.id === activeItem ? "default" : "ghost"}
-                    className={cn(
-                      "rounded-[13px] px-4 md:px-6 whitespace-nowrap text-sm md:text-base",
-                      item.id === activeItem &&
-                        "bg-[#2b2b2b] text-white hover:bg-[#2b2b2b]/90"
-                    )}
-                    onClick={() => handleItemClick(item.id, item.category)}
-                  >
-                    {item.label}
-                  </Button>
+                  <Link href={`/collections/${item.category}`}>
+                    <Button
+                      variant={item.id === activeItem ? "default" : "ghost"}
+                      className={cn(
+                        "rounded-[13px] px-4 md:px-6 whitespace-nowrap text-sm md:text-base",
+                        item.id === activeItem &&
+                          "bg-[#2b2b2b] text-white hover:bg-[#2b2b2b]/90"
+                      )}
+                      onClick={() => handleItemClick(item.id)}
+                    >
+                      {item.label}
+                    </Button>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -184,17 +186,19 @@ export function CapsuleNav() {
           <div className="flex touch-pan-y">
             {items.map((item) => (
               <div key={item.id} className="relative mr-1">
-                <Button
-                  variant={item.id === activeItem ? "default" : "ghost"}
-                  className={cn(
-                    "rounded-[13px] px-4 md:px-6 whitespace-nowrap text-sm md:text-base",
-                    item.id === activeItem &&
-                      "bg-[#2b2b2b] text-white hover:bg-[#2b2b2b]/90"
-                  )}
-                  onClick={() => handleItemClick(item.id, item.category)}
-                >
-                  {item.label}
-                </Button>
+                <Link href={`/collections/${item.category}`}>
+                  <Button
+                    variant={item.id === activeItem ? "default" : "ghost"}
+                    className={cn(
+                      "rounded-[13px] px-4 md:px-6 whitespace-nowrap text-sm md:text-base",
+                      item.id === activeItem &&
+                        "bg-[#2b2b2b] text-white hover:bg-[#2b2b2b]/90"
+                    )}
+                    onClick={() => handleItemClick(item.id)}
+                  >
+                    {item.label}
+                  </Button>
+                </Link>
               </div>
             ))}
           </div>
