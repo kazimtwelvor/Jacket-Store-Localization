@@ -57,34 +57,47 @@ export function CapsuleNav() {
       const currentScrollY = window.scrollY;
       const isMobileView = window.innerWidth < 1024;
 
-      // Specific logic for product pages on mobile
-      if (isProductPage && isMobileView) {
-        const productImage = document.querySelector(".product-gallery");
-        const navbar = document.querySelector("header");
-        if (productImage && navbar) {
-          const imageRect = productImage.getBoundingClientRect();
-          const navbarHeight = navbar.getBoundingClientRect().height;
+      // Mobile-specific behavior: Visible only at the very top; hidden otherwise
+      if (isMobileView) {
+        const TOP_THRESHOLD = 2; // allow tiny scroll jitter/bounce
+        setIsVisible(currentScrollY <= TOP_THRESHOLD);
+      } else {
+        // Desktop behavior: Keep existing logic
+        if (isProductPage) {
+          const productImage = document.querySelector(".product-gallery");
+          const navbar = document.querySelector("header");
+          if (productImage && navbar) {
+            const imageRect = productImage.getBoundingClientRect();
+            const navbarHeight = navbar.getBoundingClientRect().height;
 
-          // Show nav only when scrolled past the product image
-          setIsVisible(imageRect.bottom <= navbarHeight);
-        }
-      } else if ((isCategoryPage || isShopPage || isCollectionsPage) && isMobileView) {
-        const lowerContentSection = document.getElementById(
-          "lower-content-section"
-        ) || document.getElementById("lower-content-div");
-        const navbar = document.querySelector("header");
-        const navBarHeight = navbar?.getBoundingClientRect().height || 64;
+            // Show nav only when scrolled past the product image
+            setIsVisible(imageRect.bottom <= navbarHeight);
+          }
+        } else if ((isCategoryPage || isShopPage || isCollectionsPage)) {
+          const lowerContentSection = document.getElementById(
+            "lower-content-section"
+          ) || document.getElementById("lower-content-div");
+          const navbar = document.querySelector("header");
+          const navBarHeight = navbar?.getBoundingClientRect().height || 64;
 
-        if (lowerContentSection) {
-          const sectionTop = lowerContentSection.offsetTop;
-          const inLowerSection = currentScrollY >= sectionTop - navBarHeight;
+          if (lowerContentSection) {
+            const sectionTop = lowerContentSection.offsetTop;
+            const inLowerSection = currentScrollY >= sectionTop - navBarHeight;
 
-          setIsExpanded(inLowerSection);
+            setIsExpanded(inLowerSection);
 
-          if (inLowerSection) {
-            setIsVisible(true); // Always visible when scrolled to lower sections
+            if (inLowerSection) {
+              setIsVisible(true); // Always visible when scrolled to lower sections
+            } else {
+              // Original logic for upper part of the page
+              if (currentScrollY > 100 && currentScrollY > lastScrollY.current) {
+                setIsVisible(false); // Scrolling down
+              } else {
+                setIsVisible(true); // Scrolling up or at the top
+              }
+            }
           } else {
-            // Original logic for upper part of the page
+            // Fallback to original logic if section not found
             if (currentScrollY > 100 && currentScrollY > lastScrollY.current) {
               setIsVisible(false); // Scrolling down
             } else {
@@ -92,20 +105,13 @@ export function CapsuleNav() {
             }
           }
         } else {
-          // Fallback to original logic if section not found
+          // Generic logic for all other pages (including desktop)
+          // Hide on scroll down, show on scroll up
           if (currentScrollY > 100 && currentScrollY > lastScrollY.current) {
             setIsVisible(false); // Scrolling down
           } else {
             setIsVisible(true); // Scrolling up or at the top
           }
-        }
-      } else {
-        // Generic logic for all other pages (including desktop)
-        // Hide on scroll down, show on scroll up
-        if (currentScrollY > 100 && currentScrollY > lastScrollY.current) {
-          setIsVisible(false); // Scrolling down
-        } else {
-          setIsVisible(true); // Scrolling up or at the top
         }
       }
 
@@ -175,7 +181,10 @@ export function CapsuleNav() {
         (isCategoryPage || isShopPage || isCollectionsPage) && isMobileView && isExpanded
           ? "w-[95%]"
           : "w-[70%]",
-        isProductPage && isMobileView
+        // Mobile: Always sticky at top, Desktop: Keep existing positioning
+        isMobileView
+          ? "fixed top-16 left-0 right-0 z-40 px-4"
+          : isProductPage && isMobileView
           ? "fixed top-[60px] left-0 right-0 z-40 px-4"
           : "relative",
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"

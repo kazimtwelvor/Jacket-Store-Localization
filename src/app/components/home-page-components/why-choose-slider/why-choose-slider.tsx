@@ -108,13 +108,13 @@ export default function WhyChooseSlider() {
             <div className="relative w-full z-20">
                 <button
                     onClick={prevSlide}
-                    className="absolute left-5 md:top-1/2 top-[68%] -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2 transition-all duration-300 group z-30"
+                    className="absolute left-5 md:top-1/2 top-[68%] -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-none w-9 h-9 grid place-items-center transition-all duration-300 group z-30"
                 >
                     <ChevronLeft className="w-5 h-5 text-white group-hover:text-[#2b2b2b]" />
                 </button>
                 <button
                     onClick={nextSlide}
-                    className="absolute right-6 md:top-1/2 top-[68%] -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2 transition-all duration-300 group z-30"
+                    className="absolute right-6 md:top-1/2 top-[68%] -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-none w-9 h-9 grid place-items-center transition-all duration-300 group z-30"
                 >
                     <ChevronRight className="w-5 h-5 text-white group-hover:text-[#2b2b2b]" />
                 </button>
