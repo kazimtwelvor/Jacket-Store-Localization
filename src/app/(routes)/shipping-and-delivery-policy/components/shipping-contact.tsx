@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -16,10 +17,10 @@ export default function ShippingContact() {
   const handleContactAction = (type: string) => {
     switch (type) {
       case "email":
-        router.push("mailto:support@fashionstore.com")
+        window.location.href = "mailto:support@fashionstore.com"
         break
       case "phone":
-        router.push("tel:+18001234567")
+        window.location.href = "tel:+18001234567"
         break
       case "chat":
         alert("Live chat would open here. This is a placeholder.")
@@ -60,25 +61,25 @@ export default function ShippingContact() {
     return (
       <section className="py-12">
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-black-900 mb-4">Need Help?</h2>
-          <p className="text-lg text-black-600 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Need Help?</h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Our customer service team is here to assist you with any shipping or delivery questions.
           </p>
         </div>
 
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-          <div className="grid md:grid-cols-3">
+          <div className="grid md:grid-cols-3 divide-x divide-gray-100">
             {contactOptions.map((item, index) => (
               <div
                 key={index}
-                className="p-8 bg-white border border-black-100 hover:border-black-300 transition-colors duration-300"
+                className="p-8 bg-white hover:border-gray-300 transition-colors duration-300"
               >
                 <div className="flex flex-col items-center text-center">
-                  <div className="w-14 h-14 rounded-full bg-[#eaeaea] flex items-center justify-center mb-4"></div>
-                  <h3 className="text-xl font-bold text-black-900 mb-2">{item.title}</h3>
-                  <p className="text-black-600 mb-4">{item.description}</p>
-                  <p className="font-medium text-black-800 mb-6">{item.contact}</p>
-                  <button className="px-6 py-2 bg-[#2b2b2b] text-white rounded-md hover:bg-[#eaeaea] transition-colors duration-200">
+                  <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4"></div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-gray-600 mb-4">{item.description}</p>
+                  <p className="font-medium text-gray-800 mb-6">{item.contact}</p>
+                  <button className="px-6 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-200 transition-colors duration-200">
                     {item.action}
                   </button>
                 </div>
@@ -99,8 +100,8 @@ export default function ShippingContact() {
         transition={{ duration: 0.6 }}
         className="text-center mb-8"
       >
-        <h2 className="text-3xl md:text-4xl font-bold text-black-900 mb-4">Need Help?</h2>
-        <p className="text-lg text-black-600 max-w-2xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Need Help?</h2>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           Our customer service team is here to assist you with any shipping or delivery questions.
         </p>
       </motion.div>
@@ -110,24 +111,28 @@ export default function ShippingContact() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.2, duration: 0.6 }}
-        className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden"
+        className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200"
       >
-        <div className="grid md:grid-cols-3">
+        <div className="grid md:grid-cols-3 divide-x divide-gray-200">
           {contactOptions.map((item, index) => (
             <div
               key={index}
-              className="p-8 bg-white border border-black-100 hover:border-black-300 transition-colors duration-300"
+              className="p-8 bg-white hover:bg-gray-50 transition-colors duration-300 relative"
             >
+              {/* Vertical divider between columns using Tailwind's divide-x */}
+              {index < contactOptions.length - 1 && (
+                <div className="absolute right-0 top-0 bottom-0 w-px bg-gray-200"></div>
+              )}
               <div className="flex flex-col items-center text-center">
-                <div className="w-14 h-14 rounded-full bg-[#eaeaea] flex items-center justify-center mb-4">
-                  <item.icon className="w-7 h-7 text-black-600" />
+                <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                  <item.icon className="w-7 h-7 text-gray-600" />
                 </div>
-                <h3 className="text-xl font-bold text-black-900 mb-2">{item.title}</h3>
-                <p className="text-black-600 mb-4">{item.description}</p>
-                <p className="font-medium text-black-800 mb-6">{item.contact}</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
+                <p className="text-gray-600 mb-4">{item.description}</p>
+                <p className="font-medium text-gray-800 mb-6">{item.contact}</p>
                 <button
                   onClick={() => handleContactAction(item.type)}
-                  className="px-6 py-2 bg-[#EAEAEA] text-black rounded-md hover:bg-[#2B2B2B] transition-colors duration-200"
+                  className="px-6 py-2 bg-gray-100 text-gray-900 rounded-md hover:bg-gray-800 hover:text-white transition-colors duration-200"
                 >
                   {item.action}
                 </button>

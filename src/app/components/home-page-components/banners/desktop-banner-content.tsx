@@ -15,15 +15,20 @@ export const DesktopBannerContent = () => {
   const router = useRouter();
 
   const handleShopClick = (gender: string) => {
-    if (gender === "men" || gender === "women") {
-      const url = `/shop?genders=${gender}`;
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('route-loading:start'));
-      }
-      router.push(url);
+    let url: string;
+    if (gender === "men") {
+      url = "/collections/leather-bomber-jacket-mens";
+    } else if (gender === "women") {
+      url = "/collections/womens-leather-bomber-jackets";
     } else {
       notFound();
+      return;
     }
+    
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('route-loading:start'));
+    }
+    router.push(url);
   };
 
   return (
