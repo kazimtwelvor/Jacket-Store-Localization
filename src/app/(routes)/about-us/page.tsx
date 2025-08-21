@@ -70,7 +70,7 @@ export default function AboutUsPage() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="border-black text-black hover:bg-[#1B1B1B]/10 rounded-none"
+                  className="border-black text-white hover:bg-[#1B1B1B]/10 rounded-none"
                   asChild
                 >
                   <Link href="/blogs">Learn More</Link>
@@ -339,7 +339,7 @@ export default function AboutUsPage() {
             <Button
               variant="outline"
               size="lg"
-              className="border-[#2b2b2b] text-[#2b2b2b] hover:bg-[#EAEAEA] hover:bg-[#EAEAEA]/10 rounded-none"
+              className="border-[#2b2b2b] hover:bg-[#EAEAEA] hover:bg-[#EAEAEA]/10 rounded-none"
               asChild
             >
               <Link href="/contact-us">Get in Touch</Link>

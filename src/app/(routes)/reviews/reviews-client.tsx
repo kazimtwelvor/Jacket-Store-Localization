@@ -253,7 +253,7 @@ export default function ReviewsClient() {
             {totalPages > 1 && (
               <div className="flex justify-center items-center mt-16 gap-2">
                 <Button
-                  variant="outline"
+                  variant="black"
                   size="icon"
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
@@ -265,7 +265,7 @@ export default function ReviewsClient() {
                 {Array.from({ length: totalPages }).map((_, index) => (
                   <Button
                     key={index}
-                    variant={currentPage === index + 1 ? "default" : "outline"}
+                    variant={currentPage === index + 1 ? "default" : "black"}
                     size="icon"
                     onClick={() => setCurrentPage(index + 1)}
                     className={`h-10 w-10 rounded-full ${
@@ -279,7 +279,7 @@ export default function ReviewsClient() {
                 ))}
 
                 <Button
-                  variant="outline"
+                  variant="black"
                   size="icon"
                   onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}

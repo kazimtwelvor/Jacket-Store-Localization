@@ -102,7 +102,7 @@ export default function ReviewsTestimonial({
             onClick={onPrev}
             className="h-10 w-10 rounded-full border-black-200 hover:border-black-500 hover:bg-[#eaeaea] transition-colors duration-200"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4 text-white" />
           </Button>
 
           <div className="flex gap-2">
@@ -122,7 +122,7 @@ export default function ReviewsTestimonial({
             onClick={onNext}
             className="h-10 w-10 rounded-full border-black-200 hover:border-black-500 hover:bg-[#eaeaea] transition-colors duration-200"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4 text-white" />
           </Button>
         </div>
       )}

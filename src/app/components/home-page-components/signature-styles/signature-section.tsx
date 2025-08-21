@@ -73,7 +73,7 @@ export default function SignatureStylesSection() {
 
       <div className="flex w-full -mx-0">
         <div className="flex-1">
-          <Link href="/shop?genders=men" className="block">
+          <Link href="/collections/leather-bomber-jacket-mens" className="block">
             <Card className="group hover:shadow-xl border-0 shadow-none overflow-hidden relative h-[360px] md:h-[500px] lg:h-[700px] rounded-none m-0">
               <div className="relative h-full bg-[#151B1B] overflow-hidden rounded-none">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
@@ -110,7 +110,7 @@ export default function SignatureStylesSection() {
                       <ShopButton
                         as="div"
                         variant="bordered"
-                        href="/shop?genders=men"
+                        href="/collections/leather-bomber-jacket-mens"
                         size="sm"
                         showArrow={true}
                         className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}
@@ -126,7 +126,7 @@ export default function SignatureStylesSection() {
         </div>
 
         <div className="flex-1">
-          <Link href="/shop?genders=women" className="block">
+          <Link href="/collections/womens-leather-bomber-jackets" className="block">
             <Card className="group hover:shadow-xl border-0 shadow-none overflow-hidden relative h-[360px] md:h-[500px] lg:h-[700px] rounded-none m-0">
               <div className="relative h-full bg-[#151B1B] overflow-hidden rounded-none">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
@@ -166,7 +166,7 @@ export default function SignatureStylesSection() {
                       <ShopButton
                         as="div"
                         variant="bordered"
-                        href="/shop?genders=women"
+                        href="/collections/womens-leather-bomber-jackets"
                         size="sm"
                         showArrow={true}
                         className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}
