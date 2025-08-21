@@ -141,7 +141,7 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('categories')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBlack.className}`}>CATEGORIES</h3>
+                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>CATEGORIES</h3>
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'categories' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'categories' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
@@ -179,17 +179,17 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('company')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBlack.className}`}>COMPANY</h3>
+                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>COMPANY</h3>
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'company' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'company' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/blogs" className="text-black font-semibold hover:font-bold transition-all">
+                                    <Link href="/blogs" className="text-black hover:font-bold transition-all">
                                         Blogs
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/about-us" className="text-black font-semibold hover:font-bold transition-all">
+                                    <Link href="/about-us" className="text-black hover:font-bold transition-all">
                                         About Us
                                     </Link>
                                 </li>
@@ -200,27 +200,27 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('support')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBlack.className}`}>SUPPORT</h3>
+                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>SUPPORT</h3>
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'support' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'support' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/faqs" className="text-black  font-semibold hover:font-bold transition-all">
+                                    <Link href="/faqs" className="text-black hover:font-bold transition-all">
                                         FAQs
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/reviews" className="text-black font-semibold hover:font-bold transition-all">
+                                    <Link href="/reviews" className="text-black hover:font-bold transition-all">
                                         Reviews
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/contact-us" className="text-black font-semibold hover:font-bold transition-all">
+                                    <Link href="/contact-us" className="text-black hover:font-bold transition-all">
                                         Contact Us
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/size-guide" className="text-black font-semibold hover:font-bold transition-all">
+                                    <Link href="/size-guide" className="text-black hover:font-bold transition-all">
                                         Size Guide
                                     </Link>
                                 </li>
@@ -233,23 +233,23 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('help')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBlack.className}`}>HELP</h3>
+                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>HELP</h3>
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'help' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'help' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/privacy-policy" className="text-black font-semibold hover:font-bold transition-all">
+                                    <Link href="/privacy-policy" className="text-black hover:font-bold transition-all">
                                         Privacy Policy
                                     </Link>
                                 </li>
 
                                 <li>
-                                    <Link href="/terms-conditions" className="text-black font-semibold hover:font-bold transition-all">
+                                    <Link href="/terms-conditions" className="text-black hover:font-bold transition-all">
                                         Terms & Conditions
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/shipping-and-delivery-policy" className="text-black font-semibold  hover:font-bold transition-all">
+                                    <Link href="/shipping-and-delivery-policy" className="text-black hover:font-bold transition-all">
                                         Shipping & Delivery
                                     </Link>
                                 </li>
