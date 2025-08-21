@@ -160,7 +160,7 @@ export default function ProductCategory({
   };
 
   return (
-    <section className={`w-full ${bg} flex justify-center overflow-hidden font-bold`}>
+    <section className={`w-full ${bg} flex justify-center overflow-hidden`}>
       <div className="w-full max-w-[1896px] py-0 m-0 md:pl-8 lg:pl-[57px]">
         <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 -ml-4 ml-3 md:-ml-4">
           <div className="flex gap-4">

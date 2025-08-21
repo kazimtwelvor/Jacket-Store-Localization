@@ -25,61 +25,69 @@ type ShopPageProps = {
     colorId?: string;
     sizeId?: string;
     search?: string;
-    genders?: string;
+    genders?: string; // comma-separated string (men,women,unisex)
+    materials?: string;
+    styles?: string;
+    colors?: string;
+    sizes?: string;
+    sort?: string;
   }>;
 };
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const resolvedSearchParams = await searchParams;
-  const gendersParam = resolvedSearchParams.genders;
-  const gendersFilter = gendersParam === "men" || gendersParam === "women" ? gendersParam : undefined;
   const page = Number.parseInt(resolvedSearchParams.page || "1");
   const limit = Number.parseInt(resolvedSearchParams.limit || "28");
 
-  const [productsData, categories, colors, sizes, keywordCategories] = await Promise.allSettled([
-    getProducts({
-      page,
-      limit,
-      categoryId: resolvedSearchParams.categoryId,
-      colorId: resolvedSearchParams.colorId,
-      sizeId: resolvedSearchParams.sizeId,
-      search: resolvedSearchParams.search,
-      genders: gendersFilter,
-    }),
-    getCategories(),
-    getColors(),
-    getSizes(),
-    getKeywordCategories(),
-  ]);
+  const [productsData, categories, colors, sizes, keywordCategories] =
+    await Promise.allSettled([
+      getProducts({
+        page,
+        limit,
+        categoryId: resolvedSearchParams.categoryId,
+        colorId: resolvedSearchParams.colorId,
+        sizeId: resolvedSearchParams.sizeId,
+        search: resolvedSearchParams.search,
+        genders: resolvedSearchParams.genders,
+        materials: resolvedSearchParams.materials,
+        styles: resolvedSearchParams.styles,
+        colors: resolvedSearchParams.colors,
+        sizes: resolvedSearchParams.sizes,
+        sort: resolvedSearchParams.sort,
+      }),
+      getCategories(),
+      getColors(),
+      getSizes(),
+      getKeywordCategories(),
+    ]);
 
-  const finalProductsData = productsData.status === 'fulfilled' ? productsData.value : {
-    products: [],
-    pagination: {
-      currentPage: page,
-      totalPages: 0,
-      totalProducts: 0,
-      productsPerPage: limit,
-      hasNextPage: false,
-      hasPreviousPage: false,
-    },
-  };
+  const finalProductsData =
+    productsData.status === "fulfilled"
+      ? productsData.value
+      : {
+          products: [],
+          pagination: {
+            currentPage: page,
+            totalPages: 0,
+            totalProducts: 0,
+            productsPerPage: limit,
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+        };
 
-  const finalCategories = categories.status === 'fulfilled' ? categories.value : [];
-  const finalColors = colors.status === 'fulfilled' ? colors.value : [];
-  const finalSizes = sizes.status === 'fulfilled' ? sizes.value : [];
-  const finalKeywordCategories = keywordCategories.status === 'fulfilled' ? keywordCategories.value : [];
+  const finalCategories =
+    categories.status === "fulfilled" ? categories.value : [];
+  const finalColors = colors.status === "fulfilled" ? colors.value : [];
+  const finalSizes = sizes.status === "fulfilled" ? sizes.value : [];
+  const finalKeywordCategories =
+    keywordCategories.status === "fulfilled" ? keywordCategories.value : [];
 
-
-  return (  
+  return (
     <div className="bg-white min-h-screen flex flex-col">
       <main className="flex-1">
         <Suspense
-          fallback={
-            <div className="flex justify-center items-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
-              <span className="ml-3 text-gray-600">Loading products...</span>
-            </div>
-          }
+          fallback={<div className="text-center py-20 text-gray-600"></div>}
         >
           <ProductsPageClient
             initialProductsData={finalProductsData}

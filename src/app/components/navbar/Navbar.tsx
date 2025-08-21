@@ -286,6 +286,20 @@ const Navbar = () => {
     setSearchQuery("");
   };
 
+  const toSlug = (text: string) =>
+    text
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+  const navigateToCategory = (category: string, _gender?: "men" | "women") => {
+    const slug = toSlug(category);
+    router.push(`/collections/${slug}`);
+    setIsSearchOpen(false);
+    setSelectedCategory(null);
+    setSearchQuery("");
+  };
+
   // Removed heavy custom event dispatchers
 
   return (
@@ -963,18 +977,16 @@ const Navbar = () => {
                                 <div className="space-y-2">
                                   {searchResults.categories.map(
                                     (category: string, index: number) => (
-                                      <div
+                                      <button
                                         key={index}
-                                        className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                                        onClick={() =>
-                                          handleCategorySelect(category)
-                                        }
+                                        className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                                        onClick={() => navigateToCategory(category)}
                                       >
                                         <span className="text-white font-medium">
                                           {category}
                                         </span>
                                         <ChevronRight className="h-4 w-4 text-white" />
-                                      </div>
+                                      </button>
                                     )
                                   )}
                                 </div>
@@ -1002,125 +1014,105 @@ const Navbar = () => {
                             SUGGESTIONS
                           </h2>
                           <div className="space-y-2">
-                            <div
-                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() =>
-                                handleCategorySelect("Leather Jackets")
-                              }
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Leather Jackets")}
                             >
                               <span className="text-white font-medium">
                                 Leather Jackets
                               </span>
                               <ChevronRight className="h-4 w-4 text-white" />
-                            </div>
-                            <div
-                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() =>
-                                handleCategorySelect("Women's Jackets")
-                              }
+                            </button>
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Women's Jackets")}
                             >
                               <span className="text-white font-medium">
                                 Women's Jackets
                               </span>
                               <ChevronRight className="h-4 w-4 text-white" />
-                            </div>
-                            <div
-                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() =>
-                                handleCategorySelect("Men's Jackets")
-                              }
+                            </button>
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Men's Jackets")}
                             >
                               <span className="text-white font-medium">
                                 Men's Jackets
                               </span>
                               <ChevronRight className="h-4 w-4 text-white" />
-                            </div>
-                            <div
-                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() =>
-                                handleCategorySelect("Biker Jackets")
-                              }
+                            </button>
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Biker Jackets")}
                             >
                               <span className="text-white font-medium">
                                 Biker Jackets
                               </span>
                               <ChevronRight className="h-4 w-4 text-white" />
-                            </div>
-                            <div
-                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() =>
-                                handleCategorySelect("Bomber Jackets")
-                              }
+                            </button>
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Bomber Jackets")}
                             >
                               <span className="text-white font-medium">
                                 Bomber Jackets
                               </span>
                               <ChevronRight className="h-4 w-4 text-white" />
-                            </div>
-                            <div
-                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() =>
-                                handleCategorySelect("Moto Jackets")
-                              }
+                            </button>
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Moto Jackets")}
                             >
                               <span className="text-white font-medium">
                                 Moto Jackets
                               </span>
                               <ChevronRight className="h-4 w-4 text-white" />
-                            </div>
-                            <div
-                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() =>
-                                handleCategorySelect("Racing Jackets")
-                              }
+                            </button>
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Racing Jackets")}
                             >
                               <span className="text-white font-medium">
                                 Racing Jackets
                               </span>
                               <ChevronRight className="h-4 w-4 text-white" />
-                            </div>
-                            <div
-                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() =>
-                                handleCategorySelect("Trench Coats")
-                              }
+                            </button>
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Trench Coats")}
                             >
                               <span className="text-white font-medium">
                                 Trench Coats
                               </span>
                               <ChevronRight className="h-4 w-4 text-white" />
-                            </div>
-                            <div
-                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
+                            </button>
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
                               onClick={() => handleCategorySelect("Wool Coats")}
                             >
                               <span className="text-white font-medium">
                                 Wool Coats
                               </span>
                               <ChevronRight className="h-4 w-4 text-white" />
-                            </div>
-                            <div
-                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() =>
-                                handleCategorySelect("Varsity Jackets")
-                              }
+                            </button>
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Varsity Jackets")}
                             >
                               <span className="text-white font-medium">
                                 Varsity Jackets
                               </span>
                               <ChevronRight className="h-4 w-4 text-white" />
-                            </div>
-                            <div
-                              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                              onClick={() =>
-                                handleCategorySelect("Denim Jackets")
-                              }
+                            </button>
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => handleCategorySelect("Denim Jackets")}
                             >
                               <span className="text-white font-medium">
                                 Denim Jackets
                               </span>
                               <ChevronRight className="h-4 w-4 text-white" />
-                            </div>
+                            </button>
                             <div
                               className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
                               onClick={() => {
@@ -1152,11 +1144,14 @@ const Navbar = () => {
                         <div className="mb-6">
                           <h3 className="text-white font-semibold mb-3">MEN</h3>
                           <div className="space-y-2">
-                            <div className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors bg-gray-800">
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors bg-gray-800"
+                              onClick={() => navigateToCategory(selectedCategory!, "men")}
+                            >
                               <span className="text-white font-medium">
                                 {">"} {selectedCategory}
                               </span>
-                            </div>
+                            </button>
                           </div>
                         </div>
 
@@ -1166,11 +1161,14 @@ const Navbar = () => {
                             WOMEN
                           </h3>
                           <div className="space-y-2">
-                            <div className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors">
+                            <button
+                              className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                              onClick={() => navigateToCategory(selectedCategory!, "women")}
+                            >
                               <span className="text-white font-medium">
                                 {">"} {selectedCategory}
                               </span>
-                            </div>
+                            </button>
                           </div>
                         </div>
 
@@ -1190,19 +1188,14 @@ const Navbar = () => {
 
                         {/* Search All Categories Link */}
                         <div className="pt-4 border-t border-gray-700">
-                          <div
-                            className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
-                            onClick={() => {
-                              router.push("/shop");
-                              setIsSearchOpen(false);
-                              setSelectedCategory(null);
-                              setSearchQuery("");
-                            }}
+                          <button
+                            className="w-full text-left flex items-center justify-between py-2 hover:bg-gray-800 px-3 rounded transition-colors"
+                            onClick={() => navigateToCategory(selectedCategory!)}
                           >
                             <span className="text-white font-medium">
                               {">"} SEARCH IN ALL CATEGORIES
                             </span>
-                          </div>
+                          </button>
                         </div>
                       </div>
 
@@ -1223,12 +1216,8 @@ const Navbar = () => {
                                 key={product.id}
                                 className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
                                 onClick={() => {
-                                  router.push(
-                                    `/shop?category=${product.category
-                                    }&product=${product.name
-                                      .toLowerCase()
-                                      .replace(/\s+/g, "-")}`
-                                  );
+                                  const categorySlug = toSlug(product.category || "");
+                                  router.push(`/collections/${categorySlug}`);
                                   setIsSearchOpen(false);
                                   setSelectedCategory(null);
                                   setSearchQuery("");
@@ -1280,7 +1269,7 @@ const Navbar = () => {
                           <div
                             className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
                             onClick={() => {
-                              router.push("/shop");
+                              router.push("/collections");
                               setIsSearchOpen(false);
                               setSelectedCategory(null);
                               setSearchQuery("");

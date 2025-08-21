@@ -1,4 +1,3 @@
-
 "use client";
 import { useState, useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
@@ -7,18 +6,20 @@ import Link from "next/link";
 import Button from "../../ui/button";
 import { cn } from "../../lib/utils";
 
-
 const items = [
-  { id: 1, label: "Leather", isActive: true, category: "leather-bomber-jacket-mens" },
-  { id: 2, label: "Puffer", isActive: false, category: "mens-puffer-jackets" },
-  { id: 3, label: "Bomber", isActive: false, category: "leather-bomber-jacket-mens" },
-  { id: 4, label: "Varsity", isActive: false, category: "mens-varsity-jackets" },
-  { id: 5, label: "Lettermen", isActive: false, category: "lettermen-jackets" },
+  { id: 0, label: "Home", isActive: true, href: "/" },
+  // Use query keys/values that the shop page understands
+  { id: 1, label: "Leather", isActive: false, category: "materials=Leather" },
+  { id: 2, label: "Puffer", isActive: false, category: "styles=Puffer" },
+  { id: 3, label: "Bomber", isActive: false, category: "styles=Bomber" },
+  { id: 4, label: "Varsity", isActive: false, category: "styles=Varsity" },
+  // "Lettermen" is effectively a varsity style in our filters
+  { id: 5, label: "Lettermen", isActive: false, category: "styles=Varsity" },
 ];
 
 export function CapsuleNav() {
   const [isMounted, setIsMounted] = useState(false);
-  const [activeItem, setActiveItem] = useState(1);
+  const [activeItem, setActiveItem] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const [isFilterBarSticky, setIsFilterBarSticky] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -36,8 +37,10 @@ export function CapsuleNav() {
   const isShopPage = pathname === "/shop";
   const lastScrollY = useRef(0);
 
-  const isMobileView = typeof window !== "undefined" ? window.innerWidth < 1024 : false;
-  const shouldHideOnShopPage = (isShopPage || isCollectionsPage) && isMobileView;
+  const isMobileView =
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false;
+  const shouldHideOnShopPage =
+    (isShopPage || isCollectionsPage) && isMobileView;
 
   useEffect(() => {
     setIsMounted(true);
@@ -73,10 +76,10 @@ export function CapsuleNav() {
             // Show nav only when scrolled past the product image
             setIsVisible(imageRect.bottom <= navbarHeight);
           }
-        } else if ((isCategoryPage || isShopPage || isCollectionsPage)) {
-          const lowerContentSection = document.getElementById(
-            "lower-content-section"
-          ) || document.getElementById("lower-content-div");
+        } else if (isCategoryPage || isShopPage || isCollectionsPage) {
+          const lowerContentSection =
+            document.getElementById("lower-content-section") ||
+            document.getElementById("lower-content-div");
           const navbar = document.querySelector("header");
           const navBarHeight = navbar?.getBoundingClientRect().height || 64;
 
@@ -90,7 +93,10 @@ export function CapsuleNav() {
               setIsVisible(true); // Always visible when scrolled to lower sections
             } else {
               // Original logic for upper part of the page
-              if (currentScrollY > 100 && currentScrollY > lastScrollY.current) {
+              if (
+                currentScrollY > 100 &&
+                currentScrollY > lastScrollY.current
+              ) {
                 setIsVisible(false); // Scrolling down
               } else {
                 setIsVisible(true); // Scrolling up or at the top
@@ -127,46 +133,22 @@ export function CapsuleNav() {
       window.removeEventListener("scroll", handleScroll);
       if (isCategoryPage || isShopPage || isCollectionsPage) {
         window.removeEventListener(
-          "filterBarsticky",
+          "filterBarSticky",
           handleFilterBarSticky as EventListener
         );
       }
     };
   }, [isProductPage, isCategoryPage, isShopPage, isCollectionsPage]);
 
+  useEffect(() => {
+    if (pathname === "/") {
+      setActiveItem(0);
+    }
+  }, [pathname]);
+
   const handleItemClick = (id: number) => {
     setActiveItem(id);
   };
-
-  if (!isMounted) {
-    return (
-      <div className="relative w-[70%] mx-auto md:w-auto md:mx-0">
-        <div className="rounded-[15px] bg-white px-1 py-1 shadow-lg">
-          <div className="overflow-hidden">
-            <div className="flex touch-pan-y">
-              {items.map((item) => (
-                <div key={item.id} className="relative mr-1">
-                  <Link href={`/collections/${item.category}`}>
-                    <Button
-                      variant={item.id === activeItem ? "default" : "ghost"}
-                      className={cn(
-                        "rounded-[13px] px-4 md:px-6 whitespace-nowrap text-sm md:text-base",
-                        item.id === activeItem &&
-                          "bg-[#2b2b2b] text-white hover:bg-[#2b2b2b]/90"
-                      )}
-                      onClick={() => handleItemClick(item.id)}
-                    >
-                      {item.label}
-                    </Button>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (!isMounted) return null;
 
@@ -178,7 +160,9 @@ export function CapsuleNav() {
     <div
       className={cn(
         "mx-auto md:w-auto md:mx-0 transition-all duration-300",
-        (isCategoryPage || isShopPage || isCollectionsPage) && isMobileView && isExpanded
+        (isCategoryPage || isShopPage || isCollectionsPage) &&
+          isMobileView &&
+          isExpanded
           ? "w-[95%]"
           : "w-[70%]",
         // Mobile: Always sticky at top, Desktop: Keep existing positioning
@@ -195,7 +179,7 @@ export function CapsuleNav() {
           <div className="flex touch-pan-y">
             {items.map((item) => (
               <div key={item.id} className="relative mr-1">
-                <Link href={`/collections/${item.category}`}>
+                <Link href={item.href ?? `/shop?${item.category}`}>
                   <Button
                     variant={item.id === activeItem ? "default" : "ghost"}
                     className={cn(

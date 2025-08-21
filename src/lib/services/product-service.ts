@@ -44,17 +44,31 @@ const generateSlug = (name: string, id?: string): string => {
 const buildQueryParams = (query: Query): Record<string, any> => {
     const params: Record<string, any> = {}
 
+    const asCSV = (val?: string[] | string) => {
+        if (!val) return undefined
+        if (Array.isArray(val)) {
+            const joined = val.filter(Boolean).map(v => String(v).trim()).join(',')
+            return joined || undefined
+        }
+        return String(val)
+    }
+
     if (query.page && query.page > 1) params.page = query.page
     if (query.categoryId) params.categoryId = query.categoryId
     if (query.colorId) params.colorId = query.colorId
     if (query.sizeId) params.sizeId = query.sizeId
     if (query.isFeatured) params.isFeatured = query.isFeatured
     if (query.search) params.search = query.search
-    if (query.materials) params.materials = query.materials
-    if (query.styles) params.styles = query.styles
-    if (query.genders) params.genders = query.genders
-    if (query.colors) params.colors = query.colors
-    if (query.sizes) params.sizes = query.sizes
+    const materials = asCSV(query.materials)
+    if (materials) params.materials = materials
+    const styles = asCSV(query.styles)
+    if (styles) params.styles = styles
+    const genders = asCSV(query.genders)
+    if (genders) params.genders = genders
+    const colors = asCSV(query.colors)
+    if (colors) params.colors = colors
+    const sizes = asCSV(query.sizes)
+    if (sizes) params.sizes = sizes
     if (query.sort) params.sort = query.sort
     if (query.limit) params.limit = query.limit
 
