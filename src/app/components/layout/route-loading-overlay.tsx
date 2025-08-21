@@ -26,6 +26,12 @@ export default function RouteLoadingOverlay() {
         const url = new URL(anchor.href, location.href)
         const isInternal = url.origin === location.origin
         if (!isInternal) return
+        
+        // Ignore hash-only navigation (same page, different section)
+        if (url.pathname === location.pathname && url.search === location.search && url.hash && url.hash !== location.hash) {
+          return
+        }
+        
         // Same-path clicks should not trigger
         const toPath = url.pathname + url.search + url.hash
         const fromPath = location.pathname + location.search + location.hash
