@@ -156,23 +156,18 @@ const Footer = () => {
                                 ) : (
                                     <>
                                         <li>
-                                            <Link href="/collections/varsity" className="text-black font-semibold hover:font-bold transition-all">
-                                                Varsity Jackets
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link href="/collections/puffer" className="text-black font-semibold hover:font-bold transition-all">
+                                            <Link href="/collections/mens-puffer-vests" className="text-black  hover:font-bold transition-all">
                                                 Puffer Jackets
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link href="/collections/leather" className="text-black font-semibold hover:font-bold transition-all">
+                                            <Link href="/collections/leather-bomber-jacket-mens" className="text-black  hover:font-bold transition-all">
                                                 Leather Jackets
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link href="/collections/denim" className="text-black font-semibold hover:font-bold transition-all">
-                                                Denim Jackets
+                                            <Link href="/collections/biker-jacket-men" className="text-black  hover:font-bold transition-all">
+                                                Biker Jackets
                                             </Link>
                                         </li>
                                     </>
