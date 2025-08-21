@@ -10,6 +10,9 @@ const nextConfig = {
   experimental: {
     // Disable route groups temporarily to fix build issues
     appDir: true,
+    serverActions: {
+      allowedOrigins: ['localhost:3000', 'localhost:3001', '192.168.100.8:3000']
+    }
   },
   images: {
     domains: ["res.cloudinary.com", "outjackets.com", "d1.fineyst.com", "jacket.us.com", "192.168.100.8", "images.unsplash.com","localhost"],

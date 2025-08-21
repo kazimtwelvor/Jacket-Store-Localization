@@ -248,16 +248,16 @@ export default function ReviewsClient() {
                 </div>
               ))}
             </div>
-
+border-black text-white hover:bg-[#1B1B1B]/10 rounded-none
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center mt-16 gap-2">
                 <Button
-                  variant="black"
+                  variant="pagination"
                   size="icon"
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
-                  className="h-10 w-10 rounded-full border-black hover:border-black hover:bg-[#eaeaea] transition-colors duration-200"
+                  className="h-10 w-10 rounded-full"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
@@ -265,13 +265,13 @@ export default function ReviewsClient() {
                 {Array.from({ length: totalPages }).map((_, index) => (
                   <Button
                     key={index}
-                    variant={currentPage === index + 1 ? "default" : "black"}
+                    variant={currentPage === index + 1 ? "default" : "outline"}
                     size="icon"
                     onClick={() => setCurrentPage(index + 1)}
                     className={`h-10 w-10 rounded-full ${
                       currentPage === index + 1
-                        ? "bg-[#eaeaea] hover:bg-[#2b2b2b]"
-                        : "border-black hover:border-black hover:bg-[#eaeaea]"
+                        ? "bg-black text-white hover:bg-black"
+                        : "border-black text-white hover:bg-[#1B1B1B]/10"
                     } transition-colors duration-200`}
                   >
                     {index + 1}
@@ -279,11 +279,11 @@ export default function ReviewsClient() {
                 ))}
 
                 <Button
-                  variant="black"
+                  variant="pagination"
                   size="icon"
                   onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}
-                  className="h-10 w-10 rounded-full border-black hover:border-black hover:bg-[#eaeaea] transition-colors duration-200"
+                  className="h-10 w-10 rounded-full"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>

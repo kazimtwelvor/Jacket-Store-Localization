@@ -24,6 +24,10 @@ const buttonVariants = cva(
           "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
         black: 
           "bg-black text-white hover:bg-black/90 dark:bg-black dark:text-white",
+        pagination:
+          "bg-white border border-black text-black hover:bg-white hover:border-black",
+        blackInvert:
+          "bg-black text-white hover:bg-white hover:text-black border border-black",
       },
       size: {
         default: "h-10 px-4 py-2",

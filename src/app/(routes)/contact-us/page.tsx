@@ -340,7 +340,7 @@ export default function ContactUsPage() {
             <p className="text-black mb-4">
               Still have questions? Our customer service team is here to help.
             </p>
-            <Button className="bg-[#eaeaea] hover:bg-[#EAEAEA] text-black" asChild>
+            <Button variant="blackInvert" asChild>
               <a href="mailto:support@storecopy.com">Contact Support</a>
             </Button>
           </div>
