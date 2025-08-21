@@ -189,7 +189,7 @@ export default function ProductCategory({
           </div>
         </div>
         
-        <div className="w-full flex justify-end items-center gap-2 sm:gap-3 mb-2 md:mb-3">
+        <div className="w-full hidden md:flex justify-end items-center gap-2 sm:gap-3 mb-2 md:mb-3">
           <button
             onClick={() => scroll("left")}
             className={cn(
