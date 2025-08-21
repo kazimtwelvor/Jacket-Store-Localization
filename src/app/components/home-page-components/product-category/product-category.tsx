@@ -100,7 +100,7 @@ const womenCategories: Category[] = [
     id: "biker-women",
     name: "BIKER JACKETS",
     imageUrl: "/images/women-biker.webp",
-    href: "/collections/womens-biker-jackets",
+    href: "/collections/womens-leather-biker-jackets",
   },
   {
     id: "varsity-women",
