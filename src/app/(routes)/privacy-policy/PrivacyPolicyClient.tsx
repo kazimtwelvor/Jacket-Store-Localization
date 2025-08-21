@@ -88,7 +88,7 @@ export default function PrivacyPolicyClient() {
 
               <div className="mt-8 pt-6 border-t border-black">
                 <Button
-                  variant="outline"
+                  variant="black"
                   size="sm"
                   asChild
                   className="w-full border-[#b2b2b2] border-black hover:bg-[#b2b2b2]/10"

@@ -375,8 +375,8 @@ const BlogsPage = () => {
           {hasMorePosts && (
             <div className="mt-12 text-center">
               <Button
-                variant="outline"
-                className="border-[#2b2b2b] text-[#2b2b2b] hover:bg-[#eaeaea]/10"
+                variant="black"
+                className="border-[#2b2b2b] hover:bg-[#eaeaea]/10"
                 onClick={handleLoadMore}
                 disabled={isLoadingMore}
               >
