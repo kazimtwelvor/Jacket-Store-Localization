@@ -7,6 +7,8 @@ import { avertaBold, avertaDefault } from "@/src/lib/fonts";
 import Footer from "./components/home-page-components/footer/footer";
 import RouteLoadingOverlay from "@/src/app/components/layout/route-loading-overlay";
 import CartSidebarWrapper from "./components/layout/cart-sidebar-wrapper";
+import { Suspense } from "react";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -18,7 +20,9 @@ export default function RootLayout({
         <FontProvider>
           <CartProvider>
             <Navbar />
-            <RouteLoadingOverlay />
+            <Suspense fallback={null}>
+              <RouteLoadingOverlay />
+            </Suspense>
             {children}
             <Footer />
             <CartSidebarWrapper />

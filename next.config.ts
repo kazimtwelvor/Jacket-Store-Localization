@@ -1,4 +1,3 @@
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -11,34 +10,45 @@ const nextConfig = {
     // Disable route groups temporarily to fix build issues
     appDir: true,
     serverActions: {
-      allowedOrigins: ['localhost:3000', 'localhost:3001', '192.168.100.8:3000']
-    }
+      allowedOrigins: [
+        "localhost:3000",
+        "localhost:3001",
+        "192.168.100.8:3000",
+      ],
+    },
   },
   images: {
-    domains: ["res.cloudinary.com", "outjackets.com", "d1.fineyst.com", "jacket.us.com", "192.168.100.8", "images.unsplash.com","localhost"],
+    domains: [
+      "res.cloudinary.com",
+      "outjackets.com",
+      "d1.fineyst.com",
+      "jacket.us.com",
+      "192.168.100.8",
+      "images.unsplash.com",
+      "localhost",
+    ],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'd1.fineyst.com',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "d1.fineyst.com",
+        pathname: "/**",
       },
       {
-        protocol: 'http',
-        hostname: '192.168.100.8',
-        pathname: '/**',
+        protocol: "http",
+        hostname: "192.168.100.8",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
       },
-       {
-        protocol: 'https',
-        hostname: 'localhost:3001',
-        pathname: '/**',
+      {
+        protocol: "https",
+        hostname: "localhost:3001",
+        pathname: "/**",
       },
     ],
-
   },
   async headers() {
     return [
@@ -60,8 +70,8 @@ const nextConfig = {
           },
         ],
       },
-    ]
+    ];
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;
