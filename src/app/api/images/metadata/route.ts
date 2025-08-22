@@ -1,0 +1,98 @@
+import { type NextRequest, NextResponse } from "next/server"
+import path from "path"
+import { statSync } from "fs"
+import sharp from "sharp"
+import { getImageMetadata } from "@/src/app/lib/image-metadata"
+
+// Function to extract image dimensions
+async function getImageDimensions(filePath: string) {
+  try {
+    const metadata = await sharp(filePath).metadata()
+    return {
+      width: metadata.width || 0,
+      height: metadata.height || 0,
+    }
+  } catch (error) {
+    console.error("Error getting image dimensions:", error)
+    return { width: 0, height: 0 }
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const imageUrl = searchParams.get("url")
+
+    if (!imageUrl) {
+      return NextResponse.json({ error: "Image URL is required" }, { status: 400 })
+    }
+
+    // Extract the path from the URL (assuming format like /uploads/2023/image.jpg)
+    const urlPath = new URL(imageUrl, "http://localhost").pathname
+
+    // Map the URL path to the actual file system path
+    const filePath = path.join(process.cwd(), "public", urlPath)
+
+    // Check if file exists
+    try {
+      const stats = statSync(filePath)
+
+      // Get file stats
+      const fileSize = stats.size
+      const createdDate = stats.birthtime
+      const modifiedDate = stats.mtime
+
+      // Determine file type from extension
+      const extension = path.extname(filePath).toLowerCase()
+      const mimeTypes: Record<string, string> = {
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".gif": "image/gif",
+        ".webp": "image/webp",
+        ".svg": "image/svg+xml",
+        ".avif": "image/avif",
+      }
+      const fileType = mimeTypes[extension] || "application/octet-stream"
+
+      // Get dimensions
+      const dimensions = await getImageDimensions(filePath)
+
+      // Get filename
+      const fileName = path.basename(filePath)
+
+      // Get additional metadata from database if available
+      const dbMetadata = await getImageMetadata(urlPath)
+
+      // Log the database metadata
+      console.log("Database metadata:", dbMetadata)
+
+      // Create response data - combine file system data with database data
+      const metadata = {
+        name: fileName,
+        type: fileType,
+        size: fileSize,
+        dimensions,
+        uploadedOn: dbMetadata?.uploadedOn?.toISOString() || createdDate.toISOString(),
+        lastModified: modifiedDate.toISOString(),
+        uploadedBy: dbMetadata?.uploadedBy || "Unknown User",
+        uploadedById: dbMetadata?.uploadedById || "",
+        uploadedTo: dbMetadata?.uploadedToPage || "Unknown Page",
+        path: urlPath,
+        altText: dbMetadata?.altText || "",
+        title: dbMetadata?.title || "",
+        caption: dbMetadata?.caption || "",
+        description: dbMetadata?.description || "",
+        excludeFromSitemap: dbMetadata?.excludeFromSitemap || false,
+      }
+
+      return NextResponse.json(metadata)
+    } catch (error) {
+      console.error("Error accessing file:", error)
+      return NextResponse.json({ error: "Image not found" }, { status: 404 })
+    }
+  } catch (error) {
+    console.error("Error processing image metadata:", error)
+    return NextResponse.json({ error: "Failed to get image metadata" }, { status: 500 })
+  }
+}

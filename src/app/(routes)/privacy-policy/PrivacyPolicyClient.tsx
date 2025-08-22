@@ -88,10 +88,10 @@ export default function PrivacyPolicyClient() {
 
               <div className="mt-8 pt-6 border-t border-black">
                 <Button
-                  variant="black"
+                  variant="blackInvert"
                   size="sm"
                   asChild
-                  className="w-full border-[#b2b2b2] border-black hover:bg-[#b2b2b2]/10"
+                  className="w-full"
                 >
                   <Link href="/contact-us">Questions? Contact Us</Link>
                 </Button>
@@ -289,9 +289,9 @@ export default function PrivacyPolicyClient() {
             {/* Back to Top Button */}
             <div className="text-center mt-12">
               <Button
-                variant="outline"
+                variant="blackInvert"
                 size="sm"
-                className="rounded-full h-12 w-12 p-0 border-[#b2b2b2] border-black hover:bg-[#b2b2b2]/10"
+                className="rounded-full h-12 w-12 p-0"
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               >
                 <ArrowUp className="h-5 w-5" />

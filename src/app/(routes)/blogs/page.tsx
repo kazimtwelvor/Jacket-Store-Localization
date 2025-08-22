@@ -302,7 +302,7 @@ const BlogsPage = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">{featuredPost.readTime}</span>
                   <Link href={`/blogs/${featuredPost.id}`}>
-                    <Button className="bg-[#2b2b2b] hover:bg-[#eaeaea]/90 text-white">
+                    <Button variant="blackInvert">
                       Read Article
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
@@ -375,8 +375,7 @@ const BlogsPage = () => {
           {hasMorePosts && (
             <div className="mt-12 text-center">
               <Button
-                variant="black"
-                className="border-[#2b2b2b] hover:bg-[#eaeaea]/10"
+                variant="blackInvert"
                 onClick={handleLoadMore}
                 disabled={isLoadingMore}
               >
