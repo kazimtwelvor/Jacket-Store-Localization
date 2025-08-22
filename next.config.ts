@@ -6,6 +6,8 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Exclude uploads directory from serverless function bundling
+  output: 'standalone',
   experimental: {
     // Disable route groups temporarily to fix build issues
     appDir: true,

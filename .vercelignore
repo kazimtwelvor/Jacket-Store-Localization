@@ -1,0 +1,20 @@
+# Exclude uploads directory from serverless function bundling
+public/uploads/
+public/uploads/**/*
+
+# Exclude other large directories that shouldn't be in serverless functions
+.next/
+node_modules/
+.git/
+
+# Exclude large image files that might be accidentally imported
+*.webp
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# Keep only essential public assets
+!public/fonts/
+!public/logo.webp
+!public/favicon.ico
