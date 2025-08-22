@@ -1,7 +1,4 @@
 import type { Billboard } from "@/types"
-import { fetchJson } from "./_http"
-
-const URL = `${process.env.NEXT_PUBLIC_API_URL}/billboards`
 
 // Fallback billboard data in case of errors
 const fallbackBillboard: Billboard = {
@@ -18,8 +15,22 @@ const getBillboard = async (id: string): Promise<Billboard> => {
       return fallbackBillboard
     }
 
-    // Fetch the billboard with proper caching disabled to get fresh data
-    const billboard = await fetchJson<Billboard>(`/billboards/${id}`)
+    // Use direct external API call with proper error handling and caching
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/billboards/${id}`, {
+      next: { revalidate: 3600 }, // Cache for 1 hour
+      cache: "force-cache",
+      headers: {
+        "Accept": "application/json",
+        "User-Agent": "Fineyst-App",
+      },
+    })
+
+    if (!response.ok) {
+      console.warn("Failed to fetch billboard:", response.status);
+      return fallbackBillboard;
+    }
+
+    const billboard = await response.json();
 
     // Validate the billboard data
     if (!billboard || !billboard.imageUrl) {

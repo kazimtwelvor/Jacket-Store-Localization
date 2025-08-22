@@ -1,28 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Use Edge Runtime for better external API compatibility
-export const runtime = 'edge'
-
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
-// Handle CORS preflight requests
-export async function OPTIONS(request: NextRequest) {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    },
-  })
-}
-
 export async function GET(request: NextRequest) {
-  // Add CORS headers for Vercel
-  const response = NextResponse.next()
-  response.headers.set('Access-Control-Allow-Origin', '*')
-  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
 
   if (!API_BASE_URL) {
     console.error('API_BASE_URL is not configured:', process.env.NEXT_PUBLIC_API_URL)

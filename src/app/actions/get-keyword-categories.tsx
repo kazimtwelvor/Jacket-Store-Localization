@@ -1,15 +1,17 @@
-const URL = `${process.env.NEXT_PUBLIC_API_URL}/category-pages?all=true`;
-
 const getKeywordCategories = async (): Promise<any[]> => {
   try {
     if (!process.env.NEXT_PUBLIC_API_URL) {
+      console.warn('API URL not configured, returning empty array');
       return [];
     }
-    const res = await fetch(URL, {
-      next: { revalidate: 0 },
-      cache: "no-store",
+
+    // Use direct external API call with proper error handling and caching
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/category-pages?all=true`, {
+      next: { revalidate: 3600 }, // Cache for 1 hour
+      cache: "force-cache",
       headers: {
-        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "User-Agent": "Fineyst-App",
       },
     });
 

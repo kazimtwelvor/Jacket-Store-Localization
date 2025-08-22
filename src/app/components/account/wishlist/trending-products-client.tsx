@@ -70,17 +70,26 @@ export default function TrendingProducts() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (!process.env.NEXT_PUBLIC_API_URL) {
-        setIsLoading(false);
-        return;
-      }
-
       try {
         setIsLoading(true);
 
         try {
+          if (!process.env.NEXT_PUBLIC_API_URL) {
+            console.warn('API URL not configured, using fallback products');
+            return;
+          }
+
+          // Use direct external API call with proper error handling and caching
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/products?isFeatured=true`
+            `${process.env.NEXT_PUBLIC_API_URL}/products?isFeatured=true`,
+            {
+              next: { revalidate: 1800 }, // Cache for 30 minutes
+              cache: "force-cache",
+              headers: {
+                "Accept": "application/json",
+                "User-Agent": "Fineyst-App"
+              },
+            }
           );
 
           if (response.ok) {

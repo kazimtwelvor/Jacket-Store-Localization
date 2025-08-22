@@ -36,10 +36,11 @@ export async function fetchJson<T>(
   }
 
   const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), init.timeoutMs ?? 1000) // Reduced timeout from 10s to 5s
+  const timeout = setTimeout(() => controller.abort(), init.timeoutMs ?? 1000)
 
   try {
     const query = toURLSearchParams(init.query)
+    // Use direct external API calls with proper error handling
     const url = query && query.toString()
       ? `${API_BASE_URL}${path}?${query.toString()}`
       : `${API_BASE_URL}${path}`
