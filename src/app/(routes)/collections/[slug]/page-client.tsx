@@ -654,10 +654,23 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
             imageUrl = category.imageUrl || '';
         }
         imageUrl = getLocalImageUrl(imageUrl)
+        
+        // Find the proper slug for the current category
+        const matchingKeywordCategory = keywordCategories.find(kc => 
+            kc.id === category.id || 
+            kc.name.toLowerCase() === category.name.toLowerCase()
+        );
+        const matchingRegularCategory = allCategories.find(c => c.id === category.id);
+        const properSlug = matchingKeywordCategory?.slug || 
+                          matchingRegularCategory?.slug || 
+                          category.slug ||
+                          category.name.toLowerCase().replace(/\s+/g, '-');
+        
         currentCategory = {
             categoryId: category.id,
             categoryName: category.name,
-            imageUrl: imageUrl
+            imageUrl: imageUrl,
+            slug: properSlug
         };
     }
     let categories: { name: string; icon: string; slug: string; categoryId: string; }[] = [];

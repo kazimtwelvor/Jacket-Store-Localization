@@ -120,7 +120,8 @@ const WishlistPage = () => {
               </p>
               <Button
                 onClick={handleContinueShopping}
-                className="bg-[#B01E23] hover:bg-[#8a1a1e] text-white mt-4"
+                variant="blackInvert"
+                className="mt-4"
               >
                 Continue Shopping
               </Button>
