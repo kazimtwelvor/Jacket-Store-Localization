@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Category {
   name?: string;
@@ -18,6 +19,7 @@ interface JacketCategoriesProps {
     categoryId: string;
     categoryName: string;
     imageUrl: string;
+    slug?: string;
   };
 }
 
@@ -185,11 +187,16 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
     if (cleanImageUrl) {
       cleanImageUrl = getCleanImageUrl(cleanImageUrl);
     }
+    // Use the slug from currentCategory if available, otherwise find matching category
+    const properSlug = currentCategory.slug || 
+                      categories.find(cat => cat.categoryId === currentCategory.categoryId)?.slug || 
+                      currentCategory.categoryId;
+    
     displayCategories.push({
       name: currentCategory.categoryName,
       icon: cleanImageUrl,
       categoryId: currentCategory.categoryId,
-      slug: currentCategory.categoryId,
+      slug: properSlug,
       isActive: true,
     });
   }
@@ -253,13 +260,10 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
             // Use the slug that was already determined when creating the category object
             const categorySlug = category.slug
             return (
-              <div
+              <Link
                 key={categorySlug || index}
-                onClick={() => handleCategoryClick(categorySlug || '')}
+                href={`/collections/${categorySlug}`}
                 className={`relative flex flex-col items-center flex-shrink-0 w-[23vw] sm:w-28 text-center cursor-pointer py-2 ${category.isActive ? 'sticky left-3 z-10 sticky-mask' : ''}`}
-                role="button"
-                tabIndex={0}
-                onKeyPress={(e) => e.key === 'Enter' && handleCategoryClick(categorySlug || '')}
                 aria-current={category.isActive ? 'page' : undefined}
               >
                 <div
@@ -288,7 +292,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
                 >
                   {category.name}
                 </span>
-              </div>
+              </Link>
             );
           })}
         </nav>

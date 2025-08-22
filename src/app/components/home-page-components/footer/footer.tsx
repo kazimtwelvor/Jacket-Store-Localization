@@ -118,22 +118,14 @@ const Footer = () => {
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'shop' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'shop' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
-                                <li>
-                                    <Link href="/size-guide" className="text-black  hover:font-bold transition-all" >
-                                        Size Guide
-                                    </Link>
-                                </li>
+
 
                                 <li>
                                     <Link href="/shop" className="text-black  hover:font-semibold transition-all" >
                                         Collections
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link href="/reviews" className="text-black font-normal hover:font-bold transition-all">
-                                        Customer Reviews
-                                    </Link>
-                                </li>
+
                             </ul>
                         </div>
                         <div className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
@@ -168,6 +160,11 @@ const Footer = () => {
                                         <li>
                                             <Link href="/collections/biker-jacket-men" className="text-black  hover:font-bold transition-all">
                                                 Biker Jackets
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link href="/collections" className="text-black  hover:font-bold transition-all">
+                                                View All
                                             </Link>
                                         </li>
                                     </>

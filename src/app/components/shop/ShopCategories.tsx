@@ -68,7 +68,7 @@ const ShopCategories: React.FC<ShopCategoriesProps> = ({ keywordCategories }) =>
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('route-loading:start'))
     }
-    router.push(`/category/${slug}`)
+    router.push(`/collections/${slug}`)
   }
 
   const checkForScrollability = useCallback(() => {

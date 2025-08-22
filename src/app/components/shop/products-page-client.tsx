@@ -23,6 +23,7 @@ import { FilterSidebar } from "./components/FilterSidebar";
 import { CategorySlider } from "./components/CategorySlider";
 import WhatsMySize from "@/src/components/WhatsMySize";
 import { Loader2 } from "lucide-react";
+import { avertaBlack } from "@/src/lib/fonts";
 
 const useMediaQuery = (query: string): boolean => {
   const [matches, setMatches] = useState(false);
@@ -780,6 +781,21 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   return (
     <section className="bg-white">
       <ShopCategories keywordCategories={keywordCategories} />
+      
+      {/* Shop Heading */}
+      <div className="container mx-auto text-center -mt-2 sm:mt-8 -mb-2 sm:mb-0">
+        <h1 className={`text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 ${avertaBlack.className}`}>
+          {(() => {
+            const material = searchParams.get('materials');
+            const style = searchParams.get('styles');
+            if (material === 'Leather') return 'SHOP LEATHER JACKETS';
+            if (style === 'Bomber') return 'SHOP BOMBER JACKETS';
+            if (style === 'Varsity') return 'SHOP VARSITY JACKETS';
+            if (style === 'Biker') return 'SHOP BIKER JACKETS';
+            return 'SHOP';
+          })()}
+        </h1>
+      </div>
 
       <div className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
         <div ref={filterBarWrapperRef}>
