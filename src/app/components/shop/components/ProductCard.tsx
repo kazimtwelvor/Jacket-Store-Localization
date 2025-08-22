@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import type { Product } from "@/types"
 import { cn } from "../../../lib/utils"
 import { Heart, ShoppingCart } from "lucide-react"
@@ -41,6 +41,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   visibleProducts,
   wasDraggedRef,
 }) => {
+  const [isWishlisted, setIsWishlisted] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  
+  useEffect(() => {
+    setMounted(true)
+    setIsWishlisted(wishlist.isInWishlist(product.id))
+  }, [wishlist, product.id])
+  
   const isHovered = hoveredProduct === `grid-${product.id}`
   const hasMultipleImages = product.images && product.images.length > 1
   const availableSizes = product.sizeDetails || product.sizes || []
@@ -89,10 +97,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           whileTap={{ scale: 0.9 }}
           onClick={(e) => {
             e.stopPropagation()
-            if (wishlist.isInWishlist(product.id)) {
+            if (isWishlisted) {
               wishlist.removeItem(product.id)
+              setIsWishlisted(false)
             } else {
               wishlist.addItem(product)
+              setIsWishlisted(true)
             }
           }}
         >
@@ -101,9 +111,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
               stroke="black"
               strokeWidth="2"
-              fill={wishlist.isInWishlist(product.id) ? "black" : "none"}
+              fill="none"
               strokeLinecap="round"
               strokeLinejoin="round"
+              className={mounted && isWishlisted ? "fill-black" : ""}
             />
           </svg>
         </motion.button>

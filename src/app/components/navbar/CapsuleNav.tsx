@@ -6,13 +6,15 @@ import Link from "next/link";
 import Button from "../../ui/button";
 import { cn } from "../../lib/utils";
 
+import { avertaBold } from "@/src/lib/fonts";
+
 const items = [
- { id: 0, label: "Home", isActive: true, href: "/" },
+ { id: 0, label: "HOME", isActive: true, href: "/" },
   // Use query keys/values that the shop page understands
-  { id: 1, label: "Leather", isActive: false, category: "materials=Leather" },
-  { id: 2, label: "Bomber", isActive: false, category: "styles=Bomber" },
-  { id: 3, label: "Varsity", isActive: false, category: "styles=Varsity" },
-  { id: 4, label: "Biker", isActive: false, category: "styles=Biker" },
+  { id: 1, label: "LEATHER", isActive: false, category: "materials=Leather" },
+  { id: 2, label: "BOMBER", isActive: false, category: "styles=Bomber" },
+  { id: 3, label: "VARSITY", isActive: false, category: "styles=Varsity" },
+  { id: 4, label: "BIKER", isActive: false, category: "styles=Biker" },
 ];
 
 export function CapsuleNav() {
@@ -181,9 +183,10 @@ export function CapsuleNav() {
                   <Button
                     variant={item.id === activeItem ? "default" : "ghost"}
                     className={cn(
-                      "rounded-[13px] px-4 md:px-6 whitespace-nowrap text-sm md:text-base",
+                      "rounded-[13px] px-4 md:px-6 whitespace-nowrap text-xs md:text-sm",
                       item.id === activeItem &&
-                        "bg-[#2b2b2b] text-white hover:bg-[#2b2b2b]/90"
+                        "bg-[#2b2b2b] text-white hover:bg-[#2b2b2b]/90",
+                      avertaBold.className
                     )}
                     onClick={() => handleItemClick(item.id)}
                   >

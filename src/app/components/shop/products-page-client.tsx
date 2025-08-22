@@ -1,248 +1,371 @@
+"use client";
 
-
-"use client"
-
-import React, { useState, useRef, useEffect, useCallback, useLayoutEffect } from "react"
-import type { Product, Category, Color, Size } from "@/types"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useCart } from "../../contexts/CartContext"
-import useWishlist from "../../hooks/use-wishlist"
-import getProducts from "../../actions/get-products"
-import MobileAddToCartModal from "../../modals/MobileAddToCartModal"
-import ShopCategories from "./ShopCategories"
-import RecentlyViewed from "../../category/RecentlyViewed"
-import WeThinkYouWillLove from "../../category/WeThinkYouWillLove"
-import { ProductCard } from "./components/ProductCard"
-import { FilterBar } from "../common/FilterBar"
-import { PaginationControls } from "./components/PaginationControls"
-import { FilterSidebar } from "./components/FilterSidebar"
-import { CategorySlider } from "./components/CategorySlider"
-import WhatsMySize from "@/src/components/WhatsMySize"
-import { Loader2 } from "lucide-react"
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useLayoutEffect,
+} from "react";
+import type { Product, Category, Color, Size } from "@/types";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCart } from "../../contexts/CartContext";
+import useWishlist from "../../hooks/use-wishlist";
+import getProducts from "../../actions/get-products";
+import MobileAddToCartModal from "../../modals/MobileAddToCartModal";
+import ShopCategories from "./ShopCategories";
+import RecentlyViewed from "../../category/RecentlyViewed";
+import WeThinkYouWillLove from "../../category/WeThinkYouWillLove";
+import { ProductCard } from "./components/ProductCard";
+import { FilterBar } from "../common/FilterBar";
+import { PaginationControls } from "./components/PaginationControls";
+import { FilterSidebar } from "./components/FilterSidebar";
+import { CategorySlider } from "./components/CategorySlider";
+import WhatsMySize from "@/src/components/WhatsMySize";
+import { Loader2 } from "lucide-react";
 
 const useMediaQuery = (query: string): boolean => {
-  const [matches, setMatches] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const [matches, setMatches] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-    if (typeof window === "undefined") return
+    setMounted(true);
+    if (typeof window === "undefined") return;
 
-    const media = window.matchMedia(query)
-    setMatches(media.matches)
+    const media = window.matchMedia(query);
+    setMatches(media.matches);
 
-    const listener = () => setMatches(media.matches)
-    media.addEventListener("change", listener)
-    return () => media.removeEventListener("change", listener)
-  }, [query])
+    const listener = () => setMatches(media.matches);
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, [query]);
 
-  return mounted ? matches : false
-}
+  return mounted ? matches : false;
+};
 
 const getMaterialsFromCategories = (categories?: Category[]) => {
-  const materials = ["Leather", "Denim", "Cotton", "Polyester", "Wool", "Suede"]
-  return materials.map((name, index) => ({ id: `material-${index}`, name }))
-}
+  const materials = [
+    "Leather",
+    "Denim",
+    "Cotton",
+    "Polyester",
+    "Wool",
+    "Suede",
+  ];
+  return materials.map((name, index) => ({ id: `material-${index}`, name }));
+};
 
 const getStylesFromCategories = (categories?: Category[]) => {
-  const styles = ["Bomber", "Biker", "Varsity", "Aviator", "Puffer", "Trench"]
-  return styles.map((name, index) => ({ id: `style-${index}`, name }))
-}
+  const styles = ["Bomber", "Biker", "Varsity", "Aviator", "Puffer", "Trench"];
+  return styles.map((name, index) => ({ id: `style-${index}`, name }));
+};
 
 const getGendersFromCategories = (categories?: Category[]) => {
-  const genders = ["Male", "Female", "Unisex"]
-  return genders.map((name, index) => ({ id: `gender-${index}`, name }))
-}
-
+  const genders = ["Male", "Female", "Unisex"];
+  return genders.map((name, index) => ({ id: `gender-${index}`, name }));
+};
 
 const getProductSlug = (product: Product): string => {
-  if (product.slug) return product.slug
+  if (product.slug) return product.slug;
   if (product.name) {
     const baseSlug = product.name
       .toLowerCase()
       .replace(/[^\w\s-]/g, "")
       .replace(/\s+/g, "-")
       .replace(/-+/g, "-")
-      .trim()
-    return product.id ? `${baseSlug}-${product.id.substring(0, 8)}` : baseSlug
+      .trim();
+    return product.id ? `${baseSlug}-${product.id.substring(0, 8)}` : baseSlug;
   }
-  return product.id
-}
+  return product.id;
+};
 
 interface PaginatedProductsData {
-  products: Product[]
+  products: Product[];
   pagination: {
-    currentPage: number
-    totalPages: number
-    totalProducts: number
-    productsPerPage: number
-    hasNextPage: boolean
-    hasPreviousPage: boolean
-  }
+    currentPage: number;
+    totalPages: number;
+    totalProducts: number;
+    productsPerPage: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
 }
 
 interface KeywordCategory {
-  id: string
-  name: string
-  slug: string
-  imageUrl?: string
+  id: string;
+  name: string;
+  slug: string;
+  imageUrl?: string;
 }
 
 type ProductsPageClientProps = {
-  initialProductsData: PaginatedProductsData
-  categories?: Category[]
-  colors?: Color[]
-  sizes?: Size[]
-  keywordCategories?: KeywordCategory[]
-}
+  initialProductsData: PaginatedProductsData;
+  categories?: Category[];
+  colors?: Color[];
+  sizes?: Size[];
+  keywordCategories?: KeywordCategory[];
+};
 
 const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   initialProductsData,
   categories,
   colors,
   sizes,
-  keywordCategories = []
+  keywordCategories = [],
 }) => {
-  const [productsData, setProductsData] = useState<PaginatedProductsData>(initialProductsData)
-  const [loading, setLoading] = useState(false)
-  const [sizeModalOpen, setSizeModalOpen] = useState(false)
-  const [filterSidebarOpen, setFilterSidebarOpen] = useState(false)
-  const [categorySliderOpen, setCategorySliderOpen] = useState(false)
-  const [sortDropdownOpen, setSortDropdownOpen] = useState(false)
-  const [activeCategory, setActiveCategory] = useState("t-shirts")
-  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
-  const [activeSort, setActiveSort] = useState<string>("")
+  const [productsData, setProductsData] =
+    useState<PaginatedProductsData>(initialProductsData);
+  const [loading, setLoading] = useState(false);
+  const [sizeModalOpen, setSizeModalOpen] = useState(false);
+  const [filterSidebarOpen, setFilterSidebarOpen] = useState(false);
+  const [categorySliderOpen, setCategorySliderOpen] = useState(false);
+  const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("t-shirts");
+  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
+  const [activeSort, setActiveSort] = useState<string>("");
   const [selectedFilters, setSelectedFilters] = useState({
     materials: [] as string[],
     style: [] as string[],
     gender: [] as string[],
     colors: [] as string[],
     sizes: [] as string[],
-  })
-  const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
-  const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([])
-  const [visibleProducts, setVisibleProducts] = useState<string[]>([])
-  const [currentPage, setCurrentPage] = useState(initialProductsData.pagination.currentPage)
-  const [isFilterSticky, setIsFilterSticky] = useState(false)
-  const [loadingProducts, setLoadingProducts] = useState<Set<string>>(new Set())
-  const [mobileCartModal, setMobileCartModal] = useState<{ isOpen: boolean; product: Product | null }>({ isOpen: false, product: null })
-  const [currentProducts, setCurrentProducts] = useState<Product[]>(initialProductsData.products)
-  const [mounted, setMounted] = useState(false)
+  });
+  const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>(
+    {}
+  );
+  const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
+  const [visibleProducts, setVisibleProducts] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(
+    initialProductsData.pagination.currentPage
+  );
+  const [isFilterSticky, setIsFilterSticky] = useState(false);
+  const [loadingProducts, setLoadingProducts] = useState<Set<string>>(
+    new Set()
+  );
+  const [mobileCartModal, setMobileCartModal] = useState<{
+    isOpen: boolean;
+    product: Product | null;
+  }>({ isOpen: false, product: null });
+  const [currentProducts, setCurrentProducts] = useState<Product[]>(
+    initialProductsData.products
+  );
+  const [mounted, setMounted] = useState(false);
   const [layoutMetrics, setLayoutMetrics] = useState({
     startStickyPoint: 0,
     endStickyPoint: 0,
     filterBarHeight: 0,
-  })
+  });
 
-  const filterBarWrapperRef = useRef<HTMLDivElement>(null)
-  const paginationSectionRef = useRef<HTMLDivElement>(null)
-  const filterBarRef = useRef<HTMLDivElement>(null)
-  const wasDraggedRef = useRef(false)
-  const productRefs = useRef<(HTMLDivElement | null)[]>([])
+  const filterBarWrapperRef = useRef<HTMLDivElement>(null);
+  const paginationSectionRef = useRef<HTMLDivElement>(null);
+  const filterBarRef = useRef<HTMLDivElement>(null);
+  const wasDraggedRef = useRef(false);
+  const productRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const requestIdRef = useRef(0);
+  const latestHandledRequestRef = useRef(0);
+  const inflightCountRef = useRef(0);
 
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const isDesktop = useMediaQuery("(min-width: 768px)")
-  const { addToCart } = useCart()
-  const wishlist = useWishlist()
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const { addToCart } = useCart();
+  const wishlist = useWishlist();
 
-  const materials = getMaterialsFromCategories(categories)
-  const styles = getStylesFromCategories(categories)
-  const genders = getGendersFromCategories(categories)
+  const materials = getMaterialsFromCategories(categories);
+  const styles = getStylesFromCategories(categories);
+  const genders = getGendersFromCategories(categories);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
-  const hasActiveFilters = selectedFilters.materials.length > 0 || selectedFilters.style.length > 0 || selectedFilters.gender.length > 0 || selectedFilters.colors.length > 0 || selectedFilters.sizes.length > 0
-  const totalActiveFilters = selectedFilters.materials.length + selectedFilters.style.length + selectedFilters.gender.length + selectedFilters.colors.length + selectedFilters.sizes.length
+  const hasActiveFilters =
+    selectedFilters.materials.length > 0 ||
+    selectedFilters.style.length > 0 ||
+    selectedFilters.gender.length > 0 ||
+    selectedFilters.colors.length > 0 ||
+    selectedFilters.sizes.length > 0;
+  const totalActiveFilters =
+    selectedFilters.materials.length +
+    selectedFilters.style.length +
+    selectedFilters.gender.length +
+    selectedFilters.colors.length +
+    selectedFilters.sizes.length;
 
-  const sortProductsClient = useCallback((list: Product[], sortKey: string): Product[] => {
-    if (!Array.isArray(list)) return []
-    const normalized = sortKey.replace('_', '-').toLowerCase()
-    const parsePriceValue = (raw: any): number => {
-      if (raw === undefined || raw === null) return 0
-      if (typeof raw === 'number') return raw
-      const cleaned = String(raw).replace(/[^0-9.]/g, '')
-      const num = Number.parseFloat(cleaned)
-      return Number.isFinite(num) ? num : 0
-    }
-    const priceOf = (p: Product) => {
-      const sale = parsePriceValue((p as any).salePrice)
-      const base = parsePriceValue((p as any).price)
-      return sale > 0 ? sale : base
-    }
-    if (normalized === 'newest') {
-      return [...list].sort((a, b) => {
-        const aTime = new Date((a as any).createdAt || 0).getTime()
-        const bTime = new Date((b as any).createdAt || 0).getTime()
-        return bTime - aTime
-      })
-    }
-    if (normalized === 'price-desc' || normalized === 'price-high') {
-      return [...list].sort((a, b) => priceOf(b) - priceOf(a))
-    }
-    if (normalized === 'price-asc' || normalized === 'price-low') {
-      return [...list].sort((a, b) => priceOf(a) - priceOf(b))
-    }
-    return list
-  }, [])
+  const sortProductsClient = useCallback(
+    (list: Product[], sortKey: string): Product[] => {
+      if (!Array.isArray(list)) return [];
+      const normalized = sortKey.replace("_", "-").toLowerCase();
+      const parsePriceValue = (raw: any): number => {
+        if (raw === undefined || raw === null) return 0;
+        if (typeof raw === "number") return raw;
+        const cleaned = String(raw).replace(/[^0-9.]/g, "");
+        const num = Number.parseFloat(cleaned);
+        return Number.isFinite(num) ? num : 0;
+      };
+      const priceOf = (p: Product) => {
+        const sale = parsePriceValue((p as any).salePrice);
+        const base = parsePriceValue((p as any).price);
+        return sale > 0 ? sale : base;
+      };
+      if (normalized === "newest") {
+        return [...list].sort((a, b) => {
+          const aTime = new Date((a as any).createdAt || 0).getTime();
+          const bTime = new Date((b as any).createdAt || 0).getTime();
+          return bTime - aTime;
+        });
+      }
+      if (normalized === "price-desc" || normalized === "price-high") {
+        return [...list].sort((a, b) => priceOf(b) - priceOf(a));
+      }
+      if (normalized === "price-asc" || normalized === "price-low") {
+        return [...list].sort((a, b) => priceOf(a) - priceOf(b));
+      }
+      return list;
+    },
+    []
+  );
 
   const updateURL = useCallback(
     (newParams: Record<string, string | number>) => {
-      const params = new URLSearchParams(searchParams.toString())
+      const params = new URLSearchParams(searchParams.toString());
       Object.entries(newParams).forEach(([key, value]) => {
-        if (value && value !== "" && value !== "1" && !(key === "categoryId" && value === "t-shirts")) {
-          params.set(key, String(value))
+        if (
+          value &&
+          value !== "" &&
+          value !== "1" &&
+          !(key === "categoryId" && value === "t-shirts")
+        ) {
+          params.set(key, String(value));
         } else {
-          params.delete(key)
+          params.delete(key);
         }
-      })
-      const newUrl = params.toString() ? `/shop?${params.toString()}` : "/shop"
-      router.push(newUrl, { scroll: false })
+      });
+      const newUrl = params.toString() ? `/shop?${params.toString()}` : "/shop";
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("route-loading:start"));
+      }
+      router.push(newUrl, { scroll: false });
     },
-    [router, searchParams],
-  )
+    [router, searchParams]
+  );
 
   const fetchProducts = useCallback(
-    async (page: number, resetFilters = false, sortOverride?: string, skipURLUpdate = false) => {
-      setLoading(true)
+    async (
+      page: number,
+      resetFilters = false,
+      sortOverride?: string,
+      skipURLUpdate = false,
+      explicitQuery?: {
+        materials?: string;
+        styles?: string;
+        genders?: string;
+        colors?: string;
+        sizes?: string;
+      }
+    ) => {
+      inflightCountRef.current += 1;
+      // Only show in-page loading when we are NOT updating the URL.
+      // For URL updates, the global route overlay will handle loading UX
+      if (skipURLUpdate) {
+        setLoading(true);
+      }
+      const requestId = ++requestIdRef.current;
       try {
-        const hasFilters = selectedFilters.materials.length > 0 || selectedFilters.style.length > 0 || selectedFilters.gender.length > 0 || selectedFilters.colors.length > 0 || selectedFilters.sizes.length > 0
-        
+        const hasFilters =
+          selectedFilters.materials.length > 0 ||
+          selectedFilters.style.length > 0 ||
+          selectedFilters.gender.length > 0 ||
+          selectedFilters.colors.length > 0 ||
+          selectedFilters.sizes.length > 0;
+
+        const genderToParam = (g: string) => {
+          const v = g.trim().toLowerCase();
+          if (v === "male" || v === "men") return "men";
+          if (v === "female" || v === "women") return "women";
+          if (v === "unisex") return "unisex";
+          return v;
+        };
+
         const queryParams = {
           page,
           limit: 28,
-          categoryId: activeCategory !== "t-shirts" ? activeCategory : undefined,
-          materials: selectedFilters.materials.length > 0 ? selectedFilters.materials.join(",") : undefined,
-          styles: selectedFilters.style.length > 0 ? selectedFilters.style.join(",") : undefined,
-          genders: selectedFilters.gender.length > 0 ? Array.from(new Set(selectedFilters.gender.map(g => g.trim().toLowerCase()))).join(",") : undefined,
-          colors: selectedFilters.colors.length > 0 ? selectedFilters.colors.join(",") : undefined,
-          sizes: selectedFilters.sizes.length > 0 ? selectedFilters.sizes.join(",") : undefined,
-          sort: hasFilters ? (sortOverride ?? activeSort) : undefined,
+          categoryId:
+            activeCategory !== "t-shirts" ? activeCategory : undefined,
+          materials:
+            explicitQuery?.materials ??
+            (selectedFilters.materials.length > 0
+              ? selectedFilters.materials.join(",")
+              : undefined),
+          styles:
+            explicitQuery?.styles ??
+            (selectedFilters.style.length > 0
+              ? selectedFilters.style.join(",")
+              : undefined),
+          genders:
+            explicitQuery?.genders ??
+            (selectedFilters.gender.length > 0
+              ? Array.from(
+                  new Set(selectedFilters.gender.map(genderToParam))
+                ).join(",")
+              : undefined),
+          colors:
+            explicitQuery?.colors ??
+            (selectedFilters.colors.length > 0
+              ? selectedFilters.colors.join(",")
+              : undefined),
+          sizes:
+            explicitQuery?.sizes ??
+            (selectedFilters.sizes.length > 0
+              ? selectedFilters.sizes.join(",")
+              : undefined),
+          sort: hasFilters ? sortOverride ?? activeSort : undefined,
+        };
+
+        console.log("Fetching products with params:", queryParams);
+        console.log("Selected filters:", selectedFilters);
+
+        const newProductsData = await getProducts(queryParams);
+
+        // Only apply if this is the latest request
+        if (requestId > latestHandledRequestRef.current) {
+          latestHandledRequestRef.current = requestId;
+          setProductsData(newProductsData);
+          setCurrentProducts(
+            sortProductsClient(
+              newProductsData.products,
+              sortOverride ?? activeSort
+            )
+          );
+          setCurrentPage(page);
         }
-        
-        console.log('Fetching products with params:', queryParams)
-        console.log('Selected filters:', selectedFilters)
-
-        const newProductsData = await getProducts(queryParams)
-
-        setProductsData(newProductsData)
-        setCurrentProducts(sortProductsClient(newProductsData.products, sortOverride ?? activeSort))
-        setCurrentPage(page)
 
         if (!skipURLUpdate) {
-          const normalizedGender = Array.from(new Set(selectedFilters.gender.map(g => g.trim().toLowerCase()))).join(",")
+          const normalizedGender = Array.from(
+            new Set(selectedFilters.gender.map(genderToParam))
+          ).join(",");
           updateURL({
             page: page > 1 ? page : "",
             categoryId: activeCategory !== "t-shirts" ? activeCategory : "",
-            materials: selectedFilters.materials.length > 0 ? selectedFilters.materials.join(",") : "",
-            styles: selectedFilters.style.length > 0 ? selectedFilters.style.join(",") : "",
+            materials:
+              selectedFilters.materials.length > 0
+                ? selectedFilters.materials.join(",")
+                : "",
+            styles:
+              selectedFilters.style.length > 0
+                ? selectedFilters.style.join(",")
+                : "",
             genders: normalizedGender || "",
-            colors: selectedFilters.colors.length > 0 ? selectedFilters.colors.join(",") : "",
-            sizes: selectedFilters.sizes.length > 0 ? selectedFilters.sizes.join(",") : "",
-            sort: sortOverride ?? activeSort,
-          })
+            colors:
+              selectedFilters.colors.length > 0
+                ? selectedFilters.colors.join(",")
+                : "",
+            sizes:
+              selectedFilters.sizes.length > 0
+                ? selectedFilters.sizes.join(",")
+                : "",
+            sort: (sortOverride ?? activeSort) || "",
+          });
         }
       } catch (error) {
         setProductsData({
@@ -255,143 +378,188 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             hasNextPage: false,
             hasPreviousPage: false,
           },
-        })
+        });
       } finally {
-        setLoading(false)
+        inflightCountRef.current = Math.max(0, inflightCountRef.current - 1);
+        if (skipURLUpdate) {
+          if (inflightCountRef.current === 0) {
+            setLoading(false);
+          }
+        }
       }
     },
-    [activeCategory, selectedFilters, updateURL, activeSort],
-  )
+    [activeCategory, selectedFilters, updateURL, activeSort]
+  );
 
   const handlePageChange = useCallback(
     (page: number) => {
-      fetchProducts(page)
-      window.scrollTo({ top: 0, behavior: "smooth" })
+      fetchProducts(page);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [fetchProducts],
-  )
+    [fetchProducts]
+  );
 
   const handleFilterChange = useCallback(() => {
-    fetchProducts(1, true)
-  }, [fetchProducts])
+    fetchProducts(1, true);
+  }, [fetchProducts]);
 
   const handleCategoryChange = useCallback(
     (categoryId: string) => {
-      setActiveCategory(categoryId)
-      fetchProducts(1, true)
+      setActiveCategory(categoryId);
+      fetchProducts(1, true);
     },
-    [fetchProducts],
-  )
+    [fetchProducts]
+  );
 
   const handleSortChange = (sortValue: string) => {
-    setActiveSort(sortValue)
-    setSortDropdownOpen(false)
-    fetchProducts(1, true, sortValue)
-  }
+    setActiveSort(sortValue);
+    setSortDropdownOpen(false);
+    fetchProducts(1, true, sortValue);
+  };
 
   const handleClick = (product: Product) => {
-    const slug = getProductSlug(product)
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('route-loading:start'))
-    }
-    router.push(`/product/${slug}`)
-  }
+    const slug = getProductSlug(product);
+    // We no longer trigger the global route overlay for same-path navigations
+    router.push(`/product/${slug}`);
+  };
 
   const addToRecentlyViewed = (product: Product) => {
     setRecentlyViewed((prev) => {
-      const filtered = prev.filter((p) => p.id !== product.id)
-      const updated = [product, ...filtered].slice(0, 8)
-      localStorage.setItem("recentlyViewedProducts", JSON.stringify(updated))
-      return updated
-    })
-  }
+      const filtered = prev.filter((p) => p.id !== product.id);
+      const updated = [product, ...filtered].slice(0, 8);
+      localStorage.setItem("recentlyViewedProducts", JSON.stringify(updated));
+      return updated;
+    });
+  };
 
   const handleSizeSelect = (productId: string, size: string) => {
-    const product = currentProducts.find((p) => p.id === productId) || recentlyViewed.find((p) => p.id === productId)
+    const product =
+      currentProducts.find((p) => p.id === productId) ||
+      recentlyViewed.find((p) => p.id === productId);
     if (product) {
-      addToCart(product, 'M')
+      addToCart(product, "M");
     }
     setSelectedSizes((prev) => ({
       ...prev,
       [productId]: size,
-    }))
-  }
+    }));
+  };
 
   const toggleMaterialFilter = (material: string) => {
     setSelectedFilters((prev) => {
-      const newMaterials = prev.materials.includes(material) ? prev.materials.filter((m) => m !== material) : [...prev.materials, material]
-      return { ...prev, materials: newMaterials }
-    })
-  }
+      const newMaterials = prev.materials.includes(material)
+        ? prev.materials.filter((m) => m !== material)
+        : [...prev.materials, material];
+      return { ...prev, materials: newMaterials };
+    });
+  };
 
   const toggleStyleFilter = (style: string) => {
     setSelectedFilters((prev) => {
-      const newStyles = prev.style.includes(style) ? prev.style.filter((s) => s !== style) : [...prev.style, style]
-      return { ...prev, style: newStyles }
-    })
-  }
+      const newStyles = prev.style.includes(style)
+        ? prev.style.filter((s) => s !== style)
+        : [...prev.style, style];
+      return { ...prev, style: newStyles };
+    });
+  };
 
   const toggleGenderFilter = (gender: string) => {
     setSelectedFilters((prev) => {
-      const newGenders = prev.gender.includes(gender) ? prev.gender.filter((g) => g !== gender) : [...prev.gender, gender]
-      return { ...prev, gender: newGenders }
-    })
-  }
+      const newGenders = prev.gender.includes(gender)
+        ? prev.gender.filter((g) => g !== gender)
+        : [...prev.gender, gender];
+      return { ...prev, gender: newGenders };
+    });
+  };
 
   const toggleSizeFilter = (size: string) => {
     setSelectedFilters((prev) => {
-      const newSizes = prev.sizes.includes(size) ? prev.sizes.filter((s) => s !== size) : [...prev.sizes, size]
-      return { ...prev, sizes: newSizes }
-    })
-  }
+      const newSizes = prev.sizes.includes(size)
+        ? prev.sizes.filter((s) => s !== size)
+        : [...prev.sizes, size];
+      return { ...prev, sizes: newSizes };
+    });
+  };
 
   const toggleColorFilter = (color: string) => {
     setSelectedFilters((prev) => {
-      const newColors = prev.colors.includes(color) ? prev.colors.filter((c) => c !== color) : [...prev.colors, color]
-      return { ...prev, colors: newColors }
-    })
-  }
+      const newColors = prev.colors.includes(color)
+        ? prev.colors.filter((c) => c !== color)
+        : [...prev.colors, color];
+      return { ...prev, colors: newColors };
+    });
+  };
 
   const clearFilters = () => {
+    // reset local state
     setSelectedFilters({
       materials: [],
       style: [],
       gender: [],
       colors: [],
       sizes: [],
-    })
-  }
+    });
+    setActiveCategory("t-shirts");
+    setActiveSort("");
+    setCurrentPage(1);
+
+    // reset URL back to base /shop
+    updateURL({
+      page: "",
+      categoryId: "",
+      materials: "",
+      styles: "",
+      genders: "",
+      colors: "",
+      sizes: "",
+      sort: "",
+    });
+
+    // refetch products after state flush without updating URL again
+    setTimeout(() => {
+      fetchProducts(1, true, "", true);
+    }, 0);
+  };
 
   useEffect(() => {
-    setMounted(true)
-    const sortedInitial = sortProductsClient(initialProductsData.products, activeSort)
-    setCurrentProducts(sortedInitial)
-    setVisibleProducts(sortedInitial.map((p) => p.id))
-  }, [initialProductsData.products])
+    setMounted(true);
+    const sortedInitial = sortProductsClient(
+      initialProductsData.products,
+      activeSort
+    );
+    setCurrentProducts(sortedInitial);
+    setVisibleProducts(sortedInitial.map((p) => p.id));
+  }, [initialProductsData.products]);
 
   useEffect(() => {
-    const urlPage = Number.parseInt(searchParams.get("page") || "1")
-    const urlCategoryId = searchParams.get("categoryId") || "t-shirts"
-    const urlMaterials = searchParams.get("materials")
-    const urlStyle = searchParams.get("styles")
-    const urlGender = searchParams.get("genders")
-    const urlColor = searchParams.get("colors")
-    const urlSize = searchParams.get("sizes")
-    const urlSort = searchParams.get("sort")
-    
-    console.log('URL params:', { urlGender, urlMaterials, urlStyle, urlColor, urlSize })
+    const urlPage = Number.parseInt(searchParams.get("page") || "1");
+    const urlCategoryId = searchParams.get("categoryId") || "t-shirts";
+    const urlMaterials = searchParams.get("materials");
+    const urlStyle = searchParams.get("styles");
+    const urlGender = searchParams.get("genders");
+    const urlColor = searchParams.get("colors");
+    const urlSize = searchParams.get("sizes");
+    const urlSort = searchParams.get("sort");
 
-    setActiveCategory(urlCategoryId)
-    setCurrentPage(urlPage)
-    setActiveSort(urlSort || "")
+    console.log("URL params:", {
+      urlGender,
+      urlMaterials,
+      urlStyle,
+      urlColor,
+      urlSize,
+    });
+
+    setActiveCategory(urlCategoryId);
+    setCurrentPage(urlPage);
+    setActiveSort(urlSort || "");
 
     const mapGenderToTitle = (g: string) => {
-      const v = g.trim().toLowerCase()
-      if (v === "men") return "Male"
-      if (v === "women") return "Female"
-      if (v === "unisex") return "Unisex"
-      return g
-    }
+      const v = g.trim().toLowerCase();
+      if (v === "men" || v === "male") return "Male";
+      if (v === "women" || v === "female") return "Female";
+      if (v === "unisex") return "Unisex";
+      return g;
+    };
 
     if (urlMaterials || urlStyle || urlGender || urlColor || urlSize) {
       setSelectedFilters({
@@ -400,20 +568,86 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         gender: urlGender ? urlGender.split(",").map(mapGenderToTitle) : [],
         colors: urlColor ? urlColor.split(",") : [],
         sizes: urlSize ? urlSize.split(",") : [],
-      })
+      });
     }
-    
-    if (urlMaterials || urlStyle || urlGender || urlColor || urlSize || urlPage > 1 || urlCategoryId !== "t-shirts") {
-      setTimeout(() => fetchProducts(urlPage, false, undefined, true), 100)
+
+    if (
+      urlMaterials ||
+      urlStyle ||
+      urlGender ||
+      urlColor ||
+      urlSize ||
+      urlPage > 1 ||
+      urlCategoryId !== "t-shirts"
+    ) {
+      const explicit = {
+        materials: urlMaterials || undefined,
+        styles: urlStyle || undefined,
+        genders: urlGender || undefined,
+        colors: urlColor || undefined,
+        sizes: urlSize || undefined,
+      };
+      setTimeout(
+        () => fetchProducts(urlPage, false, undefined, true, explicit),
+        0
+      );
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    const urlPage = Number.parseInt(searchParams.get("page") || "1")
-    if (urlPage !== currentPage) {
-      fetchProducts(urlPage)
+    const urlPage = Number.parseInt(searchParams.get("page") || "1");
+    const urlMaterials = searchParams.get("materials") || "";
+    const urlStyle = searchParams.get("styles") || "";
+    const urlGender = searchParams.get("genders") || "";
+    const urlColor = searchParams.get("colors") || "";
+    const urlSize = searchParams.get("sizes") || "";
+
+    const currentMaterials = selectedFilters.materials.join(",");
+    const currentStyles = selectedFilters.style.join(",");
+    const currentGenders = selectedFilters.gender
+      .map((g) => g.trim().toLowerCase())
+      .join(",");
+    const currentColors = selectedFilters.colors.join(",");
+    const currentSizes = selectedFilters.sizes.join(",");
+
+    const filtersChanged =
+      urlMaterials !== currentMaterials ||
+      urlStyle !== currentStyles ||
+      urlGender !== currentGenders ||
+      urlColor !== currentColors ||
+      urlSize !== currentSizes;
+
+    if (filtersChanged) {
+      // Sync local state from URL
+      const mapGenderToTitle = (g: string) => {
+        const v = g.trim().toLowerCase();
+        if (v === "men" || v === "male") return "Male";
+        if (v === "women" || v === "female") return "Female";
+        if (v === "unisex") return "Unisex";
+        return g;
+      };
+      setSelectedFilters({
+        materials: urlMaterials ? urlMaterials.split(",") : [],
+        style: urlStyle ? urlStyle.split(",") : [],
+        gender: urlGender ? urlGender.split(",").map(mapGenderToTitle) : [],
+        colors: urlColor ? urlColor.split(",") : [],
+        sizes: urlSize ? urlSize.split(",") : [],
+      });
+      const explicit = {
+        materials: urlMaterials || undefined,
+        styles: urlStyle || undefined,
+        genders: urlGender || undefined,
+        colors: urlColor || undefined,
+        sizes: urlSize || undefined,
+      };
+      fetchProducts(urlPage, true, undefined, true, explicit);
+      return;
     }
-  }, [searchParams])
+
+    if (urlPage !== currentPage) {
+      fetchProducts(urlPage);
+    }
+  }, [searchParams]);
 
   // Disabled automatic filter effect to prevent conflicts with URL-based filtering
   // useEffect(() => {
@@ -423,72 +657,91 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   // }, [selectedFilters])
 
   useEffect(() => {
-    setCurrentProducts(prev => sortProductsClient(prev, activeSort))
-  }, [activeSort])
+    setCurrentProducts((prev) => sortProductsClient(prev, activeSort));
+  }, [activeSort]);
 
   useEffect(() => {
-    const stoblackRecentlyViewed = localStorage.getItem("recentlyViewedProducts")
+    const stoblackRecentlyViewed = localStorage.getItem(
+      "recentlyViewedProducts"
+    );
     if (stoblackRecentlyViewed) {
       try {
-        const parsedData = JSON.parse(stoblackRecentlyViewed)
-        const productObjects = parsedData.map((p: Product) => p).filter(Boolean)
-        setRecentlyViewed(productObjects)
+        const parsedData = JSON.parse(stoblackRecentlyViewed);
+        const productObjects = parsedData
+          .map((p: Product) => p)
+          .filter(Boolean);
+        setRecentlyViewed(productObjects);
       } catch (error) {
-        console.error("Error parsing recently viewed products:", error)
+        console.error("Error parsing recently viewed products:", error);
       }
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const productId = entry.target.id.replace("product-", "")
-            setVisibleProducts((prev) => (prev.includes(productId) ? prev : [...prev, productId]))
+            const productId = entry.target.id.replace("product-", "");
+            setVisibleProducts((prev) =>
+              prev.includes(productId) ? prev : [...prev, productId]
+            );
           }
-        })
+        });
       },
       {
         threshold: 0.1,
         rootMargin: window.innerWidth < 768 ? "200px" : "100px",
-      },
-    )
+      }
+    );
 
     productRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref)
-    })
+      if (ref) observer.observe(ref);
+    });
 
     return () => {
       productRefs.current.forEach((ref) => {
-        if (ref) observer.unobserve(ref)
-      })
-    }
-  }, [productsData.products])
+        if (ref) observer.unobserve(ref);
+      });
+    };
+  }, [productsData.products]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (sortDropdownOpen && filterBarRef.current && !filterBarRef.current.contains(event.target as Node)) {
-        setSortDropdownOpen(false)
+      if (
+        sortDropdownOpen &&
+        filterBarRef.current &&
+        !filterBarRef.current.contains(event.target as Node)
+      ) {
+        setSortDropdownOpen(false);
       }
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [sortDropdownOpen])
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [sortDropdownOpen]);
 
   useLayoutEffect(() => {
     const updateLayout = () => {
       const filterBarWrapper = filterBarWrapperRef.current;
       const paginationSection = paginationSectionRef.current;
-      if (filterBarWrapper && paginationSection && filterBarWrapper.firstElementChild) {
-        const filterBarElement = filterBarWrapper.firstElementChild as HTMLElement;
+      if (
+        filterBarWrapper &&
+        paginationSection &&
+        filterBarWrapper.firstElementChild
+      ) {
+        const filterBarElement =
+          filterBarWrapper.firstElementChild as HTMLElement;
         const style = window.getComputedStyle(filterBarElement);
         const marginBottom = parseFloat(style.marginBottom);
         const height = filterBarElement.offsetHeight + marginBottom;
-        const stickyBarTopPosition = window.matchMedia('(min-width: 768px)').matches ? 112 : 128;
+        const stickyBarTopPosition = window.matchMedia("(min-width: 768px)")
+          .matches
+          ? 112
+          : 128;
         setLayoutMetrics({
           startStickyPoint: filterBarWrapper.offsetTop,
-          endStickyPoint: paginationSection.offsetTop - stickyBarTopPosition - height,
+          endStickyPoint:
+            paginationSection.offsetTop - stickyBarTopPosition - height,
           filterBarHeight: height,
         });
       }
@@ -503,42 +756,29 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const { startStickyPoint, endStickyPoint } = layoutMetrics;
-      const shouldBeSticky = scrollY >= startStickyPoint && scrollY < endStickyPoint;
-      setIsFilterSticky(current => current !== shouldBeSticky ? shouldBeSticky : current);
+      const shouldBeSticky =
+        scrollY >= startStickyPoint && scrollY < endStickyPoint;
+      setIsFilterSticky((current) =>
+        current !== shouldBeSticky ? shouldBeSticky : current
+      );
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [layoutMetrics]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("filterBarSticky", { detail: { isSticky: isFilterSticky } }))
+      window.dispatchEvent(
+        new CustomEvent("filterBarSticky", {
+          detail: { isSticky: isFilterSticky },
+        })
+      );
     }
-  }, [isFilterSticky])
-
-  if (!mounted) {
-    return (
-      <div className="bg-white min-h-screen flex flex-col">
-        <main className="flex-1">
-          <div className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
-            <div className="flex justify-center items-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
-              <span className="ml-3 text-gray-600">Loading products...</span>
-            </div>
-          </div>
-        </main>
-      </div>
-    )
-  }
+  }, [isFilterSticky]);
 
   return (
     <section className="bg-white">
-      {loading && (
-        <div className="fixed inset-0 z-[9998] bg-white/30 flex items-center justify-center">
-          <Loader2 className="h-10 w-10 text-black animate-spin" />
-        </div>
-      )}
       <ShopCategories keywordCategories={keywordCategories} />
 
       <div className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
@@ -560,13 +800,21 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           />
         </div>
 
-        
-
         <div className="w-full px-2 sm:px-4 md:px-8">
           {!loading && productsData.products.length > 0 ? (
             <>
               <div className="mb-4 text-sm text-gray-600 text-center">
-                Showing {(productsData.pagination.currentPage - 1) * productsData.pagination.productsPerPage + 1} - {Math.min(productsData.pagination.currentPage * productsData.pagination.productsPerPage, productsData.pagination.totalProducts)} of {productsData.pagination.totalProducts} products
+                Showing{" "}
+                {(productsData.pagination.currentPage - 1) *
+                  productsData.pagination.productsPerPage +
+                  1}{" "}
+                -{" "}
+                {Math.min(
+                  productsData.pagination.currentPage *
+                    productsData.pagination.productsPerPage,
+                  productsData.pagination.totalProducts
+                )}{" "}
+                of all products
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
@@ -607,14 +855,23 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             </>
           ) : !loading ? (
             <div className="text-center py-10">
-              <p className="text-gray-500">No products found. Try adjusting your filters.</p>
+              <p className="text-gray-500">
+                No products found. Try adjusting your filters.
+              </p>
               {hasActiveFilters && (
-                <button onClick={clearFilters} className="mt-2 text-black-600 hover:text-black underline">
+                <button
+                  onClick={clearFilters}
+                  className="mt-2 text-black-600 hover:text-black underline"
+                >
                   Clear all filters
                 </button>
               )}
             </div>
-          ) : null}
+          ) : (
+            <div className="text-center py-10">
+              <p className="text-gray-500">Loading products...</p>
+            </div>
+          )}
         </div>
 
         {currentProducts.length > 0 && (
@@ -626,7 +883,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             addToRecentlyViewed={addToRecentlyViewed}
             handleClick={handleClick}
             handleSizeSelect={handleSizeSelect}
-            onAddToCartClick={(product) => setMobileCartModal({ isOpen: true, product })}
+            onAddToCartClick={(product) =>
+              setMobileCartModal({ isOpen: true, product })
+            }
           />
         )}
 
@@ -639,7 +898,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             addToRecentlyViewed={addToRecentlyViewed}
             handleClick={handleClick}
             handleSizeSelect={handleSizeSelect}
-            onAddToCartClick={(product) => setMobileCartModal({ isOpen: true, product })}
+            onAddToCartClick={(product) =>
+              setMobileCartModal({ isOpen: true, product })
+            }
           />
         )}
 
@@ -663,8 +924,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           }}
           onClearFilters={clearFilters}
           onApplyFilters={() => {
-            fetchProducts(1, true)
-            setFilterSidebarOpen(false)
+            fetchProducts(1, true);
+            setFilterSidebarOpen(false);
           }}
         />
 
@@ -673,16 +934,16 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           onClose={() => setCategorySliderOpen(false)}
           keywordCategories={keywordCategories || []}
           onCategorySelect={(category) => {
-            console.log('Selected category:', category)
-            setCategorySliderOpen(false)
+            console.log("Selected category:", category);
+            setCategorySliderOpen(false);
           }}
         />
 
-        <WhatsMySize 
-          open={sizeModalOpen} 
+        <WhatsMySize
+          open={sizeModalOpen}
           onOpenChange={setSizeModalOpen}
           onCategorySelect={(category) => {
-            console.log('Selected category:', category)
+            console.log("Selected category:", category);
           }}
         />
 
@@ -693,7 +954,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             product={mobileCartModal.product}
             availableSizes={mobileCartModal.product.sizeDetails || []}
             availableColors={mobileCartModal.product.colorDetails || []}
-            selectedColorId={mobileCartModal.product.colorDetails?.[0]?.id || ""}
+            selectedColorId={
+              mobileCartModal.product.colorDetails?.[0]?.id || ""
+            }
           />
         )}
 
@@ -720,8 +983,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         `}</style>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ProductsPageClient
-
+export default ProductsPageClient;
