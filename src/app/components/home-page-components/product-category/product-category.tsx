@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/src/app/lib/utils";
+import { avertaBold } from "@/src/lib/fonts";
 
 interface Category {
   id: string;
@@ -124,6 +125,7 @@ interface ProductCategoryProps {
   tabTextColor?: string;
   tabActiveColor?: string;
   tabHoverColor?: string;
+  showTabs?: boolean;
   categories?: {
     men: Category[];
     women: Category[];
@@ -139,6 +141,7 @@ export default function ProductCategory({
   tabTextColor = "text-gray-700",
   tabActiveColor = "border-[#2b2b2b] text-[#2b2b2b]",
   tabHoverColor = "hover:text-[#2b2b2b]",
+  showTabs = true,
   categories: propCategories,
   onCategoryClick,
 }: ProductCategoryProps) {
@@ -162,32 +165,34 @@ export default function ProductCategory({
   return (
     <section className={`w-full ${bg} flex justify-center overflow-hidden`}>
       <div className="w-full max-w-[1896px] py-0 m-0 md:pl-8 lg:pl-[57px]">
-        <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 -ml-4 ml-3 md:-ml-4">
-          <div className="flex gap-4">
-            <button
-              onClick={() => setActiveTab("men")}
-              className={cn(
-                "px-3 pb-1 text-base font-semibold transition-colors border-b-2 text-center",
-                activeTab === "men"
-                  ? tabActiveColor
-                  : `border-transparent ${tabTextColor} ${tabHoverColor}`
-              )}
-            >
-              MEN
-            </button>
-            <button
-              onClick={() => setActiveTab("women")}
-              className={cn(
-                "px-3 pb-1 text-base font-semibold transition-colors border-b-2 text-center",
-                activeTab === "women"
-                  ? tabActiveColor
-                  : `border-transparent ${tabTextColor} ${tabHoverColor}`
-              )}
-            >
-              WOMEN
-            </button>
+        {showTabs && (
+          <div className="w-full flex justify-center items-center -mt-1 mb-3 md:mb-4 -ml-4 ml-3 md:-ml-4">
+            <div className="flex gap-4">
+              <button
+                onClick={() => setActiveTab("men")}
+                className={cn(
+                  "px-3 pb-1 text-base font-semibold transition-colors border-b-2 text-center",
+                  activeTab === "men"
+                    ? tabActiveColor
+                    : `border-transparent ${tabTextColor} ${tabHoverColor}`
+                )}
+              >
+                MEN
+              </button>
+              <button
+                onClick={() => setActiveTab("women")}
+                className={cn(
+                  "px-3 pb-1 text-base font-semibold transition-colors border-b-2 text-center",
+                  activeTab === "women"
+                    ? tabActiveColor
+                    : `border-transparent ${tabTextColor} ${tabHoverColor}`
+                )}
+              >
+                WOMEN
+              </button>
+            </div>
           </div>
-        </div>
+        )}
         
         <div className="w-full hidden md:flex justify-end items-center gap-2 sm:gap-3 mb-2 md:mb-3">
           <button
@@ -241,12 +246,12 @@ export default function ProductCategory({
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                           className="object-cover transition-transform duration-700 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
 
                         <div className="absolute inset-x-0 bottom-0 p-4 group">
                           <div className="transition-all duration-500 ease-in-out group-hover:-translate-y-12">
                             <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
-                              <h3 className="text-white text-lg md:text-xl lg:text-2xl font-black text-left transition-all duration-500">
+                              <h3 className={`text-white text-lg md:text-xl lg:text-2xl font-black text-left transition-all duration-500 ${avertaBold.className}`}>
                                 {item.name}
                               </h3>
                               <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1" />
@@ -272,12 +277,12 @@ export default function ProductCategory({
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                           className="object-cover transition-transform duration-700 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent"></div>
 
                         <div className="absolute inset-x-0 bottom-0 p-4 group">
                           <div className="transition-all duration-500 ease-in-out group-hover:-translate-y-12">
                             <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
-                              <h3 className="text-white text-lg md:text-xl lg:text-2xl font-black text-left transition-all duration-500">
+                              <h3 className={`text-white text-lg md:text-xl lg:text-2xl font-black text-left transition-all duration-500 ${avertaBold.className}`}>
                                 {item.name}
                               </h3>
                               <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1" />

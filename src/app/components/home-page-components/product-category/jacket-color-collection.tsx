@@ -5,6 +5,63 @@ import type React from "react"
 import { avertaBlack } from "@/src/lib/fonts"
 import ProductCategory from "./product-category"
 
+const colorCollectionMen = [
+  {
+    id: "color-black-men",
+    name: "BLACK JACKETS",
+    imageUrl: "/images/Black.webp",
+    href: "/collections/mens-leather-bomber-jackets",
+  },
+  {
+    id: "color-brown-men",
+    name: "BROWN JACKETS",
+    imageUrl: "/images/Brown.webp",
+    href: "/collections/mens-suede-jackets",
+  },
+  {
+    id: "color-red-women",
+    name: "RED JACKETS",
+    imageUrl: "/images/Red Women.webp",
+    href: "/collections/mens-suede-jackets",
+  },
+  {
+    id: "color-white-men",
+    name: "WHITE JACKETS",
+    imageUrl: "/images/White.webp",
+    href: "/collections/mens-denim-jackets",
+  },
+  {
+    id: "color-pink-men",
+    name: "PINK JACKETS",
+    imageUrl: "/images/Pink.webp",
+    href: "/collections/mens-suede-jackets",
+  },
+  {
+    id: "color-blue-men",
+    name: "BLUE JACKETS",
+    imageUrl: "/images/Blue.webp",
+    href: "/collections/mens-puffer-jackets",
+  },
+  {
+    id: "color-green-women",
+    name: "GREEN JACKETS",
+    imageUrl: "/images/Green.webp",
+    href: "/collections/mens-suede-jackets",
+  },
+
+
+  {
+    id: "color-yellow-men",
+    name: "YELLOW JACKETS",
+    imageUrl: "/images/Yellow.webp",
+    href: "/collections/mens-suede-jackets",
+  },
+
+
+];
+
+
+
 export default function JacketColorCollection() {
   return (
     <section className="w-full bg-[#EAEAEA] text-black relative overflow-hidden">
@@ -20,15 +77,20 @@ export default function JacketColorCollection() {
             Discover our exclusive range of premium jackets across different styles.
           </p>
         </div>
-        
-        <ProductCategory 
-          bg="bg-[#EAEAEA]" 
+
+        <ProductCategory
+          bg="bg-[#EAEAEA]"
           arrowBgColor="bg-white"
           arrowTextColor="text-black"
           arrowHoverBgColor="hover:bg-gray-200"
           tabTextColor="text-gray-600"
           tabActiveColor="border-black text-black"
           tabHoverColor="hover:text-black"
+          showTabs={false}
+          categories={{
+            men: colorCollectionMen,
+            women: colorCollectionMen
+          }}
         />
       </div>
     </section>
