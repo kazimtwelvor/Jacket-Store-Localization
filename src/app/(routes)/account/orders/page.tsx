@@ -58,6 +58,7 @@ export default function OrderHistoryPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const storeId = process.env.NEXT_PUBLIC_STORE_ID;
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -71,22 +72,38 @@ export default function OrderHistoryPage() {
 
       try {
         setIsLoading(true);
-        console.log("Token:", token);
-        const ordersUrl = `https://d1.fineyst.com/api/users/orders`;
+        const url = new URL(`https://d1.fineyst.com/api/users/orders`);
+        if (storeId) {
+          url.searchParams.set("storeId", storeId);
+        }
 
-        const response = await fetch(ordersUrl, {
+        const response = await fetch(url.toString(), {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            ...(storeId ? { "X-Store-Id": storeId } : {}),
           },
         });
+
+        if (response.status === 401) {
+          // Unauthorized: clear session and redirect to login
+          await logout();
+          router.push("/auth/login?redirectTo=/account/orders");
+          return;
+        }
 
         if (response.ok) {
           const data = await response.json();
           setOrders(data.orders || []);
         } else {
           setOrders([]);
+          try {
+            const errData = await response.json();
+            setError(errData?.error || errData?.message || "Failed to load orders.");
+          } catch (_) {
+            setError(`Failed to load orders (status ${response.status}).`);
+          }
         }
       } catch (err) {
         console.error("Error fetching orders:", err);
