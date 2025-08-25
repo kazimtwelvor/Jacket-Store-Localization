@@ -20,12 +20,13 @@ export async function POST(req: Request) {
     // Forward the email verification request to the Admin API
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || ""
     
-    // If no external API URL is configured, return a mock success response
+    // If no external API URL is configured, return error
     if (!apiUrl) {
-      console.log("[STORE_VERIFY] No external API configured, returning mock response")
-      return NextResponse.json({
-        message: "Email verification successful",
-      })
+      console.log("[STORE_VERIFY] No external API configured")
+      return NextResponse.json(
+        { error: "Email verification service not configured" },
+        { status: 503 }
+      )
     }
 
     const adminApiUrl = `${apiUrl}/auth/verify`
@@ -53,10 +54,10 @@ export async function POST(req: Request) {
       })
     } catch (fetchError) {
       console.error("[STORE_VERIFY] External API fetch failed:", fetchError)
-      // Return a mock success response if external API is not available
-      return NextResponse.json({
-        message: "Email verification successful",
-      })
+      return NextResponse.json(
+        { error: "Failed to connect to email verification service" },
+        { status: 503 }
+      )
     }
   } catch (error) {
     console.error("[STORE_VERIFY_EMAIL_ERROR]", error)

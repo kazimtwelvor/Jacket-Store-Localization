@@ -1,67 +1,143 @@
-import { NextResponse } from "next/server"
-import { z } from "zod"
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { sendPasswordResetEmail } from "@/src/app/lib/mail";
+import crypto from "crypto";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email format"),
   storeId: z.string().min(1, "Store ID is required"),
-})
+});
+
+// In-memory storage for reset tokens (in production, use a database)
+const resetTokens = new Map<
+  string,
+  { token: string; expires: number; email: string }
+>();
+
+// Helper function to check if user exists using external API
+async function userExists(email: string, storeId: string): Promise<boolean> {
+  try {
+    // Use the external API endpoint to check if user exists
+    const checkUserUrl = `https://d1.fineyst.com/api/users/check-exists?email=${encodeURIComponent(email)}`;
+    
+    const response = await fetch(checkUserUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      return data === true; // API returns true if user exists
+    }
+    
+    // If API call fails, return false for security
+    return false;
+  } catch (error) {
+    // If there's any error, return false for security
+    return false;
+  }
+}
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json()
+    const body = await req.json();
 
-    const validationResult = forgotPasswordSchema.safeParse(body)
+    const validationResult = forgotPasswordSchema.safeParse(body);
     if (!validationResult.success) {
-      return NextResponse.json({ error: validationResult.error.issues[0].message }, { status: 400 })
+      return NextResponse.json(
+        { error: validationResult.error.issues[0].message },
+        { status: 400 }
+      );
     }
 
-    const { email, storeId } = validationResult.data
+    const { email, storeId } = validationResult.data;
 
-    // Forward the forgot password request to the Admin API
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || ""
-    
-    // If no external API URL is configured, return a mock success response
-    if (!apiUrl) {
-      console.log("[STORE_FORGOT_PASSWORD] No external API configured, returning mock response")
+    // Check if user exists before proceeding
+    const userExistsResult = await userExists(email, storeId);
+
+    if (!userExistsResult) {
+      // Always return the same message to prevent email enumeration
       return NextResponse.json({
-        message: "Password reset email sent successfully",
-      })
+        message:
+          "If an account with that email exists, a password reset link has been sent.",
+      });
     }
 
-    const adminApiUrl = `${apiUrl}/auth/forgot-password`
+    // User exists, proceed with password reset
+
+    // Generate a secure reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const expiresAt = Date.now() + 60 * 60 * 1000; // 1 hour from now
+
+    // Store the reset token (in production, store this in a database)
+    resetTokens.set(resetToken, {
+      token: resetToken,
+      expires: expiresAt,
+      email: email,
+    });
+
+    // Create the reset link
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'https://d1.fineyst.com';
+    const resetLink = `${baseUrl}/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(
+      email
+    )}`;
 
     try {
-      const response = await fetch(adminApiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          storeId,
-        }),
-      })
+      // Extract name from email (everything before @)
+      const name = email.split("@")[0];
 
-      const responseData = await response.json()
+      // Send password reset email using nodemailer
+      const emailSent = await sendPasswordResetEmail(email, name, resetLink);
 
-      if (!response.ok) {
-        return NextResponse.json({ error: responseData.error || "Failed to send reset email" }, { status: response.status })
+      if (emailSent) {
+        return NextResponse.json({
+          message:
+            "If an account with that email exists, a password reset link has been sent.",
+        });
+      } else {
+        return NextResponse.json(
+          { error: "Failed to send password reset email" },
+          { status: 500 }
+        );
       }
-
-      return NextResponse.json({
-        message: "Password reset email sent successfully",
-      })
-    } catch (fetchError) {
-      console.error("[STORE_FORGOT_PASSWORD] External API fetch failed:", fetchError)
-      // Return a mock success response if external API is not available
-      return NextResponse.json({
-        message: "Password reset email sent successfully",
-      })
+    } catch (emailError) {
+      return NextResponse.json(
+        { error: "Failed to send password reset email" },
+        { status: 500 }
+      );
     }
   } catch (error) {
-    console.error("[STORE_FORGOT_PASSWORD_ERROR]", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
+}
+
+// Helper function to validate reset token (can be used by reset-password endpoint)
+export function validateResetToken(token: string): {
+  valid: boolean;
+  email?: string;
+} {
+  const tokenData = resetTokens.get(token);
+
+  if (!tokenData) {
+    return { valid: false };
+  }
+
+  if (Date.now() > tokenData.expires) {
+    resetTokens.delete(token); // Clean up expired token
+    return { valid: false };
+  }
+
+  return { valid: true, email: tokenData.email };
+}
+
+// Helper function to consume reset token (call this after successful password reset)
+export function consumeResetToken(token: string): boolean {
+  return resetTokens.delete(token);
 }
 
 export async function OPTIONS() {
@@ -72,5 +148,5 @@ export async function OPTIONS() {
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
-  })
+  });
 }

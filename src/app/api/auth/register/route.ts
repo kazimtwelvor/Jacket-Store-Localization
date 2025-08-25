@@ -1,5 +1,7 @@
+import { sendEmailVerificationEmail, sendWelcomeEmail } from "@/src/app/lib/mail"
 import { NextResponse } from "next/server"
 import { z } from "zod"
+// import { sendWelcomeEmail, sendEmailVerificationEmail } from "@/lib/mail"
 
 const registerSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -16,7 +18,9 @@ const registerSchema = z.object({
 
 export async function POST(req: Request) {
   try {
+
     const body = await req.json()
+
 
     const validationResult = registerSchema.safeParse(body)
     if (!validationResult.success) {
@@ -25,22 +29,19 @@ export async function POST(req: Request) {
 
     const { name, email, password, storeId, phone, address, city, state, zipCode, country } = validationResult.data
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || ""
-    
-    // If no external API URL is configured, return a mock success response
-    if (!apiUrl) {
-      console.log("[STORE_REGISTER] No external API configured, returning mock response")
-      return NextResponse.json({
-        message: "User registered successfully. Please check your email to verify your account.",
-        user: {
-          id: "mock-user-id",
-          email,
-          name,
-        },
-      })
+    // Get the API URL from environment variable
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || ""
+
+    // Try both relative and absolute URLs
+    let adminApiUrl = "/api/auth/register"
+
+    if (apiBaseUrl) {
+      // If we have an API base URL, use it to construct an absolute URL
+      // Remove /api/storeId if it's included in the base URL
+      const baseUrl = apiBaseUrl.replace(/\/api\/[^/]+$/, "")
+      adminApiUrl = `${baseUrl}/api/auth/register`
     }
 
-    const adminApiUrl = `${apiUrl}/auth/register`
 
     try {
       const response = await fetch(adminApiUrl, {
@@ -62,10 +63,62 @@ export async function POST(req: Request) {
         }),
       })
 
-      const responseData = await response.json()
+
+      // Get the raw response text first
+      const responseText = await response.text()
+
+      // Try to parse as JSON if possible
+      let responseData
+      try {
+        responseData = JSON.parse(responseText)
+      } catch (parseError) {
+
+        // If we can't parse the response but the status is 201 (Created),
+        // assume the registration was successful
+        if (response.status === 201) {
+          return NextResponse.json({
+            message: "User registered successfully. Please check your email to verify your account.",
+          })
+        }
+
+        return NextResponse.json(
+          {
+            error: "Failed to parse server response",
+            details: responseText.substring(0, 100),
+          },
+          { status: 500 },
+        )
+      }
 
       if (!response.ok) {
-        return NextResponse.json({ error: responseData.error || "Registration failed" }, { status: response.status })
+
+        return NextResponse.json(
+          {
+            error: responseData.error || responseData.message || "Registration failed",
+            status: response.status,
+          },
+          { status: response.status },
+        )
+      }
+
+      // Send welcome email after successful registration
+      try {
+        const emailSent = await sendWelcomeEmail(email, name)
+        if (emailSent) {
+        }
+      } catch (emailError) {
+        // Don't fail the registration if email fails
+      }
+
+      // If email verification is required, send verification email
+      if (process.env.REQUIRE_EMAIL_VERIFICATION === "true") {
+        try {
+          const verificationLink = `https://d1.fineyst.com/auth/verify?token=verification_token_here`
+          const verificationEmailSent = await sendEmailVerificationEmail(email, name, verificationLink)
+          if (verificationEmailSent) {
+          }
+        } catch (verificationError) {
+        }
       }
 
       return NextResponse.json({
@@ -73,22 +126,34 @@ export async function POST(req: Request) {
         user: responseData.user,
       })
     } catch (fetchError) {
-      console.error("[STORE_REGISTER] External API fetch failed:", fetchError)
-      // Return a mock success response if external API is not available
-      return NextResponse.json({
-        message: "User registered successfully. Please check your email to verify your account.",
-        user: {
-          id: "mock-user-id",
-          email,
-          name,
+
+      // Provide detailed error information
+      return NextResponse.json(
+        {
+          error: "Failed to connect to authentication service",
+          details:
+            fetchError instanceof Error
+              ? fetchError.message
+              : String(fetchError),
         },
-      })
+        { status: 500 },
+      )
     }
   } catch (error) {
-    console.error("[STORE_REGISTER_ERROR]", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
-  }
-}
+
+    // Return detailed error information
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+        details:
+          error instanceof Error
+            ? error.message
+            : String(error),
+          },
+          { status: 500 },
+        )
+      }
+    }
 
 export async function OPTIONS() {
   return new NextResponse(null, {

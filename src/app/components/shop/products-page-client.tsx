@@ -323,9 +323,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           sort: hasFilters ? sortOverride ?? activeSort : undefined,
         };
 
-        console.log("Fetching products with params:", queryParams);
-        console.log("Selected filters:", selectedFilters);
-
         const newProductsData = await getProducts(queryParams);
 
         // Only apply if this is the latest request
@@ -541,15 +538,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     const urlColor = searchParams.get("colors");
     const urlSize = searchParams.get("sizes");
     const urlSort = searchParams.get("sort");
-
-    console.log("URL params:", {
-      urlGender,
-      urlMaterials,
-      urlStyle,
-      urlColor,
-      urlSize,
-    });
-
     setActiveCategory(urlCategoryId);
     setCurrentPage(urlPage);
     setActiveSort(urlSort || "");
@@ -781,18 +769,52 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   return (
     <section className="bg-white">
       <ShopCategories keywordCategories={keywordCategories} />
-      
+
       {/* Shop Heading */}
       <div className="container mx-auto text-center -mt-2 sm:mt-8 -mb-2 sm:mb-0">
-        <h1 className={`text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 ${avertaBlack.className}`}>
+        <h1
+          className={`text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 ${avertaBlack.className}`}
+        >
           {(() => {
-            const material = searchParams.get('materials');
-            const style = searchParams.get('styles');
-            if (material === 'Leather') return 'SHOP LEATHER JACKETS';
-            if (style === 'Bomber') return 'SHOP BOMBER JACKETS';
-            if (style === 'Varsity') return 'SHOP VARSITY JACKETS';
-            if (style === 'Biker') return 'SHOP BIKER JACKETS';
-            return 'SHOP';
+            const material = searchParams.get("materials");
+            const style = searchParams.get("styles");
+
+            // Collect all selected categories
+            const categories: string[] = [];
+
+            // Handle comma-separated materials
+            if (material) {
+              const materials = material.split(",").map((m) => m.trim());
+              materials.forEach((m) => {
+                if (m.toLowerCase() === "leather") categories.push("LEATHER");
+                if (m.toLowerCase() === "denim") categories.push("DENIM");
+                if (m.toLowerCase() === "nylon") categories.push("NYLON");
+                if (m.toLowerCase() === "polyester")
+                  categories.push("POLYESTER");
+                if (m.toLowerCase() === "cotton") categories.push("COTTON");
+                if (m.toLowerCase() === "wool") categories.push("WOOL");
+                if (m.toLowerCase() === "silk") categories.push("SILK");
+                if (m.toLowerCase() === "cashmere") categories.push("CASHMERE");
+                if (m.toLowerCase() === "linen") categories.push("LINEN");
+              });
+            }
+
+            // Handle comma-separated styles
+            if (style) {
+              const styles = style.split(",").map((s) => s.trim());
+              styles.forEach((s) => {
+                if (s.toLowerCase() === "bomber") categories.push("BOMBER");
+                if (s.toLowerCase() === "varsity") categories.push("VARSITY");
+                if (s.toLowerCase() === "biker") categories.push("BIKER");
+              });
+            }
+
+            // Handle multiple categories
+            if (categories.length === 0) return "SHOP";
+            if (categories.length === 1) return `SHOP ${categories[0]} JACKETS`;
+            if (categories.length === 2)
+              return `SHOP ${categories[0]} AND ${categories[1]} JACKETS`;
+            if (categories.length > 2) return "SHOP JACKETS";
           })()}
         </h1>
       </div>
@@ -950,7 +972,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           onClose={() => setCategorySliderOpen(false)}
           keywordCategories={keywordCategories || []}
           onCategorySelect={(category) => {
-            console.log("Selected category:", category);
             setCategorySliderOpen(false);
           }}
         />
@@ -958,9 +979,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         <WhatsMySize
           open={sizeModalOpen}
           onOpenChange={setSizeModalOpen}
-          onCategorySelect={(category) => {
-            console.log("Selected category:", category);
-          }}
+          // onCategorySelect={(category) => {
+          //   console.log("Selected category:", category);
+          // }}
         />
 
         {mobileCartModal.product && (

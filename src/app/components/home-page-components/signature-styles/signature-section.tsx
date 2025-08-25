@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FaArrowRight, FaChevronDown, FaChevronUp } from "react-icons/fa";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "@/src/app/ui/card";
 import { avertaBlack, avertaBold } from "@/src/lib/fonts";
 import ShopButton from "@/src/app/components/shop-button";
@@ -58,11 +58,33 @@ const TruncatedText = ({
 export default function SignatureStylesSection() {
   const [menDropdownOpen, setMenDropdownOpen] = useState(false);
   const [womenDropdownOpen, setWomenDropdownOpen] = useState(false);
+  const [womenImageSrc, setWomenImageSrc] = useState("https://jacket.us.com/uploads/2025/uadYfG.webp");
   const menDesc =
     "Crafted for the modern warrior, each jacket embodies strength, style and sophistication with premium leather that ages beautifully with every adventure.";
   const womenDesc =
     "Elegance redefined. From boardroom power moves to weekend adventures, our women's collection celebrates confidence with every curve and contour.";
   const characterLimit = 70;
+
+  // Handle responsive image selection on client side only
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      if (screenWidth >= 768 && screenWidth <= 1024) {
+        setWomenImageSrc("/images/tablet-image.jpg");
+      } else {
+        setWomenImageSrc("https://jacket.us.com/uploads/2025/uadYfG.webp");
+      }
+    };
+
+    // Set initial image
+    handleResize();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <section className="pt-10 pb-8 bg-white relative">
@@ -135,10 +157,7 @@ export default function SignatureStylesSection() {
                 )}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <img
-                    src={useImageForView(
-                      "https://jacket.us.com/uploads/2025/uadYfG.webp",
-                      "/images/tablet-image.jpg"
-                    )}
+                    src={womenImageSrc}
                     alt="Women's Leather Jacket"
                     className="w-full h-full object-cover object-[100%] md:object-[100%] lg:object-[100%] group-hover:scale-110 transition-transform duration-500 block"
                   />
@@ -183,14 +202,4 @@ export default function SignatureStylesSection() {
       </div>
     </section>
   );
-}
-
-function useImageForView(desktopImage: string, tabletImage: string): string {
-  if (typeof window !== "undefined") {
-    const screenWidth = window.innerWidth;
-    return screenWidth >= 768 && screenWidth <= 1024
-      ? tabletImage
-      : desktopImage;
-  }
-  return desktopImage;
 }
