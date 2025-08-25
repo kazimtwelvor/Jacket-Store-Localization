@@ -44,6 +44,9 @@ export default function LoginPage() {
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [zipError, setZipError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [stateError, setStateError] = useState("");
 
   // Create countries list from the package
   const countriesList = getCountryDataList()
@@ -325,9 +328,12 @@ export default function LoginPage() {
     }
   }, [state]);
 
+  const [loginError, setLoginError] = useState("");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setLoginError("");
 
     try {
       const result = await login(email, password);
@@ -336,9 +342,11 @@ export default function LoginPage() {
         toast.success("Login successful");
         router.push(redirectTo);
       } else {
+        setLoginError("Invalid email or password");
         toast.error(result.message);
       }
     } catch (error) {
+      setLoginError("Invalid email or password");
       toast.error("An error occurred during login");
     } finally {
       setIsLoading(false);
@@ -370,6 +378,7 @@ export default function LoginPage() {
 
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setEmailError("");
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
@@ -379,6 +388,18 @@ export default function LoginPage() {
     if (!validatePassword(password)) {
       toast.error(passwordError);
       return;
+    }
+
+    // Validate state for countries without predefined states
+    if (country && !statesData[country] && state) {
+      // For countries without predefined states, we'll accept any non-empty value
+      // but could add more specific validation here if needed
+    } else if (country && statesData[country] && state && state !== "other") {
+      const validState = statesData[country].find(s => s.code === state);
+      if (!validState) {
+        setStateError("Please select a valid state/province for the selected country");
+        return;
+      }
     }
 
     setIsLoading(true);
@@ -403,7 +424,10 @@ export default function LoginPage() {
         );
         setActiveTab("login");
       } else {
-        toast.error(result.message);
+        if (result.message === "Email already in use" || result.error === "Email already in use") {
+          setEmailError("Email already registered");
+        }
+        toast.error(result.message || result.error);
       }
     } catch (error) {
       console.error("Registration error:", error);
@@ -509,6 +533,11 @@ export default function LoginPage() {
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                   </div>
+                  {loginError && (
+                    <p className="text-sm text-red-600 mt-2 text-center">
+                      {loginError}
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -617,13 +646,23 @@ export default function LoginPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Email Address *
                     </label>
+                    {emailError && (
+                      <p className="text-sm text-red-600 mb-2">
+                        {emailError}
+                      </p>
+                    )}
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                       <input
                         type="email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setEmailError("");
+                        }}
+                        className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200 ${
+                          emailError ? "border-red-500" : "border-gray-300"
+                        }`}
                         placeholder="Enter your email"
                         required
                       />
@@ -639,9 +678,15 @@ export default function LoginPage() {
                       <input
                         type="tel"
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9+\s-]/g, '');
+                          if (value.length <= 15) {
+                            setPhone(value);
+                          }
+                        }}
                         className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                         placeholder="+1 123 456 7890"
+                        maxLength={15}
                       />
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
@@ -873,11 +918,21 @@ export default function LoginPage() {
                       <input
                         type="text"
                         value={state === "other" ? "" : state}
-                        onChange={(e) => setState(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
+                        onChange={(e) => {
+                          setState(e.target.value);
+                          setStateError("");
+                        }}
+                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200 ${
+                          stateError ? "border-red-500" : "border-gray-300"
+                        }`}
                         placeholder="Enter state/province/region"
                         required
                       />
+                      {stateError && (
+                        <p className="text-sm text-red-600 mt-1">
+                          {stateError}
+                        </p>
+                      )}
                     </div>
                   )}
 
@@ -907,6 +962,7 @@ export default function LoginPage() {
                       onChange={(e) => setAddressLine1(e.target.value)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
                       placeholder="Street address"
+                      maxLength={100}
                       required
                     />
                   </div>
@@ -921,20 +977,45 @@ export default function LoginPage() {
                       onChange={(e) => setAddressDetails(e.target.value)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
                       placeholder="Apartment, suite, etc. (optional)"
+                      maxLength={100}
                     />
                   </div>
 
                   <div className="mt-4">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      ZIP/Postal Code
+                      ZIP/Postal Code {(country === 'US' || country === 'CA') && '*'}
                     </label>
                     <input
                       type="text"
                       value={zipCode}
-                      onChange={(e) => setZipCode(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
-                      placeholder="ZIP or postal code"
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/[^0-9]/g, '');
+                        if (value.length <= 5) {
+                          setZipCode(value);
+                        }
+                        
+                        if (value && country === 'US') {
+                          const usZipRegex = /^\d{5}$/;
+                          setZipError(usZipRegex.test(value) ? "" : "Invalid US ZIP code format (12345)");
+                        } else if (value && country === 'CA') {
+                          const caPostalRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+                          setZipError(caPostalRegex.test(value) ? "" : "Invalid Canadian postal code format (A1A 1A1)");
+                        } else {
+                          setZipError("");
+                        }
+                      }}
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200 ${
+                        zipError ? "border-red-500" : "border-gray-300"
+                      }`}
+                      placeholder={country === 'US' ? "12345" : country === 'CA' ? "A1A 1A1" : "ZIP or postal code"}
+                      maxLength={5}
+                      required={country === 'US' || country === 'CA'}
                     />
+                    {zipError && (
+                      <p className="text-sm text-red-600 mt-1">
+                        {zipError}
+                      </p>
+                    )}
                   </div>
                 </div>
 
