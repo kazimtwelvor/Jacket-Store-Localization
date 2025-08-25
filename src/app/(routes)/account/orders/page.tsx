@@ -67,22 +67,27 @@ export default function OrderHistoryPage() {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      if (!isAuthenticated || !token) return;
+      if (!isAuthenticated || !user?.email || !token) return;
 
       try {
         setIsLoading(true);
-        const response = await fetch(`/api/orders`, {
+        console.log("Token:", token);
+        const ordersUrl = `https://d1.fineyst.com/api/users/orders`;
+
+        const response = await fetch(ordersUrl, {
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch orders");
+        if (response.ok) {
+          const data = await response.json();
+          setOrders(data.orders || []);
+        } else {
+          setOrders([]);
         }
-
-        const data = await response.json();
-        setOrders(data.orders || []);
       } catch (err) {
         console.error("Error fetching orders:", err);
         setError("Failed to load your orders. Please try again later.");
@@ -92,7 +97,7 @@ export default function OrderHistoryPage() {
     };
 
     fetchOrders();
-  }, [isAuthenticated, token]);
+  }, [isAuthenticated, user?.email, token]);
 
   if (!isAuthenticated) {
     return null;
@@ -289,7 +294,9 @@ export default function OrderHistoryPage() {
                                   Order placed
                                 </p>
                                 <p className="font-medium">
-                                  {new Date(order.createdAt).toLocaleDateString()}
+                                  {new Date(
+                                    order.createdAt
+                                  ).toLocaleDateString()}
                                 </p>
                               </div>
                               <div className="mb-2 md:mb-0">
@@ -302,9 +309,7 @@ export default function OrderHistoryPage() {
                               </div>
                               <div className="mb-2 md:mb-0">
                                 <p className="text-sm text-gray-500">Total</p>
-                                <p className="font-medium">
-                                  ${order.total}
-                                </p>
+                                <p className="font-medium">${order.total}</p>
                               </div>
                               <div className="flex space-x-2">
                                 {getStatusBadge(order.status)}
@@ -338,9 +343,7 @@ export default function OrderHistoryPage() {
                                             {item.product.name}
                                           </Link>
                                         </h3>
-                                        <p className="ml-4">
-                                          ${item.price}
-                                        </p>
+                                        <p className="ml-4">${item.price}</p>
                                       </div>
                                     </div>
                                     <div className="flex flex-1 items-end justify-between text-sm">
@@ -377,7 +380,9 @@ export default function OrderHistoryPage() {
                                   <Calendar className="h-4 w-4 mr-1 text-gray-500" />
                                   <span className="text-sm text-gray-600">
                                     Est. delivery:{" "}
-                                    {new Date(order.estimatedDelivery).toLocaleDateString()}
+                                    {new Date(
+                                      order.estimatedDelivery
+                                    ).toLocaleDateString()}
                                   </span>
                                 </div>
                               )}

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
+import { email, z } from "zod";
 import { sendPasswordResetEmail } from "@/src/app/lib/mail";
 import crypto from "crypto";
 
@@ -16,25 +16,24 @@ const resetTokens = new Map<
 // Helper function to check if user exists using external API
 async function userExists(email: string, storeId: string): Promise<boolean> {
   try {
-    // Use the external API endpoint to check if user exists
-    const checkUserUrl = `https://d1.fineyst.com/api/users/check-exists?email=${encodeURIComponent(email)}`;
-    
+    const checkUserUrl = `https://d1.fineyst.com/api/users/check-exists?email=${encodeURIComponent(
+      email
+    )}`;
+
     const response = await fetch(checkUserUrl, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
-    
+
     if (response.ok) {
       const data = await response.json();
-      return data === true; // API returns true if user exists
+      return Boolean(data);
     }
-    
-    // If API call fails, return false for security
+
     return false;
   } catch (error) {
-    // If there's any error, return false for security
     return false;
   }
 }
@@ -52,7 +51,7 @@ export async function POST(req: Request) {
     }
 
     const { email } = validationResult.data;
-    
+
     // Get store ID from environment variable
     const storeId = process.env.NEXT_PUBLIC_STORE_ID;
     if (!storeId) {
@@ -62,18 +61,15 @@ export async function POST(req: Request) {
       );
     }
 
-    // Check if user exists before proceeding
     const userExistsResult = await userExists(email, storeId);
 
     if (!userExistsResult) {
-      // Always return the same message to prevent email enumeration
+      // Return same message but don't send email
       return NextResponse.json({
         message:
           "If an account with that email exists, a password reset link has been sent.",
       });
     }
-
-    // User exists, proceed with password reset
 
     // Generate a secure reset token
     const resetToken = crypto.randomBytes(32).toString("hex");
@@ -87,16 +83,17 @@ export async function POST(req: Request) {
     });
 
     // Create the reset link
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'https://d1.fineyst.com';
-    const resetLink = `${baseUrl}/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(
+    const baseUrl =
+      process.env.NEXT_PUBLIC_API_URL ||
+      process.env.NEXTAUTH_URL ||
+      "https://d1.fineyst.com";
+    const resetLink = `${baseUrl}/api/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(
       email
     )}`;
 
     try {
-      // Extract name from email (everything before @)
       const name = email.split("@")[0];
 
-      // Send password reset email using nodemailer
       const emailSent = await sendPasswordResetEmail(email, name, resetLink);
 
       if (emailSent) {

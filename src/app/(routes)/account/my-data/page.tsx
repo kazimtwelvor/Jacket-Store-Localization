@@ -13,14 +13,6 @@ export default function MyDataPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("my-data");
 
-  const userData = {
-    name: "Admin User",
-    email: "admin@example.com",
-    dob: "14.08.1991",
-    phone: "Mobile",
-    customerNumber: "12754689",
-  };
-
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/auth/login");
@@ -30,6 +22,13 @@ export default function MyDataPage() {
   if (!isAuthenticated) {
     return null;
   }
+
+  // Use actual user data or provide fallbacks based on available User interface
+  const displayName = user?.firstName && user?.lastName 
+    ? `${user.firstName} ${user.lastName}` 
+    : user?.username || user?.email?.split('@')[0] || "User";
+  const displayEmail = user?.email || "No email provided";
+  const displayCustomerNumber = user?.id || "N/A";
 
   return (
     <Container>
@@ -113,13 +112,15 @@ export default function MyDataPage() {
                   <h2 className="font-bold text-lg mb-4">MY DATA</h2>
                   <div className="space-y-2 mb-6">
                     <p>
-                      <span className="font-medium">Mr. {userData.name}</span>
+                      <span className="font-medium">
+                        {displayName}
+                      </span>
                     </p>
-                    <p>{userData.email}</p>
-                    <p>{userData.dob}</p>
-                    <p>{userData.phone}</p>
+                    <p>{displayEmail}</p>
+                    <p>Date of birth not provided</p>
+                    <p>Phone number not provided</p>
                     <p className="mt-4">
-                      Customer Number: {userData.customerNumber}
+                      Customer Number: {displayCustomerNumber}
                     </p>
                   </div>
                   <button className="flex items-center text-sm font-medium hover:underline">
@@ -157,11 +158,11 @@ export default function MyDataPage() {
                       INVOICE ADDRESS
                     </h3>
                     <div className="space-y-1 text-sm">
-                      <p>Mr. {userData.name}</p>
-                      <p>Street1</p>
-                      <p>Austin</p>
-                      <p>Texas</p>
-                      <p>United States</p>
+                      <p>{displayName}</p>
+                      <p>Street address not provided</p>
+                      <p>City not provided</p>
+                      <p>State not provided</p>
+                      <p>Country not provided</p>
                     </div>
                     <p className="text-sm text-gray-500 mt-2">
                       ✓ Preferred Billing Address
