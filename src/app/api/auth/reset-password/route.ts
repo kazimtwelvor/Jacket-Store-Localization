@@ -5,7 +5,6 @@ import { validateResetToken, consumeResetToken } from "../forgot-password/route"
 const resetPasswordSchema = z.object({
   token: z.string().min(1, "Token is required"),
   password: z.string().min(8, "Password must be at least 8 characters"),
-  storeId: z.string().min(1, "Store ID is required"),
 })
 
 export async function POST(req: Request) {
@@ -17,7 +16,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: validationResult.error.issues[0].message }, { status: 400 })
     }
 
-    const { token, password, storeId } = validationResult.data
+    const { token, password } = validationResult.data
+    
+    // Get store ID from environment variable
+    const storeId = process.env.NEXT_PUBLIC_STORE_ID;
+    if (!storeId) {
+      return NextResponse.json(
+        { error: "Store ID not configured" },
+        { status: 500 }
+      );
+    }
 
     // Validate the reset token
     const tokenValidation = validateResetToken(token)

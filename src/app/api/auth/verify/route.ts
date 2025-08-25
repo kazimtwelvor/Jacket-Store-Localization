@@ -3,7 +3,6 @@ import { z } from "zod"
 
 const verifyEmailSchema = z.object({
   token: z.string().min(1, "Token is required"),
-  storeId: z.string().min(1, "Store ID is required"),
 })
 
 export async function POST(req: Request) {
@@ -15,7 +14,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: validationResult.error.issues[0].message }, { status: 400 })
     }
 
-    const { token, storeId } = validationResult.data
+    const { token } = validationResult.data
+    
+    // Get store ID from environment variable
+    const storeId = process.env.NEXT_PUBLIC_STORE_ID;
+    if (!storeId) {
+      return NextResponse.json(
+        { error: "Store ID not configured" },
+        { status: 500 }
+      );
+    }
 
     // Forward the email verification request to the Admin API
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || ""

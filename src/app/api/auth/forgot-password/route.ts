@@ -5,7 +5,6 @@ import crypto from "crypto";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email format"),
-  storeId: z.string().min(1, "Store ID is required"),
 });
 
 // In-memory storage for reset tokens (in production, use a database)
@@ -52,7 +51,16 @@ export async function POST(req: Request) {
       );
     }
 
-    const { email, storeId } = validationResult.data;
+    const { email } = validationResult.data;
+    
+    // Get store ID from environment variable
+    const storeId = process.env.NEXT_PUBLIC_STORE_ID;
+    if (!storeId) {
+      return NextResponse.json(
+        { error: "Store ID not configured" },
+        { status: 500 }
+      );
+    }
 
     // Check if user exists before proceeding
     const userExistsResult = await userExists(email, storeId);

@@ -51,8 +51,8 @@ interface RegisterData {
   country?: string;
 }
 
-// Use default store ID for external API
-const storeId = "jackets-new"; // Default store ID
+// Use environment variable for store ID
+const storeId = process.env.NEXT_PUBLIC_STORE_ID || "fe268b7e-f2cc-459d-9619-957967ff23dc";
 
 const useAuth = create(
   persist<AuthStore>(

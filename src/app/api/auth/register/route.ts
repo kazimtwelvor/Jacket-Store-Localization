@@ -7,7 +7,6 @@ const registerSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email format"),
   password: z.string().min(8, "Password must be at least 8 characters"),
-  storeId: z.string().min(1, "Store ID is required"),
   phone: z.string().optional(),
   address: z.string().optional(),
   city: z.string().optional(),
@@ -27,7 +26,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: validationResult.error.issues[0].message }, { status: 400 })
     }
 
-    const { name, email, password, storeId, phone, address, city, state, zipCode, country } = validationResult.data
+    const { name, email, password, phone, address, city, state, zipCode, country } = validationResult.data
+    
+    // Get store ID from environment variable
+    const storeId = process.env.NEXT_PUBLIC_STORE_ID;
+    if (!storeId) {
+      return NextResponse.json(
+        { error: "Store ID not configured" },
+        { status: 500 }
+      );
+    }
 
     // Get the API URL from environment variable
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || ""
