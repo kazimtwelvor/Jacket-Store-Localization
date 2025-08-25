@@ -20,7 +20,7 @@ const menCategories: Category[] = [
     id: "leather-men",
     name: "LEATHER JACKETS",
     imageUrl: "/images/leather.webp",
-    href: "/collections/mens-leather-bomber-jackets",
+    href: "/collections/leather-bomber-jacket-mens",
   },
   {
     id: "puffer-men",

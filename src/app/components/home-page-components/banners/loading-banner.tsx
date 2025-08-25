@@ -65,12 +65,12 @@ export const LoadingBanner = ({ heroImages, currentImageIndex }: LoadingBannerPr
                             UP TO <span className="font-black">50%</span> OFF + CODE: STREET<span className="font-black">15</span>
                         </p>
                         <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-5">
-                            <Link href="/sale/men" aria-label="Shop men's collection">
+                            <Link href="/shop" aria-label="Shop men's collection">
                                 <span className="bg-white text-black font-bold py-4 px-8 md:px-10 text-sm md:text-base uppercase w-full sm:w-auto min-w-[180px] inline-block">
                                     Shop Men
                                 </span>
                             </Link>
-                            <Link href="/sale/women" aria-label="Shop women's collection">
+                            <Link href="/shop" aria-label="Shop women's collection">
                                 <span className="bg-white text-black font-bold py-4 px-8 md:px-10 text-sm md:text-base uppercase w-full sm:w-auto min-w-[180px] inline-block">
                                     Shop Women
                                 </span>
