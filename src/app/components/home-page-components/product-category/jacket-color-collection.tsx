@@ -10,7 +10,7 @@ const colorCollectionMen = [
     id: "color-black-men",
     name: "BLACK JACKETS",
     imageUrl: "/images/Black.webp",
-    href: "/collections/mens-leather-bomber-jackets",
+    href: "/collections/leather-bomber-jacket-mens",
   },
   {
     id: "color-brown-men",
