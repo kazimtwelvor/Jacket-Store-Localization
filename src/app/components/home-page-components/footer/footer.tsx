@@ -137,38 +137,31 @@ const Footer = () => {
                                 <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'categories' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'categories' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
-                                {categories && categories.length > 0 ? (
-                                    categories.map((cat: any) => (
-                                        <li key={cat.slug}>
-                                            <Link href={`/collections/${cat.slug}`} className="text-black font-semibold hover:font-bold transition-all">
-                                                {cat.name}
-                                            </Link>
-                                        </li>
-                                    ))
-                                ) : (
-                                    <>
-                                        <li>
-                                            <Link href="/collections/mens-puffer-vests" className="text-black  hover:font-bold transition-all">
-                                                Puffer Jackets
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link href="/collections/leather-bomber-jacket-mens" className="text-black  hover:font-bold transition-all">
-                                                Leather Jackets
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link href="/collections/biker-jacket-men" className="text-black  hover:font-bold transition-all">
-                                                Biker Jackets
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link href="/collections" className="text-black  hover:font-bold transition-all">
-                                                View All
-                                            </Link>
-                                        </li>
-                                    </>
-                                )}
+                                <li>
+                                    <Link href="/collections/mens-leather-jackets" className="text-black hover:font-bold transition-all">
+                                        Men's Leather Jackets
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/collections/mens-jackets" className="text-black hover:font-bold transition-all">
+                                        Men's Jackets
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/collections/mens-letterman-jackets" className="text-black hover:font-bold transition-all">
+                                        Men's Letterman Jackets
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/collections/mens-denim-jackets" className="text-black hover:font-bold transition-all">
+                                        Men's Denim Jackets
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/collections" className="text-black  hover:font-bold transition-all">
+                                        View All
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                         <div className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
