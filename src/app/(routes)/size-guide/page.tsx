@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     title: "Size Guide | Fineyst",
     description: "Find your perfect fit with our comprehensive size guide for all clothing categories.",
     alternates: {
-        canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/size-guide`
+        canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://jacket.us.com'}/size-guide`
     }
 }
 

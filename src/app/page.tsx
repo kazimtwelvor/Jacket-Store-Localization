@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import SlideBanners from "@/src/app/components/home-page-components/banners/slide-banners";
 import WelcomeAccordionSection from "./components/home-page-components/welcome-section/welcome-section";
 import ProductCategory from "./components/home-page-components/product-category/product-category";
@@ -10,6 +11,14 @@ import FAQ from "./components/home-page-components/faqs/faq";
 import BlogsShowcase from "./components/home-page-components/blog-showcase/blog-showcase";
 import GlobalFashionPartners from "./components/home-page-components/global-fashion-partner/global-fashion-partner";
 import AnimatedReviewsSection from "./components/home-page-components/animated-review-section/animated-review-section";
+
+export const metadata: Metadata = {
+  title: 'Premium Jackets & Outerwear | Jacket.us.com',
+  description: 'Discover premium quality jackets and outerwear at Jacket.us.com. Shop leather jackets, winter coats, and stylish outerwear with fast shipping and excellent customer service.',
+  alternates: {
+    canonical: 'https://jacket.us.com/'
+  }
+}
 
 export default function Home() {
   return (
