@@ -12,8 +12,11 @@ export const metadata: Metadata = {
 
 export default function SizeGuidePage() {
     return (
-        <SizeGuideContextProvider>
-            <SizeGuideClientLayout />
-        </SizeGuideContextProvider>
+        <>
+            <h1 className="sr-only">Complete Size Guide for Jackets & Outerwear</h1>
+            <SizeGuideContextProvider>
+                <SizeGuideClientLayout />
+            </SizeGuideContextProvider>
+        </>
     )
 }
