@@ -180,3 +180,15 @@ export interface Color {
   name: string
   value: string
 }
+
+export interface BlogDetail {
+  id: string
+  title: string
+  slug: string
+  content: any
+  excerpt?: string
+  imageUrl?: string
+  isPublished: boolean
+  createdAt: string
+  updatedAt: string
+}

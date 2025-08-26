@@ -1,7 +1,9 @@
+import type { BlogDetail } from "@/types"
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 const STORE_ID = process.env.NEXT_PUBLIC_STORE_ID
 
-export async function getBlog(slug: string): Promise<any | null> {
+export async function getBlog(slug: string): Promise<BlogDetail | null> {
   try {
     if (!API_URL) throw new Error("API_URL is not defined")
     if (!STORE_ID) throw new Error("STORE_ID is not defined")

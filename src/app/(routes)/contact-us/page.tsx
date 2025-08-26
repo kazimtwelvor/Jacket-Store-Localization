@@ -27,8 +27,59 @@ export const metadata: Metadata = {
 }
 
 export default function ContactUsPage() {
+  const contactSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Us - Fineyst",
+    "description": "Get in touch with our team for any questions, feedback, or support.",
+    "url": "https://jacket.us.com/contact-us"
+  }
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Fineyst",
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "telephone": "+1-212-555-1234",
+        "contactType": "customer service",
+        "email": "hello@storecopy.com",
+        "availableLanguage": "English",
+        "hoursAvailable": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "18:00"
+        }
+      },
+      {
+        "@type": "ContactPoint",
+        "telephone": "+1-800-555-1234",
+        "contactType": "customer service",
+        "email": "support@storecopy.com",
+        "availableLanguage": "English",
+        "hoursAvailable": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "18:00"
+        }
+      }
+    ]
+  }
+
   return (
-    <section className="bg-background pb-20">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <section className="bg-background pb-20">
       <div className="relative overflow-hidden bg-white">
         <div className="absolute inset-0 opacity-10">
           <div
@@ -350,5 +401,6 @@ export default function ContactUsPage() {
         </Container>
       </div>
     </section>
+    </>
   )
 }
