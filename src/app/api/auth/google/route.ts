@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || `${process.env.NEXTAUTH_URL}/api/auth/google/callback`;
+const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/google`;
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
                 type: 'GOOGLE_AUTH_SUCCESS',
                 user: ${JSON.stringify(result.user)},
                 token: '${result.token}'
-              }, '${process.env.NEXTAUTH_URL}');
+              }, '${process.env.NEXT_PUBLIC_SITE_URL}');
               window.close();
             </script>
           </body>
@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
             window.opener.postMessage({
               type: 'GOOGLE_AUTH_ERROR',
               error: '${error instanceof Error ? error.message : 'Authentication failed'}'
-            }, '${process.env.NEXTAUTH_URL}');
+            }, '${process.env.NEXT_PUBLIC_SITE_URL}');
             window.close();
           </script>
         </body>

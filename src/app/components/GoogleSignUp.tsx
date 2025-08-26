@@ -28,12 +28,15 @@ export default function GoogleSignUp({ onSuccess, onError, isLoading, setIsLoadi
         
         if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
           popup?.close();
-          onSuccess(event.data.user);
+          // Pass both user and token to caller so it can persist auth
+          onSuccess({ user: event.data.user, token: event.data.token });
           window.removeEventListener('message', messageListener);
+          setIsLoading(false);
         } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
           popup?.close();
           onError(event.data.error);
           window.removeEventListener('message', messageListener);
+          setIsLoading(false);
         }
       };
 

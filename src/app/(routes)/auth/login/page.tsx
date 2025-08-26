@@ -22,6 +22,7 @@ import useAuth from "@/src/app/hooks/use-auth";
 import { toast } from "react-hot-toast";
 import { getCountryDataList } from "countries-list";
 import GoogleSignUp from "@/src/app/components/GoogleSignUp";
+import EmailVerification from "@/src/app/components/EmailVerification";
 
 export default function LoginPage() {
   const [activeTab, setActiveTab] = useState("login");
@@ -49,6 +50,8 @@ export default function LoginPage() {
   const [zipError, setZipError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [stateError, setStateError] = useState("");
+  const [showVerification, setShowVerification] = useState(false);
+  const [pendingUserData, setPendingUserData] = useState<any>(null);
 
   // Create countries list from the package
   const countriesList = getCountryDataList()
@@ -409,7 +412,8 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const result = await register({
+      // Store user data and send verification code
+      const userData = {
         email,
         password,
         firstName,
@@ -422,22 +426,66 @@ export default function LoginPage() {
         state: addLocation ? state : "",
         zipCode: addLocation ? zipCode : "",
         country: addLocation ? country : "",
+      };
+
+      // Generate and send verification code
+      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      // Store code
+      await fetch('/api/auth/verify-code', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code: verificationCode }),
       });
 
+      // Send email
+      const emailResponse = await fetch('/api/auth/send-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code: verificationCode }),
+      });
+
+      if (emailResponse.ok) {
+        setPendingUserData(userData);
+        setShowVerification(true);
+        toast.success("Verification code sent to your email!");
+      } else {
+        // Still show verification page even if email fails
+        setPendingUserData(userData);
+        setShowVerification(true);
+        toast.error("Email sending failed, but you can still proceed with verification");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast.error("An error occurred during registration");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEmailVerified = async () => {
+    if (!pendingUserData) return;
+
+    setIsLoading(true);
+    try {
+      const result = await register(pendingUserData);
+
       if (result.success) {
-        toast.success(
-          "Registration successful! Please check your email to verify your account."
-        );
+        toast.success("Registration successful!");
         setActiveTab("login");
+        setShowVerification(false);
+        setPendingUserData(null);
       } else {
         if (result.message === "Email already in use") {
           setEmailError("Email already registered");
         }
         toast.error(result.message);
+        setShowVerification(false);
       }
     } catch (error) {
       console.error("Registration error:", error);
       toast.error("An error occurred during registration");
+      setShowVerification(false);
     } finally {
       setIsLoading(false);
     }
@@ -600,7 +648,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          {activeTab === "register" && (
+          {activeTab === "register" && !showVerification && (
             <div className="max-w-2xl mx-auto">
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-slate-900 mb-2">
@@ -1110,6 +1158,17 @@ export default function LoginPage() {
                 </p>
               </div>
             </div>
+          )}
+
+          {activeTab === "register" && showVerification && (
+            <EmailVerification
+              email={email}
+              onVerified={handleEmailVerified}
+              onBack={() => {
+                setShowVerification(false);
+                setPendingUserData(null);
+              }}
+            />
           )}
         </div>
       </div>

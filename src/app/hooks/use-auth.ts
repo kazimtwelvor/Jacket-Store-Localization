@@ -224,8 +224,33 @@ const useAuth = create(
 
       googleRegister: async (user: any, token: string) => {
         try {
+          // Normalize Google/user payload to our internal User shape
+          const fullName: string | undefined =
+            user?.name || [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
+            user?.given_name || user?.givenName
+              ? `${user?.given_name || user?.givenName || ""} ${user?.family_name || user?.familyName || ""}`.trim()
+              : undefined;
+
+          const derivedFirstName =
+            user?.firstName || user?.given_name || user?.givenName || fullName?.split(" ")?.[0] || undefined;
+          const derivedLastName =
+            user?.lastName || user?.family_name || user?.familyName || (fullName ? fullName.split(" ").slice(1).join(" ") : undefined);
+
+          const email: string | undefined = user?.email || user?.primaryEmail || user?.primaryEmailAddress || user?.contactEmail;
+          const username: string | undefined =
+            user?.username || user?.name || (email ? email.split("@")[0] : undefined);
+
+          const normalizedUser = {
+            id: user?.id || user?.userId || user?._id || user?.clerkId || user?.googleId || "",
+            email: email || "",
+            username,
+            firstName: derivedFirstName,
+            lastName: derivedLastName,
+            isAdmin: Boolean(user?.isAdmin),
+          } as const;
+
           set({
-            user,
+            user: normalizedUser as any,
             token,
             isAuthenticated: true,
             isLoading: false,
