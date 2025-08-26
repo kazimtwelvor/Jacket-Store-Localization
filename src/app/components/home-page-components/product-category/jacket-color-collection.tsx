@@ -9,43 +9,43 @@ const colorCollectionMen = [
   {
     id: "color-black-men",
     name: "BLACK JACKETS",
-    imageUrl: "/images/Black.webp",
+    imageUrl: "/images/color-collection/Black.webp",
     href: "/collections/leather-bomber-jacket-mens",
   },
   {
     id: "color-brown-men",
     name: "BROWN JACKETS",
-    imageUrl: "/images/Brown.webp",
+    imageUrl: "/images/color-collection/Brown .webp",
     href: "/collections/mens-suede-jackets",
   },
   {
     id: "color-red-women",
     name: "RED JACKETS",
-    imageUrl: "/images/Red Women.webp",
+    imageUrl: "/images/color-collection/Red.webp",
     href: "/collections/mens-suede-jackets",
   },
   {
     id: "color-white-men",
     name: "WHITE JACKETS",
-    imageUrl: "/images/White.webp",
+    imageUrl: "/images/color-collection/White .webp",
     href: "/collections/mens-denim-jackets",
   },
   {
     id: "color-pink-men",
     name: "PINK JACKETS",
-    imageUrl: "/images/Pink.webp",
+    imageUrl: "/images/color-collection/Pink.webp",
     href: "/collections/mens-suede-jackets",
   },
   {
     id: "color-blue-men",
     name: "BLUE JACKETS",
-    imageUrl: "/images/Blue.webp",
+    imageUrl: "/images/color-collection/Blue.webp",
     href: "/collections/mens-puffer-jackets",
   },
   {
     id: "color-green-women",
     name: "GREEN JACKETS",
-    imageUrl: "/images/Green.webp",
+    imageUrl: "/images/color-collection/Green.webp",
     href: "/collections/mens-suede-jackets",
   },
 
@@ -53,7 +53,7 @@ const colorCollectionMen = [
   {
     id: "color-yellow-men",
     name: "YELLOW JACKETS",
-    imageUrl: "/images/Yellow.webp",
+    imageUrl: "/images/color-collection/Yellow .webp",
     href: "/collections/mens-suede-jackets",
   },
 
