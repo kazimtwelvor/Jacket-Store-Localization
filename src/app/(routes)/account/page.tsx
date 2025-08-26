@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { LogOut, User, Sliders, Package, Heart } from "lucide-react"
+import { LogOut, User, Package, Heart } from "lucide-react"
 import useAuth from "@/src/app/hooks/use-auth"
 import Container from "@/src/app/ui/container"
 
@@ -57,7 +57,7 @@ export default function AccountPage() {
         </div>
 
         <div className="max-w-5xl mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             <div
               className="flex flex-col items-center text-center cursor-pointer"
               onClick={() => router.push("/account/my-data")}
@@ -67,17 +67,6 @@ export default function AccountPage() {
               </div>
               <h3 className="font-bold text-base md:text-lg mb-1 md:mb-2">MY DATA</h3>
               <p className="text-gray-600 text-sm md:text-base">Personal data, address and payment methods</p>
-            </div>
-
-            <div
-              className="flex flex-col items-center text-center cursor-pointer"
-              onClick={() => router.push("/account/preferences")}
-            >
-              <div className="w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full bg-gray-100 flex items-center justify-center mb-3 md:mb-4 shadow-md">
-                <Sliders className="h-12 w-12 md:h-14 md:w-14 lg:h-16 lg:w-16 text-black" strokeWidth={1} />
-              </div>
-              <h3 className="font-bold text-base md:text-lg mb-1 md:mb-2">MY PREFERENCES</h3>
-              <p className="text-gray-600 text-sm md:text-base">Choose your preferred communication channels</p>
             </div>
 
             <div
