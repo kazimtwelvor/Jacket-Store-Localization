@@ -13,15 +13,10 @@ import SizeFAQ from "./size-faq"
 import SizeGuideCTA from "./size-guide-cta"
 
 export default function SizeGuideClientLayout() {
-    const [isMounted, setIsMounted] = useState(false)
     const [activeSection, setActiveSection] = useState("size-charts")
     const [scrollY, setScrollY] = useState(0)
     const [scrollProgress, setScrollProgress] = useState(0)
     const contentRef = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        setIsMounted(true)
-    }, [])
 
     useEffect(() => {
         const handleScroll = () => {
@@ -67,10 +62,6 @@ export default function SizeGuideClientLayout() {
             const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
             window.scrollTo({ top: y, behavior: "smooth" })
         }
-    }
-
-    if (!isMounted) {
-        return null
     }
 
     return (

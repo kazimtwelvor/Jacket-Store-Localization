@@ -1,5 +1,6 @@
 
 import "./globals.css";
+import "./styles/mobile-fixes.css";
 import Navbar from "@/src/app/components/navbar/Navbar";
 import { FontProvider } from "@/src/components/font-provider";
 import { CartProvider } from "@/src/app/contexts/CartContext";
@@ -19,6 +20,11 @@ export default function RootLayout({
       <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0 bg-[#000000]`}>
         <FontProvider>
           <CartProvider>
+            <noscript>
+              <div style={{background:'#111', color:'#fff', padding:'8px 12px', textAlign:'center'}}>
+                For the best experience, enable JavaScript. Basic content is still available.
+              </div>
+            </noscript>
             <Navbar />
             <Suspense fallback={null}>
               <RouteLoadingOverlay />

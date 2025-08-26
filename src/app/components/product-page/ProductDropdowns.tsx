@@ -40,6 +40,56 @@ const ProductDropdowns = ({
   
   return (
     <div className="border-t border-gray-200">
+      <noscript>
+        <div className="py-3 sm:py-4 px-2 sm:px-0">
+          <h3 className="text-sm font-bold uppercase mb-2">Details</h3>
+          <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed">
+            {(() => {
+              const description = data.description || "";
+              return (
+                <>
+                  <div dangerouslySetInnerHTML={{ __html: description }} />
+                  <ul className="list-disc pl-5 mt-3 sm:mt-4 space-y-1">
+                    <li>SKU: {data.sku || "N/A"}</li>
+                    <li>Material: {data.material || "Premium fabric"}</li>
+                    <li>Fit: {data.specifications?.fit || "Regular fit"}</li>
+                  </ul>
+                </>
+              );
+            })()}
+          </div>
+        </div>
+        <div className="py-3 sm:py-4 px-2 sm:px-0">
+          <h3 className="text-sm font-bold uppercase mb-2">Customer Reviews</h3>
+          <div className="pb-6 pt-2">
+            <div className="text-center py-4">
+              <p className="text-gray-500">Reviews require JavaScript to load.</p>
+            </div>
+          </div>
+        </div>
+        <div className="py-3 sm:py-4 px-2 sm:px-0">
+          <h3 className="text-sm font-bold uppercase mb-2">Care</h3>
+          <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed">
+            <p>To preserve the quality of your garment:</p>
+            <ul className="list-disc pl-5 mt-2 space-y-1">
+              <li>Machine wash cold with similar colors</li>
+              <li>Do not bleach</li>
+              <li>Tumble dry low</li>
+              <li>Iron on low heat if needed</li>
+              <li>Do not dry clean</li>
+            </ul>
+          </div>
+        </div>
+        <div className="py-3 sm:py-4 px-2 sm:px-0">
+          <h3 className="text-sm font-bold uppercase mb-2">Shipping & Returns</h3>
+          <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed">
+            <p className="mb-2">Standard Shipping (5-10 business days): Free on orders over $99</p>
+            <p className="mb-2">Express Shipping (1-2 business days): $15</p>
+            <p>International shipping available to select countries.</p>
+            <p className="mt-3 sm:mt-4 font-medium">Returns accepted within 30 days of delivery.</p>
+          </div>
+        </div>
+      </noscript>
       {/* Details Dropdown */}
       <div className="border-b border-gray-200" data-dropdown>
         <button 

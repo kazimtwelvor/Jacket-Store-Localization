@@ -196,6 +196,26 @@ const Navbar = () => {
   }, [pathname]);
 
 
+  // Lock background scroll when search modal is open
+  useEffect(() => {
+    if (isSearchOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+
+    // Notify any listeners that modal state changed (keeps layout wrappers in sync)
+    try {
+      const evt = new CustomEvent('modalStateChange', { detail: { isOpen: isSearchOpen } });
+      window.dispatchEvent(evt);
+    } catch {}
+
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [isSearchOpen]);
+
+
 
   const itemCount = totalItems;
 

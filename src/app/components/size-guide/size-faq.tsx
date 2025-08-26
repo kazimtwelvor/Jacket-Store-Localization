@@ -1,15 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../ui/accordion"
 
 export default function SizeFAQ() {
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
 
   const faqs = [
     {
@@ -54,62 +47,6 @@ export default function SizeFAQ() {
     },
   ]
 
-  if (!isMounted) {
-    return (
-      <div className="space-y-8">
-        <div className="mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">Frequently Asked Questions</h2>
-          <p className="text-muted-foreground max-w-3xl">Find answers to common questions about sizing and fit.</p>
-        </div>
-
-        <div className="bg-card rounded-lg border shadow-sm overflow-hidden">
-          <div className="divide-y">
-            {faqs.map((faq, index) => (
-              <div key={index} className="p-6">
-                <h3 className="text-lg font-semibold mb-2">{faq.question}</h3>
-                <p className="text-muted-foreground">{faq.answer}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="p-4 bg-primary/10 rounded-lg border border-primary/20 flex items-start">
-          <div className="mr-3 mt-1 text-primary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M12 16v-4"></path>
-              <path d="M12 8h.01"></path>
-            </svg>
-          </div>
-          <div>
-            <p className="text-sm">
-              Still have questions about finding your perfect size? Our customer service team is here to help! Contact
-              us at{" "}
-              <a href="mailto:support@example.com" className="text-primary underline">
-                support@example.com
-              </a>{" "}
-              or call us at{" "}
-              <a href="tel:+18001234567" className="text-primary underline">
-                1-800-123-4567
-              </a>
-              .
-            </p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -122,18 +59,19 @@ export default function SizeFAQ() {
       <p className="text-[#666666] max-w-3xl mb-6">Find answers to common questions about sizing and fit.</p>
 
       <div className="bg-white rounded-lg border border-[#2b2b2b] shadow-sm overflow-hidden">
-        <Accordion type="single" collapsible className="w-full">
+        <div className="divide-y">
           {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={`item-${index}`} className="border-b border-[#2b2b2b]">
-              <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-[#F6F6F6]/50 text-left text-[#333333]">
-                {faq.question}
-              </AccordionTrigger>
-              <AccordionContent className="px-6 pb-6 pt-3 text-[#666666]">
+            <details key={index} className="group">
+              <summary className="px-6 py-4 cursor-pointer list-none text-left flex items-center justify-between hover:bg-[#F6F6F6]/50">
+                <span className="text-[#333333] font-medium">{faq.question}</span>
+                <span className="ml-4 transition-transform group-open:rotate-180">▾</span>
+              </summary>
+              <div className="px-6 pb-6 pt-3 text-[#666666]">
                 <p>{faq.answer}</p>
-              </AccordionContent>
-            </AccordionItem>
+              </div>
+            </details>
           ))}
-        </Accordion>
+        </div>
       </div>
 
       <div className="p-4 bg-[#2b2b2b]/10 rounded-lg border border-[#2b2b2b]/20 flex items-start">
