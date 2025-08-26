@@ -9,6 +9,7 @@ import CategoryPageClient from "./page-client";
 import { notFound } from "next/navigation";
 import type { Metadata, ResolvingMetadata } from "next";
 import StructuredData from "../../../components/layout/structured-data-layout";
+import { Suspense } from "react";
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
@@ -181,14 +182,16 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
     return (
       <div className="min-h-screen bg-white">
         <StructuredData data={keywordStructuredData} />
-        <CategoryPageClient
-          category={categoryForClient}
-          products={products.products || []}
-          slug={slug}
-          allCategories={allCategories}
-          keywordCategories={keywordCategories}
-          isKeywordCategory={true}
-        />
+        <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-gray-600"></div></div>}>
+          <CategoryPageClient
+            category={categoryForClient}
+            products={products.products || []}
+            slug={slug}
+            allCategories={allCategories}
+            keywordCategories={keywordCategories}
+            isKeywordCategory={true}
+          />
+        </Suspense>
       </div>
     );
   } catch (error) {
