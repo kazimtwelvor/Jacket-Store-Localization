@@ -27,7 +27,7 @@ export default function SizeGuideHeroNew() {
   if (!isMounted) {
     return (
       <div className="text-center max-w-3xl mx-auto">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black  mb-4">Size Guide</h1>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black  mb-4">Complete Size Guide for Jackets & Outerwear</h2>
         <p className="text-lg md:text-xl text-gray-600 mb-6">Find your perfect fit with our comprehensive sizing guide</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {[
@@ -48,14 +48,14 @@ export default function SizeGuideHeroNew() {
 
   return (
     <div className="text-center max-w-3xl mx-auto">
-      <motion.h1
+      <motion.h2
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="text-4xl md:text-5xl lg:text-6xl font-bold text-black  mb-4"
       >
-        Size Guide
-      </motion.h1>
+        Complete Size Guide for Jackets & Outerwear
+      </motion.h2>
 
       <motion.p
         initial={{ opacity: 0 }}

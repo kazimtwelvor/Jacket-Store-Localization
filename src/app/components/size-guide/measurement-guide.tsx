@@ -51,7 +51,7 @@ export default function MeasurementGuide() {
     return (
       <div className="space-y-8">
         <div className="mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">How to Measure</h2>
+          <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">How to Measure</h3>
           <p className="text-muted-foreground max-w-3xl">
             Follow these simple steps to take accurate measurements for the perfect fit.
           </p>
@@ -94,7 +94,7 @@ export default function MeasurementGuide() {
       viewport={{ once: true }}
       className="space-y-8"
     >
-      <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-black ">How to Measure</h2>
+      <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-black ">How to Measure</h3>
       <p className="text-[#666666] max-w-3xl mb-6">
         Follow these simple steps to take accurate measurements for the perfect fit.
       </p>
