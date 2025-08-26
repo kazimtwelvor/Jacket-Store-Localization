@@ -21,8 +21,48 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Fineyst",
+    "url": "https://jacket.us.com",
+    "logo": "https://jacket.us.com/logo.webp",
+    "description": "Premium quality jackets and outerwear with fast shipping and excellent customer service.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+1-800-555-1234",
+      "contactType": "customer service",
+      "email": "support@storecopy.com"
+    },
+    "sameAs": [
+      "https://facebook.com",
+      "https://twitter.com",
+      "https://instagram.com"
+    ]
+  }
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Fineyst",
+    "url": "https://jacket.us.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://jacket.us.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
       <section className="w-full mx-0 px-0 bg-[#efefef]">
         <SlideBanners />
       </section>

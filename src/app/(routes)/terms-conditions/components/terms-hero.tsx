@@ -28,7 +28,7 @@ export default function TermsHero({ completionPercentage }: TermsHeroProps) {
 
         <div className="container mx-auto px-4 py-12 md:py-20 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-black">Terms & Conditions</h1>
+            <p className="text-3xl md:text-5xl font-bold mb-4 text-black">Terms & Conditions</p>
             <p className="text-lg text-[#666666] mb-8 max-w-3xl mx-auto">
               Our commitment to transparency and fairness. These terms outline our relationship and responsibilities to
               each other.
@@ -105,7 +105,7 @@ export default function TermsHero({ completionPercentage }: TermsHeroProps) {
       <div className="container mx-auto px-4 py-12 md:py-20 relative z-10">
         <div className="max-w-5xl mx-auto text-center">
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#2b2b2b]">Terms & Conditions</h1>
+            <p className="text-3xl md:text-5xl font-bold mb-4 text-[#2b2b2b]">Terms & Conditions</p>
             <p className="text-lg text-[#666666] mb-8 max-w-3xl mx-auto">
               Our commitment to transparency and fairness. These terms outline our relationship and responsibilities to
               each other.

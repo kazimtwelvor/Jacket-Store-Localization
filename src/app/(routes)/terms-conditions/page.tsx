@@ -58,6 +58,9 @@ export const metadata: Metadata = {
 export default function TermsConditionsPage() {
   return (
     <>
+      {/* SEO h1 at the very top */}
+      <h1 className="sr-only">Terms & Conditions</h1>
+      
       {/* Server-rendered content for SEO - visible in page source */}
       <div aria-hidden="true" className="sr-only">
         <div className="bg-background">
@@ -65,7 +68,7 @@ export default function TermsConditionsPage() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="py-20 md:py-32 relative z-10">
                 <div className="max-w-3xl mx-auto text-center">
-                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">Terms & Conditions</h1>
+                  <p className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">Terms & Conditions</p>
                   <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                     Last updated: April 15, 2024
                   </p>
