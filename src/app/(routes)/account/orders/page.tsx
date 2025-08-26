@@ -2,21 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  User,
-  Sliders,
-  Package,
-  Heart,
-  ArrowRight,
-  Clock,
-  XCircle,
-  Truck,
-  Calendar,
-} from "lucide-react";
+import { Package, ArrowLeft, Calendar, Truck, DollarSign } from "lucide-react";
 import Container from "@/src/app/ui/container";
 import { Badge } from "@/src/app/ui/badge";
 import Link from "next/link";
-// import { format } from "date-fns";
 import useAuth from "@/src/app/hooks/use-auth";
 import { Skeleton } from "@/src/app/ui/skeleton";
 
@@ -51,10 +40,9 @@ interface Order {
   estimatedDelivery?: string;
 }
 
-export default function OrderHistoryPage() {
+export default function OrdersPage() {
   const { user, isAuthenticated, token, logout } = useAuth();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("online");
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -87,7 +75,6 @@ export default function OrderHistoryPage() {
         });
 
         if (response.status === 401) {
-          // Unauthorized: clear session and redirect to login
           await logout();
           router.push("/auth/login?redirectTo=/account/orders");
           return;
@@ -123,312 +110,208 @@ export default function OrderHistoryPage() {
   const getStatusBadge = (status: string) => {
     switch (status?.toLowerCase()) {
       case "completed":
-        return <Badge className="bg-green-500">Completed</Badge>;
+        return <Badge className="bg-green-500 text-white">Completed</Badge>;
       case "processing":
-        return <Badge className="bg-blue-500">Processing</Badge>;
+        return <Badge className="bg-blue-500 text-white">Processing</Badge>;
       case "shipped":
-        return <Badge className="bg-purple-500">Shipped</Badge>;
+        return <Badge className="bg-purple-500 text-white">Shipped</Badge>;
       case "cancelled":
-        return <Badge className="bg-red-500">Cancelled</Badge>;
+        return <Badge className="bg-red-500 text-white">Cancelled</Badge>;
       case "pending":
-        return <Badge className="bg-yellow-500">Pending</Badge>;
+        return <Badge className="bg-yellow-500 text-white">Pending</Badge>;
       default:
-        return <Badge className="bg-gray-500">{status || "Unknown"}</Badge>;
+        return <Badge className="bg-gray-500 text-white">{status || "Unknown"}</Badge>;
     }
   };
 
   const getPaymentStatusBadge = (status: string) => {
     switch (status?.toLowerCase()) {
       case "paid":
-        return <Badge className="bg-green-500">Paid</Badge>;
+        return <Badge className="bg-green-500 text-white">Paid</Badge>;
       case "pending":
-        return <Badge className="bg-yellow-500">Pending</Badge>;
+        return <Badge className="bg-yellow-500 text-white">Pending</Badge>;
       case "failed":
-        return <Badge className="bg-red-500">Failed</Badge>;
+        return <Badge className="bg-red-500 text-white">Failed</Badge>;
       default:
-        return <Badge className="bg-gray-500">{status || "Unknown"}</Badge>;
+        return <Badge className="bg-gray-500 text-white">{status || "Unknown"}</Badge>;
     }
   };
 
   return (
     <Container>
-      <section className="min-h-screen py-6 md:py-8 lg:py-10">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row">
-            <div className="w-full md:w-64 mb-6 md:mb-0">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="flex flex-col space-y-1">
-                  <Link
-                    href="/account"
-                    className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium flex items-center"
-                  >
-                    <span>Overview</span>
-                  </Link>
-                  <Link
-                    href="/account/my-data"
-                    className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium flex items-center"
-                  >
-                    <span>My Data</span>
-                    <User className="ml-auto h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/account/preferences"
-                    className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium flex items-center"
-                  >
-                    <span>My Preferences</span>
-                    <Sliders className="ml-auto h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/account/orders"
-                    className="py-2 px-4 bg-gray-200 rounded text-sm uppercase font-medium flex items-center"
-                  >
-                    <span>Order History</span>
-                    <Package className="ml-auto h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/account/wishlist"
-                    className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium flex items-center"
-                  >
-                    <span>My Wishlist</span>
-                    <Heart className="ml-auto h-4 w-4" />
-                  </Link>
-                  <button
-                    onClick={() => {
-                      logout();
-                      router.push("/");
-                    }}
-                    className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium text-left flex items-center"
-                  >
-                    <span>Log Out</span>
-                    <ArrowRight className="ml-auto h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
+      <div className="min-h-screen py-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <Link
+              href="/account"
+              className="inline-flex items-center text-gray-600 hover:text-black mb-4"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Account
+            </Link>
+            <h1 className="text-3xl font-bold text-gray-900">My Orders</h1>
+            <p className="text-gray-600 mt-2">View and track your order history</p>
+          </div>
 
-            <div className="flex-1 md:ml-8">
-              <div className="bg-gray-50 p-6 rounded-lg mb-6">
-                <div className="flex items-center">
-                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6 shadow-md">
-                    <Package
-                      className="h-10 w-10 text-black"
-                      strokeWidth={1.5}
-                    />
+          {/* Orders Content */}
+          <div className="space-y-6">
+            {isLoading ? (
+              // Loading skeletons
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="border border-gray-200 rounded-lg p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <Skeleton className="h-6 w-32" />
+                      <Skeleton className="h-6 w-24" />
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-4">
+                        <Skeleton className="h-16 w-16 rounded" />
+                        <div className="flex-1">
+                          <Skeleton className="h-4 w-3/4 mb-2" />
+                          <Skeleton className="h-4 w-1/2" />
+                        </div>
+                        <Skeleton className="h-6 w-20" />
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <h1 className="text-3xl font-bold">ORDER HISTORY</h1>
-                    <p className="text-gray-600">Review your past orders</p>
-                  </div>
-                </div>
+                ))}
               </div>
-
-              <div className="border-b border-gray-200 mb-6">
-                <div className="flex">
-                  <button
-                    className={`py-3 px-6 font-medium text-sm uppercase ${
-                      activeTab === "online"
-                        ? "bg-black text-white"
-                        : "bg-white text-black hover:bg-gray-100"
-                    }`}
-                    onClick={() => setActiveTab("online")}
-                  >
-                    Online
-                  </button>
-                  <button
-                    className={`py-3 px-6 font-medium text-sm uppercase ${
-                      activeTab === "retail"
-                        ? "bg-black text-white"
-                        : "bg-white text-black hover:bg-gray-100"
-                    }`}
-                    onClick={() => setActiveTab("retail")}
-                  >
-                    Retail
-                  </button>
-                </div>
+            ) : error ? (
+              // Error state
+              <div className="text-center py-12 bg-red-50 rounded-lg border border-red-200">
+                <Package className="mx-auto h-16 w-16 text-red-400 mb-4" />
+                <h3 className="text-lg font-medium text-red-800 mb-2">Error Loading Orders</h3>
+                <p className="text-red-600 mb-4">{error}</p>
+                <button
+                  onClick={() => router.refresh()}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                >
+                  Try Again
+                </button>
               </div>
+            ) : orders.length === 0 ? (
+              // Empty state
+              <div className="text-center py-16 bg-gray-50 rounded-lg border border-gray-200">
+                <Package className="mx-auto h-20 w-20 text-gray-400 mb-4" />
+                <h3 className="text-xl font-medium text-gray-900 mb-2">No Orders Yet</h3>
+                <p className="text-gray-600 mb-6">You haven't placed any orders yet.</p>
+                <Link
+                  href="/shop"
+                  className="inline-block px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
+                >
+                  Start Shopping
+                </Link>
+              </div>
+            ) : (
+              // Orders list
+              <div className="space-y-6">
+                {orders.map((order) => (
+                  <div
+                    key={order.id}
+                    className="border border-gray-200 rounded-lg overflow-hidden bg-white"
+                  >
+                    {/* Order header */}
+                    <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex items-center space-x-6">
+                          <div className="flex items-center space-x-2">
+                            <Calendar className="h-4 w-4 text-gray-500" />
+                            <span className="text-sm text-gray-600">
+                              {new Date(order.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <DollarSign className="h-4 w-4 text-gray-500" />
+                            <span className="text-sm text-gray-600">
+                              ${order.total.toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          {getStatusBadge(order.status)}
+                          {getPaymentStatusBadge(order.paymentStatus)}
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <span className="text-xs text-gray-500">Order #{order.id.substring(0, 8).toUpperCase()}</span>
+                      </div>
+                    </div>
 
-              <div className="py-4">
-                {activeTab === "online" && (
-                  <>
-                    {isLoading ? (
-                      <div className="space-y-6">
-                        {[1, 2, 3].map((i) => (
-                          <div key={i} className="border rounded-lg p-4">
-                            <div className="flex justify-between mb-4">
-                              <Skeleton className="h-6 w-32" />
-                              <Skeleton className="h-6 w-24" />
+                    {/* Order items */}
+                    <div className="p-6">
+                      <div className="space-y-4">
+                        {order.orderItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center space-x-4 py-3 border-b border-gray-100 last:border-b-0"
+                          >
+                            <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                              <img
+                                src={
+                                  item.product.images[0]?.url ||
+                                  "/placeholder.svg?height=80&width=80"
+                                }
+                                alt={item.product.name}
+                                className="h-full w-full object-cover object-center"
+                              />
                             </div>
-                            <div className="border-t pt-4">
-                              <div className="flex items-center">
-                                <Skeleton className="h-16 w-16 rounded" />
-                                <div className="ml-4 flex-1">
-                                  <Skeleton className="h-4 w-3/4 mb-2" />
-                                  <Skeleton className="h-4 w-1/2" />
-                                </div>
-                                <Skeleton className="h-6 w-20" />
-                              </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-sm font-medium text-gray-900 truncate">
+                                <Link
+                                  href={`/product/${item.productId}`}
+                                  className="hover:text-blue-600"
+                                >
+                                  {item.product.name}
+                                </Link>
+                              </h3>
+                              <p className="text-sm text-gray-500 mt-1">
+                                Quantity: {item.quantity}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-sm font-medium text-gray-900">
+                                ${item.price.toFixed(2)}
+                              </p>
                             </div>
                           </div>
                         ))}
                       </div>
-                    ) : error ? (
-                      <div className="text-center py-8">
-                        <XCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
-                        <p className="text-gray-600">{error}</p>
-                        <button
-                          onClick={() => router.refresh()}
-                          className="mt-4 px-4 py-2 bg-black text-white rounded-md"
-                        >
-                          Try Again
-                        </button>
-                      </div>
-                    ) : orders.length === 0 ? (
-                      <div className="text-center py-12">
-                        <Package
-                          className="mx-auto h-16 w-16 text-gray-400 mb-4"
-                          strokeWidth={1}
-                        />
-                        <p className="text-gray-600">
-                          You have not placed any orders yet.
-                        </p>
+                    </div>
+
+                    {/* Order footer */}
+                    <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex items-center space-x-4 text-sm text-gray-600">
+                          {order.trackingNumber && (
+                            <div className="flex items-center space-x-2">
+                              <Truck className="h-4 w-4" />
+                              <span>Tracking: {order.trackingNumber}</span>
+                            </div>
+                          )}
+                          {order.estimatedDelivery && (
+                            <div className="flex items-center space-x-2">
+                              <Calendar className="h-4 w-4" />
+                              <span>Est. delivery: {new Date(order.estimatedDelivery).toLocaleDateString()}</span>
+                            </div>
+                          )}
+                        </div>
                         <Link
-                          href="/"
-                          className="mt-4 inline-block px-4 py-2 bg-black text-white rounded-md"
+                          href={`/account/orders/${order.id}`}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline"
                         >
-                          Start Shopping
+                          View Details
                         </Link>
                       </div>
-                    ) : (
-                      <div className="space-y-6">
-                        {orders.map((order) => (
-                          <div
-                            key={order.id}
-                            className="border rounded-lg overflow-hidden"
-                          >
-                            <div className="bg-gray-50 p-4 flex flex-col md:flex-row md:items-center md:justify-between">
-                              <div className="mb-2 md:mb-0">
-                                <p className="text-sm text-gray-500">
-                                  Order placed
-                                </p>
-                                <p className="font-medium">
-                                  {new Date(
-                                    order.createdAt
-                                  ).toLocaleDateString()}
-                                </p>
-                              </div>
-                              <div className="mb-2 md:mb-0">
-                                <p className="text-sm text-gray-500">
-                                  Order number
-                                </p>
-                                <p className="font-medium">
-                                  {order.id.substring(0, 8).toUpperCase()}
-                                </p>
-                              </div>
-                              <div className="mb-2 md:mb-0">
-                                <p className="text-sm text-gray-500">Total</p>
-                                <p className="font-medium">${order.total}</p>
-                              </div>
-                              <div className="flex space-x-2">
-                                {getStatusBadge(order.status)}
-                                {getPaymentStatusBadge(order.paymentStatus)}
-                              </div>
-                            </div>
-
-                            <div className="p-4">
-                              {order.orderItems.map((item) => (
-                                <div
-                                  key={item.id}
-                                  className="flex py-4 border-b last:border-b-0"
-                                >
-                                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                    <img
-                                      src={
-                                        item.product.images[0]?.url ||
-                                        "/placeholder.svg?height=96&width=96"
-                                      }
-                                      alt={item.product.name}
-                                      className="h-full w-full object-cover object-center"
-                                    />
-                                  </div>
-                                  <div className="ml-4 flex flex-1 flex-col">
-                                    <div>
-                                      <div className="flex justify-between text-base font-medium text-gray-900">
-                                        <h3>
-                                          <Link
-                                            href={`/product/${item.productId}`}
-                                          >
-                                            {item.product.name}
-                                          </Link>
-                                        </h3>
-                                        <p className="ml-4">${item.price}</p>
-                                      </div>
-                                    </div>
-                                    <div className="flex flex-1 items-end justify-between text-sm">
-                                      <p className="text-gray-500">
-                                        Qty {item.quantity}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-
-                            <div className="bg-gray-50 p-4 flex flex-wrap gap-4 items-center justify-between">
-                              <div className="flex items-center">
-                                {order.paymentMethod && (
-                                  <div className="flex items-center mr-4">
-                                    <Clock className="h-4 w-4 mr-1 text-gray-500" />
-                                    <span className="text-sm text-gray-600">
-                                      {order.paymentMethod.toUpperCase()}
-                                    </span>
-                                  </div>
-                                )}
-                                {order.trackingNumber && (
-                                  <div className="flex items-center">
-                                    <Truck className="h-4 w-4 mr-1 text-gray-500" />
-                                    <span className="text-sm text-gray-600">
-                                      Tracking: {order.trackingNumber}
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                              {order.estimatedDelivery && (
-                                <div className="flex items-center">
-                                  <Calendar className="h-4 w-4 mr-1 text-gray-500" />
-                                  <span className="text-sm text-gray-600">
-                                    Est. delivery:{" "}
-                                    {new Date(
-                                      order.estimatedDelivery
-                                    ).toLocaleDateString()}
-                                  </span>
-                                </div>
-                              )}
-                              <Link
-                                href={`/account/orders/${order.id}`}
-                                className="text-sm font-medium text-black hover:underline"
-                              >
-                                View order details
-                              </Link>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </>
-                )}
-
-                {activeTab === "retail" && (
-                  <div className="text-center py-12">
-                    <p className="text-gray-600">
-                      You have not placed any retail orders yet.
-                    </p>
+                    </div>
                   </div>
-                )}
+                ))}
               </div>
-            </div>
+            )}
           </div>
         </div>
-      </section>
+      </div>
     </Container>
   );
 }
