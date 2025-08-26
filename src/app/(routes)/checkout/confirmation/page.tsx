@@ -78,15 +78,8 @@ const ConfirmationPage = () => {
     // Fetch order details from our Store API
     const fetchOrder = async () => {
       try {
-
-        // Extract storeId from the URL path or use a default
-        // This is just for the API route path, not for the actual API call
-        const pathArray = window.location.pathname.split("/")
-        const storeId = pathArray[1] === "checkout" ? "default" : pathArray[1]
-
-
-        // Use the Store API URL to fetch order details
-        const response = await fetch(`/api/${storeId}/orders/${orderId}`)
+        // Use the Store API URL to fetch order details (no store segment)
+        const response = await fetch(`/api/orders/${orderId}`)
 
         if (!response.ok) {
           const errorText = await response.text()

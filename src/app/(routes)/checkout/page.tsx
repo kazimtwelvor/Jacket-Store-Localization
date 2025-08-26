@@ -118,7 +118,7 @@ const CheckoutPage = () => {
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [orderId, setOrderId] = useState<string | null>(null)
   const [stripePublishableKey, setStripePublishableKey] = useState<string | null>(null)
-  const { items, removeAll, totalPrice: cartTotalPrice } = useCart()
+  const { items, clearCart, totalPrice: cartTotalPrice } = useCart()
   const router = useRouter()
 
   // Form states
@@ -176,6 +176,14 @@ const CheckoutPage = () => {
   useEffect(() => {
     const fetchStripePublishableKey = async () => {
       try {
+        // Check if API URL is available
+        if (!process.env.NEXT_PUBLIC_API_URL) {
+          console.warn("API URL not configured. Using fallback Stripe key.")
+          // You can set a fallback key here for development
+          setStripePublishableKey(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || null)
+          return
+        }
+
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe-publishable-key`)
         if (!response.ok) {
           throw new Error(`Failed to fetch Stripe publishable key: ${response.status}`)
@@ -184,7 +192,14 @@ const CheckoutPage = () => {
         setStripePublishableKey(data.publishableKey)
       } catch (error) {
         console.error("Error fetching Stripe publishable key:", error)
-        toast.error("Failed to load Stripe. Please try again later.")
+        // Fallback to environment variable if API call fails
+        const fallbackKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        if (fallbackKey) {
+          console.warn("Using fallback Stripe key from environment variable")
+          setStripePublishableKey(fallbackKey)
+        } else {
+          toast.error("Failed to load Stripe. Please try again later.")
+        }
       }
     }
 
@@ -236,7 +251,7 @@ const CheckoutPage = () => {
   }
 
   const handlePaymentSuccess = () => {
-    removeAll();
+    clearCart();
     router.push(`/checkout/confirmation?orderId=${orderId}&success=1`)
   }
 
@@ -324,7 +339,7 @@ const CheckoutPage = () => {
                     <div key={item.id} className="flex gap-4 p-4 border-b">
                       <div className="relative w-32 h-36 flex-shrink-0">
                         <Image
-                          src={item.product.images?.[0]?.url || "/placeholder.svg"}
+                          src={item.product.images?.[0]?.image?.url || "/placeholder.svg"}
                           alt={item.product.name}
                           fill
                           className="object-contain rounded"
@@ -336,7 +351,7 @@ const CheckoutPage = () => {
                         </h3>
                         <div className="space-y-1 mb-2">
                           <p className="text-xs text-gray-700">
-                            Color: {item.product.colors?.[0]?.name || 'Black'}
+                            Color: {item.product.colorDetails?.[0]?.name || 'Black'}
                           </p>
                           <p className="text-xs text-gray-700">
                             Size: {item.size}
@@ -1223,7 +1238,7 @@ const CheckoutPage = () => {
                     <div key={item.id} className="flex gap-4 p-4 border-b">
                       <div className="relative w-32 h-36 flex-shrink-0">
                         <Image
-                          src={item.product.images?.[0]?.url || "/placeholder.svg"}
+                          src={item.product.images?.[0]?.image?.url || "/placeholder.svg"}
                           alt={item.product.name}
                           fill
                           className="object-contain rounded"
@@ -1235,7 +1250,7 @@ const CheckoutPage = () => {
                         </h3>
                         <div className="space-y-1 mb-2">
                           <p className="text-xs text-gray-700">
-                            Color: {item.product.colors?.[0]?.name || 'Black'}
+                            Color: {item.product.colorDetails?.[0]?.name || 'Black'}
                           </p>
                           <p className="text-xs text-gray-700">
                             Size: {item.size}
