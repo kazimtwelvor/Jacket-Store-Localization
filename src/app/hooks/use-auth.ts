@@ -33,6 +33,10 @@ interface AuthStore {
   register: (
     userData: RegisterData
   ) => Promise<{ success: boolean; message: string }>;
+  googleRegister: (
+    user: any,
+    token: string
+  ) => Promise<{ success: boolean; message: string }>;
   verifyEmail: (
     token: string
   ) => Promise<{ success: boolean; message: string }>;
@@ -214,6 +218,25 @@ const useAuth = create(
           return {
             success: false,
             message: "An error occurred during registration",
+          };
+        }
+      },
+
+      googleRegister: async (user: any, token: string) => {
+        try {
+          set({
+            user,
+            token,
+            isAuthenticated: true,
+            isLoading: false,
+          });
+          toast.success("Google sign-up successful!");
+          return { success: true, message: "Google registration successful" };
+        } catch (error) {
+          console.error("Google registration error:", error);
+          return {
+            success: false,
+            message: "An error occurred during Google registration",
           };
         }
       },

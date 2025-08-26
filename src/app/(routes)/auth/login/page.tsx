@@ -21,6 +21,7 @@ import Link from "next/link";
 import useAuth from "@/src/app/hooks/use-auth";
 import { toast } from "react-hot-toast";
 import { getCountryDataList } from "countries-list";
+import GoogleSignUp from "@/src/app/components/GoogleSignUp";
 
 export default function LoginPage() {
   const [activeTab, setActiveTab] = useState("login");
@@ -304,7 +305,7 @@ export default function LoginPage() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { login, isAuthenticated, register } = useAuth();
+  const { login, isAuthenticated, register, googleRegister } = useAuth();
 
   const redirectTo = searchParams?.get("redirectTo") || "/account";
 
@@ -998,6 +999,30 @@ export default function LoginPage() {
                       </div>
                     </>
                   )}
+                </div>
+
+                {/* Google Sign-Up Section */}
+                <div className="bg-gray-50 p-6 rounded-xl">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4">
+                    Quick Sign-Up
+                  </h3>
+                  <GoogleSignUp
+                    onSuccess={(userData) => {
+                      googleRegister(userData.user, userData.token);
+                      router.push("/account");
+                    }}
+                    onError={(error) => {
+                      toast.error(error);
+                    }}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                  />
+                  
+                  <div className="flex items-center my-4">
+                    <div className="flex-1 border-t border-gray-300"></div>
+                    <span className="px-4 text-sm text-gray-500">or continue with email</span>
+                    <div className="flex-1 border-t border-gray-300"></div>
+                  </div>
                 </div>
 
                 {/* Terms Section */}
