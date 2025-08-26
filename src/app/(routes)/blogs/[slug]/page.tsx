@@ -87,6 +87,37 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
 
   const { hero, contentSection, guideContent } = blogData.content
 
+  const blogPostSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": hero.title,
+    "url": `https://jacket.us.com/blogs/${slug}`,
+    "datePublished": hero.date,
+    "dateModified": hero.date,
+    "author": {
+      "@type": "Person",
+      "name": hero.author
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fineyst",
+      "url": "https://jacket.us.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://jacket.us.com/logo.webp"
+      }
+    },
+    "description": contentSection?.text || guideContent.title,
+    "image": {
+      "@type": "ImageObject",
+      "url": hero.bannerImage.replace('\n', '')
+    },
+    "articleSection": hero.category,
+    "wordCount": guideContent.steps.reduce((acc: number, step: any) => 
+      acc + (step.content?.join(' ').length || 0), 0
+    )
+  }
+
   const renderStepContent = (step: any) => {
     if (step.images && step.images.length > 0 && step.images.some((img: string) => img)) {
       if (step.cardTitles && step.cardDescriptions) {
@@ -224,6 +255,10 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
 
   return (
     <section className="bg-white min-h-screen pt-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostSchema) }}
+      />
       <div className="fixed top-0 left-0 h-1 bg-gradient-to-r from-[#B01E23] to-[#0A2463] w-0 z-[9999] transition-all duration-200" id="reading-progress-bar"></div>
 
       <button

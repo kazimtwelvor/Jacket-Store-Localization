@@ -86,8 +86,51 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const finalKeywordCategories =
     keywordCategories.status === "fulfilled" ? keywordCategories.value : [];
 
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Shop Premium Jackets and Outerwear",
+    "description": "Browse our collection of premium clothing and accessories.",
+    "url": "https://jacket.us.com/shop",
+    "numberOfItems": finalProductsData.pagination.totalProducts,
+    "itemListElement": finalProductsData.products.slice(0, 10).map((product, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Product",
+        "name": product.name,
+        "description": product.description || `Premium ${product.name} from Fineyst`,
+        "url": `https://jacket.us.com/product/${product.slug}`,
+        "image": product.images?.[0]?.image?.url,
+        "offers": {
+          "@type": "Offer",
+          "price": product.price,
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    }))
+  }
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Shop Premium Jackets and Outerwear",
+    "description": "Browse our collection of premium clothing and accessories.",
+    "url": "https://jacket.us.com/shop"
+  }
+
   return (
-    <div className="bg-white min-h-screen flex flex-col">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <div className="bg-white min-h-screen flex flex-col">
       <main className="flex-1">
         <Suspense
           fallback={<div className="text-center py-20 text-gray-600"></div>}
@@ -104,5 +147,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
 
       <ProductCategory />
     </div>
+    </>
   );
 }

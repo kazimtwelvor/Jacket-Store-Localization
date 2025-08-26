@@ -14,8 +14,73 @@ export const metadata: Metadata = {
 }
 
 export default function AboutUsPage() {
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Fineyst",
+    "url": "https://jacket.us.com",
+    "logo": "https://jacket.us.com/logo.webp",
+    "description": "Crafting exceptional fashion experiences since 2010. We provide high-quality, sustainable fashion that empowers people to express themselves authentically.",
+    "foundingDate": "2010",
+    "founder": {
+      "@type": "Person",
+      "name": "Alex Johnson"
+    },
+    "employee": [
+      {
+        "@type": "Person",
+        "name": "Alex Johnson",
+        "jobTitle": "Founder & CEO"
+      },
+      {
+        "@type": "Person",
+        "name": "Sam Rivera",
+        "jobTitle": "Creative Director"
+      },
+      {
+        "@type": "Person",
+        "name": "Taylor Kim",
+        "jobTitle": "Head of Sustainability"
+      },
+      {
+        "@type": "Person",
+        "name": "Jordan Patel",
+        "jobTitle": "Lead Designer"
+      }
+    ],
+    "sameAs": [
+      "https://facebook.com",
+      "https://twitter.com",
+      "https://instagram.com",
+      "https://linkedin.com"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+1-800-555-1234",
+      "contactType": "customer service",
+      "email": "hello@storecopy.com"
+    }
+  }
+
+  const aboutPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Us - Our Story and Mission",
+    "description": "Learn about our story, mission, and the team behind FINEYST.",
+    "url": "https://jacket.us.com/about-us"
+  }
+
   return (
-    <section className="bg-background pb-20">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
+      />
+      <section className="bg-background pb-20">
       <div className="relative overflow-hidden bg-white">
         <div className="absolute inset-0 opacity-10">
           <div
@@ -351,5 +416,6 @@ export default function AboutUsPage() {
         </section>
       </Container>
     </section>
+    </>
   )
 }
