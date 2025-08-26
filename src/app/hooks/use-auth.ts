@@ -114,8 +114,8 @@ const useAuth = create(
 
       forgotPassword: async (email: string) => {
         try {
-          // Use external API URL for authentication
-          const response = await fetch(`https://d1.fineyst.com/api/auth/forgot-password`, {
+          // Call local API route where the logic is implemented
+          const response = await fetch(`/api/auth/forgot-password`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
