@@ -25,7 +25,7 @@ const menCategories: Category[] = [
   {
     id: "puffer-men",
     name: "PUFFER JACKETS",
-    imageUrl: "/images/category-carousel-men/Mens-puffer.webp",
+    imageUrl: "/images/category-carousel-men/Mens-Puffer.webp",
     href: "/collections/mens-puffer-jackets",
   },
   {
