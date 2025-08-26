@@ -6,8 +6,11 @@ import Container from "../../ui/container"
 import Button from "../../ui/button"
 
 export const metadata: Metadata = {
-  title: "About Us | FINEYST",
+  title: "About Us - Our Story and Mission | FINEYST",
   description: "Learn about our story, mission, and the team behind FINEYST.",
+  alternates: {
+    canonical: "https://jacket.us.com/about-us"
+  }
 }
 
 export default function AboutUsPage() {
