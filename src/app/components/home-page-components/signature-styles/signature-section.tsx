@@ -95,109 +95,103 @@ export default function SignatureStylesSection() {
 
       <div className="flex w-full -mx-0">
         <div className="flex-1">
-          <Link href="/collections/leather-bomber-jacket-mens" className="block">
-            <Card className="group hover:shadow-xl border-0 shadow-none overflow-hidden relative h-[360px] md:h-[500px] lg:h-[700px] rounded-none m-0">
-              <div className="relative h-full bg-[#151B1B] overflow-hidden rounded-none">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
-                {menDropdownOpen && (
-                  <div className="absolute inset-0 bg-black/80 z-[15] md:hidden" />
-                )}
-                <div className="absolute inset-0 flex items-start justify-center">
-                  <img
-                    src="https://jacket.us.com/uploads/2025/Untitled_design__10_.png"
-                    alt="Men's Leather Jacket"
-                    className="w-full h-full object-cover object-[5%] md:object-[5%] lg:object-[5%] group-hover:scale-110 transition-transform duration-500 block"
+          <Card className="group hover:shadow-xl border-0 shadow-none overflow-hidden relative h-[360px] md:h-[500px] lg:h-[700px] rounded-none m-0">
+            <div className="relative h-full bg-[#151B1B] overflow-hidden rounded-none">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
+              {menDropdownOpen && (
+                <div className="absolute inset-0 bg-black/80 z-[15] md:hidden" />
+              )}
+              <div className="absolute inset-0 flex items-start justify-center">
+                <img
+                  src="https://jacket.us.com/uploads/2025/Untitled_design__10_.png"
+                  alt="Men's Leather Jacket"
+                  className="w-full h-full object-cover object-[5%] md:object-[5%] lg:object-[5%] group-hover:scale-110 transition-transform duration-500 block"
+                />
+              </div>
+              <div className="absolute inset-0 flex items-end justify-center pb-6 md:items-end md:justify-center md:pb-6 lg:justify-end lg:pb-24 z-[25]">
+                <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pr-20 mb-10">
+                  <div>
+                    <h2
+                      className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}
+                    >
+                      MEN'S
+                      <br />
+                      LEATHER
+                      <br />
+                      JACKET
+                    </h2>
+                  </div>
+                  <TruncatedText
+                    text={menDesc}
+                    limit={characterLimit}
+                    className="mt-2 ml-2 text-sm md:text-sm lg:text-base text-center"
+                    onToggle={setMenDropdownOpen}
                   />
-                </div>
-                <div className="absolute inset-0 flex items-end justify-center pb-6 md:items-end md:justify-center md:pb-6 lg:justify-end lg:pb-24 z-[25]">
-                  <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pr-20 mb-10">
-                    <div>
-                      <h2
-                        className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}
-                      >
-                        MEN'S
-                        <br />
-                        LEATHER
-                        <br />
-                        JACKET
-                      </h2>
-                    </div>
-                    <TruncatedText
-                      text={menDesc}
-                      limit={characterLimit}
-                      className="mt-2 ml-2 text-sm md:text-sm lg:text-base text-center"
-                      onToggle={setMenDropdownOpen}
-                    />
-                    <div className="mt-6 text-center">
-                      <ShopButton
-                        as="div"
-                        variant="bordered"
-                        href="/collections/leather-bomber-jacket-mens"
-                        size="sm"
-                        showArrow={true}
-                        className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}
-                      >
-                        Shop Mens
-                      </ShopButton>
-                    </div>
+                  <div className="mt-6 text-center">
+                    <ShopButton
+                      variant="bordered"
+                      href="/collections/leather-bomber-jacket-mens"
+                      size="sm"
+                      showArrow={true}
+                      className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}
+                    >
+                      Shop Mens
+                    </ShopButton>
                   </div>
                 </div>
               </div>
-            </Card>
-          </Link>
+            </div>
+          </Card>
         </div>
 
         <div className="flex-1">
-          <Link href="/collections/womens-leather-bomber-jackets" className="block">
-            <Card className="group hover:shadow-xl border-0 shadow-none overflow-hidden relative h-[360px] md:h-[500px] lg:h-[700px] rounded-none m-0">
-              <div className="relative h-full bg-[#151B1B] overflow-hidden rounded-none">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
-                {womenDropdownOpen && (
-                  <div className="absolute inset-0 bg-black/80 z-[15] md:hidden" />
-                )}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <img
-                    src={womenImageSrc}
-                    alt="Women's Leather Jacket"
-                    className="w-full h-full object-cover object-[100%] md:object-[100%] lg:object-[100%] group-hover:scale-110 transition-transform duration-500 block"
+          <Card className="group hover:shadow-xl border-0 shadow-none overflow-hidden relative h-[360px] md:h-[500px] lg:h-[700px] rounded-none m-0">
+            <div className="relative h-full bg-[#151B1B] overflow-hidden rounded-none">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10" />
+              {womenDropdownOpen && (
+                <div className="absolute inset-0 bg-black/80 z-[15] md:hidden" />
+              )}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <img
+                  src={womenImageSrc}
+                  alt="Women's Leather Jacket"
+                  className="w-full h-full object-cover object-[100%] md:object-[100%] lg:object-[100%] group-hover:scale-110 transition-transform duration-500 block"
+                />
+              </div>
+              <div className="absolute inset-0 flex items-end justify-center pb-6 md:items-end md:justify-center md:pb-6 lg:justify-start lg:pb-24 z-[25]">
+                <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pl-20 mb-10">
+                  <div>
+                    <h2
+                      className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}
+                    >
+                      WOMEN'S
+                      <br />
+                      LEATHER
+                      <br />
+                      JACKET
+                    </h2>
+                  </div>
+                  <TruncatedText
+                    text={womenDesc}
+                    limit={characterLimit}
+                    className="mt-2 text-sm md:text-sm lg:text-base text-center"
+                    onToggle={setWomenDropdownOpen}
                   />
-                </div>
-                <div className="absolute inset-0 flex items-end justify-center pb-6 md:items-end md:justify-center md:pb-6 lg:justify-start lg:pb-24 z-[25]">
-                  <div className="max-w-md text-center md:text-center md:max-w-md lg:max-w-md px-2 md:px-2 lg:pl-20 mb-10">
-                    <div>
-                      <h2
-                        className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}
-                      >
-                        WOMEN'S
-                        <br />
-                        LEATHER
-                        <br />
-                        JACKET
-                      </h2>
-                    </div>
-                    <TruncatedText
-                      text={womenDesc}
-                      limit={characterLimit}
-                      className="mt-2 text-sm md:text-sm lg:text-base text-center"
-                      onToggle={setWomenDropdownOpen}
-                    />
-                    <div className="mt-6 text-center">
-                      <ShopButton
-                        as="div"
-                        variant="bordered"
-                        href="/collections/womens-leather-bomber-jackets"
-                        size="sm"
-                        showArrow={true}
-                        className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}
-                      >
-                        Shop Womens
-                      </ShopButton>
-                    </div>
+                  <div className="mt-6 text-center">
+                    <ShopButton
+                      variant="bordered"
+                      href="/collections/womens-leather-bomber-jackets"
+                      size="sm"
+                      showArrow={true}
+                      className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}
+                    >
+                      Shop Womens
+                    </ShopButton>
                   </div>
                 </div>
               </div>
-            </Card>
-          </Link>
+            </div>
+          </Card>
         </div>
       </div>
     </section>
