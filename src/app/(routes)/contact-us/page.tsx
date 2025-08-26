@@ -19,8 +19,11 @@ import { Button } from "@/src/app/ui/button"
 import ContactFAQ from "../../components/contact/contact-faq"
 
 export const metadata: Metadata = {
-  title: "Contact Us | StoreCopy",
+  title: "Contact Us - Get in Touch with Our Team | Fineyst",
   description: "Get in touch with our team for any questions, feedback, or support.",
+  alternates: {
+    canonical: "https://jacket.us.com/contact-us"
+  }
 }
 
 export default function ContactUsPage() {

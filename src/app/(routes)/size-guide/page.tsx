@@ -3,7 +3,7 @@ import SizeGuideContextProvider from "../../components/size-guide/size-guide-con
 import SizeGuideClientLayout from "../../components/size-guide/size-guide-client-layout"
 
 export const metadata: Metadata = {
-    title: "Size Guide | Fineyst",
+    title: "Complete Size Guide for Perfect Fit | Fineyst",
     description: "Find your perfect fit with our comprehensive size guide for all clothing categories.",
     alternates: {
         canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://jacket.us.com'}/size-guide`

@@ -5,8 +5,11 @@ import { termsData } from "./data/terms-data"
 import Container from "@/src/app/ui/container"
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Fineyst",
+  title: "Terms and Conditions - Legal Information | Fineyst",
   description: "Read our terms and conditions to understand your rights and responsibilities when using our services.",
+  alternates: {
+    canonical: "https://jacket.us.com/terms-conditions"
+  }
 }
 
  function ServerTermsSection({

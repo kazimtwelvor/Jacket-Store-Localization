@@ -7,6 +7,9 @@ import getKeywordCategories from '@/src/app/actions/get-keyword-categories';
 export const metadata: Metadata = {
   title: 'All Categories | Jackets Store',
   description: 'Browse all our jacket categories and find your perfect style.',
+  alternates: {
+    canonical: "https://jacket.us.com/collections"
+  }
 };
 
 export default async function Categories() {

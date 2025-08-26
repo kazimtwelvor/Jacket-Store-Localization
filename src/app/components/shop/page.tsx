@@ -9,8 +9,11 @@ import getKeywordCategories from "../../actions/get-keyword-categories";
 import ProductCategory from "../home-page-components/product-category/product-category";
 
 export const metadata = {
-  title: "Shop | Fineyst",
+  title: "Shop Premium Jackets and Outerwear | Fineyst",
   description: "Browse our collection of premium clothing and accessories.",
+  alternates: {
+    canonical: "https://jacket.us.com/shop"
+  }
 };
 
 export const revalidate = 300;
