@@ -43,6 +43,7 @@ export default function LoginPage() {
   const [country, setCountry] = useState("");
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
+  const [addLocation, setAddLocation] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [zipError, setZipError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -395,9 +396,11 @@ export default function LoginPage() {
       // For countries without predefined states, we'll accept any non-empty value
       // but could add more specific validation here if needed
     } else if (country && statesData[country] && state && state !== "other") {
-      const validState = statesData[country].find(s => s.code === state);
+      const validState = statesData[country].find((s) => s.code === state);
       if (!validState) {
-        setStateError("Please select a valid state/province for the selected country");
+        setStateError(
+          "Please select a valid state/province for the selected country"
+        );
         return;
       }
     }
@@ -411,11 +414,13 @@ export default function LoginPage() {
         firstName,
         lastName,
         phone,
-        address: addressLine1 + (addressDetails ? `, ${addressDetails}` : ""),
-        city,
-        state,
-        zipCode,
-        country,
+        address: addLocation
+          ? addressLine1 + (addressDetails ? `, ${addressDetails}` : "")
+          : "",
+        city: addLocation ? city : "",
+        state: addLocation ? state : "",
+        zipCode: addLocation ? zipCode : "",
+        country: addLocation ? country : "",
       });
 
       if (result.success) {
@@ -424,10 +429,10 @@ export default function LoginPage() {
         );
         setActiveTab("login");
       } else {
-        if (result.message === "Email already in use" || result.error === "Email already in use") {
+        if (result.message === "Email already in use") {
           setEmailError("Email already registered");
         }
-        toast.error(result.message || result.error);
+        toast.error(result.message);
       }
     } catch (error) {
       console.error("Registration error:", error);
@@ -441,7 +446,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-slate-100 to-zinc-100 flex items-center justify-center p-4">
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden">
         {/* Header with Logo */}
-        <div className="bg-gradient-to-r from-gray-900 via-slate-800 to-zinc-900 text-white p-8 text-center">
+        <div className="bg-[#2B2B2B] text-white p-8 text-center">
           <div className="w-16 h-16 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
             <span className="text-2xl font-bold text-gray-900">F</span>
           </div>
@@ -567,7 +572,7 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-gray-800 to-slate-800 text-white py-3 px-4 rounded-lg font-semibold hover:from-gray-900 hover:to-slate-900 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed transform hover:scale-[1.02]"
+                  className="w-full bg-[#2B2B2B] text-white py-3 px-4 rounded-lg font-semibold hover:bg-[#1c1c1c] focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed transform hover:scale-[1.02]"
                 >
                   {isLoading ? (
                     <div className="flex items-center justify-center">
@@ -647,9 +652,7 @@ export default function LoginPage() {
                       Email Address *
                     </label>
                     {emailError && (
-                      <p className="text-sm text-red-600 mb-2">
-                        {emailError}
-                      </p>
+                      <p className="text-sm text-red-600 mb-2">{emailError}</p>
                     )}
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -679,7 +682,10 @@ export default function LoginPage() {
                         type="tel"
                         value={phone}
                         onChange={(e) => {
-                          const value = e.target.value.replace(/[^0-9+\s-]/g, '');
+                          const value = e.target.value.replace(
+                            /[^0-9+\s-]/g,
+                            ""
+                          );
                           if (value.length <= 15) {
                             setPhone(value);
                           }
@@ -739,63 +745,7 @@ export default function LoginPage() {
                           {passwordError}
                         </p>
                       )}
-                      <div className="mt-2 p-3 bg-blue-50 rounded-lg">
-                        <p className="text-xs font-medium text-blue-800 mb-2">
-                          Password Requirements:
-                        </p>
-                        <ul className="text-xs text-blue-700 space-y-1">
-                          <li className="flex items-center">
-                            <span
-                              className={`w-2 h-2 rounded-full mr-2 ${
-                                password.length >= 8
-                                  ? "bg-green-500"
-                                  : "bg-gray-300"
-                              }`}
-                            ></span>
-                            8-20 characters
-                          </li>
-                          <li className="flex items-center">
-                            <span
-                              className={`w-2 h-2 rounded-full mr-2 ${
-                                /[A-Z]/.test(password)
-                                  ? "bg-green-500"
-                                  : "bg-gray-300"
-                              }`}
-                            ></span>
-                            Uppercase letter
-                          </li>
-                          <li className="flex items-center">
-                            <span
-                              className={`w-2 h-2 rounded-full mr-2 ${
-                                /[a-z]/.test(password)
-                                  ? "bg-green-500"
-                                  : "bg-gray-300"
-                              }`}
-                            ></span>
-                            Lowercase letter
-                          </li>
-                          <li className="flex items-center">
-                            <span
-                              className={`w-2 h-2 rounded-full mr-2 ${
-                                /[0-9]/.test(password)
-                                  ? "bg-green-500"
-                                  : "bg-gray-300"
-                              }`}
-                            ></span>
-                            Number
-                          </li>
-                          <li className="flex items-center">
-                            <span
-                              className={`w-2 h-2 rounded-full mr-2 ${
-                                /[!?%&@#$^*~]/.test(password)
-                                  ? "bg-green-500"
-                                  : "bg-gray-300"
-                              }`}
-                            ></span>
-                            Special character
-                          </li>
-                        </ul>
-                      </div>
+                      {/* Password requirement hint removed per request */}
                     </div>
 
                     <div>
@@ -846,177 +796,208 @@ export default function LoginPage() {
                     Location
                   </h3>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Country *
-                      </label>
-                      <div className="relative">
-                        <select
-                          value={country}
-                          onChange={(e) => setCountry(e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200 appearance-none"
-                          required
-                        >
-                          <option value="" disabled>
-                            Select country
-                          </option>
-                          {countriesList.map((countryItem) => (
-                            <option
-                              key={countryItem.code}
-                              value={countryItem.code}
+                  <div className="flex items-center mb-4">
+                    <input
+                      id="addLocation"
+                      type="checkbox"
+                      className="h-4 w-4 text-gray-800 focus:ring-gray-800 border-gray-300 rounded"
+                      checked={addLocation}
+                      onChange={(e) => setAddLocation(e.target.checked)}
+                    />
+                    <label htmlFor="addLocation" className="ml-2 text-sm text-gray-700">
+                      Add location details
+                    </label>
+                  </div>
+
+                  {addLocation && (
+                    <>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Country *
+                          </label>
+                          <div className="relative">
+                            <select
+                              value={country}
+                              onChange={(e) => setCountry(e.target.value)}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200 appearance-none"
+                              required
                             >
-                              {countryItem.name}
-                            </option>
-                          ))}
-                        </select>
-                        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
-                      </div>
-                    </div>
-
-                    {country && (
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          State/Province *
-                        </label>
-                        <div className="relative">
-                          <select
-                            value={state}
-                            onChange={(e) => setState(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200 appearance-none"
-                            required
-                          >
-                            <option value="" disabled>
-                              Select state
-                            </option>
-                            {statesData[country] ? (
-                              statesData[country].map((stateItem) => (
-                                <option
-                                  key={stateItem.code}
-                                  value={stateItem.code}
-                                >
-                                  {stateItem.name}
-                                </option>
-                              ))
-                            ) : (
-                              <option value="other">
-                                Other (please specify)
+                              <option value="" disabled>
+                                Select country
                               </option>
-                            )}
-                          </select>
-                          <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
+                              {countriesList.map((countryItem) => (
+                                <option
+                                  key={countryItem.code}
+                                  value={countryItem.code}
+                                >
+                                  {countryItem.name}
+                                </option>
+                              ))}
+                            </select>
+                            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
+                          </div>
                         </div>
+
+                        {country && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              State/Province *
+                            </label>
+                            <div className="relative">
+                              <select
+                                value={state}
+                                onChange={(e) => setState(e.target.value)}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200 appearance-none"
+                                required
+                              >
+                                <option value="" disabled>
+                                  Select state
+                                </option>
+                                {statesData[country] ? (
+                                  statesData[country].map((stateItem) => (
+                                    <option
+                                      key={stateItem.code}
+                                      value={stateItem.code}
+                                    >
+                                      {stateItem.name}
+                                    </option>
+                                  ))
+                                ) : (
+                                  <option value="other">
+                                    Other (please specify)
+                                  </option>
+                                )}
+                              </select>
+                              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
 
-                  {country && (state === "other" || !statesData[country]) && (
-                    <div className="mt-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        State/Province/Region *
-                      </label>
-                      <input
-                        type="text"
-                        value={state === "other" ? "" : state}
-                        onChange={(e) => {
-                          setState(e.target.value);
-                          setStateError("");
-                        }}
-                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200 ${
-                          stateError ? "border-red-500" : "border-gray-300"
-                        }`}
-                        placeholder="Enter state/province/region"
-                        required
-                      />
-                      {stateError && (
-                        <p className="text-sm text-red-600 mt-1">
-                          {stateError}
-                        </p>
+                      {country && (state === "other" || !statesData[country]) && (
+                        <div className="mt-4">
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            State/Province/Region *
+                          </label>
+                          <input
+                            type="text"
+                            value={state === "other" ? "" : state}
+                            onChange={(e) => {
+                              setState(e.target.value);
+                              setStateError("");
+                            }}
+                            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200 ${
+                              stateError ? "border-red-500" : "border-gray-300"
+                            }`}
+                            placeholder="Enter state/province/region"
+                            required
+                          />
+                          {stateError && (
+                            <p className="text-sm text-red-600 mt-1">
+                              {stateError}
+                            </p>
+                          )}
+                        </div>
                       )}
-                    </div>
+
+                      {state && (
+                        <div className="mt-4">
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            City *
+                          </label>
+                          <input
+                            type="text"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter city"
+                            required
+                          />
+                        </div>
+                      )}
+
+                      <div className="mt-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Address Line 1 *
+                        </label>
+                        <input
+                          type="text"
+                          value={addressLine1}
+                          onChange={(e) => setAddressLine1(e.target.value)}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
+                          placeholder="Street address"
+                          maxLength={100}
+                          required
+                        />
+                      </div>
+
+                      <div className="mt-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Additional Address Details
+                        </label>
+                        <input
+                          type="text"
+                          value={addressDetails}
+                          onChange={(e) => setAddressDetails(e.target.value)}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
+                          placeholder="Apartment, suite, etc. (optional)"
+                          maxLength={100}
+                        />
+                      </div>
+
+                      <div className="mt-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          ZIP/Postal Code{" "}
+                          {(country === "US" || country === "CA") && "*"}
+                        </label>
+                        <input
+                          type="text"
+                          value={zipCode}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, "");
+                            if (value.length <= 5) {
+                              setZipCode(value);
+                            }
+
+                            if (value && country === "US") {
+                              const usZipRegex = /^\d{5}$/;
+                              setZipError(
+                                usZipRegex.test(value)
+                                  ? ""
+                                  : "Invalid US ZIP code format (12345)"
+                              );
+                            } else if (value && country === "CA") {
+                              const caPostalRegex =
+                                /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+                              setZipError(
+                                caPostalRegex.test(value)
+                                  ? ""
+                                  : "Invalid Canadian postal code format (A1A 1A1)"
+                              );
+                            } else {
+                              setZipError("");
+                            }
+                          }}
+                          className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200 ${
+                            zipError ? "border-red-500" : "border-gray-300"
+                          }`}
+                          placeholder={
+                            country === "US"
+                              ? "12345"
+                              : country === "CA"
+                              ? "A1A 1A1"
+                              : "ZIP or postal code"
+                          }
+                          maxLength={5}
+                          required={country === "US" || country === "CA"}
+                        />
+                        {zipError && (
+                          <p className="text-sm text-red-600 mt-1">{zipError}</p>
+                        )}
+                      </div>
+                    </>
                   )}
-
-                  {state && (
-                    <div className="mt-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        City *
-                      </label>
-                      <input
-                        type="text"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
-                        placeholder="Enter city"
-                        required
-                      />
-                    </div>
-                  )}
-
-                  <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Address Line 1 *
-                    </label>
-                    <input
-                      type="text"
-                      value={addressLine1}
-                      onChange={(e) => setAddressLine1(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
-                      placeholder="Street address"
-                      maxLength={100}
-                      required
-                    />
-                  </div>
-
-                  <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Additional Address Details
-                    </label>
-                    <input
-                      type="text"
-                      value={addressDetails}
-                      onChange={(e) => setAddressDetails(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
-                      placeholder="Apartment, suite, etc. (optional)"
-                      maxLength={100}
-                    />
-                  </div>
-
-                  <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      ZIP/Postal Code {(country === 'US' || country === 'CA') && '*'}
-                    </label>
-                    <input
-                      type="text"
-                      value={zipCode}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/[^0-9]/g, '');
-                        if (value.length <= 5) {
-                          setZipCode(value);
-                        }
-                        
-                        if (value && country === 'US') {
-                          const usZipRegex = /^\d{5}$/;
-                          setZipError(usZipRegex.test(value) ? "" : "Invalid US ZIP code format (12345)");
-                        } else if (value && country === 'CA') {
-                          const caPostalRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
-                          setZipError(caPostalRegex.test(value) ? "" : "Invalid Canadian postal code format (A1A 1A1)");
-                        } else {
-                          setZipError("");
-                        }
-                      }}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200 ${
-                        zipError ? "border-red-500" : "border-gray-300"
-                      }`}
-                      placeholder={country === 'US' ? "12345" : country === 'CA' ? "A1A 1A1" : "ZIP or postal code"}
-                      maxLength={5}
-                      required={country === 'US' || country === 'CA'}
-                    />
-                    {zipError && (
-                      <p className="text-sm text-red-600 mt-1">
-                        {zipError}
-                      </p>
-                    )}
-                  </div>
                 </div>
 
                 {/* Terms Section */}
@@ -1076,11 +1057,11 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed transform hover:scale-[1.02]"
-                >
+                                 <button
+                   type="submit"
+                   disabled={isLoading}
+                   className="w-full bg-[#2B2B2B] text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-[#1c1c1c] focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed transform hover:scale-[1.02]"
+                 >
                   {isLoading ? (
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
