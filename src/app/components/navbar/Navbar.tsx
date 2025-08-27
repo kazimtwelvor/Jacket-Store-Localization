@@ -29,6 +29,15 @@ const MobileMenu = dynamic(() => import("../../utils/mobileMenu"), {
 const AnimatedMenuIcon = dynamic(() => import("../../utils/animatedMenuIcon"), {
   ssr: false,
 });
+const MensMegaMenu = dynamic(() => import("./MensMegaMenu"), {
+  ssr: false,
+});
+const WomensMegaMenu = dynamic(() => import("./WomensMegaMenu"), {
+  ssr: false,
+});
+const BrandsMegaMenu = dynamic(() => import("./BrandsMegaMenu"), {
+  ssr: false,
+});
 import { cn } from "../../lib/utils";
 import { avertaBold } from "@/src/lib/fonts";
 export const revalidate = 0;
@@ -405,24 +414,23 @@ const Navbar = () => {
                   <Button
                     variant="ghost"
                     className={`h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
-                    onClick={() => {
-                      setShowMegaMenu(true);
-                      setActiveNavItem("coats");
-                    }}
-                  
+                    onClick={() => router.push("/collections")}
                   >
                     COATS
                   </Button>
-                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "coats" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
                 </div>
                 <div className="relative">
                   <Button
                     variant="ghost"
                     className={`h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
-                    onClick={() => router.push("/")}
+                    onClick={() => {
+                      setShowMegaMenu(true);
+                      setActiveNavItem("brands");
+                    }}
                   >
                     BRANDS
                   </Button>
+                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "brands" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
                 </div>
               </div>
             </nav>
@@ -509,328 +517,25 @@ const Navbar = () => {
         </header>
       </div>
 
-      {showMegaMenu && (
-        <div
-          className="fixed left-0 right-0 top-16 w-screen z-[9001]"
-        >
-          <div
-            ref={megaMenuRef}
-            className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl h-screen overflow-y-auto mega-menu-scrollbar"
-          >
-            <button
-              onClick={() => {
-                setShowMegaMenu(false);
-                setActiveNavItem(null);
-              }}
-              className="sticky top-6 right-8 float-right bg-white text-black rounded-full p-1 flex items-center justify-center hover:bg-gray-200 transition-colors z-20 mr-8 mt-6"
-              aria-label="Close menu"
-            >
-              <X className="h-8 w-8" />
-            </button>
-            <div className="w-full max-w-screen-2xl mx-auto px-8 lg:px-16 py-16">
-              <div className="grid grid-cols-6 gap-4 pt-8">
-                <div className="space-y-4">
-                  <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                    LEATHER JACKETS
-                  </h3>
-                  <ul className="space-y-3">
-                    <li>
-                      <Link
-                        href="/shop?category=leather-jackets"
-                        className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        All Leather Jackets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=biker-jackets"
-                        className="mega-menu-link text-gray-200 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Biker Jackets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=bomber-jackets"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Bomber Jackets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=moto-jackets"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Moto Jackets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=racing-jackets"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Racing Jackets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=vintage-leather"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Vintage Leather
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className="space-y-4">
-                  <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                    COATS & OUTERWEAR
-                  </h3>
-                  <ul className="space-y-3">
-                    <li>
-                      <Link
-                        href="/shop?category=coats"
-                        className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        All Coats & Outerwear
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=trench-coats"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Trench Coats
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=wool-coats"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Wool Coats
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=puffer-jackets"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Puffer Jackets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=peacoats"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Peacoats
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=parkas"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Parkas
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className="space-y-4">
-                  <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                    SPECIALTY
-                  </h3>
-                  <ul className="space-y-3">
-                    <li>
-                      <Link
-                        href="/shop?category=varsity-jackets"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Varsity Jackets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=denim-jackets"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Denim Jackets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=blazers"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Blazers
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=windbreakers"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Windbreakers
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=hooded-jackets"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Hooded Jackets
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className="space-y-4">
-                  <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                    COLLECTIONS
-                  </h3>
-                  <ul className="space-y-3">
-                    <li>
-                      <Link
-                        href="/shop?genders=men"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        All Men's Jackets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?genders=women"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        All Women's Jackets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?category=unisex"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Unisex Styles
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/shop?price=luxury"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Luxury Collection
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/size-guide"
-                        className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                        onClick={() => {
-                          setShowMegaMenu(false);
-                          setActiveNavItem(null);
-                        }}
-                      >
-                        Size Guide
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="mt-20">
-                <h3 className="font-bold text-white mb-8 text-4xl uppercase tracking-widest text-left">
-                  More Inspiration
-                </h3>
-                <MegaMenuCarousel />
-              </div>
-            </div>
-          </div>
-        </div>
+      {showMegaMenu && activeNavItem === "mens-jackets" && (
+        <MensMegaMenu onClose={() => {
+          setShowMegaMenu(false);
+          setActiveNavItem(null);
+        }} />
+      )}
+
+      {showMegaMenu && activeNavItem === "womens-jackets" && (
+        <WomensMegaMenu onClose={() => {
+          setShowMegaMenu(false);
+          setActiveNavItem(null);
+        }} />
+      )}
+
+      {showMegaMenu && activeNavItem === "brands" && (
+        <BrandsMegaMenu onClose={() => {
+          setShowMegaMenu(false);
+          setActiveNavItem(null);
+        }} />
       )}
 
       {isMounted && isSearchOpen && (
