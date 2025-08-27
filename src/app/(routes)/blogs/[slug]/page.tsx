@@ -87,6 +87,12 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
 
   const { hero, contentSection, guideContent } = blogData.content
 
+  const sanitizeSrc = (value?: string) => {
+    if (!value) return ""
+    const cleaned = value.replace(/\n/g, "").trim()
+    return cleaned
+  }
+
   const blogPostSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -285,29 +291,35 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
             <p className="text-gray-700 mb-6">{contentSection.text}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="md:col-span-2">
-                <Image
-                  src={contentSection.mainImage.replace('\n', '')}
-                  alt={contentSection.title}
-                  width={600}
-                  height={400}
-                  className="object-cover rounded-lg"
-                />
+                {sanitizeSrc(contentSection.mainImage) && (
+                  <Image
+                    src={sanitizeSrc(contentSection.mainImage)}
+                    alt={contentSection.title}
+                    width={600}
+                    height={400}
+                    className="object-cover rounded-lg"
+                  />
+                )}
               </div>
               <div>
-                <Image
-                  src={contentSection.smallImageTop.replace('\n', '')}
-                  alt="Content Image 1"
-                  width={300}
-                  height={200}
-                  className="object-cover rounded-lg mb-4"
-                />
-                <Image
-                  src={contentSection.smallImageBottom.replace('\n', '')}
-                  alt="Content Image 2"
-                  width={300}
-                  height={200}
-                  className="object-cover rounded-lg"
-                />
+                {sanitizeSrc(contentSection.smallImageTop) && (
+                  <Image
+                    src={sanitizeSrc(contentSection.smallImageTop)}
+                    alt="Content Image 1"
+                    width={300}
+                    height={200}
+                    className="object-cover rounded-lg mb-4"
+                  />
+                )}
+                {sanitizeSrc(contentSection.smallImageBottom) && (
+                  <Image
+                    src={sanitizeSrc(contentSection.smallImageBottom)}
+                    alt="Content Image 2"
+                    width={300}
+                    height={200}
+                    className="object-cover rounded-lg"
+                  />
+                )}
               </div>
             </div>
             <h2 className="text-2xl font-bold text-[#0A2463] mt-8 mb-4">{contentSection.subtitleHeading}</h2>

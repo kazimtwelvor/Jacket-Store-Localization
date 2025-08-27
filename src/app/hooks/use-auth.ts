@@ -56,7 +56,8 @@ interface RegisterData {
 }
 
 // Use environment variable for store ID
-const storeId = process.env.NEXT_PUBLIC_STORE_ID || "fe268b7e-f2cc-459d-9619-957967ff23dc";
+const storeId =
+  process.env.NEXT_PUBLIC_STORE_ID || "fe268b7e-f2cc-459d-9619-957967ff23dc";
 
 const useAuth = create(
   persist<AuthStore>(
@@ -70,13 +71,16 @@ const useAuth = create(
         set({ isLoading: true });
         try {
           // Use external API URL for authentication
-          const response = await fetch(`https://d1.fineyst.com/api/auth/login`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password, storeId }),
-          });
+          const response = await fetch(
+            `https://d1.fineyst.com/api/auth/login`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, password, storeId }),
+            }
+          );
 
           const data = await response.json();
 
@@ -146,13 +150,16 @@ const useAuth = create(
       resetPassword: async (token: string, password: string) => {
         try {
           // Use external API URL for authentication
-          const response = await fetch(`https://d1.fineyst.com/api/auth/reset-password`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token, password, storeId }),
-          });
+          const response = await fetch(
+            `https://jacket.us.com/api/auth/reset-password`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ token, password, storeId }),
+            }
+          );
 
           const data = await response.json();
 
@@ -192,13 +199,16 @@ const useAuth = create(
           };
 
           // Use external API URL for authentication
-          const response = await fetch(`https://d1.fineyst.com/api/auth/register`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(registrationData),
-          });
+          const response = await fetch(
+            `https://d1.fineyst.com/api/auth/register`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(registrationData),
+            }
+          );
 
           const data = await response.json();
 
@@ -226,22 +236,43 @@ const useAuth = create(
         try {
           // Normalize Google/user payload to our internal User shape
           const fullName: string | undefined =
-            user?.name || [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
-            user?.given_name || user?.givenName
+            user?.name ||
+            [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
+            user?.given_name ||
+            user?.givenName
               ? `${user?.given_name || user?.givenName || ""} ${user?.family_name || user?.familyName || ""}`.trim()
               : undefined;
 
           const derivedFirstName =
-            user?.firstName || user?.given_name || user?.givenName || fullName?.split(" ")?.[0] || undefined;
+            user?.firstName ||
+            user?.given_name ||
+            user?.givenName ||
+            fullName?.split(" ")?.[0] ||
+            undefined;
           const derivedLastName =
-            user?.lastName || user?.family_name || user?.familyName || (fullName ? fullName.split(" ").slice(1).join(" ") : undefined);
+            user?.lastName ||
+            user?.family_name ||
+            user?.familyName ||
+            (fullName ? fullName.split(" ").slice(1).join(" ") : undefined);
 
-          const email: string | undefined = user?.email || user?.primaryEmail || user?.primaryEmailAddress || user?.contactEmail;
+          const email: string | undefined =
+            user?.email ||
+            user?.primaryEmail ||
+            user?.primaryEmailAddress ||
+            user?.contactEmail;
           const username: string | undefined =
-            user?.username || user?.name || (email ? email.split("@")[0] : undefined);
+            user?.username ||
+            user?.name ||
+            (email ? email.split("@")[0] : undefined);
 
           const normalizedUser = {
-            id: user?.id || user?.userId || user?._id || user?.clerkId || user?.googleId || "",
+            id:
+              user?.id ||
+              user?.userId ||
+              user?._id ||
+              user?.clerkId ||
+              user?.googleId ||
+              "",
             email: email || "",
             username,
             firstName: derivedFirstName,
@@ -269,13 +300,16 @@ const useAuth = create(
       verifyEmail: async (token: string) => {
         try {
           // Use external API URL for authentication
-          const response = await fetch(`https://d1.fineyst.com/api/auth/verify`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token, storeId }),
-          });
+          const response = await fetch(
+            `https://d1.fineyst.com/api/auth/verify`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ token, storeId }),
+            }
+          );
 
           const data = await response.json();
 

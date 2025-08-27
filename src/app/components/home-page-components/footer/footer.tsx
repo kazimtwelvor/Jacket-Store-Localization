@@ -108,16 +108,16 @@ const Footer = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col sm:grid sm:grid-cols-2 md:grid md:grid-cols-3 lg:flex lg:flex-row gap-1 sm:gap-18 md:gap-16 lg:gap-20 xl:gap-24 2xl:gap-28 justify-center sm:justify-start md:justify-center lg:justify-end flex-1 mt-6 sm:mt-4 md:mt-6 lg:mt-0 md:mr-4 lg:mr-6">
+                    <div className="flex flex-col sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 lg:flex lg:flex-row gap-1 sm:gap-18 md:gap-10 lg:gap-20 xl:gap-24 2xl:gap-28 justify-center sm:justify-start md:justify-center lg:justify-end flex-1 mt-6 sm:mt-4 md:mt-6 lg:mt-0 md:mr-4 lg:mr-6">
                         <div className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
                             <button
-                                className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
+                                className="flex bg[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('shop')}
                             >
                                 <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>SHOP</h3>
-                                <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'shop' ? 'rotate-180' : ''}`} />
+                                <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'shop' ? 'rotate-180' : ''}`} />
                             </button>
-                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'shop' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
+                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'shop' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
 
 
                                 <li>
@@ -130,13 +130,13 @@ const Footer = () => {
                         </div>
                         <div className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
                             <button
-                                className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
+                                className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('categories')}
                             >
                                 <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>CATEGORIES</h3>
-                                <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'categories' ? 'rotate-180' : ''}`} />
+                                <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'categories' ? 'rotate-180' : ''}`} />
                             </button>
-                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'categories' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
+                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'categories' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
                                     <Link href="/collections/mens-leather-jackets" className="text-black hover:font-bold transition-all">
                                         Men's Leather Jackets
@@ -166,13 +166,13 @@ const Footer = () => {
                         </div>
                         <div className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
                             <button
-                                className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
+                                className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('company')}
                             >
                                 <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>COMPANY</h3>
-                                <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'company' ? 'rotate-180' : ''}`} />
+                                <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'company' ? 'rotate-180' : ''}`} />
                             </button>
-                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'company' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
+                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'company' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
                                     <Link href="/blogs" className="text-black hover:font-bold transition-all">
                                         Blogs
@@ -187,13 +187,13 @@ const Footer = () => {
                         </div>
                         <div className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
                             <button
-                                className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
+                                className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('support')}
                             >
                                 <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>SUPPORT</h3>
-                                <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'support' ? 'rotate-180' : ''}`} />
+                                <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'support' ? 'rotate-180' : ''}`} />
                             </button>
-                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'support' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
+                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'support' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
                                     <Link href="/faqs" className="text-black hover:font-bold transition-all">
                                         FAQs
@@ -220,13 +220,13 @@ const Footer = () => {
                         </div>
                         <div className="md:border-0 md:pb-0 mb-1 md:mb-0 text-center md:text-left">
                             <button
-                                className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 md:cursor-default text-center md:text-left"
+                                className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('help')}
                             >
                                 <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>HELP</h3>
-                                <ChevronDown className={`h-5 w-5 md:hidden transition-transform text-black ${expandedSection === 'help' ? 'rotate-180' : ''}`} />
+                                <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'help' ? 'rotate-180' : ''}`} />
                             </button>
-                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'help' ? 'block' : 'hidden'} md:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
+                            <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'help' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
                                     <Link href="/privacy-policy" className="text-black hover:font-bold transition-all">
                                         Privacy Policy
@@ -300,7 +300,7 @@ const Footer = () => {
                     </div>
 
                     {/* Trust Signals Image */}
-                    <div className="flex flex-col items-center my-4 md:my-0 md:mx-auto pl-0 md:pl-40">
+                    <div className="flex flex-col items-center my-4 md:my-0 md:mx-auto pl-0 md:pl-0 lg:pl-40">
                         <img
                             src="/images/trust-signals.webp"
                             alt="Trust Signals"
