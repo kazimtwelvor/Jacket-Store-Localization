@@ -1,10 +1,7 @@
 import Link from "next/link"
 import { X } from "lucide-react"
-import dynamic from "next/dynamic"
 
-const MegaMenuCarousel = dynamic(() => import("./MegaMenuCarousal"), {
-  ssr: false,
-})
+
 
 interface BrandsMegaMenuProps {
   onClose: () => void
@@ -25,87 +22,106 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
           <div className="grid grid-cols-6 gap-4 pt-8">
             <div className="space-y-4">
               <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                PREMIUM BRANDS
+                Company
               </h3>
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/brands/fineyst"
+                    href="/blogs"
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                    Fineyst
+                    Blogs
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/brands/leather-craft"
+                    href="/about-us"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                    Leather Craft
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/brands/vintage-collection"
-                    className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                    onClick={onClose}
-                  >
-                    Vintage Collection
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/brands/urban-style"
-                    className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                    onClick={onClose}
-                  >
-                    Urban Style
+                   About Us
                   </Link>
                 </li>
               </ul>
             </div>
             <div className="space-y-4">
               <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                LUXURY BRANDS
+                SUPPORT
               </h3>
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/brands/elite-leather"
+                    href="/faqs"
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                    Elite Leather
+                    FAQs
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/brands/premium-craft"
+                    href="/reviews"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                    Premium Craft
+                    Reviews
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/brands/heritage-collection"
+                    href="/contact-us"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                    Heritage Collection
+                    Contact Us
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/size-guide"
+                    className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                    onClick={onClose}
+                  >
+                    Size Guide
                   </Link>
                 </li>
               </ul>
             </div>
-          </div>
-          <div className="mt-20">
-            <h3 className="font-bold text-white mb-8 text-4xl uppercase tracking-widest text-left">
-              Brand Collections
-            </h3>
-            <MegaMenuCarousel />
+            <div className="space-y-4">
+              <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
+                HELP
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link
+                    href="/privacy-policy"
+                    className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                    onClick={onClose}
+                  >
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/terms-conditions"
+                    className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                    onClick={onClose}
+                  >
+                    Terms & Conditions
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/shipping-and-delivery-policy"
+                    className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
+                    onClick={onClose}
+                  >
+                    Shipping & Delivery
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

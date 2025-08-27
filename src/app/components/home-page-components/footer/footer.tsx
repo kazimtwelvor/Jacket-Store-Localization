@@ -122,7 +122,7 @@ const Footer = () => {
 
                                 <li>
                                     <Link href="/shop" className="text-black  hover:font-semibold transition-all" >
-                                        Collections
+                                        Shop
                                     </Link>
                                 </li>
 
