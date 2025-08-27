@@ -382,10 +382,10 @@ const Navbar = () => {
           <div className="absolute left-0 right-0 mb-5 mx-auto hidden h-full items-center justify-center lg:flex lg:w-auto lg:max-w-[70%] lg:left-1/2 lg:-translate-x-1/2">
             <nav>
               <div className="flex space-x-8 text-5xl">
-                <div className="relative">
+                <div className="relative group">
                   <Button
                     variant="ghost"
-                    className={`h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
+                    className={`h-full rounded-none bg-transparent hover:!bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
                     onClick={() => {
                       setShowMegaMenu(true);
                       setActiveNavItem("mens-jackets");
@@ -394,12 +394,12 @@ const Navbar = () => {
                   >
                     MEN'S JACKETS
                   </Button>
-                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "mens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
+                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "mens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"}`} />
                 </div>
-                <div className="relative">
+                <div className="relative group">
                   <Button
                     variant="ghost"
-                    className={`h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
+                    className={`h-full rounded-none bg-transparent hover:!bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
                     onClick={() => {
                       setShowMegaMenu(true);
                       setActiveNavItem("womens-jackets");
@@ -408,21 +408,22 @@ const Navbar = () => {
                   >
                     WOMEN'S JACKETS
                   </Button>
-                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "womens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
+                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "womens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"}`} />
                 </div>
-                <div className="relative">
+                <div className="relative group">
                   <Button
                     variant="ghost"
-                    className={`h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
+                    className={`h-full rounded-none bg-transparent hover:!bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
                     onClick={() => router.push("/collections")}
                   >
                     COATS
                   </Button>
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100" />
                 </div>
-                <div className="relative">
+                <div className="relative group">
                   <Button
                     variant="ghost"
-                    className={`h-full rounded-none bg-transparent hover:bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
+                    className={`h-full rounded-none bg-transparent hover:!bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
                     onClick={() => {
                       setShowMegaMenu(true);
                       setActiveNavItem("brands");
@@ -430,7 +431,7 @@ const Navbar = () => {
                   >
                     BRANDS
                   </Button>
-                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "brands" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
+                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "brands" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"}`} />
                 </div>
               </div>
             </nav>
