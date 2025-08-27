@@ -15,7 +15,7 @@ export default function ResetPasswordPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [token, setToken] = useState<string | null>(null)
+  const [email, setEmail] = useState<string | null>(null)
   const [passwordError, setPasswordError] = useState("")
 
   const router = useRouter()
@@ -23,11 +23,11 @@ export default function ResetPasswordPage() {
   const { resetPassword } = useAuth()
 
   useEffect(() => {
-    const tokenParam = searchParams?.get("token")
-    if (tokenParam) {
-      setToken(tokenParam)
+    const emailParam = searchParams?.get("email")
+    if (emailParam) {
+      setEmail(emailParam)
     } else {
-      toast.error("Invalid or missing reset token")
+      toast.error("Invalid or missing email")
       router.push("/auth/login")
     }
   }, [searchParams, router])
@@ -56,8 +56,8 @@ export default function ResetPasswordPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!token) {
-      toast.error("Invalid reset token")
+    if (!email) {
+      toast.error("Invalid email")
       return
     }
 
@@ -74,7 +74,7 @@ export default function ResetPasswordPage() {
     setIsLoading(true)
 
     try {
-      const result = await resetPassword(token, password)
+      const result = await resetPassword(email, password)
 
       if (result.success) {
         toast.success("Password reset successful")

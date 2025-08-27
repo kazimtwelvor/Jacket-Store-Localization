@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { validateResetToken, consumeResetToken } from "../forgot-password/route"
 
 const resetPasswordSchema = z.object({
-  token: z.string().min(1, "Token is required"),
+  email: z.string().email("Valid email is required"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 })
 
@@ -16,7 +15,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: validationResult.error.issues[0].message }, { status: 400 })
     }
 
-    const { token, password } = validationResult.data
+    const { email, password } = validationResult.data
     
     // Get store ID from environment variable
     const storeId = process.env.NEXT_PUBLIC_STORE_ID;
@@ -27,15 +26,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // Validate the reset token
-    const tokenValidation = validateResetToken(token)
-    
-    if (!tokenValidation.valid) {
-      return NextResponse.json(
-        { error: "Invalid or expired reset token" },
-        { status: 400 }
-      )
-    }
+    // Note: In a real implementation, verify the email exists and
+    // that the reset request is authorized for this email (e.g., via a prior step)
 
     // Here you would typically:
     // 1. Hash the new password
@@ -48,10 +40,7 @@ export async function POST(req: Request) {
     try {
       // Example of what you might do:
       // const hashedPassword = await bcrypt.hash(password, 12)
-      // await updateUserPassword(tokenValidation.email!, hashedPassword)
-      
-      // Consume the reset token so it can't be used again
-      consumeResetToken(token);
+      // await updateUserPassword(email, hashedPassword)
       
       return NextResponse.json({
         message: "Password reset successful",

@@ -27,7 +27,7 @@ interface AuthStore {
     email: string
   ) => Promise<{ success: boolean; message: string }>;
   resetPassword: (
-    token: string,
+    email: string,
     password: string
   ) => Promise<{ success: boolean; message: string }>;
   register: (
@@ -147,7 +147,7 @@ const useAuth = create(
         }
       },
 
-      resetPassword: async (token: string, password: string) => {
+      resetPassword: async (email: string, password: string) => {
         try {
           // Use external API URL for authentication
           const response = await fetch(
@@ -157,7 +157,7 @@ const useAuth = create(
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ token, password, storeId }),
+              body: JSON.stringify({ email, password, storeId }),
             }
           );
 
