@@ -151,7 +151,7 @@ const useAuth = create(
         try {
           // Use external API URL for authentication
           const response = await fetch(
-            `https://jacket.us.com/api/auth/reset-password`,
+            `https://d1.fineyst.com/api/auth/reset-password`,
             {
               method: "POST",
               headers: {
