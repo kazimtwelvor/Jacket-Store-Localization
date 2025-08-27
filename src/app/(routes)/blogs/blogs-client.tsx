@@ -9,7 +9,6 @@ import Container from "@/src/app/ui/container"
 import { Button } from "@/src/app/ui/button"
 import { toast } from "@/src/app/hooks/use-toast"
 
-const CATEGORIES = ["All", "Style Guides", "Fashion Trends", "Sustainability", "Care Tips", "Brand Spotlights"]
 
 const POSTS_PER_PAGE = 6
 
@@ -133,24 +132,7 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
         </Container>
       </div>
 
-      <Container>
-        <div className="py-8 border-b overflow-x-auto scrollbar-hide">
-          <div className="flex space-x-6 min-w-max">
-            {CATEGORIES.map((category) => (
-              <button
-                key={category}
-                className={`text-sm font-medium whitespace-nowrap pb-2 border-b-2 transition-colors ${activeCategory === category
-                  ? "border-[#1b1b1b] text-[#2b2b2b]"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
-                  }`}
-                onClick={() => handleCategoryChange(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-      </Container>
+   
 
       <Container>
         <div className="py-12">

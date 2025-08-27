@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: ProductPageProps, parent: Res
         description: product.metaDescription || product.description || `Buy ${product.name} online.`,
         images: [...productImages, ...previousImages],
         type: "website",
-        url: `/product/${product.slug || slugOrId}`,
+        url: `https://jacket.us.com/us/product/${product.slug || slugOrId}`,
       },
       twitter: {
         card: "summary_large_image",
@@ -86,7 +86,7 @@ export async function generateMetadata({ params }: ProductPageProps, parent: Res
         images: productImages.length > 0 ? [productImages[0]] : undefined,
       },
       alternates: {
-        canonical: `/product/${product.slug || slugOrId}`,
+        canonical: `https://jacket.us.com/us/product/${product.slug || slugOrId}`,
       },
       other: {
         "og:price:amount": product.isDiscounted && product.salePrice ? product.salePrice : product.price,

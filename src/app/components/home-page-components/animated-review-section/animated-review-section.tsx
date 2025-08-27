@@ -6,13 +6,143 @@ import { Star } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { avertaBlack, avertaBold } from "@/src/lib/fonts"
 
+// const reviews = [
+//     {
+//         id: 1,
+//         name: "Sarah J.",
+//         rating: 5,
+//         date: "May 15, 2023",
+//         text: "The quality of these clothes is exceptional! I've been wearing the jeans for months and they still look brand new.",
+//         image: "/images/reviews/sarah-j.webp",
+//     },
+//     {
+//         id: 2,
+//         name: "Michael T.",
+//         rating: 5,
+//         date: "April 3, 2023",
+//         text: "Fast shipping and the fit is perfect. Will definitely be ordering more items soon!",
+//         image: "/images/reviews/michael-t.webp",
+//     },
+//     {
+//         id: 3,
+//         name: "Emma R.",
+//         rating: 4,
+//         date: "June 20, 2023",
+//         text: "Love the style and comfort of their t-shirts. The only reason for 4 stars is that I wish they had more color options.",
+//         image: "/images/reviews/emma-r.webp",
+//     },
+//     {
+//         id: 4,
+//         name: "David L.",
+//         rating: 5,
+//         date: "March 12, 2023",
+//         text: "The attention to detail in these clothes is amazing. Worth every penny!",
+//         image: "/images/reviews/david-l.webp",
+//     },
+//     {
+//         id: 5,
+//         name: "Jessica M.",
+//         rating: 5,
+//         date: "July 8, 2023",
+//         text: "I've received so many compliments on my new dress. The fabric is high quality and the design is unique.",
+//         image: "/images/reviews/jessica-m.webp",
+//     },
+//     {
+//         id: 6,
+//         name: "Robert K.",
+//         rating: 5,
+//         date: "February 28, 2023",
+//         text: "Great customer service! Had an issue with sizing and they helped me exchange it with no hassle.",
+//         image: "/images/reviews/robert-k.webp",
+//     },
+//     {
+//         id: 7,
+//         name: "Olivia P.",
+//         rating: 4,
+//         date: "August 5, 2023",
+//         text: "The sweater I ordered is so cozy and stylish. Perfect for fall weather!",
+//         image: "/images/reviews/olivia-p.webp",
+//     },
+//     {
+//         id: 8,
+//         name: "James H.",
+//         rating: 5,
+//         date: "January 17, 2023",
+//         text: "These are the best fitting jeans I've ever owned. Will be buying more pairs in different colors.",
+//         image: "/images/reviews/james-h.webp",
+//     },
+//     {
+//         id: 9,
+//         name: "Alex M.",
+//         rating: 5,
+//         date: "September 10, 2023",
+//         text: "Outstanding quality and craftsmanship. The jacket exceeded my expectations in every way!",
+//         image: "/images/reviews/alex-m.webp",
+//     },
+//     {
+//         id: 10,
+//         name: "Sophia L.",
+//         rating: 4,
+//         date: "October 22, 2023",
+//         text: "Beautiful design and comfortable fit. The material feels premium and looks elegant.",
+//         image: "/images/reviews/sophia-l.webp",
+//     },
+//     {
+//         id: 11,
+//         name: "Ryan K.",
+//         rating: 5,
+//         date: "November 5, 2023",
+//         text: "Perfect for both casual and formal occasions. The versatility of this piece is amazing.",
+//         image: "/images/reviews/ryan-k.webp",
+//     },
+//     {
+//         id: 12,
+//         name: "Maya S.",
+//         rating: 5,
+//         date: "December 1, 2023",
+//         text: "Love the attention to detail and the sustainable materials used. Highly recommend!",
+//         image: "/images/reviews/maya-s.webp",
+//     },
+//     {
+//         id: 13,
+//         name: "Ethan W.",
+//         rating: 4,
+//         date: "December 15, 2023",
+//         text: "Great value for money. The fit is perfect and the style is exactly what I was looking for.",
+//         image: "/images/reviews/ethan-w.webp",
+//     },
+//     {
+//         id: 14,
+//         name: "Zoe P.",
+//         rating: 5,
+//         date: "January 3, 2024",
+//         text: "Absolutely love this purchase! The quality is exceptional and it arrived quickly.",
+//         image: "/images/reviews/zoe-p.webp",
+//     },
+//     {
+//         id: 15,
+//         name: "Noah B.",
+//         rating: 5,
+//         date: "January 20, 2024",
+//         text: "This has become my go-to piece. The comfort and style combination is unbeatable.",
+//         image: "/images/reviews/noah-b.webp",
+//     },
+//     {
+//         id: 16,
+//         name: "Ava R.",
+//         rating: 4,
+//         date: "February 8, 2024",
+//         text: "Really impressed with the quality and the customer service. Will definitely shop here again.",
+//         image: "/images/reviews/ava-r.webp",
+//     },
+// ]
 const reviews = [
     {
         id: 1,
         name: "Sarah J.",
         rating: 5,
         date: "May 15, 2023",
-        text: "The quality of these clothes is exceptional! I've been wearing the jeans for months and they still look brand new.",
+        text: "This jacket is absolutely stunning. The stitching and material feel premium, and it keeps me warm without being bulky.",
         image: "/images/reviews/sarah-j.webp",
     },
     {
@@ -20,7 +150,7 @@ const reviews = [
         name: "Michael T.",
         rating: 5,
         date: "April 3, 2023",
-        text: "Fast shipping and the fit is perfect. Will definitely be ordering more items soon!",
+        text: "Super fast delivery and the jacket fits like it was tailored for me. I’m already eyeing another one in a different color.",
         image: "/images/reviews/michael-t.webp",
     },
     {
@@ -28,7 +158,7 @@ const reviews = [
         name: "Emma R.",
         rating: 4,
         date: "June 20, 2023",
-        text: "Love the style and comfort of their t-shirts. The only reason for 4 stars is that I wish they had more color options.",
+        text: "Love the look and feel of this jacket. I just wish there were more lightweight options for spring.",
         image: "/images/reviews/emma-r.webp",
     },
     {
@@ -36,7 +166,7 @@ const reviews = [
         name: "David L.",
         rating: 5,
         date: "March 12, 2023",
-        text: "The attention to detail in these clothes is amazing. Worth every penny!",
+        text: "The craftsmanship on this jacket is next level. The inner lining and zipper quality really stand out.",
         image: "/images/reviews/david-l.webp",
     },
     {
@@ -44,7 +174,7 @@ const reviews = [
         name: "Jessica M.",
         rating: 5,
         date: "July 8, 2023",
-        text: "I've received so many compliments on my new dress. The fabric is high quality and the design is unique.",
+        text: "I’ve received compliments every time I wear this jacket. It’s stylish, functional, and feels luxurious.",
         image: "/images/reviews/jessica-m.webp",
     },
     {
@@ -52,7 +182,7 @@ const reviews = [
         name: "Robert K.",
         rating: 5,
         date: "February 28, 2023",
-        text: "Great customer service! Had an issue with sizing and they helped me exchange it with no hassle.",
+        text: "Had a sizing issue and the support team was incredibly helpful with the exchange. Love my new jacket!",
         image: "/images/reviews/robert-k.webp",
     },
     {
@@ -60,7 +190,7 @@ const reviews = [
         name: "Olivia P.",
         rating: 4,
         date: "August 5, 2023",
-        text: "The sweater I ordered is so cozy and stylish. Perfect for fall weather!",
+        text: "The jacket is cozy and perfect for chilly mornings. Only downside is it runs slightly big.",
         image: "/images/reviews/olivia-p.webp",
     },
     {
@@ -68,7 +198,7 @@ const reviews = [
         name: "James H.",
         rating: 5,
         date: "January 17, 2023",
-        text: "These are the best fitting jeans I've ever owned. Will be buying more pairs in different colors.",
+        text: "This is hands down the best jacket I've ever owned. Sleek design and it pairs well with everything.",
         image: "/images/reviews/james-h.webp",
     },
     {
@@ -84,7 +214,7 @@ const reviews = [
         name: "Sophia L.",
         rating: 4,
         date: "October 22, 2023",
-        text: "Beautiful design and comfortable fit. The material feels premium and looks elegant.",
+        text: "Elegant design and very comfortable to wear. Would love to see more color options in this style.",
         image: "/images/reviews/sophia-l.webp",
     },
     {
@@ -92,7 +222,7 @@ const reviews = [
         name: "Ryan K.",
         rating: 5,
         date: "November 5, 2023",
-        text: "Perfect for both casual and formal occasions. The versatility of this piece is amazing.",
+        text: "Perfect jacket for both casual outings and more dressed-up looks. Super versatile.",
         image: "/images/reviews/ryan-k.webp",
     },
     {
@@ -100,7 +230,7 @@ const reviews = [
         name: "Maya S.",
         rating: 5,
         date: "December 1, 2023",
-        text: "Love the attention to detail and the sustainable materials used. Highly recommend!",
+        text: "Impressed by the sustainable materials used. It's warm, stylish, and environmentally friendly!",
         image: "/images/reviews/maya-s.webp",
     },
     {
@@ -108,7 +238,7 @@ const reviews = [
         name: "Ethan W.",
         rating: 4,
         date: "December 15, 2023",
-        text: "Great value for money. The fit is perfect and the style is exactly what I was looking for.",
+        text: "Great value for the price. The fit is spot-on and it's become a staple in my wardrobe.",
         image: "/images/reviews/ethan-w.webp",
     },
     {
@@ -116,15 +246,15 @@ const reviews = [
         name: "Zoe P.",
         rating: 5,
         date: "January 3, 2024",
-        text: "Absolutely love this purchase! The quality is exceptional and it arrived quickly.",
+        text: "Absolutely in love with this jacket! It’s comfortable, stylish, and arrived in perfect condition.",
         image: "/images/reviews/zoe-p.webp",
     },
     {
         id: 15,
         name: "Noah B.",
-        rating: 5,
+        rating: 5,  
         date: "January 20, 2024",
-        text: "This has become my go-to piece. The comfort and style combination is unbeatable.",
+        text: "This jacket goes with everything. I wear it almost daily and it still looks brand new.",
         image: "/images/reviews/noah-b.webp",
     },
     {
@@ -132,10 +262,10 @@ const reviews = [
         name: "Ava R.",
         rating: 4,
         date: "February 8, 2024",
-        text: "Really impressed with the quality and the customer service. Will definitely shop here again.",
+        text: "Fantastic customer service and the jacket is top quality. I’ll definitely be back for more.",
         image: "/images/reviews/ava-r.webp",
     },
-]
+];
 
 const ReviewCard = ({ review, showH3 = true }: { review: (typeof reviews)[0]; showH3?: boolean }) => {
     const router = useRouter()
