@@ -75,7 +75,7 @@ export async function generateMetadata(
           keywordCategory.seoDescription ||
           keywordCategory.description,
         type: "website",
-        url: keywordCategory.canonicalUrl || `/collections/${slug}`,
+        url: keywordCategory.canonicalUrl || `https://jacket.us.com/us/collections/${slug}`,
       },
       twitter: {
         card: "summary_large_image",
@@ -89,7 +89,7 @@ export async function generateMetadata(
           keywordCategory.description,
       },
       alternates: {
-        canonical: keywordCategory.canonicalUrl || `/collections/${slug}`,
+        canonical: keywordCategory.canonicalUrl || `https://jacket.us.com/us/collections/${slug}`,
       },
       ...(keywordCategory.enableSchema && keywordCategory.customSchema
         ? {

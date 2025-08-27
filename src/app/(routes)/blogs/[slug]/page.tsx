@@ -6,6 +6,7 @@ import { ArrowUp, ArrowLeft, ArrowRight } from "lucide-react"
 import { getBlog } from "@/src/app/actions/get-blog"
 import BlogHeroSection from "../../../components/blogs/blog-hero-section"
 import BlogClientScripts from "../../../components/blogs/blog-client-scripts"
+import type { Metadata } from "next"
 
 export const revalidate = 3600; // ISR: Revalidate every hour
 export const dynamicParams = true; // Generate new pages on-demand
@@ -76,6 +77,26 @@ interface BlogData {
   }
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const blogData = await getBlog(slug)
+  
+  if (!blogData || !blogData.content.metadata.isPublished) {
+    return {
+      title: "Blog Post Not Found",
+      description: "The requested blog post could not be found."
+    }
+  }
+  
+  return {
+    title: blogData.content.hero.title,
+    description: blogData.content.contentSection?.text || blogData.content.guideContent.title,
+    alternates: {
+      canonical: `https://jacket.us.com/us/blogs/${slug}`
+    }
+  }
+}
+
 export default async function BlogPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
@@ -97,7 +118,7 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": hero.title,
-    "url": `https://jacket.us.com/blogs/${slug}`,
+    "url": `https://jacket.us.com/us/blogs/${slug}`,
     "datePublished": hero.date,
     "dateModified": hero.date,
     "author": {
@@ -107,10 +128,10 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
     "publisher": {
       "@type": "Organization",
       "name": "Fineyst",
-      "url": "https://jacket.us.com",
+      "url": "https://jacket.us.com/us",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://jacket.us.com/logo.webp"
+        "url": "https://jacket.us.com/us/logo.webp"
       }
     },
     "description": contentSection?.text || guideContent.title,
@@ -249,11 +270,6 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
           {step.content.map((paragraph: string, index: number) => (
             <p key={index} className="text-gray-700" dangerouslySetInnerHTML={{ __html: paragraph }} />
           ))}
-          {step.buttonText && (
-            <button className="bg-[#B01E23] text-white px-6 py-2 rounded-lg hover:bg-[#8B1A1F] transition-colors">
-              {step.buttonText}
-            </button>
-          )}
         </div>
       </section>
     )

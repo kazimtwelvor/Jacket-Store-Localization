@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: "Contact Us - Get in Touch with Our Team | Fineyst",
   description: "Get in touch with our team for any questions, feedback, or support.",
   alternates: {
-    canonical: "https://jacket.us.com/contact-us"
+    canonical: "https://jacket.us.com/us/contact-us"
   }
 }
 
