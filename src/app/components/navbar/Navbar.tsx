@@ -394,7 +394,7 @@ const Navbar = () => {
                   >
                     MEN'S JACKETS
                   </Button>
-                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "mens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"}`} />
+                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "mens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
                 </div>
                 <div className="relative group">
                   <Button
@@ -408,7 +408,7 @@ const Navbar = () => {
                   >
                     WOMEN'S JACKETS
                   </Button>
-                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "womens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"}`} />
+                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "womens-jackets" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
                 </div>
                 <div className="relative group">
                   <Button
@@ -418,7 +418,7 @@ const Navbar = () => {
                   >
                     COATS
                   </Button>
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100" />
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left opacity-0 scale-x-0" />
                 </div>
                 <div className="relative group">
                   <Button
@@ -431,7 +431,7 @@ const Navbar = () => {
                   >
                     BRANDS
                   </Button>
-                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "brands" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"}`} />
+                  <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-white transition-all duration-300 origin-left ${activeNavItem === "brands" ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"}`} />
                 </div>
               </div>
             </nav>

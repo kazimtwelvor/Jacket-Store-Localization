@@ -346,7 +346,7 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
         <section className="mb-10">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-1 h-8 bg-[#B01E23] rounded-full"></div>
-            <h1 className="text-2xl font-bold text-[#0A2463]">{guideContent.title}</h1>
+            <h2 className="text-2xl font-bold text-[#0A2463]">{guideContent.title}</h2>
           </div>
 
           <div className="space-y-12">

@@ -236,7 +236,7 @@ export default function ContactUsPage() {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-none  border-b border border-black">
+            <div className="bg-white p-8 rounded-none border-b border border-black shadow-lg">
               <h2 className="text-3xl text-[#2b2b2b] font-bold mb-6">Send Us a Message</h2>
               <p className="text-black mb-8">
                 Fill out the form below and we'll get back to you as soon as possible.
