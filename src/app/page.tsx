@@ -21,47 +21,101 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
-  const organizationSchema = {
+  const homePageSchema = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Fineyst",
-    "url": "https://jacket.us.com",
-    "logo": "https://jacket.us.com/logo.webp",
-    "description": "Premium quality jackets and outerwear with fast shipping and excellent customer service.",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": "+1-800-555-1234",
-      "contactType": "customer service",
-      "email": "support@storecopy.com"
-    },
-    "sameAs": [
-      "https://facebook.com",
-      "https://twitter.com",
-      "https://instagram.com"
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "FINEYST JACKETS",
+        "url": "https://jacket.us.com/us",
+        "logo": "https://jacket.us.com/logo.webp",
+        "image": "https://jacket.us.com/images/banner.webp",
+        "description": "jacket.us.com/us is a U.S.-based brand specializing in premium leather jackets, offering biker, bomber, cropped, custom, and trench styles crafted from high-quality cowhide, lambskin, goatskin, and suede. Designed for durability and timeless style, our jackets deliver comfort, edge, and authenticity. Fast nationwide shipping, secure ordering, and dedicated customer service.",
+        "email": "info@jacket.us.com",
+        "telephone": "+1-888-000-0000",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Address",
+          "addressLocality": "Address",
+          "addressRegion": "Address",
+          "postalCode": "Address",
+          "addressCountry": "US"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 43.67564012717867,
+          "longitude": -76.16514538750089
+        },
+        "openingHours": "Mon-Fri 09:00-18:00",
+        "priceRange": "$",
+        "sameAs": [
+          "https://www.instagram.com/fineystpatches/",
+          "https://www.facebook.com/fineystpatches/"
+        ],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": 4.9,
+          "reviewCount": 94
+        }
+      },
+      {
+        "@type": "WebSite",
+        "url": "https://jacket.us.com/us",
+        "name": "FINEYST JACKETS",
+        "inLanguage": "en-US",
+        "publisher": {
+          "@type": "Organization",
+          "name": "FINEYST JACKETS"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://jacket.us.com/us/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://jacket.us.com/us"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Men's Leather Jackets",
+            "item": "https://jacket.us.com/us/collections/mens-leather-jackets"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Women's Leather Jackets",
+            "item": "https://jacket.us.com/us/collections/womens-leather-jackets"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "Men's Varsity Jackets",
+            "item": "https://jacket.us.com/us/collections/mens-varsity-jackets"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "name": "Women's Varsity Jackets",
+            "item": "https://jacket.us.com/us/collections/womens-varsity-jackets"
+          }
+        ]
+      }
     ]
-  }
-
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Fineyst",
-    "url": "https://jacket.us.com",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://jacket.us.com/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
   }
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageSchema) }}
       />
       <section className="w-full mx-0 px-0 bg-[#efefef]">
         <SlideBanners />
