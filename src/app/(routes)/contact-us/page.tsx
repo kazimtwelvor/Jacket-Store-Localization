@@ -17,6 +17,7 @@ import {
 import Container from "@/src/app/ui/container"
 import { Button } from "@/src/app/ui/button"
 import ContactFAQ from "../../components/contact/contact-faq"
+import ContactForm from "./components/contact-form"
 
 export const metadata: Metadata = {
   title: "Contact Us - Get in Touch with Our Team | Fineyst",
@@ -236,93 +237,7 @@ export default function ContactUsPage() {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-none border-b border border-black shadow-lg">
-              <h2 className="text-3xl text-[#2b2b2b] font-bold mb-6">Send Us a Message</h2>
-              <p className="text-black mb-8">
-                Fill out the form below and we'll get back to you as soon as possible.
-              </p>
-
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium mb-2">
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      className="w-full px-4 py-3 rounded-md border border-input bg-background"
-                      placeholder="John"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium mb-2">
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      className="w-full px-4 py-3 rounded-md border border-input bg-background"
-                      placeholder="Doe"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-2">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full px-4 py-3 rounded-md border border-input bg-background"
-                    placeholder="john.doe@example.com"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    className="w-full px-4 py-3 rounded-md border border-input bg-background"
-                    placeholder="How can we help you?"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    rows={5}
-                    className="w-full px-4 py-3 rounded-md border border-input bg-background resize-none"
-                    placeholder="Tell us more about your inquiry..."
-                  ></textarea>
-                </div>
-
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="privacy"
-                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                  />
-                  <label htmlFor="privacy" className="ml-2 block text-sm text-muted-foreground">
-                    I agree to the{" "}
-                    <Link href="/privacy-policy" className="text-[#2b2b2b] hover:underline">
-                      Privacy Policy
-                    </Link>
-                  </label>
-                </div>
-
-                <Button type="submit" size="lg" className="w-full bg-[#EAEAEA] hover:bg-[#EAEAEA]/90 text-black rounded-none">
-                  Send Message
-                </Button>
-              </form>
-            </div>
+            <ContactForm />
           </div>
         </div>
       </Container>

@@ -16,28 +16,28 @@ export default function FitGuide() {
       title: "Slim Fit",
       description:
         "Our slim fit is tailored close to the body with a narrower cut through the chest, waist, and hips. Ideal for a modern, streamlined look.",
-      image: "/slim-fit-model.png",
+      image: "/images/size-guide/slim-fit.webp",
       bestFor: ["Lean or athletic builds", "Modern, fashion-forward style", "Layering under jackets"],
     },
     {
       title: "Regular Fit",
       description:
         "Our regular fit offers a balanced cut that's neither too tight nor too loose. Comfortable through the chest, waist, and hips with room to move.",
-      image: "/regular-fit-model.png",
+      image: "/images/size-guide/regular-fit.webp",
       bestFor: ["Most body types", "Everyday wear", "Business casual settings"],
     },
     {
       title: "Relaxed Fit",
       description:
         "Our relaxed fit provides a generous cut with extra room through the chest, waist, and hips for maximum comfort and ease of movement.",
-      image: "/relaxed-fit-model.png",
+      image: "/images/size-guide/relaxed-fit.webp",
       bestFor: ["Fuller figures", "Comfort-focused style", "Casual, laid-back looks"],
     },
     {
       title: "Oversized Fit",
       description:
         "Our oversized fit features an extra roomy cut throughout for a trendy, statement-making silhouette that's both comfortable and stylish.",
-      image: "/placeholder.svg?height=300&width=200&query=oversized fit clothing model",
+      image: "/images/size-guide/oversized-fit.webp",
       bestFor: ["Street style looks", "Layered outfits", "Making a fashion statement"],
     },
   ]

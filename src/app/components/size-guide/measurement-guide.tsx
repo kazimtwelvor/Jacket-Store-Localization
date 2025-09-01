@@ -18,23 +18,23 @@ export default function MeasurementGuide() {
       title: "Chest / Bust",
       description:
         "Measure around the fullest part of your chest/bust, keeping the measuring tape horizontal and not too tight.",
-      image: "/person-measuring-chest.png",
+      image: "/images/size-guide/chest-bust.webp",
     },
     {
       title: "Waist",
       description:
         "Measure around your natural waistline, which is the narrowest part of your torso, typically above your belly button.",
-      image: "/placeholder.svg?key=wwb77",
+      image: "/images/size-guide/waist.webp",
     },
     {
       title: "Hips",
       description: "Measure around the fullest part of your hips, usually about 8 inches below your waistline.",
-      image: "/person-measuring-hips.png",
+      image: "/images/size-guide/hips.webp",
     },
     {
       title: "Inseam",
       description: "Measure from the crotch seam to the bottom of the leg along the inside of the leg.",
-      image: "/measuring-inseam.png",
+      image: "/images/size-guide/inseam.webp",
     },
   ]
 

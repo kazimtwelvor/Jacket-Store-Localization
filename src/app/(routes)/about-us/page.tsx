@@ -145,9 +145,9 @@ export default function AboutUsPage() {
                 </Button>
               </div>
             </div>
-            <div className="relative h-[400px] rounded-lg overflow-hidden shadow-xl">
+            <div className="relative h-[400px] overflow-hidden shadow-xl">
               <Image
-                src="/sustainable-fashion-production.png"
+                src="/images/about-us/our-mission.webp"
                 alt="Our sustainable practices"
                 fill
                 className="object-cover"
@@ -214,26 +214,26 @@ export default function AboutUsPage() {
               {
                 name: "Alex Johnson",
                 role: "Founder & CEO",
-                image: "/professional-headshot-1.png",
+                image: "/images/about-us/alex-johnson.webp",
               },
               {
                 name: "Sam Rivera",
                 role: "Creative Director",
-                image: "/professional-headshot-2.png",
+                image: "/images/about-us/sam-rivera.webp",
               },
               {
                 name: "Taylor Kim",
                 role: "Head of Sustainability",
-                image: "/professional-headshot-3.png",
+                image: "/images/about-us/taylor-kim.webp",
               },
               {
                 name: "Jordan Patel",
                 role: "Lead Designer",
-                image: "/professional-headshot-4.png",
+                image: "/images/about-us/jordan-patel.webp",
               },
             ].map((member, index) => (
               <div key={index} className="group">
-                <div className="relative h-[300px] rounded-lg overflow-hidden mb-4 transition-all duration-300 group-hover:shadow-xl">
+                <div className="relative h-[300px]  overflow-hidden mb-4 transition-all duration-300 group-hover:shadow-xl">
                   <Image
                     src={member.image || "/placeholder.svg"}
                     alt={member.name}

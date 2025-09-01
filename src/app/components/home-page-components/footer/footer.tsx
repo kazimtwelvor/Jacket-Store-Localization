@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Facebook, Twitter, Instagram, Linkedin, ChevronDown, Star, Phone, Mail } from "lucide-react"
 import Image from "next/image"
 import { avertaBlack, avertaBold } from "@/src/lib/fonts"
+import { submitNewsletterForm } from "@/src/lib/services/forms"
 
 
 
@@ -12,16 +13,29 @@ const Footer = () => {
     const [emailInput, setEmailInput] = useState("")
     const [expandedSection, setExpandedSection] = useState("")
     const [categories, setCategories] = useState<any[]>([])
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
     const currentYear = new Date().getFullYear()
 
     const toggleSection = (div: string) => {
         setExpandedSection(expandedSection === div ? "" : div)
     }
 
-    const handleSubscribe = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        alert("Thank you for subscribing to our newsletter!")
-        setEmailInput("")
+        setIsSubmitting(true)
+        setSubmitStatus('idle')
+
+        try {
+            await submitNewsletterForm(emailInput)
+            setSubmitStatus('success')
+            setEmailInput('')
+        } catch (error) {
+            setSubmitStatus('error')
+            console.error('Newsletter subscription failed:', error)
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     const scrollToTop = () => {
@@ -314,6 +328,19 @@ const Footer = () => {
                     <div className="my-4 md:my-0 w-full md:w-auto px-4 md:text-right md:ml-auto flex-shrink-0">
                         <p className="text-black font-semibold mb-2 text-center md:text-right">Subscribe to Our Newsletter</p>
                         <p className="text-black font-semibold text-sm mb-3 text-center md:text-right">Get exclusive offers, design tips, and industry news</p>
+                        
+                        {submitStatus === 'success' && (
+                            <div className="mb-3 p-2 bg-green-50 border border-green-200 rounded-md">
+                                <p className="text-green-800 text-sm text-center md:text-right">Thank you for subscribing!</p>
+                            </div>
+                        )}
+                        
+                        {submitStatus === 'error' && (
+                            <div className="mb-3 p-2 bg-red-50 border border-red-200 rounded-md">
+                                <p className="text-red-800 text-sm text-center md:text-right">Subscription failed. Please try again.</p>
+                            </div>
+                        )}
+                        
                         <form onSubmit={handleSubscribe} className="flex md:justify-end">
                             <input
                                 type="email"
@@ -321,12 +348,14 @@ const Footer = () => {
                                 value={emailInput}
                                 onChange={(e) => setEmailInput(e.target.value)}
                                 required
-                                className="bg-[#F6F6F6] border border-black rounded-l-md px-4 py-2 text-black w-full focus:outline-none focus:border-black"
+                                disabled={isSubmitting}
+                                className="bg-[#F6F6F6] border border-black rounded-l-md px-4 py-2 text-black w-full focus:outline-none focus:border-black disabled:opacity-50"
                             />
                             <button
                                 type="submit"
-                                className="bg-[#2b2b2b] hover:bg-[black] text-[#dedddd] border-b border border-black font-medium px-4 py-2 rounded-r-md transition-colors"             >
-                                Subscribe
+                                disabled={isSubmitting}
+                                className="bg-[#2b2b2b] hover:bg-[black] text-[#dedddd] border-b border border-black font-medium px-4 py-2 rounded-r-md transition-colors disabled:opacity-50"             >
+                                {isSubmitting ? 'Subscribing...' : 'Subscribe'}
                             </button>
                         </form>
                     </div>
