@@ -103,7 +103,7 @@ export default function SignatureStylesSection() {
               )}
               <div className="absolute inset-0 flex items-start justify-center">
                 <img
-                  src="https://jacket.us.com/uploads/2025/Untitled_design__2_.png"
+                  src="/uploads/2025/Untitled_design__10_.png"
                   alt="Men's Leather Jacket"
                   className="w-full h-full object-cover object-[5%] md:object-[5%] lg:object-[5%] group-hover:scale-110 transition-transform duration-500 block"
                 />
