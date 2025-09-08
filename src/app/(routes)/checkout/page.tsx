@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import { ShoppingBag, ChevronLeft, CreditCard, Truck, Shield, Check, ChevronRight, RotateCcw } from "lucide-react"
 import { loadStripe } from "@stripe/stripe-js"
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
+import PayPalButtons from "../../components/cart/PayPalButtons"
 import Currency from "../../ui/currency"
 import Button from "../../ui/button"
 import { toast } from "react-hot-toast"
@@ -966,43 +967,13 @@ const CheckoutPage = () => {
                         </div>
                       </label>
                       
-                      {/* Stripe Payment Form for PayPal */}
+                      {/* PayPal Buttons */}
                       {formData.selectedPaymentMethod === "paypal" && (
                         <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-                          {isLoading && !clientSecret ? (
-                            <div className="flex flex-col items-center justify-center py-6">
-                              <div className="w-8 h-8 border-4 border-[#B01E23] border-t-transparent rounded-full animate-spin mb-2"></div>
-                              <p className="text-gray-600 text-sm">Initializing payment...</p>
-                            </div>
-                          ) : stripePromise && clientSecret ? (
-                            <Elements
-                              stripe={stripePromise}
-                              options={{
-                                clientSecret,
-                                appearance: {
-                                  theme: "stripe",
-                                  variables: {
-                                    colorPrimary: "#000000",
-                                    colorBackground: "#ffffff",
-                                    colorText: "#30313d",
-                                  },
-                                },
-                              }}
-                            >
-                              <PaymentForm
-                                clientSecret={clientSecret}
-                                orderId={orderId!}
-                                onSuccess={handlePaymentSuccess}
-                                onBack={() => setActiveStep("address")}
-                                isLoading={isLoading}
-                                setIsLoading={setIsLoading}
-                              />
-                            </Elements>
-                          ) : (
-                            <div className="text-center py-6">
-                              <p className="text-red-500 text-sm">Failed to load payment form. Please try again.</p>
-                            </div>
-                          )}
+                          <PayPalButtons
+                            items={items.map((i) => ({ id: i.product.id, quantity: i.quantity }))}
+                            onApproveSuccess={handlePaymentSuccess}
+                          />
                         </div>
                       )}
                     </div>
