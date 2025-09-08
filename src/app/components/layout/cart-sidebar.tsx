@@ -27,6 +27,24 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
     const taxAmount = totalPrice * taxRate
     const grandTotal = totalPrice + shippingPrice + taxAmount
 
+    const getDeliveryDates = () => {
+        const today = new Date();
+        const startDate = new Date(today);
+        const endDate = new Date(today);
+        
+        startDate.setDate(today.getDate() + 3);
+        endDate.setDate(today.getDate() + 4);
+        
+        const formatDate = (date: Date) => {
+            return date.toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: '2-digit' 
+            });
+        };
+        
+        return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+    };
+
     useEffect(() => {
         if (isOpen) {
             const scrollY = window.scrollY
@@ -220,7 +238,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
 
                                 <div className="flex items-center justify-center gap-2 p-6 text-xs text-black">
                                     <Truck className="h-3 w-3" />
-                                    <span>Delivery approx. <strong>August 06 - August 12</strong></span>
+                                    <span>Delivery approx. <strong>{getDeliveryDates()}</strong></span>
                                 </div>
 
                                 <div className="mb-6">

@@ -61,6 +61,24 @@ const CartPage = () => {
   const sentinelTopRef = useRef<HTMLDivElement>(null);
   const sentinelBottomRef = useRef<HTMLDivElement>(null);
 
+  const getDeliveryDates = () => {
+    const today = new Date();
+    const startDate = new Date(today);
+    const endDate = new Date(today);
+    
+    startDate.setDate(today.getDate() + 3);
+    endDate.setDate(today.getDate() + 4);
+    
+    const formatDate = (date: Date) => {
+      return date.toLocaleDateString('en-US', { 
+        month: 'long', 
+        day: '2-digit' 
+      });
+    };
+    
+    return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+  };
+
   const shippingPrice = totalPrice > 100 ? 0 : 10;
   const taxRate = 0.08;
   const taxAmount = totalPrice * taxRate;
@@ -410,7 +428,7 @@ const CartPage = () => {
                   <div className="flex items-center gap-2 mb-6 text-sm text-black">
                     <Truck className="h-4 w-4" />
                     <span>
-                      Delivery approx. <strong>August 06 - August 12</strong>
+                      Delivery approx. <strong>{getDeliveryDates()}</strong>
                     </span>
                   </div>
 

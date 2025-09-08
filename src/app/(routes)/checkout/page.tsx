@@ -340,7 +340,7 @@ const CheckoutPage = () => {
                     <div key={item.id} className="flex gap-4 p-4 border-b">
                       <div className="relative w-32 h-36 flex-shrink-0">
                         <Image
-                          src={item.product.images?.[0]?.image?.url || "/placeholder.svg"}
+                          src={item.product.images?.[0]?.url || "/placeholder.svg"}
                           alt={item.product.name}
                           fill
                           className="object-contain rounded"
@@ -1205,7 +1205,7 @@ const CheckoutPage = () => {
                     <div key={item.id} className="flex gap-4 p-4 border-b">
                       <div className="relative w-32 h-36 flex-shrink-0">
                         <Image
-                          src={item.product.images?.[0]?.image?.url || "/placeholder.svg"}
+                          src={item.product.images?.[0]?.url || "/placeholder.svg"}
                           alt={item.product.name}
                           fill
                           className="object-contain rounded"
