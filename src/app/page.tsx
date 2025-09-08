@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: 'Premium Jackets & Outerwear | Jacket.us.com',
   description: 'Discover premium quality jackets and outerwear at Jacket.us.com. Shop leather jackets, winter coats, and stylish outerwear with fast shipping and excellent customer service.',
   alternates: {
-    canonical: 'https://jacket.us.com/'
+    canonical: 'https://jacket.us.com/us'
   }
 }
 
