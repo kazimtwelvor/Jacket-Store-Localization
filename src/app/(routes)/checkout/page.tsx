@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import { ShoppingBag, ChevronLeft, CreditCard, Truck, Shield, Check, ChevronRight, RotateCcw } from "lucide-react"
 import { loadStripe } from "@stripe/stripe-js"
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
+import PayPalButtons from "../../components/cart/PayPalButtons"
 import Currency from "../../ui/currency"
 import Button from "../../ui/button"
 import { toast } from "react-hot-toast"
@@ -880,12 +881,10 @@ const CheckoutPage = () => {
                           <span className="ml-3 text-sm font-medium">Google Pay</span>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <svg className="w-12 h-8" viewBox="0 0 48 20" fill="none">
-                            <rect width="48" height="20" rx="4" fill="#4285F4"/>
-                            <path d="M12.24 10.285c0-.639-.057-1.252-.164-1.841H6.24v3.481h3.361c-.144.766-.58 1.415-1.235 1.85v1.538h1.998c1.168-1.076 1.841-2.661 1.841-4.53z" fill="white"/>
-                            <path d="M6.24 14.71c1.668 0 3.064-.55 4.085-1.496l-1.998-1.538c-.554.371-1.262.59-2.087.59-1.606 0-2.967-1.085-3.45-2.544H.72v1.59C1.728 13.16 3.82 14.71 6.24 14.71z" fill="white"/>
-                            <path d="M2.79 9.722c-.123-.371-.193-.766-.193-1.177s.07-.806.193-1.177V5.778H.72C.263 6.69 0 7.715 0 8.545s.263 1.855.72 2.767l2.07-1.59z" fill="white"/>
-                            <path d="M6.24 2.346c.905 0 1.719.311 2.36.922l1.769-1.769C9.304.551 7.908 0 6.24 0 3.82 0 1.728 1.55.72 3.398l2.07 1.59c.483-1.459 1.844-2.544 3.45-2.544z" fill="white"/>
+                          <svg className="w-14 h-8" viewBox="0 0 56 20" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="56" height="20" rx="4" fill="#000"/>
+                            <text x="7" y="14" font-size="10" fill="#fff" font-family="Arial, Helvetica, sans-serif">Google</text>
+                            <text x="36" y="14" font-size="10" fill="#fff" font-family="Arial, Helvetica, sans-serif">Pay</text>
                           </svg>
                         </div>
                       </label>
@@ -957,52 +956,20 @@ const CheckoutPage = () => {
                           <span className="ml-3 text-sm font-medium">PayPal</span>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <svg className="w-16 h-8" viewBox="0 0 64 20" fill="none">
-                            <rect width="64" height="20" rx="4" fill="#0070BA"/>
-                            <path d="M8.5 5h3.2c1.8 0 3.2 1.4 3.2 3.2 0 1.8-1.4 3.2-3.2 3.2H9.7l-.6 2.6H7.3L8.5 5zm2.4 4.8c.7 0 1.3-.6 1.3-1.3s-.6-1.3-1.3-1.3H9.8l-.4 2.6h1.5z" fill="white"/>
-                            <path d="M15.8 8.2c1.1 0 2 .9 2 2v.1h-3.2c.1.5.5.9 1 .9.3 0 .6-.1.8-.3l.8 1.2c-.5.4-1.1.6-1.8.6-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5c1.3 0 2.4 1 2.4 2.5zm-1.3-.8c-.4 0-.7.3-.8.7h1.6c0-.4-.4-.7-.8-.7z" fill="white"/>
-                            <path d="M21.5 8.2l-1.2 4.6h-1.8l.2-.8c-.4.6-1 1-1.7 1-1 0-1.8-.8-1.8-1.8 0-1.6 1.3-2.9 2.9-2.9.6 0 1.1.2 1.5.6l.1-.9h1.8zm-2.8 2.3c0 .3.2.5.5.5s.6-.2.7-.5c.1-.3-.1-.5-.4-.5s-.6.2-.8.5z" fill="white"/>
+                          <svg className="w-16 h-8" viewBox="0 0 64 20" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="64" height="20" rx="4" fill="#003087"/>
+                            <text x="10" y="14" font-size="10" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-weight="bold">PayPal</text>
                           </svg>
                         </div>
                       </label>
                       
-                      {/* Stripe Payment Form for PayPal */}
+                      {/* PayPal Buttons */}
                       {formData.selectedPaymentMethod === "paypal" && (
                         <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-                          {isLoading && !clientSecret ? (
-                            <div className="flex flex-col items-center justify-center py-6">
-                              <div className="w-8 h-8 border-4 border-[#B01E23] border-t-transparent rounded-full animate-spin mb-2"></div>
-                              <p className="text-gray-600 text-sm">Initializing payment...</p>
-                            </div>
-                          ) : stripePromise && clientSecret ? (
-                            <Elements
-                              stripe={stripePromise}
-                              options={{
-                                clientSecret,
-                                appearance: {
-                                  theme: "stripe",
-                                  variables: {
-                                    colorPrimary: "#000000",
-                                    colorBackground: "#ffffff",
-                                    colorText: "#30313d",
-                                  },
-                                },
-                              }}
-                            >
-                              <PaymentForm
-                                clientSecret={clientSecret}
-                                orderId={orderId!}
-                                onSuccess={handlePaymentSuccess}
-                                onBack={() => setActiveStep("address")}
-                                isLoading={isLoading}
-                                setIsLoading={setIsLoading}
-                              />
-                            </Elements>
-                          ) : (
-                            <div className="text-center py-6">
-                              <p className="text-red-500 text-sm">Failed to load payment form. Please try again.</p>
-                            </div>
-                          )}
+                          <PayPalButtons
+                            items={items.map((i) => ({ id: i.product.id, quantity: i.quantity }))}
+                            onApproveSuccess={handlePaymentSuccess}
+                          />
                         </div>
                       )}
                     </div>
@@ -1032,18 +999,18 @@ const CheckoutPage = () => {
                           <span className="ml-3 text-sm font-medium">Credit Card</span>
                         </div>
                         <div className="flex items-center space-x-1">
-                          <svg className="w-8 h-5" viewBox="0 0 32 20" fill="none">
+                          <svg className="w-8 h-5" viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="20" rx="2" fill="#EB001B"/>
                             <circle cx="12" cy="10" r="6" fill="#FF5F00"/>
                             <circle cx="20" cy="10" r="6" fill="#F79E1B"/>
                           </svg>
-                          <svg className="w-8 h-5" viewBox="0 0 32 20" fill="none">
+                          <svg className="w-8 h-5" viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg">
                             <rect width="32" height="20" rx="2" fill="#1A1F71"/>
-                            <path d="M13.5 6h5l-2.5 8h-5l2.5-8z" fill="white"/>
+                            <text x="8" y="13" font-size="9" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-weight="bold">VISA</text>
                           </svg>
-                          <svg className="w-8 h-5" viewBox="0 0 32 20" fill="none">
-                            <rect width="32" height="20" rx="2" fill="#006FCF"/>
-                            <path d="M8 6h3l2 8h-3l-2-8zm8 0h3l-1 8h-3l1-8z" fill="white"/>
+                          <svg className="w-8 h-5" viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="32" height="20" rx="2" fill="#2E77BC"/>
+                            <text x="5" y="13" font-size="8" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-weight="bold">AMEX</text>
                           </svg>
                         </div>
                       </label>
@@ -1116,9 +1083,9 @@ const CheckoutPage = () => {
                           <span className="ml-3 text-sm font-medium">Klarna - Slice it</span>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <svg className="w-16 h-8" viewBox="0 0 64 20" fill="none">
+                          <svg className="w-16 h-8" viewBox="0 0 64 20" xmlns="http://www.w3.org/2000/svg">
                             <rect width="64" height="20" rx="4" fill="#FFB3C7"/>
-                            <path d="M8 5h2v10H8V5zm4 0h2v4l3-4h2.5l-3.5 4.5L20 15h-2.5l-3.5-4.5V15H12V5zm8 0h2v2h-2V5zm0 3h2v7h-2V8zm4 0h2c2 0 3 1 3 3.5S26 15 24 15h-2V8zm2 2v3c.5 0 1-.5 1-1.5S26.5 10 26 10zm4-2h2v1c.5-.7 1.2-1 2-1v2c-.8 0-1.5.5-1.5 1.5V15h-2V8z" fill="black"/>
+                            <text x="18" y="14" font-size="10" fill="#000" font-family="Arial, Helvetica, sans-serif" font-weight="bold">Klarna</text>
                           </svg>
                         </div>
                       </label>
