@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { decrypt } from "../../utils/decrypt"
+import { decrypt } from "../../../utils/decrypt"
 
 export async function POST(req: NextRequest) {
   try {
