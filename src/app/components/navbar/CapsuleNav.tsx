@@ -564,7 +564,7 @@ export function CapsuleNav() {
           : isProductPage && isMobileView
           ? "fixed top-[60px] left-0 right-0 z-40 px-4"
           : "relative",
-        isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+        isVisible ? "opacity-100" : "opacity-0 pointer-events-none translate-y-[-100%]"
       )}
     >
       <div className="rounded-[15px] bg-white px-1 py-1 shadow-lg">

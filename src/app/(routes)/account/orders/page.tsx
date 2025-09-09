@@ -19,7 +19,7 @@ interface OrderItem {
   product: {
     id: string;
     name: string;
-    images: Array<{ url: string }>;
+    images: Array<{ image: { url: string } }>;
   };
 }
 
@@ -344,14 +344,14 @@ export default function OrdersPage() {
                               }`}
                             >
                               <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
-                                {item.product.images?.[0]?.url ? (
+                                {item.product.images?.[0]?.image?.url ? (
                                   <img
-                                    src={item.product.images[0].url}
+                                    src={item.product.images[0].image.url}
                                     alt={item.product.name}
                                     className="h-full w-full object-cover object-center"
                                     onError={(e) => {
                                       const target = e.target as HTMLImageElement;
-                                      target.src = "/placeholder.svg?height=96&width=96";
+                                      target.src = "/placeholder.svg";
                                     }}
                                   />
                                 ) : (

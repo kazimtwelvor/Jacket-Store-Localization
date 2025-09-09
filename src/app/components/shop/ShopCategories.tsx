@@ -44,6 +44,7 @@ const ShopCategories: React.FC<ShopCategoriesProps> = ({ keywordCategories }) =>
   const [currentStartIndex, setCurrentStartIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const [visibleCount, setVisibleCount] = useState(0);
+  const isNavigatingRef = useRef(false);
 
   // Placeholder categories for error handling
   const placeholderCategories = [
@@ -65,10 +66,10 @@ const ShopCategories: React.FC<ShopCategoriesProps> = ({ keywordCategories }) =>
   }));
 
   const handleCategoryClick = (slug: string) => {
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('route-loading:start'))
-    }
-    router.push(`/collections/${slug}`)
+    if (!slug) return;
+    if (isNavigatingRef.current) return;
+    isNavigatingRef.current = true;
+    router.push(`/collections/${slug}`);
   }
 
   const checkForScrollability = useCallback(() => {

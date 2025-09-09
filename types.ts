@@ -138,6 +138,7 @@ export interface Product {
   brandName?: string
   ratingValue?: string
   reviewCount?: string
+  reviews?: Review[]
 
   menuOrder?: string | null
   weight?: string | null
@@ -179,6 +180,19 @@ export interface Color {
   id: string
   name: string
   value: string
+}
+
+export interface Review {
+  id: string
+  userId: string
+  userName: string
+  email?: string | null
+  rating: number
+  title?: string | null
+  comment: string
+  photoUrl?: string | null
+  createdAt: string | Date
+  updatedAt: string | Date
 }
 
 export interface BlogDetail {

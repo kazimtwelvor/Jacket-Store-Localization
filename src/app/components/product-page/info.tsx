@@ -7,7 +7,6 @@ import { useCart } from "../../contexts/CartContext"
 import { useState, useEffect } from "react"
 import useWishlist from "../../hooks/use-wishlist"
 import { cn } from "../../lib/utils"
-import { getProductReviews, type ReviewData } from "../../actions/get-reviews"
 import MobileAddToCartModal from "../../modals/MobileAddToCartModal"
 import ProductHeader from "../../components/product-page/ProductHeader"
 import ColorSelection from "../../components/product-page/ColorSelection"
@@ -35,7 +34,6 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
   const [reviewRating, setReviewRating] = useState(0)
   const [reviewTitle, setReviewTitle] = useState("")
   const [reviewContent, setReviewContent] = useState("")
-  const [reviews, setReviews] = useState<ReviewData[]>([])
   const [reviewsLoading, setReviewsLoading] = useState(false)
   const [showMobileSizeModal, setShowMobileSizeModal] = useState(false)
   const [showMobileCartModal, setShowMobileCartModal] = useState(false)
@@ -124,94 +122,33 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [availableSizes, availableColors, selectedSizeId, selectedColorId])
 
-  // Fetch reviews when component mounts
+  // Use reviews from product data
+  const reviews = data.reviews || []
+
+
+
+
+
+
+
+  // Handle mobile modal events only
   useEffect(() => {
-    const fetchReviews = async () => {
-      if (data.id) {
-        setReviewsLoading(true)
-        try {
-          const productReviews = await getProductReviews(data.id)
-          setReviews(productReviews)
-        } catch (error) {
-        } finally {
-          setReviewsLoading(false)
-        }
-      }
-    }
-
-    fetchReviews()
-  }, [data.id])
-
-
-
-
-
-
-
-  // Handle navbar visibility on scroll and modal events
-  useEffect(() => {
-    // Enable smooth scrolling for all devices
-    document.documentElement.style.scrollBehavior = 'smooth'
-    document.body.style.scrollBehavior = 'smooth'
-    
-    // Aggressive mobile scroll optimization
-    if (isMobile) {
-      document.body.style.overscrollBehavior = 'auto'
-      document.body.style.touchAction = 'auto'
-      document.documentElement.style.touchAction = 'auto'
-      
-      // Force touch-action on all elements
-      const allElements = document.querySelectorAll('*')
-      allElements.forEach(el => {
-        (el as HTMLElement).style.touchAction = 'auto'
-      })
-    }
-    
-    const handleScroll = () => {
-      if (!isMobile) return
-      const productTitle = document.getElementById('product-title')
-      if (productTitle) {
-        const rect = productTitle.getBoundingClientRect()
-        const isVisible = rect.top <= window.innerHeight && rect.bottom >= 0
-        setShowNavbar(isVisible)
-        
-        // Dispatch custom event to control navbar
-        window.dispatchEvent(new CustomEvent('toggleNavbar', { 
-          detail: { show: isVisible } 
-        }))
-      }
-    }
-
     const handleShowMobileSizeModal = () => {
       setShowMobileSizeModal(true)
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('showMobileSizeModal', handleShowMobileSizeModal)
     
-    // Prevent touch events from interfering with scroll
-    if (isMobile) {
-      const preventTouchInterference = (e: TouchEvent) => {
-        // Don't prevent default, just ensure scrolling continues
-        e.stopPropagation = () => {}
-      }
-      
-      document.addEventListener('touchstart', preventTouchInterference, { passive: true })
-      document.addEventListener('touchmove', preventTouchInterference, { passive: true })
-      
-      handleScroll() // Check initial state
-    }
-    
     return () => {
-      window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('showMobileSizeModal', handleShowMobileSizeModal)
     }
-  }, [isMobile])
+  }, [])
 
   // Helper function to format time ago
-  const getTimeAgo = (date: Date) => {
+  const getTimeAgo = (date: Date | string) => {
+    const reviewDate = new Date(date)
     const now = new Date()
-    const diffInMs = now.getTime() - date.getTime()
+    const diffInMs = now.getTime() - reviewDate.getTime()
     const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24))
     
     if (diffInDays === 0) return "Today"
@@ -359,7 +296,7 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         reviews={reviews}
-        reviewsLoading={reviewsLoading}
+        reviewsLoading={false}
         getTimeAgo={getTimeAgo}
         isMobile={isMobile}
         deliveryDates={deliveryDates}

@@ -3,17 +3,16 @@
 import { useState, useEffect } from "react"
 import { ChevronDown } from "lucide-react"
 import { cn } from "../../lib/utils"
-import type { Product } from "@/types"
-import type { ReviewData } from "../../actions/get-reviews"
+import type { Product, Review } from "@/types"
 import ProductDetailsModal from "../../modals/ProductDetailsModal"
 
 interface ProductDropdownsProps {
   data: Product
   activeTab: string
   setActiveTab: (tab: string) => void
-  reviews: ReviewData[]
+  reviews: Review[]
   reviewsLoading: boolean
-  getTimeAgo: (date: Date) => string
+  getTimeAgo: (date: Date | string) => string
   isMobile: boolean
   deliveryDates: {
     earliest: string
@@ -33,10 +32,7 @@ const ProductDropdowns = ({
 }: ProductDropdownsProps) => {
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   
-  // Enable smooth scrolling
-  useEffect(() => {
-    document.documentElement.style.scrollBehavior = 'smooth'
-  }, [])
+
   
   return (
     <div className="border-t border-gray-200">
@@ -99,13 +95,10 @@ const ProductDropdowns = ({
           <span>Details</span>
           <ChevronDown 
             size={16} 
-            className={cn(
-              "transition-transform text-[#00000]", 
-              activeTab === "details" ? "transform rotate-180" : ""
-            )} 
+            className={`text-[#00000] transition-transform duration-200 ${activeTab === "details" ? "rotate-180" : ""}`} 
           />
         </button>
-        {activeTab === "details" && (
+        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeTab === "details" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
           <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed" data-dropdown>
             {(() => {
               const description = data.description || "";
@@ -136,7 +129,7 @@ const ProductDropdowns = ({
               );
             })()}
           </div>
-        )}
+        </div>
       </div>
       
       {/* Reviews Dropdown */}
@@ -160,26 +153,48 @@ const ProductDropdowns = ({
             <span className="text-xs text-gray-500">({reviews.length})</span>
             <ChevronDown 
               size={16} 
-              className={cn(
-                "transition-transform text-[#00000] ml-2", 
-                activeTab === "reviews" ? "transform rotate-180" : ""
-              )} 
+              className={`text-[#00000] ml-2 transition-transform duration-200 ${activeTab === "reviews" ? "rotate-180" : ""}`} 
             />
           </div>
         </button>
-        {activeTab === "reviews" && (
+        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeTab === "reviews" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
           <div className="pb-6 pt-2" data-dropdown>
             {reviewsLoading ? (
               <div className="flex justify-center py-8">
                 <div className="w-8 h-8 border-2 border-[#00000] border-t-transparent rounded-full animate-spin"></div>
               </div>
+            ) : reviews.length > 0 ? (
+              <div className="max-h-80 overflow-y-auto space-y-4">
+                {reviews.map((review) => (
+                  <div key={review.id} className="border-b border-gray-100 pb-4 last:border-b-0">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <div className="flex items-center mb-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <svg key={star} className={`w-4 h-4 ${star <= review.rating ? 'text-yellow-400' : 'text-gray-300'}`} fill="currentColor" viewBox="0 0 22 20">
+                              <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                            </svg>
+                          ))}
+                        </div>
+                        <p className="font-medium text-sm">{review.userName}</p>
+                      </div>
+                      <span className="text-xs text-gray-500">{getTimeAgo(new Date(review.createdAt))}</span>
+                    </div>
+                    {review.title && <h4 className="font-medium text-sm mb-1">{review.title}</h4>}
+                    <p className="text-sm text-gray-700">{review.comment}</p>
+                    {review.photoUrl && (
+                      <img src={review.photoUrl} alt="Review photo" className="mt-2 w-16 h-16 object-cover rounded" />
+                    )}
+                  </div>
+                ))}
+              </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-500">Reviews functionality would go here</p>
+                <p className="text-gray-500">No reviews yet. Be the first to review this product!</p>
               </div>
             )}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Care Dropdown */}
@@ -191,13 +206,10 @@ const ProductDropdowns = ({
           <span>Care</span>
           <ChevronDown 
             size={16} 
-            className={cn(
-              "transition-transform text-[#00000]", 
-              activeTab === "care" ? "transform rotate-180" :""
-            )} 
+            className={`text-[#00000] transition-transform duration-200 ${activeTab === "care" ? "rotate-180" : ""}`} 
           />
         </button>
-        {activeTab === "care" && (
+        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeTab === "care" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
           <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed" data-dropdown>
             <p>To preserve the quality of your garment:</p>
             <ul className="list-disc pl-5 mt-2 space-y-1">
@@ -208,7 +220,7 @@ const ProductDropdowns = ({
               <li>Do not dry clean</li>
             </ul>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Shipping Dropdown */}
@@ -220,13 +232,10 @@ const ProductDropdowns = ({
           <span>Shipping & Returns</span>
           <ChevronDown 
             size={16} 
-            className={cn(
-              "transition-transform text-[#00000]", 
-              activeTab === "shipping" ? "transform rotate-180" : ""
-            )} 
+            className={`text-[#00000] transition-transform duration-200 ${activeTab === "shipping" ? "rotate-180" : ""}`} 
           />
         </button>
-        {activeTab === "shipping" && (
+        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeTab === "shipping" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
           <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed" data-dropdown>
             <p className="mb-2">Standard Shipping (5-10 business days): Free on orders over $99</p>
             <p className="mb-2">Express Shipping (1-2 business days): $15</p>
@@ -250,7 +259,7 @@ const ProductDropdowns = ({
             </div>
             <p className="mt-3 sm:mt-4 font-medium">Returns accepted within 30 days of delivery.</p>
           </div>
-        )}
+        </div>
       </div>
       
       <ProductDetailsModal 
