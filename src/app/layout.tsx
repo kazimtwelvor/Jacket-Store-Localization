@@ -25,11 +25,15 @@ export default function RootLayout({
                 For the best experience, enable JavaScript. Basic content is still available.
               </div>
             </noscript>
-            <Navbar />
+            <Suspense fallback={<div />}>
+              <Navbar />
+            </Suspense>
             <Suspense fallback={null}>
               <RouteLoadingOverlay />
             </Suspense>
-            {children}
+            <Suspense fallback={<div />}>
+              {children}
+            </Suspense>
             <Footer />
             <CartSidebarWrapper />
           </CartProvider>
