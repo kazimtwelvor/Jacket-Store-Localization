@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { decrypt } from "../../../utils/decrypt"
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,14 +9,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid items" }, { status: 400 })
     }
 
+    // Get PayPal credentials from backend
+    const settingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment-settings`, {
+      cache: "no-store",
+    });
+    if (!settingsRes.ok) throw new Error("Failed to fetch payment settings");
+    const settings = await settingsRes.json();
+    if (!settings.paypalClientId || !settings.paypalClientSecret)
+      throw new Error("PayPal credentials not available");
+
+    const clientId = decrypt(settings.paypalClientId, "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0");
+    const clientSecret = decrypt(settings.paypalClientSecret, "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0");
+
     // Get PayPal access token
     const tokenResponse = await fetch(`${process.env.PAYPAL_BASE_URL}/v1/oauth2/token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `Basic ${Buffer.from(
-          `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
-        ).toString("base64")}`,
+        Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`,
       },
       body: "grant_type=client_credentials",
     })
