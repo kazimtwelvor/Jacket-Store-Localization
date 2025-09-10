@@ -27,6 +27,8 @@ interface OrderDetails {
   createdAt: string
   items: OrderItem[]
   totalPrice: string
+  discountAmount?: string
+  voucherCode?: string
   shippingAddress?: {
     line1: string
     line2?: string
@@ -112,7 +114,9 @@ const ConfirmationPage = () => {
           orderNumber: data.id.substring(0, 8).toUpperCase(),
           createdAt: data.createdAt,
           status: data.status || "processing",
-          totalPrice: calculatedTotalPrice || "0",
+          totalPrice: data.total?.toString() || data.totalAmount || calculatedTotalPrice || "0",
+          discountAmount: data.discount?.toString() || data.discountAmount || "0",
+          voucherCode: data.voucherCode,
           items:
             data.orderItems?.map((item: any) => ({
               id: item.id,
@@ -304,7 +308,7 @@ const ConfirmationPage = () => {
                             </div>
                             <div className="mt-1 flex justify-between">
                               <span className="text-sm text-gray-500">Qty: {item.quantity}</span>
-                              <Currency value={item.price} />
+                <Currency value={Number(item.price) * item.quantity} />
                             </div>
                           </div>
                         </div>
@@ -326,9 +330,17 @@ const ConfirmationPage = () => {
                         <span className="text-sm text-gray-500">Shipping</span>
                         <span className="text-sm text-gray-500">Free</span>
                       </div>
+                      {order?.discountAmount && Number(order.discountAmount) > 0 && (
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm text-gray-500">
+                            Discount {order.voucherCode && `(${order.voucherCode})`}
+                          </span>
+                          <span className="text-sm text-green-600">-<Currency value={order.discountAmount} /></span>
+                        </div>
+                      )}
                       <div className="flex justify-between font-medium">
                         <span>Total</span>
-                        <Currency value={subtotal} />
+                        <Currency value={order?.totalPrice || subtotal} />
                       </div>
                     </div>
                   </div>

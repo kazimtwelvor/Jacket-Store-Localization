@@ -8,6 +8,7 @@ import type { Product } from "@/types"
 import Currency from "../../ui/currency"
 import { useCart } from "../../contexts/CartContext"
 import { useRouter } from "next/navigation"
+import { toast } from "react-hot-toast"
 
 interface CartSidebarProps {
     isOpen: boolean
@@ -21,11 +22,56 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
     const { items, updateQuantity, removeFromCart, totalPrice } = useCart()
     const [showVoucherField, setShowVoucherField] = useState(false)
     const [couponCode, setCouponCode] = useState("")
+    const [discountAmount, setDiscountAmount] = useState(0)
+    const [voucherApplying, setVoucherApplying] = useState(false)
+    const [voucherMessage, setVoucherMessage] = useState("")
     const router = useRouter()
     const shippingPrice = totalPrice > 100 ? 0 : 10
     const taxRate = 0.08
     const taxAmount = totalPrice * taxRate
     const grandTotal = totalPrice + shippingPrice + taxAmount
+    const effectiveGrandTotal = Math.max(0, grandTotal - discountAmount)
+
+    const handleApplyVoucher = async () => {
+        try {
+            if (!couponCode.trim()) {
+                toast.error("Enter a voucher code")
+                return
+            }
+            setVoucherApplying(true)
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/confirm-voucher`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        code: couponCode.trim(),
+                        orderTotal: grandTotal,
+                        items: items.map((i) => ({
+                            id: i.product.id,
+                            price: i.unitPrice,
+                            quantity: i.quantity,
+                        })),
+                    }),
+                }
+            )
+            const data = await response.json()
+            if (data.valid) {
+                setDiscountAmount(Number(data.discount) || 0)
+                setVoucherMessage(data.message || "Voucher applied")
+                toast.success(data.message || "Voucher applied")
+            } else {
+                setDiscountAmount(0)
+                setVoucherMessage(data.message || "Invalid voucher code")
+                toast.error(data.message || "Invalid voucher code")
+            }
+        } catch (e: any) {
+            console.error(e)
+            toast.error(e.message || "Failed to apply voucher")
+        } finally {
+            setVoucherApplying(false)
+        }
+    }
 
     const getDeliveryDates = () => {
         const today = new Date();
@@ -227,10 +273,18 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                                                 <Currency value={taxAmount} />
                                             </p>
                                         </div>
+                                        {discountAmount > 0 && (
+                                            <div className="flex justify-between">
+                                                <p className="text-sm text-black">Discount</p>
+                                                <p className="font-bold text-sm text-green-600">
+                                                    -<Currency value={discountAmount} />
+                                                </p>
+                                            </div>
+                                        )}
                                         <div className="border-t border-gray-300 pt-3 flex justify-between">
                                             <p className="text-sm font-bold text-black">Total price</p>
                                             <p className="text-sm font-bold text-black">
-                                                <Currency value={grandTotal} />
+                                                <Currency value={effectiveGrandTotal} />
                                             </p>
                                         </div>
                                     </div>
@@ -250,17 +304,30 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                                         <ChevronRight className={`h-4 w-4 transition-transform ${showVoucherField ? 'rotate-90' : ''}`} />
                                     </button>
                                     {showVoucherField && (
-                                        <div className="mt-3 flex space-x-2">
-                                            <input
-                                                type="text"
-                                                placeholder="Enter voucher code"
-                                                value={couponCode}
-                                                onChange={(e) => setCouponCode(e.target.value)}
-                                                className="flex-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
-                                            />
-                                            <button className="bg-black hover:bg-gray-800 text-white px-4">
-                                                Apply
-                                            </button>
+                                        <div className="mt-3">
+                                            <div className="flex space-x-2">
+                                                <input
+                                                    type="text"
+                                                    placeholder="Enter voucher code"
+                                                    value={couponCode}
+                                                    onChange={(e) => setCouponCode(e.target.value)}
+                                                    className="flex-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                                                />
+                                                <button 
+                                                    onClick={handleApplyVoucher}
+                                                    disabled={voucherApplying}
+                                                    className="bg-black hover:bg-gray-800 text-white px-4 disabled:opacity-50"
+                                                >
+                                                    {voucherApplying ? "Applying..." : "Apply"}
+                                                </button>
+                                            </div>
+                                            {voucherMessage && (
+                                                <div className={`mt-2 p-2 text-sm text-center ${
+                                                    discountAmount > 0 ? "text-green-600" : "text-red-600"
+                                                }`}>
+                                                    {voucherMessage}
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
