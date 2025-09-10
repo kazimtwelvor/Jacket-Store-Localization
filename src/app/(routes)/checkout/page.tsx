@@ -537,7 +537,7 @@ const CheckoutPage = () => {
                         </td>
                         <td className="py-2 text-right">
                           <strong className="text-base text-black">
-                            <Currency value={taxAmount} />
+                            <Currency value="0" />
                           </strong>
                         </td>
                       </tr>
@@ -1641,7 +1641,7 @@ const CheckoutPage = () => {
                         </td>
                         <td className="py-2 text-right">
                           <strong className="text-base text-black">
-                            <Currency value={taxAmount} />
+                            <Currency value="0" />
                           </strong>
                         </td>
                       </tr>

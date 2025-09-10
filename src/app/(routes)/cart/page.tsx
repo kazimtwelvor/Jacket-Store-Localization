@@ -65,17 +65,17 @@ const CartPage = () => {
     const today = new Date();
     const startDate = new Date(today);
     const endDate = new Date(today);
-    
+
     startDate.setDate(today.getDate() + 3);
     endDate.setDate(today.getDate() + 4);
-    
+
     const formatDate = (date: Date) => {
-      return date.toLocaleDateString('en-US', { 
-        month: 'long', 
-        day: '2-digit' 
+      return date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "2-digit",
       });
     };
-    
+
     return `${formatDate(startDate)} - ${formatDate(endDate)}`;
   };
 
@@ -412,7 +412,7 @@ const CartPage = () => {
                     <div className="flex justify-between">
                       <p className="text-black">Estimated Tax</p>
                       <p className="font-bold text-black">
-                        <Currency value={taxAmount} />
+                        <Currency value="0" />
                       </p>
                     </div>
                     <div className="border-t border-gray-300 pt-3 flex justify-between">
