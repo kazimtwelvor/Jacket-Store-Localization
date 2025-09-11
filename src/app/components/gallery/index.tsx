@@ -584,7 +584,7 @@ const Gallery: React.FC<GalleryProps> = ({
             e.stopPropagation();
             onAddToWishlist?.();
           }}
-          className="absolute top-4 left-[450px] w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-md z-[9990] hover:bg-gray-50 transition-colors"
+          className="absolute top-9 left-[450px] w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-md z-[10] hover:bg-gray-50 transition-colors"
           aria-label="Add to wishlist"
         >
           <Heart

@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0 bg-[#000000]`}>
+      <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0 bg-[#000000] min-h-screen flex flex-col`}>
         <FontProvider>
           <CartProvider>
             <noscript>
@@ -31,9 +31,11 @@ export default function RootLayout({
             <Suspense fallback={null}>
               <RouteLoadingOverlay />
             </Suspense>
-            <Suspense fallback={<div />}>
-              {children}
-            </Suspense>
+            <main className="flex-1">
+              <Suspense fallback={<div className="min-h-[50vh]" />}>
+                {children}
+              </Suspense>
+            </main>
             <Footer />
             <CartSidebarWrapper />
           </CartProvider>

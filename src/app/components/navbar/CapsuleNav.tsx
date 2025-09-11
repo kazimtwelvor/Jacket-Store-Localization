@@ -1,4 +1,3 @@
-
 // "use client";
 // import { useState, useEffect, useRef } from "react";
 // import useEmblaCarousel from "embla-carousel-react";
@@ -130,7 +129,7 @@
 //       const urlParams = new URLSearchParams(pathname?.split('?')[1] || '');
 //       const materials = urlParams.get('materials');
 //       const styles = urlParams.get('styles');
-      
+
 //       if (materials === 'Leather') setActiveItem(1);
 //       else if (styles === 'Bomber') setActiveItem(2);
 //       else if (styles === 'Varsity') setActiveItem(3);
@@ -176,7 +175,7 @@
 //           <div className="flex touch-pan-y">
 //             {items.map((item) => (
 //               <div key={item.id} className="relative mr-1">
-//                 <Link href={item.href ?? `/shop?${item.category}`}>               
+//                 <Link href={item.href ?? `/shop?${item.category}`}>
 //                    <Button
 //                     variant={item.id === activeItem ? "solid" : "s"}
 //                     className={cn(
@@ -329,7 +328,7 @@
 //       const urlParams = new URLSearchParams(pathname?.split('?')[1] || '');
 //       const materials = urlParams.get('materials');
 //       const styles = urlParams.get('styles');
-      
+
 //       if (materials === 'Leather') setActiveItem(1);
 //       else if (styles === 'Bomber') setActiveItem(2);
 //       else if (styles === 'Varsity') setActiveItem(3);
@@ -375,7 +374,7 @@
 //           <div className="flex touch-pan-y">
 //             {items.map((item) => (
 //               <div key={item.id} className="relative mr-1">
-//                 <Link href={item.href ?? `/shop?${item.category}`}>               
+//                 <Link href={item.href ?? `/shop?${item.category}`}>
 //                    <Button
 //                     variant={item.id === activeItem ? "destructive" : "ghost"}
 //                     className={cn(
@@ -407,7 +406,7 @@ import { cn } from "../../lib/utils";
 import { avertaBold } from "@/src/lib/fonts";
 
 const items = [
- { id: 0, label: "HOME", isActive: true, href: "/" },
+  { id: 0, label: "HOME", isActive: true, href: "/" },
   // Use query keys/values that the shop page understands
   { id: 1, label: "LEATHER", isActive: false, category: "materials=Leather" },
   { id: 2, label: "BOMBER", isActive: false, category: "styles=Bomber" },
@@ -524,16 +523,22 @@ export function CapsuleNav() {
     if (pathname === "/") {
       setActiveItem(0);
     } else if (pathname === "/shop") {
-      const materials = searchParams.get('materials');
-      const styles = searchParams.get('styles');
-      
-      if (materials === 'Leather') setActiveItem(1);
-      else if (styles === 'Bomber') setActiveItem(2);
-      else if (styles === 'Varsity') setActiveItem(3);
-      else if (styles === 'Biker') setActiveItem(4);
-      else setActiveItem(-1); // No match, no active item
+      const materials = searchParams.get("materials");
+      const styles = searchParams.get("styles");
+
+      if (materials === "Leather") {
+        setActiveItem(1);
+      } else if (styles === "Bomber") {
+        setActiveItem(2);
+      } else if (styles === "Varsity") {
+        setActiveItem(3);
+      } else if (styles === "Biker") {
+        setActiveItem(4);
+      } else {
+        setActiveItem(-1);
+      }
     } else {
-      setActiveItem(-1); // Not on any nav page, no active item
+      setActiveItem(-1);
     }
   }, [pathname, searchParams]);
 
@@ -552,7 +557,7 @@ export function CapsuleNav() {
   return (
     <div
       className={cn(
-        "mx-auto md:w-auto md:mx-0 transition-all duration-300",
+        "mx-auto md:w-auto md:mx-0",
         (isCategoryPage || isShopPage || isCollectionsPage) &&
           isMobileView &&
           isExpanded
@@ -564,7 +569,9 @@ export function CapsuleNav() {
           : isProductPage && isMobileView
           ? "fixed top-[60px] left-0 right-0 z-40 px-4"
           : "relative",
-        isVisible ? "opacity-100" : "opacity-0 pointer-events-none translate-y-[-100%]"
+        isVisible
+          ? "opacity-100"
+          : "opacity-0 pointer-events-none translate-y-[-100%]"
       )}
     >
       <div className="rounded-[15px] bg-white px-1 py-1 shadow-lg">
@@ -572,12 +579,14 @@ export function CapsuleNav() {
           <div className="flex touch-pan-y">
             {items.map((item) => (
               <div key={item.id} className="relative mr-1">
-                <Link href={item.href ?? `/shop?${item.category}`}>               
-                   <Button
-                    variant={item.id === activeItem ? "destructive" : "ghost_2"}
+                <Link href={item.href ?? `/shop?${item.category}`}>
+                  <Button
+                    variant={item.id === activeItem && activeItem !== -1 ? "destructive" : "ghost_2"}
                     className={cn(
-                      "rounded-[13px] px-4 md:px-6 whitespace-nowrap text-xs md:text-sm",
-                      item.id !== activeItem && "text-black",
+                      "rounded-[13px] px-4 md:px-6 whitespace-nowrap text-xs md:text-sm transition-all duration-200",
+                      item.id === activeItem && activeItem !== -1
+                        ? "bg-[#2b2b2b] text-white"
+                        : "text-black hover:bg-gray-100",
                       avertaBold.className
                     )}
                     onClick={() => handleItemClick(item.id)}

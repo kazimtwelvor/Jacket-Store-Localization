@@ -90,6 +90,15 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
     onCategoryClick?.(slug);
   };
 
+  const handleLinkClick = (e: React.MouseEvent, categorySlug: string) => {
+    // Prevent the route loading overlay from showing for same-route navigation
+    e.preventDefault();
+    if (typeof window !== 'undefined') {
+      window.history.pushState(null, '', `/collections/${categorySlug}`);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    }
+  };
+
   const checkForScrollability = useCallback(() => {
     const el = scrollContainerRef.current;
     if (el) {
@@ -263,6 +272,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
               <Link
                 key={categorySlug || index}
                 href={`/collections/${categorySlug}`}
+                onClick={(e) => handleLinkClick(e, categorySlug)}
                 className={`relative flex flex-col items-center flex-shrink-0 w-[23vw] sm:w-28 text-center cursor-pointer py-2 ${category.isActive ? 'sticky left-3 z-10 sticky-mask' : ''}`}
                 aria-current={category.isActive ? 'page' : undefined}
               >
