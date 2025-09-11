@@ -165,3 +165,21 @@ export const sendEmailVerificationEmail = async (
     from: getEmailFromAlias(EmailAlias.NOREPLY),
   });
 };
+
+export const sendOrderConfirmationEmail = async (
+  to: string,
+  name: string,
+  orderNumber: string,
+  orderTotal: string,
+  items: any[],
+  trackOrderUrl: string
+): Promise<boolean> => {
+  const { getOrderConfirmationTemplate } = await import("./email-template");
+
+  return sendEmail({
+    to,
+    subject: `Order Confirmation #${orderNumber}`,
+    html: getOrderConfirmationTemplate(name, orderNumber, orderTotal, items, trackOrderUrl),
+    from: getEmailFromAlias(EmailAlias.ORDERS),
+  });
+};

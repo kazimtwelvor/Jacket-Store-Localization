@@ -67,7 +67,12 @@ const ProductCard = ({ data, onMouseEnter }: ProductCardProps) => {
 
   const handleAddToWishlist = (e: React.MouseEvent) => {
     e.stopPropagation()
-    wishlist.addItem(data)
+    console.log('Wishlist button clicked for product:', data.id, 'Currently wishlisted:', wishlist.isInWishlist(data.id))
+    if (wishlist.isInWishlist(data.id)) {
+      wishlist.removeItem(data.id)
+    } else {
+      wishlist.addItem(data)
+    }
   }
 
   // Check if product has sizes

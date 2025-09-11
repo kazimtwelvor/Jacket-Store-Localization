@@ -31,7 +31,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
           }
           
           .email-header {
-              background: linear-gradient(135deg, #fe7224 0%, #131a31 100%);
+              background: #000000;
               color: white;
               padding: 40px 30px;
               text-align: center;
@@ -67,7 +67,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
           
           .button {
               display: inline-block;
-              background: linear-gradient(135deg, #fe7224 0%, #131a31 100%);
+              background: #000000;
               color: white;
               text-decoration: none;
               padding: 14px 28px;
@@ -84,7 +84,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
           
           .info-box {
               background-color: #f7fafc;
-              border-left: 4px solid #fe7224;
+              border-left: 4px solid #000000;
               padding: 16px 20px;
               margin: 20px 0;
               border-radius: 4px;
@@ -115,7 +115,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
           .social-links a {
               display: inline-block;
               margin: 0 10px;
-              color: #fe7224;
+              color: #000000;
               text-decoration: none;
           }
           
@@ -150,8 +150,8 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
   <body>
       <div class="email-container">
           <div class="email-header">
-              <h1>YOUR STORE</h1>
-              <p>Premium Quality Products</p>
+              <h1>FINEYST</h1>
+              <p>Premium Quality Jackets</p>
           </div>
           
           <div class="email-body">
@@ -159,7 +159,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
           </div>
           
           <div class="email-footer">
-              <p>© ${new Date().getFullYear()} Your Store. All rights reserved.</p>
+              <p>© ${new Date().getFullYear()} Fineyst. All rights reserved.</p>
               <p>You received this email because you have an account with us.</p>
               <div class="social-links">
                   <a href="#">Facebook</a>
@@ -168,7 +168,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
               </div>
               <p style="font-size: 12px; opacity: 0.6;">
                   If you no longer wish to receive these emails, you can 
-                  <a href="#" style="color: #fe7224;">unsubscribe here</a>.
+                  <a href="#" style="color: #000000;">unsubscribe here</a>.
               </div>
           </div>
       </div>
@@ -180,33 +180,33 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
   // Welcome email template
   export const getWelcomeEmailTemplate = (name: string): string => {
     const content = `
-      <h2>Welcome to Custom Patches, ${name}! 🎉</h2>
+      <h2>Welcome to Fineyst, ${name}! 🧥</h2>
       
-      <p>Thank you for joining our community of patch enthusiasts! We're excited to help you create amazing custom patches for your brand, team, or personal projects.</p>
+      <p>Thank you for joining our community of jacket enthusiasts! We're excited to help you discover premium quality jackets that combine style, comfort, and durability.</p>
       
       <p>Here's what you can expect from us:</p>
       
       <div class="info-box">
-          <p><strong>🎨 Free Design Service:</strong> Our expert designers will bring your vision to life</p>
-          <p><strong>🚚 Free Shipping:</strong> Complimentary shipping on all orders with no minimum</p>
-          <p><strong>⚡ Fast Turnaround:</strong> High-quality patches delivered in as fast as 5 days</p>
-          <p><strong>💯 Quality Guarantee:</strong> 100% satisfaction guarantee on all our work</p>
-          <p><strong>🔄 Unlimited Revisions:</strong> We'll perfect your design until you love it</p>
+          <p><strong>🧥 Premium Quality:</strong> Handcrafted jackets with finest materials</p>
+          <p><strong>🚚 Free Shipping:</strong> Complimentary shipping on all orders</p>
+          <p><strong>⚡ Fast Delivery:</strong> Quick processing and shipping</p>
+          <p><strong>💯 Quality Guarantee:</strong> 100% satisfaction guarantee</p>
+          <p><strong>🔄 Easy Returns:</strong> Hassle-free return policy</p>
       </div>
       
-      <p>Ready to create your custom patches?</p>
+      <p>Ready to explore our collection?</p>
       
-      <a href="https://custompatches.us.com" class="button">Get Free Quote</a>
+      <a href="${process.env.NEXT_PUBLIC_SITE_URL}/shop" class="button">Shop Now</a>
       
-      <p>Whether you need embroidered patches, PVC patches, or chenille patches, we've got you covered with premium materials and vibrant, durable results.</p>
+      <p>From leather jackets to denim, letterman to trench coats, we've got you covered with premium materials and timeless designs.</p>
       
-      <p>If you have any questions, our customer support team is here to help. Just reply to this email or contact us at <a href="mailto:support@custompatches.us.com" style="color: #fe7224;">support@custompatches.us.com</a>.</p>
+      <p>If you have any questions, our customer support team is here to help. Just reply to this email or contact us at <a href="mailto:support@fineyst.com" style="color: #000000;">support@fineyst.com</a>.</p>
       
-      <p>Let's create something amazing together!</p>
-      <p><strong>The Custom Patches Team</strong></p>
+      <p>Let's find your perfect jacket!</p>
+      <p><strong>The Fineyst Team</strong></p>
     `
   
-    return getBaseTemplate(content, "Welcome to Custom Patches")
+    return getBaseTemplate(content, "Welcome to Fineyst")
   }
   
   // Login notification template
@@ -226,7 +226,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
       
       <p>Hi ${name},</p>
       
-      <p>We detected a new login to your Custom Patches account:</p>
+      <p>We detected a new login to your Fineyst account:</p>
       
       <div class="info-box">
           <p><strong>Time:</strong> ${formattedTime}</p>
@@ -236,11 +236,11 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
       
       <p>If this was you, no action is needed. If you don't recognize this login, please secure your account immediately:</p>
       
-      <a href="https://custompatches.us.com/auth/reset-password" class="button">Change Password</a>
+      <a href="${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password" class="button">Change Password</a>
       
       <p>For additional security, consider enabling two-factor authentication on your account.</p>
       
-      <p>Stay safe,<br><strong>The Custom Patches Security Team</strong></p>
+      <p>Stay safe,<br><strong>The Fineyst Security Team</strong></p>
     `
   
     return getBaseTemplate(content, "New Login Detected")
@@ -282,7 +282,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
       
       <p>Hi ${name},</p>
       
-      <p>Thank you for signing up for Custom Patches! To complete your registration and start creating amazing patches, please verify your email address by clicking the button below:</p>
+      <p>Thank you for signing up for Fineyst! To complete your registration and start shopping for premium jackets, please verify your email address by clicking the button below:</p>
       
       <a href="${verificationLink}" class="button">Verify Email Address</a>
       
@@ -290,18 +290,18 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
           <p><strong>Why verify your email?</strong></p>
           <p>• Secure your account and enable password recovery</p>
           <p>• Receive order confirmations and shipping updates</p>
-          <p>• Get exclusive offers and design tips</p>
-          <p>• Access your free design consultations</p>
+          <p>• Get exclusive offers and style tips</p>
+          <p>• Access member-only collections</p>
       </div>
       
       <p>This verification link will expire in 24 hours for security reasons.</p>
       
       <p>If you're having trouble clicking the button, copy and paste this link into your browser:</p>
-      <p style="word-break: break-all; color: #fe7224;">${verificationLink}</p>
+      <p style="word-break: break-all; color: #000000;">${verificationLink}</p>
       
       <p>If you didn't create an account with us, you can safely ignore this email.</p>
       
-      <p>Welcome to the Custom Patches family!<br><strong>The Custom Patches Team</strong></p>
+      <p>Welcome to the Fineyst family!<br><strong>The Fineyst Team</strong></p>
     `
   
     return getBaseTemplate(content, "Verify Your Email Address")
@@ -313,6 +313,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
     orderNumber: string,
     orderTotal: string,
     items: any[],
+    trackOrderUrl: string
   ): string => {
     const itemsHtml = items
       .map(
@@ -334,9 +335,9 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
       <p>Thank you for your order! We've received your custom patch request and our design team is already working on bringing your vision to life.</p>
       
       <div class="info-box">
-          <p><strong>Order Number:</strong> #${orderNumber}</p>
+          <p><strong>Order Number:</strong> ${orderNumber}</p>
           <p><strong>Order Total:</strong> $${orderTotal}</p>
-          <p><strong>Production Time:</strong> 5-7 business days</p>
+          <p><strong>Estimated Delivery:</strong> 7-10 business days</p>
           <p><strong>Shipping:</strong> FREE - No minimum required</p>
       </div>
       
@@ -354,21 +355,28 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
         </tbody>
       </table>
       
-      <p><strong>What happens next?</strong></p>
+      <p><strong>Track Your Order:</strong></p>
       <div class="info-box">
-          <p>1. Our designers will create your patch mockup</p>
-          <p>2. We'll send you the design for approval</p>
-          <p>3. Once approved, we'll start production</p>
-          <p>4. Your patches will be shipped with tracking</p>
+          <p>Use your Order ID <strong>${orderNumber}</strong> to track your order status anytime.</p>
+          <p>Get real-time updates on processing, shipping, and delivery.</p>
       </div>
       
-      <a href="https://custompatches.us.com/account/orders/${orderNumber}" class="button">Track Your Order</a>
+      <a href="${trackOrderUrl}" class="button">Track My Order</a>
       
-      <p>We'll send you design mockups within 24 hours and keep you updated throughout the production process.</p>
+      <p><strong>Want More Features?</strong></p>
+      <div class="info-box">
+          <p>🔐 <strong>Sign up for an account</strong> to unlock:</p>
+          <p>• Order history and easy reordering</p>
+          <p>• Exclusive member discounts</p>
+          <p>• Faster checkout process</p>
+          <p>• Wishlist and favorites</p>
+      </div>
       
-      <p>Questions about your order? Contact us at <a href="mailto:orders@custompatches.us.com" style="color: #fe7224;">orders@custompatches.us.com</a></p>
+      <a href="${process.env.NEXT_PUBLIC_SITE_URL}/auth/register" class="button" style="background: #28a745;">Create Account</a>
       
-      <p>Thank you for choosing Custom Patches!<br><strong>The Custom Patches Team</strong></p>
+      <p>We'll keep you updated throughout the process. Questions? Contact us at <a href="mailto:support@fineyst.com" style="color: #fe7224;">support@fineyst.com</a></p>
+      
+      <p>Thank you for choosing Fineyst!<br><strong>The Fineyst Team</strong></p>
     `
   
     return getBaseTemplate(content, `Order Confirmation #${orderNumber}`)

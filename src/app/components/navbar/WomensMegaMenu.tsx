@@ -1,13 +1,13 @@
-import Link from "next/link"
-import { X } from "lucide-react"
-import dynamic from "next/dynamic"
+import Link from "next/link";
+import { X } from "lucide-react";
+import dynamic from "next/dynamic";
 
 const MegaMenuCarousel = dynamic(() => import("./MegaMenuCarousal"), {
   ssr: false,
-})
+});
 
 interface WomensMegaMenuProps {
-  onClose: () => void
+  onClose: () => void;
 }
 
 export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
@@ -16,7 +16,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
       <div className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl h-screen overflow-y-auto mega-menu-scrollbar">
         <button
           onClick={onClose}
-          className="sticky top-6 right-8 float-right bg-white text-black rounded-full p-1 flex items-center justify-center hover:bg-gray-200 transition-colors z-20 mr-8 mt-6"
+          className="sticky top-9 right-8 float-right bg-white text-black rounded-full p-1 flex items-center justify-center hover:bg-gray-200 transition-colors z-20 mr-8 mt-6"
           aria-label="Close menu"
         >
           <X className="h-8 w-8" />
@@ -25,7 +25,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
           <div className="grid grid-cols-6 gap-4 pt-8">
             <div className="space-y-4">
               <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                 LEATHER JACKETS
+                LEATHER JACKETS
               </h3>
               <ul className="space-y-3">
                 <li>
@@ -43,7 +43,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-200 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Fashion Leather Jackets
+                    Fashion Leather Jackets
                   </Link>
                 </li>
                 <li>
@@ -52,7 +52,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Leather Bomber Jackets
+                    Leather Bomber Jackets
                   </Link>
                 </li>
                 <li>
@@ -61,7 +61,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Leather Biker Jackets
+                    Leather Biker Jackets
                   </Link>
                 </li>
                 <li>
@@ -70,7 +70,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Suede Leather Jackets
+                    Suede Leather Jackets
                   </Link>
                 </li>
                 <li>
@@ -79,7 +79,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Leather Blazers
+                    Leather Blazers
                   </Link>
                 </li>
                 <li>
@@ -88,14 +88,14 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Leather Vests
+                    Leather Vests
                   </Link>
                 </li>
               </ul>
             </div>
             <div className="space-y-4">
               <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                 COATS
+                COATS
               </h3>
               <ul className="space-y-3">
                 <li>
@@ -104,7 +104,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Shearling Coats
+                    Shearling Coats
                   </Link>
                 </li>
                 <li>
@@ -113,7 +113,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Trench Coats
+                    Trench Coats
                   </Link>
                 </li>
                 <li>
@@ -122,7 +122,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Winter Coats
+                    Winter Coats
                   </Link>
                 </li>
                 <li>
@@ -131,7 +131,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Rain Coats
+                    Rain Coats
                   </Link>
                 </li>
                 <li>
@@ -140,7 +140,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Puffer Jackets
+                    Puffer Jackets
                   </Link>
                 </li>
                 <li>
@@ -149,14 +149,14 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Quilted Jackets
+                    Quilted Jackets
                   </Link>
                 </li>
               </ul>
             </div>
             <div className="space-y-4">
               <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
-                 STYLES
+                STYLES
               </h3>
               <ul className="space-y-3">
                 <li>
@@ -165,7 +165,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Cropped Jackets
+                    Cropped Jackets
                   </Link>
                 </li>
                 <li>
@@ -174,7 +174,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Pilot & Aviator Jackets
+                    Pilot & Aviator Jackets
                   </Link>
                 </li>
                 <li>
@@ -183,7 +183,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Varsity Jackets
+                    Varsity Jackets
                   </Link>
                 </li>
                 <li>
@@ -192,7 +192,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Letterman Jackets
+                    Letterman Jackets
                   </Link>
                 </li>
                 <li>
@@ -201,7 +201,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Denim Jackets
+                    Denim Jackets
                   </Link>
                 </li>
                 <li>
@@ -210,7 +210,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Anorak & Ski Jackets
+                    Anorak & Ski Jackets
                   </Link>
                 </li>
               </ul>
@@ -226,7 +226,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                     Puffer Vests
+                    Puffer Vests
                   </Link>
                 </li>
                 <li>
@@ -261,12 +261,12 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
           </div>
           <div className="mt-20">
             <h3 className="font-bold text-white mb-8 text-4xl uppercase tracking-widest text-left">
-               Collection
+              Collection
             </h3>
             <MegaMenuCarousel />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

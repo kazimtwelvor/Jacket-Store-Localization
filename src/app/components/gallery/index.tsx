@@ -542,56 +542,57 @@ const Gallery: React.FC<GalleryProps> = ({
       {typeof window !== "undefined" &&
         createPortal(imageViewerModal, document.body)}
 
-      <div className="hidden lg:grid grid-cols-2 gap-0">
-        {sortedImages.map((image, idx) => (
-          <div
-            key={image.id}
-            className="relative group cursor-zoom-in overflow-hidden"
-            style={{ height: "100vh" }}
-            onClick={() => openViewer(idx)}
-            onMouseMove={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              const x = ((e.clientX - rect.left) / rect.width) * 100;
-              const y = ((e.clientY - rect.top) / rect.height) * 100;
-              const img = e.currentTarget.querySelector("img");
-              if (img) {
-                img.style.transformOrigin = `${x}% ${y}%`;
-              }
-            }}
-            onMouseLeave={(e) => {
-              const img = e.currentTarget.querySelector("img");
-              if (img) {
-                img.style.transformOrigin = "center center";
-              }
-            }}
-          >
-            <Image
-              src={image.image.url || "/placeholder.svg"}
-              alt={image.image.altText || `Product image ${idx + 1}`}
-              fill
-              className="object-cover transition-transform duration-200 group-hover:scale-[1.5]"
-              sizes="30vw"
-              priority={idx === 0}
-            />
+      <div className="hidden lg:block relative">
+        <div className="grid grid-cols-2 gap-0">
+          {sortedImages.map((image, idx) => (
+            <div
+              key={image.id}
+              className="relative group cursor-zoom-in overflow-hidden"
+              style={{ height: "100vh" }}
+              onClick={() => openViewer(idx)}
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                const img = e.currentTarget.querySelector("img");
+                if (img) {
+                  img.style.transformOrigin = `${x}% ${y}%`;
+                }
+              }}
+              onMouseLeave={(e) => {
+                const img = e.currentTarget.querySelector("img");
+                if (img) {
+                  img.style.transformOrigin = "center center";
+                }
+              }}
+            >
+              <Image
+                src={image.image.url || "/placeholder.svg"}
+                alt={image.image.altText || `Product image ${idx + 1}`}
+                fill
+                className="object-cover transition-transform duration-200 group-hover:scale-[1.5]"
+                sizes="30vw"
+                priority={idx === 0}
+              />
+            </div>
+          ))}
+        </div>
 
-            {idx === 0 && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onAddToWishlist?.();
-                }}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-md z-10 hover:bg-black-50 transition-colors"
-                aria-label="Add to wishlist"
-              >
-                <Heart
-                  className={`w-5 h-5 transition-colors ${
-                    isInWishlist ? "text-black fill-black" : "text-gray-600"
-                  }`}
-                />
-              </button>
-            )}
-          </div>
-        ))}
+        {/* Wishlist Button - Outside grid container */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onAddToWishlist?.();
+          }}
+          className="absolute top-4 left-[450px] w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-md z-[9990] hover:bg-gray-50 transition-colors"
+          aria-label="Add to wishlist"
+        >
+          <Heart
+            className={`w-5 h-5 transition-colors ${
+              isInWishlist ? "text-black fill-black" : "text-gray-600"
+            }`}
+          />
+        </button>
       </div>
 
       {/* Mobile and tablet view - slider */}

@@ -228,7 +228,11 @@ const Footer = () => {
                                         Size Guide
                                     </Link>
                                 </li>
-
+                                <li>
+                                    <Link href="/track-order" className="text-black hover:font-bold transition-all">
+                                        Track My Order
+                                    </Link>
+                                </li>
 
                             </ul>
                         </div>

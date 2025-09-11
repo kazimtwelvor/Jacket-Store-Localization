@@ -1,23 +1,23 @@
-import Link from "next/link"
-import { X } from "lucide-react"
-
-
+import Link from "next/link";
+import { X } from "lucide-react";
 
 interface BrandsMegaMenuProps {
-  onClose: () => void
+  onClose: () => void;
 }
 
 export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
   return (
     <div className="fixed left-0 right-0 top-16 w-screen z-[9001]">
       <div className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl h-screen overflow-y-auto mega-menu-scrollbar">
-        <button
+        <div
           onClick={onClose}
-          className="sticky top-6 right-8 float-right bg-white text-black rounded-full p-1 flex items-center justify-center hover:bg-gray-200 transition-colors z-20 mr-8 mt-6"
+          className="sticky top-9 right-8 float-right bg-white text-black rounded-full w-12 h-12 flex items-center justify-center hover:bg-gray-200 transition-colors z-20 mr-8 mt-6 cursor-pointer"
+          role="button"
+          tabIndex={0}
           aria-label="Close menu"
         >
-          <X className="h-8 w-8" />
-        </button>
+          <X className="h-6 w-6" />
+        </div>
         <div className="w-full max-w-screen-2xl mx-auto px-8 lg:px-16 py-16">
           <div className="grid grid-cols-6 gap-4 pt-8">
             <div className="space-y-4">
@@ -40,7 +40,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
-                   About Us
+                    About Us
                   </Link>
                 </li>
               </ul>
@@ -126,5 +126,5 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
