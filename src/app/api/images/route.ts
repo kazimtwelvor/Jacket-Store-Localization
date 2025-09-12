@@ -42,7 +42,13 @@ export async function GET() {
 
     // Check if uploads directory exists
     if (!fs.existsSync(uploadsDir)) {
-      return NextResponse.json({ images: [] })
+      return NextResponse.json({ images: [] }, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        },
+      })
     }
 
     // Get all images from the uploads directory and its subdirectories
@@ -51,9 +57,33 @@ export async function GET() {
     // Sort images by last modified date (newest first)
     images.sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime())
 
-    return NextResponse.json({ images })
+    return NextResponse.json({ images }, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    })
   } catch (error) {
     console.error("Error fetching images:", error)
-    return NextResponse.json({ error: "Failed to fetch images" }, { status: 500 })
+    return NextResponse.json({ error: "Failed to fetch images" }, { 
+      status: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    })
   }
+}
+
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
+  })
 }
