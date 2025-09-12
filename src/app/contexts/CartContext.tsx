@@ -1,7 +1,7 @@
 "use client"
 
 import { Product } from '@/types'
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
 
 export interface CartItem {
   id: string
@@ -27,7 +27,9 @@ const CartContext = createContext<CartContextType | undefined>(undefined)
 const CART_EXPIRY_DAYS = 30
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [items, setItems] = useState<CartItem[]>(() => {
+  const [items, setItems] = useState<CartItem[]>([])
+
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('cart-items')
       if (saved) {
@@ -36,19 +38,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           if (cartData.timestamp) {
             const isExpired = Date.now() - cartData.timestamp > (CART_EXPIRY_DAYS * 24 * 60 * 60 * 1000)
             if (!isExpired) {
-              return cartData.items || []
+              setItems(cartData.items || [])
             }
-            localStorage.removeItem('cart-items')
-          } else {
-            localStorage.removeItem('cart-items')
           }
         } catch (error) {
-          localStorage.removeItem('cart-items')
+          // ignore errors
         }
       }
     }
-    return []
-  })
+  }, [])
 
   const addToCart = (product: Product, size: string, selectedColor?: string) => {
     const itemId = `${product.id}-${size}-${selectedColor || 'default'}`

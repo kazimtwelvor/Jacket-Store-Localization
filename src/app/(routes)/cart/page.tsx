@@ -175,11 +175,11 @@ const CartPage = () => {
   };
 
   const handleContinueShopping = () => {
-    router.push("/");
+    window.location.href = "/";
   };
 
   const handleCheckout = () => {
-    router.push("/checkout");
+    window.location.href = "/checkout";
   };
 
   return (

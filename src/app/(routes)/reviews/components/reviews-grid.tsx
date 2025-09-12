@@ -24,7 +24,7 @@ export default function ReviewsGrid({ reviews, currentPage, totalPages, setCurre
   if (!isMounted) {
     return (
       <div className="reviews-content">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-0">
           {reviews.map((review) => (
             <div key={review.id} className="h-full">
               <ReviewCard review={review} index={0} />
@@ -67,7 +67,7 @@ export default function ReviewsGrid({ reviews, currentPage, totalPages, setCurre
 
   return (
     <div className="reviews-content">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-0">
         {reviews.map((review, index) => (
           <div key={review.id} className="h-full">
             <ReviewCard review={review} index={index} />

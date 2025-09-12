@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Search, X, ChevronLeft, ChevronRight, Grid3X3, List, Star } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../../../ui/sheet"
@@ -35,6 +35,13 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [selectedCategory, setSelectedCategory] = useState<KeywordCategory | null>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (isOpen && searchInputRef.current) {
+      searchInputRef.current.blur()
+    }
+  }, [isOpen])
 
   // Filter categories based on search query
   const filteredCategories = useMemo(() => {
@@ -297,11 +304,14 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
             <div className="relative mb-6">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
+                ref={searchInputRef}
                 type="text"
                 placeholder="Search categories, materials, styles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all duration-200"
+                autoFocus={false}
+                tabIndex={-1}
               />
             </div>
 

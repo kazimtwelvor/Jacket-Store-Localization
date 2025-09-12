@@ -167,42 +167,20 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
   const isInWishlist = wishlist.isInWishlist(data.id)
 
   const onAddToCart = () => {
-    
     if (!selectedSizeId && availableSizes.length > 0) {
-      // Highlight size selector if no size is selected
-      document.getElementById("size-selector")?.classList.add("ring-2", "ring-red-500")
       setSizeError("Please select a size")
-      setTimeout(() => {
-        document.getElementById("size-selector")?.classList.remove("ring-2", "ring-red-500")
-      }, 2000)
       return
     }
 
     setIsLoading(true)
 
-    try {
-      // Get the selected size name
-      const selectedSizeName = availableSizes.find((size: Size) => size.id === selectedSizeId)?.name || 'Default'
-      
-      // Get the selected color name
-      const selectedColorName = selectedColorId
-        ? availableColors.find((color: Color) => color.id === selectedColorId)?.name || "Default"
-        : availableColors[0]?.name || "Default"
-      
-      
-      // Add to cart immediately
-      addToCart(data, selectedSizeName, selectedColorName)
-      
-      
-      // Open cart sidebar after adding item
-      setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('openCart'))
-        setIsLoading(false)
-      }, 300)
-      
-    } catch (error) {
-      setIsLoading(false)
-    }
+    const selectedSizeName = availableSizes.find((size: Size) => size.id === selectedSizeId)?.name || 'Default'
+    const selectedColorName = selectedColorId
+      ? availableColors.find((color: Color) => color.id === selectedColorId)?.name || "Default"
+      : availableColors[0]?.name || "Default"
+    
+    addToCart(data, selectedSizeName, selectedColorName)
+    setIsLoading(false)
   }
 
   // Scroll utility functions

@@ -61,8 +61,6 @@ export default function MobileAddToCartModal({
 
       addToCart(product, selectedSizeName);
       setStep("cart-confirmation");
-      // Open cart sidebar after adding item
-      window.dispatchEvent(new CustomEvent("openCart"));
     }
   };
 
@@ -287,7 +285,7 @@ export default function MobileAddToCartModal({
                     <button
                       onClick={() => {
                         handleClose();
-                        router.push("/cart");
+                        window.location.href = "/cart";
                       }}
                       className="w-full py-4 bg-white border-2 border-black text-black font-bold  hover:bg-gray-50 transition-colors"
                     >
@@ -296,7 +294,7 @@ export default function MobileAddToCartModal({
                     <button
                       onClick={() => {
                         handleClose();
-                        router.push("/checkout");
+                        window.location.href = "/checkout";
                       }}
                       className="w-full py-4 bg-black text-white font-bold  hover:bg-gray-800 transition-colors"
                     >

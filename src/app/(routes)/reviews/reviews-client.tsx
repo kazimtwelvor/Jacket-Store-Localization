@@ -241,14 +241,13 @@ export default function ReviewsClient() {
             </div>
 
             {/* Render reviews grid immediately */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-0">
               {currentReviews.map((review, index) => (
                 <div key={review.id} className="h-full">
                   <ReviewCard review={review} index={index} />
                 </div>
               ))}
             </div>
-border-black text-white hover:bg-[#1B1B1B]/10 rounded-none
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center mt-16 gap-2">
@@ -312,7 +311,7 @@ border-black text-white hover:bg-[#1B1B1B]/10 rounded-none
           <div className="container mx-auto px-4">
             <p className="text-3xl font-bold text-center mb-12">Additional Reviews</p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4 md:px-0">
               {/* Google Reviews */}
               <div className="bg-white p-6 rounded-xl shadow-sm border border-black flex flex-col items-center">
                 <div className="mb-4">

@@ -61,7 +61,7 @@ export default function ReviewsStats() {
   // Static version for non-JS users
   if (!isMounted) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
           <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex flex-col items-center text-center">
@@ -76,7 +76,7 @@ export default function ReviewsStats() {
   }
 
   return (
-    <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div ref={ref} className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 md:px-0">
       {stats.map((stat, index) => (
         <div
           key={index}

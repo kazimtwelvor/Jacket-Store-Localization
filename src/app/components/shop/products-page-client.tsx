@@ -435,7 +435,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       currentProducts.find((p) => p.id === productId) ||
       recentlyViewed.find((p) => p.id === productId);
     if (product) {
-      addToCart(product, "M");
+      addToCart(product, size);
     }
     setSelectedSizes((prev) => ({
       ...prev,
