@@ -341,6 +341,7 @@ const Navbar = () => {
           isOpen={isMobileMenuOpen}
           onClose={toggleMobileMenu}
           onNavigate={handleMobileNav}
+          onSearchOpen={() => setIsSearchOpen(true)}
         />
       )}
 

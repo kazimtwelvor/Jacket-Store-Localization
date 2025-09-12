@@ -128,29 +128,27 @@ export default function ShippingCosts() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-xl p-8 shadow-lg border border-[#eaeaea]"
+          className="bg-white rounded-xl p-4 md:p-8 shadow-lg border border-[#eaeaea] mx-4 md:mx-0"
         >
-          <div className="overflow-hidden">
-            <div className="relative overflow-x-auto rounded-lg">
-              <table className="w-full text-left">
-                <thead className="bg-[#eaeaea] text-black-700">
-                  <tr>
-                    <th className="px-6 py-3 font-semibold">Order Value</th>
-                    <th className="px-6 py-3 font-semibold">Standard</th>
-                    <th className="px-6 py-3 font-semibold">Express</th>
+          <div className="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0">
+            <table className="w-full text-left min-w-[350px] border border-[#eaeaea] rounded-lg">
+              <thead className="bg-[#eaeaea] text-black-700">
+                <tr>
+                  <th className="px-2 md:px-6 py-3 font-semibold text-xs md:text-base border-r border-[#eaeaea] last:border-r-0">Order Value</th>
+                  <th className="px-2 md:px-6 py-3 font-semibold text-xs md:text-base border-r border-[#eaeaea] last:border-r-0">Standard</th>
+                  <th className="px-2 md:px-6 py-3 font-semibold text-xs md:text-base">Express</th>
+                </tr>
+              </thead>
+              <tbody>
+                {shippingRates.map((rate, index) => (
+                  <tr key={index} className={`${index % 2 === 0 ? "bg-white" : "bg-[#eaeaea]/30"} border-b border-[#eaeaea] last:border-b-0`}>
+                    <td className="px-2 md:px-6 py-4 font-medium text-xs md:text-base border-r border-[#eaeaea]">{rate.order}</td>
+                    <td className="px-2 md:px-6 py-4 text-xs md:text-base border-r border-[#eaeaea]">{rate.standard}</td>
+                    <td className="px-2 md:px-6 py-4 text-xs md:text-base">{rate.express}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {shippingRates.map((rate, index) => (
-                    <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-[#eaeaea]/30"}>
-                      <td className="px-6 py-4 font-medium">{rate.order}</td>
-                      <td className="px-6 py-4">{rate.standard}</td>
-                      <td className="px-6 py-4">{rate.express}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </motion.div>
 

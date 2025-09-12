@@ -73,7 +73,7 @@ export default function JacketColorCollection() {
           <h2 className={`text-2xl text-white sm:text-3xl md:text-4xl mb-6 tracking-tight leading-tight ${avertaBlack.className}`}>
             OUR COLOR COLLECTION
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-white max-w-3xl mx-auto leading-relaxed">
             Discover our exclusive range of premium jackets across different styles.
           </p>
         </div>

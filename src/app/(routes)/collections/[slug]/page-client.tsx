@@ -513,7 +513,6 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
         const product = currentProducts.find(p => p.id === productId) || recentlyViewed.find(p => p.id === productId);
         if (product) {
             addToCart(product, size)
-            window.dispatchEvent(new CustomEvent('openCart'))
         }
         setSelectedSizes((prev) => ({
             ...prev,
@@ -1218,7 +1217,13 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                 </div>
                 <Sheet open={categoriesSidebarOpen} onOpenChange={setCategoriesSidebarOpen}>
                     <SheetContent side="left" className="w-[85vw] max-w-[300px] p-0 z-[9999]" style={{ zIndex: 9999 }}>
-                        <div className="h-full flex flex-col">
+                        <div className="h-full flex flex-col relative">
+                            <button
+                                onClick={() => setCategoriesSidebarOpen(false)}
+                                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors z-10 text-gray-600 hover:text-gray-800"
+                            >
+                                ✕
+                            </button>
                             <SheetHeader className="text-left px-4 pt-4 pb-2 border-b">
                                 <SheetTitle className="text-xl font-bold">Categories</SheetTitle>
                             </SheetHeader>

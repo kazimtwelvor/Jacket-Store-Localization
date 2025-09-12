@@ -22,6 +22,7 @@ interface MobileMenuProps {
   isOpen: boolean
   onClose: () => void
   onNavigate: (href: string) => void
+  onSearchOpen?: () => void
 }
 
 const discoverData: Record<string, { title: string; items: string[]; links: string[] }[]> = {
@@ -136,7 +137,7 @@ const SubCategoryAccordion = ({ title, items, links, onNavigate }: { title: stri
 };
 
 
-const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate }) => {
+const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate, onSearchOpen }) => {
   const { user, isAuthenticated, logout } = useAuth()
   const { items } = useCart()
   const wishlist = useWishlist()
@@ -291,7 +292,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate }) 
                                             MOBILE MENU
                                         </h2>
                                         <div className="flex items-center space-x-6 text-white">
-                                            <button onClick={() => onNavigate('/shop')} className="hover:opacity-80 transition-opacity">
+                                            <button onClick={() => {
+                                                onClose();
+                                                onSearchOpen?.();
+                                            }} className="hover:opacity-80 transition-opacity">
                                                 <Search size={22} />
                                                 <span className="sr-only">Search</span>
                                             </button>
