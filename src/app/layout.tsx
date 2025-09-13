@@ -9,7 +9,6 @@ import { avertaBold, avertaDefault } from "@/src/lib/fonts";
 import Footer from "./components/home-page-components/footer/footer";
 import RouteLoadingOverlay from "@/src/app/components/layout/route-loading-overlay";
 import CartSidebarWrapper from "./components/layout/cart-sidebar-wrapper";
-import CountryModal from "./components/modals/CountryModal";
 import GlobalCountryNavigation from "./components/navigation/GlobalCountryNavigation";
 import { Suspense } from "react";
 
@@ -42,7 +41,6 @@ export default function RootLayout({
               </main>
               <Footer />
               <CartSidebarWrapper />
-              <CountryModal />
               <GlobalCountryNavigation />
             </CartProvider>
           </CountryProvider>

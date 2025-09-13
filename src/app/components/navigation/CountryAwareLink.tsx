@@ -19,10 +19,10 @@ export default function CountryAwareLink({
   addCountryParam = true,
   ...props 
 }: CountryAwareLinkProps) {
-  const { selectedCountry, addCountryToUrl } = useCountry();
+  const { addCountryToUrl } = useCountry();
 
   const getFinalHref = () => {
-    if (!addCountryParam || !selectedCountry) {
+    if (!addCountryParam) {
       return href;
     }
 

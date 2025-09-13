@@ -17,17 +17,11 @@ export function middleware(request: NextRequest) {
 
   if (!pathname.startsWith("/_next") && !pathname.startsWith("/api") && !pathname.includes(".")) {
     const countryFromUrl = searchParams.get("country")
-    const countryFromCookie = request.cookies.get("userCountry")?.value
 
-    if (!countryFromUrl && countryFromCookie) {
+    // Always ensure country parameter is set to 'us'
+    if (!countryFromUrl || countryFromUrl.toLowerCase() !== 'us') {
       const url = request.nextUrl.clone()
-      url.searchParams.set("country", countryFromCookie)
-      return NextResponse.redirect(url)
-    }
-
-    if (countryFromUrl && countryFromCookie && countryFromUrl.toLowerCase() !== countryFromCookie.toLowerCase()) {
-      const url = request.nextUrl.clone()
-      url.searchParams.set("country", countryFromCookie.toLowerCase())
+      url.searchParams.set("country", "us")
       return NextResponse.redirect(url)
     }
   }
