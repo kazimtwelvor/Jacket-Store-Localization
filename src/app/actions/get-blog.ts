@@ -10,7 +10,7 @@ export async function getBlog(slug: string): Promise<BlogDetail | null> {
 
     // First, get all blogs to find the one with the matching slug
     const res = await fetch(`${API_URL}/blog`, {
-      cache: "no-store",
+      next: { revalidate: 3600 }, // Cache for 1 hour
       headers: {
         "Content-Type": "application/json",
       },
@@ -32,7 +32,7 @@ export async function getBlog(slug: string): Promise<BlogDetail | null> {
 
     // Now fetch the specific blog by ID to get full details
     const blogRes = await fetch(`${API_URL}/blog/${blog.id}`, {
-      cache: "no-store",
+      next: { revalidate: 3600 }, // Cache for 1 hour
       headers: {
         "Content-Type": "application/json",
       },

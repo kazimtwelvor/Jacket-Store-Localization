@@ -1,5 +1,3 @@
-
-
 "use client"
 import React, { useState, useRef, useEffect, useLayoutEffect } from "react"
 import Image from "next/image"
