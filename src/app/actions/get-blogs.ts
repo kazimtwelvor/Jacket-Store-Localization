@@ -9,7 +9,7 @@ export async function getBlogs(): Promise<BlogDetail[]> {
     if (!STORE_ID) throw new Error("STORE_ID is not defined")
 
     const res = await fetch(`${API_URL}/blog`, {
-      cache: "no-store",
+      next: { revalidate: 3600 }, 
       headers: {
         "Content-Type": "application/json",
       },

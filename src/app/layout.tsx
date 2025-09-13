@@ -21,8 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0 bg-[#000000] min-h-screen flex flex-col`}>
         <FontProvider>
-          <CountryProvider>
-            <CartProvider>
+          <Suspense fallback={<div />}>
+            <CountryProvider>
+              <CartProvider>
               <noscript>
                 <div style={{background:'#111', color:'#fff', padding:'8px 12px', textAlign:'center'}}>
                   For the best experience, enable JavaScript. Basic content is still available.
@@ -41,9 +42,12 @@ export default function RootLayout({
               </main>
               <Footer />
               <CartSidebarWrapper />
-              <GlobalCountryNavigation />
-            </CartProvider>
-          </CountryProvider>
+              <Suspense fallback={null}>
+                <GlobalCountryNavigation />
+              </Suspense>
+              </CartProvider>
+            </CountryProvider>
+          </Suspense>
         </FontProvider>
       </body>
     </html>

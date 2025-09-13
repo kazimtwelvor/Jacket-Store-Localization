@@ -16,12 +16,11 @@ export function middleware(request: NextRequest) {
   }
 
   if (!pathname.startsWith("/_next") && !pathname.startsWith("/api") && !pathname.includes(".")) {
-    const countryFromUrl = searchParams.get("country")
+    const countryFromUrl = searchParams.get("cn")
 
-    // Always ensure country parameter is set to 'us'
     if (!countryFromUrl || countryFromUrl.toLowerCase() !== 'us') {
       const url = request.nextUrl.clone()
-      url.searchParams.set("country", "us")
+      url.searchParams.set("cn", "us")
       return NextResponse.redirect(url)
     }
   }

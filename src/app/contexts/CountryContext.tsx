@@ -28,25 +28,24 @@ export function CountryProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     Cookies.set('userCountry', 'US', { expires: 365 });
     
-    const countryFromUrl = searchParams.get('country');
+    const countryFromUrl = searchParams.get('cn');
     if (!countryFromUrl || countryFromUrl.toLowerCase() !== 'us') {
       const newSearchParams = new URLSearchParams(searchParams.toString());
-      newSearchParams.set('country', 'us');
+      newSearchParams.set('cn', 'us');
       const newUrl = `${pathname}?${newSearchParams.toString()}`;
       router.replace(newUrl);
     }
   }, [searchParams, router, pathname]);
 
   const addCountryToUrl = (url: string): string => {
-    // Handle URLs that start with ? (query parameters only)
     if (url.startsWith('?')) {
       const urlParams = new URLSearchParams(url.substring(1));
-      urlParams.set('country', 'us');
+      urlParams.set('cn', 'us');
       return `${pathname}?${urlParams.toString()}`;
     }
     
     const urlObj = new URL(url, window.location.origin);
-    urlObj.searchParams.set('country', 'us');
+    urlObj.searchParams.set('cn', 'us');
     return urlObj.pathname + urlObj.search;
   };
 
