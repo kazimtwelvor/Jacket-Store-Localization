@@ -75,7 +75,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
       try {
         setLoading(true)
         const productPromises = relatedProductIds.map(async (id) => {
-          const response = await fetch(`/api/fe268b7e-f2cc-459d-9619-957967ff23dc/products/${id}`)
+          const response = await fetch(`/api/products/${id}`)
           if (response.ok) {
             return await response.json()
           }
