@@ -107,8 +107,10 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
     if (availableColors.length > 0 && !selectedColorId) {
       setSelectedColorId(availableColors[0].id)
     }
-    
-    // Close dropdown when clicking outside
+  }, [availableColors.length])
+
+  // Handle click outside dropdown
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isDropdownOpen) {
         const sizeSelector = document.getElementById("size-selector");
@@ -120,7 +122,7 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
     
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [availableSizes, availableColors, selectedSizeId, selectedColorId])
+  }, [isDropdownOpen])
 
   // Use reviews from product data
   const reviews = data.reviews || []
@@ -180,7 +182,10 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
       : availableColors[0]?.name || "Default"
     
     addToCart(data, selectedSizeName, selectedColorName)
-    setIsLoading(false)
+    
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 50)
   }
 
   // Scroll utility functions
