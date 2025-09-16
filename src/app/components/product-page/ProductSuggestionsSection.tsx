@@ -4,14 +4,16 @@ import { useState, useEffect } from "react"
 import type { Product } from "@/types"
 import WeThinkYouWillLove from "../../category/WeThinkYouWillLove"
 import RecentlyViewed from "../../category/RecentlyViewed"
+import RelatedProducts from "./related-products"
 import { useRouter } from "next/navigation"
 
 interface ProductSuggestionsSectionProps {
   suggestProducts: Product[]
+  relatedProductIds?: string[]
   isMobile: boolean
 }
 
-export const ProductSuggestionsSection = ({ suggestProducts, isMobile }: ProductSuggestionsSectionProps) => {
+export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, isMobile }: ProductSuggestionsSectionProps) => {
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
   const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
   const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([])
@@ -55,6 +57,19 @@ export const ProductSuggestionsSection = ({ suggestProducts, isMobile }: Product
 
   return (
     <div className="flex flex-col w-full min-h-0 space-y-4 pb-12 pt-5 md:space-y-8 lg:space-y-4 items-center ml-2 sm:ml-0" style={{ backgroundColor: '#F9F9F9', minHeight: 'fit-content', maxWidth: '100vw', overflow: 'hidden' }}>
+      {relatedProductIds && relatedProductIds.length > 0 && (
+        <RelatedProducts
+          relatedProductIds={relatedProductIds}
+          hoveredProduct={hoveredProduct}
+          setHoveredProduct={setHoveredProduct}
+          selectedSizes={selectedSizes}
+          addToRecentlyViewed={addToRecentlyViewed}
+          handleClick={handleProductClick}
+          handleSizeSelect={handleSizeSelect}
+          onAddToCartClick={handleAddToCart}
+        />
+      )}
+      
       <WeThinkYouWillLove
         products={suggestProducts}
         hoveredProduct={hoveredProduct}
