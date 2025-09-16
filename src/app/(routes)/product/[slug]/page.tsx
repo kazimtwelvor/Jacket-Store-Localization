@@ -236,6 +236,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
       <div className="w-full">
         <ProductSuggestionsSection
           suggestProducts={suggestProducts}
+          relatedProductIds={product.relatedProducts}
           isMobile={false}
         />
       </div>
