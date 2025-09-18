@@ -220,6 +220,10 @@ export default function ProductCarousel({
     return product.images?.[0]?.url || product.imageUrl || "/placeholder.svg";
   };
 
+  const truncateTitle = (title: string, limit: number = 38) => {
+    return title.length > limit ? title.substring(0, limit) + '...' : title;
+  };
+
   const handleTouchStart = (e: React.TouchEvent) => {
     if (isTransitioning.current || !canLoop) return;
     setTouchStart(e.targetTouches[0].clientX);
@@ -366,7 +370,7 @@ export default function ProductCarousel({
                         </motion.div>
                         <div className="text-center mt-3 sm:mt-4 w-full px-1">
                           <h3 className="font-semibold text-xs sm:text-sm text-gray-800 whitespace-nowrap overflow-hidden ">
-                            {product.name}
+                            {truncateTitle(product.name)}
                           </h3>
                           <div className="flex justify-center items-center gap-1 sm:gap-2 text-sm sm:text-base mt-1">
                             {product.salePrice ? (
@@ -474,7 +478,7 @@ export default function ProductCarousel({
                             <h3
                               className={`font-bold text-xs sm:text-sm md:text-base text-black uppercase leading-tight mb-1 whitespace-nowrap overflow-hidden  group-hover:text-[#2b2b2b] transition-colors ${avertaBlack.className}`}
                             >
-                              {product.name}
+                              {truncateTitle(product.name)}
                             </h3>
                             <div className="flex justify-center items-center gap-1 sm:gap-2 text-xs sm:text-sm md:text-base">
                               {product.salePrice ? (
