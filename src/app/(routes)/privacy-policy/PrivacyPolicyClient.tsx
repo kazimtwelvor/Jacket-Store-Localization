@@ -36,19 +36,14 @@ export default function PrivacyPolicyClient() {
     <section className="bg-background pb-20">
       <Script src="https://code.jquery.com/jquery-3.6.0.min.js" strategy="beforeInteractive" />
       <Script src="https://cdn.jsdelivr.net/npm/fixed-sticky@0.1.7/fixedsticky.min.js" strategy="beforeInteractive" />
-      <div className="relative h-[40vh] w-full overflow-hidden mb-16 md:mb-24 hero-div">
-        <Image src="/placeholder.svg?key=5rrok" alt="Privacy Policy" fill className="object-cover" priority />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Container>
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-6xl font-bold text-[#2b2b2b] mb-6 drop-shadow-lg">Privacy Policy</h1>
-              <p className="text-lg md:text-xl text-[#1B1B1B] mb-8 drop-shadow-lg">
-                How we collect, use, and protect your personal information
-              </p>
-            </div>
-          </Container>
+      <Container>
+        <div className="max-w-3xl mx-auto text-center pt-16 mb-16">
+          <h1 className="text-4xl md:text-6xl font-bold text-[#2b2b2b] mb-6">Privacy Policy</h1>
+          <p className="text-lg md:text-xl text-[#1B1B1B] mb-8">
+            How we collect, use, and protect your personal information
+          </p>
         </div>
-      </div>
+      </Container>
 
       <Container>
         <div className="flex flex-col lg:flex-row gap-12">

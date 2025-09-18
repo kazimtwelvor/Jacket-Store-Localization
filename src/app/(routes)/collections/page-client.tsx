@@ -29,7 +29,7 @@ const CategoriesPage = ({ categories }: CategoriesPageProps) => {
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">All Collections</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4 pt-16">All Collections</h1>
           <div className="max-w-md mx-auto">
             <input
               type="text"
