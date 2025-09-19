@@ -6,14 +6,21 @@ import { X } from "lucide-react"
 interface ColorSelectorProps {
   product: Product
   isDesktop: boolean
+  selectedColorId?: string
+  onColorSelect?: (colorId: string, productId: string) => void
 }
 
-export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop }) => {
+export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop, selectedColorId, onColorSelect }) => {
   const [colorPopup, setColorPopup] = useState<{ productId: string; rect: DOMRect } | null>(null)
   const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
   
   const availableColors = product.colorDetails || [{ value: "#000000", name: "Black" }]
   const hasMultipleColors = availableColors.length > 1
+  
+  const currentSelectedColorId = selectedColorId || availableColors[0]?.id || availableColors[0]?.name
+  const currentColor = availableColors.find(color => 
+    (color.id || color.name) === currentSelectedColorId
+  ) || availableColors[0]
 
   if (!hasMultipleColors) {
     return (
@@ -33,13 +40,13 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
 
   return (
     <div className="mt-2">
-      <div className="relative inline-flex items-center gap-2 px-3 py-2 bg-gray-50 border border-black">
+      <div className="relative inline-flex items-center gap-2 px-3 py-2 bg-gray-50 border border-black min-w-fit">
         <div className="flex items-center gap-1">
           <div 
             className="w-4 h-4 rounded-full border border-black/30" 
-            style={{ backgroundColor: availableColors[0].value || "#000000" }} 
+            style={{ backgroundColor: currentColor.value || "#000000" }} 
           />
-          <span className="text-xs text-gray-700">{availableColors[0].name || "Black"}</span>
+          <span className="text-xs text-gray-700">{currentColor.name || "Black"}</span>
         </div>
         
         <button
@@ -68,19 +75,25 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
         </button>
 
         {colorPopup?.productId === product.id && isDesktop && (
-          <div className="absolute -top-32 left-0 z-50 bg-white border-2 border-gray-600 shadow-2xl w-52">
+          <div className="absolute -top-32 left-0 z-50 bg-white border-2 border-gray-600 shadow-2xl" style={{ width: Math.max(208, availableColors.length * 44 + 32) }}>
             <div className="p-3">
               <h4 className="text-sm font-semibold text-grey mb-3 pb-2 border-b border-black-200">
-                Color: {availableColors[0]?.name || "Black"}
+                Color: {currentColor?.name || "Black"}
               </h4>
-              <div className="flex gap-2 mb-2">
+              <div className="flex gap-2 mb-2 flex-wrap">
                 {availableColors.map((color: any) => (
                   <div 
-                    key={color.id} 
-                    className="cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-md" 
+                    key={color.id || color.name} 
+                    className={cn(
+                      "cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-md",
+                      (color.id || color.name) === currentSelectedColorId && "ring-2 ring-black ring-offset-1"
+                    )}
                     onClick={(e) => { 
                       e.preventDefault(); 
                       e.stopPropagation(); 
+                      if (onColorSelect) {
+                        onColorSelect(color.id || color.name, product.id)
+                      }
                       setColorPopup(null) 
                     }}
                   >
@@ -113,11 +126,17 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
                 <div className="grid grid-cols-4 gap-4">
                   {availableColors.map((color: any) => (
                     <div 
-                      key={color.id} 
-                      className="flex flex-col items-center gap-2 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer" 
+                      key={color.id || color.name} 
+                      className={cn(
+                        "flex flex-col items-center gap-2 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer",
+                        (color.id || color.name) === currentSelectedColorId && "bg-gray-100 ring-2 ring-black ring-offset-1"
+                      )}
                       onClick={(e) => { 
                         e.preventDefault(); 
                         e.stopPropagation(); 
+                        if (onColorSelect) {
+                          onColorSelect(color.id || color.name, product.id)
+                        }
                         setColorPopup(null) 
                       }}
                     >

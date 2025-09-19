@@ -24,6 +24,8 @@ const nextConfig = {
       "res.cloudinary.com",
       "outjackets.com",
       "d1.fineyst.com",
+      "www.fineystjackets.com",
+      "fineystjackets.com",
       "jacket.us.com",
       "192.168.100.8",
       "images.unsplash.com",
@@ -33,6 +35,16 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "d1.fineyst.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.fineystjackets.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "fineystjackets.com",
         pathname: "/**",
       },
       {

@@ -350,23 +350,32 @@ export default function ProductCarousel({
                               if (isTransitioning.current) return;
                               isTransitioning.current = true;
                               setActiveIndex(i);
-                            } else {
-                              if (typeof window !== 'undefined') {
-                                window.dispatchEvent(new CustomEvent('route-loading:start'));
-                              }
-                              router.push(`/product/${product.slug}`);
                             }
                           }}
                         >
-                          <img
-                            src={getImageUrl(product)}
-                            alt={product.name}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.currentTarget.src = "/placeholder.svg";
-                            }}
-                            draggable="false"
-                          />
+                          {isCenter ? (
+                            <Link href={`/product/${product.slug}`}>
+                              <img
+                                src={getImageUrl(product)}
+                                alt={product.name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.src = "/placeholder.svg";
+                                }}
+                                draggable="false"
+                              />
+                            </Link>
+                          ) : (
+                            <img
+                              src={getImageUrl(product)}
+                              alt={product.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = "/placeholder.svg";
+                              }}
+                              draggable="false"
+                            />
+                          )}
                         </motion.div>
                         <div className="text-center mt-3 sm:mt-4 w-full px-1">
                           <h3 className="font-semibold text-xs sm:text-sm text-gray-800 whitespace-nowrap overflow-hidden ">
@@ -443,13 +452,6 @@ export default function ProductCarousel({
                           marginLeft,
                           marginRight,
                         }}
-                        onClick={() => {
-                          if (isScrolling) return;
-                          if (typeof window !== 'undefined') {
-                            window.dispatchEvent(new CustomEvent('route-loading:start'));
-                          }
-                          router.push(`/product/${product.slug}`);
-                        }}
                       >
                         <motion.div
                           animate={{
@@ -460,20 +462,22 @@ export default function ProductCarousel({
                             isJumping ? { duration: 0 } : SPRING_OPTIONS
                           }
                         >
-                          <div
-                            className="relative group overflow-hidden bg-gray-100"
-                            style={{ aspectRatio: "280/420" }}
-                          >
-                            <img
-                              src={getImageUrl(product)}
-                              alt={product.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                              onError={(e) => {
-                                e.currentTarget.src = "/placeholder.svg";
-                              }}
-                              draggable="false"
-                            />
-                          </div>
+                          <Link href={`/product/${product.slug}`}>
+                            <div
+                              className="relative group overflow-hidden bg-gray-100"
+                              style={{ aspectRatio: "280/420" }}
+                            >
+                              <img
+                                src={getImageUrl(product)}
+                                alt={product.name}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                onError={(e) => {
+                                  e.currentTarget.src = "/placeholder.svg";
+                                }}
+                                draggable="false"
+                              />
+                            </div>
+                          </Link>
                           <div className="text-center mt-2 sm:mt-3 md:mt-4 px-1 sm:px-2">
                             <h3
                               className={`font-bold text-xs sm:text-sm md:text-base text-black uppercase leading-tight mb-1 whitespace-nowrap overflow-hidden  group-hover:text-[#2b2b2b] transition-colors ${avertaBlack.className}`}

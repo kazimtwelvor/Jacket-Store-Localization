@@ -15,15 +15,6 @@ export function middleware(request: NextRequest) {
     return response
   }
 
-  if (!pathname.startsWith("/_next") && !pathname.startsWith("/api") && !pathname.includes(".")) {
-    const countryFromUrl = searchParams.get("cn")
-
-    if (!countryFromUrl || countryFromUrl.toLowerCase() !== 'us') {
-      const url = request.nextUrl.clone()
-      url.searchParams.set("cn", "us")
-      return NextResponse.redirect(url)
-    }
-  }
 
   return NextResponse.next()
 }
