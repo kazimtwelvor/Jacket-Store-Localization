@@ -23,6 +23,8 @@ interface ProductCardProps {
   loadingProducts: Set<string>
   visibleProducts: string[]
   wasDraggedRef: React.MutableRefObject<boolean>
+  openColorModal?: string | null
+  setOpenColorModal?: (productId: string | null) => void
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -40,6 +42,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   loadingProducts,
   visibleProducts,
   wasDraggedRef,
+  openColorModal,
+  setOpenColorModal,
 }) => {
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -51,8 +55,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   
   const isHovered = hoveredProduct === `grid-${product.id}`
   const hasMultipleImages = product.images && product.images.length > 1
-  const availableSizes = product.sizeDetails || product.sizes || []
-  const availableColors = product.colorDetails || product.colors || []
+  const availableSizes = product.sizeDetails || []
+  const availableColors = product.colorDetails || []
+  
+  // Debug logging
+  console.log('ProductCard Debug:', {
+    productId: product.id,
+    productName: product.name,
+    hasImages: !!product.images,
+    imagesLength: product.images?.length,
+    firstImageUrl: product.images?.[0]?.image?.url,
+    productKeys: Object.keys(product)
+  })
 
   return (
     <motion.div
@@ -169,6 +183,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <ColorSelector
           product={product}
           isDesktop={isDesktop}
+          openColorModal={openColorModal}
+          setOpenColorModal={setOpenColorModal}
         />
       </div>
     </motion.div>

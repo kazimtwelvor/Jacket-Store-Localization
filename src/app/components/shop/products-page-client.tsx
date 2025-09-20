@@ -147,6 +147,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     isOpen: boolean;
     product: Product | null;
   }>({ isOpen: false, product: null });
+  const [openColorModal, setOpenColorModal] = useState<string | null>(null);
   const [currentProducts, setCurrentProducts] = useState<Product[]>(
     initialProductsData.products
   );
@@ -873,6 +874,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
                     loadingProducts={loadingProducts}
                     visibleProducts={visibleProducts}
                     wasDraggedRef={wasDraggedRef}
+                    openColorModal={openColorModal}
+                    setOpenColorModal={setOpenColorModal}
                   />
                 ))}
               </div>

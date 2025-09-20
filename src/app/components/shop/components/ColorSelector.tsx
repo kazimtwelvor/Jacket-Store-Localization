@@ -8,11 +8,14 @@ interface ColorSelectorProps {
   isDesktop: boolean
   selectedColorId?: string
   onColorSelect?: (colorId: string, productId: string) => void
+  openColorModal?: string | null
+  setOpenColorModal?: (productId: string | null) => void
 }
 
-export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop, selectedColorId, onColorSelect }) => {
-  const [colorPopup, setColorPopup] = useState<{ productId: string; rect: DOMRect } | null>(null)
+export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop, selectedColorId, onColorSelect, openColorModal, setOpenColorModal }) => {
   const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
+  
+  const isModalOpen = openColorModal === product.id
   
   const availableColors = product.colorDetails || [{ value: "#000000", name: "Black" }]
   const hasMultipleColors = availableColors.length > 1
@@ -56,30 +59,36 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
           data-color-trigger
           onClick={(e) => {
             e.stopPropagation()
-            if (colorPopup?.productId === product.id) {
-              setColorPopup(null)
-            } else {
-              const button = e.currentTarget
-              const rect = button.getBoundingClientRect()
-              setColorPopup({ productId: product.id, rect })
+            if (setOpenColorModal) {
+              if (isModalOpen) {
+                setOpenColorModal(null)
+              } else {
+                setOpenColorModal(product.id)
+              }
             }
           }}
-          className={cn(
-            "text-xs transition-colors", 
-            colorPopup?.productId === product.id && isDesktop 
-              ? "absolute inset-0 flex items-center justify-center bg-black text-white border border-black font-medium" 
-              : "text-gray-500 hover:text-gray-700 underline"
-          )}
+          className="text-xs text-gray-500 hover:text-gray-700 underline transition-colors"
         >
-          {colorPopup?.productId === product.id && isDesktop ? "Hide colors" : `+${availableColors.length - 1} more`}
+          {`+${availableColors.length - 1} more`}
         </button>
 
-        {colorPopup?.productId === product.id && isDesktop && (
-          <div className="absolute -top-32 left-0 z-50 bg-white border-2 border-gray-600 shadow-2xl" style={{ width: Math.max(208, availableColors.length * 44 + 32) }}>
+        {isModalOpen && isDesktop && (
+          <div className="absolute -top-32 left-0 z-[60] bg-white border-2 border-gray-600 shadow-2xl" style={{ width: Math.max(208, availableColors.length * 44 + 32) }}>
             <div className="p-3">
-              <h4 className="text-sm font-semibold text-grey mb-3 pb-2 border-b border-black-200">
-                Color: {currentColor?.name || "Black"}
-              </h4>
+              <div className="flex items-center justify-between mb-3 pb-2 border-b border-black-200">
+                <h4 className="text-sm font-semibold text-grey">
+                  Color: {currentColor?.name || "Black"}
+                </h4>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    if (setOpenColorModal) setOpenColorModal(null)
+                  }}
+                  className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X size={16} />
+                </button>
+              </div>
               <div className="flex gap-2 mb-2 flex-wrap">
                 {availableColors.map((color: any) => (
                   <div 
@@ -94,7 +103,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
                       if (onColorSelect) {
                         onColorSelect(color.id || color.name, product.id)
                       }
-                      setColorPopup(null) 
+                      if (setOpenColorModal) setOpenColorModal(null)
                     }}
                   >
                     <div className="w-10 h-10 rounded-full border-2 border-gray-600 shadow-sm">
@@ -110,13 +119,13 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
           </div>
         )}
 
-        {colorPopup?.productId === product.id && !isDesktop && (
+        {isModalOpen && !isDesktop && (
           <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-center z-50">
             <div className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto">
               <div className="flex items-center justify-between p-5">
                 <h2 className="text-lg font-bold">Select Color</h2>
                 <button 
-                  onClick={() => setColorPopup(null)} 
+                  onClick={() => setOpenColorModal && setOpenColorModal(null)} 
                   className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
                   <X size={20} />
@@ -137,7 +146,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
                         if (onColorSelect) {
                           onColorSelect(color.id || color.name, product.id)
                         }
-                        setColorPopup(null) 
+                        if (setOpenColorModal) setOpenColorModal(null)
                       }}
                     >
                       <div className="w-12 h-12 rounded-full border-2 border-gray-300">
