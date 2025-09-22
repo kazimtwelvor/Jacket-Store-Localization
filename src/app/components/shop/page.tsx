@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+// import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import ProductsPageClient from "./products-page-client";
 import getProducts from "../../actions/get-products";
@@ -132,9 +132,9 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       />
       <div className="bg-white min-h-screen flex flex-col">
       <main className="flex-1">
-        <Suspense
+        {/* <Suspense
           fallback={<div className="text-center py-20 text-gray-600"></div>}
-        >
+        > */}
           <ProductsPageClient
             initialProductsData={finalProductsData}
             categories={finalCategories}
@@ -142,7 +142,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             sizes={finalSizes}
             keywordCategories={finalKeywordCategories}
           />
-        </Suspense>
+        {/* </Suspense> */}
       </main>
 
       <ProductCategory />
