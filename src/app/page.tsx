@@ -3,8 +3,8 @@ import SlideBanners from "@/src/app/components/home-page-components/banners/slid
 import WelcomeAccordionSection from "./components/home-page-components/welcome-section/welcome-section-server";
 import ProductCategoryServer from "./components/home-page-components/product-category/product-category-server";
 import SignatureSectionServer from "./components/home-page-components/signature-styles/signature-section-server";
-import ProductCarousel from "./components/home-page-components/product-category/product-carousel";
-import JacketColorCollection from "./components/home-page-components/product-category/jacket-color-collection";
+import ProductCarouselServer from "./components/home-page-components/product-category/product-carousel-server";
+import JacketColorCollectionServer from "./components/home-page-components/product-category/jacket-color-collection-server";
 import AboutSection from "./components/home-page-components/about-us/about-us";
 import WhyChooseSlider from "./components/home-page-components/why-choose-slider/why-choose-slider";
 import FAQ from "./components/home-page-components/faqs/faq";
@@ -123,8 +123,8 @@ export default function Home() {
       <WelcomeAccordionSection />
       <ProductCategoryServer />
       <SignatureSectionServer />
-      <ProductCarousel />
-      <JacketColorCollection />
+      <ProductCarouselServer />
+      <JacketColorCollectionServer />
       <AboutSection />
       <WhyChooseSlider />
       <FAQ />
