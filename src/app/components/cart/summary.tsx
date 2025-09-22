@@ -5,12 +5,12 @@
 import Button from "@/src/app/ui/button"
 import Currency from "@/src/app/ui/currency"
 import { useCart } from "@/src/app/contexts/CartContext"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
 
 const Summary = () => {
-  const searchParams = useSearchParams();
+  // Removed useSearchParams to avoid SSR issues
   const { items, clearCart } = useCart();
   const totalPrice = items.reduce(
     (total, item) => total + Number(item.price),
@@ -20,14 +20,17 @@ const Summary = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (searchParams.get("success")) {
+    if (typeof window === "undefined") return;
+    
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success")) {
       toast.success("Payment completed.");
       clearCart();
     }
-    if (searchParams.get("canceled")) {
+    if (params.get("canceled")) {
       toast.error("Something went wrong.");
     }
-  }, [searchParams, clearCart]);
+  }, [clearCart]);
 
   const onCheckout = async () => {
     try {

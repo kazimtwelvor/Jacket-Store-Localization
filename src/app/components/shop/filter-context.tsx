@@ -1,7 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 // Define filter types
 export type FilterState = {
@@ -33,15 +33,17 @@ const FilterContext = createContext<FilterContextType | undefined>(undefined)
 export function FilterProvider({ children }: { children: ReactNode }) {
   const [filters, setFilters] = useState<FilterState>(initialFilters)
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   // Load filters from URL on initial render
   useEffect(() => {
-    const materials = searchParams.get("materials")?.split(",").filter(Boolean) || []
-    const style = searchParams.get("style")?.split(",").filter(Boolean) || []
-    const gender = searchParams.get("gender")?.split(",").filter(Boolean) || []
-    const colors = searchParams.get("color")?.split(",").filter(Boolean) || []
-    const sizes = searchParams.get("size")?.split(",").filter(Boolean) || []
+    if (typeof window === "undefined") return;
+    
+    const params = new URLSearchParams(window.location.search);
+    const materials = params.get("materials")?.split(",").filter(Boolean) || []
+    const style = params.get("style")?.split(",").filter(Boolean) || []
+    const gender = params.get("gender")?.split(",").filter(Boolean) || []
+    const colors = params.get("color")?.split(",").filter(Boolean) || []
+    const sizes = params.get("size")?.split(",").filter(Boolean) || []
 
     setFilters({
       materials,
@@ -50,7 +52,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
       colors,
       sizes
     })
-  }, [searchParams])
+  }, [])
 
   // Toggle a filter value
   const setFilter = (type: keyof FilterState, value: string) => {
@@ -71,7 +73,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
 
   // Apply filters by updating URL
   const applyFilters = () => {
-    const params = new URLSearchParams(searchParams.toString())
+    const params = new URLSearchParams(window.location.search)
     
     // Clear existing filter params
     params.delete("materials")

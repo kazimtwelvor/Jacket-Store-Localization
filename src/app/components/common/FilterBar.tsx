@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Filter, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
@@ -56,7 +56,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   isDesktop,
 }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const filterBarRef = useRef<HTMLDivElement>(null);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
@@ -106,7 +105,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     if (handleSortChange) {
       handleSortChange(sortValue);
     } else {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(window.location.search);
       params.set("sort", sortValue);
       router.push(`?${params.toString()}`, { scroll: false });
       onSortChange?.(sortValue);

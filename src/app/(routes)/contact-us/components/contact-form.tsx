@@ -6,6 +6,7 @@ import { Button } from "@/src/app/ui/button"
 import { submitContactForm, type ContactFormData } from "@/src/lib/services/forms"
 
 export default function ContactForm() {
+  
   const [formData, setFormData] = useState<ContactFormData>({
     firstName: '',
     lastName: '',
@@ -14,6 +15,7 @@ export default function ContactForm() {
     message: '',
     agreeToPrivacyPolicy: false
   })
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')

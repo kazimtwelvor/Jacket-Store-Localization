@@ -6,12 +6,14 @@ const getCachedProduct = unstable_cache(
   async (slug: string): Promise<Product | null> => {
     try {
       return await fetchJson<Product>(`/api/products/${slug}`, {
-        next: { revalidate: 3600 }
+        next: { revalidate: 3600 },
+        timeoutMs: 10000
       })
     } catch (error) {
       const { products } = await fetchJson<{ products: Product[] }>("/products", {
         query: { search: slug, limit: 100 },
-        next: { revalidate: 3600 }
+        next: { revalidate: 3600 },
+        timeoutMs: 10000
       })
       
       const product = products.find(p => 

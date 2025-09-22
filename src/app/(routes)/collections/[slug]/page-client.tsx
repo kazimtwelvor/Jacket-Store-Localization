@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from "react"
 import Image from "next/image"
 
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { X } from "lucide-react"
 import { motion, AnimatePresence, useMotionValue, animate, PanInfo } from "framer-motion"
 import WhatsMySize from "@/src/components/WhatsMySize"
@@ -210,28 +210,27 @@ const getProductSlug = (product: Product): string => {
 
 const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category, products, slug, allCategories, keywordCategories = [], isKeywordCategory = false }) => {
     const router = useRouter()
-    const searchParams = useSearchParams()
+    // Removed useSearchParams to avoid SSR issues
     const wasDraggedRef = useRef(false);
     const isDesktop = useMediaQuery('(min-width: 768px)');
     const [mounted, setMounted] = useState(false);
-    const initialSort = searchParams.get('sort') || 'popular'
-    const [currentSort, setCurrentSort] = useState(initialSort)
-    const urlSizes = searchParams.get('sizes')?.split(',').filter(Boolean) || []
-    const urlColors = searchParams.get('colors')?.split(',').filter(Boolean) || []
+    const [currentSort, setCurrentSort] = useState('popular')
+    const [urlSizes, setUrlSizes] = useState<string[]>([])
+    const [urlColors, setUrlColors] = useState<string[]>([])
     const [filterSidebarOpen, setFilterSidebarOpen] = useState(false)
     const [categoriesSidebarOpen, setCategoriesSidebarOpen] = useState(false)
     const [categorySliderOpen, setCategorySliderOpen] = useState(false)
     const [sortDropdownOpen, setSortDropdownOpen] = useState(false)
     const [sizeModalOpen, setSizeModalOpen] = useState(false)
-    const urlMaterials = searchParams.get('materials')?.split(',').filter(Boolean) || []
-    const urlStyles = searchParams.get('styles')?.split(',').filter(Boolean) || []
-    const urlGenders = searchParams.get('genders')?.split(',').filter(Boolean) || []
+    const [urlMaterials, setUrlMaterials] = useState<string[]>([])
+    const [urlStyles, setUrlStyles] = useState<string[]>([])
+    const [urlGenders, setUrlGenders] = useState<string[]>([])
     const [selectedFilters, setSelectedFilters] = useState({
-        sizes: urlSizes,
-        colors: urlColors,
-        materials: urlMaterials,
-        styles: urlStyles,
-        genders: urlGenders,
+        sizes: [],
+        colors: [],
+        materials: [],
+        styles: [],
+        genders: [],
     })
     const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
     const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
@@ -457,27 +456,47 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
             sizes: [],
             colors: [],
         })
-        const params = new URLSearchParams(searchParams.toString())
-        params.delete('materials')
-        params.delete('styles')
-        params.delete('genders')
-        params.delete('sizes')
-        params.delete('colors')
-        router.push(`?${params.toString()}`, { scroll: false })
+        // Clear URL parameters
+        router.push(window.location.pathname, { scroll: false })
     }
     const handleSortChange = (sortBy: string) => {
         setCurrentSort(sortBy)
-        const params = new URLSearchParams(searchParams.toString())
+        // Update URL with sort parameter
+        const params = new URLSearchParams(window.location.search)
         params.set('sort', sortBy)
         router.push(`?${params.toString()}`, { scroll: false })
     }
 
     useEffect(() => {
-        const s = searchParams.get('sort') || 'popular'
-        if (s !== currentSort) setCurrentSort(s)
-    }, [searchParams])
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search)
+            const s = params.get('sort') || 'popular'
+            if (s !== currentSort) setCurrentSort(s)
+            
+            const sizes = params.get('sizes')?.split(',').filter(Boolean) || []
+            const colors = params.get('colors')?.split(',').filter(Boolean) || []
+            const materials = params.get('materials')?.split(',').filter(Boolean) || []
+            const styles = params.get('styles')?.split(',').filter(Boolean) || []
+            const genders = params.get('genders')?.split(',').filter(Boolean) || []
+            
+            setUrlSizes(sizes)
+            setUrlColors(colors)
+            setUrlMaterials(materials)
+            setUrlStyles(styles)
+            setUrlGenders(genders)
+            
+            // Update selected filters
+            setSelectedFilters({
+                sizes,
+                colors,
+                materials,
+                styles,
+                genders,
+            })
+        }
+    }, [currentSort])
     const updateFiltersInURL = (newFilters: { materials: string[], styles: string[], genders: string[], sizes: string[], colors: string[] }) => {
-        const params = new URLSearchParams(searchParams.toString())
+        const params = new URLSearchParams(window.location.search)
         if (newFilters.materials.length > 0) {
             params.set('materials', newFilters.materials.join(','))
         } else {
@@ -1041,13 +1060,27 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                                                             )}
 
                                                             {colorPopup?.productKey === `${product.id}-${index}` && !isDesktop && (
-                                                                <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-center z-50">
-                                                                    <div className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto">
+                                                                <div 
+                                                                    className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-center z-50"
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault()
+                                                                        e.stopPropagation()
+                                                                        setColorPopup(null)
+                                                                    }}
+                                                                >
+                                                                    <div 
+                                                                        className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto"
+                                                                        onClick={(e) => e.stopPropagation()}
+                                                                    >
                                                                         {/* Header */}
                                                                         <div className="flex items-center justify-between p-5 ">
                                                                             <h2 className="text-lg font-bold">Select Color</h2>
                                                                             <button
-                                                                                onClick={() => setColorPopup(null)}
+                                                                                onClick={(e) => {
+                                                                                    e.preventDefault()
+                                                                                    e.stopPropagation()
+                                                                                    setColorPopup(null)
+                                                                                }}
                                                                                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                                                                             >
                                                                                 <X size={20} />
