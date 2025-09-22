@@ -9,8 +9,8 @@ import AboutUsServer from "./components/home-page-components/about-us/about-us-s
 import WhyChooseSliderServer from "./components/home-page-components/why-choose-slider/why-choose-slider-server";
 import FAQServer from "./components/home-page-components/faqs/faq-server";
 import BlogsShowcaseServer from "./components/home-page-components/blog-showcase/blog-showcase-server";
-import GlobalFashionPartners from "./components/home-page-components/global-fashion-partner/global-fashion-partner";
-import AnimatedReviewsSection from "./components/home-page-components/animated-review-section/animated-review-section";
+import GlobalFashionPartnerServer from "./components/home-page-components/global-fashion-partner/global-fashion-partner-server";
+import AnimatedReviewSectionServer from "./components/home-page-components/animated-review-section/animated-review-section-server";
 
 export const metadata: Metadata = {
   title: 'Premium Jackets & Outerwear | Jacket.us.com',
@@ -129,8 +129,8 @@ export default function Home() {
       <WhyChooseSliderServer />
       <FAQServer />
       <BlogsShowcaseServer />
-      <GlobalFashionPartners />
-      <AnimatedReviewsSection />
+      <GlobalFashionPartnerServer />
+      <AnimatedReviewSectionServer />
     </>
   );
 }
