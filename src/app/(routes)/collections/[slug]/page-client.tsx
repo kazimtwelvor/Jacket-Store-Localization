@@ -1041,13 +1041,27 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                                                             )}
 
                                                             {colorPopup?.productKey === `${product.id}-${index}` && !isDesktop && (
-                                                                <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-center z-50">
-                                                                    <div className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto">
+                                                                <div 
+                                                                    className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-center z-50"
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault()
+                                                                        e.stopPropagation()
+                                                                        setColorPopup(null)
+                                                                    }}
+                                                                >
+                                                                    <div 
+                                                                        className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto"
+                                                                        onClick={(e) => e.stopPropagation()}
+                                                                    >
                                                                         {/* Header */}
                                                                         <div className="flex items-center justify-between p-5 ">
                                                                             <h2 className="text-lg font-bold">Select Color</h2>
                                                                             <button
-                                                                                onClick={() => setColorPopup(null)}
+                                                                                onClick={(e) => {
+                                                                                    e.preventDefault()
+                                                                                    e.stopPropagation()
+                                                                                    setColorPopup(null)
+                                                                                }}
                                                                                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                                                                             >
                                                                                 <X size={20} />

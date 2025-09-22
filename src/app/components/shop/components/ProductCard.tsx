@@ -58,15 +58,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const availableSizes = product.sizeDetails || []
   const availableColors = product.colorDetails || []
   
-  // Debug logging
-  console.log('ProductCard Debug:', {
-    productId: product.id,
-    productName: product.name,
-    hasImages: !!product.images,
-    imagesLength: product.images?.length,
-    firstImageUrl: product.images?.[0]?.image?.url,
-    productKeys: Object.keys(product)
-  })
+  
 
   return (
     <motion.div
