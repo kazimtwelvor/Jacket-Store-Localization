@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import SlideBanners from "@/src/app/components/home-page-components/banners/slide-banners-server";
 import WelcomeAccordionSection from "./components/home-page-components/welcome-section/welcome-section-server";
-import ProductCategory from "./components/home-page-components/product-category/product-category";
-import SignatureStylesSection from "./components/home-page-components/signature-styles/signature-section";
+import ProductCategoryServer from "./components/home-page-components/product-category/product-category-server";
+import SignatureSectionServer from "./components/home-page-components/signature-styles/signature-section-server";
 import ProductCarousel from "./components/home-page-components/product-category/product-carousel";
 import JacketColorCollection from "./components/home-page-components/product-category/jacket-color-collection";
 import AboutSection from "./components/home-page-components/about-us/about-us";
@@ -121,8 +121,8 @@ export default function Home() {
         <SlideBanners />
       </section>
       <WelcomeAccordionSection />
-      <ProductCategory />
-      <SignatureStylesSection />
+      <ProductCategoryServer />
+      <SignatureSectionServer />
       <ProductCarousel />
       <JacketColorCollection />
       <AboutSection />
