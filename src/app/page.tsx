@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import SlideBanners from "@/src/app/components/home-page-components/banners/slide-banners";
-import WelcomeAccordionSection from "./components/home-page-components/welcome-section/welcome-section";
+import SlideBanners from "@/src/app/components/home-page-components/banners/slide-banners-server";
+import WelcomeAccordionSection from "./components/home-page-components/welcome-section/welcome-section-server";
 import ProductCategory from "./components/home-page-components/product-category/product-category";
 import SignatureStylesSection from "./components/home-page-components/signature-styles/signature-section";
 import ProductCarousel from "./components/home-page-components/product-category/product-carousel";
