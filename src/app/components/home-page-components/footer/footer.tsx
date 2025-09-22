@@ -8,7 +8,6 @@ import { avertaBlack, avertaBold } from "@/src/lib/fonts"
 import { submitNewsletterForm } from "@/src/lib/services/forms"
 
 
-
 const Footer = () => {
     const [emailInput, setEmailInput] = useState("")
     const [expandedSection, setExpandedSection] = useState("")

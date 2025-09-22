@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Eye,
@@ -24,7 +24,7 @@ import { getCountryDataList } from "countries-list";
 import GoogleSignUp from "@/src/app/components/GoogleSignUp";
 import EmailVerification from "@/src/app/components/EmailVerification";
 
-export default function LoginPage() {
+function LoginContent() {
   const [activeTab, setActiveTab] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -1174,4 +1174,12 @@ export default function LoginPage() {
       </div>
     </div>
   );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
+  )
 }

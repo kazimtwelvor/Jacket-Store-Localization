@@ -233,3 +233,4 @@ export default function AnimatedReviewSectionClient({ reviews }: AnimatedReviewS
     </section>
   );
 }
+
