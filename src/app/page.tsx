@@ -7,8 +7,8 @@ import ProductCarouselServer from "./components/home-page-components/product-cat
 import JacketColorCollectionServer from "./components/home-page-components/product-category/jacket-color-collection-server";
 import AboutUsServer from "./components/home-page-components/about-us/about-us-server";
 import WhyChooseSliderServer from "./components/home-page-components/why-choose-slider/why-choose-slider-server";
-import FAQ from "./components/home-page-components/faqs/faq";
-import BlogsShowcase from "./components/home-page-components/blog-showcase/blog-showcase";
+import FAQServer from "./components/home-page-components/faqs/faq-server";
+import BlogsShowcaseServer from "./components/home-page-components/blog-showcase/blog-showcase-server";
 import GlobalFashionPartners from "./components/home-page-components/global-fashion-partner/global-fashion-partner";
 import AnimatedReviewsSection from "./components/home-page-components/animated-review-section/animated-review-section";
 
@@ -127,8 +127,8 @@ export default function Home() {
       <JacketColorCollectionServer />
       <AboutUsServer />
       <WhyChooseSliderServer />
-      <FAQ />
-      <BlogsShowcase />
+      <FAQServer />
+      <BlogsShowcaseServer />
       <GlobalFashionPartners />
       <AnimatedReviewsSection />
     </>
