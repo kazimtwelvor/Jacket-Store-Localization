@@ -5,8 +5,8 @@ import ProductCategoryServer from "./components/home-page-components/product-cat
 import SignatureSectionServer from "./components/home-page-components/signature-styles/signature-section-server";
 import ProductCarouselServer from "./components/home-page-components/product-category/product-carousel-server";
 import JacketColorCollectionServer from "./components/home-page-components/product-category/jacket-color-collection-server";
-import AboutSection from "./components/home-page-components/about-us/about-us";
-import WhyChooseSlider from "./components/home-page-components/why-choose-slider/why-choose-slider";
+import AboutUsServer from "./components/home-page-components/about-us/about-us-server";
+import WhyChooseSliderServer from "./components/home-page-components/why-choose-slider/why-choose-slider-server";
 import FAQ from "./components/home-page-components/faqs/faq";
 import BlogsShowcase from "./components/home-page-components/blog-showcase/blog-showcase";
 import GlobalFashionPartners from "./components/home-page-components/global-fashion-partner/global-fashion-partner";
@@ -125,8 +125,8 @@ export default function Home() {
       <SignatureSectionServer />
       <ProductCarouselServer />
       <JacketColorCollectionServer />
-      <AboutSection />
-      <WhyChooseSlider />
+      <AboutUsServer />
+      <WhyChooseSliderServer />
       <FAQ />
       <BlogsShowcase />
       <GlobalFashionPartners />
