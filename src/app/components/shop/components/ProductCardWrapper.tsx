@@ -28,9 +28,16 @@ export const ProductCardWrapper: React.FC<ProductCardWrapperProps> = (props) => 
   const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
-    setIsHydrated(true)
+    // Use a small delay to ensure proper hydration
+    const timer = setTimeout(() => {
+      setIsHydrated(true)
+    }, 0)
+    
+    return () => clearTimeout(timer)
   }, [])
 
+  // For no-JS compatibility, always show fallback initially
+  // After hydration, switch to full component
   if (!isHydrated) {
     return <ProductCardFallback {...props} />
   }

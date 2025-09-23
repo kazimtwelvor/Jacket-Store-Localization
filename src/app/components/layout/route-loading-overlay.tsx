@@ -82,11 +82,22 @@ function RouteLoadingOverlayContent() {
         });
       }
     };
+
+    const handleProgrammaticEnd = () => {
+      loadingRef.current = false;
+      setIsLoading(false);
+    };
+
     window.addEventListener("route-loading:start", handleProgrammaticStart);
+    window.addEventListener("route-loading:end", handleProgrammaticEnd);
     return () => {
       window.removeEventListener(
         "route-loading:start",
         handleProgrammaticStart
+      );
+      window.removeEventListener(
+        "route-loading:end",
+        handleProgrammaticEnd
       );
     };
   }, []);
