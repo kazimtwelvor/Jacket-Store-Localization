@@ -50,7 +50,7 @@ const DRAG_BUFFER = 10;
 
 const throttle = (func: Function, limit: number) => {
     let inThrottle: boolean;
-    return function(this: any, ...args: any[]) {
+    return function (this: any, ...args: any[]) {
         if (!inThrottle) {
             func.apply(this, args);
             inThrottle = true;
@@ -253,7 +253,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
 
     const { addToCart } = useCart()
     const wishlist = useWishlist()
-    const productsPerPage = 20 
+    const productsPerPage = 20
     const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
     const [currentProducts, setCurrentProducts] = useState<Product[]>(products)
     const [currentPage, setCurrentPage] = useState(1)
@@ -270,7 +270,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
     }
 
     const sizes = ["XS", "S", "M", "L", "XL", "XXL"]
-    
+
     // Colors: build name->value map from products (if available), but expose names list to UI to keep logic unchanged
     const buildColorNameToValueMap = (): Map<string, string> => {
         const map = new Map<string, string>()
@@ -294,7 +294,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
     }
     const colorNameToValue = buildColorNameToValueMap()
     const colors = Array.from(colorNameToValue.keys())
-    
+
     const materials = ["Leather", "Denim", "Cotton", "Polyester", "Wool", "Suede"]
     const styles = ["Bomber", "Biker", "Varsity", "Aviator", "Puffer", "Trench"]
     const genders = ["Men", "Women", "Unisex"]
@@ -318,14 +318,14 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
 
     const hasActiveFilters = selectedFilters.materials.length > 0 || selectedFilters.styles.length > 0 || selectedFilters.genders.length > 0 || selectedFilters.sizes.length > 0 || selectedFilters.colors.length > 0
     const totalActiveFiltersCount = selectedFilters.materials.length + selectedFilters.styles.length + selectedFilters.genders.length + selectedFilters.sizes.length + selectedFilters.colors.length
-    
+
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             updateFiltersInURL(selectedFilters)
         }, 300) // Debounce filter updates
         return () => clearTimeout(timeoutId)
     }, [selectedFilters.materials, selectedFilters.styles, selectedFilters.genders, selectedFilters.sizes, selectedFilters.colors])
-    
+
     useEffect(() => {
         setMounted(true)
         if (products && products.length > 0) {
@@ -473,19 +473,19 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
             const params = new URLSearchParams(window.location.search)
             const s = params.get('sort') || 'popular'
             setCurrentSort(s)
-            
+
             const sizes = params.get('sizes')?.split(',').filter(Boolean) || []
             const colors = params.get('colors')?.split(',').filter(Boolean) || []
             const materials = params.get('materials')?.split(',').filter(Boolean) || []
             const styles = params.get('styles')?.split(',').filter(Boolean) || []
             const genders = params.get('genders')?.split(',').filter(Boolean) || []
-            
+
             setUrlSizes(sizes)
             setUrlColors(colors)
             setUrlMaterials(materials)
             setUrlStyles(styles)
             setUrlGenders(genders)
-            
+
             // Update selected filters
             setSelectedFilters({
                 sizes,
@@ -495,7 +495,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                 genders,
             })
         }
-    }, []) 
+    }, [])
     const updateFiltersInURL = (newFilters: { materials: string[], styles: string[], genders: string[], sizes: string[], colors: string[] }) => {
         const params = new URLSearchParams(window.location.search)
         if (newFilters.materials.length > 0) {
@@ -649,8 +649,20 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
     const handlePageChange = (page: number) => {
         setIsPageLoading(true)
         setCurrentPage(page)
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        setTimeout(() => setIsPageLoading(false), 100)
+
+        setTimeout(() => {
+            const filterBarElement = document.querySelector('[data-filter-bar]') ||
+                filterBarWrapperRef.current;
+
+            if (filterBarElement) {
+                const elementTop = filterBarElement.getBoundingClientRect().top + window.pageYOffset - 80;
+                window.scrollTo({ top: elementTop, behavior: 'smooth' });
+            } else {
+                window.scrollTo({ top: 400, behavior: 'smooth' });
+            }
+        }, 100)
+
+        setTimeout(() => setIsPageLoading(false), 200)
     }
     let parsedCategoryContent: any = category.categoryContent;
     if (typeof category.categoryContent === 'string') {
@@ -674,18 +686,18 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
             imageUrl = category.imageUrl || '';
         }
         imageUrl = getLocalImageUrl(imageUrl)
-        
+
         // Find the proper slug for the current category
-        const matchingKeywordCategory = keywordCategories.find(kc => 
-            kc.id === category.id || 
+        const matchingKeywordCategory = keywordCategories.find(kc =>
+            kc.id === category.id ||
             kc.name.toLowerCase() === category.name.toLowerCase()
         );
         const matchingRegularCategory = allCategories.find(c => c.id === category.id);
-        const properSlug = matchingKeywordCategory?.slug || 
-                          matchingRegularCategory?.slug || 
-                          category.slug ||
-                          category.name.toLowerCase().replace(/\s+/g, '-');
-        
+        const properSlug = matchingKeywordCategory?.slug ||
+            matchingRegularCategory?.slug ||
+            category.slug ||
+            category.name.toLowerCase().replace(/\s+/g, '-');
+
         currentCategory = {
             categoryId: category.id,
             categoryName: category.name,
@@ -698,16 +710,16 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
         categories = parsedCategoryContent.otherCategories.map((cat: any) => {
             const foundCategory = allCategories.find(c => c.id === cat.categoryId);
             // First try to find a matching keyword category by name or ID
-            const matchingKeywordCategory = keywordCategories.find(kc => 
-                kc.id === cat.categoryId || 
+            const matchingKeywordCategory = keywordCategories.find(kc =>
+                kc.id === cat.categoryId ||
                 kc.name.toLowerCase() === cat.categoryName.toLowerCase()
             );
-            
+
             // Prioritize keyword category slug, then regular category slug, then generate one
-            const categorySlug = matchingKeywordCategory?.slug || 
-                                foundCategory?.slug || 
-                                cat.categoryName.toLowerCase().replace(/\s+/g, '-');
-            
+            const categorySlug = matchingKeywordCategory?.slug ||
+                foundCategory?.slug ||
+                cat.categoryName.toLowerCase().replace(/\s+/g, '-');
+
             let iconUrl = "";
             iconUrl = getLocalImageUrl(cat.imageUrl);
             if (iconUrl === "/placeholder.svg") {
@@ -762,7 +774,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                 </div>
             </div>
             <div className="mx-auto w-full px-2 sm:px-6 md:px-6 lg:px-8 xl:px-8 py-3 sm:py-3 md:py-6 lg:py-6 xl:py-6">
-                <div ref={filterBarWrapperRef} style={{ height: isFilterSticky ? `${layoutMetrics.filterBarHeight}px` : 'auto' }}>
+                <div ref={filterBarWrapperRef} data-filter-bar style={{ height: isFilterSticky ? `${layoutMetrics.filterBarHeight}px` : 'auto' }}>
                     <FilterBar
                         category={category}
                         hasActiveFilters={hasActiveFilters}
@@ -969,14 +981,14 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                                 <div className="px-6 py-3 bg-white border-b border-gray-100">
                                     <div className="flex items-start justify-between gap-3">
                                         <div className="flex flex-wrap gap-2 flex-1">
-                                            {(['materials','styles','genders','sizes','colors'] as const).map(group => 
+                                            {(['materials', 'styles', 'genders', 'sizes', 'colors'] as const).map(group =>
                                                 selectedFilters[group].map((value) => (
-                                                    <span 
-                                                        key={`${group}-${value}`} 
+                                                    <span
+                                                        key={`${group}-${value}`}
                                                         className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs bg-gray-100 text-gray-800 border border-gray-300"
                                                     >
                                                         {value}
-                                                        <button 
+                                                        <button
                                                             onClick={() => {
                                                                 if (group === 'materials') toggleMaterialFilter(value)
                                                                 if (group === 'styles') toggleStyleFilter(value)
@@ -1106,11 +1118,11 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                                                         : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
                                                 )}
                                             >
-                                                <span 
+                                                <span
                                                     className={cn(
                                                         "w-3.5 h-3.5  border",
-                                                        selectedFilters.colors.includes(colorName) 
-                                                            ? "border-white" 
+                                                        selectedFilters.colors.includes(colorName)
+                                                            ? "border-white"
                                                             : "border-gray-300"
                                                     )}
                                                     style={{ backgroundColor: colorNameToValue.get(colorName) || colorName.toLowerCase() }}
@@ -1142,18 +1154,18 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                         </div>
                     </SheetContent>
                 </Sheet>
-                <WhatsMySize 
-                  open={sizeModalOpen} 
-                  onOpenChange={setSizeModalOpen}
-                  onCategorySelect={(category) => {
-                    console.log('Selected category:', category)
-                  }}
+                <WhatsMySize
+                    open={sizeModalOpen}
+                    onOpenChange={setSizeModalOpen}
+                    onCategorySelect={(category) => {
+                        console.log('Selected category:', category)
+                    }}
                 />
                 <CartSidebar
                     isOpen={productSidebarOpen}
                     onClose={() => setProductSidebarOpen(false)}
                 />
-                
+
                 <style jsx global>{`
           /* Custom scrollbar for the filter sidebar */
           .custom-scrollbar::-webkit-scrollbar {
