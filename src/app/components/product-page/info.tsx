@@ -120,8 +120,8 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
       }
     };
     
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [isDropdownOpen])
 
   // Use reviews from product data

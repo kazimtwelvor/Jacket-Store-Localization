@@ -30,6 +30,7 @@ const SizeSelection = ({
   setShowMobileSizeModal,
   errorMessage
 }: SizeSelectionProps) => {
+  
   if (availableSizes.length === 0) return null
 
   return (
@@ -44,7 +45,7 @@ const SizeSelection = ({
           >
             <div className="px-3 sm:px-4 py-3 flex items-center justify-between">
               <span className="text-sm sm:text-[15px] text-gray-700 font-bold">
-                {selectedSizeId ? `SIZE ${availableSizes.find((size: Size) => size.id === selectedSizeId)?.name}` : "SIZE"}
+                {selectedSizeId ? `SIZE ${availableSizes.find((size: Size) => size.id === selectedSizeId)?.name || 'Unknown'}` : "SIZE"}
               </span>
               <ChevronDown size={16} className={cn("text-gray-700 transition-transform sm:w-[18px] sm:h-[18px]", isDropdownOpen && "rotate-180")} />
             </div>
