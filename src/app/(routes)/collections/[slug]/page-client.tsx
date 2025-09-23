@@ -22,6 +22,7 @@ import useWishlist from "@/src/app/hooks/use-wishlist"
 import MobileAddToCartModal from "@/src/app/modals/MobileAddToCartModal"
 import { CategorySlider } from "@/src/app/components/shop/components/CategorySlider"
 import CategorySEOSection from "@/src/app/category/category-seo-section"
+import { ProductCardWrapper } from "./components/ProductCardWrapper"
 
 interface KeywordCategory {
     id: string;
@@ -794,365 +795,34 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
 
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
                                 {currentProducts.map((product, index) => (
-                                    <motion.div
+                                    <ProductCardWrapper
                                         key={product.id}
-                                        id={`product-${product.id}`}
-                                        ref={(el) => { if (productRefs.current) productRefs.current[index] = el as HTMLDivElement | null; }}
-                                        className="group relative cursor-pointer flex flex-col h-full"
-                                        onClick={() => {
-                                            if (!isDesktop && wasDraggedRef.current) return;
-                                            addToRecentlyViewed(product)
-                                            handleClick(product)
+                                        product={product}
+                                        index={index}
+                                        isDesktop={isDesktop}
+                                        hoveredProduct={hoveredProduct}
+                                        setHoveredProduct={setHoveredProduct}
+                                        selectedSizes={selectedSizes}
+                                        handleSizeSelect={handleSizeSelect}
+                                        handleClick={handleClick}
+                                        addToRecentlyViewed={addToRecentlyViewed}
+                                        wishlist={wishlist}
+                                        setMobileCartModal={setMobileCartModal}
+                                        loadingProducts={loadingProducts}
+                                        visibleProducts={visibleProducts}
+                                        wasDraggedRef={wasDraggedRef}
+                                        openColorModal={{ isOpen: colorPopup?.productKey === `${product.id}-${index}` || false, product: colorPopup?.productKey === `${product.id}-${index}` ? product : null }}
+                                        setOpenColorModal={(modal) => {
+                                            if (modal.isOpen) {
+                                                setColorPopup({ productKey: `${product.id}-${index}`, rect: { top: 0, left: 0, right: 0, bottom: 0, height: 0, width: 0, x: 0, y: 0, toJSON: () => ({}) } as DOMRect })
+                                            } else {
+                                                setColorPopup(null)
+                                            }
                                         }}
-                                        onMouseEnter={() => isDesktop && setHoveredProduct(`grid-${product.id}-${index}`)}
-                                        onMouseLeave={() => isDesktop && setHoveredProduct(null)}
-                                        initial={loadingProducts.has(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                                        animate={loadingProducts.has(product.id) ? { opacity: 1, y: 0 } : (visibleProducts.includes(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 })}
-                                        transition={{ duration: 0.2, ease: "easeOut" }}
-                                    >
-                                        <div
-                                            className="relative w-full aspect-[3/5] bg-gray-100 overflow-visible md:overflow-hidden"
-                                        >
-                                            {mounted ? (
-                                                isDesktop ? (
-                                                    <div className="w-full h-full overflow-hidden relative">
-                                                        <Image
-                                                            src={
-                                                                hoveredProduct === `grid-${product.id}-${index}` && (product.images?.[1] as any)?.url
-                                                                    ? (product.images[1] as any).url
-                                                                    : ((product.images?.[0] as any)?.url || "/placeholder.svg")
-                                                            }
-                                                            alt={product.name}
-                                                            fill
-                                                            className={cn(
-                                                                "object-cover object-top transition-all duration-300",
-                                                                hoveredProduct === `grid-${product.id}-${index}` && (product.images?.[1] as any)?.url ? "scale-110" : "scale-100"
-                                                            )}
-                                                            sizes="(max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
-                                                            priority={index < 4}
-                                                            loading={index < 4 ? "eager" : "lazy"}
-                                                        />
-                                                        {loadingProducts.has(product.id) && (
-                                                            <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
-                                                                <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-gray-400"></div>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                ) : (
-                                                    <ProductImageCarousel product={product} wasDragged={wasDraggedRef} />
-                                                )
-                                            ) : (
-                                                <div className="w-full h-full overflow-hidden bg-gray-100" />
-                                            )}
-                                            <motion.button
-                                                className="absolute w-8 h-8 md:w-9 md:h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 -bottom-4 md:top-2 right-12 md:right-2"
-                                                aria-label="Add to wishlist"
-                                                whileHover={{ scale: 1.2, backgroundColor: "#f8f8f8" }}
-                                                whileTap={{ scale: 0.9 }}
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    if (wishlist.isInWishlist(product.id)) {
-                                                        wishlist.removeItem(product.id)
-                                                    } else {
-                                                        wishlist.addItem(product)
-                                                    }
-                                                }}
-                                            >
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className=" md:w-6 md:h-6">
-                                                    <path
-                                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                                                        stroke="black"
-                                                        strokeWidth="2"
-                                                        fill={mounted && wishlist.isInWishlist(product.id) ? "black" : "none"}
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                    />
-                                                </svg>
-                                            </motion.button>
-                                            <button
-                                                className=" md:hidden absolute w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-md z-48 right-2 -bottom-4 md:top-3 md:right-3 md:bottom-auto"
-                                                aria-label="Add to cart"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setMobileCartModal({ isOpen: true, product });
-                                                }}
-                                            >
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M6.5 9h11L19 21H5L6.5 9z" />
-                                                    <path d="M9 9c0-2.76 1.38-5 3-5s3 2.24 3 5" />
-                                                </svg>
-                                            </button>
-                                            {product.isFeatured && (
-                                                <motion.div
-                                                    className="absolute top-3 left-0 z-10"
-                                                    initial={{ x: -50, opacity: 0 }}
-                                                    animate={{ x: 0, opacity: 1 }}
-                                                    transition={{ duration: 0.3, delay: 0.1 }}
-                                                >
-                                                    <div className="relative">
-                                                        <div className="bg-black text-white py-0.5 px-2 shadow-md flex items-center">
-                                                            <span className="font-semibold tracking-wide text-[8px] md:text-xs">BEST SELLING</span>
-                                                        </div>
-                                                    </div>
-                                                </motion.div>
-                                            )}
-                                            <AnimatePresence>
-                                                {isDesktop && hoveredProduct === `grid-${product.id}-${index}` && ((product as any).sizeDetails || (product as any).sizes) && ((product as any).sizeDetails || (product as any).sizes).length > 0 && (
-                                                    <motion.div
-                                                        className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 z-20"
-                                                        initial={{ opacity: 0, y: 20 }}
-                                                        animate={{ opacity: 1, y: 0 }}
-                                                        exit={{ opacity: 0, y: 20 }}
-                                                        transition={{ duration: 0.15 }}
-                                                        onClick={(e) => e.stopPropagation()}
-                                                    >
-                                                        <div className="p-3">
-                                                            <div className="text-xs mb-2">
-                                                                Quick Shop <span className="text-gray-500">(Select your Size)</span>
-                                                            </div>
-                                                            <div className="flex flex-wrap gap-1">
-                                                                {((product as any).sizeDetails || (product as any).sizes).map((size: any) => (
-                                                                    <button
-                                                                        key={size.id}
-                                                                        className={cn(
-                                                                            "px-3 py-1.5 text-xs border-black hover:border-black transition-colors",
-                                                                            selectedSizes[product.id] === size.name ? "border-black" : "border-black",
-                                                                        )}
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation()
-                                                                            handleSizeSelect(product.id, size.name)
-                                                                        }}
-                                                                    >
-                                                                        {size.name}
-                                                                    </button>
-                                                                ))}
-                                                            </div>
-                                                        </div>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-                                        </div>
-                                        <div className="mt-6 xs:mt-6 sm:mt-6 md:mt-4 lg:mt-4 xl:mt-4 2xl:mt-4">
-                                            <h3 className="text-sm line-clamp-1">{product.name.toUpperCase()}</h3>
-                                            <div className="mt-1 xs:mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-1 2xl:mt-1">
-                                                {product.salePrice && Number(product.salePrice) > 0 ? (
-                                                    <div className="flex items-center gap-1">
-                                                        <span className="text-sm line-through text-black-500">${product.price}</span>
-                                                        <span className="text-sm font-bold text-black">${product.salePrice}</span>
-                                                    </div>
-                                                ) : (
-                                                    <span className="text-sm font-bold text-black">${product.price}</span>
-                                                )}
-                                            </div>
-                                            <div className="mt-2">
-                                                <div
-                                                    className="relative inline-flex items-center gap-2 px-3 py-2 bg-gray-50 border border-black"
-                                                    onClick={(e) => e.stopPropagation()}
-                                                >
-                                                    {((product as any).colorDetails || (product as any).colors || [{ value: '#000000', name: 'Black' }]).slice(0, 1).map((color: any, index: number) => (
-                                                        <div key={index} className="flex items-center gap-1">
-                                                            <div
-                                                                className="w-4 h-4 rounded-full border border-black/30"
-                                                                style={{ backgroundColor: color.value || '#000000' }}
-                                                            />
-                                                            <span className="text-xs text-gray-700">{color.name || 'Black'}</span>
-                                                        </div>
-                                                    ))}
-                                                    {((product as any).colorDetails || (product as any).colors || []).length > 1 && (
-                                                        <>
-                                                            <button
-                                                                ref={(el) => {
-                                                                    if (el) colorTriggerRefs.current[`grid-${product.id}-${index}`] = el
-                                                                }}
-                                                                data-color-trigger
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation()
-                                                                    const productKey = `${product.id}-${index}`
-                                                                    if (colorPopup?.productKey === productKey) {
-                                                                        setColorPopup(null)
-                                                                    } else {
-                                                                        const button = e.currentTarget
-                                                                        const rect = button.getBoundingClientRect()
-                                                                        setColorPopup({ productKey, rect })
-                                                                    }
-                                                                }}
-                                                                className={cn(
-                                                                    "text-xs transition-colors",
-                                                                    colorPopup?.productKey === `${product.id}-${index}` && isDesktop
-                                                                        ? "absolute inset-0 flex items-center justify-center bg-black text-white border border-black font-medium"
-                                                                        : "text-gray-500 hover:text-gray-700 underline"
-                                                                )}
-                                                            >
-                                                                {colorPopup?.productKey === `${product.id}-${index}` && isDesktop
-                                                                    ? "Hide colors"
-                                                                    : `+${((product as any).colorDetails || (product as any).colors || []).length - 1} more`
-                                                                }
-                                                            </button>
-
-                                                            {/* Color Popup inside the color box container */}
-                                                            {colorPopup?.productKey === `${product.id}-${index}` && isDesktop && (
-                                                                <div className="absolute -top-32 left-0 z-50 bg-white border-2 border-gray-600 shadow-2xl w-52">
-                                                                    <div className="p-3">
-                                                                        <div className="flex items-center justify-between mb-3 pb-2 border-b border-black-200">
-                                                                            <h4 className="text-sm font-semibold text-grey">
-                                                                                Color: {(() => {
-                                                                                    const colors = (product as any)?.colorDetails || (product as any)?.colors || []
-                                                                                    return colors[0]?.name || 'Black'
-                                                                                })()}
-                                                                            </h4>
-                                                                        </div>
-                                                                        <div className="flex gap-2 mb-2">
-                                                                            {((product as any)?.colorDetails || (product as any)?.colors || []).map((color: any) => {
-                                                                                const colorLinks = product?.colorLinks || {}
-                                                                                const colorLink = colorLinks[color.name]
-
-                                                                                return (
-                                                                                    <div
-                                                                                        key={color.id}
-                                                                                        className="cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-md"
-                                                                                        onClick={async (e) => {
-                                                                                            e.preventDefault()
-                                                                                            e.stopPropagation()
-
-                                                                                            if (colorLink && colorLink.trim() !== '') {
-                                                                                                try {
-                                                                                                    setLoadingProducts(prev => new Set([...prev, product.id]))
-
-                                                                                                    const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
-
-                                                                                                    if (response.ok) {
-                                                                                                        const newProduct = await response.json()
-
-                                                                                                        if (newProduct && newProduct.name && newProduct.id) {
-                                                                                                            setCurrentProducts(prev =>
-                                                                                                                prev.map(p =>
-                                                                                                                    p.id === product.id ? newProduct : p
-                                                                                                                )
-                                                                                                            )
-                                                                                                        }
-                                                                                                    }
-                                                                                                } catch (error) {
-                                                                                                    console.error('Error:', error)
-                                                                                                } finally {
-                                                                                                    setLoadingProducts(prev => {
-                                                                                                        const newSet = new Set(prev)
-                                                                                                        newSet.delete(product.id)
-                                                                                                        return newSet
-                                                                                                    })
-                                                                                                }
-                                                                                            }
-
-                                                                                            setColorPopup(null)
-                                                                                        }}
-                                                                                    >
-                                                                                        <div className="w-10 h-10 rounded-full border-2 border-gray-600 shadow-sm">
-                                                                                            <div
-                                                                                                className="w-full h-full rounded-full border-2 border-white"
-                                                                                                style={{ backgroundColor: color.value }}
-                                                                                            />
-                                                                                        </div>
-                                                                                    </div>
-                                                                                )
-                                                                            })}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            )}
-
-                                                            {colorPopup?.productKey === `${product.id}-${index}` && !isDesktop && (
-                                                                <div 
-                                                                    className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-center z-50"
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault()
-                                                                        e.stopPropagation()
-                                                                        setColorPopup(null)
-                                                                    }}
-                                                                >
-                                                                    <div 
-                                                                        className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto"
-                                                                        onClick={(e) => e.stopPropagation()}
-                                                                    >
-                                                                        {/* Header */}
-                                                                        <div className="flex items-center justify-between p-5 ">
-                                                                            <h2 className="text-lg font-bold">Select Color</h2>
-                                                                            <button
-                                                                                onClick={(e) => {
-                                                                                    e.preventDefault()
-                                                                                    e.stopPropagation()
-                                                                                    setColorPopup(null)
-                                                                                }}
-                                                                                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                                                                            >
-                                                                                <X size={20} />
-                                                                            </button>
-                                                                        </div>
-
-                                                                        <div className="p-4">
-                                                                            <div className="grid grid-cols-4 gap-4">
-                                                                                {((product as any)?.colorDetails || (product as any)?.colors || []).map((color: any) => {
-                                                                                    const colorLinks = product?.colorLinks || {}
-                                                                                    const colorLink = colorLinks[color.name]
-
-                                                                                    return (
-                                                                                        <div
-                                                                                            key={color.id}
-                                                                                            className="flex flex-col items-center gap-2 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
-                                                                                            onClick={async (e) => {
-                                                                                                e.preventDefault()
-                                                                                                e.stopPropagation()
-
-                                                                                                if (colorLink && colorLink.trim() !== '') {
-                                                                                                    try {
-                                                                                                        setLoadingProducts(prev => new Set([...prev, product.id]))
-
-                                                                                                        const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
-
-                                                                                                        if (response.ok) {
-                                                                                                            const newProduct = await response.json()
-
-                                                                                                            if (newProduct && newProduct.name && newProduct.id) {
-                                                                                                                setCurrentProducts(prev =>
-                                                                                                                    prev.map(p =>
-                                                                                                                        p.id === product.id ? newProduct : p
-                                                                                                                    )
-                                                                                                                )
-                                                                                                            }
-                                                                                                        }
-                                                                                                    } catch (error) {
-                                                                                                        console.error('Error:', error)
-                                                                                                    } finally {
-                                                                                                        setLoadingProducts(prev => {
-                                                                                                            const newSet = new Set(prev)
-                                                                                                            newSet.delete(product.id)
-                                                                                                            return newSet
-                                                                                                        })
-                                                                                                    }
-                                                                                                }
-
-                                                                                                setColorPopup(null)
-                                                                                            }}
-                                                                                        >
-                                                                                            <div className="w-12 h-12 rounded-full border-2 border-gray-300">
-                                                                                                <div
-                                                                                                    className="w-full h-full rounded-full border-2 border-white"
-                                                                                                    style={{ backgroundColor: color.value }}
-                                                                                                />
-                                                                                            </div>
-                                                                                            <span className="text-xs text-center font-medium">{color.name}</span>
-                                                                                        </div>
-                                                                                    )
-                                                                                })}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            )}
-                                                        </>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </motion.div>))}
+                                        productRefs={productRefs}
+                                        mounted={mounted}
+                                    />
+                                ))}
                             </div>
                         </>
                     ) : (
