@@ -181,7 +181,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <ColorSelector
             product={product}
             availableColors={availableColors}
-            onColorClick={() => setOpenColorModal({ isOpen: true, product })}
+            isDesktop={isDesktop}
+            openColorModal={openColorModal}
+            setOpenColorModal={setOpenColorModal}
           />
         )}
       </div>
