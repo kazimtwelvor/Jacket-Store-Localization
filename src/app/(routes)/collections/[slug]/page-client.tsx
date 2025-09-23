@@ -636,7 +636,9 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
     useEffect(() => {
         const startIndex = (currentPage - 1) * productsPerPage
         const endIndex = startIndex + productsPerPage
-        setCurrentProducts(filteredProducts.slice(startIndex, endIndex))
+        const newCurrentProducts = filteredProducts.slice(startIndex, endIndex)
+        setCurrentProducts(newCurrentProducts)
+        setVisibleProducts(newCurrentProducts.map(p => p.id))
     }, [filteredProducts, currentPage, productsPerPage])
 
     const totalPages = Math.ceil(filteredProducts.length / productsPerPage)
