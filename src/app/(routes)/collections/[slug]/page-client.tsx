@@ -472,7 +472,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search)
             const s = params.get('sort') || 'popular'
-            if (s !== currentSort) setCurrentSort(s)
+            setCurrentSort(s)
             
             const sizes = params.get('sizes')?.split(',').filter(Boolean) || []
             const colors = params.get('colors')?.split(',').filter(Boolean) || []
@@ -495,7 +495,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                 genders,
             })
         }
-    }, [currentSort])
+    }, []) 
     const updateFiltersInURL = (newFilters: { materials: string[], styles: string[], genders: string[], sizes: string[], colors: string[] }) => {
         const params = new URLSearchParams(window.location.search)
         if (newFilters.materials.length > 0) {
@@ -627,6 +627,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
             filtered = [...filtered].sort((a, b) => priceOf(b) - priceOf(a))
         } else if (currentSort === 'price-low') {
             filtered = [...filtered].sort((a, b) => priceOf(a) - priceOf(b))
+        } else {
         }
 
         setFilteredProducts(filtered)
