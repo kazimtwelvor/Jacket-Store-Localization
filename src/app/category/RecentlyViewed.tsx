@@ -508,22 +508,14 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                   setColorPopup({ productKey, rect })
                                 }
                               }}
-                              className={cn(
-                                "text-xs transition-colors",
-                                colorPopup?.productKey === `${product.id}-${index}` && isDesktop
-                                  ? "absolute inset-0 flex items-center justify-center bg-black text-white border border-black font-medium"
-                                  : "text-gray-500 hover:text-gray-700 underline"
-                              )}
+                              className="text-xs text-gray-500 hover:text-gray-700 underline transition-colors"
                             >
-                              {colorPopup?.productKey === `${product.id}-${index}` && isDesktop
-                                ? "Hide colors"
-                                : `+${((product as any).colorDetails || (product as any).colors || []).length - 1} more`
-                              }
+                              +{((product as any).colorDetails || (product as any).colors || []).length - 1} more
                             </button>
 
                             {/* Color Popup inside the color box container */}
                             {colorPopup?.productKey === `${product.id}-${index}` && isDesktop && (
-                              <div className="absolute -top-32 left-0 z-50 bg-white border-2 border-gray-600 shadow-2xl w-52">
+                              <div className="absolute -top-32 left-0 right-0 z-[60] bg-white border-2 border-gray-600 shadow-2xl max-w-xs" style={{ width: Math.max(208, Math.min(320, ((product as any)?.colorDetails || (product as any)?.colors || []).length * 44 + 32)) }}>
                                 <div className="p-3">
                                   <div className="flex items-center justify-between mb-3 pb-2 border-b border-black-200">
                                     <h4 className="text-sm font-semibold text-grey">
@@ -532,8 +524,18 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                         return colors[0]?.name || 'Black'
                                       })()}
                                     </h4>
+                                    <button 
+                                      onClick={(e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        setColorPopup(null)
+                                      }}
+                                      className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                                    >
+                                      <X size={16} />
+                                    </button>
                                   </div>
-                                  <div className="flex gap-2 mb-2">
+                                  <div className="flex gap-2 mb-2 flex-wrap">
                                     {((product as any)?.colorDetails || (product as any)?.colors || []).map((color: any) => {
                                       const colorLinks = product?.colorLinks || {}
                                       const colorLink = colorLinks[color.name]

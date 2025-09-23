@@ -115,7 +115,21 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 }) => {
   const [productsData, setProductsData] =
     useState<PaginatedProductsData>(initialProductsData);
+  
+  useEffect(() => {
+    console.log('ProductsData state updated:', {
+      currentPage: productsData.pagination.currentPage,
+      totalPages: productsData.pagination.totalPages,
+      productsCount: productsData.products.length,
+      firstProduct: productsData.products[0]?.name || 'none'
+    });
+  }, [productsData]);
   const [loading, setLoading] = useState(false);
+  
+  // Debug loading state changes
+  useEffect(() => {
+    console.log('Loading state changed:', loading);
+  }, [loading]);
   const [sizeModalOpen, setSizeModalOpen] = useState(false);
   const [filterSidebarOpen, setFilterSidebarOpen] = useState(false);
   const [categorySliderOpen, setCategorySliderOpen] = useState(false);
@@ -138,6 +152,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const [currentPage, setCurrentPage] = useState(
     initialProductsData.pagination.currentPage
   );
+  const [isPaginationInProgress, setIsPaginationInProgress] = useState(false);
   const [isFilterSticky, setIsFilterSticky] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState<Set<string>>(
     new Set()
@@ -246,7 +261,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       const newUrl = params.toString() ? `/shop?${params.toString()}` : "/shop";
       window.dispatchEvent(new CustomEvent("route-loading:start"));
       router.push(newUrl, { scroll: false });
-
+      
+      // Ensure loader disappears after navigation
       setTimeout(() => {
         window.dispatchEvent(new CustomEvent("route-loading:end"));
       }, 100);
@@ -269,11 +285,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       }
     ) => {
       inflightCountRef.current += 1;
-      // Only show in-page loading when we are NOT updating the URL.
-      // For URL updates, the global route overlay will handle loading UX
-      if (skipURLUpdate) {
-        setLoading(true);
-      }
+      // Set loading state for all requests to prevent race conditions
+      setLoading(true);
       const requestId = ++requestIdRef.current;
       try {
         const hasFilters =
@@ -327,10 +340,21 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         };
 
         const newProductsData = await getProducts(queryParams);
+        console.log('API Response received:', {
+          requestId,
+          latestHandled: latestHandledRequestRef.current,
+          page,
+          newProductsData: {
+            currentPage: newProductsData.pagination.currentPage,
+            totalPages: newProductsData.pagination.totalPages,
+            productsCount: newProductsData.products.length
+          }
+        });
 
         // Only apply if this is the latest request
         if (requestId > latestHandledRequestRef.current) {
           latestHandledRequestRef.current = requestId;
+          console.log('Updating state with new data for page:', page);
           setProductsData(newProductsData);
           setCurrentProducts(
             sortProductsClient(
@@ -339,6 +363,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             )
           );
           setCurrentPage(page);
+        } else {
+          console.log('Request ignored - not latest:', requestId, 'vs', latestHandledRequestRef.current);
         }
 
         if (!skipURLUpdate) {
@@ -382,22 +408,29 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         });
       } finally {
         inflightCountRef.current = Math.max(0, inflightCountRef.current - 1);
-        if (skipURLUpdate) {
-          if (inflightCountRef.current === 0) {
-            setLoading(false);
+        // Always set loading to false when request completes
+        if (inflightCountRef.current === 0) {
+          setLoading(false);
+          // Clear pagination in progress flag after a short delay to allow URL to update
+          if (isPaginationInProgress) {
+            setTimeout(() => {
+              setIsPaginationInProgress(false);
+            }, 200);
           }
         }
       }
     },
-    [activeCategory, selectedFilters, updateURL, activeSort]
+    [activeCategory, selectedFilters, updateURL, activeSort, isPaginationInProgress]
   );
 
   const handlePageChange = useCallback(
     (page: number) => {
+      console.log('Page change requested:', page, 'Current productsData page:', productsData.pagination.currentPage);
+      setIsPaginationInProgress(true);
       fetchProducts(page);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [fetchProducts]
+    [fetchProducts, productsData.pagination.currentPage]
   );
 
   const handleFilterChange = useCallback(() => {
@@ -643,10 +676,13 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       return;
     }
 
-    if (urlPage !== currentPage) {
+    // Only fetch if URL page is different from current page AND we're not in the middle of a pagination update
+    console.log('URL sync check:', { urlPage, currentPage, loading, isPaginationInProgress, shouldFetch: urlPage !== currentPage && !loading && !isPaginationInProgress });
+    if (urlPage !== currentPage && !loading && !isPaginationInProgress) {
+      console.log('URL sync triggering fetchProducts for page:', urlPage);
       fetchProducts(urlPage);
     }
-  }, [currentPage]);
+  }, [currentPage, loading, isPaginationInProgress]);
 
   useEffect(() => {
     setCurrentProducts((prev) => sortProductsClient(prev, activeSort));

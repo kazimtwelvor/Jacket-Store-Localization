@@ -11,17 +11,19 @@ interface ProductCardWrapperProps {
   isDesktop: boolean
   hoveredProduct: string | null
   setHoveredProduct: (productId: string | null) => void
-  selectedSizes: Record<string, string[]>
+  selectedSizes: Record<string, string>
   handleSizeSelect: (productId: string, size: string) => void
   handleClick: (product: Product) => void
   addToRecentlyViewed: (product: Product) => void
   wishlist: any
-  setMobileCartModal: (modal: { isOpen: boolean; product: Product }) => void
+  setMobileCartModal: (modal: { isOpen: boolean; product: Product | null }) => void
   loadingProducts: Set<string>
   visibleProducts: string[]
   wasDraggedRef: React.MutableRefObject<boolean>
   openColorModal: { isOpen: boolean; product: Product | null }
   setOpenColorModal: (modal: { isOpen: boolean; product: Product | null }) => void
+  productRefs: React.MutableRefObject<(HTMLDivElement | null)[]>
+  mounted: boolean
 }
 
 export const ProductCardWrapper: React.FC<ProductCardWrapperProps> = (props) => {
@@ -36,8 +38,6 @@ export const ProductCardWrapper: React.FC<ProductCardWrapperProps> = (props) => 
     return () => clearTimeout(timer)
   }, [])
 
-  // For no-JS compatibility, always show fallback initially
-  // After hydration, switch to full component
   if (!isHydrated) {
     return <ProductCardFallback {...props} />
   }
