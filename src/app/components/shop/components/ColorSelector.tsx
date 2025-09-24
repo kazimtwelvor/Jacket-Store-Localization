@@ -58,6 +58,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
           }}
           data-color-trigger
           onClick={(e) => {
+            e.preventDefault()
             e.stopPropagation()
             if (setOpenColorModal) {
               if (isModalOpen) {

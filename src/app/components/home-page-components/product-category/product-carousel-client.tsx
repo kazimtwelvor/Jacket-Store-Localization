@@ -466,20 +466,20 @@ export default function ProductCarouselClient({
           </div>
 
           <button
-            className="absolute left-[39px] top-1/2 -translate-y-1/2 bg-black text-white p-2 md:p-3 shadow-lg hover:bg-gray-800 transition-all duration-300 z-10 hidden md:flex"
+            className="absolute left-2 sm:left-4 md:left-6 lg:left-8 xl:left-12 top-1/2 -translate-y-1/2 bg-black text-white p-2 md:p-3 shadow-lg hover:bg-gray-800 transition-all duration-300 z-10 hidden sm:flex items-center justify-center"
             onClick={prevSlide}
             disabled={!canLoop && activeIndex === 0}
             aria-label="Previous"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
           </button>
           <button
-            className="absolute right-[39px] top-1/2 -translate-y-1/2 bg-black text-white p-2 md:p-3 shadow-lg hover:bg-gray-800 transition-all duration-300 z-10 hidden md:flex"
+            className="absolute right-2 sm:right-4 md:right-6 lg:right-8 xl:right-12 top-1/2 -translate-y-1/2 bg-black text-white p-2 md:p-3 shadow-lg hover:bg-gray-800 transition-all duration-300 z-10 hidden sm:flex items-center justify-center"
             onClick={nextSlide}
             disabled={!canLoop && activeIndex === productItems.length - 1}
             aria-label="Next"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
           </button>
         </div>
       </div>

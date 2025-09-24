@@ -6,6 +6,8 @@ import WeThinkYouWillLove from "../../category/WeThinkYouWillLove"
 import RecentlyViewed from "../../category/RecentlyViewed"
 import RelatedProducts from "./related-products"
 import { useRouter } from "next/navigation"
+import { useCart } from "../../contexts/CartContext"
+import MobileAddToCartModal from "../../modals/MobileAddToCartModal"
 
 interface ProductSuggestionsSectionProps {
   suggestProducts: Product[]
@@ -17,10 +19,23 @@ export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, 
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
   const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
   const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([])
+  const [mobileCartModal, setMobileCartModal] = useState<{ isOpen: boolean; product: Product | null }>({
+    isOpen: false,
+    product: null
+  })
+  const [isMobileView, setIsMobileView] = useState(false)
   const router = useRouter()
+  const { addToCart } = useCart()
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = 'smooth'
+
+    const checkMobile = () => {
+      setIsMobileView(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
 
     const stored = localStorage.getItem('recentlyViewed')
     if (stored) {
@@ -34,7 +49,12 @@ export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, 
       }
     } else {
     }
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+    }
   }, [])
+
+
 
   const addToRecentlyViewed = (product: Product) => {
     const updated = [product, ...recentlyViewed.filter(p => p.id !== product.id)].slice(0, 10)
@@ -52,7 +72,21 @@ export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, 
   }
 
   const handleAddToCart = (product: Product) => {
-    console.log('Adding to cart:', product)
+    
+    if (isMobileView) {
+      console.log('Opening mobile cart modal')
+      setMobileCartModal({ isOpen: true, product })
+    } else {
+      console.log('Adding directly to cart')
+      const defaultSize = product.sizeDetails && product.sizeDetails.length > 0 
+        ? product.sizeDetails[0].name 
+        : 'Default'
+      const defaultColor = product.colorDetails && product.colorDetails.length > 0 
+        ? product.colorDetails[0].name 
+        : 'Default'
+      
+      addToCart(product, defaultSize, defaultColor)
+    }
   }
 
   return (
@@ -91,6 +125,17 @@ export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, 
         handleSizeSelect={handleSizeSelect}
         onAddToCartClick={handleAddToCart}
       />
+
+      {mobileCartModal.isOpen && mobileCartModal.product && (
+        <MobileAddToCartModal
+          isOpen={mobileCartModal.isOpen}
+          onClose={() => setMobileCartModal({ isOpen: false, product: null })}
+          product={mobileCartModal.product}
+          availableSizes={mobileCartModal.product.sizeDetails || []}
+          availableColors={mobileCartModal.product.colorDetails || []}
+          selectedColorId={mobileCartModal.product.colorDetails?.[0]?.id || ''}
+        />
+      )}
     </div>
   )
 }
