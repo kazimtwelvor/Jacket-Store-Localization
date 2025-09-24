@@ -10,9 +10,12 @@ interface ColorSelectorProps {
   onColorSelect?: (colorId: string, productId: string) => void
   openColorModal?: string | null
   setOpenColorModal?: (productId: string | null) => void
+  onProductUpdate?: (updatedProduct: Product) => void
+  loadingProducts?: Set<string>
+  setLoadingProducts?: React.Dispatch<React.SetStateAction<Set<string>>>
 }
 
-export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop, selectedColorId, onColorSelect, openColorModal, setOpenColorModal }) => {
+export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop, selectedColorId, onColorSelect, openColorModal, setOpenColorModal, onProductUpdate, loadingProducts, setLoadingProducts }) => {
   const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
   
   const isModalOpen = openColorModal === product.id
@@ -99,12 +102,43 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
                       "cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-md",
                       (color.id || color.name) === currentSelectedColorId && "ring-2 ring-black ring-offset-1"
                     )}
-                    onClick={(e) => { 
+                    onClick={async (e) => { 
                       e.preventDefault(); 
                       e.stopPropagation(); 
-                      if (onColorSelect) {
+                      
+                      // Check if this color has a link to a different product
+                      const colorLinks = product?.colorLinks || {}
+                      const colorLink = colorLinks[color.name]
+                      
+                      if (colorLink && colorLink.trim() !== '' && onProductUpdate && setLoadingProducts) {
+                        try {
+                          setLoadingProducts(prev => new Set([...prev, product.id]))
+                          
+                          const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
+                          
+                          if (response.ok) {
+                            const newProduct = await response.json()
+                            
+                            if (newProduct && newProduct.name && newProduct.id) {
+                              onProductUpdate(newProduct)
+                            }
+                          } else {
+                            const errorData = await response.json()
+                            console.warn('Product not found for color link:', colorLink, errorData)
+                          }
+                        } catch (error) {
+                          console.error('Error fetching product by color link:', error)
+                        } finally {
+                          setLoadingProducts(prev => {
+                            const newSet = new Set(prev)
+                            newSet.delete(product.id)
+                            return newSet
+                          })
+                        }
+                      } else if (onColorSelect) {
                         onColorSelect(color.id || color.name, product.id)
                       }
+                      
                       if (setOpenColorModal) setOpenColorModal(null)
                     }}
                   >
@@ -156,12 +190,43 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
                         "flex flex-col items-center gap-2 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer",
                         (color.id || color.name) === currentSelectedColorId && "bg-gray-100 ring-2 ring-black ring-offset-1"
                       )}
-                      onClick={(e) => { 
+                      onClick={async (e) => { 
                         e.preventDefault(); 
                         e.stopPropagation(); 
-                        if (onColorSelect) {
+                        
+                        // Check if this color has a link to a different product
+                        const colorLinks = product?.colorLinks || {}
+                        const colorLink = colorLinks[color.name]
+                        
+                        if (colorLink && colorLink.trim() !== '' && onProductUpdate && setLoadingProducts) {
+                          try {
+                            setLoadingProducts(prev => new Set([...prev, product.id]))
+                            
+                            const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
+                            
+                            if (response.ok) {
+                              const newProduct = await response.json()
+                              
+                              if (newProduct && newProduct.name && newProduct.id) {
+                                onProductUpdate(newProduct)
+                              }
+                            } else {
+                              const errorData = await response.json()
+                              console.warn('Product not found for color link:', colorLink, errorData)
+                            }
+                          } catch (error) {
+                            console.error('Error fetching product by color link:', error)
+                          } finally {
+                            setLoadingProducts(prev => {
+                              const newSet = new Set(prev)
+                              newSet.delete(product.id)
+                              return newSet
+                            })
+                          }
+                        } else if (onColorSelect) {
                           onColorSelect(color.id || color.name, product.id)
                         }
+                        
                         if (setOpenColorModal) setOpenColorModal(null)
                       }}
                     >

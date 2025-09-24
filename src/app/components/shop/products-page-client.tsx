@@ -915,6 +915,17 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
                           wasDraggedRef={wasDraggedRef}
                           openColorModal={openColorModal}
                           setOpenColorModal={setOpenColorModal}
+                          onProductUpdate={(updatedProduct) => {
+                            setCurrentProducts(prev => {
+                              const newProducts = [...prev]
+                              const productIndex = newProducts.findIndex(p => p.id === product.id)
+                              if (productIndex !== -1) {
+                                newProducts[productIndex] = updatedProduct
+                              }
+                              return newProducts
+                            })
+                          }}
+                          setLoadingProducts={setLoadingProducts}
                         />
                       ))}
               </div>

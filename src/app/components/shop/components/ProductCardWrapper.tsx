@@ -11,17 +11,19 @@ interface ProductCardWrapperProps {
   isDesktop: boolean
   hoveredProduct: string | null
   setHoveredProduct: (productId: string | null) => void
-  selectedSizes: Record<string, string[]>
+  selectedSizes: Record<string, string>
   handleSizeSelect: (productId: string, size: string) => void
   handleClick: (product: Product) => void
   addToRecentlyViewed: (product: Product) => void
   wishlist: any
-  setMobileCartModal: (modal: { isOpen: boolean; product: Product }) => void
+  setMobileCartModal: (modal: { isOpen: boolean; product: Product | null }) => void
   loadingProducts: Set<string>
   visibleProducts: string[]
   wasDraggedRef: React.MutableRefObject<boolean>
-  openColorModal: { isOpen: boolean; product: Product | null }
-  setOpenColorModal: (modal: { isOpen: boolean; product: Product | null }) => void
+  openColorModal: string | null
+  setOpenColorModal: (productId: string | null) => void
+  onProductUpdate?: (updatedProduct: Product) => void
+  setLoadingProducts?: React.Dispatch<React.SetStateAction<Set<string>>>
 }
 
 export const ProductCardWrapper: React.FC<ProductCardWrapperProps> = (props) => {
