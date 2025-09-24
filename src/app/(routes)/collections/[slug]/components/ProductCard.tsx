@@ -27,6 +27,8 @@ interface ProductCardProps {
   setOpenColorModal: (modal: { isOpen: boolean; product: Product | null }) => void
   productRefs: React.MutableRefObject<(HTMLDivElement | null)[]>
   mounted: boolean
+  onProductUpdate?: (updatedProduct: Product) => void
+  setLoadingProducts?: React.Dispatch<React.SetStateAction<Set<string>>>
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -48,6 +50,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   setOpenColorModal,
   productRefs,
   mounted,
+  onProductUpdate,
+  setLoadingProducts,
 }) => {
   const [isWishlisted, setIsWishlisted] = useState(false)
 
@@ -58,12 +62,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const isHovered = hoveredProduct === `grid-${product.id}-${index}`
   const hasMultipleImages = product.images && product.images.length > 1
   const availableSizes = product.sizeDetails || []
-  const selectedProductSizes = selectedSizes[product.id] || []
+  const selectedProductSizes = selectedSizes[product.id] ? [selectedSizes[product.id]] : []
   const availableColors = product.colorDetails || []
 
   return (
     <motion.div
-      key={product.id}
       id={`product-${product.id}`}
       ref={(el) => { if (productRefs.current) productRefs.current[index] = el as HTMLDivElement | null; }}
       className="group relative cursor-pointer flex flex-col h-full"
@@ -184,6 +187,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             isDesktop={isDesktop}
             openColorModal={openColorModal}
             setOpenColorModal={setOpenColorModal}
+            onProductUpdate={onProductUpdate}
+            loadingProducts={loadingProducts}
+            setLoadingProducts={setLoadingProducts}
           />
         )}
       </div>

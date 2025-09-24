@@ -226,7 +226,13 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
     const [urlMaterials, setUrlMaterials] = useState<string[]>([])
     const [urlStyles, setUrlStyles] = useState<string[]>([])
     const [urlGenders, setUrlGenders] = useState<string[]>([])
-    const [selectedFilters, setSelectedFilters] = useState({
+    const [selectedFilters, setSelectedFilters] = useState<{
+        sizes: string[];
+        colors: string[];
+        materials: string[];
+        styles: string[];
+        genders: string[];
+    }>({
         sizes: [],
         colors: [],
         materials: [],
@@ -811,7 +817,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
                                 {currentProducts.map((product, index) => (
                                     <ProductCardWrapper
-                                        key={product.id}
+                                        key={`${product.id}-${index}-${currentPage}`}
                                         product={product}
                                         index={index}
                                         isDesktop={isDesktop}
@@ -836,6 +842,17 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                                         }}
                                         productRefs={productRefs}
                                         mounted={mounted}
+                                        onProductUpdate={(updatedProduct) => {
+                                            setCurrentProducts(prev => {
+                                                const newProducts = [...prev]
+                                                const productIndex = newProducts.findIndex(p => p.id === product.id)
+                                                if (productIndex !== -1) {
+                                                    newProducts[productIndex] = updatedProduct
+                                                }
+                                                return newProducts
+                                            })
+                                        }}
+                                        setLoadingProducts={setLoadingProducts}
                                     />
                                 ))}
                             </div>
