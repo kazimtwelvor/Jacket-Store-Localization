@@ -83,7 +83,7 @@ export async function POST(req: Request) {
     });
 
     // Create the reset link
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jacket.us.com";
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.fineystjackets.com";
     const resetLink = `${baseUrl}/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(
       email
     )}`;

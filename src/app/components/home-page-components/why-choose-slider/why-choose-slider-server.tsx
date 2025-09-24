@@ -24,7 +24,7 @@ const getCachedSlides = unstable_cache(
           "Quality lining materials",   
           "Artisan-level attention to detail",
         ],
-        imageUrl: "https://jacket.us.com/uploads/2025/craftmanship_banner_2.webp",
+        imageUrl: "https://www.fineystjackets.com/uploads/2025/craftmanship_banner_2.webp",
       },
       {
         id: 3,
@@ -48,7 +48,7 @@ const getCachedSlides = unstable_cache(
           "Perfect fit guarantee",
           "Custom sizing consultations",
         ],
-        imageUrl: "https://jacket.us.com/uploads/2025/Tailored_fit_section_1.webp",
+        imageUrl: "https://www.fineystjackets.com/uploads/2025/Tailored_fit_section_1.webp",
       },
       {
         id: 4,

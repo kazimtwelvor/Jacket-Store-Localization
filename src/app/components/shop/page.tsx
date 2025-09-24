@@ -12,7 +12,7 @@ export const metadata = {
   title: "Shop Premium Jackets and Outerwear | Fineyst",
   description: "Browse our collection of premium clothing and accessories.",
   alternates: {
-    canonical: "https://jacket.us.com/us/shop"
+    canonical: "https://www.fineystjackets.com/us/shop"
   }
 };
 
@@ -91,7 +91,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     "@type": "ItemList",
     "name": "Shop Premium Jackets and Outerwear",
     "description": "Browse our collection of premium clothing and accessories.",
-    "url": "https://jacket.us.com/us/shop",
+    "url": "https://www.fineystjackets.com/us/shop",
     "numberOfItems": finalProductsData.pagination.totalProducts,
     "itemListElement": finalProductsData.products.slice(0, 10).map((product, index) => ({
       "@type": "ListItem",
@@ -100,7 +100,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         "@type": "Product",
         "name": product.name,
         "description": product.description || `Premium ${product.name} from Fineyst`,
-        "url": `https://jacket.us.com/us/product/${product.slug}`,
+        "url": `https://www.fineystjackets.com/us/product/${product.slug}`,
         "image": product.images?.[0]?.image?.url,
         "offers": {
           "@type": "Offer",
@@ -117,7 +117,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     "@type": "CollectionPage",
     "name": "Shop Premium Jackets and Outerwear",
     "description": "Browse our collection of premium clothing and accessories.",
-    "url": "https://jacket.us.com/us/shop"
+    "url": "https://www.fineystjackets.com/us/shop"
   }
 
   return (

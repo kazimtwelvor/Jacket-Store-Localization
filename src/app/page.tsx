@@ -17,9 +17,9 @@ export const dynamic = 'force-static'
 export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
-  const title = "Premium Jackets & Outerwear | Jacket.us.com"
-  const description = "Discover premium quality jackets and outerwear at Jacket.us.com. Shop leather jackets, winter coats, and stylish outerwear with fast shipping and excellent customer service."
-  const canonical = "https://jacket.us.com/us"
+  const title = "Premium Jackets & Outerwear | www.fineystjackets.com"
+  const description = "Discover premium quality jackets and outerwear at www.fineystjackets.com. Shop leather jackets, winter coats, and stylish outerwear with fast shipping and excellent customer service."
+  const canonical = "https://www.fineystjackets.com/us"
   
   return {
     title,
@@ -33,14 +33,14 @@ export async function generateMetadata(): Promise<Metadata> {
       url: canonical,
       siteName: "FINEYST JACKETS",
       images: [{
-        url: "https://jacket.us.com/images/banner.webp"
+        url: "https://www.fineystjackets.com/images/banner.webp"
       }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: ["https://jacket.us.com/images/banner.webp"],
+      images: ["https://www.fineystjackets.com/images/banner.webp"],
     }
   }
 }
@@ -52,11 +52,11 @@ export default function Home() {
       {
         "@type": "Organization",
         "name": "FINEYST JACKETS",
-        "url": "https://jacket.us.com/us",
-        "logo": "https://jacket.us.com/logo.webp",
-        "image": "https://jacket.us.com/images/banner.webp",
-        "description": "jacket.us.com/us is a U.S.-based brand specializing in premium leather jackets, offering biker, bomber, cropped, custom, and trench styles crafted from high-quality cowhide, lambskin, goatskin, and suede. Designed for durability and timeless style, our jackets deliver comfort, edge, and authenticity. Fast nationwide shipping, secure ordering, and dedicated customer service.",
-        "email": "info@jacket.us.com",
+        "url": "https://www.fineystjackets.com/us",
+        "logo": "https://www.fineystjackets.com/logo.webp",
+        "image": "https://www.fineystjackets.com/images/banner.webp",
+        "description": "www.fineystjackets.com/us is a U.S.-based brand specializing in premium leather jackets, offering biker, bomber, cropped, custom, and trench styles crafted from high-quality cowhide, lambskin, goatskin, and suede. Designed for durability and timeless style, our jackets deliver comfort, edge, and authenticity. Fast nationwide shipping, secure ordering, and dedicated customer service.",
+        "email": "info@www.fineystjackets.com",
         "telephone": "+1-888-000-0000",
         "address": {
           "@type": "PostalAddress",
@@ -85,7 +85,7 @@ export default function Home() {
       },
       {
         "@type": "WebSite",
-        "url": "https://jacket.us.com/us",
+        "url": "https://www.fineystjackets.com/us",
         "name": "FINEYST JACKETS",
         "inLanguage": "en-US",
         "publisher": {
@@ -94,7 +94,7 @@ export default function Home() {
         },
         "potentialAction": {
           "@type": "SearchAction",
-          "target": "https://jacket.us.com/us/search?q={search_term_string}",
+          "target": "https://www.fineystjackets.com/us/search?q={search_term_string}",
           "query-input": "required name=search_term_string"
         }
       },
@@ -105,31 +105,31 @@ export default function Home() {
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "https://jacket.us.com/us"
+            "item": "https://www.fineystjackets.com/us"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Men's Leather Jackets",
-            "item": "https://jacket.us.com/us/collections/mens-leather-jackets"
+            "item": "https://www.fineystjackets.com/us/collections/mens-leather-jackets"
           },
           {
             "@type": "ListItem",
             "position": 3,
             "name": "Women's Leather Jackets",
-            "item": "https://jacket.us.com/us/collections/womens-leather-jackets"
+            "item": "https://www.fineystjackets.com/us/collections/womens-leather-jackets"
           },
           {
             "@type": "ListItem",
             "position": 4,
             "name": "Men's Varsity Jackets",
-            "item": "https://jacket.us.com/us/collections/mens-varsity-jackets"
+            "item": "https://www.fineystjackets.com/us/collections/mens-varsity-jackets"
           },
           {
             "@type": "ListItem",
             "position": 5,
             "name": "Women's Varsity Jackets",
-            "item": "https://jacket.us.com/us/collections/womens-varsity-jackets"
+            "item": "https://www.fineystjackets.com/us/collections/womens-varsity-jackets"
           }
         ]
       }

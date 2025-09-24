@@ -138,7 +138,7 @@ export default function InteractiveModel() {
               <div className="h-full flex flex-col">
                 <div className="relative h-80 md:h-96 bg-[#F6F6F6] rounded-t-lg overflow-hidden">
                   <img
-                    src="/everyday-elegance.png"
+                    src="https://www.fineystjackets.com/placeholder.svg?height=600&width=400&query=fashion%20model%20female%20average%20average"
                     alt="Model visualization"
                     className="w-full h-full object-cover object-top"
                   />

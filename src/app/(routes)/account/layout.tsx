@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "My Account | Fineyst",
   description: "Manage your account settings, orders, and personal information.",
   alternates: {
-    canonical: "https://jacket.us.com/us/account"
+    canonical: "https://www.fineystjackets.com/us/account"
   }
 }
 

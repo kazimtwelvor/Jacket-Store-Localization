@@ -58,7 +58,7 @@ const TruncatedText = ({
 export default function SignatureStylesSection() {
   const [menDropdownOpen, setMenDropdownOpen] = useState(false);
   const [womenDropdownOpen, setWomenDropdownOpen] = useState(false);
-  const [womenImageSrc, setWomenImageSrc] = useState("https://jacket.us.com/uploads/2025/uadYfG.webp");
+  const [womenImageSrc, setWomenImageSrc] = useState("https://www.fineystjackets.com/uploads/2025/uadYfG.webp");
   const menDesc =
     "Crafted for the modern warrior, each jacket embodies strength, style and sophistication with premium leather that ages beautifully with every adventure.";
   const womenDesc =
@@ -71,7 +71,7 @@ export default function SignatureStylesSection() {
       if (screenWidth >= 768 && screenWidth <= 1024) {
         setWomenImageSrc("/images/tablet-image.jpg");
       } else {
-        setWomenImageSrc("https://jacket.us.com/uploads/2025/uadYfG.webp");
+        setWomenImageSrc("https://www.fineystjackets.com/uploads/2025/uadYfG.webp");
       }
     };
 

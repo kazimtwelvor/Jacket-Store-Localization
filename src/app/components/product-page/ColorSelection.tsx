@@ -116,7 +116,7 @@ const ColorSelection = ({
               const colorLink = colorLinks[color.name]
               
               if (colorLink && selectedColorId !== color.id) {
-                const modifiedLink = colorLink.replace('jacket.us.com', 'www.fineystjackets.com')
+                const modifiedLink = colorLink.replace('www.fineystjackets.com', 'www.fineystjackets.com')
                 return (
                   <Link key={color.id} href={modifiedLink}>
                     <div 
