@@ -410,6 +410,9 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                       return updated
                                     })
                                   }
+                                } else {
+                                  const errorData = await response.json()
+                                  console.warn('Product not found for color link:', colorLink, errorData)
                                 }
                               } catch (error) {
                                 console.error('Error:', error)
@@ -654,6 +657,9 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                                       return updated
                                                     })
                                                   }
+                                                } else {
+                                                  const errorData = await response.json()
+                                                  console.warn('Product not found for color link:', colorLink, errorData)
                                                 }
                                               } catch (error) {
                                                 console.error('Error:', error)
@@ -729,6 +735,9 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                                         return updated
                                                       })
                                                     }
+                                                  } else {
+                                                    const errorData = await response.json()
+                                                    console.warn('Product not found for color link:', colorLink, errorData)
                                                   }
                                                 } catch (error) {
                                                   console.error('Error:', error)
