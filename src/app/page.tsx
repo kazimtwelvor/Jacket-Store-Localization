@@ -1,22 +1,47 @@
 import type { Metadata } from 'next'
-import SlideBanners from "@/src/app/components/home-page-components/banners/slide-banners";
-import WelcomeAccordionSection from "./components/home-page-components/welcome-section/welcome-section";
-import ProductCategory from "./components/home-page-components/product-category/product-category";
-import SignatureStylesSection from "./components/home-page-components/signature-styles/signature-section";
-import ProductCarousel from "./components/home-page-components/product-category/product-carousel";
-import JacketColorCollection from "./components/home-page-components/product-category/jacket-color-collection";
-import AboutSection from "./components/home-page-components/about-us/about-us";
-import WhyChooseSlider from "./components/home-page-components/why-choose-slider/why-choose-slider";
-import FAQ from "./components/home-page-components/faqs/faq";
-import BlogsShowcase from "./components/home-page-components/blog-showcase/blog-showcase";
-import GlobalFashionPartners from "./components/home-page-components/global-fashion-partner/global-fashion-partner";
-import AnimatedReviewsSection from "./components/home-page-components/animated-review-section/animated-review-section";
+import Script from 'next/script'
+import SlideBanners from "@/src/app/components/home-page-components/banners/slide-banners-server";
+import WelcomeAccordionSection from "./components/home-page-components/welcome-section/welcome-section-server";
+import ProductCategoryServer from "./components/home-page-components/product-category/product-category-server";
+import SignatureSectionServer from "./components/home-page-components/signature-styles/signature-section-server";
+import ProductCarouselServer from "./components/home-page-components/product-category/product-carousel-server";
+import JacketColorCollectionServer from "./components/home-page-components/product-category/jacket-color-collection-server";
+import AboutUsServer from "./components/home-page-components/about-us/about-us-server";
+import WhyChooseSliderServer from "./components/home-page-components/why-choose-slider/why-choose-slider-server";
+import FAQServer from "./components/home-page-components/faqs/faq-server";
+import BlogsShowcaseServer from "./components/home-page-components/blog-showcase/blog-showcase-server";
+import GlobalFashionPartnerServer from "./components/home-page-components/global-fashion-partner/global-fashion-partner-server";
+import AnimatedReviewSectionServer from "./components/home-page-components/animated-review-section/animated-review-section-server";
 
-export const metadata: Metadata = {
-  title: 'Premium Jackets & Outerwear | Jacket.us.com',
-  description: 'Discover premium quality jackets and outerwear at Jacket.us.com. Shop leather jackets, winter coats, and stylish outerwear with fast shipping and excellent customer service.',
-  alternates: {
-    canonical: 'https://jacket.us.com/us'
+export const dynamic = 'force-static'
+export const revalidate = 3600
+
+export async function generateMetadata(): Promise<Metadata> {
+  const title = "Premium Jackets & Outerwear | Jacket.us.com"
+  const description = "Discover premium quality jackets and outerwear at Jacket.us.com. Shop leather jackets, winter coats, and stylish outerwear with fast shipping and excellent customer service."
+  const canonical = "https://jacket.us.com/us"
+  
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    robots: 'index, follow',
+    keywords: 'jackets, leather jackets, outerwear, winter coats, mens jackets, womens jackets',
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: "FINEYST JACKETS",
+      images: [{
+        url: "https://jacket.us.com/images/banner.webp"
+      }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ["https://jacket.us.com/images/banner.webp"],
+    }
   }
 }
 
@@ -113,24 +138,27 @@ export default function Home() {
 
   return (
     <>
-      <script
+      <Script
+        id="structured-data"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(homePageSchema)
+        }}
       />
       <section className="w-full mx-0 px-0 bg-[#efefef]">
         <SlideBanners />
       </section>
       <WelcomeAccordionSection />
-      <ProductCategory />
-      <SignatureStylesSection />
-      <ProductCarousel />
-      <JacketColorCollection />
-      <AboutSection />
-      <WhyChooseSlider />
-      <FAQ />
-      <BlogsShowcase />
-      <GlobalFashionPartners />
-      <AnimatedReviewsSection />
+      <ProductCategoryServer />
+      <SignatureSectionServer />
+      <ProductCarouselServer />
+      <JacketColorCollectionServer />
+      <AboutUsServer />
+      <WhyChooseSliderServer />
+      <FAQServer />
+      <BlogsShowcaseServer />
+      <GlobalFashionPartnerServer />
+      <AnimatedReviewSectionServer />
     </>
   );
 }

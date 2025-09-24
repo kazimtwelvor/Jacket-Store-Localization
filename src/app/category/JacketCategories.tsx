@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface Category {
   name?: string;
@@ -47,6 +48,7 @@ const ArrowIcon = ({ direction }: { direction: 'left' | 'right' }) => (
 );
 
 const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCategoryClick, currentCategory }) => {
+  const router = useRouter();
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
@@ -91,11 +93,11 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
   };
 
   const handleLinkClick = (e: React.MouseEvent, categorySlug: string) => {
-    // Prevent the route loading overlay from showing for same-route navigation
     e.preventDefault();
-    if (typeof window !== 'undefined') {
-      window.history.pushState(null, '', `/collections/${categorySlug}`);
-      window.dispatchEvent(new PopStateEvent('popstate'));
+    if (onCategoryClick) {
+      onCategoryClick(categorySlug);
+    } else {
+      router.push(`/collections/${categorySlug}`);
     }
   };
 

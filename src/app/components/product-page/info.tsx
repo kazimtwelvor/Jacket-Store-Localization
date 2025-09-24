@@ -12,6 +12,7 @@ import ProductHeader from "../../components/product-page/ProductHeader"
 import ColorSelection from "../../components/product-page/ColorSelection"
 import SizeSelection from "../../components/product-page/SizeSelection"
 import AddToCartButton from "../../components/product-page/AddToCartButton"
+import AddToCartSuccess from "../../components/product-page/AddToCartSuccess"
 import DeliveryInfo from "../../components/product-page/DeliveryInfo"
 import ProductDropdowns from "../../components/product-page/ProductDropdowns"
 
@@ -28,6 +29,7 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
   const [isLoading, setIsLoading] = useState(false)
   const [quantity, setQuantity] = useState(1)
   const [activeTab, setActiveTab] = useState("")
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false)
   const [showFullDescription, setShowFullDescription] = useState(false)
   const [showDescriptionModal, setShowDescriptionModal] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -120,8 +122,8 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
       }
     };
     
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [isDropdownOpen])
 
   // Use reviews from product data
@@ -174,6 +176,10 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
       return
     }
 
+    if (showSuccessAnimation || isLoading) {
+      return
+    }
+
     setIsLoading(true)
 
     const selectedSizeName = availableSizes.find((size: Size) => size.id === selectedSizeId)?.name || 'Default'
@@ -182,6 +188,8 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
       : availableColors[0]?.name || "Default"
     
     addToCart(data, selectedSizeName, selectedColorName)
+    
+    setShowSuccessAnimation(true)
     
     setTimeout(() => {
       setIsLoading(false)
@@ -283,6 +291,12 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
         getTimeAgo={getTimeAgo}
         isMobile={isMobile}
         deliveryDates={deliveryDates}
+      />
+      
+      {/* Success Animation */}
+      <AddToCartSuccess 
+        isVisible={showSuccessAnimation}
+        onComplete={() => setShowSuccessAnimation(false)}
       />
       
       </div>

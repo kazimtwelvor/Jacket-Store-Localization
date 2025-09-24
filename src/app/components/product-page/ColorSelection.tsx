@@ -116,8 +116,9 @@ const ColorSelection = ({
               const colorLink = colorLinks[color.name]
               
               if (colorLink && selectedColorId !== color.id) {
+                const modifiedLink = colorLink.replace('jacket.us.com', 'www.fineystjackets.com')
                 return (
-                  <Link key={color.id} href={colorLink}>
+                  <Link key={color.id} href={modifiedLink}>
                     <div 
                       className={cn(
                         "w-[24px] h-[24px] rounded-full border-2 transition-all duration-200 cursor-pointer",

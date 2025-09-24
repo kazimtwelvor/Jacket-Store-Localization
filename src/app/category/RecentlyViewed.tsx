@@ -334,13 +334,14 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                             if (el) colorTriggerRefs.current[`recent-mobile-${product.id}-${index}`] = el
                           }}
                           onClick={(e) => {
+                            e.preventDefault()
                             e.stopPropagation()
                             const productKey = `${product.id}-${index}`
                             const button = e.currentTarget
                             const rect = button.getBoundingClientRect()
                             setColorPopup({ productKey, rect })
                           }}
-                          className="text-xs text-gray-500"
+                          className="text-xs text-gray-500 hover:text-gray-700 underline transition-colors"
                         >
                           +{((product as any).colorDetails || (product as any).colors || []).length - 1} more
                         </button>
@@ -352,6 +353,100 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
             ))}
           </motion.div>
         </div>
+
+        {/* Mobile Color Modal - Rendered at carousel level */}
+        {colorPopup && !isDesktop && (
+          <div 
+            className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-end justify-center z-50"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              setColorPopup(null)
+            }}
+          >
+            <div 
+              className="bg-white rounded-t-lg w-full max-h-[80vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between p-5">
+                <h2 className="text-lg font-bold">Select Color</h2>
+                <button
+                  onClick={() => setColorPopup(null)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="p-4">
+                <div className="grid grid-cols-4 gap-4">
+                  {(() => {
+                    const productKey = colorPopup.productKey
+                    const product = currentProducts.find((p, idx) => `${p.id}-${idx}` === productKey)
+                    if (!product) return null
+                    
+                    return ((product as any)?.colorDetails || (product as any)?.colors || []).map((color: any) => {
+                      const colorLinks = product?.colorLinks || {}
+                      const colorLink = colorLinks[color.name]
+
+                      return (
+                        <div
+                          key={color.id}
+                          className="flex flex-col items-center gap-2 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
+                          onClick={async (e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+
+                            if (colorLink && colorLink.trim() !== '') {
+                              try {
+                                const currentProductIndex = currentProducts.findIndex(p => p.id === product.id)
+                                if (currentProductIndex === -1) return
+
+                                setLoadingProducts(prev => new Set([...prev, product.id]))
+
+                                const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
+
+                                if (response.ok) {
+                                  const newProduct = await response.json()
+
+                                  if (newProduct && newProduct.name && newProduct.id) {
+                                    setCurrentProducts(prev => {
+                                      const updated = [...prev]
+                                      updated[currentProductIndex] = newProduct
+                                      return updated
+                                    })
+                                  }
+                                }
+                              } catch (error) {
+                                console.error('Error:', error)
+                              } finally {
+                                setLoadingProducts(prev => {
+                                  const newSet = new Set(prev)
+                                  newSet.delete(product.id)
+                                  return newSet
+                                })
+                              }
+                            }
+
+                            setColorPopup(null)
+                          }}
+                        >
+                          <div className="w-12 h-12 rounded-full border-2 border-gray-300">
+                            <div
+                              className="w-full h-full rounded-full border-2 border-white"
+                              style={{ backgroundColor: color.value }}
+                            />
+                          </div>
+                          <span className="text-xs text-center font-medium">{color.name}</span>
+                        </div>
+                      )
+                    })
+                  })()}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Desktop/Tablet Carousel */}
         <div className="hidden md:block relative group">
@@ -498,6 +593,7 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                               }}
                               data-color-trigger
                               onClick={(e) => {
+                                e.preventDefault()
                                 e.stopPropagation()
                                 const productKey = `${product.id}-${index}`
                                 if (colorPopup?.productKey === productKey) {
@@ -508,22 +604,14 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                   setColorPopup({ productKey, rect })
                                 }
                               }}
-                              className={cn(
-                                "text-xs transition-colors",
-                                colorPopup?.productKey === `${product.id}-${index}` && isDesktop
-                                  ? "absolute inset-0 flex items-center justify-center bg-black text-white border border-black font-medium"
-                                  : "text-gray-500 hover:text-gray-700 underline"
-                              )}
+                              className="text-xs text-gray-500 hover:text-gray-700 underline transition-colors"
                             >
-                              {colorPopup?.productKey === `${product.id}-${index}` && isDesktop
-                                ? "Hide colors"
-                                : `+${((product as any).colorDetails || (product as any).colors || []).length - 1} more`
-                              }
+                              +{((product as any).colorDetails || (product as any).colors || []).length - 1} more
                             </button>
 
                             {/* Color Popup inside the color box container */}
                             {colorPopup?.productKey === `${product.id}-${index}` && isDesktop && (
-                              <div className="absolute -top-32 left-0 z-50 bg-white border-2 border-gray-600 shadow-2xl w-52">
+                              <div className="absolute -top-32 left-0 right-0 z-[60] bg-white border-2 border-gray-600 shadow-2xl max-w-xs" style={{ width: Math.max(208, Math.min(320, ((product as any)?.colorDetails || (product as any)?.colors || []).length * 44 + 32)) }}>
                                 <div className="p-3">
                                   <div className="flex items-center justify-between mb-3 pb-2 border-b border-black-200">
                                     <h4 className="text-sm font-semibold text-grey">
@@ -532,8 +620,18 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                         return colors[0]?.name || 'Black'
                                       })()}
                                     </h4>
+                                    <button 
+                                      onClick={(e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        setColorPopup(null)
+                                      }}
+                                      className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                                    >
+                                      <X size={16} />
+                                    </button>
                                   </div>
-                                  <div className="flex gap-2 mb-2">
+                                  <div className="flex gap-2 mb-2 flex-wrap">
                                     {((product as any)?.colorDetails || (product as any)?.colors || []).map((color: any) => {
                                       const colorLinks = product?.colorLinks || {}
                                       const colorLink = colorLinks[color.name]

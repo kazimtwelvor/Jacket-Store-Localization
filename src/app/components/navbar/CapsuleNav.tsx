@@ -398,7 +398,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Button from "../../ui/button";
 import { cn } from "../../lib/utils";
@@ -422,7 +422,6 @@ export function CapsuleNav() {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [emblaRef] = useEmblaCarousel({
     align: "start",
     containScroll: "trimSnaps",
@@ -523,24 +522,12 @@ export function CapsuleNav() {
     if (pathname === "/") {
       setActiveItem(0);
     } else if (pathname === "/shop") {
-      const materials = searchParams.get("materials");
-      const styles = searchParams.get("styles");
-
-      if (materials === "Leather") {
-        setActiveItem(1);
-      } else if (styles === "Bomber") {
-        setActiveItem(2);
-      } else if (styles === "Varsity") {
-        setActiveItem(3);
-      } else if (styles === "Biker") {
-        setActiveItem(4);
-      } else {
-        setActiveItem(-1);
-      }
+      // Set default active item for shop page without relying on searchParams
+      setActiveItem(-1);
     } else {
       setActiveItem(-1);
     }
-  }, [pathname, searchParams]);
+  }, [pathname]);
 
   const handleItemClick = (id: number) => {
     setActiveItem(id);

@@ -7,6 +7,26 @@ import { Card } from "@/src/app/ui/card";
 import { avertaBlack, avertaBold } from "@/src/lib/fonts";
 import ShopButton from "@/src/app/components/shop-button";
 
+interface SignatureData {
+  men: {
+    title: string;
+    description: string;
+    imageUrl: string;
+    href: string;
+  };
+  women: {
+    title: string;
+    description: string;
+    imageUrl: string;
+    tabletImageUrl: string;
+    href: string;
+  };
+}
+
+interface SignatureSectionClientProps {
+  signatureData: SignatureData;
+}
+
 const TruncatedText = ({
   text,
   limit,
@@ -55,23 +75,19 @@ const TruncatedText = ({
   );
 };
 
-export default function SignatureStylesSection() {
+export default function SignatureSectionClient({ signatureData }: SignatureSectionClientProps) {
   const [menDropdownOpen, setMenDropdownOpen] = useState(false);
   const [womenDropdownOpen, setWomenDropdownOpen] = useState(false);
-  const [womenImageSrc, setWomenImageSrc] = useState("https://jacket.us.com/uploads/2025/uadYfG.webp");
-  const menDesc =
-    "Crafted for the modern warrior, each jacket embodies strength, style and sophistication with premium leather that ages beautifully with every adventure.";
-  const womenDesc =
-    "Elegance redefined. From boardroom power moves to weekend adventures, our women's collection celebrates confidence with every curve and contour.";
+  const [womenImageSrc, setWomenImageSrc] = useState(signatureData.women.imageUrl);
   const characterLimit = 70;
 
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
       if (screenWidth >= 768 && screenWidth <= 1024) {
-        setWomenImageSrc("/images/tablet-image.jpg");
+        setWomenImageSrc(signatureData.women.tabletImageUrl);
       } else {
-        setWomenImageSrc("https://jacket.us.com/uploads/2025/uadYfG.webp");
+        setWomenImageSrc(signatureData.women.imageUrl);
       }
     };
 
@@ -80,7 +96,7 @@ export default function SignatureStylesSection() {
     window.addEventListener('resize', handleResize);
     
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [signatureData.women.imageUrl, signatureData.women.tabletImageUrl]);
 
   return (
     <section className="pt-10 pb-8 bg-white relative">
@@ -99,7 +115,7 @@ export default function SignatureStylesSection() {
               )}
               <div className="absolute inset-0 flex items-start justify-center">
                 <img
-                  src="/uploads/2025/Untitled_design__10_.png"
+                  src={signatureData.men.imageUrl}
                   alt="Men's Leather Jacket"
                   className="w-full h-full object-cover object-[5%] md:object-[5%] lg:object-[5%] group-hover:scale-110 transition-transform duration-500 block"
                 />
@@ -110,15 +126,16 @@ export default function SignatureStylesSection() {
                     <h2
                       className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}
                     >
-                      MEN'S
-                      <br />
-                      LEATHER
-                      <br />
-                      JACKET
+                      {signatureData.men.title.split(' ').map((word, index) => (
+                        <React.Fragment key={index}>
+                          {word}
+                          {index < signatureData.men.title.split(' ').length - 1 && <br />}
+                        </React.Fragment>
+                      ))}
                     </h2>
                   </div>
                   <TruncatedText
-                    text={menDesc}
+                    text={signatureData.men.description}
                     limit={characterLimit}
                     className="mt-2 ml-2 text-sm md:text-sm lg:text-base text-center"
                     onToggle={setMenDropdownOpen}
@@ -126,7 +143,7 @@ export default function SignatureStylesSection() {
                   <div className="mt-6 text-center">
                     <ShopButton
                       variant="bordered"
-                      href="/collections/leather-bomber-jacket-mens"
+                      href={signatureData.men.href}
                       size="sm"
                       showArrow={true}
                       className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}
@@ -160,15 +177,16 @@ export default function SignatureStylesSection() {
                     <h2
                       className={`text-xl md:text-3xl lg:text-7xl font-bold text-white mb-3 leading-tight ${avertaBlack.className}`}
                     >
-                      WOMEN'S
-                      <br />
-                      LEATHER
-                      <br />
-                      JACKET
+                      {signatureData.women.title.split(' ').map((word, index) => (
+                        <React.Fragment key={index}>
+                          {word}
+                          {index < signatureData.women.title.split(' ').length - 1 && <br />}
+                        </React.Fragment>
+                      ))}
                     </h2>
                   </div>
                   <TruncatedText
-                    text={womenDesc}
+                    text={signatureData.women.description}
                     limit={characterLimit}
                     className="mt-2 text-sm md:text-sm lg:text-base text-center"
                     onToggle={setWomenDropdownOpen}
@@ -176,7 +194,7 @@ export default function SignatureStylesSection() {
                   <div className="mt-6 text-center">
                     <ShopButton
                       variant="bordered"
-                      href="/collections/womens-leather-bomber-jackets"
+                      href={signatureData.women.href}
                       size="sm"
                       showArrow={true}
                       className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}

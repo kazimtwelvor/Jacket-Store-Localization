@@ -10,6 +10,20 @@ import RouteLoadingOverlay from "@/src/app/components/layout/route-loading-overl
 import CartSidebarWrapper from "./components/layout/cart-sidebar-wrapper";
 import { Suspense } from "react";
 
+export const metadata: Metadata = {
+  title: 'Premium Jackets & Outerwear | Jacket.us.com',
+  description: 'Discover premium quality jackets and outerwear at Jacket.us.com. Shop leather jackets, winter coats, and stylish outerwear with fast shipping and excellent customer service.',
+  metadataBase: new URL('https://jacket.us.com'),
+  alternates: {
+    canonical: 'https://jacket.us.com/us',
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+  },
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -17,30 +31,61 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Preload critical images */}
+        <link
+          rel="preload"
+          href="/images/banner.webp"
+          as="image"
+          type="image/webp"
+        />
+        <link
+          rel="preload"
+          href="/images/leather.webp"
+          as="image"
+          type="image/webp"
+        />
+
+        {/* Font optimization */}
+        <link
+          rel="preload"
+          href="/fonts/Averta-Regular.woff"
+          as="font"
+          type="font/woff"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Averta-Bold.woff"
+          as="font"
+          type="font/woff"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0 bg-[#000000] min-h-screen flex flex-col`}>
         <FontProvider>
-          <Suspense fallback={<div />}>
+          {/* <Suspense fallback={<div />}> */}
               <CartProvider>
               <noscript>
                 <div style={{background:'#111', color:'#fff', padding:'8px 12px', textAlign:'center'}}>
                   For the best experience, enable JavaScript. Basic content is still available.
                 </div>
               </noscript>
-              <Suspense fallback={<div />}>
+              {/* <Suspense fallback={<div />}> */}
                 <Navbar />
-              </Suspense>
+              {/* </Suspense> */}
               <Suspense fallback={null}>
                 <RouteLoadingOverlay />
               </Suspense>
               <main className="flex-1">
-                <Suspense fallback={<div className="min-h-[50vh]" />}>
+                {/* <Suspense fallback={<div className="min-h-[50vh]" />}> */}
                   {children}
-                </Suspense>
+                {/* </Suspense> */}
               </main>
               <Footer />
               <CartSidebarWrapper />
               </CartProvider>
-          </Suspense>
+          {/* </Suspense> */}
         </FontProvider>
       </body>
     </html>

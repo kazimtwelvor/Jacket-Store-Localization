@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState, useTransition, useRef } from "react";
+import { useEffect, useState, useTransition, useRef, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
-export default function RouteLoadingOverlay() {
+function RouteLoadingOverlayContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -82,11 +82,22 @@ export default function RouteLoadingOverlay() {
         });
       }
     };
+
+    const handleProgrammaticEnd = () => {
+      loadingRef.current = false;
+      setIsLoading(false);
+    };
+
     window.addEventListener("route-loading:start", handleProgrammaticStart);
+    window.addEventListener("route-loading:end", handleProgrammaticEnd);
     return () => {
       window.removeEventListener(
         "route-loading:start",
         handleProgrammaticStart
+      );
+      window.removeEventListener(
+        "route-loading:end",
+        handleProgrammaticEnd
       );
     };
   }, []);
@@ -106,5 +117,13 @@ export default function RouteLoadingOverlay() {
         {/* <p className="text-xs font-medium text-gray-700">Loading…</p> */}
       </div>
     </div>
+  );
+}
+
+export default function RouteLoadingOverlay() {
+  return (
+    <Suspense fallback={null}>
+      <RouteLoadingOverlayContent />
+    </Suspense>
   );
 }

@@ -11,8 +11,8 @@ import StructuredData from "@/src/app/components/layout/structured-data-layout"
 import ProductPageClient from "./page-client"
 
 
-export const revalidate = 3600; // ISR: Revalidate every hour
-export const dynamicParams = true; // Generate new pages on-demand
+export const revalidate = 3600;
+export const dynamicParams = true; 
 
 interface ProductPageProps {
   params: Promise<{
