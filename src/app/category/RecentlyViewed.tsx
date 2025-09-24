@@ -416,6 +416,9 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                       return updated
                                     })
                                   }
+                                } else {
+                                  const errorData = await response.json()
+                                  console.warn('Product not found for color link:', colorLink, errorData)
                                 }
                               } catch (error) {
                                 console.error('Error:', error)
@@ -663,6 +666,9 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                                       return updated
                                                     })
                                                   }
+                                                } else {
+                                                  const errorData = await response.json()
+                                                  console.warn('Product not found for color link:', colorLink, errorData)
                                                 }
                                               } catch (error) {
                                                 console.error('Error:', error)
@@ -741,6 +747,9 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                                         return updated
                                                       })
                                                     }
+                                                  } else {
+                                                    const errorData = await response.json()
+                                                    console.warn('Product not found for color link:', colorLink, errorData)
                                                   }
                                                 } catch (error) {
                                                   console.error('Error:', error)

@@ -898,7 +898,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
                       {(currentProducts.length > 0 ? currentProducts : productsData.products).map((product, index) => (
                         <ProductCardWrapper
-                          key={product.id}
+                          key={`${product.id}-${index}-${productsData.pagination.currentPage}`}
                           product={product}
                           index={index}
                           isDesktop={isDesktop}
@@ -915,6 +915,17 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
                           wasDraggedRef={wasDraggedRef}
                           openColorModal={openColorModal}
                           setOpenColorModal={setOpenColorModal}
+                          onProductUpdate={(updatedProduct) => {
+                            setCurrentProducts(prev => {
+                              const newProducts = [...prev]
+                              const productIndex = newProducts.findIndex(p => p.id === product.id)
+                              if (productIndex !== -1) {
+                                newProducts[productIndex] = updatedProduct
+                              }
+                              return newProducts
+                            })
+                          }}
+                          setLoadingProducts={setLoadingProducts}
                         />
                       ))}
               </div>

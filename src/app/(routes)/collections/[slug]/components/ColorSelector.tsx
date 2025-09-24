@@ -9,6 +9,9 @@ interface ColorSelectorProps {
   isDesktop: boolean
   openColorModal: { isOpen: boolean; product: Product | null }
   setOpenColorModal: (modal: { isOpen: boolean; product: Product | null }) => void
+  onProductUpdate?: (updatedProduct: Product) => void
+  loadingProducts?: Set<string>
+  setLoadingProducts?: React.Dispatch<React.SetStateAction<Set<string>>>
 }
 
 export const ColorSelector: React.FC<ColorSelectorProps> = ({ 
@@ -16,7 +19,10 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
   availableColors, 
   isDesktop,
   openColorModal,
-  setOpenColorModal
+  setOpenColorModal,
+  onProductUpdate,
+  loadingProducts,
+  setLoadingProducts
 }) => {
   const hasMultipleColors = availableColors.length > 1
   const isModalOpen = openColorModal.isOpen && openColorModal.product?.id === product.id
@@ -78,24 +84,58 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
                 </button>
               </div>
               <div className="flex gap-2 mb-2 flex-wrap">
-                {availableColors.map((color: any) => (
-                  <div 
-                    key={color.id || color.name} 
-                    className="cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-md"
-                    onClick={(e) => { 
-                      e.preventDefault(); 
-                      e.stopPropagation(); 
-                      setOpenColorModal({ isOpen: false, product: null })
-                    }}
-                  >
-                    <div className="w-10 h-10 rounded-full border-2 border-gray-600 shadow-sm">
-                      <div 
-                        className="w-full h-full rounded-full border-2 border-white" 
-                        style={{ backgroundColor: color.value }} 
-                      />
+                {availableColors.map((color: any) => {
+                  const colorLinks = (product as any)?.colorLinks || {}
+                  const colorLink = colorLinks[color.name]
+                  
+                  return (
+                    <div 
+                      key={color.id || color.name} 
+                      className="cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-md"
+                      onClick={async (e) => { 
+                        e.preventDefault(); 
+                        e.stopPropagation(); 
+                        
+                        if (colorLink && colorLink.trim() !== '' && onProductUpdate && setLoadingProducts) {
+                          try {
+                            setLoadingProducts(prev => new Set([...prev, product.id]))
+                            
+                            const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
+                            
+                            if (response.ok) {
+                              const newProduct = await response.json()
+                              
+                              if (newProduct && newProduct.name && newProduct.id) {
+                                onProductUpdate(newProduct)
+                              }
+                            } else {
+                              const errorData = await response.json()
+                              console.warn('Product not found for color link:', colorLink, errorData)
+                              // You could show a toast notification here if needed
+                            }
+                          } catch (error) {
+                            console.error('Error fetching product by color link:', error)
+                          } finally {
+                            setLoadingProducts(prev => {
+                              const newSet = new Set(prev)
+                              newSet.delete(product.id)
+                              return newSet
+                            })
+                          }
+                        }
+                        
+                        setOpenColorModal({ isOpen: false, product: null })
+                      }}
+                    >
+                      <div className="w-10 h-10 rounded-full border-2 border-gray-600 shadow-sm">
+                        <div 
+                          className="w-full h-full rounded-full border-2 border-white" 
+                          style={{ backgroundColor: color.value }} 
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -129,25 +169,59 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
               </div>
               <div className="p-4">
                 <div className="grid grid-cols-4 gap-4">
-                  {availableColors.map((color: any) => (
-                    <div 
-                      key={color.id || color.name} 
-                      className="flex flex-col items-center gap-2 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
-                      onClick={(e) => { 
-                        e.preventDefault(); 
-                        e.stopPropagation(); 
-                        setOpenColorModal({ isOpen: false, product: null })
-                      }}
-                    >
-                      <div className="w-12 h-12 rounded-full border-2 border-gray-300">
-                        <div 
-                          className="w-full h-full rounded-full border-2 border-white" 
-                          style={{ backgroundColor: color.value }} 
-                        />
+                  {availableColors.map((color: any) => {
+                    const colorLinks = (product as any)?.colorLinks || {}
+                    const colorLink = colorLinks[color.name]
+                    
+                    return (
+                      <div 
+                        key={color.id || color.name} 
+                        className="flex flex-col items-center gap-2 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
+                        onClick={async (e) => { 
+                          e.preventDefault(); 
+                          e.stopPropagation(); 
+                          
+                          if (colorLink && colorLink.trim() !== '' && onProductUpdate && setLoadingProducts) {
+                            try {
+                              setLoadingProducts(prev => new Set([...prev, product.id]))
+                              
+                              const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
+                              
+                              if (response.ok) {
+                                const newProduct = await response.json()
+                                
+                                if (newProduct && newProduct.name && newProduct.id) {
+                                  onProductUpdate(newProduct)
+                                }
+                              } else {
+                                const errorData = await response.json()
+                                console.warn('Product not found for color link:', colorLink, errorData)
+                                // You could show a toast notification here if needed
+                              }
+                            } catch (error) {
+                              console.error('Error fetching product by color link:', error)
+                            } finally {
+                              setLoadingProducts(prev => {
+                                const newSet = new Set(prev)
+                                newSet.delete(product.id)
+                                return newSet
+                              })
+                            }
+                          }
+                          
+                          setOpenColorModal({ isOpen: false, product: null })
+                        }}
+                      >
+                        <div className="w-12 h-12 rounded-full border-2 border-gray-300">
+                          <div 
+                            className="w-full h-full rounded-full border-2 border-white" 
+                            style={{ backgroundColor: color.value }} 
+                          />
+                        </div>
+                        <span className="text-xs text-center font-medium">{color.name}</span>
                       </div>
-                      <span className="text-xs text-center font-medium">{color.name}</span>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             </div>

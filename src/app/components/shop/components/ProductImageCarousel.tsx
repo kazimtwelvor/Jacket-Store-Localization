@@ -15,7 +15,7 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({
   product, 
   wasDragged 
 }) => {
-  const images = product.images && product.images.length > 0 ? product.images : [{ id: "placeholder", url: "/placeholder.svg" }]
+  const images = product.images && product.images.length > 0 ? product.images : [{ id: "placeholder", image: { url: "/placeholder.svg" } }]
   const [imageIndex, setImageIndex] = useState(0)
   const dragX = useMotionValue(0)
   const containerRef = useRef<HTMLDivElement>(null)

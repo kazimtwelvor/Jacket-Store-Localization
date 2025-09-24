@@ -26,7 +26,8 @@ interface ProductCardProps {
   openColorModal: { isOpen: boolean; product: Product | null }
   setOpenColorModal: (modal: { isOpen: boolean; product: Product | null }) => void
   productRefs: React.MutableRefObject<(HTMLDivElement | null)[]>
-  mounted: boolean
+  onProductUpdate?: (updatedProduct: Product) => void
+  setLoadingProducts?: React.Dispatch<React.SetStateAction<Set<string>>>
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -47,7 +48,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   openColorModal,
   setOpenColorModal,
   productRefs,
-  mounted,
+  onProductUpdate,
+  setLoadingProducts,
 }) => {
   const [isWishlisted, setIsWishlisted] = useState(false)
 
@@ -58,12 +60,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const isHovered = hoveredProduct === `grid-${product.id}-${index}`
   const hasMultipleImages = product.images && product.images.length > 1
   const availableSizes = product.sizeDetails || []
-  const selectedProductSizes = selectedSizes[product.id] || []
+  const selectedProductSizes = selectedSizes[product.id] ? [selectedSizes[product.id]] : []
   const availableColors = product.colorDetails || []
 
   return (
     <motion.div
-      key={product.id}
       id={`product-${product.id}`}
       ref={(el) => { if (productRefs.current) productRefs.current[index] = el as HTMLDivElement | null; }}
       className="group relative cursor-pointer flex flex-col h-full"
@@ -79,44 +80,32 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       transition={{ duration: 0.2, ease: "easeOut" }}
     >
       <div className="relative w-full aspect-[3/5] bg-gray-100 overflow-visible md:overflow-hidden">
-        {mounted ? (
-          isDesktop ? (
-            <div className="w-full h-full overflow-hidden relative">
-              <Image
-                src={
-                  isHovered && hasMultipleImages
-                    ? (product.images[1] as any).url
-                    : ((product.images?.[0] as any)?.url || "/placeholder.svg")
-                }
-                alt={product.name}
-                fill
-                className={cn(
-                  "object-cover object-top transition-all duration-300",
-                  isHovered && hasMultipleImages ? "scale-110" : "scale-100"
-                )}
-                sizes="(max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
-                priority={index < 4}
-                loading={index < 4 ? "eager" : "lazy"}
-              />
-              {loadingProducts.has(product.id) && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
-                  <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-gray-400"></div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <ProductImageCarousel product={product} wasDragged={wasDraggedRef} />
-          )
-        ) : (
+        {isDesktop ? (
           <div className="w-full h-full overflow-hidden relative">
             <Image
-              src={(product.images?.[0] as any)?.url || "/placeholder.svg"}
+              src={
+                isHovered && hasMultipleImages
+                  ? (product.images[1] as any).url
+                  : ((product.images?.[0] as any)?.url || "/placeholder.svg")
+              }
               alt={product.name}
               fill
-              className="object-cover object-top"
-              sizes="(max-width: 1024px) 50vw, 33vw"
+              className={cn(
+                "object-cover object-top transition-all duration-300",
+                isHovered && hasMultipleImages ? "scale-110" : "scale-100"
+              )}
+              sizes="(max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+              priority={index < 4}
+              loading={index < 4 ? "eager" : "lazy"}
             />
+            {loadingProducts.has(product.id) && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
+                <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-gray-400"></div>
+              </div>
+            )}
           </div>
+        ) : (
+          <ProductImageCarousel product={product} wasDragged={wasDraggedRef} />
         )}
 
         <button
@@ -184,6 +173,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             isDesktop={isDesktop}
             openColorModal={openColorModal}
             setOpenColorModal={setOpenColorModal}
+            onProductUpdate={onProductUpdate}
+            loadingProducts={loadingProducts}
+            setLoadingProducts={setLoadingProducts}
           />
         )}
       </div>

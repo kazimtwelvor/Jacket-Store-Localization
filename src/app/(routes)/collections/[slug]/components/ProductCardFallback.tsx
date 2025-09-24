@@ -22,7 +22,6 @@ interface ProductCardFallbackProps {
   openColorModal: { isOpen: boolean; product: Product | null }
   setOpenColorModal: (modal: { isOpen: boolean; product: Product | null }) => void
   productRefs: React.MutableRefObject<(HTMLDivElement | null)[]>
-  mounted: boolean
 }
 
 export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
@@ -43,7 +42,6 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
   openColorModal,
   setOpenColorModal,
   productRefs,
-  mounted,
 }) => {
   const isHovered = hoveredProduct === `grid-${product.id}-${index}`
   const hasMultipleImages = product.images && product.images.length > 1

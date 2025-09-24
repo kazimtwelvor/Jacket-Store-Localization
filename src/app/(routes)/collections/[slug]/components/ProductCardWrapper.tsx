@@ -23,7 +23,8 @@ interface ProductCardWrapperProps {
   openColorModal: { isOpen: boolean; product: Product | null }
   setOpenColorModal: (modal: { isOpen: boolean; product: Product | null }) => void
   productRefs: React.MutableRefObject<(HTMLDivElement | null)[]>
-  mounted: boolean
+  onProductUpdate?: (updatedProduct: Product) => void
+  setLoadingProducts?: React.Dispatch<React.SetStateAction<Set<string>>>
 }
 
 export const ProductCardWrapper: React.FC<ProductCardWrapperProps> = (props) => {
@@ -36,7 +37,7 @@ export const ProductCardWrapper: React.FC<ProductCardWrapperProps> = (props) => 
     }, 0)
     
     return () => clearTimeout(timer)
-  }, [])
+  }, []) 
 
   if (!isHydrated) {
     return <ProductCardFallback {...props} />

@@ -25,6 +25,8 @@ interface ProductCardProps {
   wasDraggedRef: React.MutableRefObject<boolean>
   openColorModal?: string | null
   setOpenColorModal?: (productId: string | null) => void
+  onProductUpdate?: (updatedProduct: Product) => void
+  setLoadingProducts?: React.Dispatch<React.SetStateAction<Set<string>>>
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -44,6 +46,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   wasDraggedRef,
   openColorModal,
   setOpenColorModal,
+  onProductUpdate,
+  setLoadingProducts,
 }) => {
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -177,6 +181,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           isDesktop={isDesktop}
           openColorModal={openColorModal}
           setOpenColorModal={setOpenColorModal}
+          onProductUpdate={onProductUpdate}
+          loadingProducts={loadingProducts}
+          setLoadingProducts={setLoadingProducts}
         />
       </div>
     </motion.div>
