@@ -841,9 +841,17 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                                             }
                                         }}
                                         productRefs={productRefs}
-                                        mounted={mounted}
                                         onProductUpdate={(updatedProduct) => {
                                             setCurrentProducts(prev => {
+                                                const newProducts = [...prev]
+                                                const productIndex = newProducts.findIndex(p => p.id === product.id)
+                                                if (productIndex !== -1) {
+                                                    newProducts[productIndex] = updatedProduct
+                                                }
+                                                return newProducts
+                                            })
+                                            
+                                            setFilteredProducts(prev => {
                                                 const newProducts = [...prev]
                                                 const productIndex = newProducts.findIndex(p => p.id === product.id)
                                                 if (productIndex !== -1) {
