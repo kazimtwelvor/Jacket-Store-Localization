@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   description: 'Discover the latest fashion insights, style guides, and expert advice on premium jackets and outerwear. Stay updated with trends, care tips, and styling advice.',
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fineystjackets.com/us'}/blogs`
+
   }
 }
 
