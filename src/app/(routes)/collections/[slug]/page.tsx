@@ -131,28 +131,29 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
     const parseApiSlug = (apiSlug: string) => {
       const params = new URLSearchParams(apiSlug);
       return {
-        materials: params.get("materials")?.split(",") || [],
-        styles: params.get("styles")?.split(",") || [],
-        colors: params.get("colors")?.split(",") || [],
-        genders: params.get("genders")?.split(",") || [],
+        materials: params.get("materials") ? params.get("materials")!.split(",").map(s => s.trim()) : [],
+        styles: params.get("styles") ? params.get("styles")!.split(",").map(s => s.trim()) : [],
+        colors: params.get("colors") ? params.get("colors")!.split(",").map(s => s.trim()) : [],
+        genders: params.get("genders") ? params.get("genders")!.split(",").map(s => s.trim()) : [],
       };
     };
 
     const filterParams = parseApiSlug(keywordCategory.apiSlug || "");
+    
 
-    // Parallel fetch for better performance
     const [products, allCategories, keywordCategories] = await Promise.all([
       getProducts({
         materials: filterParams.materials,
         styles: filterParams.styles,
         colors: filterParams.colors,
         genders: filterParams.genders,
-        limit: 28,
+        limit: 10000, // Increased limit to get more relevant products
         page: 1,
       }),
       getCategories(),
       getKeywordCategories()
     ]);
+    
 
     const categoryForClient: Category & { currentCategory?: any } = {
       id: keywordCategory.id,
