@@ -9,7 +9,7 @@ const getProduct = async (slug: string): Promise<Product | null> => {
     }
     
     const { products } = await ProductService.getProducts({ 
-      limit: 100 
+      limit: 10000 
     })
     
     const foundProduct = products.find(p => {
