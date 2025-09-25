@@ -540,6 +540,10 @@ export function CapsuleNav() {
   }
 
   const isProductPage = pathname?.startsWith("/product/");
+  
+  if (isProductPage) {
+    return null;
+  }
 
   return (
     <div
