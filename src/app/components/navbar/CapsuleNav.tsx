@@ -395,6 +395,7 @@
 //     </div>
 //   );
 // }
+
 "use client";
 import { useState, useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
@@ -522,7 +523,6 @@ export function CapsuleNav() {
     if (pathname === "/") {
       setActiveItem(0);
     } else if (pathname === "/shop") {
-      // Set default active item for shop page without relying on searchParams
       setActiveItem(-1);
     } else {
       setActiveItem(-1);
@@ -539,7 +539,7 @@ export function CapsuleNav() {
     return null;
   }
 
-  const isProductPage = pathname?.startsWith("/product/");
+  const isProductPage = pathname?.startsWith("/product/") || pathname?.includes("/product/");
   
   if (isProductPage) {
     return null;

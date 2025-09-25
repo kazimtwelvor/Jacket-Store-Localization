@@ -82,7 +82,10 @@ export class ProductService {
 
             const response = await apiClient.get('/products', {
                 params,
-                timeout: 10000
+                timeout: 10000,
+                headers: {
+                    'Cache-Control': 'max-age=1800', // Cache for 30 minutes
+                }
             })
 
             let responseData: PaginatedResponse = response.data
@@ -137,7 +140,11 @@ export class ProductService {
 
     static async getProduct(slugOrId: string): Promise<Product | null> {
         try {
-            const response = await apiClient.get(`/products/${slugOrId}`)
+            const response = await apiClient.get(`/products/${slugOrId}`, {
+                headers: {
+                    'Cache-Control': 'max-age=3600', 
+                }
+            })
             return response.data
         } catch (error) {
             console.error("❌ Error fetching product:", error)

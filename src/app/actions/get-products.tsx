@@ -1,4 +1,6 @@
 import ProductService from "../../lib/services/product-service";
+import { unstable_cache } from "next/cache";
+import type { Product } from "@/types";
 
 export interface Query {
   categoryId?: string;
@@ -9,6 +11,7 @@ export interface Query {
   styles?: string[] | string;
   genders?: string[] | string;
   colors?: string[] | string;
+  baseColors?: string[] | string;
   sizes?: string[] | string;
   sort?: string;
   page?: number;
@@ -28,10 +31,20 @@ export interface PaginatedResponse {
   };
 }
 
-import type { Product } from "@/types";
+const getCachedProducts = unstable_cache(
+  async (query: Query): Promise<PaginatedResponse> => {
+    console.log('🔍 Fetching products from cache/API:', query);
+    return ProductService.getProducts(query);
+  },
+  ['products'],
+  { 
+    revalidate: 1800, 
+    tags: ['products', 'product-list'] 
+  }
+);
 
 const getProducts = async (query: Query): Promise<PaginatedResponse> => {
-  return ProductService.getProducts(query);
+  return getCachedProducts(query);
 };
 
 export default getProducts;
