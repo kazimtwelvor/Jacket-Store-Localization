@@ -30,7 +30,7 @@ const AddToCartSuccess: React.FC<AddToCartSuccessProps> = ({ isVisible, onComple
           transition={{ duration: 0.3, ease: "easeOut" }}
           className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
         >
-          <div className="bg-black/80 backdrop-blur-sm rounded-full p-6 shadow-2xl flex flex-col items-center justify-center">
+          <div className="bg-black/80 backdrop-blur-sm rounded-lg p-6 shadow-2xl flex flex-col items-center justify-center">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}

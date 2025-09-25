@@ -31,7 +31,10 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
   if (!hasMultipleColors) {
     return (
       <div className="mt-2">
-        <div className="relative inline-flex items-center gap-2 px-3 py-2 bg-gray-50 border border-black">
+        <div 
+          className="relative inline-flex items-center gap-2 px-3 py-2 bg-gray-50 border border-black"
+          onClick={(e) => e.stopPropagation()}
+        >
           <div className="flex items-center gap-1">
             <div 
               className="w-4 h-4 rounded-full border border-black/30" 
@@ -46,7 +49,10 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
 
   return (
     <div className="mt-2">
-      <div className="relative inline-flex items-center gap-2 px-3 py-2 bg-gray-50 border border-black min-w-fit">
+      <div 
+        className="relative inline-flex items-center gap-2 px-3 py-2 bg-gray-50 border border-black min-w-fit"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-center gap-1">
           <div 
             className="w-4 h-4 rounded-full border border-black/30" 
