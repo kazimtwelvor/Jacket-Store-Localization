@@ -11,11 +11,10 @@ import StructuredData from "@/src/app/components/layout/structured-data-layout"
 import ProductPageClient from "./page-client"
 
 
-// export const revalidate = 3600;
-// export const dynamicParams = true;
-
+// Disable static generation but enable caching
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600; // Cache for 1 hour
+export const dynamicParams = true;
 
 interface ProductPageProps {
   params: Promise<{
