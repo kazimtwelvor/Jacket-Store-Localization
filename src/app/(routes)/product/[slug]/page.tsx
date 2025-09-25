@@ -11,9 +11,8 @@ import StructuredData from "@/src/app/components/layout/structured-data-layout"
 import ProductPageClient from "./page-client"
 
 
-// Disable static generation but enable caching
-export const dynamic = 'force-dynamic';
-export const revalidate = 3600; // Cache for 1 hour
+// export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 export const dynamicParams = true;
 
 interface ProductPageProps {
@@ -22,17 +21,16 @@ interface ProductPageProps {
   }>
 }
 
-// export async function generateStaticParams() {
-//   try {
-//     const productsResult = await getProducts({ limit: 10000 });
-//     return productsResult.products?.slice(0, 10000).map((product: any) => ({
-//       slug: product.slug || product.id,
-//     })) || [];
-//   } catch (error) {
-//     return [];
-//   }
-// }
-
+export async function generateStaticParams() {
+  try {
+    const productsResult = await getProducts({ limit: 2 });
+    return productsResult.products?.slice(0, 2).map((product: any) => ({
+      slug: product.slug || product.id,
+    })) || [];
+  } catch (error) {
+    return [];
+  }
+}
 export async function generateMetadata({ params }: ProductPageProps, parent: ResolvingMetadata): Promise<Metadata> {
   try {
     const { slug: slugOrId } = await params || {}
