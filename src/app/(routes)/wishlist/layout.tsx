@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "My Wishlist | Fineyst",
   description: "Save and manage your favorite items in your personal wishlist.",
   alternates: {
-    canonical: "https://jacket.us.com/us/wishlist"
+    canonical: "https://www.fineystjackets.com/us/wishlist"
   }
 }
 

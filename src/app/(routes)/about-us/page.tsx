@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "About Us - Our Story and Mission | FINEYST",
   description: "Learn about our story, mission, and the team behind FINEYST.",
   alternates: {
-    canonical: "https://jacket.us.com/us/about-us"
+    canonical: "https://www.fineystjackets.com/us/about-us"
   }
 }
 
@@ -18,8 +18,8 @@ export default function AboutUsPage() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Fineyst",
-    "url": "https://jacket.us.com/us",
-    "logo": "https://jacket.us.com/us/logo.webp",
+    "url": "https://www.fineystjackets.com/us",
+    "logo": "https://www.fineystjackets.com/us/logo.webp",
     "description": "Crafting exceptional fashion experiences since 2010. We provide high-quality, sustainable fashion that empowers people to express themselves authentically.",
     "foundingDate": "2010",
     "founder": {
@@ -67,7 +67,7 @@ export default function AboutUsPage() {
     "@type": "AboutPage",
     "name": "About Us - Our Story and Mission",
     "description": "Learn about our story, mission, and the team behind FINEYST.",
-    "url": "https://jacket.us.com/us/about-us"
+    "url": "https://www.fineystjackets.com/us/about-us"
   }
 
   return (

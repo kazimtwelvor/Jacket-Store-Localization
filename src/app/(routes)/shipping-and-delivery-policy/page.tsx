@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Shipping & Delivery Policy | Fashion Store",
   description: "Learn about our shipping methods, delivery timeframes, and international shipping options.",
   alternates: {
-    canonical: "https://jacket.us.com/us/shipping-and-delivery-policy"
+    canonical: "https://www.fineystjackets.com/us/shipping-and-delivery-policy"
   }
 }
 

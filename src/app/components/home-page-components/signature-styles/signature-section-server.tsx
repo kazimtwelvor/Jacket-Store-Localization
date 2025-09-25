@@ -31,7 +31,7 @@ const getCachedSignatureData = unstable_cache(
       women: {
         title: "WOMEN'S LEATHER JACKET",
         description: "Elegance redefined. From boardroom power moves to weekend adventures, our women's collection celebrates confidence with every curve and contour.",
-        imageUrl: "https://jacket.us.com/uploads/2025/uadYfG.webp",
+        imageUrl: "https://www.fineystjackets.com/uploads/2025/uadYfG.webp",
         tabletImageUrl: "/images/tablet-image.jpg",
         href: "/collections/womens-leather-bomber-jackets",
       },

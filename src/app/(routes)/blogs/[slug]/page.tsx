@@ -92,7 +92,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: blogData.content.hero.title,
     description: blogData.content.contentSection?.text || blogData.content.guideContent.title,
     alternates: {
-      canonical: `https://jacket.us.com/us/blogs/${slug}`
+      canonical: `https://www.fineystjackets.com/us/blogs/${slug}`
     }
   }
 }
@@ -118,7 +118,7 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": hero.title,
-    "url": `https://jacket.us.com/us/blogs/${slug}`,
+    "url": `https://www.fineystjackets.com/us/blogs/${slug}`,
     "datePublished": hero.date,
     "dateModified": hero.date,
     "author": {
@@ -128,10 +128,10 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
     "publisher": {
       "@type": "Organization",
       "name": "Fineyst",
-      "url": "https://jacket.us.com/us",
+      "url": "https://www.fineystjackets.com/us",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://jacket.us.com/us/logo.webp"
+        "url": "https://www.fineystjackets.com/us/logo.webp"
       }
     },
     "description": contentSection?.text || guideContent.title,

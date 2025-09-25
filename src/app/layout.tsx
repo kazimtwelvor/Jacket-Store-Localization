@@ -9,13 +9,14 @@ import Footer from "./components/home-page-components/footer/footer";
 import RouteLoadingOverlay from "@/src/app/components/layout/route-loading-overlay";
 import CartSidebarWrapper from "./components/layout/cart-sidebar-wrapper";
 import { Suspense } from "react";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Premium Jackets & Outerwear | Jacket.us.com',
-  description: 'Discover premium quality jackets and outerwear at Jacket.us.com. Shop leather jackets, winter coats, and stylish outerwear with fast shipping and excellent customer service.',
-  metadataBase: new URL('https://jacket.us.com'),
+  title: 'Premium Jackets & Outerwear | Fineyst Jackets',
+  description: 'Discover premium quality jackets and outerwear at Fineyst Jackets. Shop leather jackets, winter coats, and stylish outerwear with fast shipping and excellent customer service.',
+  metadataBase: new URL('https://www.fineystjackets.com'),
   alternates: {
-    canonical: 'https://jacket.us.com/us',
+    canonical: 'https://www.fineystjackets.com/us',
   },
   icons: {
     icon: [

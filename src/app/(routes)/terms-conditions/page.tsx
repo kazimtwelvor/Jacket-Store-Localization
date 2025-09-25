@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Terms and Conditions - Legal Information | Fineyst",
   description: "Read our terms and conditions to understand your rights and responsibilities when using our services.",
   alternates: {
-    canonical: "https://jacket.us.com/us/terms-conditions"
+    canonical: "https://www.fineystjackets.com/us/terms-conditions"
   }
 }
 

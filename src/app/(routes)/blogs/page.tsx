@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Fashion Insights & Style Guide | Fineyst",
   description: "Discover the latest fashion insights, style guides, and expert advice on premium jackets and outerwear.",
   alternates: {
-    canonical: "https://jacket.us.com/us/blogs"
+    canonical: "https://www.fineystjackets.com/us/blogs"
   }
 }
 

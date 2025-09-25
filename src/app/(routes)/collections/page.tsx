@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'All Categories | Jackets Store',
   description: 'Browse all our jacket categories and find your perfect style.',
   alternates: {
-    canonical: "https://jacket.us.com/us/collections"
+    canonical: "https://www.fineystjackets.com/us/collections"
   }
 };
 
