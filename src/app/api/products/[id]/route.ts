@@ -12,17 +12,39 @@ export async function GET(
 
   try {
     const { id } = await params
-    const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+
+    let response = await fetch(`${API_BASE_URL}/products/${id}`, {
       headers: { 'Accept': 'application/json' },
       next: { revalidate: 3600 }
     })
 
-    if (!response.ok) {
-      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+    if (response.ok) {
+      const data = await response.json()
+      return NextResponse.json(data)
     }
 
-    const data = await response.json()
-    return NextResponse.json(data)
+    const searchResponse = await fetch(`${API_BASE_URL}/products?limit=500`, {
+      headers: { 'Accept': 'application/json' },
+      next: { revalidate: 3600 }
+    })
+
+    if (!searchResponse.ok) {
+      return NextResponse.json({ error: 'Failed to search products' }, { status: 500 })
+    }
+
+    const searchData = await searchResponse.json()
+    const products = searchData.products || []
+
+    const product = products.find((p: any) => {
+      const nameSlug = p.name?.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-")
+      return p.id === id || p.slug === id || nameSlug === id
+    })
+
+    if (product) {
+      return NextResponse.json(product)
+    }
+
+    return NextResponse.json({ error: 'Product not found' }, { status: 404 })
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 })
   }
