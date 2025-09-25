@@ -12,7 +12,7 @@ import ProductPageClient from "./page-client"
 
 
 export const revalidate = 3600;
-export const dynamicParams = true; 
+export const dynamicParams = true;
 
 interface ProductPageProps {
   params: Promise<{
@@ -22,8 +22,8 @@ interface ProductPageProps {
 
 export async function generateStaticParams() {
   try {
-    const productsResult = await getProducts({ limit: 20 });
-    return productsResult.products?.slice(0, 20).map((product: any) => ({
+    const productsResult = await getProducts({ limit: 10000 });
+    return productsResult.products?.slice(0, 10000).map((product: any) => ({
       slug: product.slug || product.id,
     })) || [];
   } catch (error) {
@@ -116,6 +116,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
     return notFound()
   }
 
+
   if (product.slug && product.slug !== slugOrId && product.id === slugOrId) {
     redirect(`/product/${product.slug}`)
   }
@@ -195,12 +196,12 @@ const ProductPage = async ({ params }: ProductPageProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-white" style={{scrollBehavior: 'smooth'}}>
+    <div className="min-h-screen bg-white" style={{ scrollBehavior: 'smooth' }}>
       <StructuredData data={schemaArray} />
-      
+
       <ProductPageClient />
-      
-      
+
+
       <div className="block lg:hidden">
         <div className="pt-4 pb-2 px-4">
           <nav className="flex items-center justify-center text-xs">
@@ -213,7 +214,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
             </span>
           </nav>
         </div>
-        
+
         <div className="w-full">
           <GalleryWrapper images={formattedImages} product={product} />
           <div className="mt-2 px-1 sm:px-8">
@@ -232,7 +233,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
           </div>
         </div>
       </div>
-      
+
       <div className="w-full">
         <ProductSuggestionsSection
           suggestProducts={suggestProducts}
