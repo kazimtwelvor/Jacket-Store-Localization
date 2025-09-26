@@ -1050,121 +1050,24 @@ const CheckoutPage = () => {
 
                 {/* Payment Method Selection */}
                 <div className="mb-8">
-                  <h3 className="text-lg font-medium mb-6">
-                    Select Payment Method
-                  </h3>
-                  <div className="space-y-3">
-                    {/* Google Pay */}
-                    <div>
-                      <label className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-gray-300 transition-colors">
-                        <div className="flex items-center">
-                          <div className="relative">
-                            <input
-                              type="radio"
-                              name="selectedPaymentMethod"
-                              value="google_pay"
-                              checked={
-                                formData.selectedPaymentMethod === "google_pay"
-                              }
-                              onChange={handleInputChange}
-                              className="sr-only" // Hidden radio button
-                            />
-                            <div
-                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                formData.selectedPaymentMethod === "google_pay"
-                                  ? "bg-black border-black"
-                                  : "border-gray-300"
-                              }`}
-                            >
-                              {formData.selectedPaymentMethod ===
-                                "google_pay" && (
-                                <Check className="w-3 h-3 text-white" />
-                              )}
-                            </div>
-                          </div>
-                          <span className="ml-3 text-sm font-medium">
-                            Google Pay
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <svg
-                            className="w-14 h-8"
-                            viewBox="0 0 56 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect width="56" height="20" rx="4" fill="#000" />
-                            <text
-                              x="7"
-                              y="14"
-                              font-size="10"
-                              fill="#fff"
-                              font-family="Arial, Helvetica, sans-serif"
-                            >
-                              Google
-                            </text>
-                            <text
-                              x="36"
-                              y="14"
-                              font-size="10"
-                              fill="#fff"
-                              font-family="Arial, Helvetica, sans-serif"
-                            >
-                              Pay
-                            </text>
-                          </svg>
-                        </div>
-                      </label>
-
-                      {/* Stripe Payment Form for Google Pay */}
-                      {formData.selectedPaymentMethod === "google_pay" && (
-                        <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-                          {isLoading && !clientSecret ? (
-                            <div className="flex flex-col items-center justify-center py-6">
-                              <div className="w-8 h-8 border-4 border-[#B01E23] border-t-transparent rounded-full animate-spin mb-2"></div>
-                              <p className="text-gray-600 text-sm">
-                                Initializing payment...
-                              </p>
-                            </div>
-                          ) : stripePromise && clientSecret ? (
-                            <Elements
-                              stripe={stripePromise}
-                              options={{
-                                clientSecret,
-                                appearance: {
-                                  theme: "stripe",
-                                  variables: {
-                                    colorPrimary: "#000000",
-                                    colorBackground: "#ffffff",
-                                    colorText: "#30313d",
-                                  },
-                                },
-                              }}
-                            >
-                              <PaymentForm
-                                clientSecret={clientSecret}
-                                orderId={orderId!}
-                                onSuccess={handlePaymentSuccess}
-                                onBack={() => setActiveStep("address")}
-                                isLoading={isLoading}
-                                setIsLoading={setIsLoading}
-                              />
-                            </Elements>
-                          ) : (
-                            <div className="text-center py-6">
-                              <p className="text-red-500 text-sm">
-                                Failed to load payment form. Please try again.
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
+                  <div className="flex items-center mb-6">
+                    <CreditCard className="w-5 h-5 text-gray-700 mr-2" />
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      Choose Payment Method
+                    </h3>
+                  </div>
+                  <div className="space-y-4">
                     {/* PayPal */}
-                    <div>
-                      <label className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-gray-300 transition-colors">
+                    <div className="group">
+                      <label
+                        className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          formData.selectedPaymentMethod === "paypal"
+                            ? "border-black bg-gray-100 shadow-md"
+                            : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                        }`}
+                      >
                         <div className="flex items-center">
-                          <div className="relative">
+                          <div className="relative mr-4">
                             <input
                               type="radio"
                               name="selectedPaymentMethod"
@@ -1173,53 +1076,42 @@ const CheckoutPage = () => {
                                 formData.selectedPaymentMethod === "paypal"
                               }
                               onChange={handleInputChange}
-                              className="sr-only" // Hidden radio button
+                              className="sr-only"
                             />
                             <div
-                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                                 formData.selectedPaymentMethod === "paypal"
                                   ? "bg-black border-black"
-                                  : "border-gray-300"
+                                  : "border-gray-300 group-hover:border-gray-500"
                               }`}
                             >
                               {formData.selectedPaymentMethod === "paypal" && (
-                                <Check className="w-3 h-3 text-white" />
+                                <Check className="w-4 h-4 text-white" />
                               )}
                             </div>
                           </div>
-                          <span className="ml-3 text-sm font-medium">
-                            PayPal
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <svg
-                            className="w-16 h-8"
-                            viewBox="0 0 64 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect
-                              width="64"
-                              height="20"
-                              rx="4"
-                              fill="#003087"
-                            />
-                            <text
-                              x="10"
-                              y="14"
-                              font-size="10"
-                              fill="#fff"
-                              font-family="Arial, Helvetica, sans-serif"
-                              font-weight="bold"
-                            >
+                          <div className="flex items-center">
+                            <div className="bg-blue-600 px-4 py-2 rounded text-white font-semibold text-sm">
                               PayPal
-                            </text>
-                          </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="text-sm text-gray-500 mr-2">
+                            Secure payment
+                          </span>
+                          <Shield className="w-4 h-4 text-gray-600" />
                         </div>
                       </label>
 
                       {/* PayPal Buttons */}
                       {formData.selectedPaymentMethod === "paypal" && (
-                        <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
+                          <div className="mb-4">
+                            <p className="text-sm text-gray-700 mb-2">
+                              Complete your payment with PayPal
+                            </p>
+                          </div>
                           <PayPalButtons
                             items={items.map((i) => ({
                               id: i.product.id,
@@ -1232,10 +1124,16 @@ const CheckoutPage = () => {
                     </div>
 
                     {/* Credit Card */}
-                    <div>
-                      <label className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-gray-300 transition-colors">
+                    <div className="group">
+                      <label
+                        className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          formData.selectedPaymentMethod === "CREDIT_CARD"
+                            ? "border-black bg-gray-100 shadow-md"
+                            : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                        }`}
+                      >
                         <div className="flex items-center">
-                          <div className="relative">
+                          <div className="relative mr-4">
                             <input
                               type="radio"
                               name="selectedPaymentMethod"
@@ -1247,195 +1145,136 @@ const CheckoutPage = () => {
                               className="sr-only"
                             />
                             <div
-                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                // Custom radio button styling
+                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                                 formData.selectedPaymentMethod === "CREDIT_CARD"
                                   ? "bg-black border-black"
-                                  : "border-gray-300"
+                                  : "border-gray-300 group-hover:border-gray-500"
                               }`}
                             >
                               {formData.selectedPaymentMethod ===
                                 "CREDIT_CARD" && (
-                                <Check className="w-3 h-3 text-white" />
+                                <Check className="w-4 h-4 text-white" />
                               )}
                             </div>
                           </div>
-                          <span className="ml-3 text-sm font-medium">
-                            Credit Card
-                          </span>
+                          <div className="flex items-center">
+                            <CreditCard className="w-8 h-8 text-gray-600 mr-3" />
+                            <span className="text-base font-medium text-gray-900">
+                              Credit or Debit Card
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-1">
-                          <svg
-                            className="w-8 h-5"
-                            viewBox="0 0 32 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect
-                              width="32"
-                              height="20"
-                              rx="2"
-                              fill="#EB001B"
-                            />
-                            <circle cx="12" cy="10" r="6" fill="#FF5F00" />
-                            <circle cx="20" cy="10" r="6" fill="#F79E1B" />
-                          </svg>
-                          <svg
-                            className="w-8 h-5"
-                            viewBox="0 0 32 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect
-                              width="32"
-                              height="20"
-                              rx="2"
-                              fill="#1A1F71"
-                            />
-                            <text
-                              x="8"
-                              y="13"
-                              font-size="9"
-                              fill="#fff"
-                              font-family="Arial, Helvetica, sans-serif"
-                              font-weight="bold"
+                        <div className="flex items-center space-x-2">
+                          {/* Mastercard */}
+                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
+                            <svg
+                              className="w-8 h-5"
+                              viewBox="0 0 32 20"
+                              xmlns="http://www.w3.org/2000/svg"
                             >
-                              VISA
-                            </text>
-                          </svg>
-                          <svg
-                            className="w-8 h-5"
-                            viewBox="0 0 32 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect
-                              width="32"
-                              height="20"
-                              rx="2"
-                              fill="#2E77BC"
-                            />
-                            <text
-                              x="5"
-                              y="13"
-                              font-size="8"
-                              fill="#fff"
-                              font-family="Arial, Helvetica, sans-serif"
-                              font-weight="bold"
+                              <circle cx="12" cy="10" r="6" fill="#EB001B" />
+                              <circle cx="20" cy="10" r="6" fill="#F79E1B" />
+                              <path
+                                d="M16 6c1.1 1.2 1.8 2.8 1.8 4.5s-.7 3.3-1.8 4.5c-1.1-1.2-1.8-2.8-1.8-4.5S14.9 7.2 16 6z"
+                                fill="#FF5F00"
+                              />
+                            </svg>
+                          </div>
+                          {/* Visa */}
+                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
+                            <svg
+                              className="w-8 h-5"
+                              viewBox="0 0 32 20"
+                              xmlns="http://www.w3.org/2000/svg"
                             >
-                              AMEX
-                            </text>
-                          </svg>
+                              <rect
+                                width="32"
+                                height="20"
+                                rx="2"
+                                fill="#1A1F71"
+                              />
+                              <text
+                                x="6"
+                                y="13"
+                                fontSize="8"
+                                fill="#fff"
+                                fontFamily="Arial, sans-serif"
+                                fontWeight="bold"
+                              >
+                                VISA
+                              </text>
+                            </svg>
+                          </div>
+                          {/* American Express */}
+                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
+                            <svg
+                              className="w-8 h-5"
+                              viewBox="0 0 32 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                width="32"
+                                height="20"
+                                rx="2"
+                                fill="#2E77BC"
+                              />
+                              <text
+                                x="4"
+                                y="13"
+                                fontSize="7"
+                                fill="#fff"
+                                fontFamily="Arial, sans-serif"
+                                fontWeight="bold"
+                              >
+                                AMEX
+                              </text>
+                            </svg>
+                          </div>
+                          {/* Discover */}
+                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
+                            <svg
+                              className="w-8 h-5"
+                              viewBox="0 0 32 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                width="32"
+                                height="20"
+                                rx="2"
+                                fill="#FF6000"
+                              />
+                              <text
+                                x="2"
+                                y="13"
+                                fontSize="6"
+                                fill="#fff"
+                                fontFamily="Arial, sans-serif"
+                                fontWeight="bold"
+                              >
+                                DISC
+                              </text>
+                            </svg>
+                          </div>
                         </div>
                       </label>
 
                       {/* Stripe Payment Form for Credit Card */}
                       {formData.selectedPaymentMethod === "CREDIT_CARD" && (
-                        <div className="mt-4 p-4  rounded-lg bg-gray-50">
-                          {isLoading && !clientSecret ? (
-                            <div className="flex flex-col items-center justify-center py-6">
-                              <div className="w-8 h-8 border-4 border-[#B01E23] border-t-transparent rounded-full animate-spin mb-2"></div>
-                              <p className="text-gray-600 text-sm">
-                                Initializing payment...
-                              </p>
-                            </div>
-                          ) : stripePromise && clientSecret ? (
-                            <Elements
-                              stripe={stripePromise}
-                              options={{
-                                clientSecret,
-                                appearance: {
-                                  theme: "stripe",
-                                  variables: {
-                                    colorPrimary: "#000000",
-                                    colorBackground: "#ffffff",
-                                    colorText: "#30313d",
-                                  },
-                                },
-                              }}
-                            >
-                              <PaymentForm
-                                clientSecret={clientSecret}
-                                orderId={orderId!}
-                                onSuccess={handlePaymentSuccess}
-                                onBack={() => setActiveStep("address")}
-                                isLoading={isLoading}
-                                setIsLoading={setIsLoading}
-                              />
-                            </Elements>
-                          ) : (
-                            <div className="text-center py-6">
-                              <p className="text-red-500 text-sm">
-                                Failed to load payment form. Please try again.
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Klarna */}
-                    <div>
-                      <label className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-gray-300 transition-colors">
-                        <div className="flex items-center">
-                          <div className="relative">
-                            <input
-                              type="radio"
-                              name="selectedPaymentMethod"
-                              value="klarna"
-                              checked={
-                                formData.selectedPaymentMethod === "klarna"
-                              }
-                              onChange={handleInputChange}
-                              className="sr-only" // Hidden radio button
-                            />
-                            <div
-                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                formData.selectedPaymentMethod === "klarna"
-                                  ? "bg-black border-black"
-                                  : "border-gray-300"
-                              }`}
-                            >
-                              {formData.selectedPaymentMethod === "klarna" && (
-                                <Check className="w-3 h-3 text-white" />
-                              )}
+                        <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
+                          <div className="mb-4">
+                            <p className="text-sm text-gray-700 mb-2">
+                              Enter your card details securely
+                            </p>
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Shield className="w-3 h-3 mr-1" />
+                              <span>256-bit SSL encryption</span>
                             </div>
                           </div>
-                          <span className="ml-3 text-sm font-medium">
-                            Klarna - Slice it
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <svg
-                            className="w-16 h-8"
-                            viewBox="0 0 64 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect
-                              width="64"
-                              height="20"
-                              rx="4"
-                              fill="#FFB3C7"
-                            />
-                            <text
-                              x="18"
-                              y="14"
-                              font-size="10"
-                              fill="#000"
-                              font-family="Arial, Helvetica, sans-serif"
-                              font-weight="bold"
-                            >
-                              Klarna
-                            </text>
-                          </svg>
-                        </div>
-                      </label>
-
-                      {/* Stripe Payment Form for Klarna */}
-                      {formData.selectedPaymentMethod === "klarna" && (
-                        <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
                           {isLoading && !clientSecret ? (
-                            <div className="flex flex-col items-center justify-center py-6">
-                              <div className="w-8 h-8 border-4 border-[#B01E23] border-t-transparent rounded-full animate-spin mb-2"></div>
-                              <p className="text-gray-600 text-sm">
-                                Initializing payment...
+                            <div className="flex flex-col items-center justify-center py-8">
+                              <div className="w-10 h-10 border-4 border-gray-600 border-t-transparent rounded-full animate-spin mb-3"></div>
+                              <p className="text-gray-700 text-sm font-medium">
+                                Initializing secure payment...
                               </p>
                             </div>
                           ) : stripePromise && clientSecret ? (
@@ -1448,7 +1287,9 @@ const CheckoutPage = () => {
                                   variables: {
                                     colorPrimary: "#000000",
                                     colorBackground: "#ffffff",
-                                    colorText: "#30313d",
+                                    colorText: "#374151",
+                                    borderRadius: "8px",
+                                    fontFamily: "system-ui, sans-serif",
                                   },
                                 },
                               }}
@@ -1463,15 +1304,35 @@ const CheckoutPage = () => {
                               />
                             </Elements>
                           ) : (
-                            <div className="text-center py-6">
-                              <p className="text-red-500 text-sm">
-                                Failed to load payment form. Please try again.
+                            <div className="text-center py-8">
+                              <div className="mb-3">
+                                <svg
+                                  className="w-12 h-12 text-gray-400 mx-auto"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"
+                                  />
+                                </svg>
+                              </div>
+                              <p className="text-gray-700 text-sm font-medium mb-2">
+                                Failed to load payment form
+                              </p>
+                              <p className="text-gray-500 text-xs">
+                                Please refresh the page or try again later.
                               </p>
                             </div>
                           )}
                         </div>
                       )}
                     </div>
+
+                    {/* Apple Pay / Google Pay */}
                   </div>
                 </div>
 
