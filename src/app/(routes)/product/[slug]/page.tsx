@@ -201,9 +201,9 @@ const ProductPage = async ({ params }: ProductPageProps) => {
 
   const schemaArray = []
 
-  if (product.schema) {
+  if (product?.schema) {
     try {
-      const schemaData = typeof product?.schema === "string" ? JSON.parse(product?.schema) : product?.schema
+      const schemaData = typeof product.schema === "string" ? JSON.parse(product.schema) : product.schema
 
       if (schemaData && typeof schemaData === "object") {
         Object.values(schemaData).forEach((schema) => {
