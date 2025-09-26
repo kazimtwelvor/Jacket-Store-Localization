@@ -144,18 +144,16 @@ export async function generateMetadata({ params }: ProductPageProps, parent: Res
 const ProductPage = async ({ params }: ProductPageProps) => {
   const { slug: slugOrId } = await params || {}
 
-  // if (!slugOrId) {
-  //   console.error("No slug or ID provided")
-  //   return notFound()
-  // }
+  if (!slugOrId) {
+    console.error("No slug or ID provided")
+    return notFound()
+  }
 
-  // Try to get product with fallback strategy
   let product = null
   try {
     product = await getProduct(slugOrId)
   } catch (error) {
     console.error("Error fetching product:", error)
-    // Fallback: try to get from products list
     try {
       const productsResult = await getProducts({ limit: 10000 })
       product = productsResult.products?.find(p => {
@@ -167,9 +165,9 @@ const ProductPage = async ({ params }: ProductPageProps) => {
     }
   }
 
-  // if (!product || !product.id || !product.name) {
-  //   return notFound()
-  // }
+  if (!product) {
+    return notFound()
+  }
 
 
   if (product?.slug && product.slug !== slugOrId && product.id === slugOrId) {
