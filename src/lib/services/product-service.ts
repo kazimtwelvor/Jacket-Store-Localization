@@ -82,10 +82,7 @@ export class ProductService {
 
             const response = await apiClient.get('/products', {
                 params,
-                timeout: 60000, 
-                headers: {
-                    'Cache-Control': 'max-age=1800', // Cache for 30 minutes
-                }
+                timeout: 60000
             })
 
             let responseData: PaginatedResponse = response.data

@@ -36,7 +36,7 @@ export async function fetchJson<T>(
   }
 
   const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), init.timeoutMs ?? 1000)
+  const timeout = setTimeout(() => controller.abort(), init.timeoutMs ?? 60000) 
 
   try {
     const query = toURLSearchParams(init.query)

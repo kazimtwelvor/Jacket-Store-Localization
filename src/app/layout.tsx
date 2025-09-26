@@ -33,6 +33,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Google Site Verification */}
+        <meta name="google-site-verification" content="7fzjFZWpRYLIz_L2sKypuvXyhyf44Na3by5X3a96l9g" />
+        
         {/* Preload critical images */}
         <link
           rel="preload"
