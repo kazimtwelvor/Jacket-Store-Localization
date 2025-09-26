@@ -3,7 +3,7 @@ import { getApiBaseURL, isCorsIssue, getCorsDebugInfo } from './config/api-confi
 
 const apiClient = axios.create({
     baseURL: getApiBaseURL(),
-    timeout: 10000,
+    timeout: 60000, // Increased from 10s to 30s for build process
     headers: {
         'Content-Type': 'application/json',
     },
