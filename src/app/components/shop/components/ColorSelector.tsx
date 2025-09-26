@@ -20,7 +20,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
   
   const isModalOpen = openColorModal === product.id
   
-  const availableColors = product.colorDetails || [{ value: "#000000", name: "Black" }]
+  const availableColors = product?.colorDetails || [{ value: "#000000", name: "Black" }]
   const hasMultipleColors = availableColors.length > 1
   
   const currentSelectedColorId = selectedColorId || availableColors[0]?.id || availableColors[0]?.name

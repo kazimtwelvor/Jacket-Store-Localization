@@ -99,8 +99,8 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
   }
 
   // Use the sizes and colors from the API response if available
-  const availableSizes: Size[] = (data.sizeDetails as Size[]) || []
-  const availableColors: Color[] = (data.colorDetails as Color[]) || []
+  const availableSizes: Size[] = (data?.sizeDetails as Size[]) || []
+  const availableColors: Color[] = (data?.colorDetails as Color[]) || []
   
 
 

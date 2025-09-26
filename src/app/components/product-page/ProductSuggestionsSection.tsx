@@ -78,10 +78,10 @@ export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, 
       setMobileCartModal({ isOpen: true, product })
     } else {
       console.log('Adding directly to cart')
-      const defaultSize = product.sizeDetails && product.sizeDetails.length > 0 
+      const defaultSize = product?.sizeDetails && product.sizeDetails.length > 0 
         ? product.sizeDetails[0].name 
         : 'Default'
-      const defaultColor = product.colorDetails && product.colorDetails.length > 0 
+      const defaultColor = product?.colorDetails && product.colorDetails.length > 0 
         ? product.colorDetails[0].name 
         : 'Default'
       
@@ -126,14 +126,14 @@ export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, 
         onAddToCartClick={handleAddToCart}
       />
 
-      {mobileCartModal.isOpen && mobileCartModal.product && (
+      {mobileCartModal?.isOpen && mobileCartModal?.product && (
         <MobileAddToCartModal
-          isOpen={mobileCartModal.isOpen}
+          isOpen={mobileCartModal?.isOpen}
           onClose={() => setMobileCartModal({ isOpen: false, product: null })}
-          product={mobileCartModal.product}
-          availableSizes={mobileCartModal.product.sizeDetails || []}
-          availableColors={mobileCartModal.product.colorDetails || []}
-          selectedColorId={mobileCartModal.product.colorDetails?.[0]?.id || ''}
+          product={mobileCartModal?.product}
+          availableSizes={mobileCartModal?.product?.sizeDetails || []}
+          availableColors={mobileCartModal?.product?.colorDetails || []}
+          selectedColorId={mobileCartModal?.product?.colorDetails?.[0]?.id || ''}
         />
       )}
     </div>

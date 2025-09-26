@@ -1042,10 +1042,10 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             isOpen={mobileCartModal.isOpen}
             onClose={() => setMobileCartModal({ isOpen: false, product: null })}
             product={mobileCartModal.product}
-            availableSizes={mobileCartModal.product.sizeDetails || []}
-            availableColors={mobileCartModal.product.colorDetails || []}
+            availableSizes={mobileCartModal.product?.sizeDetails || []}
+            availableColors={mobileCartModal.product?.colorDetails || []}
             selectedColorId={
-              mobileCartModal.product.colorDetails?.[0]?.id || ""
+              mobileCartModal.product?.colorDetails?.[0]?.id || ""
             }
           />
         )}

@@ -14,7 +14,7 @@ export const SizeSelector: React.FC<SizeSelectorProps> = ({
   selectedSizes, 
   handleSizeSelect 
 }) => {
-  const availableSizes = product.sizeDetails || []
+  const availableSizes = product?.sizeDetails || []
 
   if (availableSizes.length === 0) return null
 

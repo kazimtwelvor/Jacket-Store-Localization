@@ -51,9 +51,9 @@ const GalleryWrapper: React.FC<GalleryWrapperProps> = ({ images, product }) => {
         isOpen={showMobileSizeModal}
         onClose={() => setShowMobileSizeModal(false)}
         product={product}
-        availableSizes={product.sizeDetails || []}
-        availableColors={product.colorDetails || []}
-        selectedColorId={product.colorDetails?.[0]?.id || ''}
+        availableSizes={product?.sizeDetails || []}
+        availableColors={product?.colorDetails || []}
+        selectedColorId={product?.colorDetails?.[0]?.id || ''}
       />
     </>
   )
