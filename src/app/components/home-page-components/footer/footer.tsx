@@ -99,7 +99,14 @@ const Footer = () => {
                                         <circle cx="12" cy="10" r="3"></circle>
                                     </svg>
                                 </div>
-                                <span className="text-black text-sm font-semibold text-center md:text-left">123 Fineyst St, Luxury City, LC 12345</span>
+                                <Link 
+                                    href="https://www.google.com/maps/place/122+Henderson+Rd,+Sandy+Creek,+NY+13145,+USA/@43.6753337,-76.1654487,17z/data=!3m1!4b1!4m6!3m5!1s0x89d83725ea5925ed:0xfc34d1bcfa6f4763!8m2!3d43.6753337!4d-76.1654487!16s%2Fg%2F11kpjwbkc_?entry=ttu&g_ep=EgoyMDI1MDkyMy4wIKXMDSoASAFQAw%3D%3D"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-black text-sm font-semibold text-center md:text-left hover:text-blue-600 hover:underline transition-colors"
+                                >
+                                    122 Henderson Rd, Sandy Creek, NY 13145, USA
+                                </Link>
                             </div>
 
                             <div className="flex items-center md:items-start">
