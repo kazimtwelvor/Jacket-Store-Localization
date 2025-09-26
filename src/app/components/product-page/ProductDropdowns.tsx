@@ -41,14 +41,14 @@ const ProductDropdowns = ({
           <h3 className="text-sm font-bold uppercase mb-2">Details</h3>
           <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed">
             {(() => {
-              const description = data.description || "";
+              const description = data?.description || "";
               return (
                 <>
                   <div dangerouslySetInnerHTML={{ __html: description }} />
                   <ul className="list-disc pl-5 mt-3 sm:mt-4 space-y-1">
-                    <li>SKU: {data.sku || "N/A"}</li>
-                    <li>Material: {data.material || "Premium fabric"}</li>
-                    <li>Fit: {data.specifications?.fit || "Regular fit"}</li>
+                    <li>SKU: {data?.sku || "N/A"}</li>
+                    <li>Material: {data?.material || "Premium fabric"}</li>
+                    <li>Fit: {data?.specifications?.fit || "Regular fit"}</li>
                   </ul>
                 </>
               );
@@ -101,7 +101,7 @@ const ProductDropdowns = ({
         <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeTab === "details" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
           <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed" data-dropdown>
             {(() => {
-              const description = data.description || "";
+              const description = data?.description || "";
               const firstParagraphEnd = description.indexOf('</p>') + 4;
               const firstParagraph = firstParagraphEnd > 4 ? description.substring(0, firstParagraphEnd) : description;
               const restOfDescription = firstParagraphEnd > 4 ? description.substring(firstParagraphEnd) : "";
@@ -121,9 +121,9 @@ const ProductDropdowns = ({
                   )}
                   
                   <ul className="list-disc pl-5 mt-3 sm:mt-4 space-y-1">
-                    <li>SKU: {data.sku || "N/A"}</li>
-                    <li>Material: {data.material || "Premium fabric"}</li>
-                    <li>Fit: {data.specifications?.fit || "Regular fit"}</li>
+                    <li>SKU: {data?.sku || "N/A"}</li>
+                    <li>Material: {data?.material || "Premium fabric"}</li>
+                    <li>Fit: {data?.specifications?.fit || "Regular fit"}</li>
                   </ul>
                 </>
               );
