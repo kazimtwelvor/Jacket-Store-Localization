@@ -452,7 +452,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                       </motion.div>
                     )}
                     <AnimatePresence>
-                      {hoveredProduct === `related-${product.id}-${index}` && ((product as any).sizeDetails || (product as any).sizes) && ((product as any).sizeDetails || (product as any).sizes).length > 0 && (
+                      {hoveredProduct === `related-${product.id}-${index}` && ((product as any)?.sizeDetails || (product as any)?.sizes) && ((product as any)?.sizeDetails || (product as any)?.sizes).length > 0 && (
                         <motion.div
                           className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 z-20"
                           initial={{ opacity: 0, y: 20 }}
@@ -466,7 +466,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                               Quick Shop <span className="text-gray-500">(Select your Size)</span>
                             </div>
                             <div className="flex flex-wrap gap-1">
-                              {((product as any).sizeDetails || (product as any).sizes).map((size: any) => (
+                              {((product as any)?.sizeDetails || (product as any)?.sizes)?.map((size: any) => (
                                 <button
                                   key={size.id}
                                   className={cn(

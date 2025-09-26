@@ -51,9 +51,9 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
 
   const isHovered = hoveredProduct === `grid-${product.id}`
   const hasMultipleImages = product.images && product.images.length > 1
-  const availableSizes = product.sizeDetails || []
-  const selectedProductSizes = selectedSizes[product.id] || []
-  const availableColors = product.colorDetails || []
+  const availableSizes = product?.sizeDetails || []
+  const selectedProductSize = selectedSizes[product.id] || ''
+  const availableColors = product?.colorDetails || []
 
   return (
     <div
@@ -155,7 +155,7 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
                     key={size}
                     className={cn(
                       "px-2 py-1 text-xs rounded border transition-colors",
-                      selectedProductSizes.includes(size)
+                      selectedProductSize === size
                         ? "bg-black text-white border-black"
                         : "bg-white text-black border-gray-300 hover:border-black"
                     )}

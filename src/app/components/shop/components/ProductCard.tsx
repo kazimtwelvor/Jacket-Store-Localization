@@ -59,8 +59,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   
   const isHovered = hoveredProduct === `grid-${product.id}`
   const hasMultipleImages = product.images && product.images.length > 1
-  const availableSizes = product.sizeDetails || []
-  const availableColors = product.colorDetails || []
+  const availableSizes = product?.sizeDetails || []
+  const availableColors = product?.colorDetails || []
   
   
 
