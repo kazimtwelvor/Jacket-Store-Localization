@@ -8,10 +8,9 @@ const getKeywordCategory = async (
       return null;
     }
 
-    // Use direct external API call with proper error handling and caching
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/category-pages`, {
-      next: { revalidate: 3600 }, // Cache for 1 hour
-      cache: "force-cache",
+      next: { revalidate: 0 }, 
+      cache: "no-store",
       headers: {
         "Accept": "application/json",
         "User-Agent": "Fineyst-App",

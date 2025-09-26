@@ -52,7 +52,7 @@ const getCategories = async (): Promise<Category[]> => {
 
     console.log("🔄 Fetching categories from API:", `${process.env.NEXT_PUBLIC_API_URL}/categories`)
     
-    const categories = await fetchJson<Category[]>("/categories")
+    const categories = await fetchJson<Category[]>("/categories", { timeoutMs: 60000 })
     
     console.log("✅ Categories fetched from API:", categories)
     console.log("✅ Categories length:", categories?.length)
