@@ -25,18 +25,18 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
               LEATHER
             </Link>
             <span className="mx-1 text-gray-500">/</span>
-            <span className="text-black truncate max-w-[170px] uppercase font-medium" title={data.name}>
-              {data.name.length > 20 ? `${data.name.substring(0, 20)}` : data.name}
+            <span className="text-black truncate max-w-[170px] uppercase font-medium" title={data?.name}>
+              {data?.name && data?.name?.length > 20 ? `${data?.name?.substring(0, 20)}` : data?.name}
             </span>
           </nav>
         </div>
       )}
 
       {/* Sale Flags - Mobile Style */}
-      {isMobile && data.salePrice && (
+      {isMobile && data?.salePrice && (
         <div className="flex items-center gap-2 mb-2">
           <div className="bg-black text-white px-2 py-1 text-xs font-bold">
-            Sale -{Math.round(((parseFloat(data.price) - parseFloat(data.salePrice as string)) / parseFloat(data.price)) * 100)}%
+            Sale -{Math.round(((parseFloat(data?.price || '0') - parseFloat(data?.salePrice as string || '0')) / parseFloat(data?.price || '1')) * 100)}%
           </div>
           <div className="text-black px-2 py-1 text-xs font-medium border border-gray-300">
             Slim fit
@@ -52,7 +52,7 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
           `${avertaBlack.className} font-bold leading-tight`,
           isMobile ? "text-lg line-clamp-2 md:text-xl line-clamp-2 sm:text-2xl line-clamp-2" : "text-xl lg:text-2xl line-clamp-2"
         )}>
-          {data.name.toUpperCase()}
+          {data?.name?.toUpperCase()}
         </h1>
 
 
@@ -60,7 +60,7 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
         {/* Price Section */}
         <div className={cn(isMobile ? "py-1 mb-1" : "py-5 mb-3")}>
           {(() => {
-            const hasValidSalePrice = data.salePrice && parseFloat(data.salePrice) > 0;
+            const hasValidSalePrice = data?.salePrice && parseFloat(data?.salePrice) > 0;
             if (hasValidSalePrice) {
               return (
                 <div className="flex items-center gap-2">
@@ -68,13 +68,13 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
                     "font-bold line-through text-gray-500",
                     isMobile ? "text-lg sm:text-xl md:text-2xl" : "text-lg lg:text-xl"
                   )}>
-                    ${data.price}
+                    ${data?.price}
                   </span>
                   <span className={cn(
                     "font-bold text-black",
                     isMobile ? "text-lg sm:text-xl md:text-2xl" : "text-xl lg:text-2xl"
                   )}>
-                    ${data.salePrice}
+                    ${data?.salePrice}
                   </span>
                 </div>
               );
@@ -84,7 +84,7 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
                   "font-bold text-black",
                   isMobile ? "text-lg sm:text-xl md:text-2xl" : "text-xl lg:text-2xl"
                 )}>
-                  ${data.price}
+                  ${data?.price}
                 </span>
               );
             }
@@ -97,9 +97,9 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
             {/* Sale Flags - Desktop Style */}
             {!isMobile && (
               <div className="flex items-center gap-3 ">
-                {data.salePrice && parseFloat(data.salePrice) > 0 && (
+                {data?.salePrice && parseFloat(data?.salePrice) > 0 && (
                   <div className="bg-black text-white px-3 py-1.5 text-xs pointer-events-none">
-                    Sale -{Math.round(((parseFloat(data.price) - parseFloat(data.salePrice as string)) / parseFloat(data.price)) * 100)}%
+                    Sale -{Math.round(((parseFloat(data?.price || '0') - parseFloat(data?.salePrice as string || '0')) / parseFloat(data?.price || '1')) * 100)}%
                   </div>
                 )}
                 <div className="text-black px-3 py-1.5 text-xs  border border-gray-800">

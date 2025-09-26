@@ -127,7 +127,7 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
   }, [isDropdownOpen])
 
   // Use reviews from product data
-  const reviews = data.reviews || []
+  const reviews = data?.reviews || []
 
 
 
@@ -168,7 +168,7 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
 
   const { addToCart } = useCart()
   const wishlist = useWishlist()
-  const isInWishlist = wishlist.isInWishlist(data.id)
+  const isInWishlist = wishlist?.isInWishlist(data?.id)
 
   const onAddToCart = () => {
     if (!selectedSizeId && availableSizes.length > 0) {
@@ -247,7 +247,7 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
         setSelectedColorId={setSelectedColorId}
         selectedColorName={selectedColorName}
         isMobile={isMobile}
-        colorLinks={data.colorLinks}
+        colorLinks={data?.colorLinks}
       />
 
       <SizeSelection 
@@ -279,7 +279,7 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
         <span className={cn(
           "font-bold text-black-600",
           isMobile ? "text-xs" : "text-sm"
-        )}>{data.sku || "N/A"}</span>
+        )}>{data?.sku || "N/A"}</span>
       </div>
 
       <ProductDropdowns 
