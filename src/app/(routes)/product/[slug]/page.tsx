@@ -11,10 +11,9 @@ import StructuredData from "@/src/app/components/layout/structured-data-layout"
 import ProductPageClient from "./page-client"
 
 
-// export const dynamic = 'force-dynamic';
-export const dynamic = 'auto';
-export const revalidate = 60;  
-export const dynamicParams = true;
+export const dynamic = 'force-static';     // Force static generation
+export const dynamicParams = true;         // Allow on-demand generation for missing routes
+export const revalidate = false;           // No revalidation for pure static
 
 interface ProductPageProps {
   params: Promise<{
@@ -22,27 +21,54 @@ interface ProductPageProps {
   }>
 }
 
-// export async function generateStaticParams() {
-//   try {
-//     const productsResult = await getProducts({ limit: 2 });
-//     return productsResult.products?.slice(0, 2).map((product: any) => ({
-//       slug: product.slug || product.id,
-//     })) || [];
-//   } catch (error) {
-//     return [];
-//   }
-// }
-
 export async function generateStaticParams() {
   try {
-    const productsResult = await getProducts({ limit: 100 }); 
-    return productsResult.products?.map((product: any) => ({
+    console.log('🔨 Generating static params for products...');
+    
+    // Try to get products with multiple fallback strategies
+    let productsResult = null;
+    
+    // Strategy 1: Try with normal limit
+    try {
+      productsResult = await getProducts({ limit: 100 });
+    } catch (error) {
+      console.warn('⚠️ Failed to fetch 100 products, trying smaller batch...');
+      
+      // Strategy 2: Try with smaller limit
+      try {
+        productsResult = await getProducts({ limit: 50 });
+      } catch (error2) {
+        console.warn('⚠️ Failed to fetch 50 products, trying minimal batch...');
+        
+        // Strategy 3: Try with minimal limit
+        try {
+          productsResult = await getProducts({ limit: 10 });
+        } catch (error3) {
+          console.error('❌ All fetch strategies failed:', error3);
+          return [];
+        }
+      }
+    }
+    
+    if (!productsResult?.products?.length) {
+      console.warn('⚠️ No products found, returning empty array');
+      return [];
+    }
+    
+    const params = productsResult.products.map((product: any) => ({
       slug: product.slug || product.id,
-    })) || [];
+    }));
+    
+    console.log(`✅ Generated ${params.length} static params`);
+    return params;
+    
   } catch (error) {
+    console.error('❌ Critical error in generateStaticParams:', error);
+    // Return empty array as fallback - dynamicParams=true will handle missing routes
     return [];
   }
 }
+
 
 export async function generateMetadata({ params }: ProductPageProps, parent: ResolvingMetadata): Promise<Metadata> {
   try {
@@ -118,19 +144,35 @@ export async function generateMetadata({ params }: ProductPageProps, parent: Res
 const ProductPage = async ({ params }: ProductPageProps) => {
   const { slug: slugOrId } = await params || {}
 
-  if (!slugOrId) {
-    console.error("No slug or ID provided")
-    return notFound()
+  // if (!slugOrId) {
+  //   console.error("No slug or ID provided")
+  //   return notFound()
+  // }
+
+  // Try to get product with fallback strategy
+  let product = null
+  try {
+    product = await getProduct(slugOrId)
+  } catch (error) {
+    console.error("Error fetching product:", error)
+    // Fallback: try to get from products list
+    try {
+      const productsResult = await getProducts({ limit: 10000 })
+      product = productsResult.products?.find(p => {
+        const nameSlug = p.name?.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-")
+        return p.id === slugOrId || p.slug === slugOrId || nameSlug === slugOrId
+      }) || null
+    } catch (fallbackError) {
+      console.error("Fallback fetch also failed:", fallbackError)
+    }
   }
 
-  const product = await getProduct(slugOrId)
-
-  if (!product || !product.id || !product.name) {
-    return notFound()
-  }
+  // if (!product || !product.id || !product.name) {
+  //   return notFound()
+  // }
 
 
-  if (product.slug && product.slug !== slugOrId && product.id === slugOrId) {
+  if (product?.slug && product.slug !== slugOrId && product.id === slugOrId) {
     redirect(`/product/${product.slug}`)
   }
 
@@ -142,16 +184,16 @@ const ProductPage = async ({ params }: ProductPageProps) => {
     suggestProducts = []
   }
 
-  const productImages = product.images || []
+  const productImages = product?.images || []
   const formattedImages: ProductImage[] = productImages.map((img: any, index: number) => ({
     id: img.id || img.imageId || `temp-${index}`,
-    productId: product.id,
+    productId: product?.id,
     imageId: img.imageId || img.id || `temp-${index}`,
     image: {
       id: img.image?.id || img.id || `temp-${index}`,
       url: img.url || img.image?.url || "/placeholder.svg",
-      altText: img.altText || img.image?.altText || product.name,
-      title: img.title || img.image?.title || product.name,
+      altText: img.altText || img.image?.altText || product?.name,
+      title: img.title || img.image?.title || product?.name,
     },
     order: index,
     isPrimary: index === 0,
@@ -161,7 +203,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
 
   if (product.schema) {
     try {
-      const schemaData = typeof product.schema === "string" ? JSON.parse(product.schema) : product.schema
+      const schemaData = typeof product?.schema === "string" ? JSON.parse(product?.schema) : product?.schema
 
       if (schemaData && typeof schemaData === "object") {
         Object.values(schemaData).forEach((schema) => {
@@ -179,29 +221,29 @@ const ProductPage = async ({ params }: ProductPageProps) => {
     const basicSchema: any = {
       "@context": "https://schema.org",
       "@type": "Product",
-      name: product.name,
-      description: product.description || "",
+      name: product?.name,
+      description: product?.description || "",
       image: formattedImages.map(img => img.image.url),
-      sku: product.sku || "",
+      sku: product?.sku || "",
       brand: {
         "@type": "Brand",
-        name: product.brandName || "Brand Name",
+        name: product?.brandName || "Brand Name",
       },
       offers: {
         "@type": "Offer",
-        url: `${process.env.NEXT_PUBLIC_APP_URL || ""}/product/${product.slug || slugOrId}`,
+        url: `${process.env.NEXT_PUBLIC_APP_URL || ""}/product/${product?.slug || slugOrId}`,
         priceCurrency: "USD",
-        price: product.isDiscounted && product.salePrice ? product.salePrice : product.price,
+        price: product?.isDiscounted && product?.salePrice ? product?.salePrice : product?.price,
         availability: "https://schema.org/InStock",
         itemCondition: "https://schema.org/NewCondition",
       },
     }
 
-    if (product.ratingValue && product.reviewCount) {
+    if (product?.ratingValue && product?.reviewCount) {
       basicSchema.aggregateRating = {
         "@type": "AggregateRating",
-        ratingValue: product.ratingValue,
-        reviewCount: product.reviewCount,
+        ratingValue: product?.ratingValue,
+        reviewCount: product?.reviewCount,
       }
     }
 
@@ -222,8 +264,8 @@ const ProductPage = async ({ params }: ProductPageProps) => {
             <span className="mx-1 text-gray-500">/</span>
             <span className="text-gray-500 hover:text-black uppercase font-medium">LEATHER</span>
             <span className="mx-1 text-gray-500">/</span>
-            <span className="text-black truncate max-w-[80px] uppercase font-medium" title={product.name}>
-              {product.name.length > 12 ? `${product.name.substring(0, 12)}...` : product.name}
+            <span className="text-black truncate max-w-[80px] uppercase font-medium" title={product?.name}>
+              {product?.name?.length > 12 ? `${product?.name.substring(0, 12)}...` : product?.name}
             </span>
           </nav>
         </div>
@@ -250,7 +292,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
       <div className="w-full">
         <ProductSuggestionsSection
           suggestProducts={suggestProducts}
-          relatedProductIds={product.relatedProducts}
+          relatedProductIds={product?.relatedProducts}
           isMobile={false}
         />
       </div>
