@@ -11,8 +11,9 @@ import StructuredData from "@/src/app/components/layout/structured-data-layout"
 import ProductPageClient from "./page-client"
 
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 3600; 
+// export const dynamic = 'force-dynamic';
+export const dynamic = 'auto';
+export const revalidate = 60;  
 export const dynamicParams = true;
 
 interface ProductPageProps {
@@ -31,6 +32,17 @@ interface ProductPageProps {
 //     return [];
 //   }
 // }
+
+export async function generateStaticParams() {
+  try {
+    const productsResult = await getProducts({ limit: 100 }); 
+    return productsResult.products?.map((product: any) => ({
+      slug: product.slug || product.id,
+    })) || [];
+  } catch (error) {
+    return [];
+  }
+}
 
 export async function generateMetadata({ params }: ProductPageProps, parent: ResolvingMetadata): Promise<Metadata> {
   try {
