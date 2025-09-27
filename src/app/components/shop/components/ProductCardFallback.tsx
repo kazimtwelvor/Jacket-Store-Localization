@@ -152,16 +152,16 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
                     key={size.id || size.name || `size-${sizeIndex}`}
                     className={cn(
                       "px-2 py-1 text-xs rounded border transition-colors",
-                      selectedProductSize === size
+                      selectedProductSize === size.name
                         ? "bg-black text-white border-black"
                         : "bg-white text-black border-gray-300 hover:border-black"
                     )}
                     onClick={(e) => {
                       e.stopPropagation()
-                      handleSizeSelect(product.id, size)
+                      handleSizeSelect(product.id, size.name)
                     }}
                   >
-                    {size}
+                    {size.name}
                   </button>
                 ))}
               </div>
