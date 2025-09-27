@@ -248,7 +248,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                     className="object-cover object-top transition-all duration-300"
                     sizes="250px"
                   />
-                  {loadingProducts.has(product.id) && (
+                  {loadingProducts.has(`${product.id}-${index}`) && (
                     <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
                       <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-black"></div>
                     </div>
@@ -259,15 +259,16 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                     aria-label="Add to wishlist"
                     onClick={(e) => {
                       e.stopPropagation()
-                      if (wishlist.isInWishlist(product.id)) {
-                        wishlist.removeItem(product.id)
+                      const uniqueKey = `love-${product.id}-${index}`
+                      if (wishlist.isInWishlistWithKey(uniqueKey)) {
+                        wishlist.removeItemWithKey(uniqueKey)
                       } else {
-                        wishlist.addItem(product)
+                        wishlist.addItemWithKey(product, uniqueKey)
                       }
                     }}
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="black" strokeWidth="2" fill={mounted && wishlistItems.includes(product.id) ? "black" : "none"} strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="black" strokeWidth="2" fill={mounted && wishlist.isInWishlistWithKey(`love-${product.id}-${index}`) ? "black" : "none"} strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </button>
                   <button
@@ -392,11 +393,14 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                             e.stopPropagation()
 
                             if (colorLink && colorLink.trim() !== '') {
-                              try {
-                                const currentProductIndex = displayedProducts.findIndex(p => p.id === product.id)
-                                if (currentProductIndex === -1) return
+                              const productKey = colorPopup.productKey
+                              const currentProductIndex = parseInt(productKey.split('-').pop() || '0')
+                              if (currentProductIndex === -1) return
 
-                                setLoadingProducts(prev => new Set([...prev, product.id]))
+                              const loadingKey = `${product.id}-${currentProductIndex}`
+                              setLoadingProducts(prev => new Set([...prev, loadingKey]))
+                              
+                              try {
 
                                 const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
 
@@ -419,7 +423,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                               } finally {
                                 setLoadingProducts(prev => {
                                   const newSet = new Set(prev)
-                                  newSet.delete(product.id)
+                                  newSet.delete(loadingKey)
                                   return newSet
                                 })
                               }
@@ -478,7 +482,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                       draggable={false}
                       onDragStart={(e) => e.preventDefault()}
                     />
-                    {loadingProducts.has(product.id) && (
+                    {loadingProducts.has(`${product.id}-${index}`) && (
                       <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
                         <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-black"></div>
                       </div>
@@ -491,14 +495,15 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                       whileTap={{ scale: 0.9 }}
                       onClick={(e) => {
                         e.stopPropagation()
-                        if (wishlist.isInWishlist(product.id)) {
-                          wishlist.removeItem(product.id)
+                        const uniqueKey = `love-${product.id}-${index}`
+                        if (wishlist.isInWishlistWithKey(uniqueKey)) {
+                          wishlist.removeItemWithKey(uniqueKey)
                         } else {
-                          wishlist.addItem(product)
+                          wishlist.addItemWithKey(product, uniqueKey)
                         }
                       }}
                     >
-                      <Heart className={`w-6 h-6 ${mounted && wishlistItems.includes(product.id) ? 'fill-black' : ''}`} />
+                      <Heart className={`w-6 h-6 ${mounted && wishlist.isInWishlistWithKey(`love-${product.id}-${index}`) ? 'fill-black' : ''}`} />
                     </motion.button>
                     {product.isFeatured && (
                       <motion.div
@@ -639,11 +644,13 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                             e.stopPropagation()
 
                                             if (colorLink && colorLink.trim() !== '') {
-                                              try {
-                                                const currentProductIndex = currentProducts.findIndex(p => p.id === product.id)
-                                                if (currentProductIndex === -1) return
+                                              const currentProductIndex = index
+                                              if (currentProductIndex === -1) return
 
-                                                setLoadingProducts(prev => new Set([...prev, product.id]))
+                                              const loadingKey = `${product.id}-${currentProductIndex}`
+                                              setLoadingProducts(prev => new Set([...prev, loadingKey]))
+                                              
+                                              try {
 
                                                 const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
 
@@ -666,7 +673,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                               } finally {
                                                 setLoadingProducts(prev => {
                                                   const newSet = new Set(prev)
-                                                  newSet.delete(product.id)
+                                                  newSet.delete(loadingKey)
                                                   return newSet
                                                 })
                                               }
@@ -717,11 +724,13 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                               e.stopPropagation()
 
                                               if (colorLink && colorLink.trim() !== '') {
-                                                try {
-                                                  const currentProductIndex = currentProducts.findIndex(p => p.id === product.id)
-                                                  if (currentProductIndex === -1) return
+                                                const currentProductIndex = index
+                                                if (currentProductIndex === -1) return
 
-                                                  setLoadingProducts(prev => new Set([...prev, product.id]))
+                                                const loadingKey = `${product.id}-${currentProductIndex}`
+                                                setLoadingProducts(prev => new Set([...prev, loadingKey]))
+                                                
+                                                try {
 
                                                   const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
 
@@ -744,7 +753,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                                 } finally {
                                                   setLoadingProducts(prev => {
                                                     const newSet = new Set(prev)
-                                                    newSet.delete(product.id)
+                                                    newSet.delete(loadingKey)
                                                     return newSet
                                                   })
                                                 }

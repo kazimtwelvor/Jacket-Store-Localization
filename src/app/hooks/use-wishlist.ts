@@ -21,6 +21,9 @@ interface WishlistStore {
   decreaseQuantity: (id: string) => void
   setQuantity: (id: string, quantity: number) => void
   updateItemSize: (id: string, size: string) => void
+  addItemWithKey: (data: Product, uniqueKey: string) => void
+  removeItemWithKey: (uniqueKey: string) => void
+  isInWishlistWithKey: (uniqueKey: string) => boolean
 }
 
 const useWishlist = create(
@@ -108,6 +111,30 @@ const useWishlist = create(
         })
 
         set({ items: updatedItems })
+      },
+      addItemWithKey: (data: Product, uniqueKey: string) => {
+        const currentItems = get().items
+        const existingItem = currentItems.find((item) => item.id === uniqueKey)
+
+        if (existingItem) {
+          return get().increaseQuantity(uniqueKey)
+        }
+
+        const productWithQuantity = {
+          ...data,
+          id: uniqueKey,
+          quantity: 1,
+        }
+
+        set({ items: [...get().items, productWithQuantity] })
+        toast.success("Item added to wishlist.")
+      },
+      removeItemWithKey: (uniqueKey: string) => {
+        set({ items: [...get().items.filter((item) => item.id !== uniqueKey)] })
+        toast.success("Item removed from wishlist.")
+      },
+      isInWishlistWithKey: (uniqueKey: string) => {
+        return get().items.some((item) => item.id === uniqueKey)
       },
     }),
     {

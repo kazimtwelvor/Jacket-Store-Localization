@@ -5,12 +5,14 @@ import { cn } from "../../../lib/utils"
 
 interface SizeSelectorProps {
   product: Product
+  index: number
   selectedSizes: Record<string, string>
   handleSizeSelect: (productId: string, size: string) => void
 }
 
 export const SizeSelector: React.FC<SizeSelectorProps> = ({ 
   product, 
+  index,
   selectedSizes, 
   handleSizeSelect 
 }) => {
@@ -34,7 +36,7 @@ export const SizeSelector: React.FC<SizeSelectorProps> = ({
         <div className="flex flex-wrap gap-1">
           {availableSizes.map((size) => (
             <button
-              key={size.id}
+              key={size.id || size.name || `size-${index}`}
               className={cn(
                 "px-3 py-1.5 text-xs border-black hover:border-black transition-colors", 
                 selectedSizes[product.id] === size.name ? "border-black" : "border-black"

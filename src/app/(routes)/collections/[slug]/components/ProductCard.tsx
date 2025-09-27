@@ -51,11 +51,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onProductUpdate,
   setLoadingProducts,
 }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setIsWishlisted(wishlist.isInWishlist(product.id))
-  }, [wishlist, product.id])
+    setMounted(true)
+  }, [])
 
   const isHovered = hoveredProduct === `grid-${product.id}-${index}`
   const hasMultipleImages = product.images && product.images.length > 1
@@ -113,16 +113,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           aria-label="Add to wishlist"
           onClick={(e) => {
             e.stopPropagation()
-            if (isWishlisted) {
-              wishlist.removeItem(product.id)
-              setIsWishlisted(false)
+            const uniqueKey = `${product.id}-${index}`
+            if (wishlist.isInWishlistWithKey(uniqueKey)) {
+              wishlist.removeItemWithKey(uniqueKey)
             } else {
-              wishlist.addItem(product)
-              setIsWishlisted(true)
+              wishlist.addItemWithKey(product, uniqueKey)
             }
           }}
         >
-          <Heart className={cn("w-4 h-4 md:w-5 md:h-5", isWishlisted ? "fill-black text-black" : "text-gray-700")} />
+          <Heart className={cn("w-4 h-4 md:w-5 md:h-5", mounted && wishlist.isInWishlistWithKey(`${product.id}-${index}`) ? "fill-black text-black" : "text-gray-700")} />
         </button>
 
         <button

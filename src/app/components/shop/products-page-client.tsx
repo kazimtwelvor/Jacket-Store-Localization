@@ -564,7 +564,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       activeSort
     );
     setCurrentProducts(sortedInitial);
-    setVisibleProducts(sortedInitial.map((p) => p.id));
+    setVisibleProducts(sortedInitial.map((p, index) => `${p.id}-${index}`));
   }, [initialProductsData.products]);
 
   useEffect(() => {
