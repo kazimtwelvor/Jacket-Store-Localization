@@ -1,5 +1,6 @@
-export const revalidate = false; // Make it fully static
-export const dynamicParams = true; // Generate new pages on-demand
+export const dynamic = 'force-static';     
+export const dynamicParams = true;         
+export const revalidate = false;           
 import getCategories from "../../../actions/get-categories";
 import getKeywordCategory from "../../../actions/get-keyword-category";
 import getKeywordCategories from "../../../actions/get-keyword-categories";
@@ -17,11 +18,39 @@ interface CategoryPageProps {
 
 export async function generateStaticParams() {
   try {
-    const keywordCategories = await getKeywordCategories();
-    return keywordCategories.slice(0, 10).map((category: any) => ({
+    console.log('🔨 Generating static params for collections...');
+    
+    let categoriesResult = null;
+    
+    try {
+      categoriesResult = await getKeywordCategories();
+    } catch (error) {
+      console.warn('⚠️ Failed to fetch keyword categories, trying fallback...');
+      
+      try {
+        const regularCategories = await getCategories();
+        categoriesResult = regularCategories?.slice(0, 20) || [];
+      } catch (error2) {
+        console.error('❌ All category fetch strategies failed:', error2);
+        return [];
+      }
+    }
+    
+    if (!categoriesResult?.length) {
+      console.warn('⚠️ No categories found, returning empty array');
+      return [];
+    }
+    
+    const collectionCount = process.env.NEXT_COLLECTION_COUNT ? parseInt(process.env.NEXT_COLLECTION_COUNT) : 500;
+    const params = categoriesResult.slice(0, collectionCount).map((category: any) => ({
       slug: category.slug,
     }));
+    
+    console.log(`✅ Generated ${params.length} static collection params`);
+    return params;
+    
   } catch (error) {
+    console.error('❌ Critical error in generateStaticParams:', error);
     return [];
   }
 }
@@ -140,18 +169,35 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
 
     const filterParams = parseApiSlug(keywordCategory.apiSlug || "");
     
-    // Fetch only the first 40 products for static generation
+    const fetchWithRetry = async (fetchFn: () => Promise<any>, retries = 3, timeout = 300000): Promise<any> => {
+      for (let i = 0; i < retries; i++) {
+        try {
+          const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Request timeout')), timeout);
+          });
+          
+          return await Promise.race([fetchFn(), timeoutPromise]);
+        } catch (error) {
+          console.warn(`Attempt ${i + 1} failed for collection ${slug}:`, error);
+          if (i === retries - 1) throw error;
+          
+          await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+        }
+      }
+      throw new Error('All retry attempts failed');
+    };
+
     const [products, allCategories, keywordCategories] = await Promise.all([
-      getProducts({
+      fetchWithRetry(() => getProducts({
         materials: filterParams.materials,
         styles: filterParams.styles,
         colors: filterParams.colors,
         genders: filterParams.genders,
         limit: 40, // Only fetch first 40 products for static generation
         page: 1,
-      }),
-      getCategories(),
-      getKeywordCategories()
+      })),
+      fetchWithRetry(() => getCategories()),
+      fetchWithRetry(() => getKeywordCategories())
     ]);
 
     const categoryForClient: Category & { currentCategory?: any } = {
