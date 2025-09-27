@@ -1,10 +1,10 @@
-export const revalidate = 1800; // ISR: Revalidate every 30 minutes
+export const revalidate = false; // Make it fully static
 export const dynamicParams = true; // Generate new pages on-demand
 import getCategories from "../../../actions/get-categories";
 import getKeywordCategory from "../../../actions/get-keyword-category";
 import getKeywordCategories from "../../../actions/get-keyword-categories";
 import getProducts from "../../../actions/get-products";
-import type { Category } from "@/types";
+import type { Category, Product } from "@/types";
 import CategoryPageClient from "./page-client";
 import { notFound } from "next/navigation";
 import type { Metadata, ResolvingMetadata } from "next";
@@ -140,14 +140,14 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
 
     const filterParams = parseApiSlug(keywordCategory.apiSlug || "");
     
-
+    // Fetch only the first 40 products for static generation
     const [products, allCategories, keywordCategories] = await Promise.all([
       getProducts({
         materials: filterParams.materials,
         styles: filterParams.styles,
         colors: filterParams.colors,
         genders: filterParams.genders,
-        limit: 10000, // Increased limit to get more relevant products
+        limit: 40, // Only fetch first 40 products for static generation
         page: 1,
       }),
       getCategories(),
@@ -182,16 +182,17 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
     return (
       <div className="min-h-screen bg-white">
         <StructuredData data={keywordStructuredData} />
-        {/* <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-gray-600"></div></div>}> */}
-          <CategoryPageClient
-            category={categoryForClient}
-            products={products.products || []}
-            slug={slug}
-            allCategories={allCategories}
-            keywordCategories={keywordCategories}
-            isKeywordCategory={true}
-          />
-        {/* </Suspense> */}
+        <CategoryPageClient
+          category={categoryForClient}
+          products={products.products || []}
+          slug={slug}
+          allCategories={allCategories}
+          keywordCategories={keywordCategories}
+          isKeywordCategory={true}
+          filterParams={filterParams}
+          initialProductCount={products.products?.length || 0}
+          hasMoreProducts={(products.pagination?.totalProducts || 0) > 40}
+        />
       </div>
     );
   } catch (error) {

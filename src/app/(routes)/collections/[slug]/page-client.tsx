@@ -44,6 +44,14 @@ interface CategoryPageClientProps {
     allCategories: Category[]
     keywordCategories?: KeywordCategory[]
     isKeywordCategory?: boolean
+    filterParams?: {
+        materials: string[];
+        styles: string[];
+        colors: string[];
+        genders: string[];
+    }
+    initialProductCount?: number
+    hasMoreProducts?: boolean
 }
 
 const DRAG_BUFFER = 10;
@@ -209,7 +217,17 @@ const getProductSlug = (product: Product): string => {
     return product.id
 }
 
-const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category, products, slug, allCategories, keywordCategories = [], isKeywordCategory = false }) => {
+const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ 
+    category, 
+    products, 
+    slug, 
+    allCategories, 
+    keywordCategories = [], 
+    isKeywordCategory = false,
+    filterParams,
+    initialProductCount = 0,
+    hasMoreProducts = false
+}) => {
     const router = useRouter()
     // Removed useSearchParams to avoid SSR issues
     const wasDraggedRef = useRef(false);
@@ -256,13 +274,17 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
     });
     const [materialQuery, setMaterialQuery] = useState("")
     const [styleQuery, setStyleQuery] = useState("")
+    
+    // Load more functionality state
+    const [loadedProducts, setLoadedProducts] = useState<Product[]>(products) // All loaded products (starts with initial 40)
+    const [isLoadingMore, setIsLoadingMore] = useState(false)
+    const [loadMorePage, setLoadMorePage] = useState(2) // Start from page 2 since page 1 is already loaded
+    const [hasMore, setHasMore] = useState(hasMoreProducts)
 
     const { addToCart } = useCart()
     const wishlist = useWishlist()
-    const productsPerPage = 20
     const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
     const [currentProducts, setCurrentProducts] = useState<Product[]>(products)
-    const [currentPage, setCurrentPage] = useState(1)
     const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
     const productRefs = useRef<(HTMLDivElement | null)[]>([])
     const recentlyViewedScrollRef = useRef<HTMLDivElement>(null)
@@ -334,8 +356,8 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
 
     useEffect(() => {
         setMounted(true)
-        if (products && products.length > 0) {
-            setVisibleProducts(products.slice(0, productsPerPage).map((p) => p.id))
+        if (loadedProducts && loadedProducts.length > 0) {
+            setVisibleProducts(loadedProducts.map((p) => p.id))
         }
         if (typeof window !== 'undefined') {
             const savedRecentlyViewed = localStorage.getItem('recentlyViewed')
@@ -350,7 +372,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                 }
             }
         }
-    }, [products, productsPerPage])
+    }, [loadedProducts])
     useEffect(() => {
         if (currentProducts.length > 0) {
             const observer = new IntersectionObserver(
@@ -472,6 +494,50 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
         const params = new URLSearchParams(window.location.search)
         params.set('sort', sortBy)
         router.push(`?${params.toString()}`, { scroll: false })
+    }
+    
+    // Load more functionality
+    const handleLoadMore = async () => {
+        if (isLoadingMore || !hasMore) return
+        
+        setIsLoadingMore(true)
+        
+        try {
+            const response = await fetch('/api/collections/load-more', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    materials: filterParams?.materials || [],
+                    styles: filterParams?.styles || [],
+                    colors: filterParams?.colors || [],
+                    genders: filterParams?.genders || [],
+                    page: loadMorePage,
+                    limit: 20,
+                    sort: currentSort
+                }),
+            })
+            
+            if (!response.ok) {
+                throw new Error('Failed to load more products')
+            }
+            
+            const data = await response.json()
+            
+            if (data.success && data.products?.length > 0) {
+                setLoadedProducts(prev => [...prev, ...data.products])
+                setLoadMorePage(prev => prev + 1)
+                setHasMore(data.pagination?.hasNextPage || false)
+            } else {
+                setHasMore(false)
+            }
+        } catch (error) {
+            console.error('Error loading more products:', error)
+            setHasMore(false)
+        } finally {
+            setIsLoadingMore(false)
+        }
     }
 
     useEffect(() => {
@@ -612,7 +678,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
             return matchesMaterials && matchesStyles && matchesGenders && matchesSizes && matchesColors && matchesGender
         }
 
-        let filtered = products.filter(filterBySelections)
+        let filtered = loadedProducts.filter(filterBySelections)
 
         const parsePriceValue = (raw: any): number => {
             if (raw === undefined || raw === null) return 0
@@ -640,39 +706,56 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
         }
 
         setFilteredProducts(filtered)
-        setCurrentPage(1)
-    }, [products, selectedFilters, currentSort])
+        setCurrentProducts(filtered) // Since we're not paginating, show all filtered products
+    }, [loadedProducts, selectedFilters, currentSort])
 
+    // Update visible products when filtered products change
     useEffect(() => {
-        const startIndex = (currentPage - 1) * productsPerPage
-        const endIndex = startIndex + productsPerPage
-        const newCurrentProducts = filteredProducts.slice(startIndex, endIndex)
-        setCurrentProducts(newCurrentProducts)
-        setVisibleProducts(newCurrentProducts.map(p => p.id))
-    }, [filteredProducts, currentPage, productsPerPage])
+        setVisibleProducts(currentProducts.map(p => p.id))
+    }, [currentProducts])
+    
+    // Update loadedProducts when new products are loaded via load more
+    useEffect(() => {
+        if (loadedProducts.length !== products.length) {
+            // Re-apply current filters to include newly loaded products
+            const filterBySelections = (p: Product) => {
+                // Use the same filtering logic as the main filter effect
+                const productColors = ((p as any).colorDetails || (p as any).colors || []).map((c: any) => String(c.name || c).trim().toLowerCase())
+                const productSizes = ((p as any).sizeDetails || (p as any).sizes || []).map((s: any) => String(s.name || s).trim().toLowerCase())
+                const productMaterials = ((p as any).materials || []).map((m: any) => String(m.name || m).trim().toLowerCase())
+                const productStyles = ((p as any).styles || []).map((s: any) => String(s.name || s).trim().toLowerCase())
+                const normalizeGender = (value: string): string => {
+                    const v = String(value || '').trim().toLowerCase()
+                    if (v.startsWith('women')) return 'female'
+                    if (v.startsWith('female')) return 'female'
+                    if (v.startsWith('ladies')) return 'female'
+                    if (v.startsWith('men')) return 'male'
+                    if (v.startsWith('male')) return 'male'
+                    if (v.startsWith('man')) return 'male'
+                    return v
+                }
+                const productGender = normalizeGender((p as any).gender || '')
 
-    const totalPages = Math.ceil(filteredProducts.length / productsPerPage)
-    const hasNextPage = currentPage < totalPages
-    const hasPreviousPage = currentPage > 1
+                const wantedMaterials = selectedFilters.materials.map(v => String(v).trim().toLowerCase())
+                const wantedStyles = selectedFilters.styles.map(v => String(v).trim().toLowerCase())
+                const wantedGenders = selectedFilters.genders.map(v => String(v).trim().toLowerCase())
+                const wantedSizes = selectedFilters.sizes.map(v => String(v).trim().toLowerCase())
+                const wantedColors = selectedFilters.colors.map(v => String(v).trim().toLowerCase())
 
-    const handlePageChange = (page: number) => {
-        setIsPageLoading(true)
-        setCurrentPage(page)
+                const matchesMaterials = wantedMaterials.length === 0 || wantedMaterials.some(material => productMaterials.includes(material))
+                const matchesStyles = wantedStyles.length === 0 || wantedStyles.some(style => productStyles.includes(style))
+                const matchesGenders = wantedGenders.length === 0 || wantedGenders.some(gender => normalizeGender(gender) === productGender)
+                const matchesSizes = wantedSizes.length === 0 || wantedSizes.some(size => productSizes.includes(size))
+                const matchesColors = wantedColors.length === 0 || wantedColors.some(color => productColors.includes(color))
 
-        setTimeout(() => {
-            const filterBarElement = document.querySelector('[data-filter-bar]') ||
-                filterBarWrapperRef.current;
-
-            if (filterBarElement) {
-                const elementTop = filterBarElement.getBoundingClientRect().top + window.pageYOffset - 80;
-                window.scrollTo({ top: elementTop, behavior: 'smooth' });
-            } else {
-                window.scrollTo({ top: 400, behavior: 'smooth' });
+                return matchesMaterials && matchesStyles && matchesGenders && matchesSizes && matchesColors
             }
-        }, 100)
-
-        setTimeout(() => setIsPageLoading(false), 200)
-    }
+            
+            const newFiltered = loadedProducts.filter(filterBySelections)
+            setFilteredProducts(newFiltered)
+            setCurrentProducts(newFiltered)
+        }
+    }, [loadedProducts, selectedFilters])
     let parsedCategoryContent: any = category.categoryContent;
     if (typeof category.categoryContent === 'string') {
         try {
@@ -809,18 +892,16 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                     {currentProducts.length > 0 ? (
                         <>
                             <div className="mb-4 text-sm text-gray-600 text-center">
-                                {(() => {
-                                    const totalCount = filteredProducts.length
-                                    const start = totalCount === 0 ? 0 : (currentPage - 1) * productsPerPage + 1
-                                    const end = Math.min(currentPage * productsPerPage, totalCount)
-                                    return `Showing ${start} - ${end} of ${totalCount} products`
-                                })()}
+                                {currentProducts.length === 0 
+                                    ? "No products found" 
+                                    : `Showing ${currentProducts.length} products`
+                                }
                             </div>
 
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
                                 {currentProducts.map((product, index) => (
                                     <ProductCardWrapper
-                                        key={`${product.id}-${index}-${currentPage}`}
+                                        key={`${product.id}-${index}`}
                                         product={product}
                                         index={index}
                                         isDesktop={isDesktop}
@@ -871,38 +952,21 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                     )}
                 </div>
                 <div ref={paginationSectionRef}>
-                    {totalPages > 1 && (
-                        <div className="flex items-center justify-center gap-2 mt-8 mb-4">
+                    {hasMore && (
+                        <div className="flex items-center justify-center mt-8 mb-4">
                             <button
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={!hasPreviousPage}
-                                className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 text-sm"
+                                onClick={handleLoadMore}
+                                disabled={isLoadingMore}
+                                className="px-8 py-3 bg-[#2b2b2b] text-white rounded-md hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
                             >
-                                Previous
-                            </button>
-
-                            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                                const page = i + 1
-                                return (
-                                    <button
-                                        key={page}
-                                        onClick={() => handlePageChange(page)}
-                                        className={`px-3 py-2 rounded-md text-sm ${page === currentPage
-                                            ? 'bg-[#2b2b2b] text-white'
-                                            : 'border border-gray-300 hover:bg-gray-50'
-                                            }`}
-                                    >
-                                        {page}
-                                    </button>
-                                )
-                            })}
-
-                            <button
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={!hasNextPage}
-                                className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 text-sm"
-                            >
-                                Next
+                                {isLoadingMore ? (
+                                    <div className="flex items-center gap-2">
+                                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                                        Loading more...
+                                    </div>
+                                ) : (
+                                    'Load More Products'
+                                )}
                             </button>
                         </div>
                     )}
@@ -1173,7 +1237,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
                                         onClick={() => setFilterSidebarOpen(false)}
                                         className="flex-1 px-3 py-2 bg-gray-900 text-white  text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm"
                                     >
-                                        Apply ({filteredProducts.length})
+                                        Apply ({currentProducts.length})
                                     </button>
                                 </div>
                             </div>
