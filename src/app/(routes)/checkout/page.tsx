@@ -23,6 +23,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import PayPalButtons from "../../components/cart/PayPalButtons";
+import PayPalCardForm from "../../components/cart/PayPalCardForm";
 import Currency from "../../ui/currency";
 import Button from "../../ui/button";
 import { toast } from "react-hot-toast";
@@ -136,6 +137,7 @@ const CheckoutPage = () => {
   const [stripePublishableKey, setStripePublishableKey] = useState<
     string | null
   >(null);
+  const isStripeEnabled = process.env.NEXT_PUBLIC_USE_STRIPE === 'true';
   const { items, clearCart, totalPrice: cartTotalPrice } = useCart();
   const router = useRouter();
   const [voucherCode, setVoucherCode] = useState("");
@@ -199,6 +201,8 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     const fetchStripePublishableKey = async () => {
+      if (!isStripeEnabled) return;
+      
       try {
         // Check if API URL is available
         if (!process.env.NEXT_PUBLIC_API_URL) {
@@ -234,13 +238,13 @@ const CheckoutPage = () => {
     };
 
     fetchStripePublishableKey();
-  }, []);
+  }, [isStripeEnabled]);
 
   useEffect(() => {
-    stripePromise = stripePublishableKey
+    stripePromise = stripePublishableKey && isStripeEnabled
       ? loadStripe(stripePublishableKey)
       : null;
-  }, [stripePublishableKey]);
+  }, [stripePublishableKey, isStripeEnabled]);
 
   const initializePayment = async () => {
     if (clientSecret) return;
@@ -1258,7 +1262,7 @@ const CheckoutPage = () => {
                         </div>
                       </label>
 
-                      {/* Stripe Payment Form for Credit Card */}
+                      {/* Payment Form for Credit Card */}
                       {formData.selectedPaymentMethod === "CREDIT_CARD" && (
                         <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
                           <div className="mb-4">
@@ -1270,63 +1274,80 @@ const CheckoutPage = () => {
                               <span>256-bit SSL encryption</span>
                             </div>
                           </div>
-                          {isLoading && !clientSecret ? (
-                            <div className="flex flex-col items-center justify-center py-8">
-                              <div className="w-10 h-10 border-4 border-gray-600 border-t-transparent rounded-full animate-spin mb-3"></div>
-                              <p className="text-gray-700 text-sm font-medium">
-                                Initializing secure payment...
-                              </p>
-                            </div>
-                          ) : stripePromise && clientSecret ? (
-                            <Elements
-                              stripe={stripePromise}
-                              options={{
-                                clientSecret,
-                                appearance: {
-                                  theme: "stripe",
-                                  variables: {
-                                    colorPrimary: "#000000",
-                                    colorBackground: "#ffffff",
-                                    colorText: "#374151",
-                                    borderRadius: "8px",
-                                    fontFamily: "system-ui, sans-serif",
-                                  },
-                                },
-                              }}
-                            >
-                              <PaymentForm
-                                clientSecret={clientSecret}
-                                orderId={orderId!}
-                                onSuccess={handlePaymentSuccess}
-                                onBack={() => setActiveStep("address")}
-                                isLoading={isLoading}
-                                setIsLoading={setIsLoading}
-                              />
-                            </Elements>
-                          ) : (
-                            <div className="text-center py-8">
-                              <div className="mb-3">
-                                <svg
-                                  className="w-12 h-12 text-gray-400 mx-auto"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"
-                                  />
-                                </svg>
+                          
+                          {isStripeEnabled ? (
+                            // Stripe Payment Form
+                            isLoading && !clientSecret ? (
+                              <div className="flex flex-col items-center justify-center py-8">
+                                <div className="w-10 h-10 border-4 border-gray-600 border-t-transparent rounded-full animate-spin mb-3"></div>
+                                <p className="text-gray-700 text-sm font-medium">
+                                  Initializing secure payment...
+                                </p>
                               </div>
-                              <p className="text-gray-700 text-sm font-medium mb-2">
-                                Failed to load payment form
-                              </p>
-                              <p className="text-gray-500 text-xs">
-                                Please refresh the page or try again later.
-                              </p>
-                            </div>
+                            ) : stripePromise && clientSecret ? (
+                              <Elements
+                                stripe={stripePromise}
+                                options={{
+                                  clientSecret,
+                                  appearance: {
+                                    theme: "stripe",
+                                    variables: {
+                                      colorPrimary: "#000000",
+                                      colorBackground: "#ffffff",
+                                      colorText: "#374151",
+                                      borderRadius: "8px",
+                                      fontFamily: "system-ui, sans-serif",
+                                    },
+                                  },
+                                }}
+                              >
+                                <PaymentForm
+                                  clientSecret={clientSecret}
+                                  orderId={orderId!}
+                                  onSuccess={handlePaymentSuccess}
+                                  onBack={() => setActiveStep("address")}
+                                  isLoading={isLoading}
+                                  setIsLoading={setIsLoading}
+                                />
+                              </Elements>
+                            ) : (
+                              <div className="text-center py-8">
+                                <div className="mb-3">
+                                  <svg
+                                    className="w-12 h-12 text-gray-400 mx-auto"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"
+                                    />
+                                  </svg>
+                                </div>
+                                <p className="text-gray-700 text-sm font-medium mb-2">
+                                  Failed to load payment form
+                                </p>
+                                <p className="text-gray-500 text-xs">
+                                  Please refresh the page or try again later.
+                                </p>
+                              </div>
+                            )
+                          ) : (
+                            // PayPal Card Form
+                            <PayPalCardForm
+                              onSuccess={handlePaymentSuccess}
+                              onBack={() => setActiveStep("address")}
+                              isLoading={isLoading}
+                              setIsLoading={setIsLoading}
+                              items={items}
+                              formData={formData}
+                              effectiveGrandTotal={effectiveGrandTotal}
+                              discountAmount={discountAmount}
+                              voucherCode={voucherCode}
+                            />
                           )}
                         </div>
                       )}
