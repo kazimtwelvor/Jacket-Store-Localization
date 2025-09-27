@@ -11,8 +11,8 @@ export const API_CONFIG = {
   
   // Production settings
   PRODUCTION: {
-    // Use external API directly in production
-    USE_LOCAL_PROXY: false,
+    // Use local API proxy in production to avoid CORS
+    USE_LOCAL_PROXY: true,
   },
   
   // Request settings
@@ -39,7 +39,8 @@ export const getApiBaseURL = (): string => {
   const isDevelopment = process.env.NODE_ENV === 'development'
   const isClient = typeof window !== 'undefined'
   
-  if (isDevelopment && isClient && API_CONFIG.DEVELOPMENT.USE_LOCAL_PROXY) {
+  // Use local proxy in both development and production to avoid CORS issues
+  if (isClient && (API_CONFIG.DEVELOPMENT.USE_LOCAL_PROXY || API_CONFIG.PRODUCTION.USE_LOCAL_PROXY)) {
     return API_CONFIG.DEVELOPMENT.LOCAL_PROXY_BASE
   }
   
