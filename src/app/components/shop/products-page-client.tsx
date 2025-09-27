@@ -430,7 +430,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       fetchProducts(page);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [fetchProducts, productsData.pagination.currentPage]
+    [fetchProducts]
   );
 
   const handleFilterChange = useCallback(() => {
