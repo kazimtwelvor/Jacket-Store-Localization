@@ -453,7 +453,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
   const handleClick = (product: Product) => {
     const slug = getProductSlug(product);
-    // We no longer trigger the global route overlay for same-path navigations
     router.push(`/product/${slug}`);
   };
 
@@ -472,6 +471,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       recentlyViewed.find((p) => p.id === productId);
     if (product) {
       addToCart(product, size);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('openCart'));
+      }
     }
     setSelectedSizes((prev) => ({
       ...prev,

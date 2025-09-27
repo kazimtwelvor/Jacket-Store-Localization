@@ -537,6 +537,9 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ category
         const product = currentProducts.find(p => p.id === productId) || recentlyViewed.find(p => p.id === productId);
         if (product) {
             addToCart(product, size)
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('openCart'));
+            }
         }
         setSelectedSizes((prev) => ({
             ...prev,
