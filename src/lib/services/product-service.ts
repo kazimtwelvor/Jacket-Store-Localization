@@ -82,7 +82,10 @@ export class ProductService {
 
             const response = await apiClient.get('/products', {
                 params,
-                timeout: 60000
+                timeout: 60000,
+                headers: {
+                    'Cache-Control': 'no-cache',
+                }
             })
 
             let responseData: PaginatedResponse = response.data
@@ -140,7 +143,7 @@ export class ProductService {
             const response = await apiClient.get(`/products/${slugOrId}`, {
                 timeout: 60000,
                 headers: {
-                    'Cache-Control': 'max-age=3600', 
+                    'Cache-Control': 'no-cache',
                 }
             })
             return response.data
@@ -156,6 +159,9 @@ export class ProductService {
                 params: {
                     isFeatured: true,
                     limit
+                },
+                headers: {
+                    'Cache-Control': 'no-cache',
                 }
             })
             return response.data.products || []
@@ -171,6 +177,9 @@ export class ProductService {
                 params: {
                     search: searchTerm,
                     limit
+                },
+                headers: {
+                    'Cache-Control': 'no-cache',
                 }
             })
             return response.data.products || []
