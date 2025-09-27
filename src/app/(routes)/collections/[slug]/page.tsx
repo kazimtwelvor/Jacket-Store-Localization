@@ -153,7 +153,6 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
       getCategories(),
       getKeywordCategories()
     ]);
-    
 
     const categoryForClient: Category & { currentCategory?: any } = {
       id: keywordCategory.id,
