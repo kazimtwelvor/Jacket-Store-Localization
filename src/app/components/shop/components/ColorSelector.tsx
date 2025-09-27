@@ -5,6 +5,7 @@ import { X } from "lucide-react"
 
 interface ColorSelectorProps {
   product: Product
+  index: number
   isDesktop: boolean
   selectedColorId?: string
   onColorSelect?: (colorId: string, productId: string) => void
@@ -15,10 +16,10 @@ interface ColorSelectorProps {
   setLoadingProducts?: React.Dispatch<React.SetStateAction<Set<string>>>
 }
 
-export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop, selectedColorId, onColorSelect, openColorModal, setOpenColorModal, onProductUpdate, loadingProducts, setLoadingProducts }) => {
+export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, index, isDesktop, selectedColorId, onColorSelect, openColorModal, setOpenColorModal, onProductUpdate, loadingProducts, setLoadingProducts }) => {
   const colorTriggerRefs = useRef<Record<string, HTMLButtonElement>>({})
   
-  const isModalOpen = openColorModal === product.id
+  const isModalOpen = openColorModal === `${product.id}-${index}`
   
   const availableColors = product?.colorDetails || [{ value: "#000000", name: "Black" }]
   const hasMultipleColors = availableColors.length > 1
@@ -73,7 +74,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
               if (isModalOpen) {
                 setOpenColorModal(null)
               } else {
-                setOpenColorModal(product.id)
+                setOpenColorModal(`${product.id}-${index}`)
               }
             }
           }}
@@ -103,7 +104,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
               <div className="flex gap-2 mb-2 flex-wrap">
                 {availableColors.map((color: any) => (
                   <div 
-                    key={color.id || color.name} 
+                    key={color.id || color.name || `color-${index}`} 
                     className={cn(
                       "cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-md",
                       (color.id || color.name) === currentSelectedColorId && "ring-2 ring-black ring-offset-1"
@@ -118,7 +119,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
                       
                       if (colorLink && colorLink.trim() !== '' && onProductUpdate && setLoadingProducts) {
                         try {
-                          setLoadingProducts(prev => new Set([...prev, product.id]))
+                          setLoadingProducts(prev => new Set([...prev, `${product.id}-${index}`]))
                           
                           const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
                           
@@ -137,7 +138,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
                         } finally {
                           setLoadingProducts(prev => {
                             const newSet = new Set(prev)
-                            newSet.delete(product.id)
+                            newSet.delete(`${product.id}-${index}`)
                             return newSet
                           })
                         }
@@ -191,7 +192,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
                 <div className="grid grid-cols-4 gap-4">
                   {availableColors.map((color: any) => (
                     <div 
-                      key={color.id || color.name} 
+                      key={color.id || color.name || `color-${index}`} 
                       className={cn(
                         "flex flex-col items-center gap-2 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer",
                         (color.id || color.name) === currentSelectedColorId && "bg-gray-100 ring-2 ring-black ring-offset-1"
@@ -206,7 +207,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
                         
                         if (colorLink && colorLink.trim() !== '' && onProductUpdate && setLoadingProducts) {
                           try {
-                            setLoadingProducts(prev => new Set([...prev, product.id]))
+                            setLoadingProducts(prev => new Set([...prev, `${product.id}-${index}`]))
                             
                             const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
                             
@@ -225,7 +226,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, isDesktop
                           } finally {
                             setLoadingProducts(prev => {
                               const newSet = new Set(prev)
-                              newSet.delete(product.id)
+                              newSet.delete(`${product.id}-${index}`)
                               return newSet
                             })
                           }

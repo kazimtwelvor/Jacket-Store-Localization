@@ -51,11 +51,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onProductUpdate,
   setLoadingProducts,
 }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setIsWishlisted(wishlist.isInWishlist(product.id))
-  }, [wishlist, product.id])
+    setMounted(true)
+  }, [])
 
   const isHovered = hoveredProduct === `grid-${product.id}-${index}`
   const hasMultipleImages = product.images && product.images.length > 1
@@ -75,8 +75,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       }}
       onMouseEnter={() => isDesktop && setHoveredProduct(`grid-${product.id}-${index}`)}
       onMouseLeave={() => isDesktop && setHoveredProduct(null)}
-      initial={loadingProducts.has(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      animate={loadingProducts.has(product.id) ? { opacity: 1, y: 0 } : (visibleProducts.includes(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 })}
+      initial={loadingProducts.has(`${product.id}-${index}`) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      animate={loadingProducts.has(`${product.id}-${index}`) ? { opacity: 1, y: 0 } : (visibleProducts.includes(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 })}
       transition={{ duration: 0.2, ease: "easeOut" }}
     >
       <div className="relative w-full aspect-[3/5] bg-gray-100 overflow-visible md:overflow-hidden">
@@ -98,7 +98,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               priority={index < 4}
               loading={index < 4 ? "eager" : "lazy"}
             />
-            {loadingProducts.has(product.id) && (
+            {loadingProducts.has(`${product.id}-${index}`) && (
               <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
                 <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-gray-400"></div>
               </div>
@@ -113,16 +113,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           aria-label="Add to wishlist"
           onClick={(e) => {
             e.stopPropagation()
-            if (isWishlisted) {
-              wishlist.removeItem(product.id)
-              setIsWishlisted(false)
+            const uniqueKey = `${product.id}-${index}`
+            if (wishlist.isInWishlistWithKey(uniqueKey)) {
+              wishlist.removeItemWithKey(uniqueKey)
             } else {
-              wishlist.addItem(product)
-              setIsWishlisted(true)
+              wishlist.addItemWithKey(product, uniqueKey)
             }
           }}
         >
-          <Heart className={cn("w-4 h-4 md:w-5 md:h-5", isWishlisted ? "fill-black text-black" : "text-gray-700")} />
+          <Heart className={cn("w-4 h-4 md:w-5 md:h-5", mounted && wishlist.isInWishlistWithKey(`${product.id}-${index}`) ? "fill-black text-black" : "text-gray-700")} />
         </button>
 
         <button
@@ -176,6 +175,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             onProductUpdate={onProductUpdate}
             loadingProducts={loadingProducts}
             setLoadingProducts={setLoadingProducts}
+            index={index}
           />
         )}
       </div>
