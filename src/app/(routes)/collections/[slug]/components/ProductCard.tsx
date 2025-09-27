@@ -75,8 +75,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       }}
       onMouseEnter={() => isDesktop && setHoveredProduct(`grid-${product.id}-${index}`)}
       onMouseLeave={() => isDesktop && setHoveredProduct(null)}
-      initial={loadingProducts.has(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      animate={loadingProducts.has(product.id) ? { opacity: 1, y: 0 } : (visibleProducts.includes(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 })}
+      initial={loadingProducts.has(`${product.id}-${index}`) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      animate={loadingProducts.has(`${product.id}-${index}`) ? { opacity: 1, y: 0 } : (visibleProducts.includes(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 })}
       transition={{ duration: 0.2, ease: "easeOut" }}
     >
       <div className="relative w-full aspect-[3/5] bg-gray-100 overflow-visible md:overflow-hidden">
@@ -98,7 +98,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               priority={index < 4}
               loading={index < 4 ? "eager" : "lazy"}
             />
-            {loadingProducts.has(product.id) && (
+            {loadingProducts.has(`${product.id}-${index}`) && (
               <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
                 <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-gray-400"></div>
               </div>
@@ -175,6 +175,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             onProductUpdate={onProductUpdate}
             loadingProducts={loadingProducts}
             setLoadingProducts={setLoadingProducts}
+            index={index}
           />
         )}
       </div>
