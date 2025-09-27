@@ -9,6 +9,12 @@ import Currency from "../../ui/currency";
 import { useCart } from "../../contexts/CartContext";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import GooglePayWithPaypal from "../GooglePayWithPaypal";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import PayPalButtons from "../cart/PayPalButtons";
+import { decrypt } from "../../utils/decrypt";
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -22,12 +28,138 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
   const [discountAmount, setDiscountAmount] = useState(0);
   const [voucherApplying, setVoucherApplying] = useState(false);
   const [voucherMessage, setVoucherMessage] = useState("");
+  const [stripePromise, setStripePromise] = useState<any>(null);
+  const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
   const router = useRouter();
+  const isStripe = process.env.NEXT_PUBLIC_IS_STRIPE === "true";
   const shippingPrice = totalPrice > 100 ? 0 : 10;
   const taxRate = 0.08;
   const taxAmount = totalPrice * taxRate;
   const grandTotal = totalPrice + shippingPrice + taxAmount;
   const effectiveGrandTotal = Math.max(0, grandTotal - discountAmount);
+
+  useEffect(() => {
+    const initializePayments = async () => {
+      try {
+        // Initialize Stripe
+        const stripeResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/stripe-publishable-key`
+        );
+        if (stripeResponse.ok) {
+          const stripeData = await stripeResponse.json();
+          const stripe = await loadStripe(stripeData.publishableKey);
+          setStripePromise(stripe);
+        }
+
+        // Initialize PayPal for Google Pay
+        const paypalResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/payment-settings`
+        );
+        if (paypalResponse.ok) {
+          const paypalData = await paypalResponse.json();
+          const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
+          const decryptedClientId = decrypt(paypalData.paypalClientId, encryptionKey);
+          setPaypalClientId(decryptedClientId);
+        }
+      } catch (error) {
+        console.error("Error initializing payments:", error);
+      }
+    };
+
+    initializePayments();
+  }, []);
+
+  const handlePaymentSuccess = (orderId?: string) => {
+    onClose();
+    const url = orderId 
+      ? `/checkout/confirmation?orderId=${orderId}&success=1`
+      : "/checkout/confirmation?success=1";
+    router.push(url);
+  };
+
+  const handleAmazonPay = async () => {
+    if (!stripePromise) {
+      toast.error("Amazon Pay not available");
+      return;
+    }
+    
+    try {
+      // Create payment intent for Amazon Pay
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-payment-intent`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: Math.round(effectiveGrandTotal * 100),
+          currency: "usd",
+          paymentMethodTypes: ["amazon_pay"],
+          items: items.map(i => ({ id: i.product.id, quantity: i.quantity }))
+        })
+      });
+      
+      if (response.ok) {
+        const { clientSecret } = await response.json();
+        const stripe = await stripePromise;
+        const result = await stripe.confirmPayment({
+          clientSecret,
+          confirmParams: {
+            return_url: `${window.location.origin}/checkout/confirmation`
+          }
+        });
+        
+        if (result.error) {
+          toast.error(result.error.message);
+        } else {
+          // Extract order ID from payment intent if available
+          const orderId = result.paymentIntent?.id;
+          handlePaymentSuccess(orderId);
+        }
+      }
+    } catch (error) {
+      toast.error("Amazon Pay failed");
+    }
+  };
+
+  const handleCashAppPay = async () => {
+    if (!stripePromise) {
+      toast.error("Cash App Pay not available");
+      return;
+    }
+    
+    try {
+      // Create payment intent for CashApp Pay
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-payment-intent`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: Math.round(effectiveGrandTotal * 100),
+          currency: "usd",
+          paymentMethodTypes: ["cashapp"],
+          items: items.map(i => ({ id: i.product.id, quantity: i.quantity }))
+        })
+      });
+      
+      if (response.ok) {
+        const { clientSecret } = await response.json();
+        const stripe = await stripePromise;
+        const result = await stripe.confirmPayment({
+          clientSecret,
+          confirmParams: {
+            return_url: `${window.location.origin}/checkout/confirmation`
+          }
+        });
+        
+        if (result.error) {
+          toast.error(result.error.message);
+        } else {
+          // Extract order ID from payment intent if available
+          const orderId = result.paymentIntent?.id;
+          handlePaymentSuccess(orderId);
+        }
+      }
+    } catch (error) {
+      toast.error("Cash App Pay failed");
+    }
+  };
 
   const handleApplyVoucher = async () => {
     try {
@@ -413,16 +545,93 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
             Express checkout options
           </p>
 
-          <div className="grid grid-cols-3 gap-2 mb-4">
-            <button className="border border-gray-300 py-2 px-3 text-sm font-medium flex items-center justify-center bg-white hover:bg-gray-50">
-              PayPal
-            </button>
-            <button className="border border-gray-300 py-2 px-3 text-sm font-medium flex items-center justify-center bg-white hover:bg-gray-50">
-              G Pay
-            </button>
-            <button className="border border-gray-300 py-2 px-3 text-sm font-medium flex items-center justify-center bg-white hover:bg-gray-50">
-              amazon pay
-            </button>
+          <div className="space-y-2 mb-4">
+            {!isStripe ? (
+              <>
+                {/* Google Pay Express */}
+                {paypalClientId && (
+                  <PayPalScriptProvider
+                    options={{
+                      "client-id": paypalClientId,
+                      currency: "USD",
+                      components: "googlepay",
+                    }}
+                  >
+                    <div className="border border-gray-300 rounded">
+                      <GooglePayWithPaypal
+                        totalAmount={effectiveGrandTotal}
+                        onCaptureSuccess={handlePaymentSuccess}
+                        termsAccepted={true}
+                        onTermsError={(message) => toast.error(message)}
+                      />
+                    </div>
+                  </PayPalScriptProvider>
+                )}
+                
+                {/* PayPal Express */}
+                {paypalClientId && (
+                  <PayPalScriptProvider
+                    options={{
+                      "client-id": paypalClientId,
+                      currency: "USD",
+                    }}
+                  >
+                    <div className="border border-gray-300 rounded p-1">
+                      <PayPalButtons
+                        items={items.map(i => ({ id: i.product.id, quantity: i.quantity }))}
+                        onApproveSuccess={handlePaymentSuccess}
+                      />
+                    </div>
+                  </PayPalScriptProvider>
+                )}
+              </>
+            ) : (
+              <>
+                {/* Amazon Pay Express */}
+                {stripePromise && (
+                  <Elements
+                    stripe={stripePromise}
+                    options={{
+                      mode: "payment",
+                      amount: Math.round(effectiveGrandTotal * 100),
+                      currency: "usd",
+                      paymentMethodTypes: ["amazon_pay"],
+                    }}
+                  >
+                    <div className="border border-gray-300 rounded">
+                      <button 
+                        onClick={handleAmazonPay}
+                        className="w-full py-2 px-3 text-sm font-medium bg-orange-500 text-white hover:bg-orange-600"
+                      >
+                        Amazon Pay
+                      </button>
+                    </div>
+                  </Elements>
+                )}
+                
+                {/* CashApp Pay Express */}
+                {stripePromise && (
+                  <Elements
+                    stripe={stripePromise}
+                    options={{
+                      mode: "payment",
+                      amount: Math.round(effectiveGrandTotal * 100),
+                      currency: "usd",
+                      paymentMethodTypes: ["cashapp"],
+                    }}
+                  >
+                    <div className="border border-gray-300 rounded">
+                      <button 
+                        onClick={handleCashAppPay}
+                        className="w-full py-2 px-3 text-sm font-medium bg-green-500 text-white hover:bg-green-600"
+                      >
+                        Cash App Pay
+                      </button>
+                    </div>
+                  </Elements>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>

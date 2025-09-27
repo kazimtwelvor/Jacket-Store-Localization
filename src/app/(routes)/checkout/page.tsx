@@ -24,6 +24,8 @@ import {
 } from "@stripe/react-stripe-js";
 import PayPalButtons from "../../components/cart/PayPalButtons";
 import PayPalCardForm from "../../components/cart/PayPalCardForm";
+import GooglePayWithPaypal from "../../components/GooglePayWithPaypal";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import Currency from "../../ui/currency";
 import Button from "../../ui/button";
 import { toast } from "react-hot-toast";
@@ -137,13 +139,14 @@ const CheckoutPage = () => {
   const [stripePublishableKey, setStripePublishableKey] = useState<
     string | null
   >(null);
-  const isStripeEnabled = process.env.NEXT_PUBLIC_USE_STRIPE === 'true';
+  const isStripeEnabled = process.env.NEXT_PUBLIC_USE_STRIPE === "true";
   const { items, clearCart, totalPrice: cartTotalPrice } = useCart();
   const router = useRouter();
   const [voucherCode, setVoucherCode] = useState("");
   const [discountAmount, setDiscountAmount] = useState(0);
   const [voucherApplying, setVoucherApplying] = useState(false);
   const [voucherMessage, setVoucherMessage] = useState("");
+  const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
 
   // Form states
   const [formData, setFormData] = useState({
@@ -191,18 +194,25 @@ const CheckoutPage = () => {
   const shippingPrice =
     formData.shippingMethod === "express" ? 15 : totalPrice > 100 ? 0 : 15;
   const taxRate = 0.08;
-  const taxAmount = totalPrice * taxRate;
+  const taxAmount = 0;
   const grandTotal = totalPrice + shippingPrice + taxAmount;
   const effectiveGrandTotal = Math.max(0, grandTotal - discountAmount);
 
   useEffect(() => {
     setIsMounted(true);
+    
+    // Check for payment method in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentMethod = urlParams.get('payment');
+    if (paymentMethod) {
+      setFormData(prev => ({ ...prev, selectedPaymentMethod: paymentMethod }));
+    }
   }, []);
 
   useEffect(() => {
     const fetchStripePublishableKey = async () => {
       if (!isStripeEnabled) return;
-      
+
       try {
         // Check if API URL is available
         if (!process.env.NEXT_PUBLIC_API_URL) {
@@ -241,10 +251,36 @@ const CheckoutPage = () => {
   }, [isStripeEnabled]);
 
   useEffect(() => {
-    stripePromise = stripePublishableKey && isStripeEnabled
-      ? loadStripe(stripePublishableKey)
-      : null;
+    stripePromise =
+      stripePublishableKey && isStripeEnabled
+        ? loadStripe(stripePublishableKey)
+        : null;
   }, [stripePublishableKey, isStripeEnabled]);
+
+  useEffect(() => {
+    const fetchPayPalClientId = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/payment-settings`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch payment settings");
+        }
+        const data = await response.json();
+        const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
+        const decryptedClientId = decrypt(data.paypalClientId, encryptionKey);
+        setPaypalClientId(decryptedClientId);
+      } catch (error) {
+        console.error("Error fetching PayPal client ID:", error);
+        const fallbackClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+        if (fallbackClientId) {
+          setPaypalClientId(fallbackClientId);
+        }
+      }
+    };
+
+    fetchPayPalClientId();
+  }, []);
 
   const initializePayment = async () => {
     if (clientSecret) return;
@@ -1274,7 +1310,7 @@ const CheckoutPage = () => {
                               <span>256-bit SSL encryption</span>
                             </div>
                           </div>
-                          
+
                           {isStripeEnabled ? (
                             // Stripe Payment Form
                             isLoading && !clientSecret ? (
@@ -1353,7 +1389,81 @@ const CheckoutPage = () => {
                       )}
                     </div>
 
-                    {/* Apple Pay / Google Pay */}
+                    {/* Google Pay */}
+                    <div className="group">
+                      <label
+                        className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          formData.selectedPaymentMethod === "googlepay"
+                            ? "border-black bg-gray-100 shadow-md"
+                            : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          <div className="relative mr-4">
+                            <input
+                              type="radio"
+                              name="selectedPaymentMethod"
+                              value="googlepay"
+                              checked={
+                                formData.selectedPaymentMethod === "googlepay"
+                              }
+                              onChange={handleInputChange}
+                              className="sr-only"
+                            />
+                            <div
+                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                formData.selectedPaymentMethod === "googlepay"
+                                  ? "bg-black border-black"
+                                  : "border-gray-300 group-hover:border-gray-500"
+                              }`}
+                            >
+                              {formData.selectedPaymentMethod ===
+                                "googlepay" && (
+                                <Check className="w-4 h-4 text-white" />
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center">
+                            <div className="bg-gray-800 px-4 py-2 rounded text-white font-semibold text-sm">
+                              Google Pay
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="text-sm text-gray-500 mr-2">
+                            Quick & secure
+                          </span>
+                          <Shield className="w-4 h-4 text-gray-600" />
+                        </div>
+                      </label>
+
+                      {/* Google Pay Component */}
+                      {formData.selectedPaymentMethod === "googlepay" && (
+                        <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
+                          <div className="mb-4">
+                            <p className="text-sm text-gray-700 mb-2">
+                              Pay with Google Pay
+                            </p>
+                          </div>
+                          {paypalClientId && (
+                            <PayPalScriptProvider
+                              options={{
+                                "client-id": paypalClientId,
+                                currency: "USD",
+                                components: "googlepay",
+                              }}
+                            >
+                              <GooglePayWithPaypal
+                                totalAmount={effectiveGrandTotal}
+                                onCaptureSuccess={handlePaymentSuccess}
+                                termsAccepted={formData.acceptTerms}
+                                onTermsError={(message) => toast.error(message)}
+                              />
+                            </PayPalScriptProvider>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
