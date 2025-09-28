@@ -881,7 +881,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
     const timeoutId = setTimeout(updateLayout, 100);
     return () => clearTimeout(timeoutId);
-  }, [productsData.products, loading]);
+  }, [productsData.products, loading, loadedProducts]);
 
   useEffect(() => {
     if (layoutMetrics.startStickyPoint === 0) return;
