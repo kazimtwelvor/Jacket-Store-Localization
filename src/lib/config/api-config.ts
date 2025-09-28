@@ -17,7 +17,7 @@ export const API_CONFIG = {
   
   // Request settings
   REQUEST: {
-    TIMEOUT: 10000,
+    TIMEOUT: 1200000, 
     RETRY_ATTEMPTS: 3,
     RETRY_DELAY: 1000,
   },

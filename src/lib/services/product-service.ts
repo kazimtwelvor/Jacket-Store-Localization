@@ -82,7 +82,7 @@ export class ProductService {
 
             const response = await apiClient.get('/products', {
                 params,
-                timeout: 60000,
+                timeout: 1200000,
                 headers: {
                     'Cache-Control': 'no-cache',
                 }
@@ -141,7 +141,7 @@ export class ProductService {
     static async getProduct(slugOrId: string): Promise<Product | null> {
         try {
             const response = await apiClient.get(`/products/${slugOrId}`, {
-                timeout: 60000,
+                timeout: 1200000, 
                 headers: {
                     'Cache-Control': 'no-cache',
                 }
