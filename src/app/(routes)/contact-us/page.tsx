@@ -43,9 +43,9 @@ export default function ContactUsPage() {
     "contactPoint": [
       {
         "@type": "ContactPoint",
-        "telephone": "+1-212-555-1234",
+        "telephone": "+1 (888) 840-0885",
         "contactType": "customer service",
-        "email": "hello@storecopy.com",
+        "email": "info@fineystjackets.com",
         "availableLanguage": "English",
         "hoursAvailable": {
           "@type": "OpeningHoursSpecification",
@@ -56,9 +56,9 @@ export default function ContactUsPage() {
       },
       {
         "@type": "ContactPoint",
-        "telephone": "+1-800-555-1234",
+        "telephone": "+1 (888) 840-0885",
         "contactType": "customer service",
-        "email": "support@storecopy.com",
+        "email": "info@fineystjackets.com",
         "availableLanguage": "English",
         "hoursAvailable": {
           "@type": "OpeningHoursSpecification",
@@ -132,13 +132,8 @@ export default function ContactUsPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Email Us</h3>
                     <p className="text-muted-foreground">
-                      <a href="mailto:hello@storecopy.com" className="hover:text-[#2b2b2b] transition-colors">
-                        hello@storecopy.com
-                      </a>
-                    </p>
-                    <p className="text-muted-foreground">
-                      <a href="mailto:support@storecopy.com" className="hover:text-[#2b2b2b] transition-colors">
-                        support@storecopy.com
+                      <a href="info@fineystjackets.com" className="hover:text-[#2b2b2b] transition-colors">
+                      info@fineystjackets.com
                       </a>
                     </p>
                   </div>
@@ -151,13 +146,8 @@ export default function ContactUsPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Call Us</h3>
                     <p className="text-muted-foreground">
-                      <a href="tel:+12125551234" className="hover:text-[#2b2b2b] transition-colors">
-                        +1 (212) 555-1234
-                      </a>
-                    </p>
-                    <p className="text-muted-foreground">
-                      <a href="tel:+18005551234" className="hover:text-[#2b2b2b] transition-colors">
-                        +1 (800) 555-1234 (Toll-free)
+                      <a href="tel:+18888400885" className="hover:text-[#2b2b2b] transition-colors">
+                      +1 (888) 840-0885
                       </a>
                     </p>
                   </div>
@@ -172,7 +162,7 @@ export default function ContactUsPage() {
                     <p className="text-muted-foreground">
                       Available Monday - Friday
                       <br />
-                      9:00 AM - 6:00 PM EST
+                      9:00 AM - 6:00 PM CST
                       <br />
                       <a href="#" className="text-[#2b2b2b] hover:underline">
                         Start a chat now
@@ -188,9 +178,9 @@ export default function ContactUsPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Support Hours</h3>
                     <p className="text-muted-foreground">
-                      Monday - Friday: 9:00 AM - 6:00 PM EST
+                      Monday - Friday: 9:00 AM - 6:00 PM CST
                       <br />
-                      Saturday: 10:00 AM - 4:00 PM EST
+                      Saturday: 10:00 AM - 4:00 PM CST
                       <br />
                       Sunday: Closed
                     </p>
@@ -310,7 +300,7 @@ export default function ContactUsPage() {
               Still have questions? Our customer service team is here to help.
             </p>
             <Button variant="blackInvert" asChild>
-              <a href="mailto:support@storecopy.com">Contact Support</a>
+              <a href="mailto:info@fineystjackets.com">Contact Support</a>
             </Button>
           </div>
         </Container>

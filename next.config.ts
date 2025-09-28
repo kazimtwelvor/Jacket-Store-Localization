@@ -34,11 +34,17 @@ const nextConfig = {
       "192.168.100.8",
       "images.unsplash.com",
       "localhost",
+      "jacket.us.com"
     ],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "d1.fineyst.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "jacket.us.com",
         pathname: "/**",
       },
       {

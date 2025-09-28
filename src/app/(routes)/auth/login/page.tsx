@@ -740,12 +740,12 @@ function LoginContent() {
                           }
                         }}
                         className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                        placeholder="+1 123 456 7890"
+                        placeholder="+1 (888) 840-0885"
                         maxLength={15}
                       />
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
-                      Format: +1 123 456 7890
+                      Format: +1 (888) 840-0885
                     </p>
                   </div>
                 </div>

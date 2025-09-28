@@ -72,7 +72,7 @@ const Footer = () => {
                     <div className="space-y-4 flex-shrink-0 md:w-64 flex flex-col items-center md:items-start">
                         <div className="flex flex-col items-center md:items-start">
                             <div className="mb-3 flex justify-center md:justify-start">
-                                <Link href="/" className="flex items-center justify-center">
+                                <Link href="/us" className="flex items-center justify-center">
                                     <img
                                         src="/images/logo-footer.webp"
                                         alt="Fineyst Logo"
@@ -113,8 +113,8 @@ const Footer = () => {
                                 <div className="text-black mr-3 flex-shrink-0">
                                     <Phone className="h-4 w-4" />
                                 </div>
-                                <Link href="tel:+18004846267" className="text-black font-semibold text-sm hover:font-bold transition-all">
-                                    Call (800) 484-6267
+                                <Link href="tel:+18888400885" className="text-black font-semibold text-sm hover:font-bold transition-all">
+                                    Call +1 (888) 840-0885
                                 </Link>
                             </div>
 
@@ -122,8 +122,8 @@ const Footer = () => {
                                 <div className="text-black mr-3 flex-shrink-0">
                                     <Mail className="h-4 w-4" />
                                 </div>
-                                <Link href="mailto:support@fineyst.com" className="text-black font-semibold text-sm hover:font-bold transition-all">
-                                    support@fineyst.com
+                                <Link href="mailto:info@fineystjackets.com" className="text-black font-semibold text-sm hover:font-bold transition-all">
+                                info@fineystjackets.com
                                 </Link>
                             </div>
                         </div>

@@ -16,10 +16,10 @@ export default function PolicyContact() {
   const handleContactAction = (type: "email" | "phone" | "chat") => {
     switch (type) {
       case "email":
-        router.push("mailto:support@fashionstore.com")
+        router.push("mailto:info@fineystjackets.com")
         break
       case "phone":
-        router.push("tel:+18001234567")
+        router.push("tel:+18888400885")
         break
       case "chat":
         alert("Live chat would open here. This is a placeholder.")
@@ -41,18 +41,18 @@ export default function PolicyContact() {
 
           <div className="space-y-3 pt-2">
             <a
-              href="mailto:support@fashionstore.com"
+              href="mailto:info@fineystjackets.com"
               className="flex items-center p-3 rounded-lg border border-[#2b2b2b] hover:border-[#2b2b2b] transition-colors"
             >
               <span className="h-5 w-5 text-[#2b2b2b] mr-3">✉️</span>
               <div>
                 <div className="font-medium text-[#333333]">Email Support</div>
-                <div className="text-sm text-[#666666]">support@fashionstore.com</div>
+                <div className="text-sm text-[#666666]">info@fineystjackets.com</div>
               </div>
             </a>
 
             <a
-              href="tel:+18001234567"
+              href="tel:+18888400885"
               className="flex items-center p-3 rounded-lg border border-[#2b2b2b] hover:border-[#2b2b2b] transition-colors"
             >
               <span className="h-5 w-5 text-[#2b2b2b] mr-3">📞</span>
@@ -100,7 +100,7 @@ export default function PolicyContact() {
             <Mail className="h-5 w-5 text-[#2b2b2b] mr-3" />
             <div>
               <div className="font-medium text-[#333333]">Email Support</div>
-              <div className="text-sm text-[#666666]">support@fashionstore.com</div>
+              <div className="text-sm text-[#666666]">info@fineystjackets.com</div>
             </div>
           </button>
 

@@ -17,13 +17,13 @@ export default function ShippingContact() {
   const handleContactAction = (type: string) => {
     switch (type) {
       case "email":
-        window.location.href = "mailto:support@fashionstore.com"
+        window.location.href = "mailto:info@fineystjackets.com"
         break
       case "phone":
-        window.location.href = "tel:+18001234567"
+        window.location.href = "tel:+18888400885"
         break
       case "chat":
-        alert("Live chat would open here. This is a placeholder.")
+        alert("")
         break
       default:
         break
@@ -35,7 +35,7 @@ export default function ShippingContact() {
       icon: Mail,
       title: "Email Us",
       description: "Get a response within 24 hours",
-      contact: "support@fashionstore.com",
+      contact: "info@fineystjackets.com",
       action: "Send Email",
       type: "email",
     },
@@ -43,7 +43,7 @@ export default function ShippingContact() {
       icon: Phone,
       title: "Call Us",
       description: "Available Mon-Fri, 9am-5pm EST",
-      contact: "+1 (800) 123-4567",
+      contact: "+1 (888) 840-0885",
       action: "Call Now",
       type: "phone",
     },
