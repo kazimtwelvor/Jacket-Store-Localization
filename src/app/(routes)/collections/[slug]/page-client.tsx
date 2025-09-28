@@ -963,7 +963,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                             <button
                                 onClick={handleLoadMore}
                                 disabled={isLoadingMore}
-                                className="px-8 py-3 bg-[#2b2b2b] text-white rounded-md hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+                                className="px-8 py-3 bg-[#2b2b2b] text-white  hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
                             >
                                 {isLoadingMore ? (
                                     <div className="flex items-center gap-2">
