@@ -920,9 +920,11 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
                           onProductUpdate={(updatedProduct) => {
                             setCurrentProducts(prev => {
                               const newProducts = [...prev]
-                              const productIndex = newProducts.findIndex(p => p.id === product.id)
-                              if (productIndex !== -1) {
-                                newProducts[productIndex] = updatedProduct
+                              // const productIndex = newProducts.findIndex(p => p.id === product.id)
+                              // if (productIndex !== -1) {
+                              //   newProducts[productIndex] = updatedProduct
+                              if (index < newProducts.length) {
+                                newProducts[index] = updatedProduct
                               }
                               return newProducts
                             })
