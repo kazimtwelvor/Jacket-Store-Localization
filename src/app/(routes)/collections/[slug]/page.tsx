@@ -1,6 +1,6 @@
 export const dynamic = 'force-static';     
 export const dynamicParams = true;         
-export const revalidate = false;           
+export const revalidate = false;        
 import getCategories from "../../../actions/get-categories";
 import getKeywordCategory from "../../../actions/get-keyword-category";
 import getKeywordCategories from "../../../actions/get-keyword-categories";
@@ -41,7 +41,7 @@ export async function generateStaticParams() {
       return [];
     }
     
-    const collectionCount = process.env.NEXT_COLLECTION_COUNT ? parseInt(process.env.NEXT_COLLECTION_COUNT) : 500;
+    const collectionCount = process.env.NEXT_COLLECTION_COUNT ? parseInt(process.env.NEXT_COLLECTION_COUNT) : 20;
     const params = categoriesResult.slice(0, collectionCount).map((category: any) => ({
       slug: category.slug,
     }));
@@ -172,6 +172,12 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
     const fetchWithRetry = async (fetchFn: () => Promise<any>, retries = 3, timeout = 300000): Promise<any> => {
       for (let i = 0; i < retries; i++) {
         try {
+          if (i > 0) {
+            const delay = Math.pow(2, i) * 2000; 
+            console.log(`⏳ Waiting ${delay}ms before retry ${i + 1} for collection ${slug}`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
+          
           const timeoutPromise = new Promise((_, reject) => {
             setTimeout(() => reject(new Error('Request timeout')), timeout);
           });
@@ -180,8 +186,6 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         } catch (error) {
           console.warn(`Attempt ${i + 1} failed for collection ${slug}:`, error);
           if (i === retries - 1) throw error;
-          
-          await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
         }
       }
       throw new Error('All retry attempts failed');
@@ -193,7 +197,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         styles: filterParams.styles,
         colors: filterParams.colors,
         genders: filterParams.genders,
-        limit: 40, // Only fetch first 40 products for static generation
+        limit: 40,
         page: 1,
       })),
       fetchWithRetry(() => getCategories()),
