@@ -542,7 +542,7 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                             <div className="text-xs mb-2">
                               Quick Shop <span className="text-gray-500">(Select your Size)</span>
                             </div>
-                            <div className="flex gap-1 overflow-x-auto">
+                            <div className="flex flex-wrap gap-1">
                               {product.sizeDetails.map((size) => (
                                 <button
                                   key={size.id}
