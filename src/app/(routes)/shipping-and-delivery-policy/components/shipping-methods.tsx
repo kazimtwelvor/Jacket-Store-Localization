@@ -36,7 +36,7 @@ export default function ShippingMethods() {
     {
       icon: Truck,
       title: "Standard Shipping",
-      description: "Delivery within 5-7 business days",
+      description: "Delivery within 3-4 business days",
       features: ["Tracking included", "Signature on delivery optional", "Available for most locations"],
     },
     {

@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react"
 import PolicyHero from "./components/policy-hero"
 import ShippingMethods from "./components/shipping-methods"
+import OrderProcessingInfo from "./components/order-processing-info"
 import DeliveryZones from "./components/delivery-zones"
 import ShippingTimeline from "./components/shipping-timeline"
-import ShippingCosts from "./components/shipping-costs"
 import ShippingFAQ from "./components/shipping-faq"
 import ShippingContact from "./components/shipping-contact"
 import { motion } from "framer-motion"
@@ -60,7 +60,7 @@ export default function ShippingPolicyClient() {
               {[
                 {
                   title: "Standard Shipping",
-                  description: "Delivery within 5-7 business days",
+                  description: "Delivery within 3-4 business days",
                   features: ["Tracking included", "Signature on delivery optional", "Available for most locations"],
                 },
                 {
@@ -90,6 +90,7 @@ export default function ShippingPolicyClient() {
               ))}
             </div>
           </div>
+
 
           <div className="py-16">
             <div className="mb-12 text-center">
@@ -129,9 +130,9 @@ export default function ShippingPolicyClient() {
                         </thead>
                         <tbody>
                           {[
-                            { region: "East Coast", time: "3-5 business days" },
-                            { region: "Midwest", time: "3-5 business days" },
-                            { region: "West Coast", time: "4-6 business days" },
+                            { region: "East Coast", time: "3-4 business days" },
+                            { region: "Midwest", time: "3-4 business days" },
+                            { region: "West Coast", time: "3-4 business days" },
                             { region: "Alaska & Hawaii", time: "5-7 business days" },
                           ].map((item, index) => (
                             <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-red-50/30"}>
@@ -371,13 +372,13 @@ export default function ShippingPolicyClient() {
                   {
                     title: "Email Us",
                     description: "Get a response within 24 hours",
-                    contact: "support@fashionstore.com",
+                    contact: "info@fineystjackets.com",
                     action: "Send Email",
                   },
                   {
                     title: "Call Us",
                     description: "Available Mon-Fri, 9am-5pm EST",
-                    contact: "+1 (800) 123-4567",
+                    contact: "+1 (888) 840-0885",
                     action: "Call Now",
                   },
                   {
@@ -426,9 +427,9 @@ export default function ShippingPolicyClient() {
         className="container mx-auto px-4 pt-0 pb-8 max-w-7xl"
       >
         <ShippingMethods />
+        <OrderProcessingInfo />
         <DeliveryZones />
         <ShippingTimeline />
-        <ShippingCosts />
         <ShippingFAQ />
         <ShippingContact />
       </motion.div>

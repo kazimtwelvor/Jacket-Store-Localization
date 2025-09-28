@@ -96,12 +96,12 @@ export default function SizeFAQ() {
           <p className="text-sm text-[#666666]">
             Still have questions about finding your perfect size? Our customer service team is here to help! Contact us
             at{" "}
-            <a href="mailto:support@example.com" className="text-[#2b2b2b] underline">
-              support@example.com
+            <a href="mailto:info@fineystjackets.com" className="text-[#2b2b2b] underline">
+            info@fineystjackets.com
             </a>{" "}
             or call us at{" "}
-            <a href="tel:+18001234567" className="text-[#2b2b2b] underline">
-              1-800-123-4567
+            <a href="tel:+18888400885" className="text-[#2b2b2b] underline">
+            +1 (888) 840-0885
             </a>
             .
           </p>

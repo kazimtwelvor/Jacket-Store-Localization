@@ -23,7 +23,7 @@ export default function PreferencesPage() {
     state: "Texas",
     zipCode: "73781",
     country: "United States",
-    phone: "+12555551454",
+    phone: "+1 (888) 840-0885",
   };
 
   const [preferences, setPreferences] = useState({
@@ -287,7 +287,7 @@ export default function PreferencesPage() {
                   data performed on the basis of the consent up to the time of
                   revocation. You can revoke your consent here under the
                   category &quot;My communication&quot; by clicking on the specific
-                  communication channel or at experience@fineyst.com.
+                  communication channel or at info@fineystjackets.com.
                 </p>
               </div>
 

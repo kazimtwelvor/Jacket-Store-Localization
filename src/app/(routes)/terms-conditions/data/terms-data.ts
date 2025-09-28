@@ -184,7 +184,7 @@ export const termsData: TermsData = {
     content: [
       "If you have any questions about these Terms & Conditions, please contact us at:",
       "Fineyst Customer Service",
-      "Email: support@fineyst.com",
+      "Email: info@fineystjackets.com",
       "Phone: 1-800-484-6267",
       "Address: 123 Fashion Avenue, Suite 500, San Francisco, CA 94103, United States",
     ],
