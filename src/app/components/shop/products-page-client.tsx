@@ -61,7 +61,7 @@ const getStylesFromCategories = (categories?: Category[]) => {
 };
 
 const getGendersFromCategories = (categories?: Category[]) => {
-  const genders = ["Male", "Female", "Unisex"];
+  const genders = ["Male", "Female"];
   return genders.map((name, index) => ({ id: `gender-${index}`, name }));
 };
 
@@ -320,15 +320,15 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
         const genderToParam = (g: string) => {
           const v = g.trim().toLowerCase();
-          if (v === "male" || v === "men") return "men";
-          if (v === "female" || v === "women") return "women";
-          if (v === "unisex") return "unisex";
+          if (v === "male" || v === "men") return "male";
+          if (v === "female" || v === "women") return "female";
+          // if (v === "unisex") return "unisex";
           return v;
         };
 
         const queryParams = {
           page,
-          limit: 28,
+          limit: 40,
           categoryId:
             activeCategory !== "t-shirts" ? activeCategory : undefined,
           materials:
@@ -385,6 +385,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             )
           );
           setCurrentPage(page);
+          // Update hasMore state based on filtered results
+          setHasMore(newProductsData.pagination?.hasNextPage || false);
         } else {
           console.log(
             "Request ignored - not latest:",
@@ -428,7 +430,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             currentPage: page,
             totalPages: 0,
             totalProducts: 0,
-            productsPerPage: 28,
+            productsPerPage: 40,
             hasNextPage: false,
             hasPreviousPage: false,
           },
@@ -504,14 +506,20 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           materials: selectedFilters.materials,
           styles: selectedFilters.style,
           colors: selectedFilters.colors,
-          genders: selectedFilters.gender,
+          genders: selectedFilters.gender.map(g => {
+            const v = g.trim().toLowerCase();
+            if (v === "male" || v === "men") return "male";
+            if (v === "female" || v === "women") return "female";
+            // if (v === "unisex") return "unisex";
+            return v;
+          }),
           sizes: selectedFilters.sizes,
           categoryId: filterParams?.categoryId,
           colorId: filterParams?.colorId,
           sizeId: filterParams?.sizeId,
           search: filterParams?.search,
-          page: loadMorePage,
-          limit: 40,
+        page: loadMorePage,
+        limit: 40,
           sort: activeSort || filterParams?.sort || "popular",
         }),
       });
@@ -540,8 +548,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   useEffect(() => {
     setLoadedProducts([]);
     setLoadMorePage(2);
-    setHasMore(hasMoreProducts);
-  }, [selectedFilters, activeSort, hasMoreProducts]);
+    setHasMore(productsData.pagination?.hasNextPage || false);
+  }, [selectedFilters, activeSort, productsData.pagination]);
 
   const handleClick = (product: Product) => {
     const slug = getProductSlug(product);
@@ -682,7 +690,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         const v = g.trim().toLowerCase();
         if (v === "men" || v === "male") return "Male";
         if (v === "women" || v === "female") return "Female";
-        if (v === "unisex") return "Unisex";
+       // if (v === "unisex") return "Unisex";
         return g;
       };
 
@@ -752,7 +760,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         const v = g.trim().toLowerCase();
         if (v === "men" || v === "male") return "Male";
         if (v === "women" || v === "female") return "Female";
-        if (v === "unisex") return "Unisex";
+        // if (v === "unisex") return "Unisex";
         return g;
       };
       setSelectedFilters({
@@ -971,6 +979,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             layoutMetrics={layoutMetrics}
             hasActiveFilters={hasActiveFilters}
             totalActiveFilters={totalActiveFilters}
+            selectedFilters={selectedFilters}
             currentSort={activeSort}
             sortDropdownOpen={sortDropdownOpen}
             setSortDropdownOpen={setSortDropdownOpen}

@@ -93,12 +93,12 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                     ))
                   )}
                 </div>
-                <button
+                {/* <button
                   onClick={onClearFilters}
                   className="text-sm text-red-600 hover:text-red-700 font-medium whitespace-nowrap"
                 >
                   Clear all
-                </button>
+                </button> */}
               </div>
             </div>
           )}
