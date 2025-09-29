@@ -369,8 +369,32 @@ const CheckoutPage = () => {
     }
   };
 
-  const handlePaymentSuccess = () => {
+  const handlePaymentSuccess = async () => {
     setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+    
+    // Send emails immediately after successful payment
+    try {
+      const orderItems = items.map(item => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        price: item.unitPrice.toString()
+      }));
+      
+      await fetch('/api/orders/send-order-emails', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerEmail: formData.email,
+          customerName: `${formData.firstName} ${formData.lastName}`,
+          orderNumber: orderId || 'unknown',
+          orderTotal: effectiveGrandTotal.toString(),
+          items: orderItems
+        })
+      });
+    } catch (error) {
+      console.error('Failed to send order emails:', error);
+    }
+    
     setTimeout(() => {
       setPaymentModal({ isOpen: false, status: "processing", message: "" });
       clearCart();
