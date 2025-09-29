@@ -72,7 +72,7 @@ export default function ShopButton({
             <div className="absolute inset-0 w-0 bg-[#1a1a1a] transition-all duration-300 group-hover:w-full"></div>
           )}
           {showArrow && !isLoading && (
-            <FaArrowRight className="hidden lg:block ml-2 opacity-0 group-hover:opacity-100 transition-all duration-400 transform group-hover:translate-x-1" />
+            <FaArrowRight className="hidden xl:block ml-2 opacity-0 group-hover:opacity-100 transition-all duration-400 transform group-hover:translate-x-1" />
           )}
         </div>
       </Link>
@@ -86,7 +86,7 @@ export default function ShopButton({
         <div className="absolute inset-0 w-0 bg-[#1a1a1a] transition-all duration-300 group-hover:w-full"></div>
       )}
       {showArrow && (
-        <FaArrowRight className="hidden lg:block ml-2 opacity-0 group-hover:opacity-100 transition-all duration-400 transform group-hover:translate-x-1" />
+        <FaArrowRight className="hidden xl:block ml-2 opacity-0 group-hover:opacity-100 transition-all duration-400 transform group-hover:translate-x-1" />
       )}
     </div>
   )
