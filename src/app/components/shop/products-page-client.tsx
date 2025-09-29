@@ -1146,7 +1146,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           isOpen={categorySliderOpen}
           onClose={() => setCategorySliderOpen(false)}
           keywordCategories={keywordCategories || []}
-          onCategorySelect={(category) => {
+          onCategorySelect={(selectedCategory) => {
+            router.push(`/collections/${selectedCategory.slug}`);
             setCategorySliderOpen(false);
           }}
         />
