@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { decrypt } from "../../utils/decrypt";
+import { loadPayPalSDK } from "../../lib/paypal-sdk-loader";
 
 type CartItem = {
   id: string;
@@ -10,29 +11,13 @@ type CartItem = {
 
 type PayPalButtonsProps = {
   items: CartItem[];
-  onApproveSuccess: () => void;
+  onApproveSuccess: (orderId?: string) => void;
 };
 
 declare global {
   interface Window {
     paypal?: any;
   }
-}
-
-async function loadPayPalSdk(clientId: string) {
-  return new Promise<void>((resolve, reject) => {
-    if (typeof window === "undefined") return reject(new Error("No window"));
-    if (window.paypal) return resolve();
-
-    const script = document.createElement("script");
-    script.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(
-      clientId
-    )}&currency=USD&intent=capture&components=buttons&enable-funding=paylater,card&disable-funding=venmo`;
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error("Failed to load PayPal SDK"));
-    document.body.appendChild(script);
-  });
 }
 
 export default function PayPalButtons({
@@ -71,7 +56,7 @@ export default function PayPalButtons({
         const decryptedClientId = decrypt(settings.paypalClientId, encryptionKey);
         console.log('Decrypted Client ID:', decryptedClientId);
         console.log('Client ID length:', decryptedClientId.length);
-        await loadPayPalSdk(decryptedClientId);
+        await loadPayPalSDK(decryptedClientId, ['buttons']);
 
         if (!isMounted || !containerRef.current) return;
 
@@ -128,7 +113,7 @@ export default function PayPalButtons({
                 body: JSON.stringify({ orderID: data.orderID }),
               });
               if (!res.ok) throw new Error("Failed to capture PayPal order");
-              onApproveSuccess();
+              onApproveSuccess(data.orderID);
             },
             onError: (err: any) => {
               console.error("PayPal error", err);

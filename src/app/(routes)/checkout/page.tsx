@@ -23,6 +23,10 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import PayPalButtons from "../../components/cart/PayPalButtons";
+import PayPalCardForm from "../../components/cart/PayPalCardForm";
+import GooglePayWithPaypal from "../../components/GooglePayWithPaypal";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import PaymentProcessingModal from "../../components/PaymentProcessingModal";
 import Currency from "../../ui/currency";
 import Button from "../../ui/button";
 import { toast } from "react-hot-toast";
@@ -43,6 +47,7 @@ const PaymentForm = ({
   onBack,
   isLoading,
   setIsLoading,
+  setPaymentModal,
 }: {
   clientSecret: string;
   orderId: string;
@@ -50,6 +55,7 @@ const PaymentForm = ({
   onBack: () => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
+  setPaymentModal: (modal: { isOpen: boolean; status: "processing" | "success" | "error"; message: string }) => void;
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -64,6 +70,7 @@ const PaymentForm = ({
 
     setIsLoading(true);
     setError(null);
+    setPaymentModal({ isOpen: true, status: "processing", message: "" });
 
     try {
       const result = await stripe.confirmPayment({
@@ -76,15 +83,20 @@ const PaymentForm = ({
 
       if (result.error) {
         setError(result.error.message || "An error occurred during payment");
-        toast.error(result.error.message || "Payment failed");
-      } else {
-        toast.success("Payment successful!");
-        onSuccess();
+        setPaymentModal({ isOpen: true, status: "error", message: result.error.message || "Payment failed" });
+        setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
+      } else if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
+        setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+        setTimeout(() => {
+          setPaymentModal({ isOpen: false, status: "processing", message: "" });
+          onSuccess();
+        }, 2000);
       }
     } catch (err) {
       console.error("Payment error:", err);
       setError("An unexpected error occurred");
-      toast.error("Payment failed. Please try again.");
+      setPaymentModal({ isOpen: true, status: "error", message: "Payment failed. Please try again." });
+      setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
     } finally {
       setIsLoading(false);
     }
@@ -136,12 +148,15 @@ const CheckoutPage = () => {
   const [stripePublishableKey, setStripePublishableKey] = useState<
     string | null
   >(null);
+  const isStripeEnabled = process.env.NEXT_PUBLIC_USE_STRIPE === "true";
   const { items, clearCart, totalPrice: cartTotalPrice } = useCart();
   const router = useRouter();
   const [voucherCode, setVoucherCode] = useState("");
   const [discountAmount, setDiscountAmount] = useState(0);
   const [voucherApplying, setVoucherApplying] = useState(false);
   const [voucherMessage, setVoucherMessage] = useState("");
+  const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
+  const [paymentModal, setPaymentModal] = useState({ isOpen: false, status: "processing" as "processing" | "success" | "error", message: "" });
 
   // Form states
   const [formData, setFormData] = useState({
@@ -189,16 +204,28 @@ const CheckoutPage = () => {
   const shippingPrice =
     formData.shippingMethod === "express" ? 15 : totalPrice > 100 ? 0 : 15;
   const taxRate = 0.08;
-  const taxAmount = totalPrice * taxRate;
+  const taxAmount = 0;
   const grandTotal = totalPrice + shippingPrice + taxAmount;
   const effectiveGrandTotal = Math.max(0, grandTotal - discountAmount);
 
   useEffect(() => {
     setIsMounted(true);
+
+    // Check for payment method in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentMethod = urlParams.get("payment");
+    if (paymentMethod) {
+      setFormData((prev) => ({
+        ...prev,
+        selectedPaymentMethod: paymentMethod,
+      }));
+    }
   }, []);
 
   useEffect(() => {
     const fetchStripePublishableKey = async () => {
+      if (!isStripeEnabled) return;
+
       try {
         // Check if API URL is available
         if (!process.env.NEXT_PUBLIC_API_URL) {
@@ -234,13 +261,39 @@ const CheckoutPage = () => {
     };
 
     fetchStripePublishableKey();
-  }, []);
+  }, [isStripeEnabled]);
 
   useEffect(() => {
-    stripePromise = stripePublishableKey
-      ? loadStripe(stripePublishableKey)
-      : null;
-  }, [stripePublishableKey]);
+    stripePromise =
+      stripePublishableKey && isStripeEnabled
+        ? loadStripe(stripePublishableKey)
+        : null;
+  }, [stripePublishableKey, isStripeEnabled]);
+
+  useEffect(() => {
+    const fetchPayPalClientId = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/payment-settings`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch payment settings");
+        }
+        const data = await response.json();
+        const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
+        const decryptedClientId = decrypt(data.paypalClientId, encryptionKey);
+        setPaypalClientId(decryptedClientId);
+      } catch (error) {
+        console.error("Error fetching PayPal client ID:", error);
+        const fallbackClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+        if (fallbackClientId) {
+          setPaypalClientId(fallbackClientId);
+        }
+      }
+    };
+
+    fetchPayPalClientId();
+  }, []);
 
   const initializePayment = async () => {
     if (clientSecret) return;
@@ -268,26 +321,45 @@ const CheckoutPage = () => {
         voucherCode: voucherCode || null,
       };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-        {
+      // Use Stripe API route for Stripe payments
+      if (isStripeEnabled && formData.selectedPaymentMethod === "CREDIT_CARD") {
+        const response = await fetch("/api/stripe/create-payment-intent", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(checkoutData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to initialize payment");
         }
-      );
 
-      if (!response.ok) {
-        throw new Error("Failed to initialize payment");
+        const data = await response.json();
+        setClientSecret(data.clientSecret);
+        setOrderId(data.orderId);
+      } else {
+        // For other payments, use the original backend endpoint
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(checkoutData),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to initialize payment");
+        }
+
+        const data = await response.json();
+        const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
+        setClientSecret(decrypt(data.clientSecret, encryptionKey));
+        setOrderId(data.orderId);
       }
-
-      const data = await response.json();
-      const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
-      console.log("stript data", data);
-      setClientSecret(decrypt(data.clientSecret, encryptionKey));
-      setOrderId(data.orderId);
     } catch (error) {
       console.error("Payment initialization error:", error);
       toast.error("Failed to initialize payment. Please try again.");
@@ -298,8 +370,12 @@ const CheckoutPage = () => {
   };
 
   const handlePaymentSuccess = () => {
-    clearCart();
-    router.push(`/checkout/confirmation?orderId=${orderId}&success=1`);
+    setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+    setTimeout(() => {
+      setPaymentModal({ isOpen: false, status: "processing", message: "" });
+      clearCart();
+      router.push(`/checkout/confirmation?orderId=${orderId}&success=1`);
+    }, 2000);
   };
 
   const handleApplyVoucher = async () => {
@@ -1050,121 +1126,24 @@ const CheckoutPage = () => {
 
                 {/* Payment Method Selection */}
                 <div className="mb-8">
-                  <h3 className="text-lg font-medium mb-6">
-                    Select Payment Method
-                  </h3>
-                  <div className="space-y-3">
-                    {/* Google Pay */}
-                    <div>
-                      <label className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-gray-300 transition-colors">
-                        <div className="flex items-center">
-                          <div className="relative">
-                            <input
-                              type="radio"
-                              name="selectedPaymentMethod"
-                              value="google_pay"
-                              checked={
-                                formData.selectedPaymentMethod === "google_pay"
-                              }
-                              onChange={handleInputChange}
-                              className="sr-only" // Hidden radio button
-                            />
-                            <div
-                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                formData.selectedPaymentMethod === "google_pay"
-                                  ? "bg-black border-black"
-                                  : "border-gray-300"
-                              }`}
-                            >
-                              {formData.selectedPaymentMethod ===
-                                "google_pay" && (
-                                <Check className="w-3 h-3 text-white" />
-                              )}
-                            </div>
-                          </div>
-                          <span className="ml-3 text-sm font-medium">
-                            Google Pay
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <svg
-                            className="w-14 h-8"
-                            viewBox="0 0 56 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect width="56" height="20" rx="4" fill="#000" />
-                            <text
-                              x="7"
-                              y="14"
-                              font-size="10"
-                              fill="#fff"
-                              font-family="Arial, Helvetica, sans-serif"
-                            >
-                              Google
-                            </text>
-                            <text
-                              x="36"
-                              y="14"
-                              font-size="10"
-                              fill="#fff"
-                              font-family="Arial, Helvetica, sans-serif"
-                            >
-                              Pay
-                            </text>
-                          </svg>
-                        </div>
-                      </label>
-
-                      {/* Stripe Payment Form for Google Pay */}
-                      {formData.selectedPaymentMethod === "google_pay" && (
-                        <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-                          {isLoading && !clientSecret ? (
-                            <div className="flex flex-col items-center justify-center py-6">
-                              <div className="w-8 h-8 border-4 border-[#B01E23] border-t-transparent rounded-full animate-spin mb-2"></div>
-                              <p className="text-gray-600 text-sm">
-                                Initializing payment...
-                              </p>
-                            </div>
-                          ) : stripePromise && clientSecret ? (
-                            <Elements
-                              stripe={stripePromise}
-                              options={{
-                                clientSecret,
-                                appearance: {
-                                  theme: "stripe",
-                                  variables: {
-                                    colorPrimary: "#000000",
-                                    colorBackground: "#ffffff",
-                                    colorText: "#30313d",
-                                  },
-                                },
-                              }}
-                            >
-                              <PaymentForm
-                                clientSecret={clientSecret}
-                                orderId={orderId!}
-                                onSuccess={handlePaymentSuccess}
-                                onBack={() => setActiveStep("address")}
-                                isLoading={isLoading}
-                                setIsLoading={setIsLoading}
-                              />
-                            </Elements>
-                          ) : (
-                            <div className="text-center py-6">
-                              <p className="text-red-500 text-sm">
-                                Failed to load payment form. Please try again.
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
+                  <div className="flex items-center mb-6">
+                    <CreditCard className="w-5 h-5 text-gray-700 mr-2" />
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      Choose Payment Method
+                    </h3>
+                  </div>
+                  <div className="space-y-4">
                     {/* PayPal */}
-                    <div>
-                      <label className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-gray-300 transition-colors">
+                    <div className="group">
+                      <label
+                        className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          formData.selectedPaymentMethod === "paypal"
+                            ? "border-black bg-gray-100 shadow-md"
+                            : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                        }`}
+                      >
                         <div className="flex items-center">
-                          <div className="relative">
+                          <div className="relative mr-4">
                             <input
                               type="radio"
                               name="selectedPaymentMethod"
@@ -1173,53 +1152,42 @@ const CheckoutPage = () => {
                                 formData.selectedPaymentMethod === "paypal"
                               }
                               onChange={handleInputChange}
-                              className="sr-only" // Hidden radio button
+                              className="sr-only"
                             />
                             <div
-                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                                 formData.selectedPaymentMethod === "paypal"
                                   ? "bg-black border-black"
-                                  : "border-gray-300"
+                                  : "border-gray-300 group-hover:border-gray-500"
                               }`}
                             >
                               {formData.selectedPaymentMethod === "paypal" && (
-                                <Check className="w-3 h-3 text-white" />
+                                <Check className="w-4 h-4 text-white" />
                               )}
                             </div>
                           </div>
-                          <span className="ml-3 text-sm font-medium">
-                            PayPal
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <svg
-                            className="w-16 h-8"
-                            viewBox="0 0 64 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect
-                              width="64"
-                              height="20"
-                              rx="4"
-                              fill="#003087"
-                            />
-                            <text
-                              x="10"
-                              y="14"
-                              font-size="10"
-                              fill="#fff"
-                              font-family="Arial, Helvetica, sans-serif"
-                              font-weight="bold"
-                            >
+                          <div className="flex items-center">
+                            <div className="bg-blue-600 px-4 py-2 rounded text-white font-semibold text-sm">
                               PayPal
-                            </text>
-                          </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="text-sm text-gray-500 mr-2">
+                            Secure payment
+                          </span>
+                          <Shield className="w-4 h-4 text-gray-600" />
                         </div>
                       </label>
 
                       {/* PayPal Buttons */}
                       {formData.selectedPaymentMethod === "paypal" && (
-                        <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
+                          <div className="mb-4">
+                            <p className="text-sm text-gray-700 mb-2">
+                              Complete your payment with PayPal
+                            </p>
+                          </div>
                           <PayPalButtons
                             items={items.map((i) => ({
                               id: i.product.id,
@@ -1232,10 +1200,16 @@ const CheckoutPage = () => {
                     </div>
 
                     {/* Credit Card */}
-                    <div>
-                      <label className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-gray-300 transition-colors">
+                    <div className="group">
+                      <label
+                        className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          formData.selectedPaymentMethod === "CREDIT_CARD"
+                            ? "border-black bg-gray-100 shadow-md"
+                            : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                        }`}
+                      >
                         <div className="flex items-center">
-                          <div className="relative">
+                          <div className="relative mr-4">
                             <input
                               type="radio"
                               name="selectedPaymentMethod"
@@ -1247,231 +1221,290 @@ const CheckoutPage = () => {
                               className="sr-only"
                             />
                             <div
-                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                // Custom radio button styling
+                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                                 formData.selectedPaymentMethod === "CREDIT_CARD"
                                   ? "bg-black border-black"
-                                  : "border-gray-300"
+                                  : "border-gray-300 group-hover:border-gray-500"
                               }`}
                             >
                               {formData.selectedPaymentMethod ===
                                 "CREDIT_CARD" && (
-                                <Check className="w-3 h-3 text-white" />
+                                <Check className="w-4 h-4 text-white" />
                               )}
                             </div>
                           </div>
-                          <span className="ml-3 text-sm font-medium">
-                            Credit Card
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <svg
-                            className="w-8 h-5"
-                            viewBox="0 0 32 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect
-                              width="32"
-                              height="20"
-                              rx="2"
-                              fill="#EB001B"
-                            />
-                            <circle cx="12" cy="10" r="6" fill="#FF5F00" />
-                            <circle cx="20" cy="10" r="6" fill="#F79E1B" />
-                          </svg>
-                          <svg
-                            className="w-8 h-5"
-                            viewBox="0 0 32 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect
-                              width="32"
-                              height="20"
-                              rx="2"
-                              fill="#1A1F71"
-                            />
-                            <text
-                              x="8"
-                              y="13"
-                              font-size="9"
-                              fill="#fff"
-                              font-family="Arial, Helvetica, sans-serif"
-                              font-weight="bold"
-                            >
-                              VISA
-                            </text>
-                          </svg>
-                          <svg
-                            className="w-8 h-5"
-                            viewBox="0 0 32 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect
-                              width="32"
-                              height="20"
-                              rx="2"
-                              fill="#2E77BC"
-                            />
-                            <text
-                              x="5"
-                              y="13"
-                              font-size="8"
-                              fill="#fff"
-                              font-family="Arial, Helvetica, sans-serif"
-                              font-weight="bold"
-                            >
-                              AMEX
-                            </text>
-                          </svg>
-                        </div>
-                      </label>
-
-                      {/* Stripe Payment Form for Credit Card */}
-                      {formData.selectedPaymentMethod === "CREDIT_CARD" && (
-                        <div className="mt-4 p-4  rounded-lg bg-gray-50">
-                          {isLoading && !clientSecret ? (
-                            <div className="flex flex-col items-center justify-center py-6">
-                              <div className="w-8 h-8 border-4 border-[#B01E23] border-t-transparent rounded-full animate-spin mb-2"></div>
-                              <p className="text-gray-600 text-sm">
-                                Initializing payment...
-                              </p>
-                            </div>
-                          ) : stripePromise && clientSecret ? (
-                            <Elements
-                              stripe={stripePromise}
-                              options={{
-                                clientSecret,
-                                appearance: {
-                                  theme: "stripe",
-                                  variables: {
-                                    colorPrimary: "#000000",
-                                    colorBackground: "#ffffff",
-                                    colorText: "#30313d",
-                                  },
-                                },
-                              }}
-                            >
-                              <PaymentForm
-                                clientSecret={clientSecret}
-                                orderId={orderId!}
-                                onSuccess={handlePaymentSuccess}
-                                onBack={() => setActiveStep("address")}
-                                isLoading={isLoading}
-                                setIsLoading={setIsLoading}
-                              />
-                            </Elements>
-                          ) : (
-                            <div className="text-center py-6">
-                              <p className="text-red-500 text-sm">
-                                Failed to load payment form. Please try again.
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Klarna */}
-                    <div>
-                      <label className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-gray-300 transition-colors">
-                        <div className="flex items-center">
-                          <div className="relative">
-                            <input
-                              type="radio"
-                              name="selectedPaymentMethod"
-                              value="klarna"
-                              checked={
-                                formData.selectedPaymentMethod === "klarna"
-                              }
-                              onChange={handleInputChange}
-                              className="sr-only" // Hidden radio button
-                            />
-                            <div
-                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                formData.selectedPaymentMethod === "klarna"
-                                  ? "bg-black border-black"
-                                  : "border-gray-300"
-                              }`}
-                            >
-                              {formData.selectedPaymentMethod === "klarna" && (
-                                <Check className="w-3 h-3 text-white" />
-                              )}
-                            </div>
+                          <div className="flex items-center">
+                            <CreditCard className="w-8 h-8 text-gray-600 mr-3" />
+                            <span className="text-base font-medium text-gray-900">
+                              Credit or Debit Card
+                            </span>
                           </div>
-                          <span className="ml-3 text-sm font-medium">
-                            Klarna - Slice it
-                          </span>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <svg
-                            className="w-16 h-8"
-                            viewBox="0 0 64 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <rect
-                              width="64"
-                              height="20"
-                              rx="4"
-                              fill="#FFB3C7"
-                            />
-                            <text
-                              x="18"
-                              y="14"
-                              font-size="10"
-                              fill="#000"
-                              font-family="Arial, Helvetica, sans-serif"
-                              font-weight="bold"
+                          {/* Mastercard */}
+                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
+                            <svg
+                              className="w-8 h-5"
+                              viewBox="0 0 32 20"
+                              xmlns="http://www.w3.org/2000/svg"
                             >
-                              Klarna
-                            </text>
-                          </svg>
+                              <circle cx="12" cy="10" r="6" fill="#EB001B" />
+                              <circle cx="20" cy="10" r="6" fill="#F79E1B" />
+                              <path
+                                d="M16 6c1.1 1.2 1.8 2.8 1.8 4.5s-.7 3.3-1.8 4.5c-1.1-1.2-1.8-2.8-1.8-4.5S14.9 7.2 16 6z"
+                                fill="#FF5F00"
+                              />
+                            </svg>
+                          </div>
+                          {/* Visa */}
+                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
+                            <svg
+                              className="w-8 h-5"
+                              viewBox="0 0 32 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                width="32"
+                                height="20"
+                                rx="2"
+                                fill="#1A1F71"
+                              />
+                              <text
+                                x="6"
+                                y="13"
+                                fontSize="8"
+                                fill="#fff"
+                                fontFamily="Arial, sans-serif"
+                                fontWeight="bold"
+                              >
+                                VISA
+                              </text>
+                            </svg>
+                          </div>
+                          {/* American Express */}
+                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
+                            <svg
+                              className="w-8 h-5"
+                              viewBox="0 0 32 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                width="32"
+                                height="20"
+                                rx="2"
+                                fill="#2E77BC"
+                              />
+                              <text
+                                x="4"
+                                y="13"
+                                fontSize="7"
+                                fill="#fff"
+                                fontFamily="Arial, sans-serif"
+                                fontWeight="bold"
+                              >
+                                AMEX
+                              </text>
+                            </svg>
+                          </div>
+                          {/* Discover */}
+                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
+                            <svg
+                              className="w-8 h-5"
+                              viewBox="0 0 32 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                width="32"
+                                height="20"
+                                rx="2"
+                                fill="#FF6000"
+                              />
+                              <text
+                                x="2"
+                                y="13"
+                                fontSize="6"
+                                fill="#fff"
+                                fontFamily="Arial, sans-serif"
+                                fontWeight="bold"
+                              >
+                                DISC
+                              </text>
+                            </svg>
+                          </div>
                         </div>
                       </label>
 
-                      {/* Stripe Payment Form for Klarna */}
-                      {formData.selectedPaymentMethod === "klarna" && (
-                        <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-                          {isLoading && !clientSecret ? (
-                            <div className="flex flex-col items-center justify-center py-6">
-                              <div className="w-8 h-8 border-4 border-[#B01E23] border-t-transparent rounded-full animate-spin mb-2"></div>
-                              <p className="text-gray-600 text-sm">
-                                Initializing payment...
-                              </p>
+                      {/* Payment Form for Credit Card */}
+                      {formData.selectedPaymentMethod === "CREDIT_CARD" && (
+                        <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
+                          <div className="mb-4">
+                            <p className="text-sm text-gray-700 mb-2">
+                              Enter your card details securely
+                            </p>
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Shield className="w-3 h-3 mr-1" />
+                              <span>256-bit SSL encryption</span>
                             </div>
-                          ) : stripePromise && clientSecret ? (
-                            <Elements
-                              stripe={stripePromise}
-                              options={{
-                                clientSecret,
-                                appearance: {
-                                  theme: "stripe",
-                                  variables: {
-                                    colorPrimary: "#000000",
-                                    colorBackground: "#ffffff",
-                                    colorText: "#30313d",
+                          </div>
+
+                          {isStripeEnabled ? (
+                            // Stripe Payment Form
+                            isLoading && !clientSecret ? (
+                              <div className="flex flex-col items-center justify-center py-8">
+                                <div className="w-10 h-10 border-4 border-gray-600 border-t-transparent rounded-full animate-spin mb-3"></div>
+                                <p className="text-gray-700 text-sm font-medium">
+                                  Initializing secure payment...
+                                </p>
+                              </div>
+                            ) : stripePromise && clientSecret ? (
+                              <Elements
+                                stripe={stripePromise}
+                                options={{
+                                  clientSecret,
+                                  appearance: {
+                                    theme: "stripe",
+                                    variables: {
+                                      colorPrimary: "#000000",
+                                      colorBackground: "#ffffff",
+                                      colorText: "#374151",
+                                      borderRadius: "8px",
+                                      fontFamily: "system-ui, sans-serif",
+                                    },
                                   },
-                                },
-                              }}
-                            >
-                              <PaymentForm
-                                clientSecret={clientSecret}
-                                orderId={orderId!}
-                                onSuccess={handlePaymentSuccess}
-                                onBack={() => setActiveStep("address")}
-                                isLoading={isLoading}
-                                setIsLoading={setIsLoading}
-                              />
-                            </Elements>
+                                }}
+                              >
+                                <PaymentForm
+                                  clientSecret={clientSecret}
+                                  orderId={orderId!}
+                                  onSuccess={handlePaymentSuccess}
+                                  onBack={() => setActiveStep("address")}
+                                  isLoading={isLoading}
+                                  setIsLoading={setIsLoading}
+                                  setPaymentModal={setPaymentModal}
+                                />
+                              </Elements>
+                            ) : (
+                              <div className="text-center py-8">
+                                <div className="mb-3">
+                                  <svg
+                                    className="w-12 h-12 text-gray-400 mx-auto"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"
+                                    />
+                                  </svg>
+                                </div>
+                                <p className="text-gray-700 text-sm font-medium mb-2">
+                                  Failed to load payment form
+                                </p>
+                                <p className="text-gray-500 text-xs">
+                                  Please refresh the page or try again later.
+                                </p>
+                              </div>
+                            )
                           ) : (
-                            <div className="text-center py-6">
-                              <p className="text-red-500 text-sm">
-                                Failed to load payment form. Please try again.
-                              </p>
-                            </div>
+                            // PayPal Card Form
+                            <PayPalCardForm
+                              onSuccess={handlePaymentSuccess}
+                              onBack={() => setActiveStep("address")}
+                              isLoading={isLoading}
+                              setIsLoading={setIsLoading}
+                              items={items}
+                              formData={formData}
+                              effectiveGrandTotal={effectiveGrandTotal}
+                              discountAmount={discountAmount}
+                              voucherCode={voucherCode}
+                            />
                           )}
                         </div>
                       )}
                     </div>
+
+                    {/* Google Pay */}
+                    {!isStripeEnabled && (
+                      <div className="group">
+                        <label
+                          className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                            formData.selectedPaymentMethod === "googlepay"
+                              ? "border-black bg-gray-100 shadow-md"
+                              : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                          }`}
+                        >
+                          <div className="flex items-center">
+                            <div className="relative mr-4">
+                              <input
+                                type="radio"
+                                name="selectedPaymentMethod"
+                                value="googlepay"
+                                checked={
+                                  formData.selectedPaymentMethod === "googlepay"
+                                }
+                                onChange={handleInputChange}
+                                className="sr-only"
+                              />
+                              <div
+                                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                  formData.selectedPaymentMethod === "googlepay"
+                                    ? "bg-black border-black"
+                                    : "border-gray-300 group-hover:border-gray-500"
+                                }`}
+                              >
+                                {formData.selectedPaymentMethod ===
+                                  "googlepay" && (
+                                  <Check className="w-4 h-4 text-white" />
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex items-center">
+                              <div className="bg-gray-800 px-4 py-2 rounded text-white font-semibold text-sm">
+                                Google Pay
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center">
+                            <span className="text-sm text-gray-500 mr-2">
+                              Quick & secure
+                            </span>
+                            <Shield className="w-4 h-4 text-gray-600" />
+                          </div>
+                        </label>
+
+                        {/* Google Pay Component */}
+                        {formData.selectedPaymentMethod === "googlepay" && (
+                          <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
+                            <div className="mb-4">
+                              <p className="text-sm text-gray-700 mb-2">
+                                Pay with Google Pay
+                              </p>
+                            </div>
+                            {paypalClientId && (
+                              <PayPalScriptProvider
+                                options={{
+                                  "client-id": paypalClientId,
+                                  currency: "USD",
+                                  components: "googlepay",
+                                }}
+                              >
+                                <GooglePayWithPaypal
+                                  totalAmount={effectiveGrandTotal}
+                                  onCaptureSuccess={handlePaymentSuccess}
+                                  termsAccepted={formData.acceptTerms}
+                                  onTermsError={(message) =>
+                                    toast.error(message)
+                                  }
+                                />
+                              </PayPalScriptProvider>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -1710,6 +1743,12 @@ const CheckoutPage = () => {
           </div>
         </div>
       </motion.div>
+      
+      <PaymentProcessingModal
+        isOpen={paymentModal.isOpen}
+        status={paymentModal.status}
+        message={paymentModal.message}
+      />
     </div>
   );
 };

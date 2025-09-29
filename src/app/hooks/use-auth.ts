@@ -70,17 +70,14 @@ const useAuth = create(
       login: async (email: string, password: string) => {
         set({ isLoading: true });
         try {
-          // Use external API URL for authentication
-          const response = await fetch(
-            `https://d1.fineyst.com/api/auth/login`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ email, password, storeId }),
-            }
-          );
+          // Use local API route for authentication
+          const response = await fetch(`/api/auth/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
 
           const data = await response.json();
 
@@ -109,7 +106,7 @@ const useAuth = create(
       logout: async () => {
         try {
           // Use external API URL for authentication
-          await fetch(`https://d1.fineyst.com/api/auth/logout`, {
+          await fetch(`https://jacket.us.com/api/auth/logout`, {
             method: "POST",
           });
         } catch (error) {
@@ -151,7 +148,7 @@ const useAuth = create(
         try {
           // Use external API URL for authentication
           const response = await fetch(
-            `https://d1.fineyst.com/api/auth/reset-password`,
+            `https:/jacket.us.com/api/auth/reset-password`,
             {
               method: "POST",
               headers: {
@@ -198,17 +195,14 @@ const useAuth = create(
             country: userData.country || "",
           };
 
-          // Use external API URL for authentication
-          const response = await fetch(
-            `https://d1.fineyst.com/api/auth/register`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(registrationData),
-            }
-          );
+          // Use local API route for registration
+          const response = await fetch(`/api/auth/register`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(registrationData),
+          });
 
           const data = await response.json();
 
@@ -240,7 +234,9 @@ const useAuth = create(
             [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
             user?.given_name ||
             user?.givenName
-              ? `${user?.given_name || user?.givenName || ""} ${user?.family_name || user?.familyName || ""}`.trim()
+              ? `${user?.given_name || user?.givenName || ""} ${
+                  user?.family_name || user?.familyName || ""
+                }`.trim()
               : undefined;
 
           const derivedFirstName =
@@ -301,7 +297,7 @@ const useAuth = create(
         try {
           // Use external API URL for authentication
           const response = await fetch(
-            `https://d1.fineyst.com/api/auth/verify`,
+            `https://jacket.us.com/api/auth/verify`,
             {
               method: "POST",
               headers: {

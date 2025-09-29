@@ -32,9 +32,7 @@ export async function POST(req: Request) {
     }
 
     // Forward the login request to the Admin API
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
-    // Use the correct endpoint: /api/auth/login instead of /api/{storeId}/auth/login
-    const adminApiUrl = `${apiUrl.split("/api/")[0]}/api/auth/login`;
+    const adminApiUrl = `${process.env.ADMIN_URL}/api/auth/login`;
 
     try {
       const response = await fetch(adminApiUrl, {
