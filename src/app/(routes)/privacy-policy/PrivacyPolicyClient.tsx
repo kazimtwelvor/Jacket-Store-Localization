@@ -274,7 +274,7 @@ export default function PrivacyPolicyClient() {
 
                   <p className="text-gray-600 mb-6">
                     For more information about our privacy practices, if you have questions, or if you would like to
-                    make a complaint, please contact us by e-mail at privacy@storecopy.com or by mail using the details
+                    make a complaint, please contact us by e-mail at info@fineystjackets.com or by mail using the details
                     provided below:
                   </p>
                 </div>

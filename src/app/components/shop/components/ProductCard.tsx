@@ -49,15 +49,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onProductUpdate,
   setLoadingProducts,
 }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false)
   const [mounted, setMounted] = useState(false)
   
   useEffect(() => {
     setMounted(true)
-    setIsWishlisted(wishlist.isInWishlist(product.id))
-  }, [wishlist, product.id])
+  }, [])
   
-  const isHovered = hoveredProduct === `grid-${product.id}`
+  const isHovered = hoveredProduct === `grid-${product.id}-${index}`
   const hasMultipleImages = product.images && product.images.length > 1
   const availableSizes = product?.sizeDetails || []
   const availableColors = product?.colorDetails || []
@@ -66,18 +64,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <motion.div
-      id={`product-${product.id}`}
+      id={`product-${product.id}-${index}`}
       className="group relative cursor-pointer flex flex-col h-full"
       onClick={() => {
         if (!isDesktop && wasDraggedRef.current) return
         addToRecentlyViewed(product)
         handleClick(product)
       }}
-      onMouseEnter={() => isDesktop && setHoveredProduct(`grid-${product.id}`)}
+      onMouseEnter={() => isDesktop && setHoveredProduct(`grid-${product.id}-${index}`)}
       onMouseLeave={() => isDesktop && setHoveredProduct(null)}
-      initial={loadingProducts.has(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      animate={loadingProducts.has(product.id) ? { opacity: 1, y: 0 } : visibleProducts.includes(product.id) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ duration: 0 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
     >
       <div className="relative w-full aspect-[3/5] bg-gray-100 overflow-visible md:overflow-hidden">
         {isDesktop ? (
@@ -107,12 +105,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           whileTap={{ scale: 0.9 }}
           onClick={(e) => {
             e.stopPropagation()
-            if (isWishlisted) {
-              wishlist.removeItem(product.id)
-              setIsWishlisted(false)
+            const uniqueKey = `${product.id}-${index}`
+            if (wishlist.isInWishlistWithKey(uniqueKey)) {
+              wishlist.removeItemWithKey(uniqueKey)
             } else {
-              wishlist.addItem(product)
-              setIsWishlisted(true)
+              wishlist.addItemWithKey(product, uniqueKey)
             }
           }}
         >
@@ -124,7 +121,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               fill="none"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className={mounted && isWishlisted ? "fill-black" : ""}
+              className={mounted && wishlist.isInWishlistWithKey(`${product.id}-${index}`) ? "fill-black" : ""}
             />
           </svg>
         </motion.button>
@@ -156,6 +153,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {isDesktop && isHovered && availableSizes.length > 0 && (
             <SizeSelector
               product={product}
+              index={index}
               selectedSizes={selectedSizes}
               handleSizeSelect={handleSizeSelect}
             />
@@ -178,6 +176,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         <ColorSelector
           product={product}
+          index={index}
           isDesktop={isDesktop}
           openColorModal={openColorModal}
           setOpenColorModal={setOpenColorModal}

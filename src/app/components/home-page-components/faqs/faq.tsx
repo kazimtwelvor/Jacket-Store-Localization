@@ -47,7 +47,7 @@ const faqItems = [
     {
         question: "How can I contact customer service?",
         answer:
-            "Our customer service team is available via live chat on our website, email at support@fineyst.com, or by phone at 1-800-FINEYST from Monday to Friday, 9am-6pm EST.",
+            "Our customer service team is available via live chat on our website, email at info@fineystjackets.com, or by phone at 1-800-FINEYST from Monday to Friday, 9am-6pm EST.",
     },
     {
         question: "Do you have a loyalty program?",

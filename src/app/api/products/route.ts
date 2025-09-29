@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
         'User-Agent': 'NextJS-App',
       },
       // Add timeout for Vercel
-      signal: AbortSignal.timeout(10000), // 10 second timeout
+      signal: AbortSignal.timeout(1200000), 
     })
 
     if (!response.ok) {

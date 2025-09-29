@@ -40,7 +40,7 @@ type ShopPageProps = {
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const resolvedSearchParams = await searchParams;
   const page = Number.parseInt(resolvedSearchParams.page || "1");
-  const limit = Number.parseInt(resolvedSearchParams.limit || "28");
+  const limit = 40; 
 
   const [productsData, categories, colors, sizes, keywordCategories] =
     await Promise.allSettled([
@@ -141,6 +141,19 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             colors={finalColors}
             sizes={finalSizes}
             keywordCategories={finalKeywordCategories}
+            hasMoreProducts={(finalProductsData.pagination?.totalProducts || 0) > 40}
+            filterParams={{
+              categoryId: resolvedSearchParams.categoryId,
+              colorId: resolvedSearchParams.colorId,
+              sizeId: resolvedSearchParams.sizeId,
+              search: resolvedSearchParams.search,
+              genders: resolvedSearchParams.genders ? resolvedSearchParams.genders.split(',') : [],
+              materials: resolvedSearchParams.materials ? resolvedSearchParams.materials.split(',') : [],
+              styles: resolvedSearchParams.styles ? resolvedSearchParams.styles.split(',') : [],
+              colors: resolvedSearchParams.colors ? resolvedSearchParams.colors.split(',') : [],
+              sizes: resolvedSearchParams.sizes ? resolvedSearchParams.sizes.split(',') : [],
+              sort: resolvedSearchParams.sort,
+            }}
           />
         {/* </Suspense> */}
       </main>

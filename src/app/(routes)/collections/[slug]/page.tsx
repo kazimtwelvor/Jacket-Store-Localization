@@ -1,10 +1,11 @@
-export const revalidate = 1800; // ISR: Revalidate every 30 minutes
-export const dynamicParams = true; // Generate new pages on-demand
+export const dynamic = 'force-static';     
+export const dynamicParams = true;         
+export const revalidate = false;        
 import getCategories from "../../../actions/get-categories";
 import getKeywordCategory from "../../../actions/get-keyword-category";
 import getKeywordCategories from "../../../actions/get-keyword-categories";
 import getProducts from "../../../actions/get-products";
-import type { Category } from "@/types";
+import type { Category, Product } from "@/types";
 import CategoryPageClient from "./page-client";
 import { notFound } from "next/navigation";
 import type { Metadata, ResolvingMetadata } from "next";
@@ -17,11 +18,39 @@ interface CategoryPageProps {
 
 export async function generateStaticParams() {
   try {
-    const keywordCategories = await getKeywordCategories();
-    return keywordCategories.slice(0, 10).map((category: any) => ({
+    console.log('🔨 Generating static params for collections...');
+    
+    let categoriesResult = null;
+    
+    try {
+      categoriesResult = await getKeywordCategories();
+    } catch (error) {
+      console.warn('⚠️ Failed to fetch keyword categories, trying fallback...');
+      
+      try {
+        const regularCategories = await getCategories();
+        categoriesResult = regularCategories?.slice(0, 20) || [];
+      } catch (error2) {
+        console.error('❌ All category fetch strategies failed:', error2);
+        return [];
+      }
+    }
+    
+    if (!categoriesResult?.length) {
+      console.warn('⚠️ No categories found, returning empty array');
+      return [];
+    }
+    
+    const collectionCount = process.env.NEXT_COLLECTION_COUNT ? parseInt(process.env.NEXT_COLLECTION_COUNT) : 20;
+    const params = categoriesResult.slice(0, collectionCount).map((category: any) => ({
       slug: category.slug,
     }));
+    
+    console.log(`✅ Generated ${params.length} static collection params`);
+    return params;
+    
   } catch (error) {
+    console.error('❌ Critical error in generateStaticParams:', error);
     return [];
   }
 }
@@ -140,18 +169,39 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
 
     const filterParams = parseApiSlug(keywordCategory.apiSlug || "");
     
+    const fetchWithRetry = async (fetchFn: () => Promise<any>, retries = 3, timeout = 300000): Promise<any> => {
+      for (let i = 0; i < retries; i++) {
+        try {
+          if (i > 0) {
+            const delay = Math.pow(2, i) * 2000; 
+            console.log(`⏳ Waiting ${delay}ms before retry ${i + 1} for collection ${slug}`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
+          
+          const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Request timeout')), timeout);
+          });
+          
+          return await Promise.race([fetchFn(), timeoutPromise]);
+        } catch (error) {
+          console.warn(`Attempt ${i + 1} failed for collection ${slug}:`, error);
+          if (i === retries - 1) throw error;
+        }
+      }
+      throw new Error('All retry attempts failed');
+    };
 
     const [products, allCategories, keywordCategories] = await Promise.all([
-      getProducts({
+      fetchWithRetry(() => getProducts({
         materials: filterParams.materials,
         styles: filterParams.styles,
         colors: filterParams.colors,
         genders: filterParams.genders,
-        limit: 10000, // Increased limit to get more relevant products
+        limit: 40,
         page: 1,
-      }),
-      getCategories(),
-      getKeywordCategories()
+      })),
+      fetchWithRetry(() => getCategories()),
+      fetchWithRetry(() => getKeywordCategories())
     ]);
 
     const categoryForClient: Category & { currentCategory?: any } = {
@@ -182,16 +232,17 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
     return (
       <div className="min-h-screen bg-white">
         <StructuredData data={keywordStructuredData} />
-        {/* <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-gray-600"></div></div>}> */}
-          <CategoryPageClient
-            category={categoryForClient}
-            products={products.products || []}
-            slug={slug}
-            allCategories={allCategories}
-            keywordCategories={keywordCategories}
-            isKeywordCategory={true}
-          />
-        {/* </Suspense> */}
+        <CategoryPageClient
+          category={categoryForClient}
+          products={products.products || []}
+          slug={slug}
+          allCategories={allCategories}
+          keywordCategories={keywordCategories}
+          isKeywordCategory={true}
+          filterParams={filterParams}
+          initialProductCount={products.products?.length || 0}
+          hasMoreProducts={(products.pagination?.totalProducts || 0) > 40}
+        />
       </div>
     );
   } catch (error) {

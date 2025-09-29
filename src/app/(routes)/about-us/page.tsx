@@ -56,9 +56,9 @@ export default function AboutUsPage() {
     ],
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+1-800-555-1234",
+      "telephone": "+1 (888) 840-0885",
       "contactType": "customer service",
-      "email": "hello@storecopy.com"
+      "email": "info@fineystjackets.com"
     }
   }
 

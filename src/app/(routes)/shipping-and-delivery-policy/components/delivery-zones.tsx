@@ -17,9 +17,9 @@ export default function DeliveryZones() {
       title: "Domestic Shipping",
       description: "Fast and reliable shipping across the United States",
       deliveryTimes: [
-        { region: "East Coast", time: "3-5 business days" },
-        { region: "Midwest", time: "3-5 business days" },
-        { region: "West Coast", time: "4-6 business days" },
+        { region: "East Coast", time: "3-4 business days" },
+        { region: "Midwest", time: "3-4 business days" },
+        { region: "West Coast", time: "3-4 business days" },
         { region: "Alaska & Hawaii", time: "5-7 business days" },
       ],
     },

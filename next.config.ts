@@ -6,11 +6,15 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Exclude uploads directory from serverless function bundling
   output: 'standalone',
+  staticPageGenerationTimeout: process.env.NEXT_BUILD_TIMEOUT ? parseInt(process.env.NEXT_BUILD_TIMEOUT) : 1200, // Default: 20 minutes (1200 seconds)
+  
   experimental: {
-    // Disable route groups temporarily to fix build issues
     appDir: true,
+    
+    staticWorkerRequestDeduping: true,
+    cpus: 1, 
+    
     serverActions: {
       allowedOrigins: [
         "localhost:3000",
@@ -30,11 +34,17 @@ const nextConfig = {
       "192.168.100.8",
       "images.unsplash.com",
       "localhost",
+      "jacket.us.com"
     ],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "d1.fineyst.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "jacket.us.com",
         pathname: "/**",
       },
       {

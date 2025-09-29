@@ -200,7 +200,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
       
       <p>From leather jackets to denim, letterman to trench coats, we've got you covered with premium materials and timeless designs.</p>
       
-      <p>If you have any questions, our customer support team is here to help. Just reply to this email or contact us at <a href="mailto:support@fineyst.com" style="color: #000000;">support@fineyst.com</a>.</p>
+      <p>If you have any questions, our customer support team is here to help. Just reply to this email or contact us at <a href="mailto:info@fineystjackets.com" style="color: #000000;">info@fineystjackets.com</a>.</p>
       
       <p>Let's find your perfect jacket!</p>
       <p><strong>The Fineyst Team</strong></p>
@@ -267,7 +267,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
       <p>If you're having trouble clicking the button, copy and paste this link into your browser:</p>
       <p style="word-break: break-all; color: #fe7224;">${resetLink}</p>
       
-      <p>Need help? Contact our support team at <a href="mailto:support@example.com" style="color: #fe7224;">support@example.com</a></p>
+      <p>Need help? Contact our support team at <a href="mailto:info@fineystjackets.com" style="color: #fe7224;">info@fineystjackets.com</a></p>
       
       <p>Best regards,<br><strong>The Team</strong></p>
     `
@@ -374,7 +374,7 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
       
       <a href="${process.env.NEXT_PUBLIC_SITE_URL}/auth/register" class="button" style="background: #28a745;">Create Account</a>
       
-      <p>We'll keep you updated throughout the process. Questions? Contact us at <a href="mailto:support@fineyst.com" style="color: #fe7224;">support@fineyst.com</a></p>
+      <p>We'll keep you updated throughout the process. Questions? Contact us at <a href="mailto:info@fineystjackets.com" style="color: #fe7224;">info@fineystjackets.com</a></p>
       
       <p>Thank you for choosing Fineyst!<br><strong>The Fineyst Team</strong></p>
     `

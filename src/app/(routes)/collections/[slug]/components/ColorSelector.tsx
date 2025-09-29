@@ -12,6 +12,7 @@ interface ColorSelectorProps {
   onProductUpdate?: (updatedProduct: Product) => void
   loadingProducts?: Set<string>
   setLoadingProducts?: React.Dispatch<React.SetStateAction<Set<string>>>
+  index: number
 }
 
 export const ColorSelector: React.FC<ColorSelectorProps> = ({ 
@@ -22,7 +23,8 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
   setOpenColorModal,
   onProductUpdate,
   loadingProducts,
-  setLoadingProducts
+  setLoadingProducts,
+  index
 }) => {
   const hasMultipleColors = availableColors.length > 1
   const isModalOpen = openColorModal.isOpen && openColorModal.product?.id === product.id
@@ -103,8 +105,10 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
                         e.stopPropagation(); 
                         
                         if (colorLink && colorLink.trim() !== '' && onProductUpdate && setLoadingProducts) {
+                          const loadingKey = `${product.id}-${index}`
+                          setLoadingProducts(prev => new Set([...prev, loadingKey]))
+                          
                           try {
-                            setLoadingProducts(prev => new Set([...prev, product.id]))
                             
                             const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
                             
@@ -124,7 +128,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
                           } finally {
                             setLoadingProducts(prev => {
                               const newSet = new Set(prev)
-                              newSet.delete(product.id)
+                              newSet.delete(loadingKey)
                               return newSet
                             })
                           }
@@ -188,8 +192,10 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
                           e.stopPropagation(); 
                           
                           if (colorLink && colorLink.trim() !== '' && onProductUpdate && setLoadingProducts) {
+                            const loadingKey = `${product.id}-${index}`
+                            setLoadingProducts(prev => new Set([...prev, loadingKey]))
+                            
                             try {
-                              setLoadingProducts(prev => new Set([...prev, product.id]))
                               
                               const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
                               
@@ -209,7 +215,7 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
                             } finally {
                               setLoadingProducts(prev => {
                                 const newSet = new Set(prev)
-                                newSet.delete(product.id)
+                                newSet.delete(loadingKey)
                                 return newSet
                               })
                             }

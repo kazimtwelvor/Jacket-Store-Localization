@@ -41,15 +41,13 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
   openColorModal,
   setOpenColorModal,
 }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    setIsWishlisted(wishlist.isInWishlist(product.id))
-  }, [wishlist, product.id])
+  }, [])
 
-  const isHovered = hoveredProduct === `grid-${product.id}`
+  const isHovered = hoveredProduct === `grid-${product.id}-${index}`
   const hasMultipleImages = product.images && product.images.length > 1
   const availableSizes = product?.sizeDetails || []
   const selectedProductSize = selectedSizes[product.id] || ''
@@ -57,14 +55,14 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
 
   return (
     <div
-      id={`product-${product.id}`}
+      id={`product-${product.id}-${index}`}
       className="group relative cursor-pointer flex flex-col h-full"
       onClick={() => {
         if (!isDesktop && wasDraggedRef.current) return
         addToRecentlyViewed(product)
         handleClick(product)
       }}
-      onMouseEnter={() => isDesktop && setHoveredProduct(`grid-${product.id}`)}
+      onMouseEnter={() => isDesktop && setHoveredProduct(`grid-${product.id}-${index}`)}
       onMouseLeave={() => isDesktop && setHoveredProduct(null)}
     >
       <div className="relative w-full aspect-[3/5] bg-gray-100 overflow-visible md:overflow-hidden">
@@ -105,12 +103,11 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
           aria-label="Add to wishlist"
           onClick={(e) => {
             e.stopPropagation()
-            if (isWishlisted) {
-              wishlist.removeItem(product.id)
-              setIsWishlisted(false)
+            const uniqueKey = `${product.id}-${index}`
+            if (wishlist.isInWishlistWithKey(uniqueKey)) {
+              wishlist.removeItemWithKey(uniqueKey)
             } else {
-              wishlist.addItem(product)
-              setIsWishlisted(true)
+              wishlist.addItemWithKey(product, uniqueKey)
             }
           }}
         >
@@ -122,7 +119,7 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
               fill="none"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className={isWishlisted ? "fill-black" : ""}
+              className={mounted && wishlist.isInWishlistWithKey(`${product.id}-${index}`) ? "fill-black" : ""}
             />
           </svg>
         </button>
@@ -150,21 +147,21 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
           <div className="absolute bottom-2 left-2 right-2 z-20">
             <div className="bg-white rounded-lg shadow-lg p-2">
               <div className="flex flex-wrap gap-1">
-                {availableSizes.map((size) => (
+                {availableSizes.map((size, sizeIndex) => (
                   <button
-                    key={size}
+                    key={size.id || size.name || `size-${sizeIndex}`}
                     className={cn(
                       "px-2 py-1 text-xs rounded border transition-colors",
-                      selectedProductSize === size
+                      selectedProductSize === size.name
                         ? "bg-black text-white border-black"
                         : "bg-white text-black border-gray-300 hover:border-black"
                     )}
                     onClick={(e) => {
                       e.stopPropagation()
-                      handleSizeSelect(product.id, size)
+                      handleSizeSelect(product.id, size.name)
                     }}
                   >
-                    {size}
+                    {size.name}
                   </button>
                 ))}
               </div>
@@ -198,7 +195,7 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
                   title={color.name}
                   onClick={(e) => {
                     e.stopPropagation()
-                    setOpenColorModal({ isOpen: true, product })
+                    setOpenColorModal(`${product.id}-${index}`)
                   }}
                 />
               ))}
