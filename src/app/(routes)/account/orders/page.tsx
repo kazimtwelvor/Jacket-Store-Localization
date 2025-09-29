@@ -2,7 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Package, ArrowLeft, Calendar, Truck, DollarSign, Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import {
+  Package,
+  ArrowLeft,
+  Calendar,
+  Truck,
+  DollarSign,
+  Clock,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+} from "lucide-react";
 import Container from "@/src/app/ui/container";
 import { Badge } from "@/src/app/ui/badge";
 import Link from "next/link";
@@ -57,10 +67,10 @@ export default function OrdersPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       if (!isAuthenticated || !user?.email || !token) return;
-
+      const BASE_URL = process.env.ADMIN_URL || "https://jacket.us.com";
       try {
         setIsLoading(true);
-        const url = new URL(`https://d1.fineyst.com/api/users/orders`);
+        const url = new URL(`${BASE_URL}/api/users/orders`);
         if (storeId) {
           url.searchParams.set("storeId", storeId);
         }
@@ -87,7 +97,9 @@ export default function OrdersPage() {
           setOrders([]);
           try {
             const errData = await response.json();
-            setError(errData?.error || errData?.message || "Failed to load orders.");
+            setError(
+              errData?.error || errData?.message || "Failed to load orders."
+            );
           } catch (_) {
             setError(`Failed to load orders (status ${response.status}).`);
           }
@@ -110,41 +122,82 @@ export default function OrdersPage() {
   const getOrderStatus = (order: Order) => {
     const status = order.status?.toLowerCase();
     const paymentStatus = order.paymentStatus?.toLowerCase();
-    
+
     // Determine primary status based on both order and payment status
-    if (status === "cancelled") return { status: "cancelled", label: "Cancelled", icon: XCircle, color: "bg-[#2B2B2B]" };
-    if (status === "completed") return { status: "completed", label: "Delivered", icon: CheckCircle, color: "bg-[#2B2B2B]" };
-    if (status === "shipped") return { status: "shipped", label: "Shipped", icon: Truck, color: "bg-[#2B2B2B]" };
-    if (status === "processing") return { status: "processing", label: "Processing", icon: Clock, color: "bg-[#2B2B2B]" };
-    if (paymentStatus === "pending") return { status: "pending", label: "Payment Pending", icon: AlertCircle, color: "bg-[#2B2B2B]" };
-    if (status === "pending") return { status: "pending", label: "Pending", icon: Clock, color: "bg-[#2B2B2B]" };
-    
-    return { status: "unknown", label: "Unknown", icon: AlertCircle, color: "bg-[#2B2B2B]" };
+    if (status === "cancelled")
+      return {
+        status: "cancelled",
+        label: "Cancelled",
+        icon: XCircle,
+        color: "bg-[#2B2B2B]",
+      };
+    if (status === "completed")
+      return {
+        status: "completed",
+        label: "Delivered",
+        icon: CheckCircle,
+        color: "bg-[#2B2B2B]",
+      };
+    if (status === "shipped")
+      return {
+        status: "shipped",
+        label: "Shipped",
+        icon: Truck,
+        color: "bg-[#2B2B2B]",
+      };
+    if (status === "processing")
+      return {
+        status: "processing",
+        label: "Processing",
+        icon: Clock,
+        color: "bg-[#2B2B2B]",
+      };
+    if (paymentStatus === "pending")
+      return {
+        status: "pending",
+        label: "Payment Pending",
+        icon: AlertCircle,
+        color: "bg-[#2B2B2B]",
+      };
+    if (status === "pending")
+      return {
+        status: "pending",
+        label: "Pending",
+        icon: Clock,
+        color: "bg-[#2B2B2B]",
+      };
+
+    return {
+      status: "unknown",
+      label: "Unknown",
+      icon: AlertCircle,
+      color: "bg-[#2B2B2B]",
+    };
   };
 
   const getOrderProgress = (order: Order) => {
     const status = order.status?.toLowerCase();
     const paymentStatus = order.paymentStatus?.toLowerCase();
-    
+
     if (status === "cancelled") return 0;
     if (status === "completed") return 100;
     if (status === "shipped") return 75;
     if (status === "processing") return 50;
     if (paymentStatus === "pending" || status === "pending") return 25;
-    
+
     return 0;
   };
 
   const getProgressStep = (order: Order) => {
     const status = order.status?.toLowerCase();
     const paymentStatus = order.paymentStatus?.toLowerCase();
-    
+
     if (status === "cancelled") return 0;
     if (status === "completed") return 4;
     if (status === "shipped") return 3;
     if (status === "processing") return 2;
     if (paymentStatus === "pending" || status === "pending") return 1;
-    
+
     return 0;
   };
 
@@ -162,8 +215,12 @@ export default function OrdersPage() {
               <span className="text-sm font-medium">Back to Account</span>
             </Link>
             <div className="text-center sm:text-left">
-              <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-3">My Orders</h1>
-              <p className="text-lg text-gray-600 max-w-2xl">Track your orders and view your complete purchase history</p>
+              <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-3">
+                My Orders
+              </h1>
+              <p className="text-lg text-gray-600 max-w-2xl">
+                Track your orders and view your complete purchase history
+              </p>
             </div>
           </div>
 
@@ -173,7 +230,10 @@ export default function OrdersPage() {
               // Enhanced loading skeletons
               <div className="space-y-6">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                  <div
+                    key={i}
+                    className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+                  >
                     <div className="flex justify-between items-start mb-6">
                       <div className="space-y-3">
                         <Skeleton className="h-5 w-32" />
@@ -203,8 +263,12 @@ export default function OrdersPage() {
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Package className="h-8 w-8 text-gray-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Unable to Load Orders</h3>
-                <p className="text-gray-600 mb-6 text-sm leading-relaxed">{error}</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Unable to Load Orders
+                </h3>
+                <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+                  {error}
+                </p>
                 <button
                   onClick={() => router.refresh()}
                   className="px-6 py-3 bg-[#2B2B2B] text-white rounded-lg hover:bg-[#1a1a1a] transition-colors font-medium"
@@ -218,9 +282,12 @@ export default function OrdersPage() {
                 <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Package className="h-10 w-10 text-gray-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">No Orders Yet</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  No Orders Yet
+                </h3>
                 <p className="text-gray-600 mb-8 text-lg leading-relaxed">
-                  Ready to start building your wardrobe? Browse our latest collection and find your perfect style.
+                  Ready to start building your wardrobe? Browse our latest
+                  collection and find your perfect style.
                 </p>
                 <Link
                   href="/shop"
@@ -238,7 +305,7 @@ export default function OrdersPage() {
                   const progress = getOrderProgress(order);
                   const progressStep = getProgressStep(order);
                   const StatusIcon = orderStatus.icon;
-                  
+
                   return (
                     <div
                       key={order.id}
@@ -251,11 +318,14 @@ export default function OrdersPage() {
                             <div className="flex items-center space-x-2">
                               <Calendar className="h-5 w-5 text-gray-500" />
                               <span className="text-sm font-medium text-gray-700">
-                                {new Date(order.createdAt).toLocaleDateString('en-US', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric'
-                                })}
+                                {new Date(order.createdAt).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                  }
+                                )}
                               </span>
                             </div>
                             <div className="flex items-center space-x-2">
@@ -266,13 +336,15 @@ export default function OrdersPage() {
                             </div>
                           </div>
                           <div className="flex items-center space-x-3">
-                            <Badge className={`${orderStatus.color} text-white px-4 py-2 text-sm font-medium flex items-center space-x-2`}>
+                            <Badge
+                              className={`${orderStatus.color} text-white px-4 py-2 text-sm font-medium flex items-center space-x-2`}
+                            >
                               <StatusIcon className="h-4 w-4" />
                               <span>{orderStatus.label}</span>
                             </Badge>
                           </div>
                         </div>
-                        
+
                         {/* Progress bar with circles */}
                         <div className="mb-3">
                           <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
@@ -284,51 +356,60 @@ export default function OrdersPage() {
                           <div className="relative">
                             {/* Progress track */}
                             <div className="w-full bg-gray-200 rounded-full h-2">
-                              <div 
+                              <div
                                 className="bg-[#2B2B2B] h-2 rounded-full transition-all duration-500 ease-out"
                                 style={{ width: `${progress}%` }}
                               />
                             </div>
-                            
+
                             {/* Progress circles */}
                             <div className="absolute top-1/2 -translate-y-1/2 w-full flex justify-between">
                               {/* Order Placed Circle */}
-                              <div className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
-                                progressStep >= 1 
-                                  ? 'bg-[#2B2B2B] border-[#2B2B2B]' 
-                                  : 'bg-white border-gray-300'
-                              }`} />
-                              
+                              <div
+                                className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
+                                  progressStep >= 1
+                                    ? "bg-[#2B2B2B] border-[#2B2B2B]"
+                                    : "bg-white border-gray-300"
+                                }`}
+                              />
+
                               {/* Processing Circle */}
-                              <div className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
-                                progressStep >= 2 
-                                  ? 'bg-[#2B2B2B] border-[#2B2B2B]' 
-                                  : 'bg-white border-gray-300'
-                              }`} />
-                              
+                              <div
+                                className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
+                                  progressStep >= 2
+                                    ? "bg-[#2B2B2B] border-[#2B2B2B]"
+                                    : "bg-white border-gray-300"
+                                }`}
+                              />
+
                               {/* Shipped Circle */}
-                              <div className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
-                                progressStep >= 3 
-                                  ? 'bg-[#2B2B2B] border-[#2B2B2B]' 
-                                  : 'bg-white border-gray-300'
-                              }`} />
-                              
+                              <div
+                                className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
+                                  progressStep >= 3
+                                    ? "bg-[#2B2B2B] border-[#2B2B2B]"
+                                    : "bg-white border-gray-300"
+                                }`}
+                              />
+
                               {/* Delivered Circle */}
-                              <div className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
-                                progressStep >= 4 
-                                  ? 'bg-[#2B2B2B] border-[#2B2B2B]' 
-                                  : 'bg-white border-gray-300'
-                              }`} />
+                              <div
+                                className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
+                                  progressStep >= 4
+                                    ? "bg-[#2B2B2B] border-[#2B2B2B]"
+                                    : "bg-white border-gray-300"
+                                }`}
+                              />
                             </div>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-500 font-mono">
                             Order #{order.id.substring(0, 8).toUpperCase()}
                           </span>
                           <span className="text-xs text-gray-400">
-                            {order.orderItems.length} item{order.orderItems.length !== 1 ? 's' : ''}
+                            {order.orderItems.length} item
+                            {order.orderItems.length !== 1 ? "s" : ""}
                           </span>
                         </div>
                       </div>
@@ -340,7 +421,9 @@ export default function OrdersPage() {
                             <div
                               key={item.id}
                               className={`flex items-center space-x-4 py-4 ${
-                                index !== order.orderItems.length - 1 ? 'border-b border-gray-100' : ''
+                                index !== order.orderItems.length - 1
+                                  ? "border-b border-gray-100"
+                                  : ""
                               }`}
                             >
                               <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
@@ -350,7 +433,8 @@ export default function OrdersPage() {
                                     alt={item.product.name}
                                     className="h-full w-full object-cover object-center"
                                     onError={(e) => {
-                                      const target = e.target as HTMLImageElement;
+                                      const target =
+                                        e.target as HTMLImageElement;
                                       target.src = "/placeholder.svg";
                                     }}
                                   />
@@ -397,17 +481,22 @@ export default function OrdersPage() {
                             {order.trackingNumber && (
                               <div className="flex items-center space-x-2 bg-white px-3 py-2 rounded-lg border border-gray-200">
                                 <Truck className="h-4 w-4 text-gray-600" />
-                                <span className="font-medium">Tracking: {order.trackingNumber}</span>
+                                <span className="font-medium">
+                                  Tracking: {order.trackingNumber}
+                                </span>
                               </div>
                             )}
                             {order.estimatedDelivery && (
                               <div className="flex items-center space-x-2 bg-white px-3 py-2 rounded-lg border border-gray-200">
                                 <Calendar className="h-4 w-4 text-gray-600" />
                                 <span className="font-medium">
-                                  Est. delivery: {new Date(order.estimatedDelivery).toLocaleDateString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric'
+                                  Est. delivery:{" "}
+                                  {new Date(
+                                    order.estimatedDelivery
+                                  ).toLocaleDateString("en-US", {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
                                   })}
                                 </span>
                               </div>

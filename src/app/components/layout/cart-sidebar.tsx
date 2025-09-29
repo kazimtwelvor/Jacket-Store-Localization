@@ -9,11 +9,101 @@ import Currency from "../../ui/currency";
 import { useCart } from "../../contexts/CartContext";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  PaymentRequestButtonElement,
+  ExpressCheckoutElement,
+  useStripe,
+} from "@stripe/react-stripe-js";
+import GooglePayWithPaypal from "../GooglePayWithPaypal";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import PayPalButtons from "../cart/PayPalButtons";
+import { decrypt } from "../../utils/decrypt";
+import PaymentProcessingModal from "../PaymentProcessingModal";
 
 interface CartSidebarProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+// Stripe Express Checkout Component
+const StripeExpressCheckout = ({
+  totalAmount,
+  onSuccess,
+  items,
+}: {
+  totalAmount: number;
+  onSuccess: (orderId?: string) => void;
+  items: any[];
+}) => {
+  const stripe = useStripe();
+
+  const handleExpressCheckout = async (event: any) => {
+    if (!stripe) return;
+
+    setPaymentModal({ isOpen: true, status: "processing", message: "" });
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/create-payment-intent`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: Math.round(totalAmount * 100),
+            currency: "usd",
+            items: items.map((i) => ({
+              id: i.product.id,
+              name: i.product.name,
+              price: i.unitPrice,
+              quantity: i.quantity,
+            })),
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const { client_secret } = await response.json();
+        const result = await stripe.confirmPayment({
+          clientSecret: client_secret,
+          confirmParams: {
+            return_url: `${window.location.origin}/checkout/confirmation?success=1`,
+          },
+        });
+
+        if (result.error) {
+          setPaymentModal({ isOpen: true, status: "error", message: result.error.message || "Payment failed" });
+          setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
+        } else {
+          setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+          setTimeout(() => {
+            setPaymentModal({ isOpen: false, status: "processing", message: "" });
+            onSuccess();
+          }, 2000);
+        }
+      }
+    } catch (error) {
+      setPaymentModal({ isOpen: true, status: "error", message: "Payment failed. Please try again." });
+      setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      <ExpressCheckoutElement
+        onConfirm={handleExpressCheckout}
+        options={{
+          paymentMethods: {
+            applePay: "auto",
+            googlePay: "auto",
+            link: "auto",
+          },
+        }}
+      />
+    </div>
+  );
+};
 
 const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
   const { items, updateQuantity, removeFromCart, totalPrice } = useCart();
@@ -22,12 +112,95 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
   const [discountAmount, setDiscountAmount] = useState(0);
   const [voucherApplying, setVoucherApplying] = useState(false);
   const [voucherMessage, setVoucherMessage] = useState("");
+  const [stripePromise, setStripePromise] = useState<any>(null);
+  const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
+  const [paymentModal, setPaymentModal] = useState({ isOpen: false, status: "processing" as "processing" | "success" | "error", message: "" });
   const router = useRouter();
+  const isStripe = process.env.NEXT_PUBLIC_USE_STRIPE === "true";
   const shippingPrice = totalPrice > 100 ? 0 : 10;
   const taxRate = 0.08;
-  const taxAmount = totalPrice * taxRate;
+  const taxAmount = 0;
   const grandTotal = totalPrice + shippingPrice + taxAmount;
   const effectiveGrandTotal = Math.max(0, grandTotal - discountAmount);
+
+  useEffect(() => {
+    const initializePayments = async () => {
+      try {
+        // Initialize Stripe
+        const stripeResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/stripe-publishable-key`
+        );
+        if (stripeResponse.ok) {
+          const stripeData = await stripeResponse.json();
+          const stripe = await loadStripe(stripeData.publishableKey);
+          setStripePromise(stripe);
+        }
+
+        // Initialize PayPal for Google Pay
+        const paypalResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/payment-settings`
+        );
+        if (paypalResponse.ok) {
+          const paypalData = await paypalResponse.json();
+          const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
+          const decryptedClientId = decrypt(
+            paypalData.paypalClientId,
+            encryptionKey
+          );
+          setPaypalClientId(decryptedClientId);
+        }
+      } catch (error) {
+        console.error("Error initializing payments:", error);
+      }
+    };
+
+    initializePayments();
+  }, []);
+
+  const handlePaymentSuccess = (orderId?: string) => {
+    setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+    setTimeout(() => {
+      setPaymentModal({ isOpen: false, status: "processing", message: "" });
+      onClose();
+      const url = orderId
+        ? `/checkout/confirmation?orderId=${orderId}&success=1`
+        : "/checkout/confirmation?success=1";
+      router.push(url);
+    }, 2000);
+  };
+
+  const handleExpressPayment = async (paymentMethod: string) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            items: items.map((i) => ({
+              id: i.product.id,
+              name: i.product.name,
+              price: i.unitPrice,
+              quantity: i.quantity,
+            })),
+            shippingPrice,
+            taxAmount,
+            discountAmount,
+            paymentMethod: paymentMethod.toLowerCase().replace(" ", ""),
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const { url } = await response.json();
+        window.location.href = url;
+      } else {
+        toast.error(`${paymentMethod} checkout failed`);
+      }
+    } catch (error) {
+      toast.error(`${paymentMethod} checkout failed`);
+    }
+  };
 
   const handleApplyVoucher = async () => {
     try {
@@ -413,19 +586,82 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
             Express checkout options
           </p>
 
-          <div className="grid grid-cols-3 gap-2 mb-4">
-            <button className="border border-gray-300 py-2 px-3 text-sm font-medium flex items-center justify-center bg-white hover:bg-gray-50">
-              PayPal
-            </button>
-            <button className="border border-gray-300 py-2 px-3 text-sm font-medium flex items-center justify-center bg-white hover:bg-gray-50">
-              G Pay
-            </button>
-            <button className="border border-gray-300 py-2 px-3 text-sm font-medium flex items-center justify-center bg-white hover:bg-gray-50">
-              amazon pay
-            </button>
+          <div className="space-y-2 mb-4">
+            {isStripe ? (
+              <>
+                {/* Stripe Express Checkout Elements */}
+                {stripePromise && (
+                  <Elements
+                    stripe={stripePromise}
+                    options={{
+                      mode: "payment",
+                      amount: Math.round(effectiveGrandTotal * 100),
+                      currency: "usd",
+                      appearance: {
+                        theme: "stripe",
+                      },
+                    }}
+                  >
+                    <StripeExpressCheckout
+                      totalAmount={effectiveGrandTotal}
+                      onSuccess={handlePaymentSuccess}
+                      items={items}
+                    />
+                  </Elements>
+                )}
+              </>
+            ) : (
+              <>
+                {/* Google Pay via PayPal */}
+                {paypalClientId && (
+                  <PayPalScriptProvider
+                    options={{
+                      "client-id": paypalClientId,
+                      currency: "USD",
+                      components: "googlepay",
+                    }}
+                  >
+                    <div className="border border-gray-300 rounded">
+                      <GooglePayWithPaypal
+                        totalAmount={effectiveGrandTotal}
+                        onCaptureSuccess={handlePaymentSuccess}
+                        termsAccepted={true}
+                        onTermsError={(message) => toast.error(message)}
+                      />
+                    </div>
+                  </PayPalScriptProvider>
+                )}
+
+                {/* PayPal Express */}
+                {paypalClientId && (
+                  <PayPalScriptProvider
+                    options={{
+                      "client-id": paypalClientId,
+                      currency: "USD",
+                    }}
+                  >
+                    <div className="border border-gray-300 rounded p-1">
+                      <PayPalButtons
+                        items={items.map((i) => ({
+                          id: i.product.id,
+                          quantity: i.quantity,
+                        }))}
+                        onApproveSuccess={handlePaymentSuccess}
+                      />
+                    </div>
+                  </PayPalScriptProvider>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>
+      
+      <PaymentProcessingModal
+        isOpen={paymentModal.isOpen}
+        status={paymentModal.status}
+        message={paymentModal.message}
+      />
     </div>
   );
 };

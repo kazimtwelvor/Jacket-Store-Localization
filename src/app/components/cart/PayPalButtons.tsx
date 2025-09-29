@@ -10,7 +10,7 @@ type CartItem = {
 
 type PayPalButtonsProps = {
   items: CartItem[];
-  onApproveSuccess: () => void;
+  onApproveSuccess: (orderId?: string) => void;
 };
 
 declare global {
@@ -128,7 +128,7 @@ export default function PayPalButtons({
                 body: JSON.stringify({ orderID: data.orderID }),
               });
               if (!res.ok) throw new Error("Failed to capture PayPal order");
-              onApproveSuccess();
+              onApproveSuccess(data.orderID);
             },
             onError: (err: any) => {
               console.error("PayPal error", err);

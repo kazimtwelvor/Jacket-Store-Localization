@@ -16,7 +16,7 @@ const resetTokens = new Map<
 // Helper function to check if user exists using external API
 async function userExists(email: string, storeId: string): Promise<boolean> {
   try {
-    const checkUserUrl = `https://d1.fineyst.com/api/users/check-exists?email=${encodeURIComponent(
+    const checkUserUrl = `https://jacket.us.com/api/users/check-exists?email=${encodeURIComponent(
       email
     )}`;
 
@@ -83,7 +83,8 @@ export async function POST(req: Request) {
     });
 
     // Create the reset link
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.fineystjackets.com";
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL || "https://www.fineystjackets.com";
     const resetLink = `${baseUrl}/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(
       email
     )}`;
