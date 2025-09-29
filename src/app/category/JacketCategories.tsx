@@ -92,6 +92,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
       const targetPath = `/collections/${slug}`;
       
       if (currentPath === targetPath) {
+        window.dispatchEvent(new CustomEvent('route-loading:end'));
         return;
       }
     }
@@ -108,6 +109,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
       const targetPath = `/collections/${categorySlug}`;
       
       if (currentPath === targetPath) {
+        window.dispatchEvent(new CustomEvent('route-loading:end'));
         return;
       }
     }

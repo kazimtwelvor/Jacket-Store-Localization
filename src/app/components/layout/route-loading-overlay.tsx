@@ -43,12 +43,13 @@ function RouteLoadingOverlayContent() {
           return;
         }
 
-        // Same-path clicks should not trigger
+        if (url.pathname === "/") return;
         const toPath = url.pathname + url.search + url.hash;
         const fromPath = location.pathname + location.search + location.hash;
         if (toPath === fromPath) return;
-        // Don't show loader when going to home page
-        if (url.pathname === "/") return;
+        if (url.pathname.startsWith("/collections/") && 
+            location.pathname.startsWith("/collections/") &&
+            url.pathname === location.pathname) return;
 
         if (!loadingRef.current) {
           loadingRef.current = true;
