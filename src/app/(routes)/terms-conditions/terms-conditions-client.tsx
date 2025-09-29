@@ -436,7 +436,7 @@ export default function TermsConditionsClient() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="mt-12 p-6 border border-[#2b2b2b] rounded-lg bg-[#2b2b2b]/30"
+                className="mt-12 p-6 border border-[#2b2b2b] rounded-lg "
               >
                 <h3 className="text-xl font-semibold mb-4 text-black">Agreement to Terms</h3>
                 <p className="text-[#333333]">

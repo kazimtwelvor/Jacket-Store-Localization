@@ -53,7 +53,7 @@ export default function TermsNavigation({
   return (
     <>
       {/* Mobile Navigation Toggle */}
-      <div className="fixed bottom-16 right-4 lg:hidden z-30">
+      {/* <div className="fixed bottom-16 right-4 lg:hidden z-30">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="bg-white text-white p-3 rounded-full shadow-lg hover:bg-white transition-colors"
@@ -61,7 +61,7 @@ export default function TermsNavigation({
         >
           {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
-      </div>
+      </div> */}
 
       {/* Mobile Navigation Drawer */}
       <motion.div

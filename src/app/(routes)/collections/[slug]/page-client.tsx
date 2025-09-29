@@ -419,21 +419,26 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
         return () => document.removeEventListener('click', handleClickOutside)
     }, [sortDropdownOpen, colorPopup])
     useLayoutEffect(() => {
-        const filterBarWrapper = filterBarWrapperRef.current;
-        const paginationSection = paginationSectionRef.current;
-        if (filterBarWrapper && paginationSection && filterBarWrapper.firstElementChild) {
-            const filterBarElement = filterBarWrapper.firstElementChild as HTMLElement;
-            const style = window.getComputedStyle(filterBarElement);
-            const marginBottom = parseFloat(style.marginBottom);
-            const height = filterBarElement.offsetHeight + marginBottom;
-            const stickyBarTopPosition = window.matchMedia('(min-width: 768px)').matches ? 112 : 128;
-            setLayoutMetrics({
-                startStickyPoint: filterBarWrapper.offsetTop,
-                endStickyPoint: paginationSection.offsetTop - stickyBarTopPosition - height,
-                filterBarHeight: height,
-            });
-        }
-    }, []);
+        const updateLayout = () => {
+            const filterBarWrapper = filterBarWrapperRef.current;
+            const paginationSection = paginationSectionRef.current;
+            if (filterBarWrapper && paginationSection && filterBarWrapper.firstElementChild) {
+                const filterBarElement = filterBarWrapper.firstElementChild as HTMLElement;
+                const style = window.getComputedStyle(filterBarElement);
+                const marginBottom = parseFloat(style.marginBottom);
+                const height = filterBarElement.offsetHeight + marginBottom;
+                const stickyBarTopPosition = window.matchMedia('(min-width: 768px)').matches ? 112 : 128;
+                setLayoutMetrics({
+                    startStickyPoint: filterBarWrapper.offsetTop,
+                    endStickyPoint: paginationSection.offsetTop - stickyBarTopPosition - height,
+                    filterBarHeight: height,
+                });
+            }
+        };
+
+        const timeoutId = setTimeout(updateLayout, 100);
+        return () => clearTimeout(timeoutId);
+    }, [loadedProducts, currentProducts, hasMore]);
     useEffect(() => {
         if (layoutMetrics.startStickyPoint === 0) return;
         const handleScroll = () => {
@@ -442,7 +447,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             const shouldBeSticky = scrollY >= startStickyPoint && scrollY < endStickyPoint;
             setIsFilterSticky(current => current !== shouldBeSticky ? shouldBeSticky : current);
         };
-        const throttledHandleScroll = throttle(handleScroll, 16); // ~60fps
+        const throttledHandleScroll = throttle(handleScroll, 16); 
         window.addEventListener('scroll', throttledHandleScroll, { passive: true });
         handleScroll();
         return () => window.removeEventListener('scroll', throttledHandleScroll);
@@ -928,6 +933,9 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                                         onProductUpdate={(updatedProduct) => {
                                             setCurrentProducts(prev => {
                                                 const newProducts = [...prev]
+                                                // const productIndex = newProducts.findIndex(p => p.id === product.id)
+                                                // if (productIndex !== -1) {
+                                                //   newProducts[productIndex] = updatedProduct
                                                 if (index < newProducts.length) {
                                                     newProducts[index] = updatedProduct
                                                 }
@@ -936,6 +944,9 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                                             
                                             setFilteredProducts(prev => {
                                                 const newProducts = [...prev]
+                                                // const productIndex = newProducts.findIndex(p => p.id === product.id)
+                                                // if (productIndex !== -1) {
+                                                //   newProducts[productIndex] = updatedProduct
                                                 if (index < newProducts.length) {
                                                     newProducts[index] = updatedProduct
                                                 }
@@ -957,7 +968,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                             <button
                                 onClick={handleLoadMore}
                                 disabled={isLoadingMore}
-                                className="px-8 py-3 bg-[#2b2b2b] text-white rounded-md hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+                                className="px-8 py-3 bg-[#2b2b2b] text-white  hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
                             >
                                 {isLoadingMore ? (
                                     <div className="flex items-center gap-2">

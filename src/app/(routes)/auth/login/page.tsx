@@ -506,30 +506,30 @@ function LoginContent() {
         {/* Tab Navigation */}
         <div className="flex bg-gray-100">
           <button
-            className={`flex-1 py-4 px-6 font-semibold text-center transition-all duration-200 ${
+            className={`flex-1 py-2 px-3 md:py-4 md:px-6 font-semibold text-center transition-all duration-200 ${
               activeTab === "login"
                 ? "bg-white text-gray-900 border-b-2 border-gray-800 shadow-sm"
                 : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
             }`}
             onClick={() => setActiveTab("login")}
           >
-            <Lock className="w-5 h-5 inline mr-2" />
-            Sign In
+            <Lock className="w-4 h-4 md:w-5 md:h-5 inline mr-1 md:mr-2" />
+            <span className="text-sm md:text-base">Sign In</span>
           </button>
           <button
-            className={`flex-1 py-4 px-6 font-semibold text-center transition-all duration-200 ${
+            className={`flex-1 py-2 px-3 md:py-4 md:px-6 font-semibold text-center transition-all duration-200 ${
               activeTab === "register"
                 ? "bg-white text-gray-900 border-b-2 border-gray-800 shadow-sm"
                 : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
             }`}
             onClick={() => setActiveTab("register")}
           >
-            <User className="w-5 h-5 inline mr-2" />
-            Create Account
+            <User className="w-4 h-4 md:w-5 md:h-5 inline mr-1 md:mr-2" />
+            <span className="text-sm md:text-base">Create Account</span>
           </button>
         </div>
 
-        <div className="p-8">
+        <div className="p-4">
           {activeTab === "login" && (
             <div className="max-w-md mx-auto">
               <div className="text-center mb-8">

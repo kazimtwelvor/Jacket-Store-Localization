@@ -68,6 +68,13 @@ export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, 
   }
 
   const handleSizeSelect = (productId: string, size: string) => {
+    const product = [...recentlyViewed, ...suggestProducts].find(p => p.id === productId);
+    if (product) {
+      addToCart(product, size);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('openCart'));
+      }
+    }
     setSelectedSizes(prev => ({ ...prev, [productId]: size }))
   }
 

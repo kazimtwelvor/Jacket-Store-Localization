@@ -104,6 +104,19 @@ type ProductsPageClientProps = {
   colors?: Color[];
   sizes?: Size[];
   keywordCategories?: KeywordCategory[];
+  hasMoreProducts?: boolean;
+  filterParams?: {
+    categoryId?: string;
+    colorId?: string;
+    sizeId?: string;
+    search?: string;
+    genders?: string[];
+    materials?: string[];
+    styles?: string[];
+    colors?: string[];
+    sizes?: string[];
+    sort?: string;
+  };
 };
 
 const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
@@ -112,24 +125,33 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   colors,
   sizes,
   keywordCategories = [],
+  hasMoreProducts = false,
+  filterParams,
 }) => {
   const [productsData, setProductsData] =
     useState<PaginatedProductsData>(initialProductsData);
-  
+
   useEffect(() => {
-    console.log('ProductsData state updated:', {
+    console.log("ProductsData state updated:", {
       currentPage: productsData.pagination.currentPage,
       totalPages: productsData.pagination.totalPages,
       productsCount: productsData.products.length,
-      firstProduct: productsData.products[0]?.name || 'none'
+      firstProduct: productsData.products[0]?.name || "none",
     });
   }, [productsData]);
   const [loading, setLoading] = useState(false);
-  
+
   // Debug loading state changes
   useEffect(() => {
-    console.log('Loading state changed:', loading);
+    console.log("Loading state changed:", loading);
   }, [loading]);
+
+  // Load more functionality states
+  const [loadedProducts, setLoadedProducts] = useState<Product[]>([]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(hasMoreProducts);
+  const [loadMorePage, setLoadMorePage] = useState(2);
+
   const [sizeModalOpen, setSizeModalOpen] = useState(false);
   const [filterSidebarOpen, setFilterSidebarOpen] = useState(false);
   const [categorySliderOpen, setCategorySliderOpen] = useState(false);
@@ -261,7 +283,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       const newUrl = params.toString() ? `/shop?${params.toString()}` : "/shop";
       window.dispatchEvent(new CustomEvent("route-loading:start"));
       router.push(newUrl, { scroll: false });
-      
+
       // Ensure loader disappears after navigation
       setTimeout(() => {
         window.dispatchEvent(new CustomEvent("route-loading:end"));
@@ -323,8 +345,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             explicitQuery?.genders ??
             (selectedFilters.gender.length > 0
               ? Array.from(
-                new Set(selectedFilters.gender.map(genderToParam))
-              ).join(",")
+                  new Set(selectedFilters.gender.map(genderToParam))
+                ).join(",")
               : undefined),
           colors:
             explicitQuery?.colors ??
@@ -340,21 +362,21 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         };
 
         const newProductsData = await getProducts(queryParams);
-        console.log('API Response received:', {
+        console.log("API Response received:", {
           requestId,
           latestHandled: latestHandledRequestRef.current,
           page,
           newProductsData: {
             currentPage: newProductsData.pagination.currentPage,
             totalPages: newProductsData.pagination.totalPages,
-            productsCount: newProductsData.products.length
-          }
+            productsCount: newProductsData.products.length,
+          },
         });
 
         // Only apply if this is the latest request
         if (requestId > latestHandledRequestRef.current) {
           latestHandledRequestRef.current = requestId;
-          console.log('Updating state with new data for page:', page);
+          console.log("Updating state with new data for page:", page);
           setProductsData(newProductsData);
           setCurrentProducts(
             sortProductsClient(
@@ -364,7 +386,12 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           );
           setCurrentPage(page);
         } else {
-          console.log('Request ignored - not latest:', requestId, 'vs', latestHandledRequestRef.current);
+          console.log(
+            "Request ignored - not latest:",
+            requestId,
+            "vs",
+            latestHandledRequestRef.current
+          );
         }
 
         if (!skipURLUpdate) {
@@ -420,12 +447,23 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         }
       }
     },
-    [activeCategory, selectedFilters, updateURL, activeSort, isPaginationInProgress]
+    [
+      activeCategory,
+      selectedFilters,
+      updateURL,
+      activeSort,
+      isPaginationInProgress,
+    ]
   );
 
   const handlePageChange = useCallback(
     (page: number) => {
-      console.log('Page change requested:', page, 'Current productsData page:', productsData.pagination.currentPage);
+      console.log(
+        "Page change requested:",
+        page,
+        "Current productsData page:",
+        productsData.pagination.currentPage
+      );
       setIsPaginationInProgress(true);
       fetchProducts(page);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -451,6 +489,60 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     fetchProducts(1, true, sortValue);
   };
 
+  const handleLoadMore = async () => {
+    if (isLoadingMore || !hasMore) return;
+
+    setIsLoadingMore(true);
+
+    try {
+      const response = await fetch("/api/shop/load-more", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          materials: selectedFilters.materials,
+          styles: selectedFilters.style,
+          colors: selectedFilters.colors,
+          genders: selectedFilters.gender,
+          sizes: selectedFilters.sizes,
+          categoryId: filterParams?.categoryId,
+          colorId: filterParams?.colorId,
+          sizeId: filterParams?.sizeId,
+          search: filterParams?.search,
+          page: loadMorePage,
+          limit: 40,
+          sort: activeSort || filterParams?.sort || "popular",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to load more products");
+      }
+
+      const data = await response.json();
+
+      if (data.success && data.products?.length > 0) {
+        setLoadedProducts((prev) => [...prev, ...data.products]);
+        setLoadMorePage((prev) => prev + 1);
+        setHasMore(data.pagination?.hasNextPage || false);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Error loading more products:", error);
+      setHasMore(false);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
+
+  useEffect(() => {
+    setLoadedProducts([]);
+    setLoadMorePage(2);
+    setHasMore(hasMoreProducts);
+  }, [selectedFilters, activeSort, hasMoreProducts]);
+
   const handleClick = (product: Product) => {
     const slug = getProductSlug(product);
     router.push(`/product/${slug}`);
@@ -467,12 +559,15 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
   const handleSizeSelect = (productId: string, size: string) => {
     const product =
-      (currentProducts.length > 0 ? currentProducts : productsData.products).find((p) => p.id === productId) ||
+      (currentProducts.length > 0
+        ? currentProducts
+        : productsData.products
+      ).find((p) => p.id === productId) ||
       recentlyViewed.find((p) => p.id === productId);
     if (product) {
       addToCart(product, size);
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('openCart'));
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("openCart"));
       }
     }
     setSelectedSizes((prev) => ({
@@ -679,9 +774,16 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     }
 
     // Only fetch if URL page is different from current page AND we're not in the middle of a pagination update
-    console.log('URL sync check:', { urlPage, currentPage, loading, isPaginationInProgress, shouldFetch: urlPage !== currentPage && !loading && !isPaginationInProgress });
+    console.log("URL sync check:", {
+      urlPage,
+      currentPage,
+      loading,
+      isPaginationInProgress,
+      shouldFetch:
+        urlPage !== currentPage && !loading && !isPaginationInProgress,
+    });
     if (urlPage !== currentPage && !loading && !isPaginationInProgress) {
-      console.log('URL sync triggering fetchProducts for page:', urlPage);
+      console.log("URL sync triggering fetchProducts for page:", urlPage);
       fetchProducts(urlPage);
     }
   }, [currentPage, loading, isPaginationInProgress]);
@@ -779,7 +881,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
     const timeoutId = setTimeout(updateLayout, 100);
     return () => clearTimeout(timeoutId);
-  }, [productsData.products, loading]);
+  }, [productsData.products, loading, loadedProducts]);
 
   useEffect(() => {
     if (layoutMetrics.startStickyPoint === 0) return;
@@ -882,66 +984,79 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         </div>
 
         <div className="w-full px-2 sm:px-4 md:px-8">
-          {!loading && productsData.products.length > 0 ? (
+          {!loading &&
+          (currentProducts.length > 0 ? currentProducts : productsData.products)
+            .length > 0 ? (
             <>
               <div className="mb-4 text-sm text-gray-600 text-center">
                 Showing{" "}
-                {(productsData.pagination.currentPage - 1) *
-                  productsData.pagination.productsPerPage +
-                  1}{" "}
-                -{" "}
-                {Math.min(
-                  productsData.pagination.currentPage *
-                  productsData.pagination.productsPerPage,
-                  productsData.pagination.totalProducts
-                )}{" "}
-                of all products
+                {(currentProducts.length > 0
+                  ? currentProducts
+                  : productsData.products
+                ).length + loadedProducts.length}{" "}
+                of {productsData.pagination.totalProducts} products
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-4 lg:gap-5 xl:gap-6 gap-y-8 md:gap-y-4 lg:gap-y-5 xl:gap-y-6">
-                      {(currentProducts.length > 0 ? currentProducts : productsData.products).map((product, index) => (
-                        <ProductCardWrapper
-                          key={`${product.id}-${index}-${productsData.pagination.currentPage}`}
-                          product={product}
-                          index={index}
-                          isDesktop={isDesktop}
-                          hoveredProduct={hoveredProduct}
-                          setHoveredProduct={setHoveredProduct}
-                          selectedSizes={selectedSizes}
-                          handleSizeSelect={handleSizeSelect}
-                          handleClick={handleClick}
-                          addToRecentlyViewed={addToRecentlyViewed}
-                          wishlist={wishlist}
-                          setMobileCartModal={setMobileCartModal}
-                          loadingProducts={loadingProducts}
-                          visibleProducts={visibleProducts}
-                          wasDraggedRef={wasDraggedRef}
-                          openColorModal={openColorModal}
-                          setOpenColorModal={setOpenColorModal}
-                          onProductUpdate={(updatedProduct) => {
-                            setCurrentProducts(prev => {
-                              const newProducts = [...prev]
-                              const productIndex = newProducts.findIndex(p => p.id === product.id)
-                              if (productIndex !== -1) {
-                                newProducts[productIndex] = updatedProduct
-                              }
-                              return newProducts
-                            })
-                          }}
-                          setLoadingProducts={setLoadingProducts}
-                        />
-                      ))}
+                {[
+                  ...(currentProducts.length > 0
+                    ? currentProducts
+                    : productsData.products),
+                  ...loadedProducts,
+                ].map((product, index) => (
+                  <ProductCardWrapper
+                    key={`${product.id}-${index}-${productsData.pagination.currentPage}`}
+                    product={product}
+                    index={index}
+                    isDesktop={isDesktop}
+                    hoveredProduct={hoveredProduct}
+                    setHoveredProduct={setHoveredProduct}
+                    selectedSizes={selectedSizes}
+                    handleSizeSelect={handleSizeSelect}
+                    handleClick={handleClick}
+                    addToRecentlyViewed={addToRecentlyViewed}
+                    wishlist={wishlist}
+                    setMobileCartModal={setMobileCartModal}
+                    loadingProducts={loadingProducts}
+                    visibleProducts={visibleProducts}
+                    wasDraggedRef={wasDraggedRef}
+                    openColorModal={openColorModal}
+                    setOpenColorModal={setOpenColorModal}
+                    onProductUpdate={(updatedProduct) => {
+                      setCurrentProducts((prev) => {
+                        const newProducts = [...prev];
+                        // const productIndex = newProducts.findIndex(p => p.id === product.id)
+                        // if (productIndex !== -1) {
+                        //   newProducts[productIndex] = updatedProduct
+                        if (index < newProducts.length) {
+                          newProducts[index] = updatedProduct;
+                        }
+                        return newProducts;
+                      });
+                    }}
+                    setLoadingProducts={setLoadingProducts}
+                  />
+                ))}
               </div>
 
               <div ref={paginationSectionRef}>
-                <PaginationControls
-                  currentPage={productsData.pagination.currentPage}
-                  totalPages={productsData.pagination.totalPages}
-                  hasNextPage={productsData.pagination.hasNextPage}
-                  hasPreviousPage={productsData.pagination.hasPreviousPage}
-                  loading={loading}
-                  onPageChange={handlePageChange}
-                  isDesktop={isDesktop}
-                />
+                {hasMore && (
+                  <div className="flex justify-center mt-12 mb-8">
+                    <button
+                      onClick={handleLoadMore}
+                      disabled={isLoadingMore}
+                      className="px-8 py-3 bg-[#2b2b2b] text-white hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                      {isLoadingMore ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Loading More...
+                        </>
+                      ) : (
+                        "Load More Products"
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div id="lower-content-div"></div>
@@ -967,9 +1082,14 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           )}
         </div>
 
-        {(currentProducts.length > 0 ? currentProducts : productsData.products).length > 0 && (
+        {(currentProducts.length > 0 ? currentProducts : productsData.products)
+          .length > 0 && (
           <WeThinkYouWillLove
-            products={currentProducts.length > 0 ? currentProducts : productsData.products}
+            products={
+              currentProducts.length > 0
+                ? currentProducts
+                : productsData.products
+            }
             hoveredProduct={hoveredProduct}
             setHoveredProduct={setHoveredProduct}
             selectedSizes={selectedSizes}
@@ -1034,9 +1154,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         <WhatsMySize
           open={sizeModalOpen}
           onOpenChange={setSizeModalOpen}
-        // onCategorySelect={(category) => {
-        //   console.log("Selected category:", category);
-        // }}
+          // onCategorySelect={(category) => {
+          //   console.log("Selected category:", category);
+          // }}
         />
 
         {mobileCartModal.product && (
