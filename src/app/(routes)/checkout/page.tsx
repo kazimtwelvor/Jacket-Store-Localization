@@ -26,6 +26,7 @@ import PayPalButtons from "../../components/cart/PayPalButtons";
 import PayPalCardForm from "../../components/cart/PayPalCardForm";
 import GooglePayWithPaypal from "../../components/GooglePayWithPaypal";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import PaymentProcessingModal from "../../components/PaymentProcessingModal";
 import Currency from "../../ui/currency";
 import Button from "../../ui/button";
 import { toast } from "react-hot-toast";
@@ -46,6 +47,7 @@ const PaymentForm = ({
   onBack,
   isLoading,
   setIsLoading,
+  setPaymentModal,
 }: {
   clientSecret: string;
   orderId: string;
@@ -53,6 +55,7 @@ const PaymentForm = ({
   onBack: () => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
+  setPaymentModal: (modal: { isOpen: boolean; status: "processing" | "success" | "error"; message: string }) => void;
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -67,6 +70,7 @@ const PaymentForm = ({
 
     setIsLoading(true);
     setError(null);
+    setPaymentModal({ isOpen: true, status: "processing", message: "" });
 
     try {
       const result = await stripe.confirmPayment({
@@ -79,15 +83,20 @@ const PaymentForm = ({
 
       if (result.error) {
         setError(result.error.message || "An error occurred during payment");
-        toast.error(result.error.message || "Payment failed");
-      } else {
-        toast.success("Payment successful!");
-        onSuccess();
+        setPaymentModal({ isOpen: true, status: "error", message: result.error.message || "Payment failed" });
+        setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
+      } else if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
+        setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+        setTimeout(() => {
+          setPaymentModal({ isOpen: false, status: "processing", message: "" });
+          onSuccess();
+        }, 2000);
       }
     } catch (err) {
       console.error("Payment error:", err);
       setError("An unexpected error occurred");
-      toast.error("Payment failed. Please try again.");
+      setPaymentModal({ isOpen: true, status: "error", message: "Payment failed. Please try again." });
+      setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
     } finally {
       setIsLoading(false);
     }
@@ -147,6 +156,7 @@ const CheckoutPage = () => {
   const [voucherApplying, setVoucherApplying] = useState(false);
   const [voucherMessage, setVoucherMessage] = useState("");
   const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
+  const [paymentModal, setPaymentModal] = useState({ isOpen: false, status: "processing" as "processing" | "success" | "error", message: "" });
 
   // Form states
   const [formData, setFormData] = useState({
@@ -200,12 +210,15 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    
+
     // Check for payment method in URL
     const urlParams = new URLSearchParams(window.location.search);
-    const paymentMethod = urlParams.get('payment');
+    const paymentMethod = urlParams.get("payment");
     if (paymentMethod) {
-      setFormData(prev => ({ ...prev, selectedPaymentMethod: paymentMethod }));
+      setFormData((prev) => ({
+        ...prev,
+        selectedPaymentMethod: paymentMethod,
+      }));
     }
   }, []);
 
@@ -308,26 +321,45 @@ const CheckoutPage = () => {
         voucherCode: voucherCode || null,
       };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-        {
+      // Use Stripe API route for Stripe payments
+      if (isStripeEnabled && formData.selectedPaymentMethod === "CREDIT_CARD") {
+        const response = await fetch("/api/stripe/create-payment-intent", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(checkoutData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to initialize payment");
         }
-      );
 
-      if (!response.ok) {
-        throw new Error("Failed to initialize payment");
+        const data = await response.json();
+        setClientSecret(data.clientSecret);
+        setOrderId(data.orderId);
+      } else {
+        // For other payments, use the original backend endpoint
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(checkoutData),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to initialize payment");
+        }
+
+        const data = await response.json();
+        const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
+        setClientSecret(decrypt(data.clientSecret, encryptionKey));
+        setOrderId(data.orderId);
       }
-
-      const data = await response.json();
-      const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
-      console.log("stript data", data);
-      setClientSecret(decrypt(data.clientSecret, encryptionKey));
-      setOrderId(data.orderId);
     } catch (error) {
       console.error("Payment initialization error:", error);
       toast.error("Failed to initialize payment. Please try again.");
@@ -338,8 +370,12 @@ const CheckoutPage = () => {
   };
 
   const handlePaymentSuccess = () => {
-    clearCart();
-    router.push(`/checkout/confirmation?orderId=${orderId}&success=1`);
+    setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+    setTimeout(() => {
+      setPaymentModal({ isOpen: false, status: "processing", message: "" });
+      clearCart();
+      router.push(`/checkout/confirmation?orderId=${orderId}&success=1`);
+    }, 2000);
   };
 
   const handleApplyVoucher = async () => {
@@ -1344,6 +1380,7 @@ const CheckoutPage = () => {
                                   onBack={() => setActiveStep("address")}
                                   isLoading={isLoading}
                                   setIsLoading={setIsLoading}
+                                  setPaymentModal={setPaymentModal}
                                 />
                               </Elements>
                             ) : (
@@ -1390,80 +1427,84 @@ const CheckoutPage = () => {
                     </div>
 
                     {/* Google Pay */}
-                    <div className="group">
-                      <label
-                        className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                          formData.selectedPaymentMethod === "googlepay"
-                            ? "border-black bg-gray-100 shadow-md"
-                            : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <div className="relative mr-4">
-                            <input
-                              type="radio"
-                              name="selectedPaymentMethod"
-                              value="googlepay"
-                              checked={
-                                formData.selectedPaymentMethod === "googlepay"
-                              }
-                              onChange={handleInputChange}
-                              className="sr-only"
-                            />
-                            <div
-                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
-                                formData.selectedPaymentMethod === "googlepay"
-                                  ? "bg-black border-black"
-                                  : "border-gray-300 group-hover:border-gray-500"
-                              }`}
-                            >
-                              {formData.selectedPaymentMethod ===
-                                "googlepay" && (
-                                <Check className="w-4 h-4 text-white" />
-                              )}
+                    {!isStripeEnabled && (
+                      <div className="group">
+                        <label
+                          className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                            formData.selectedPaymentMethod === "googlepay"
+                              ? "border-black bg-gray-100 shadow-md"
+                              : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                          }`}
+                        >
+                          <div className="flex items-center">
+                            <div className="relative mr-4">
+                              <input
+                                type="radio"
+                                name="selectedPaymentMethod"
+                                value="googlepay"
+                                checked={
+                                  formData.selectedPaymentMethod === "googlepay"
+                                }
+                                onChange={handleInputChange}
+                                className="sr-only"
+                              />
+                              <div
+                                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                  formData.selectedPaymentMethod === "googlepay"
+                                    ? "bg-black border-black"
+                                    : "border-gray-300 group-hover:border-gray-500"
+                                }`}
+                              >
+                                {formData.selectedPaymentMethod ===
+                                  "googlepay" && (
+                                  <Check className="w-4 h-4 text-white" />
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex items-center">
+                              <div className="bg-gray-800 px-4 py-2 rounded text-white font-semibold text-sm">
+                                Google Pay
+                              </div>
                             </div>
                           </div>
                           <div className="flex items-center">
-                            <div className="bg-gray-800 px-4 py-2 rounded text-white font-semibold text-sm">
-                              Google Pay
-                            </div>
+                            <span className="text-sm text-gray-500 mr-2">
+                              Quick & secure
+                            </span>
+                            <Shield className="w-4 h-4 text-gray-600" />
                           </div>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="text-sm text-gray-500 mr-2">
-                            Quick & secure
-                          </span>
-                          <Shield className="w-4 h-4 text-gray-600" />
-                        </div>
-                      </label>
+                        </label>
 
-                      {/* Google Pay Component */}
-                      {formData.selectedPaymentMethod === "googlepay" && (
-                        <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
-                          <div className="mb-4">
-                            <p className="text-sm text-gray-700 mb-2">
-                              Pay with Google Pay
-                            </p>
+                        {/* Google Pay Component */}
+                        {formData.selectedPaymentMethod === "googlepay" && (
+                          <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
+                            <div className="mb-4">
+                              <p className="text-sm text-gray-700 mb-2">
+                                Pay with Google Pay
+                              </p>
+                            </div>
+                            {paypalClientId && (
+                              <PayPalScriptProvider
+                                options={{
+                                  "client-id": paypalClientId,
+                                  currency: "USD",
+                                  components: "googlepay",
+                                }}
+                              >
+                                <GooglePayWithPaypal
+                                  totalAmount={effectiveGrandTotal}
+                                  onCaptureSuccess={handlePaymentSuccess}
+                                  termsAccepted={formData.acceptTerms}
+                                  onTermsError={(message) =>
+                                    toast.error(message)
+                                  }
+                                />
+                              </PayPalScriptProvider>
+                            )}
                           </div>
-                          {paypalClientId && (
-                            <PayPalScriptProvider
-                              options={{
-                                "client-id": paypalClientId,
-                                currency: "USD",
-                                components: "googlepay",
-                              }}
-                            >
-                              <GooglePayWithPaypal
-                                totalAmount={effectiveGrandTotal}
-                                onCaptureSuccess={handlePaymentSuccess}
-                                termsAccepted={formData.acceptTerms}
-                                onTermsError={(message) => toast.error(message)}
-                              />
-                            </PayPalScriptProvider>
-                          )}
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -1702,6 +1743,12 @@ const CheckoutPage = () => {
           </div>
         </div>
       </motion.div>
+      
+      <PaymentProcessingModal
+        isOpen={paymentModal.isOpen}
+        status={paymentModal.status}
+        message={paymentModal.message}
+      />
     </div>
   );
 };
