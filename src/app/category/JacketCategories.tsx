@@ -280,8 +280,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
           {categoriesToShow.map((category, index) => {
             // Use the slug that was already determined when creating the category object
             const categorySlug = category.slug
-            const isCurrentCategory = typeof window !== 'undefined' && 
-              window.location.pathname === `/collections/${categorySlug}`
+            const isCurrentCategory = category.isActive
             
             const CategoryContent = () => (
               <div
