@@ -9,6 +9,8 @@ import React, {
 import { usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { usePayPal3DS } from "../hooks/usePaypal3DS";
 import { useCart } from "../contexts/CartContext";
+import { loadPayPalSDK } from "../lib/paypal-sdk-loader";
+import { decrypt } from "../utils/decrypt";
 
 declare global {
   interface Window {
@@ -545,6 +547,27 @@ export default function GooglePayWithPayPal({
 
       if (!window.google?.payments?.api?.PaymentsClient) {
         throw new Error("Google Pay SDK not properly loaded");
+      }
+
+      // Load PayPal SDK with Google Pay components
+      const storeId = process.env.NEXT_PUBLIC_STORE_ID;
+      const apiBase = process.env.NEXT_PUBLIC_API_URL;
+      if (apiBase && storeId) {
+        try {
+          const settingsRes = await fetch(`${apiBase}/payment-settings`, {
+            cache: "no-store",
+          });
+          if (settingsRes.ok) {
+            const settings = await settingsRes.json();
+            if (settings.paypalClientId && settings.paypalEnabled) {
+              const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
+              const decryptedClientId = decrypt(settings.paypalClientId, encryptionKey);
+              await loadPayPalSDK(decryptedClientId, ['googlepay']);
+            }
+          }
+        } catch (error) {
+          console.warn("Failed to load PayPal for Google Pay:", error);
+        }
       }
 
       if (!isResolved) {

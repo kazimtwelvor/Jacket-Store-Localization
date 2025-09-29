@@ -73,19 +73,47 @@ const StripeExpressCheckout = ({
         });
 
         if (result.error) {
-          setPaymentModal({ isOpen: true, status: "error", message: result.error.message || "Payment failed" });
-          setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
+          setPaymentModal({
+            isOpen: true,
+            status: "error",
+            message: result.error.message || "Payment failed",
+          });
+          setTimeout(
+            () =>
+              setPaymentModal({
+                isOpen: false,
+                status: "processing",
+                message: "",
+              }),
+            3000
+          );
         } else {
-          setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+          setPaymentModal({
+            isOpen: true,
+            status: "success",
+            message: "Payment successful! Redirecting...",
+          });
           setTimeout(() => {
-            setPaymentModal({ isOpen: false, status: "processing", message: "" });
+            setPaymentModal({
+              isOpen: false,
+              status: "processing",
+              message: "",
+            });
             onSuccess();
           }, 2000);
         }
       }
     } catch (error) {
-      setPaymentModal({ isOpen: true, status: "error", message: "Payment failed. Please try again." });
-      setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
+      setPaymentModal({
+        isOpen: true,
+        status: "error",
+        message: "Payment failed. Please try again.",
+      });
+      setTimeout(
+        () =>
+          setPaymentModal({ isOpen: false, status: "processing", message: "" }),
+        3000
+      );
     }
   };
 
@@ -114,7 +142,11 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
   const [voucherMessage, setVoucherMessage] = useState("");
   const [stripePromise, setStripePromise] = useState<any>(null);
   const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
-  const [paymentModal, setPaymentModal] = useState({ isOpen: false, status: "processing" as "processing" | "success" | "error", message: "" });
+  const [paymentModal, setPaymentModal] = useState({
+    isOpen: false,
+    status: "processing" as "processing" | "success" | "error",
+    message: "",
+  });
   const router = useRouter();
   const isStripe = process.env.NEXT_PUBLIC_USE_STRIPE === "true";
   const shippingPrice = totalPrice > 100 ? 0 : 10;
@@ -158,7 +190,11 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
   }, []);
 
   const handlePaymentSuccess = (orderId?: string) => {
-    setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+    setPaymentModal({
+      isOpen: true,
+      status: "success",
+      message: "Payment successful! Redirecting...",
+    });
     setTimeout(() => {
       setPaymentModal({ isOpen: false, status: "processing", message: "" });
       onClose();
@@ -633,7 +669,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
                 )}
 
                 {/* PayPal Express */}
-                {paypalClientId && (
+                {/* {paypalClientId && (
                   <PayPalScriptProvider
                     options={{
                       "client-id": paypalClientId,
@@ -650,13 +686,13 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
                       />
                     </div>
                   </PayPalScriptProvider>
-                )}
+                )} */}
               </>
             )}
           </div>
         </div>
       </div>
-      
+
       <PaymentProcessingModal
         isOpen={paymentModal.isOpen}
         status={paymentModal.status}
