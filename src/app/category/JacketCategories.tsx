@@ -104,16 +104,6 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
   const handleLinkClick = (e: React.MouseEvent, categorySlug: string) => {
     e.preventDefault();
     
-    if (typeof window !== 'undefined') {
-      const currentPath = window.location.pathname;
-      const targetPath = `/collections/${categorySlug}`;
-      
-      if (currentPath === targetPath) {
-        window.dispatchEvent(new CustomEvent('route-loading:end'));
-        return;
-      }
-    }
-    
     if (onCategoryClick) {
       onCategoryClick(categorySlug);
     } else {
@@ -290,12 +280,12 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
           {categoriesToShow.map((category, index) => {
             // Use the slug that was already determined when creating the category object
             const categorySlug = category.slug
-            return (
-              <Link
-                key={categorySlug || index}
-                href={`/collections/${categorySlug}`}
-                onClick={(e) => handleLinkClick(e, categorySlug)}
+            const isCurrentCategory = category.isActive
+            
+            const CategoryContent = () => (
+              <div
                 className={`relative flex flex-col items-center flex-shrink-0 w-[23vw] sm:w-28 text-center cursor-pointer py-2 ${category.isActive ? 'sticky left-3 z-10 sticky-mask' : ''}`}
+                onClick={(e) => isCurrentCategory ? handleCategoryClick(categorySlug) : handleLinkClick(e, categorySlug)}
                 aria-current={category.isActive ? 'page' : undefined}
               >
                 <div
@@ -324,7 +314,22 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
                 >
                   {category.name}
                 </span>
-              </Link>
+              </div>
+            )
+            
+            return (
+              <div key={categorySlug || index}>
+                {isCurrentCategory ? (
+                  <CategoryContent />
+                ) : (
+                  <Link
+                    href={`/collections/${categorySlug}`}
+                    onClick={(e) => handleLinkClick(e, categorySlug)}
+                  >
+                    <CategoryContent />
+                  </Link>
+                )}
+              </div>
             );
           })}
         </nav>
