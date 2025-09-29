@@ -87,7 +87,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
   }, []);
 
   const handleCategoryClick = (slug: string) => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {  
       const currentPath = window.location.pathname;
       const targetPath = `/collections/${slug}`;
       
