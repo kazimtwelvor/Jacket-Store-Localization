@@ -3,6 +3,7 @@ import type { Product } from "@/types"
 import { cn } from "@/src/app/lib/utils"
 import { Heart, ShoppingCart } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { motion } from "framer-motion"
 import { ProductImageCarousel } from "./ProductImageCarousel"
 import { ColorSelector } from "./ColorSelector"
@@ -62,6 +63,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const availableSizes = product.sizeDetails || []
   const selectedProductSizes = selectedSizes[product.id] ? [selectedSizes[product.id]] : []
   const availableColors = product.colorDetails || []
+  
+  const getProductUrl = (product: Product) => {
+    if (product.slug) return `/product/${product.slug}`
+    if (product.name) {
+      const baseSlug = product.name
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .trim()
+      return product.id ? `/product/${baseSlug}-${product.id.substring(0, 8)}` : `/product/${baseSlug}`
+    }
+    return `/product/${product.id}`
+  }
 
   return (
     <motion.div
@@ -82,22 +97,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <div className="relative w-full aspect-[3/5] bg-gray-100 overflow-visible md:overflow-hidden">
         {isDesktop ? (
           <div className="w-full h-full overflow-hidden relative">
-            <Image
-              src={
-                isHovered && hasMultipleImages
-                  ? (product.images[1] as any).url
-                  : ((product.images?.[0] as any)?.url || "/placeholder.svg")
-              }
-              alt={product.name}
-              fill
-              className={cn(
-                "object-cover object-top transition-all duration-300",
-                isHovered && hasMultipleImages ? "scale-110" : "scale-100"
-              )}
-              sizes="(max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
-              priority={index < 4}
-              loading={index < 4 ? "eager" : "lazy"}
-            />
+            <Link href={getProductUrl(product)}>
+              <Image
+                src={
+                  isHovered && hasMultipleImages
+                    ? (product.images[1] as any).url
+                    : ((product.images?.[0] as any)?.url || "/placeholder.svg")
+                }
+                alt={product.name}
+                fill
+                className={cn(
+                  "object-cover object-top transition-all duration-300",
+                  isHovered && hasMultipleImages ? "scale-110" : "scale-100"
+                )}
+                sizes="(max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+                priority={index < 4}
+                loading={index < 4 ? "eager" : "lazy"}
+              />
+            </Link>
             {loadingProducts.has(`${product.id}-${index}`) && (
               <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70 z-30">
                 <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-gray-400"></div>
@@ -121,7 +138,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             }
           }}
         >
-          <Heart className={cn("w-4 h-4 md:w-5 md:h-5", mounted && wishlist.isInWishlistWithKey(`${product.id}-${index}`) ? "fill-black text-black" : "text-gray-700")} />
+          <Heart className={cn("w-4 h-4 md:w-5 md:h-5", wishlist.isInWishlistWithKey(`${product.id}-${index}`) ? "fill-black text-black" : "text-gray-700")} />
         </button>
 
         <button
