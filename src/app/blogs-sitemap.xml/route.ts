@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getBlogs } from '../actions/get-blogs'
 
-const BASE_URL = 'https://fineystjackets.com/'
+const BASE_URL = 'https://fineystjackets.com/us'
 
 export async function GET() {
   try {

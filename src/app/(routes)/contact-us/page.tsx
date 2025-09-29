@@ -132,7 +132,7 @@ export default function ContactUsPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Email Us</h3>
                     <p className="text-muted-foreground">
-                      <a href="info@fineystjackets.com" className="hover:text-[#2b2b2b] transition-colors">
+                      <a href="mailto:info@fineystjackets.com" className="hover:text-[#2b2b2b] transition-colors">
                       info@fineystjackets.com
                       </a>
                     </p>
