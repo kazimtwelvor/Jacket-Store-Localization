@@ -315,7 +315,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
         <>
           <button
             onClick={() => scroll('left')}
-            className={`hidden sm:block absolute top-8 sm:top-10 -left-12 sm:-left-[2rem] lg:left-[21rem] z-20 bg-white/70 rounded-full p-1.5 shadow-lg backdrop-blur-sm transition-opacity duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-0 disabled:cursor-not-allowed ${
+            className={`hidden 2xl:block absolute top-8 sm:top-10 -left-12 sm:-left-[2rem] lg:left-[21rem] z-20 bg-white/70 rounded-full p-1.5 shadow-lg backdrop-blur-sm transition-opacity duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-0 disabled:cursor-not-allowed ${
               !canGoLeft && 'opacity-0'
             }`}
             aria-label="Scroll left"
@@ -326,7 +326,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
 
           <button
             onClick={() => scroll('right')}
-            className={`hidden sm:block absolute top-8 sm:top-10 -right-12 sm:-right-[3rem] md:right-[13rem] lg:right-[20rem] z-20 bg-white/70 rounded-full p-1.5 shadow-lg backdrop-blur-sm transition-opacity duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-0 disabled:cursor-not-allowed ${
+            className={`hidden 2xl:block absolute top-8 sm:top-10 -right-12 sm:-right-[3rem] md:right-[13rem] lg:right-[20rem] z-20 bg-white/70 rounded-full p-1.5 shadow-lg backdrop-blur-sm transition-opacity duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-0 disabled:cursor-not-allowed ${
               !canGoRight && 'opacity-0'
             }`}
             aria-label="Scroll right"

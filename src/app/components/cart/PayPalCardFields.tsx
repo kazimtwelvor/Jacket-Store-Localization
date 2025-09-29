@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Button from "../../ui/button";
 import { toast } from "react-hot-toast";
 import { decrypt } from "../../utils/decrypt";
+import { loadPayPalSDK } from "../../lib/paypal-sdk-loader";
 
 type PayPalCardFieldsProps = {
   onSuccess: () => void;
@@ -22,22 +23,6 @@ declare global {
   interface Window {
     paypal?: any;
   }
-}
-
-async function loadPayPalSdk(clientId: string) {
-  return new Promise<void>((resolve, reject) => {
-    if (typeof window === "undefined") return reject(new Error("No window"));
-    if (window.paypal) return resolve();
-
-    const script = document.createElement("script");
-    script.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(
-      clientId
-    )}&currency=USD&intent=capture&components=card-fields&enable-funding=card`;
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error("Failed to load PayPal SDK"));
-    document.body.appendChild(script);
-  });
 }
 
 export default function PayPalCardFields({
@@ -82,7 +67,7 @@ export default function PayPalCardFields({
         const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
         const decryptedClientId = decrypt(settings.paypalClientId, encryptionKey);
         
-        await loadPayPalSdk(decryptedClientId);
+        await loadPayPalSDK(decryptedClientId, ['card-fields']);
 
         if (!isMounted || !containerRef.current) return;
 
