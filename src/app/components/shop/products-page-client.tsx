@@ -979,6 +979,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             layoutMetrics={layoutMetrics}
             hasActiveFilters={hasActiveFilters}
             totalActiveFilters={totalActiveFilters}
+            selectedFilters={selectedFilters}
             currentSort={activeSort}
             sortDropdownOpen={sortDropdownOpen}
             setSortDropdownOpen={setSortDropdownOpen}

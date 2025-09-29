@@ -24,8 +24,11 @@ interface FilterBarProps {
     name: string;
   };
   selectedFilters?: {
-    sizes: string[];
-    colors: string[];
+    materials?: string[];
+    style?: string[];
+    gender?: string[];
+    sizes?: string[];
+    colors?: string[];
   };
   
   // Shop-specific props (optional)
@@ -126,7 +129,13 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   const getActiveFilterCount = () => {
     if (totalActiveFilters !== undefined) return totalActiveFilters;
     if (selectedFilters) {
-      return selectedFilters.sizes.length + selectedFilters.colors.length;
+      return (
+        (selectedFilters.materials?.length || 0) +
+        (selectedFilters.style?.length || 0) +
+        (selectedFilters.gender?.length || 0) +
+        (selectedFilters.sizes?.length || 0) +
+        (selectedFilters.colors?.length || 0)
+      );
     }
     return 0;
   };
