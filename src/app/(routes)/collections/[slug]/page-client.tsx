@@ -863,7 +863,14 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             <div className="container mx-auto pt-24 sm:pt-22 md:pt-20 lg:pt-20 xl:pt-20 pb-0 sm:pb-2 md:pb-6 lg:pb-6 xl:pb-6 text-center">
                 <JacketCategories
                     categories={categories}
-                    onCategoryClick={(categorySlug) => router.push(`/collections/${categorySlug}`)}
+                    onCategoryClick={(categorySlug) => {
+                        const currentPath = window.location.pathname;
+                        const targetPath = `/collections/${categorySlug}`;
+                        
+                        if (currentPath !== targetPath) {
+                            router.push(targetPath);
+                        }
+                    }}
                     currentCategory={currentCategory || undefined}
                 />
                 <div className="mt-0.1 sm:mt-6 md:mt-8 lg:mt-8 xl:mt-8 mb-0 sm:mb-2 md:mb-6 lg:mb-6 xl:mb-6">

@@ -24,7 +24,6 @@ interface JacketCategoriesProps {
   };
 }
 
-// ✅ Utility to convert full URLs to /uploads/2025/{filename}
 const getCleanImageUrl = (rawUrl: string): string => {
   const trimmedUrl = rawUrl.replace(/\n/g, '').trim();
   if (trimmedUrl.startsWith('http')) {
@@ -88,12 +87,31 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
   }, []);
 
   const handleCategoryClick = (slug: string) => {
+    if (typeof window !== 'undefined') {
+      const currentPath = window.location.pathname;
+      const targetPath = `/collections/${slug}`;
+      
+      if (currentPath === targetPath) {
+        return;
+      }
+    }
+    
     setActiveSlug(slug);
     onCategoryClick?.(slug);
   };
 
   const handleLinkClick = (e: React.MouseEvent, categorySlug: string) => {
     e.preventDefault();
+    
+    if (typeof window !== 'undefined') {
+      const currentPath = window.location.pathname;
+      const targetPath = `/collections/${categorySlug}`;
+      
+      if (currentPath === targetPath) {
+        return;
+      }
+    }
+    
     if (onCategoryClick) {
       onCategoryClick(categorySlug);
     } else {
