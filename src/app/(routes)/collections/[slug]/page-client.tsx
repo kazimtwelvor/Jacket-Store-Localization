@@ -867,9 +867,12 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                         const currentPath = window.location.pathname;
                         const targetPath = `/collections/${categorySlug}`;
                         
-                        if (currentPath !== targetPath) {
-                            router.push(targetPath);
+                        if (currentPath === targetPath) {
+                            window.dispatchEvent(new CustomEvent('route-loading:end'));
+                            return;
                         }
+                        
+                        router.push(targetPath);
                     }}
                     currentCategory={currentCategory || undefined}
                 />
