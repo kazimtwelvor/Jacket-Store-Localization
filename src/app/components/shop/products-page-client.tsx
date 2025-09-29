@@ -553,7 +553,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
   const handleClick = (product: Product) => {
     const slug = getProductSlug(product);
-    router.push(`/product/${slug}`);
+    router.push(`/us/product/${slug}`);
   };
 
   const addToRecentlyViewed = (product: Product) => {
