@@ -26,26 +26,49 @@ interface MobileMenuProps {
 }
 
 const discoverData: Record<string, { title: string; items: string[]; links: string[] }[]> = {
-  "Leather Jackets": [
+  "Women's Jackets": [
     {
       title: "LEATHER JACKETS",
-      items: ["Biker Jackets", "Bomber Jackets", "Moto Jackets", "Racing Jackets", "Vintage Leather"],
-      links: ["/shop?category=biker-jackets", "/shop?category=bomber-jackets", "/shop?category=moto-jackets", "/shop?category=racing-jackets", "/shop?category=vintage-leather"]
+      items: ["Leather Jackets", "Fashion Leather Jackets", "Leather Bomber Jackets", "Leather Biker Jackets", "Suede Leather Jackets", "Leather Blazers", "Leather Vests"],
+      links: ["/collections/womens-leather-bomber-jackets", "/collections/womens-fashion-leather-jackets", "/collections/womens-leather-bomber-jackets", "/collections/womens-leather-biker-jackets", "/collections/womens-suede-leather-jackets", "/collections/womens-leather-blazers", "/collections/womens-leather-vests"]
     },
-  ],
-  "Women's Jackets": [
-     {
-      title: "WOMEN'S STYLES",
-      items: ["Leather Blazers", "Denim Jackets", "Lightweight Jackets", "Cropped Jackets"],
-      links: ["/shop?category=womens-blazers", "/shop?category=womens-denim", "/shop?category=womens-lightweight", "/shop?category=womens-cropped"]
+    {
+      title: "COATS",
+      items: ["Shearling Coats", "Trench Coats", "Winter Coats", "Rain Coats", "Puffer Jackets", "Quilted Jackets"],
+      links: ["/collections/womens-shearling-coats", "/collections/womens-trench-coats", "/collections/womens-winter-coats", "/collections/womens-rain-coats", "/collections/womens-puffer-jackets", "/collections/womens-quilted-jackets"]
     },
+    {
+      title: "STYLES",
+      items: ["Cropped Jackets", "Pilot & Aviator Jackets", "Varsity Jackets", "Letterman Jackets", "Denim Jackets", "Anorak & Ski Jackets"],
+      links: ["/collections/womens-cropped-jackets", "/collections/womens-pilot-aviator-jackets", "/collections/womens-varsity-jackets", "/collections/womens-letterman-jackets", "/collections/womens-denim-jackets", "/collections/womens-anorak-ski-jackets"]
+    },
+    {
+      title: "SPECIAL COLLECTIONS",
+      items: ["Puffer Vests", "Vintage Style", "Elegant Style", "Luxury Collection"],
+      links: ["/collections/womens-puffer-vests", "/shop?genders=women&style=vintage", "/shop?genders=women&style=elegant", "/shop?genders=women&price=luxury"]
+    }
   ],
   "Men's Jackets": [
-     {
-      title: "MEN'S STYLES",
-      items: ["Bomber Jackets", "Trucker Jackets", "Track Jackets", "Field Jackets"],
-      links: ["/shop?category=mens-bomber", "/shop?category=mens-trucker", "/shop?category=mens-track", "/shop?category=mens-field"]
+    {
+      title: "LEATHER JACKETS",
+      items: ["Leather Jackets", "Leather Bomber Jackets", "Biker & Moto Jackets", "Aviator & Flight Jackets", "Hooded Leather Jackets", "Suede Jackets", "Leather Vests"],
+      links: ["/collections/leather-bomber-jacket-mens", "collections/leather-bomber-jacket-mens", "/collections/mens-biker-moto-jackets", "/collections/mens-aviator-jackets", "/collections/mens-hooded-leather-jackets", "/collections/mens-suede-jackets", "/collections/mens-leather-vests"]
     },
+    {
+      title: "COATS",
+      items: ["Leather Dusters", "Long Leather Coats", "Shearling Coats", "Winter Coats", "Puffer Jackets", "Fur & Shearling Jackets"],
+      links: ["/collections/mens-leather-dusters", "/collections/mens-long-leather-coats", "/collections/mens-shearling-coats", "/collections/mens-winter-coats", "/collections/mens-puffer-jackets", "/collections/mens-fur-shearling-jackets"]
+    },
+    {
+      title: "STYLES",
+      items: ["Varsity Jackets", "Letterman Jackets", "Denim Jackets", "Leather Blazers", "Lightweight Jackets", "Soft Shell Jackets"],
+      links: ["/collections/mens-varsity-jackets", "/collections/mens-letterman-jackets", "/collections/mens-denim-jackets", "/collections/mens-leather-blazers", "/collections/mens-lightweight-jackets", "/collections/mens-soft-shell-jackets"]
+    },
+    {
+      title: "SPECIAL COLLECTIONS",
+      items: ["Plus Size Leather Jackets", "Puffer Vests", "Vintage Style", "Luxury Collection"],
+      links: ["/collections/plus-size-leather-jackets", "/collections/mens-puffer-vests", "/shop?genders=men&style=vintage", "/shop?genders=men&price=luxury"]
+    }
   ],
   "Coats": [
     {
@@ -68,14 +91,32 @@ const discoverData: Record<string, { title: string; items: string[]; links: stri
       items: ["Men's Collection", "Women's Collection", "Unisex Styles", "Luxury Collection", "Size Guide"],
       links: ["/shop?gender=mens", "/shop?gender=womens", "/shop?category=unisex", "/shop?price=luxury", "/size-guide"]
     }
+  ],
+  "BRANDS": [
+    {
+      title: "COMPANY",
+      items: ["Blogs", "About Us"],
+      links: ["/blogs", "/about-us"]
+    },
+    {
+      title: "SUPPORT",
+      items: ["FAQs", "Reviews", "Contact Us", "Size Guide"],
+      links: ["/faqs", "/reviews", "/contact-us", "/size-guide"]
+    },
+    {
+      title: "HELP",
+      items: ["Privacy Policy", "Terms & Conditions", "Shipping & Delivery"],
+      links: ["/privacy-policy", "/terms-conditions", "/shipping-and-delivery-policy"]
+    }
   ]
 };
 
 const mainNavLinks = [
-  { name: "Leather Jackets" },
+  
   { name: "Women's Jackets" },
   { name: "Men's Jackets" },
   { name: "Coats" },
+  { name: "BRANDS" },
 ];
 
 const panelVariants = {
@@ -359,12 +400,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate, on
                                             />
                                         ))}
 
-                                        {activeCategory === 'Coats' && (
+                                        {(activeCategory === 'Coats' || activeCategory === "Women's Jackets") && (
                                           <div className="px-12 pt-12 pb-16 text-white">
                                               <h3 className="font-bold mb-8 text-3xl uppercase tracking-widest">
-                                                  More Inspiration
+                                                  Collection
                                               </h3>
-                                              <MegaMenuCarousel theme="dark" showNavButtons={false} />
+                                              <MegaMenuCarousel />
                                           </div>
                                         )}
                                     </div>
