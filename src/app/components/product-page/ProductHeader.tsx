@@ -15,7 +15,7 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
     <>
     
       {!isMobile && (
-        <div className="pt-20 text-sm">
+        <div className="pt-0 text-sm">
           <nav className="flex items-center">
             <Link href="/shop" className="text-gray-500 hover:text-black uppercase font-medium">
               SHOP
