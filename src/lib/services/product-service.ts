@@ -108,6 +108,28 @@ export class ProductService {
                 if (!product.slug && product.name) {
                     product.slug = generateSlug(product.name, product.id)
                 }
+                
+                if (product.baseColor || product.colorDetails) {
+                    const baseColor = product.baseColor
+                    const colorDetails = product.colorDetails
+                    
+                    let combinedColorDetails = []
+                    
+                    if (baseColor && baseColor.id) {
+                        combinedColorDetails.push(baseColor)
+                    }
+                    
+                    if (Array.isArray(colorDetails)) {
+                        colorDetails.forEach(color => {
+                            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+                                combinedColorDetails.push(color)
+                            }
+                        })
+                    }
+                    
+                    product.colorDetails = combinedColorDetails
+                }
+                
                 return product
             })
 
@@ -146,7 +168,31 @@ export class ProductService {
                     'Cache-Control': 'no-cache',
                 }
             })
-            return response.data
+            
+            const product = response.data
+            
+            if (product && (product.baseColor || product.colorDetails)) {
+                const baseColor = product.baseColor
+                const colorDetails = product.colorDetails
+                
+                let combinedColorDetails = []
+                
+                if (baseColor && baseColor.id) {
+                    combinedColorDetails.push(baseColor)
+                }
+                
+                if (Array.isArray(colorDetails)) {
+                    colorDetails.forEach(color => {
+                        if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+                            combinedColorDetails.push(color)
+                        }
+                    })
+                }
+                
+                product.colorDetails = combinedColorDetails
+            }
+            
+            return product
         } catch (error) {
             console.error("❌ Error fetching product:", error)
             return null
@@ -164,7 +210,33 @@ export class ProductService {
                     'Cache-Control': 'no-cache',
                 }
             })
-            return response.data.products || []
+            
+            const products = response.data.products || []
+            
+            return products.map((product: Product) => {
+                if (product.baseColor || product.colorDetails) {
+                    const baseColor = product.baseColor
+                    const colorDetails = product.colorDetails
+                    
+                    let combinedColorDetails = []
+                    
+                    if (baseColor && baseColor.id) {
+                        combinedColorDetails.push(baseColor)
+                    }
+                    
+                    if (Array.isArray(colorDetails)) {
+                        colorDetails.forEach(color => {
+                            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+                                combinedColorDetails.push(color)
+                            }
+                        })
+                    }
+                    
+                    product.colorDetails = combinedColorDetails
+                }
+                
+                return product
+            })
         } catch (error) {
             console.error("❌ Error fetching featured products:", error)
             return []
@@ -182,7 +254,33 @@ export class ProductService {
                     'Cache-Control': 'no-cache',
                 }
             })
-            return response.data.products || []
+            
+            const products = response.data.products || []
+            
+            return products.map((product: Product) => {
+                if (product.baseColor || product.colorDetails) {
+                    const baseColor = product.baseColor
+                    const colorDetails = product.colorDetails
+                    
+                    let combinedColorDetails = []
+                    
+                    if (baseColor && baseColor.id) {
+                        combinedColorDetails.push(baseColor)
+                    }
+                    
+                    if (Array.isArray(colorDetails)) {
+                        colorDetails.forEach(color => {
+                            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+                                combinedColorDetails.push(color)
+                            }
+                        })
+                    }
+                    
+                    product.colorDetails = combinedColorDetails
+                }
+                
+                return product
+            })
         } catch (error) {
             console.error("❌ Error searching products:", error)
             return []

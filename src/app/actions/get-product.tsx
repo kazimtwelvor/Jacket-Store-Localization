@@ -17,6 +17,27 @@ const getProduct = async (slug: string): Promise<Product | null> => {
       return p.id === slug || p.slug === slug || nameSlug === slug
     })
     
+    if (foundProduct && (foundProduct.baseColor || foundProduct.colorDetails)) {
+      const baseColor = foundProduct.baseColor
+      const colorDetails = foundProduct.colorDetails
+      
+      let combinedColorDetails = []
+      
+      if (baseColor && baseColor.id) {
+        combinedColorDetails.push(baseColor)
+      }
+      
+      if (Array.isArray(colorDetails)) {
+        colorDetails.forEach(color => {
+          if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+            combinedColorDetails.push(color)
+          }
+        })
+      }
+      
+      foundProduct.colorDetails = combinedColorDetails
+    }
+    
     return foundProduct || null
   } catch (error) {
     console.error("❌ Error fetching product:", error)
