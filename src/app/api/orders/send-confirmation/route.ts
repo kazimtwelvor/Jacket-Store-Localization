@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { sendOrderConfirmationEmail } from "@/src/app/lib/mail"
+import { sendOrderEmails } from "@/src/app/lib/mail"
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     const trackOrderUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/track-order`
     
-    const emailSent = await sendOrderConfirmationEmail(
+    const { customerEmailSent, adminEmailSent } = await sendOrderEmails(
       email,
       name || "Customer",
       orderNumber,
@@ -24,16 +24,21 @@ export async function POST(request: NextRequest) {
       trackOrderUrl
     )
 
-    if (emailSent) {
-      return NextResponse.json({ success: true, message: "Order confirmation email sent" })
+    if (customerEmailSent) {
+      return NextResponse.json({ 
+        success: true, 
+        message: "Order confirmation emails sent",
+        customerEmailSent,
+        adminEmailSent
+      })
     } else {
       return NextResponse.json(
-        { error: "Failed to send email" },
+        { error: "Failed to send customer email" },
         { status: 500 }
       )
     }
   } catch (error) {
-    console.error("Error sending order confirmation email:", error)
+    console.error("Error sending order confirmation emails:", error)
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

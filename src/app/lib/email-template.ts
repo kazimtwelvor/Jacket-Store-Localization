@@ -456,3 +456,67 @@ const getBaseTemplate = (content: string, title = "Your Store"): string => {
   
     return getBaseTemplate(content, "Design Ready for Approval")
   }
+
+  // Admin order notification template
+  export const getAdminOrderNotificationTemplate = (
+    customerEmail: string,
+    customerName: string,
+    orderNumber: string,
+    orderTotal: string,
+    items: any[]
+  ): string => {
+    const itemsHtml = items
+      .map(
+        (item) => `
+      <tr>
+        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; color: #131a31;">${item.name}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center; color: #131a31;">${item.quantity}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: right; color: #131a31;">$${item.price}</td>
+      </tr>
+    `,
+      )
+      .join("")
+  
+    const content = `
+      <h2>🎉 New Order Received #${orderNumber}</h2>
+      
+      <p>A new order has been placed on the Fineyst store!</p>
+      
+      <div class="info-box">
+          <p><strong>Order Number:</strong> ${orderNumber}</p>
+          <p><strong>Customer:</strong> ${customerName}</p>
+          <p><strong>Email:</strong> ${customerEmail}</p>
+          <p><strong>Order Total:</strong> $${orderTotal}</p>
+          <p><strong>Order Time:</strong> ${new Date().toLocaleString()}</p>
+      </div>
+      
+      <h3 style="margin: 30px 0 15px 0; color: #131a31;">Order Items</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+          <tr style="background-color: #f7fafc;">
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e2e8f0; color: #131a31;">Item</th>
+            <th style="padding: 12px; text-align: center; border-bottom: 2px solid #e2e8f0; color: #131a31;">Qty</th>
+            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #131a31;">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${itemsHtml}
+        </tbody>
+      </table>
+      
+      <div class="info-box">
+          <p><strong>⚡ Action Required:</strong></p>
+          <p>• Process the order in the admin panel</p>
+          <p>• Prepare items for shipping</p>
+          <p>• Update order status as needed</p>
+      </div>
+      
+      <a href="${process.env.ADMIN_URL}/orders/${orderNumber}" class="button">View Order in Admin</a>
+      
+      <p>Customer confirmation email has been sent automatically.</p>
+      
+      <p><strong>Admin Team</strong></p>
+    `
+  
+    return getBaseTemplate(content, `New Order #${orderNumber}`)
+  }
