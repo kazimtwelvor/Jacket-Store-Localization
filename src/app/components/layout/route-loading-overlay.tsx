@@ -27,8 +27,8 @@ function RouteLoadingOverlayContent() {
       }
     };
 
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   useEffect(() => {
@@ -66,16 +66,28 @@ function RouteLoadingOverlayContent() {
         if (url.pathname === "/") return;
 
         // Check for error pages in both current and target URLs
-        if (url.pathname === '/404' || url.pathname === '/not-found' || url.pathname.includes('404') ||
-          url.pathname === '/500' || url.pathname === '/error' || url.pathname.includes('error') ||
-          location.pathname === '/404' || location.pathname === '/not-found' || location.pathname.includes('404') ||
-          location.pathname === '/500' || location.pathname === '/error' || location.pathname.includes('error')) {
+        if (
+          url.pathname === "/404" ||
+          url.pathname === "/not-found" ||
+          url.pathname.includes("404") ||
+          url.pathname === "/500" ||
+          url.pathname === "/error" ||
+          url.pathname.includes("error") ||
+          location.pathname === "/404" ||
+          location.pathname === "/not-found" ||
+          location.pathname.includes("404") ||
+          location.pathname === "/500" ||
+          location.pathname === "/error" ||
+          location.pathname.includes("error")
+        ) {
           return;
         }
 
         // Check if we're currently on a 404 page by DOM content
-        const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
-        const has404Text = document.querySelector('h1')?.textContent === '404';
+        const notFoundElement = document.querySelector(
+          ".min-h-screen.flex.items-center.justify-center.bg-gray-50"
+        );
+        const has404Text = document.querySelector("h1")?.textContent === "404";
         if (notFoundElement && has404Text) {
           return;
         }
@@ -83,9 +95,12 @@ function RouteLoadingOverlayContent() {
         const toPath = url.pathname + url.search + url.hash;
         const fromPath = location.pathname + location.search + location.hash;
         if (toPath === fromPath) return;
-        if (url.pathname.startsWith("/collections/") && 
-            location.pathname.startsWith("/collections/") &&
-            url.pathname === location.pathname) return;
+        if (
+          url.pathname.startsWith("/collections/") &&
+          location.pathname.startsWith("/collections/") &&
+          url.pathname === location.pathname
+        )
+          return;
 
         // Skip loading if we're on a 404 page
         if (isOn404PageRef.current) {
@@ -97,18 +112,17 @@ function RouteLoadingOverlayContent() {
           startTransition(() => {
             setIsLoading(true);
           });
-          
+
           if (loadingTimeoutRef.current) {
             clearTimeout(loadingTimeoutRef.current);
           }
           loadingTimeoutRef.current = setTimeout(() => {
             loadingRef.current = false;
             setIsLoading(false);
-            window.dispatchEvent(new CustomEvent('route-loading:end'));
-          }, 10000);
+            window.dispatchEvent(new CustomEvent("route-loading:end"));
+          }, 1000);
         }
-      } catch {
-      }
+      } catch {}
     };
 
     document.addEventListener("click", handleClick, {
@@ -133,24 +147,24 @@ function RouteLoadingOverlayContent() {
       if (!loadingRef.current) {
         loadingRef.current = true;
         startTransition(() => {
-          setIsLoading(true);
+          setIsLoading(false);
         });
-        
+
         if (loadingTimeoutRef.current) {
           clearTimeout(loadingTimeoutRef.current);
         }
         loadingTimeoutRef.current = setTimeout(() => {
           loadingRef.current = false;
           setIsLoading(false);
-          window.dispatchEvent(new CustomEvent('route-loading:end'));
-        }, 10000);
+          window.dispatchEvent(new CustomEvent("route-loading:end"));
+        }, 1000);
       }
     };
 
     const handleProgrammaticEnd = () => {
       loadingRef.current = false;
       setIsLoading(false);
-      
+
       if (loadingTimeoutRef.current) {
         clearTimeout(loadingTimeoutRef.current);
         loadingTimeoutRef.current = null;
@@ -164,10 +178,7 @@ function RouteLoadingOverlayContent() {
         "route-loading:start",
         handleProgrammaticStart
       );
-      window.removeEventListener(
-        "route-loading:end",
-        handleProgrammaticEnd
-      );
+      window.removeEventListener("route-loading:end", handleProgrammaticEnd);
     };
   }, []);
 
@@ -175,7 +186,7 @@ function RouteLoadingOverlayContent() {
   useEffect(() => {
     loadingRef.current = false;
     setIsLoading(false);
-    
+
     if (loadingTimeoutRef.current) {
       clearTimeout(loadingTimeoutRef.current);
       loadingTimeoutRef.current = null;
@@ -183,10 +194,12 @@ function RouteLoadingOverlayContent() {
 
     // Check if we're on a 404 page
     const check404 = () => {
-      const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
-      const has404Text = document.querySelector('h1')?.textContent === '404';
+      const notFoundElement = document.querySelector(
+        ".min-h-screen.flex.items-center.justify-center.bg-gray-50"
+      );
+      const has404Text = document.querySelector("h1")?.textContent === "404";
       isOn404PageRef.current = !!(notFoundElement && has404Text);
-      
+
       // If we detect a 404 page, ensure loading is cleared
       if (notFoundElement && has404Text) {
         loadingRef.current = false;
@@ -204,10 +217,6 @@ function RouteLoadingOverlayContent() {
     // Check again after a longer delay to catch late-rendering 404 pages
     setTimeout(check404, 500);
   }, [pathname, searchParams]);
-
-
-
-
 
   if (!isLoading && !isPending) return null;
 
