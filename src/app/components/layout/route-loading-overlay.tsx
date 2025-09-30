@@ -11,29 +11,20 @@ function RouteLoadingOverlayContent() {
   const [isPending, startTransition] = useTransition();
   const loadingRef = useRef(false);
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isBackNavigationRef = useRef(false);
-  const isProductionRef = useRef(typeof window !== 'undefined' && window.location.hostname !== 'localhost');
-  const preventLoadingRef = useRef(false);
+  const isOn404PageRef = useRef(false);
 
   useEffect(() => {
     const handlePopState = () => {
-      isBackNavigationRef.current = true;
-      preventLoadingRef.current = true;
-      
-      // Immediately clear loading state on back navigation
-      loadingRef.current = false;
-      setIsLoading(false);
-      
-      if (loadingTimeoutRef.current) {
-        clearTimeout(loadingTimeoutRef.current);
-        loadingTimeoutRef.current = null;
+      // If we're on a 404 page, skip loading completely
+      if (isOn404PageRef.current) {
+        loadingRef.current = false;
+        setIsLoading(false);
+        if (loadingTimeoutRef.current) {
+          clearTimeout(loadingTimeoutRef.current);
+          loadingTimeoutRef.current = null;
+        }
+        return;
       }
-      
-      // Reset flags after navigation completes
-      setTimeout(() => {
-        isBackNavigationRef.current = false;
-        preventLoadingRef.current = false;
-      }, 500);
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -96,8 +87,8 @@ function RouteLoadingOverlayContent() {
             location.pathname.startsWith("/collections/") &&
             url.pathname === location.pathname) return;
 
-        // Always skip loading for back navigation or if prevented
-        if (isBackNavigationRef.current || preventLoadingRef.current) {
+        // Skip loading if we're on a 404 page
+        if (isOn404PageRef.current) {
           return;
         }
 
@@ -134,15 +125,8 @@ function RouteLoadingOverlayContent() {
   // Support programmatic navigations (e.g., router.push) via a custom event
   useEffect(() => {
     const handleProgrammaticStart = () => {
-      // Always skip loading for back navigation or if prevented
-      if (isBackNavigationRef.current || preventLoadingRef.current) {
-        return;
-      }
-
-      // Check if we're currently on a 404 page
-      const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
-      const has404Text = document.querySelector('h1')?.textContent === '404';
-      if (notFoundElement && has404Text) {
+      // Skip loading if we're on a 404 page
+      if (isOn404PageRef.current) {
         return;
       }
 
@@ -187,84 +171,31 @@ function RouteLoadingOverlayContent() {
     };
   }, []);
 
-  // When the route (path or query) changes, hide the loader
+  // When the route changes, hide the loader and update 404 state
   useEffect(() => {
-    // Don't clear loading state if we're in the middle of back navigation
-    if (!isBackNavigationRef.current) {
-      loadingRef.current = false;
-      setIsLoading(false);
-      
-      if (loadingTimeoutRef.current) {
-        clearTimeout(loadingTimeoutRef.current);
-        loadingTimeoutRef.current = null;
-      }
+    loadingRef.current = false;
+    setIsLoading(false);
+    
+    if (loadingTimeoutRef.current) {
+      clearTimeout(loadingTimeoutRef.current);
+      loadingTimeoutRef.current = null;
     }
+
+    // Check if we're on a 404 page
+    const check404 = () => {
+      const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
+      const has404Text = document.querySelector('h1')?.textContent === '404';
+      isOn404PageRef.current = !!(notFoundElement && has404Text);
+    };
+
+    check404();
+    // Also check after a brief delay in case DOM hasn't updated yet
+    setTimeout(check404, 100);
   }, [pathname, searchParams]);
 
 
 
-  useEffect(() => {
-    const checkForNotFound = () => {
-      const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
-      const has404Text = document.querySelector('h1')?.textContent === '404';
-      
-      if (notFoundElement && has404Text) {
-        loadingRef.current = false;
-        setIsLoading(false);
-        return true;
-      }
-      return false;
-    };
 
-    if (checkForNotFound()) return;
-
-    if (pathname === '/404' || pathname === '/not-found' || pathname.includes('404') ||
-        pathname === '/500' || pathname === '/error' || pathname.includes('error')) {
-      loadingRef.current = false;
-      setIsLoading(false);
-      return;
-    }
-
-    const observer = new MutationObserver(() => {
-      checkForNotFound();
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-
-    return () => observer.disconnect();
-  }, [pathname]);
-
-  useEffect(() => {
-    const handle404Detection = () => {
-      const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
-      const has404Text = document.querySelector('h1')?.textContent === '404';
-      
-      if (notFoundElement && has404Text) {
-        loadingRef.current = false;
-        setIsLoading(false);
-        
-        if (loadingTimeoutRef.current) {
-          clearTimeout(loadingTimeoutRef.current);
-          loadingTimeoutRef.current = null;
-        }
-      }
-    };
-
-    handle404Detection();
-
-    const observer = new MutationObserver(handle404Detection);
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      characterData: true
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   if (!isLoading && !isPending) return null;
 
@@ -272,7 +203,6 @@ function RouteLoadingOverlayContent() {
     <div className="fixed inset-0 z-[9999] bg-white/30 flex items-center justify-center">
       <div className="flex flex-col items-center gap-3">
         <Loader2 className="h-10 w-10 text-black animate-spin" />
-        {/* <p className="text-xs font-medium text-gray-700">Loading…</p> */}
       </div>
     </div>
   );
