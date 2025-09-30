@@ -33,7 +33,36 @@ export interface PaginatedResponse {
 
 const getProducts = async (query: Query): Promise<PaginatedResponse> => {
   console.log('🔍 Fetching products from API (no cache):', query);
-  return ProductService.getProducts(query);
+  const result = await ProductService.getProducts(query);
+  
+  if (result.products && Array.isArray(result.products)) {
+    result.products = result.products.map((product: Product) => {
+      if (product.baseColor || product.colorDetails) {
+        const baseColor = product.baseColor
+        const colorDetails = product.colorDetails
+        
+        let combinedColorDetails = []
+        
+        if (baseColor && baseColor.id) {
+          combinedColorDetails.push(baseColor)
+        }
+        
+        if (Array.isArray(colorDetails)) {
+          colorDetails.forEach(color => {
+            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+              combinedColorDetails.push(color)
+            }
+          })
+        }
+        
+        product.colorDetails = combinedColorDetails
+      }
+      
+      return product
+    })
+  }
+  
+  return result;
 };
 
 export default getProducts;
