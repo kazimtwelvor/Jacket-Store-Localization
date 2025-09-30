@@ -15,9 +15,10 @@ interface ProductSuggestionsSectionProps {
   isMobile: boolean
 }
 
-export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, isMobile }: ProductSuggestionsSectionProps) => {
+export const ProductSuggestionsSection = ({ suggestProducts = [], relatedProductIds, isMobile }: ProductSuggestionsSectionProps) => {
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
   const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
+  const [selectedColors, setSelectedColors] = useState<Record<string, string>>({})
   const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([])
   const [mobileCartModal, setMobileCartModal] = useState<{ isOpen: boolean; product: Product | null }>({
     isOpen: false,
@@ -62,15 +63,32 @@ export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, 
     localStorage.setItem('recentlyViewed', JSON.stringify(updated))
   }
 
+  const handleColorSelect = (colorId: string, productId: string) => {
+    if (!colorId || !productId) return;
+    
+    setSelectedColors((prev) => ({
+      ...prev,
+      [productId]: colorId,
+    }));
+  };
+
   const handleProductClick = (product: Product) => {
     addToRecentlyViewed(product)
     router.push(`/product/${product.slug || product.id}`)
   }
 
   const handleSizeSelect = (productId: string, size: string) => {
-    const product = [...recentlyViewed, ...suggestProducts].find(p => p.id === productId);
+    if (!productId || !size) return;
+    
+    const product = [...recentlyViewed, ...suggestProducts].find(p => p && p.id === productId);
     if (product) {
-      addToCart(product, size);
+      // Get the selected color for this product
+      const selectedColorId = selectedColors?.[productId];
+      const selectedColor = selectedColorId 
+        ? product.colorDetails?.find(color => color && color.id === selectedColorId)?.name 
+        : product.colorDetails?.[0]?.name || "Default";
+      
+      addToCart(product, size, selectedColor);
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('openCart'));
       }
@@ -116,9 +134,11 @@ export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, 
         hoveredProduct={hoveredProduct}
         setHoveredProduct={setHoveredProduct}
         selectedSizes={selectedSizes}
+        selectedColors={selectedColors}
         addToRecentlyViewed={addToRecentlyViewed}
         handleClick={handleProductClick}
         handleSizeSelect={handleSizeSelect}
+        handleColorSelect={handleColorSelect}
         onAddToCartClick={handleAddToCart}
       />
 
@@ -127,9 +147,11 @@ export const ProductSuggestionsSection = ({ suggestProducts, relatedProductIds, 
         hoveredProduct={hoveredProduct}
         setHoveredProduct={setHoveredProduct}
         selectedSizes={selectedSizes}
+        selectedColors={selectedColors}
         addToRecentlyViewed={addToRecentlyViewed}
         handleClick={handleProductClick}
         handleSizeSelect={handleSizeSelect}
+        handleColorSelect={handleColorSelect}
         onAddToCartClick={handleAddToCart}
       />
 

@@ -259,6 +259,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
     })
     const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
     const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
+    const [selectedColors, setSelectedColors] = useState<Record<string, string>>({})
     const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([])
     const [visibleProducts, setVisibleProducts] = useState<string[]>([])
     const [isFilterSticky, setIsFilterSticky] = useState(false)
@@ -604,10 +605,27 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
     }
 
 
+    const handleColorSelect = (colorId: string, productId: string) => {
+        setSelectedColors((prev) => ({
+            ...prev,
+            [productId]: colorId,
+        }));
+    };
+
     const handleSizeSelect = (productId: string, size: string) => {
-        const product = currentProducts.find(p => p.id === productId) || recentlyViewed.find(p => p.id === productId);
+        // Look for the product in all possible arrays
+        const product = currentProducts.find(p => p.id === productId) || 
+                       recentlyViewed.find(p => p.id === productId) ||
+                       products.find(p => p.id === productId);
+        
         if (product) {
-            addToCart(product, size)
+            // Get the selected color for this product
+            const selectedColorId = selectedColors[productId];
+            const selectedColor = selectedColorId 
+                ? product.colorDetails?.find(color => color.id === selectedColorId)?.name 
+                : product.colorDetails?.[0]?.name || "Default";
+            
+            addToCart(product, size, selectedColor)
             if (typeof window !== 'undefined') {
                 window.dispatchEvent(new CustomEvent('openCart'));
             }
@@ -923,7 +941,9 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                                         hoveredProduct={hoveredProduct}
                                         setHoveredProduct={setHoveredProduct}
                                         selectedSizes={selectedSizes}
+                                        selectedColors={selectedColors}
                                         handleSizeSelect={handleSizeSelect}
+                                        handleColorSelect={handleColorSelect}
                                         handleClick={handleClick}
                                         addToRecentlyViewed={addToRecentlyViewed}
                                         wishlist={wishlist}
@@ -1012,9 +1032,11 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                             hoveredProduct={hoveredProduct}
                             setHoveredProduct={setHoveredProduct}
                             selectedSizes={selectedSizes}
+                            selectedColors={selectedColors}
                             addToRecentlyViewed={addToRecentlyViewed}
                             handleClick={handleClick}
                             handleSizeSelect={handleSizeSelect}
+                            handleColorSelect={handleColorSelect}
                             onAddToCartClick={(product) => setMobileCartModal({ isOpen: true, product })}
                         />
                     )}
@@ -1024,9 +1046,11 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                             hoveredProduct={hoveredProduct}
                             setHoveredProduct={setHoveredProduct}
                             selectedSizes={selectedSizes}
+                            selectedColors={selectedColors}
                             addToRecentlyViewed={addToRecentlyViewed}
                             handleClick={handleClick}
                             handleSizeSelect={handleSizeSelect}
+                            handleColorSelect={handleColorSelect}
                             onAddToCartClick={(product) => setMobileCartModal({ isOpen: true, product })}
                         />
                     )}

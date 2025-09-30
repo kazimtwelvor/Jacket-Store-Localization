@@ -16,7 +16,9 @@ interface ProductCardProps {
   hoveredProduct: string | null
   setHoveredProduct: (id: string | null) => void
   selectedSizes: Record<string, string>
+  selectedColors: Record<string, string>
   handleSizeSelect: (productId: string, size: string) => void
+  handleColorSelect: (colorId: string, productId: string) => void
   handleClick: (product: Product) => void
   addToRecentlyViewed: (product: Product) => void
   wishlist: any
@@ -38,7 +40,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   hoveredProduct,
   setHoveredProduct,
   selectedSizes,
+  selectedColors,
   handleSizeSelect,
+  handleColorSelect,
   handleClick,
   addToRecentlyViewed,
   wishlist,
@@ -187,6 +191,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             product={product}
             availableColors={availableColors}
             isDesktop={isDesktop}
+            selectedColorId={selectedColors[product.id]}
+            onColorSelect={handleColorSelect}
             openColorModal={openColorModal}
             setOpenColorModal={setOpenColorModal}
             onProductUpdate={onProductUpdate}
