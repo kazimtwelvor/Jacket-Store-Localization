@@ -12,13 +12,35 @@ function RouteLoadingOverlayContent() {
   const loadingRef = useRef(false);
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isBackNavigationRef = useRef(false);
+  const isProductionRef = useRef(typeof window !== 'undefined' && window.location.hostname !== 'localhost');
 
   useEffect(() => {
     const handlePopState = () => {
       isBackNavigationRef.current = true;
+      // Immediately clear loading state on back navigation
+      loadingRef.current = false;
+      setIsLoading(false);
+      
+      if (loadingTimeoutRef.current) {
+        clearTimeout(loadingTimeoutRef.current);
+        loadingTimeoutRef.current = null;
+      }
+      
+      // Force clear loading state multiple times in production
+      if (isProductionRef.current) {
+        const forceClear = () => {
+          loadingRef.current = false;
+          setIsLoading(false);
+        };
+        
+        setTimeout(forceClear, 0);
+        setTimeout(forceClear, 100);
+        setTimeout(forceClear, 300);
+      }
+      
       setTimeout(() => {
         isBackNavigationRef.current = false;
-      }, 100);
+      }, isProductionRef.current ? 1000 : 500);
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -81,6 +103,7 @@ function RouteLoadingOverlayContent() {
             location.pathname.startsWith("/collections/") &&
             url.pathname === location.pathname) return;
 
+        // Always skip loading for back navigation
         if (isBackNavigationRef.current) {
           return;
         }
@@ -118,6 +141,7 @@ function RouteLoadingOverlayContent() {
   // Support programmatic navigations (e.g., router.push) via a custom event
   useEffect(() => {
     const handleProgrammaticStart = () => {
+      // Always skip loading for back navigation
       if (isBackNavigationRef.current) {
         return;
       }
@@ -181,35 +205,7 @@ function RouteLoadingOverlayContent() {
     }
   }, [pathname, searchParams]);
 
-  useEffect(() => {
-    const handlePopState = () => {
-      loadingRef.current = false;
-      setIsLoading(false);
-      
-      if (loadingTimeoutRef.current) {
-        clearTimeout(loadingTimeoutRef.current);
-        loadingTimeoutRef.current = null;
-      }
 
-      setTimeout(() => {
-        const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
-        const has404Text = document.querySelector('h1')?.textContent === '404';
-        
-        if (notFoundElement && has404Text) {
-          loadingRef.current = false;
-          setIsLoading(false);
-          
-          if (loadingTimeoutRef.current) {
-            clearTimeout(loadingTimeoutRef.current);
-            loadingTimeoutRef.current = null;
-          }
-        }
-      }, 50);
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
 
   useEffect(() => {
     const checkForNotFound = () => {
