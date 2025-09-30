@@ -1349,7 +1349,12 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     product={mobileCartModal.product}
                     availableSizes={(mobileCartModal.product as any).sizeDetails || (mobileCartModal.product as any).sizes || []}
                     availableColors={(mobileCartModal.product as any).colorDetails || (mobileCartModal.product as any).colors || []}
-                    selectedColorId={(mobileCartModal.product as any).colorDetails?.[0]?.id || (mobileCartModal.product as any).colors?.[0]?.id || ''}
+                    selectedColorId={
+                        selectedColors[mobileCartModal.product.id] || 
+                        (mobileCartModal.product as any).colorDetails?.[0]?.id || 
+                        (mobileCartModal.product as any).colors?.[0]?.id || 
+                        ''
+                    }
                 />
             )}
 

@@ -1198,7 +1198,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             availableSizes={mobileCartModal.product?.sizeDetails || []}
             availableColors={mobileCartModal.product?.colorDetails || []}
             selectedColorId={
-              mobileCartModal.product?.colorDetails?.[0]?.id || ""
+              selectedColors[mobileCartModal.product.id] || 
+              mobileCartModal.product?.colorDetails?.[0]?.id || 
+              ""
             }
           />
         )}

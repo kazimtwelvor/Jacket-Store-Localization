@@ -162,7 +162,11 @@ export const ProductSuggestionsSection = ({ suggestProducts = [], relatedProduct
           product={mobileCartModal?.product}
           availableSizes={mobileCartModal?.product?.sizeDetails || []}
           availableColors={mobileCartModal?.product?.colorDetails || []}
-          selectedColorId={mobileCartModal?.product?.colorDetails?.[0]?.id || ''}
+          selectedColorId={
+            selectedColors[mobileCartModal.product.id] || 
+            mobileCartModal?.product?.colorDetails?.[0]?.id || 
+            ''
+          }
         />
       )}
     </div>
