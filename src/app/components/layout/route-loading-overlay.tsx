@@ -44,6 +44,14 @@ function RouteLoadingOverlayContent() {
         }
 
         if (url.pathname === "/") return;
+        
+        if (url.pathname === '/404' || url.pathname === '/not-found' || url.pathname.includes('404') ||
+            url.pathname === '/500' || url.pathname === '/error' || url.pathname.includes('error') ||
+            location.pathname === '/404' || location.pathname === '/not-found' || location.pathname.includes('404') ||
+            location.pathname === '/500' || location.pathname === '/error' || location.pathname.includes('error')) {
+          return;
+        }
+        
         const toPath = url.pathname + url.search + url.hash;
         const fromPath = location.pathname + location.search + location.hash;
         if (toPath === fromPath) return;
@@ -58,7 +66,6 @@ function RouteLoadingOverlayContent() {
           });
         }
       } catch {
-        // ignore invalid urls
       }
     };
 
@@ -119,6 +126,14 @@ function RouteLoadingOverlayContent() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  useEffect(() => {
+    if (pathname === '/404' || pathname === '/not-found' || pathname.includes('404') ||
+        pathname === '/500' || pathname === '/error' || pathname.includes('error')) {
+      loadingRef.current = false;
+      setIsLoading(false);
+    }
+  }, [pathname]);
 
   if (!isLoading && !isPending) return null;
 
