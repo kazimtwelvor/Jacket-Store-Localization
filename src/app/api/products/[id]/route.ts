@@ -20,6 +20,28 @@ export async function GET(
 
     if (response.ok) {
       const data = await response.json()
+      
+      if (data.baseColor || data.colorDetails) {
+        const baseColor = data.baseColor
+        const colorDetails = data.colorDetails
+        
+        let combinedColorDetails = []
+        
+        if (baseColor && baseColor.id) {
+          combinedColorDetails.push(baseColor)
+        }
+        
+        if (Array.isArray(colorDetails)) {
+          colorDetails.forEach(color => {
+            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+              combinedColorDetails.push(color)
+            }
+          })
+        }
+        
+        data.colorDetails = combinedColorDetails
+      }
+      
       return NextResponse.json(data)
     }
 
@@ -41,6 +63,27 @@ export async function GET(
     })
 
     if (product) {
+      if (product.baseColor || product.colorDetails) {
+        const baseColor = product.baseColor
+        const colorDetails = product.colorDetails
+        
+        let combinedColorDetails = []
+        
+        if (baseColor && baseColor.id) {
+          combinedColorDetails.push(baseColor)
+        }
+        
+        if (Array.isArray(colorDetails)) {
+          colorDetails.forEach(color => {
+            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+              combinedColorDetails.push(color)
+            }
+          })
+        }
+        
+        product.colorDetails = combinedColorDetails
+      }
+      
       return NextResponse.json(product)
     }
 
