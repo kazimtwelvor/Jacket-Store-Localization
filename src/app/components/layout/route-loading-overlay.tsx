@@ -13,10 +13,13 @@ function RouteLoadingOverlayContent() {
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isBackNavigationRef = useRef(false);
   const isProductionRef = useRef(typeof window !== 'undefined' && window.location.hostname !== 'localhost');
+  const preventLoadingRef = useRef(false);
 
   useEffect(() => {
     const handlePopState = () => {
       isBackNavigationRef.current = true;
+      preventLoadingRef.current = true;
+      
       // Immediately clear loading state on back navigation
       loadingRef.current = false;
       setIsLoading(false);
@@ -26,21 +29,11 @@ function RouteLoadingOverlayContent() {
         loadingTimeoutRef.current = null;
       }
       
-      // Force clear loading state multiple times in production
-      if (isProductionRef.current) {
-        const forceClear = () => {
-          loadingRef.current = false;
-          setIsLoading(false);
-        };
-        
-        setTimeout(forceClear, 0);
-        setTimeout(forceClear, 50);
-        setTimeout(forceClear, 100);
-      }
-      
+      // Reset flags after navigation completes
       setTimeout(() => {
         isBackNavigationRef.current = false;
-      }, isProductionRef.current ? 200 : 100);
+        preventLoadingRef.current = false;
+      }, 500);
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -103,8 +96,8 @@ function RouteLoadingOverlayContent() {
             location.pathname.startsWith("/collections/") &&
             url.pathname === location.pathname) return;
 
-        // Always skip loading for back navigation
-        if (isBackNavigationRef.current) {
+        // Always skip loading for back navigation or if prevented
+        if (isBackNavigationRef.current || preventLoadingRef.current) {
           return;
         }
 
@@ -141,8 +134,8 @@ function RouteLoadingOverlayContent() {
   // Support programmatic navigations (e.g., router.push) via a custom event
   useEffect(() => {
     const handleProgrammaticStart = () => {
-      // Always skip loading for back navigation
-      if (isBackNavigationRef.current) {
+      // Always skip loading for back navigation or if prevented
+      if (isBackNavigationRef.current || preventLoadingRef.current) {
         return;
       }
 
@@ -196,12 +189,15 @@ function RouteLoadingOverlayContent() {
 
   // When the route (path or query) changes, hide the loader
   useEffect(() => {
-    loadingRef.current = false;
-    setIsLoading(false);
-    
-    if (loadingTimeoutRef.current) {
-      clearTimeout(loadingTimeoutRef.current);
-      loadingTimeoutRef.current = null;
+    // Don't clear loading state if we're in the middle of back navigation
+    if (!isBackNavigationRef.current) {
+      loadingRef.current = false;
+      setIsLoading(false);
+      
+      if (loadingTimeoutRef.current) {
+        clearTimeout(loadingTimeoutRef.current);
+        loadingTimeoutRef.current = null;
+      }
     }
   }, [pathname, searchParams]);
 
