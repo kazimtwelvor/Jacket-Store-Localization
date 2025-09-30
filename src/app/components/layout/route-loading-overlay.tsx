@@ -34,13 +34,13 @@ function RouteLoadingOverlayContent() {
         };
         
         setTimeout(forceClear, 0);
+        setTimeout(forceClear, 50);
         setTimeout(forceClear, 100);
-        setTimeout(forceClear, 300);
       }
       
       setTimeout(() => {
         isBackNavigationRef.current = false;
-      }, isProductionRef.current ? 1000 : 500);
+      }, isProductionRef.current ? 200 : 100);
     };
 
     window.addEventListener('popstate', handlePopState);
