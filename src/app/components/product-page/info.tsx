@@ -226,7 +226,7 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
         "bg-white product-page", 
         isMobile 
           ? "w-full py-2 px-4 sm:px-6" 
-          : "max-w-full pt-6 pb-6 px-4 lg:px-6"
+          : "max-w-full pt-0 pb-6 "
       )}>
 
       {/* Mobile Add to Cart Modal */}
