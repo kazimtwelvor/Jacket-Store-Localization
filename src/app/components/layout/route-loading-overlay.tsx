@@ -10,6 +10,7 @@ function RouteLoadingOverlayContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
   const loadingRef = useRef(false);
+  const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
@@ -44,26 +45,35 @@ function RouteLoadingOverlayContent() {
         }
 
         if (url.pathname === "/") return;
-        
+
         if (url.pathname === '/404' || url.pathname === '/not-found' || url.pathname.includes('404') ||
-            url.pathname === '/500' || url.pathname === '/error' || url.pathname.includes('error') ||
-            location.pathname === '/404' || location.pathname === '/not-found' || location.pathname.includes('404') ||
-            location.pathname === '/500' || location.pathname === '/error' || location.pathname.includes('error')) {
+          url.pathname === '/500' || url.pathname === '/error' || url.pathname.includes('error') ||
+          location.pathname === '/404' || location.pathname === '/not-found' || location.pathname.includes('404') ||
+          location.pathname === '/500' || location.pathname === '/error' || location.pathname.includes('error')) {
           return;
         }
-        
+
         const toPath = url.pathname + url.search + url.hash;
         const fromPath = location.pathname + location.search + location.hash;
         if (toPath === fromPath) return;
-        if (url.pathname.startsWith("/collections/") && 
-            location.pathname.startsWith("/collections/") &&
-            url.pathname === location.pathname) return;
+        if (url.pathname.startsWith("/collections/") &&
+          location.pathname.startsWith("/collections/") &&
+          url.pathname === location.pathname) return;
 
         if (!loadingRef.current) {
           loadingRef.current = true;
           startTransition(() => {
             setIsLoading(true);
           });
+          
+          if (loadingTimeoutRef.current) {
+            clearTimeout(loadingTimeoutRef.current);
+          }
+          loadingTimeoutRef.current = setTimeout(() => {
+            loadingRef.current = false;
+            setIsLoading(false);
+            window.dispatchEvent(new CustomEvent('route-loading:end'));
+          }, 10000);
         }
       } catch {
       }
@@ -88,12 +98,26 @@ function RouteLoadingOverlayContent() {
         startTransition(() => {
           setIsLoading(true);
         });
+        
+        if (loadingTimeoutRef.current) {
+          clearTimeout(loadingTimeoutRef.current);
+        }
+        loadingTimeoutRef.current = setTimeout(() => {
+          loadingRef.current = false;
+          setIsLoading(false);
+          window.dispatchEvent(new CustomEvent('route-loading:end'));
+        }, 10000);
       }
     };
 
     const handleProgrammaticEnd = () => {
       loadingRef.current = false;
       setIsLoading(false);
+      
+      if (loadingTimeoutRef.current) {
+        clearTimeout(loadingTimeoutRef.current);
+        loadingTimeoutRef.current = null;
+      }
     };
 
     window.addEventListener("route-loading:start", handleProgrammaticStart);
@@ -114,6 +138,13 @@ function RouteLoadingOverlayContent() {
   useEffect(() => {
     loadingRef.current = false;
     setIsLoading(false);
+    
+    if (loadingTimeoutRef.current) {
+      clearTimeout(loadingTimeoutRef.current);
+      loadingTimeoutRef.current = null;
+    }
+    
+    window.dispatchEvent(new CustomEvent('route-loading:end'));
   }, [pathname, searchParams]);
 
   // Handle browser back/forward navigation
@@ -121,6 +152,13 @@ function RouteLoadingOverlayContent() {
     const handlePopState = () => {
       loadingRef.current = false;
       setIsLoading(false);
+      
+      if (loadingTimeoutRef.current) {
+        clearTimeout(loadingTimeoutRef.current);
+        loadingTimeoutRef.current = null;
+      }
+      
+      window.dispatchEvent(new CustomEvent('route-loading:end'));
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -128,11 +166,36 @@ function RouteLoadingOverlayContent() {
   }, []);
 
   useEffect(() => {
+    const checkForNotFound = () => {
+      const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
+      const has404Text = document.querySelector('h1')?.textContent === '404';
+      
+      if (notFoundElement && has404Text) {
+        loadingRef.current = false;
+        setIsLoading(false);
+        return true;
+      }
+      return false;
+    };
+
+    if (checkForNotFound()) return;
+
     if (pathname === '/404' || pathname === '/not-found' || pathname.includes('404') ||
         pathname === '/500' || pathname === '/error' || pathname.includes('error')) {
       loadingRef.current = false;
       setIsLoading(false);
     }
+
+    const observer = new MutationObserver(() => {
+      checkForNotFound();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    return () => observer.disconnect();
   }, [pathname]);
 
   if (!isLoading && !isPending) return null;
