@@ -104,15 +104,17 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
   const handleLinkClick = (e: React.MouseEvent, categorySlug: string) => {
     e.preventDefault();
 
-    // if (typeof window !== 'undefined') {
-    //   const currentPath = window.location.pathname;
-    //   const targetPath = `/collections/${categorySlug}`;
+    if (typeof window !== 'undefined') {
+      const currentPath = window.location.pathname;
+      const targetPath = `/collections/${categorySlug}`;
 
-    //   if (currentPath === targetPath) {
-    //     window.dispatchEvent(new CustomEvent('route-loading:end'));
-    //     return;
-    //   }
-    // }
+      if (currentPath === targetPath) {
+        return;
+      }
+
+      // Dispatch loading start event for programmatic navigation
+      window.dispatchEvent(new CustomEvent('route-loading:start'));
+    }
 
     if (onCategoryClick) {
       onCategoryClick(categorySlug);
@@ -304,7 +306,14 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
                   //   handleLinkClick(e, categorySlug);
                   // }}
                   className={`relative flex flex-col items-center flex-shrink-0 w-[23vw] sm:w-28 text-center cursor-pointer py-2 ${category.isActive ? 'sticky left-3 z-10 sticky-mask' : ''}`}
-                  onClick={(e) => isCurrentCategory ? handleCategoryClick(categorySlug) : handleLinkClick(e, categorySlug)}
+                  onClick={(e) => {
+                    if (isCurrentCategory) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      return;
+                    }
+                    handleLinkClick(e, categorySlug);
+                  }}
 
                   aria-current={category.isActive ? 'page' : undefined}
                 >

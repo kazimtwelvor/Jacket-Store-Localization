@@ -186,11 +186,23 @@ function RouteLoadingOverlayContent() {
       const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
       const has404Text = document.querySelector('h1')?.textContent === '404';
       isOn404PageRef.current = !!(notFoundElement && has404Text);
+      
+      // If we detect a 404 page, ensure loading is cleared
+      if (notFoundElement && has404Text) {
+        loadingRef.current = false;
+        setIsLoading(false);
+        if (loadingTimeoutRef.current) {
+          clearTimeout(loadingTimeoutRef.current);
+          loadingTimeoutRef.current = null;
+        }
+      }
     };
 
     check404();
     // Also check after a brief delay in case DOM hasn't updated yet
     setTimeout(check404, 100);
+    // Check again after a longer delay to catch late-rendering 404 pages
+    setTimeout(check404, 500);
   }, [pathname, searchParams]);
 
 
