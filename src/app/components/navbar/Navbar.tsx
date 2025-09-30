@@ -20,9 +20,9 @@ import useWishlist from "../../hooks/use-wishlist";
 import { useEffect, useRef, useState } from "react";
 import { CapsuleNav } from "./CapsuleNav";
 import dynamic from "next/dynamic";
-const MegaMenuCarousel = dynamic(() => import("./MegaMenuCarousal"), {
-  ssr: false,
-});
+// const MegaMenuCarousel = dynamic(() => import("./MegaMenuCarousal"), {
+//   ssr: false,
+// });
 const MobileMenu = dynamic(() => import("../../utils/mobileMenu"), {
   ssr: false,
 });
@@ -223,6 +223,19 @@ const Navbar = () => {
       document.body.classList.remove('modal-open');
     };
   }, [isSearchOpen]);
+
+  // Lock background scroll when mega menu is open
+  useEffect(() => {
+    if (showMegaMenu) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [showMegaMenu]);
 
 
 
@@ -483,7 +496,7 @@ const Navbar = () => {
             </button>
 
             <button
-              className="relative flex items-center text-white hover:opacity-80 hidden lg:flex"
+              className="relative items-center text-white hover:opacity-80 hidden lg:flex"
               onClick={() => router.push("/wishlist")}
               aria-label="View wishlist"
             >
@@ -1014,7 +1027,7 @@ const Navbar = () => {
       )}
 
       {/* CapsuleNav: Simplified rendering */}
-      {!isMobileMenuOpen && (
+      {!isMobileMenuOpen && !showMegaMenu && (
         <div className="fixed left-0 right-0 z-[9002] w-full flex justify-center top-16">
           <CapsuleNav />
         </div>

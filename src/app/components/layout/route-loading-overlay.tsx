@@ -11,6 +11,19 @@ function RouteLoadingOverlayContent() {
   const [isPending, startTransition] = useTransition();
   const loadingRef = useRef(false);
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isBackNavigationRef = useRef(false);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      isBackNavigationRef.current = true;
+      setTimeout(() => {
+        isBackNavigationRef.current = false;
+      }, 100);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
@@ -56,9 +69,13 @@ function RouteLoadingOverlayContent() {
         const toPath = url.pathname + url.search + url.hash;
         const fromPath = location.pathname + location.search + location.hash;
         if (toPath === fromPath) return;
-        if (url.pathname.startsWith("/collections/") &&
-          location.pathname.startsWith("/collections/") &&
-          url.pathname === location.pathname) return;
+        if (url.pathname.startsWith("/collections/") && 
+            location.pathname.startsWith("/collections/") &&
+            url.pathname === location.pathname) return;
+
+        if (isBackNavigationRef.current) {
+          return;
+        }
 
         if (!loadingRef.current) {
           loadingRef.current = true;
@@ -93,6 +110,10 @@ function RouteLoadingOverlayContent() {
   // Support programmatic navigations (e.g., router.push) via a custom event
   useEffect(() => {
     const handleProgrammaticStart = () => {
+      if (isBackNavigationRef.current) {
+        return;
+      }
+
       if (!loadingRef.current) {
         loadingRef.current = true;
         startTransition(() => {
@@ -143,13 +164,12 @@ function RouteLoadingOverlayContent() {
       clearTimeout(loadingTimeoutRef.current);
       loadingTimeoutRef.current = null;
     }
-    
-    window.dispatchEvent(new CustomEvent('route-loading:end'));
   }, [pathname, searchParams]);
 
-  // Handle browser back/forward navigation
+  // Handle browser back/forward navigation - simplified since we prevent loader from starting
   useEffect(() => {
     const handlePopState = () => {
+      // Just ensure loader is stopped (should already be prevented from starting)
       loadingRef.current = false;
       setIsLoading(false);
       
@@ -157,8 +177,6 @@ function RouteLoadingOverlayContent() {
         clearTimeout(loadingTimeoutRef.current);
         loadingTimeoutRef.current = null;
       }
-      
-      window.dispatchEvent(new CustomEvent('route-loading:end'));
     };
 
     window.addEventListener('popstate', handlePopState);

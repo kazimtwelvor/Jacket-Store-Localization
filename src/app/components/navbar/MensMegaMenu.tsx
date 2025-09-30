@@ -2,9 +2,9 @@ import Link from "next/link";
 import { X } from "lucide-react";
 import dynamic from "next/dynamic";
 
-const MegaMenuCarousel = dynamic(() => import("./MegaMenuCarousal"), {
-  ssr: false,
-});
+// const MegaMenuCarousel = dynamic(() => import("./MegaMenuCarousal"), {
+//   ssr: false,
+// });
 
 interface MensMegaMenuProps {
   onClose: () => void;
@@ -13,7 +13,7 @@ interface MensMegaMenuProps {
 export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
   return (
     <div className="fixed left-0 right-0 top-16 w-screen z-[9001]">
-      <div className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl h-screen overflow-y-auto mega-menu-scrollbar">
+      <div className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl max-h-[80vh] overflow-y-auto mega-menu-scrollbar">
         <button
           onClick={onClose}
           className="sticky top-9 right-8 float-right bg-white text-black rounded-full p-1 flex items-center justify-center hover:bg-gray-200 transition-colors z-20 mr-8 mt-6"
@@ -21,8 +21,9 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
         >
           <X className="h-8 w-8" />
         </button>
-        <div className="w-full max-w-screen-2xl mx-auto px-8 lg:px-16 py-16">
-          <div className="grid grid-cols-6 gap-4 pt-8">
+        <div className="w-full max-w-screen-2xl mx-auto px-8 lg:px-16 py-0 pb-8">
+          <div className="flex justify-center pt-8">
+            <div className="grid grid-cols-4 gap-8 max-w-6xl">
             <div className="space-y-4">
               <h3 className="font-bold text-white mb-4 text-sm uppercase tracking-widest border-b-2 border-gray-700 pb-2 w-fit">
                 LEATHER JACKETS
@@ -258,13 +259,14 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
               </ul>
             </div>
+            </div>
           </div>
-          <div className="mt-20">
+          {/* <div className="mt-20">
             <h3 className="font-bold text-white mb-8 text-4xl uppercase tracking-widest text-left">
               Collection
             </h3>
             <MegaMenuCarousel />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
