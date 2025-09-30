@@ -400,14 +400,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate, on
                                             />
                                         ))}
 
-                                        {(activeCategory === 'Coats' || activeCategory === "Women's Jackets") && (
+                                        {/* {(activeCategory === 'Coats' || activeCategory === "Women's Jackets") && (
                                           <div className="px-12 pt-12 pb-16 text-white">
                                               <h3 className="font-bold mb-8 text-3xl uppercase tracking-widest">
                                                   Collection
                                               </h3>
                                               <MegaMenuCarousel />
                                           </div>
-                                        )}
+                                        )} */}
                                     </div>
                                 </div>
                             )}
