@@ -87,33 +87,33 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
   }, []);
 
   const handleCategoryClick = (slug: string) => {
-    if (typeof window !== 'undefined') {  
+    if (typeof window !== 'undefined') {
       const currentPath = window.location.pathname;
       const targetPath = `/collections/${slug}`;
-      
+
       if (currentPath === targetPath) {
         window.dispatchEvent(new CustomEvent('route-loading:end'));
         return;
       }
     }
-    
+
     setActiveSlug(slug);
     onCategoryClick?.(slug);
   };
 
   const handleLinkClick = (e: React.MouseEvent, categorySlug: string) => {
     e.preventDefault();
-    
-    if (typeof window !== 'undefined') {
-      const currentPath = window.location.pathname;
-      const targetPath = `/collections/${categorySlug}`;
-      
-      if (currentPath === targetPath) {
-        window.dispatchEvent(new CustomEvent('route-loading:end'));
-        return;
-      }
-    }
-    
+
+    // if (typeof window !== 'undefined') {
+    //   const currentPath = window.location.pathname;
+    //   const targetPath = `/collections/${categorySlug}`;
+
+    //   if (currentPath === targetPath) {
+    //     window.dispatchEvent(new CustomEvent('route-loading:end'));
+    //     return;
+    //   }
+    // }
+
     if (onCategoryClick) {
       onCategoryClick(categorySlug);
     } else {
@@ -150,7 +150,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
       const screenWidth = window.innerWidth;
       const isDesktopView = screenWidth >= 640;
       setIsDesktop(isDesktopView);
-      
+
       if (isDesktopView) {
         const containerWidth = screenWidth * 0.6; // 60% container width
         const categoryWidth = 112 + 16; // w-28 (112px) + gap (16px)
@@ -199,7 +199,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
 
   const scroll = (direction: 'left' | 'right') => {
     if (isDesktop && displayCategories.length > visibleCount) {
-      const newIndex = direction === 'left' 
+      const newIndex = direction === 'left'
         ? Math.max(0, currentStartIndex - 2)
         : Math.min(displayCategories.length - visibleCount, currentStartIndex + 2);
       setCurrentStartIndex(newIndex);
@@ -219,10 +219,10 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
       cleanImageUrl = getCleanImageUrl(cleanImageUrl);
     }
     // Use the slug from currentCategory if available, otherwise find matching category
-    const properSlug = currentCategory.slug || 
-                      categories.find(cat => cat.categoryId === currentCategory.categoryId)?.slug || 
-                      currentCategory.categoryId;
-    
+    const properSlug = currentCategory.slug ||
+      categories.find(cat => cat.categoryId === currentCategory.categoryId)?.slug ||
+      currentCategory.categoryId;
+
     displayCategories.push({
       name: currentCategory.categoryName,
       icon: cleanImageUrl,
@@ -252,114 +252,114 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
 
   const categoriesToShow = displayCategories;
 
-  const showArrows = isDesktop 
+  const showArrows = isDesktop
     ? displayCategories.length > visibleCount
     : canScrollLeft || canScrollRight;
 
-  const canGoLeft = isDesktop 
+  const canGoLeft = isDesktop
     ? currentStartIndex > 0
     : canScrollLeft;
 
-  const canGoRight = isDesktop 
+  const canGoRight = isDesktop
     ? currentStartIndex + visibleCount < displayCategories.length
     : canScrollRight;
 
   return (
     <div className="relative w-full group -mt-8 sm:mt-0">
       <div className="relative w-full md:w-[758px] md:mx-auto">
-      <style jsx>{`
+        <style jsx>{`
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
           width: 0;
           height: 0;
         }
       `}</style>
-      <div
-        ref={scrollContainerRef}
-        className={`${isDesktop && displayCategories.length > visibleCount ? 'overflow-hidden' : 'overflow-x-auto overflow-y-hidden scroll-smooth'} md:text-center hide-scrollbar`}
-        style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
-      >
-        <nav
-          ref={navRef}
-          className="inline-flex items-start gap-x-1 sm:gap-x-4 px-3 py-2 transition-transform duration-300 ease-in-out"
-          style={isDesktop && displayCategories.length > visibleCount ? {
-            transform: `translateX(-${currentStartIndex * (112 + 16)}px)`
-          } : {}}
-          aria-label="Product Categories"
+        <div
+          ref={scrollContainerRef}
+          className={`${isDesktop && displayCategories.length > visibleCount ? 'overflow-hidden' : 'overflow-x-auto overflow-y-hidden scroll-smooth'} md:text-center hide-scrollbar`}
+          style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
         >
-          {categoriesToShow.map((category, index) => {
-            // Use the slug that was already determined when creating the category object
-            const categorySlug = category.slug
-            const isCurrentCategory = category.isActive
-            
-            const CategoryContent = () => (
-              <div
-                className={`relative flex flex-col items-center flex-shrink-0 w-[23vw] sm:w-28 text-center ${category.isActive ? 'cursor-default sticky left-3 z-10 sticky-mask' : 'cursor-pointer'} py-2`}
-                onClick={(e) => {
-                  if (isCurrentCategory) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return;
-                  }
-                  handleLinkClick(e, categorySlug);
-                }}
-                aria-current={category.isActive ? 'page' : undefined}
-              >
+          <nav
+            ref={navRef}
+            className="inline-flex items-start gap-x-1 sm:gap-x-4 px-3 py-2 transition-transform duration-300 ease-in-out"
+            style={isDesktop && displayCategories.length > visibleCount ? {
+              transform: `translateX(-${currentStartIndex * (112 + 16)}px)`
+            } : {}}
+            aria-label="Product Categories"
+          >
+            {categoriesToShow.map((category, index) => {
+              // Use the slug that was already determined when creating the category object
+              const categorySlug = category.slug
+              const isCurrentCategory = category.isActive
+
+              const CategoryContent = () => (
                 <div
-                  className={`relative w-20 h-20 sm:w-24 sm:h-24 mb-2 rounded-full overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-105 ${
-                    category.isActive ? ' shadow-lg shadow-gray-700/50' : 'ring-gray-200'
-                  }`}
+                  // className={`relative flex flex-col items-center flex-shrink-0 w-[23vw] sm:w-28 text-center ${category.isActive ? 'cursor-default sticky left-3 z-10 sticky-mask' : 'cursor-pointer'} py-2`}
+                  // onClick={(e) => {
+                  //   if (isCurrentCategory) {
+                  //     e.preventDefault();
+                  //     e.stopPropagation();
+                  //     return;
+                  //   }
+                  //   handleLinkClick(e, categorySlug);
+                  // }}
+                  className={`relative flex flex-col items-center flex-shrink-0 w-[23vw] sm:w-28 text-center cursor-pointer py-2 ${category.isActive ? 'sticky left-3 z-10 sticky-mask' : ''}`}
+                  onClick={(e) => isCurrentCategory ? handleCategoryClick(categorySlug) : handleLinkClick(e, categorySlug)}
+
+                  aria-current={category.isActive ? 'page' : undefined}
                 >
-                  <Image
-                    src={category.icon || '/placeholder.svg'}
-                    alt={category.name || ''}
-                    width={112}
-                    height={112}
-                    className="w-full h-full object-cover"
-                    priority={category.isActive}
-                    unoptimized={true}
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/placeholder.svg';
-                    }}
-                  />
-                </div>
-                <span
-                  className={`text-xs sm:text-sm font-bold transition-colors duration-200 w-full ${
-                    category.isActive ? 'font-semibold text-black' : 'text-gray-600'
-                  }`}
-                >
-                  {category.name}
-                </span>
-              </div>
-            )
-            
-            return (
-              <div key={categorySlug || index}>
-                {isCurrentCategory ? (
-                  <CategoryContent />
-                ) : (
-                  <Link
-                    href={`/collections/${categorySlug}`}
-                    onClick={(e) => handleLinkClick(e, categorySlug)}
+                  <div
+                    className={`relative w-20 h-20 sm:w-24 sm:h-24 mb-2 rounded-full overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-105 ${category.isActive ? ' shadow-lg shadow-gray-700/50' : 'ring-gray-200'
+                      }`}
                   >
+                    <Image
+                      src={category.icon || '/placeholder.svg'}
+                      alt={category.name || ''}
+                      width={112}
+                      height={112}
+                      className="w-full h-full object-cover"
+                      priority={category.isActive}
+                      unoptimized={true}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/placeholder.svg';
+                      }}
+                    />
+                  </div>
+                  <span
+                    className={`text-xs sm:text-sm font-bold transition-colors duration-200 w-full ${category.isActive ? 'font-semibold text-black' : 'text-gray-600'
+                      }`}
+                  >
+                    {category.name}
+                  </span>
+                </div>
+              )
+
+              return (
+                <div key={categorySlug || index}>
+                  {isCurrentCategory ? (
                     <CategoryContent />
-                  </Link>
-                )}
-              </div>
-            );
-          })}
-        </nav>
-      </div>
+                  ) : (
+                    <Link
+                      href={`/collections/${categorySlug}`}
+                      onClick={(e) => handleLinkClick(e, categorySlug)}
+                    >
+                      <CategoryContent />
+                    </Link>
+                  )}
+                </div>
+              );
+            })}
+          </nav>
+        </div>
       </div>
 
       {showArrows && (
         <>
           <button
             onClick={() => scroll('left')}
-            className={`hidden 2xl:block absolute top-8 sm:top-10 -left-12 sm:-left-[2rem] lg:left-[21rem] z-20 bg-white/70 rounded-full p-1.5 shadow-lg backdrop-blur-sm transition-opacity duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-0 disabled:cursor-not-allowed ${
-              !canGoLeft && 'opacity-0'
-            }`}
+            className={`hidden 2xl:block absolute top-8 sm:top-10 -left-12 sm:-left-[2rem] lg:left-[21rem] z-20 bg-white/70 rounded-full p-1.5 shadow-lg backdrop-blur-sm transition-opacity duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-0 disabled:cursor-not-allowed ${!canGoLeft && 'opacity-0'
+              }`}
             aria-label="Scroll left"
             disabled={!canGoLeft}
           >
@@ -368,9 +368,8 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
 
           <button
             onClick={() => scroll('right')}
-            className={`hidden 2xl:block absolute top-8 sm:top-10 -right-12 sm:-right-[3rem] md:right-[13rem] lg:right-[20rem] z-20 bg-white/70 rounded-full p-1.5 shadow-lg backdrop-blur-sm transition-opacity duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-0 disabled:cursor-not-allowed ${
-              !canGoRight && 'opacity-0'
-            }`}
+            className={`hidden 2xl:block absolute top-8 sm:top-10 -right-12 sm:-right-[3rem] md:right-[13rem] lg:right-[20rem] z-20 bg-white/70 rounded-full p-1.5 shadow-lg backdrop-blur-sm transition-opacity duration-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-0 disabled:cursor-not-allowed ${!canGoRight && 'opacity-0'
+              }`}
             aria-label="Scroll right"
             disabled={!canGoRight}
           >
