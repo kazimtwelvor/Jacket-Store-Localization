@@ -109,6 +109,17 @@ function RouteLoadingOverlayContent() {
     setIsLoading(false);
   }, [pathname, searchParams]);
 
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      loadingRef.current = false;
+      setIsLoading(false);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   if (!isLoading && !isPending) return null;
 
   return (
