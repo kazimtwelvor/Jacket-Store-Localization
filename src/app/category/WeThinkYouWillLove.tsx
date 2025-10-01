@@ -404,8 +404,45 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                             e.preventDefault()
                             e.stopPropagation()
 
-                            // Use the handleColorSelect function to track color selection
                             handleColorSelect(color.id || color.name, product.id)
+
+                            const colorLinks = product?.colorLinks || {}
+                            const colorLink = colorLinks[color.name]
+
+                            if (colorLink && colorLink.trim() !== '') {
+                              const currentProductIndex = displayedProducts.findIndex(p => p.id === product.id)
+                              if (currentProductIndex === -1) return
+
+                              const loadingKey = `${product.id}-${currentProductIndex}`
+                              setLoadingProducts(prev => new Set([...prev, loadingKey]))
+                              
+                              try {
+                                const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
+
+                                if (response.ok) {
+                                  const newProduct = await response.json()
+
+                                  if (newProduct && newProduct.name && newProduct.id) {
+                                    setCurrentProducts(prev => {
+                                      const updated = [...prev]
+                                      updated[currentProductIndex] = newProduct
+                                      return updated
+                                    })
+                                  }
+                                } else {
+                                  const errorData = await response.json()
+                                  console.warn('Product not found for color link:', colorLink, errorData)
+                                }
+                              } catch (error) {
+                                console.error('Error:', error)
+                              } finally {
+                                setLoadingProducts(prev => {
+                                  const newSet = new Set(prev)
+                                  newSet.delete(loadingKey)
+                                  return newSet
+                                })
+                              }
+                            }
 
                             setColorPopup(null)
                           }}
