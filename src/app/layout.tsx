@@ -75,6 +75,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           type="font/woff"
           crossOrigin="anonymous"
         />
+        
+        {/* Initialize dataLayer */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];`
+          }}
+        />
       </head>
       <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0 bg-[#000000] min-h-screen flex flex-col`}>
         {/* Google Tag Manager (noscript) */}
