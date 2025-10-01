@@ -11,18 +11,24 @@ function RouteLoadingOverlayContent() {
   const [isPending, startTransition] = useTransition();
   const loadingRef = useRef(false);
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isBackNavigationRef = useRef(false);
+  const isOn404PageRef = useRef(false);
 
   useEffect(() => {
     const handlePopState = () => {
-      isBackNavigationRef.current = true;
-      setTimeout(() => {
-        isBackNavigationRef.current = false;
-      }, 100);
+      // If we're on a 404 page, skip loading completely
+      if (isOn404PageRef.current) {
+        loadingRef.current = false;
+        setIsLoading(false);
+        if (loadingTimeoutRef.current) {
+          clearTimeout(loadingTimeoutRef.current);
+          loadingTimeoutRef.current = null;
+        }
+        return;
+      }
     };
 
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   useEffect(() => {
@@ -60,16 +66,28 @@ function RouteLoadingOverlayContent() {
         if (url.pathname === "/") return;
 
         // Check for error pages in both current and target URLs
-        if (url.pathname === '/404' || url.pathname === '/not-found' || url.pathname.includes('404') ||
-          url.pathname === '/500' || url.pathname === '/error' || url.pathname.includes('error') ||
-          location.pathname === '/404' || location.pathname === '/not-found' || location.pathname.includes('404') ||
-          location.pathname === '/500' || location.pathname === '/error' || location.pathname.includes('error')) {
+        if (
+          url.pathname === "/404" ||
+          url.pathname === "/not-found" ||
+          url.pathname.includes("404") ||
+          url.pathname === "/500" ||
+          url.pathname === "/error" ||
+          url.pathname.includes("error") ||
+          location.pathname === "/404" ||
+          location.pathname === "/not-found" ||
+          location.pathname.includes("404") ||
+          location.pathname === "/500" ||
+          location.pathname === "/error" ||
+          location.pathname.includes("error")
+        ) {
           return;
         }
 
         // Check if we're currently on a 404 page by DOM content
-        const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
-        const has404Text = document.querySelector('h1')?.textContent === '404';
+        const notFoundElement = document.querySelector(
+          ".min-h-screen.flex.items-center.justify-center.bg-gray-50"
+        );
+        const has404Text = document.querySelector("h1")?.textContent === "404";
         if (notFoundElement && has404Text) {
           return;
         }
@@ -77,11 +95,15 @@ function RouteLoadingOverlayContent() {
         const toPath = url.pathname + url.search + url.hash;
         const fromPath = location.pathname + location.search + location.hash;
         if (toPath === fromPath) return;
-        if (url.pathname.startsWith("/collections/") && 
-            location.pathname.startsWith("/collections/") &&
-            url.pathname === location.pathname) return;
+        if (
+          url.pathname.startsWith("/collections/") &&
+          location.pathname.startsWith("/collections/") &&
+          url.pathname === location.pathname
+        )
+          return;
 
-        if (isBackNavigationRef.current) {
+        // Skip loading if we're on a 404 page
+        if (isOn404PageRef.current) {
           return;
         }
 
@@ -90,18 +112,17 @@ function RouteLoadingOverlayContent() {
           startTransition(() => {
             setIsLoading(true);
           });
-          
+
           if (loadingTimeoutRef.current) {
             clearTimeout(loadingTimeoutRef.current);
           }
           loadingTimeoutRef.current = setTimeout(() => {
             loadingRef.current = false;
             setIsLoading(false);
-            window.dispatchEvent(new CustomEvent('route-loading:end'));
-          }, 10000);
+            window.dispatchEvent(new CustomEvent("route-loading:end"));
+          }, 1000);
         }
-      } catch {
-      }
+      } catch {}
     };
 
     document.addEventListener("click", handleClick, {
@@ -118,38 +139,32 @@ function RouteLoadingOverlayContent() {
   // Support programmatic navigations (e.g., router.push) via a custom event
   useEffect(() => {
     const handleProgrammaticStart = () => {
-      if (isBackNavigationRef.current) {
-        return;
-      }
-
-      // Check if we're currently on a 404 page
-      const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
-      const has404Text = document.querySelector('h1')?.textContent === '404';
-      if (notFoundElement && has404Text) {
+      // Skip loading if we're on a 404 page
+      if (isOn404PageRef.current) {
         return;
       }
 
       if (!loadingRef.current) {
         loadingRef.current = true;
         startTransition(() => {
-          setIsLoading(true);
+          setIsLoading(false);
         });
-        
+
         if (loadingTimeoutRef.current) {
           clearTimeout(loadingTimeoutRef.current);
         }
         loadingTimeoutRef.current = setTimeout(() => {
           loadingRef.current = false;
           setIsLoading(false);
-          window.dispatchEvent(new CustomEvent('route-loading:end'));
-        }, 10000);
+          window.dispatchEvent(new CustomEvent("route-loading:end"));
+        }, 1000);
       }
     };
 
     const handleProgrammaticEnd = () => {
       loadingRef.current = false;
       setIsLoading(false);
-      
+
       if (loadingTimeoutRef.current) {
         clearTimeout(loadingTimeoutRef.current);
         loadingTimeoutRef.current = null;
@@ -163,97 +178,32 @@ function RouteLoadingOverlayContent() {
         "route-loading:start",
         handleProgrammaticStart
       );
-      window.removeEventListener(
-        "route-loading:end",
-        handleProgrammaticEnd
-      );
+      window.removeEventListener("route-loading:end", handleProgrammaticEnd);
     };
   }, []);
 
-  // When the route (path or query) changes, hide the loader
+  // When the route changes, hide the loader and update 404 state
   useEffect(() => {
     loadingRef.current = false;
     setIsLoading(false);
-    
+
     if (loadingTimeoutRef.current) {
       clearTimeout(loadingTimeoutRef.current);
       loadingTimeoutRef.current = null;
     }
-  }, [pathname, searchParams]);
 
-  useEffect(() => {
-    const handlePopState = () => {
-      loadingRef.current = false;
-      setIsLoading(false);
-      
-      if (loadingTimeoutRef.current) {
-        clearTimeout(loadingTimeoutRef.current);
-        loadingTimeoutRef.current = null;
-      }
+    // Check if we're on a 404 page
+    const check404 = () => {
+      const notFoundElement = document.querySelector(
+        ".min-h-screen.flex.items-center.justify-center.bg-gray-50"
+      );
+      const has404Text = document.querySelector("h1")?.textContent === "404";
+      isOn404PageRef.current = !!(notFoundElement && has404Text);
 
-      setTimeout(() => {
-        const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
-        const has404Text = document.querySelector('h1')?.textContent === '404';
-        
-        if (notFoundElement && has404Text) {
-          loadingRef.current = false;
-          setIsLoading(false);
-          
-          if (loadingTimeoutRef.current) {
-            clearTimeout(loadingTimeoutRef.current);
-            loadingTimeoutRef.current = null;
-          }
-        }
-      }, 50);
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
-  useEffect(() => {
-    const checkForNotFound = () => {
-      const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
-      const has404Text = document.querySelector('h1')?.textContent === '404';
-      
+      // If we detect a 404 page, ensure loading is cleared
       if (notFoundElement && has404Text) {
         loadingRef.current = false;
         setIsLoading(false);
-        return true;
-      }
-      return false;
-    };
-
-    if (checkForNotFound()) return;
-
-    if (pathname === '/404' || pathname === '/not-found' || pathname.includes('404') ||
-        pathname === '/500' || pathname === '/error' || pathname.includes('error')) {
-      loadingRef.current = false;
-      setIsLoading(false);
-      return;
-    }
-
-    const observer = new MutationObserver(() => {
-      checkForNotFound();
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-
-    return () => observer.disconnect();
-  }, [pathname]);
-
-  useEffect(() => {
-    const handle404Detection = () => {
-      const notFoundElement = document.querySelector('.min-h-screen.flex.items-center.justify-center.bg-gray-50');
-      const has404Text = document.querySelector('h1')?.textContent === '404';
-      
-      if (notFoundElement && has404Text) {
-        loadingRef.current = false;
-        setIsLoading(false);
-        
         if (loadingTimeoutRef.current) {
           clearTimeout(loadingTimeoutRef.current);
           loadingTimeoutRef.current = null;
@@ -261,18 +211,12 @@ function RouteLoadingOverlayContent() {
       }
     };
 
-    handle404Detection();
-
-    const observer = new MutationObserver(handle404Detection);
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      characterData: true
-    });
-
-    return () => observer.disconnect();
-  }, []);
+    check404();
+    // Also check after a brief delay in case DOM hasn't updated yet
+    setTimeout(check404, 100);
+    // Check again after a longer delay to catch late-rendering 404 pages
+    setTimeout(check404, 500);
+  }, [pathname, searchParams]);
 
   if (!isLoading && !isPending) return null;
 
@@ -280,7 +224,6 @@ function RouteLoadingOverlayContent() {
     <div className="fixed inset-0 z-[9999] bg-white/30 flex items-center justify-center">
       <div className="flex flex-col items-center gap-3">
         <Loader2 className="h-10 w-10 text-black animate-spin" />
-        {/* <p className="text-xs font-medium text-gray-700">Loading…</p> */}
       </div>
     </div>
   );
