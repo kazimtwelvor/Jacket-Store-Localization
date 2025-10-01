@@ -55,3 +55,34 @@ export const trackBeginCheckout = (cartItems: any[]) => {
     }
   });
 };
+
+export const trackPurchase = (orderId: string, orderItems: any[], totalPrice: string) => {
+  if (typeof window === 'undefined') return;
+
+  // Prevent duplicate tracking
+  const purchaseTracked = sessionStorage.getItem(`purchase-tracked-${orderId}`);
+  if (purchaseTracked) return;
+
+  window.dataLayer = window.dataLayer || [];
+  
+  const items = orderItems.map(item => ({
+    item_id: item.id,
+    item_name: item.name,
+    item_category: 'Jackets',
+    item_variant: `${item.size || ''}${item.color ? ` - ${item.color}` : ''}`.trim(),
+    price: parseFloat(item.price || '0'),
+    quantity: item.quantity || 1
+  }));
+
+  window.dataLayer.push({
+    event: 'purchase',
+    ecommerce: {
+      transaction_id: orderId,
+      value: parseFloat(totalPrice || '0'),
+      currency: 'USD',
+      items: items
+    }
+  });
+
+  sessionStorage.setItem(`purchase-tracked-${orderId}`, 'true');
+};
