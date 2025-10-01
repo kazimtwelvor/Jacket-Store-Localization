@@ -30,44 +30,44 @@ const discoverData: Record<string, { title: string; items: string[]; links: stri
     {
       title: "LEATHER JACKETS",
       items: ["Leather Jackets", "Fashion Leather Jackets", "Leather Bomber Jackets", "Leather Biker Jackets", "Suede Leather Jackets", "Leather Blazers", "Leather Vests"],
-      links: ["/collections/womens-leather-bomber-jackets", "/collections/womens-fashion-leather-jackets", "/collections/womens-leather-bomber-jackets", "/collections/womens-leather-biker-jackets", "/collections/womens-suede-leather-jackets", "/collections/womens-leather-blazers", "/collections/womens-leather-vests"]
+      links: ["/us/us/collections/womens-leather-bomber-jackets", "/us/us/collections/womens-fashion-leather-jackets", "/us/us/collections/womens-leather-bomber-jackets", "/us/us/collections/womens-leather-biker-jackets", "/us/us/collections/womens-suede-leather-jackets", "/us/us/collections/womens-leather-blazers", "/us/collections/womens-leather-vests"]
     },
     {
       title: "COATS",
       items: ["Shearling Coats", "Trench Coats", "Winter Coats", "Rain Coats", "Puffer Jackets", "Quilted Jackets"],
-      links: ["/collections/womens-shearling-coats", "/collections/womens-trench-coats", "/collections/womens-winter-coats", "/collections/womens-rain-coats", "/collections/womens-puffer-jackets", "/collections/womens-quilted-jackets"]
+      links: ["/us/us/collections/womens-shearling-coats", "/us/collections/womens-trench-coats", "/us/collections/womens-winter-coats", "/us/collections/womens-rain-coats", "/us/collections/womens-puffer-jackets", "/us/collections/womens-quilted-jackets"]
     },
     {
       title: "STYLES",
       items: ["Cropped Jackets", "Pilot & Aviator Jackets", "Varsity Jackets", "Letterman Jackets", "Denim Jackets", "Anorak & Ski Jackets"],
-      links: ["/collections/womens-cropped-jackets", "/collections/womens-pilot-aviator-jackets", "/collections/womens-varsity-jackets", "/collections/womens-letterman-jackets", "/collections/womens-denim-jackets", "/collections/womens-anorak-ski-jackets"]
+      links: ["/us/collections/womens-cropped-jackets", "/us/collections/womens-pilot-aviator-jackets", "/us/collections/womens-varsity-jackets", "/us/collections/womens-letterman-jackets", "/us/collections/womens-denim-jackets", "/us/collections/womens-anorak-ski-jackets"]
     },
     {
       title: "SPECIAL COLLECTIONS",
       items: ["Puffer Vests", "Vintage Style", "Elegant Style", "Luxury Collection"],
-      links: ["/collections/womens-puffer-vests", "/shop?genders=women&style=vintage", "/shop?genders=women&style=elegant", "/shop?genders=women&price=luxury"]
+      links: ["/us/collections/womens-puffer-vests", "/shop?genders=women&style=vintage", "/shop?genders=women&style=elegant", "/shop?genders=women&price=luxury"]
     }
   ],
   "Men's Jackets": [
     {
       title: "LEATHER JACKETS",
       items: ["Leather Jackets", "Leather Bomber Jackets", "Biker & Moto Jackets", "Aviator & Flight Jackets", "Hooded Leather Jackets", "Suede Jackets", "Leather Vests"],
-      links: ["/collections/leather-bomber-jacket-mens", "collections/leather-bomber-jacket-mens", "/collections/mens-biker-moto-jackets", "/collections/mens-aviator-jackets", "/collections/mens-hooded-leather-jackets", "/collections/mens-suede-jackets", "/collections/mens-leather-vests"]
+      links: ["/us/collections/leather-bomber-jacket-mens", "collections/leather-bomber-jacket-mens", "/us/collections/mens-biker-moto-jackets", "/us/collections/mens-aviator-jackets", "/us/collections/mens-hooded-leather-jackets", "/us/collections/mens-suede-jackets", "/us/collections/mens-leather-vests"]
     },
     {
       title: "COATS",
       items: ["Leather Dusters", "Long Leather Coats", "Shearling Coats", "Winter Coats", "Puffer Jackets", "Fur & Shearling Jackets"],
-      links: ["/collections/mens-leather-dusters", "/collections/mens-long-leather-coats", "/collections/mens-shearling-coats", "/collections/mens-winter-coats", "/collections/mens-puffer-jackets", "/collections/mens-fur-shearling-jackets"]
+      links: ["/us/collections/mens-leather-dusters", "/us/collections/mens-long-leather-coats", "/us/collections/mens-shearling-coats", "/us/collections/mens-winter-coats", "/us/collections/mens-puffer-jackets", "/us/collections/mens-fur-shearling-jackets"]
     },
     {
       title: "STYLES",
       items: ["Varsity Jackets", "Letterman Jackets", "Denim Jackets", "Leather Blazers", "Lightweight Jackets", "Soft Shell Jackets"],
-      links: ["/collections/mens-varsity-jackets", "/collections/mens-letterman-jackets", "/collections/mens-denim-jackets", "/collections/mens-leather-blazers", "/collections/mens-lightweight-jackets", "/collections/mens-soft-shell-jackets"]
+      links: ["/us/collections/mens-varsity-jackets", "/us/collections/mens-letterman-jackets", "/us/collections/mens-denim-jackets", "/us/collections/mens-leather-blazers", "/us/collections/mens-lightweight-jackets", "/us/collections/mens-soft-shell-jackets"]
     },
     {
       title: "SPECIAL COLLECTIONS",
       items: ["Plus Size Leather Jackets", "Puffer Vests", "Vintage Style", "Luxury Collection"],
-      links: ["/collections/plus-size-leather-jackets", "/collections/mens-puffer-vests", "/shop?genders=men&style=vintage", "/shop?genders=men&price=luxury"]
+      links: ["/us/collections/plus-size-leather-jackets", "/us/collections/mens-puffer-vests", "/shop?genders=men&style=vintage", "/shop?genders=men&price=luxury"]
     }
   ],
   "Coats": [
@@ -96,17 +96,17 @@ const discoverData: Record<string, { title: string; items: string[]; links: stri
     {
       title: "COMPANY",
       items: ["Blogs", "About Us"],
-      links: ["/blogs", "/about-us"]
+      links: ["/us/blogs", "/us/about-us"]
     },
     {
       title: "SUPPORT",
       items: ["FAQs", "Reviews", "Contact Us", "Size Guide"],
-      links: ["/faqs", "/reviews", "/contact-us", "/size-guide"]
+      links: ["/us/faqs", "/us/reviews", "/us/contact-us", "/us/size-guide"]
     },
     {
       title: "HELP",
       items: ["Privacy Policy", "Terms & Conditions", "Shipping & Delivery"],
-      links: ["/privacy-policy", "/terms-conditions", "/shipping-and-delivery-policy"]
+      links: ["/us/privacy-policy", "/us/terms-conditions", "/us/shipping-and-delivery-policy"]
     }
   ]
 };

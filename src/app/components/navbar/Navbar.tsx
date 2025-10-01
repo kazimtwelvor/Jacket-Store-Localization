@@ -118,7 +118,7 @@ const Navbar = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const isMobileView = window.innerWidth < 1024;
-      const isShopPage = pathname === "/shop";
+      const isShopPage = pathname === "/us/shop";
 
       if (isMobileView && !isShopPage) {
         if (currentScrollY > 100 && currentScrollY > lastScrollY.current) {

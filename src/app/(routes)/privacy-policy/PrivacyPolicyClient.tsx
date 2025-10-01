@@ -88,7 +88,7 @@ export default function PrivacyPolicyClient() {
                   asChild
                   className="w-full"
                 >
-                  <Link href="/contact-us">Questions? Contact Us</Link>
+                  <Link href="/us/contact-us">Questions? Contact Us</Link>
                 </Button>
               </div>
             </div>

@@ -565,7 +565,7 @@ const CartPage = () => {
                   </button>
                 </div>
 
-                <AddMoreOffer onContinueShopping={() => router.push("/shop")} />
+                <AddMoreOffer onContinueShopping={() => router.push("/us/shop")} />
               </div>
 
               <div className="lg:col-span-5">
@@ -853,7 +853,7 @@ const CartPage = () => {
                     <div className="flex items-center gap-2 text-sm text-black">
                       <Truck className="h-4 w-4" />
                       <Link
-                        href="/shipping-and-delivery-policy"
+                        href="/us/shipping-and-delivery-policy"
                         className="underline cursor-pointer hover:text-gray-600"
                       >
                         Free Shipping over 99 USD

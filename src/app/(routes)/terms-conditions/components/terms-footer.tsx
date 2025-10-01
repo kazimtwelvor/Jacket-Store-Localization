@@ -40,7 +40,7 @@ export default function TermsFooter() {
           </div>
         </Link>
 
-        <Link href="/faqs" className="block">
+        <Link href="/us/faqs" className="block">
           <div className="bg-white p-6 rounded-lg border shadow-sm hover:border-primary/20 h-full">
             <div className="flex items-center mb-3">
               <div className="h-5 w-5 mr-2 text-primary">
@@ -66,7 +66,7 @@ export default function TermsFooter() {
           </div>
         </Link>
 
-        <Link href="/contact-us" className="block">
+        <Link href="/us/contact-us" className="block">
           <div className="bg-white p-6 rounded-lg border shadow-sm hover:border-primary/20 h-full">
             <div className="flex items-center mb-3">
               <div className="h-5 w-5 mr-2 text-primary">
@@ -120,7 +120,7 @@ export default function TermsFooter() {
         </motion.div>
       </Link>
 
-      <Link href="/faqs" className="block">
+      <Link href="/us/faqs" className="block">
         <motion.div
           whileHover={{ y: -4, boxShadow: "0 10px 25px -5px rgba(176, 30, 35, 0.1)" }}
           transition={{ duration: 0.2 }}
@@ -134,7 +134,7 @@ export default function TermsFooter() {
         </motion.div>
       </Link>
 
-      <Link href="/contact-us" className="block">
+      <Link href="/us/contact-us" className="block">
         <motion.div
           whileHover={{ y: -4, boxShadow: "0 10px 25px -5px rgba(176, 30, 35, 0.1)" }}
           transition={{ duration: 0.2 }}

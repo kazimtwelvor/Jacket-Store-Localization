@@ -241,7 +241,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/shop?genders=men&style=vintage"
+                    href="/us/shop?genders=men&style=vintage"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -250,7 +250,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/shop?genders=men&price=luxury"
+                    href="/us/shop?genders=men&price=luxury"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >

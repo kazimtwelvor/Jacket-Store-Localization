@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-const BASE_URL = 'https://fineystjackets.com/us'
+const BASE_URL = 'https://www.fineystjackets.com/us'
 
 // Static pages that should be included in sitemap
 const STATIC_PAGES = [

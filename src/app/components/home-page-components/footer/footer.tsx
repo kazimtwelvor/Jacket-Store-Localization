@@ -141,7 +141,7 @@ const Footer = () => {
 
 
                                 <li>
-                                    <Link href="/shop" className="text-black  hover:font-semibold transition-all" >
+                                    <Link href="/us/shop" className="text-black  hover:font-semibold transition-all" >
                                         Shop
                                     </Link>
                                 </li>
@@ -199,7 +199,7 @@ const Footer = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/about-us" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/about-us" className="text-black hover:font-bold transition-all">
                                         About Us
                                     </Link>
                                 </li>
@@ -215,27 +215,27 @@ const Footer = () => {
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'support' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/faqs" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/faqs" className="text-black hover:font-bold transition-all">
                                         FAQs
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/reviews" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/reviews" className="text-black hover:font-bold transition-all">
                                         Reviews
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/contact-us" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/contact-us" className="text-black hover:font-bold transition-all">
                                         Contact Us
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/size-guide" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/size-guide" className="text-black hover:font-bold transition-all">
                                         Size Guide
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/track-order" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/track-order" className="text-black hover:font-bold transition-all">
                                         Track My Order
                                     </Link>
                                 </li>
@@ -381,19 +381,19 @@ const Footer = () => {
                         {/* Legal Links - Center */}
                         <div className="mb-4 md:mb-0 md:w-1/3 flex justify-center">
                             <div className="flex flex-wrap justify-center gap-3 text-sm">
-                                <Link href="/faqs" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href="/us/faqs" className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     FAQs
                                 </Link>
-                                <Link href="/privacy-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href="/us/privacy-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Privacy
                                 </Link>
-                                <Link href="/terms-conditions" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href="/us/terms-conditions" className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Terms
                                 </Link>
-                                <Link href="/shipping-and-delivery-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href="/us/shipping-and-delivery-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Shipping
                                 </Link>
-                                <Link href="/refund-and-returns-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href="/us/refund-and-returns-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Returns
                                 </Link>
                             </div>

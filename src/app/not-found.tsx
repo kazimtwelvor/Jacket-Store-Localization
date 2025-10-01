@@ -21,11 +21,11 @@ export default function NotFound() {
           </Link>
           
           <div className="text-sm text-gray-400">
-            <Link href="/shop" className="hover:text-gray-600 transition-colors">
+            <Link href="/us/shop" className="hover:text-gray-600 transition-colors">
               Browse Products
             </Link>
             {' • '}
-            <Link href="/contact-us" className="hover:text-gray-600 transition-colors">
+            <Link href="/us/contact-us" className="hover:text-gray-600 transition-colors">
               Contact Support
             </Link>
           </div>

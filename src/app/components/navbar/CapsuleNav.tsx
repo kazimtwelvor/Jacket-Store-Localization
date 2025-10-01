@@ -431,7 +431,7 @@ export function CapsuleNav() {
 
   const isCategoryPage = pathname?.startsWith("/category/");
   const isCollectionsPage = pathname?.startsWith("/collections/");
-  const isShopPage = pathname === "/shop";
+  const isShopPage = pathname === "/us/shop";
   const lastScrollY = useRef(0);
 
   const isMobileView =
@@ -522,7 +522,7 @@ export function CapsuleNav() {
   useEffect(() => {
     if (pathname === "/") {
       setActiveItem(0);
-    } else if (pathname === "/shop") {
+    } else if (pathname === "/us/shop") {
       setActiveItem(-1);
     } else {
       setActiveItem(-1);
@@ -570,7 +570,7 @@ export function CapsuleNav() {
           <div className="flex touch-pan-y">
             {items.map((item) => (
               <div key={item.id} className="relative mr-1">
-                <Link href={item.href ?? `/shop?${item.category}`}>
+                <Link href={item.href ?? `/us/shop?${item.category}`}>
                   <Button
                     variant={item.id === activeItem && activeItem !== -1 ? "destructive" : "ghost_2"}
                     className={cn(
