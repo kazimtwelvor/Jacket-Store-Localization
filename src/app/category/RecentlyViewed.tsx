@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useRef, useEffect } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Heart, ChevronLeft, ChevronRight, X } from "lucide-react"
 import { cn } from "../lib/utils"
@@ -238,12 +239,11 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
             onTouchEnd={handleTouchEnd}
           >
             {currentProducts.map((product, index) => (
-              // Changed from motion.div to div and removed whileHover, onMouseEnter, onMouseLeave
-              <div
+              <Link
                 key={`recent-mobile-${product.id}-${index}`}
+                href={`/us/product/${product.slug || product.id}`}
                 className="flex-shrink-0 w-[calc(59vw-16px)] cursor-pointer flex flex-col h-full"
-                // Removed whileHover and onMouseEnter/onMouseLeave for mobile
-                onClick={(e) => handleCardClick(product, e)}
+                onClick={() => addToRecentlyViewed(product)}
               >
                 <div className="relative flex-1 aspect-[3/5] overflow-visible bg-gray-100">
                   {/* Simplified image logic for mobile - no hover swap */}
@@ -362,7 +362,8 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                     </div>
                   </div>
                 </div>
-              </div>
+                <span className="sr-only">View {product.name} - ${product.salePrice && Number(product.salePrice) > 0 ? product.salePrice : product.price}</span>
+              </Link>
             ))}
           </motion.div>
         </div>
@@ -480,13 +481,14 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
               onMouseLeave={handleMouseUp}
             >
               {currentProducts.map((product, index) => (
-                <div
+                <Link
                   key={`recent-${product.id}-${index}`}
+                  href={`/us/product/${product.slug || product.id}`}
                   className="group/item flex-shrink-0 cursor-pointer flex flex-col"
                   style={{ width: `calc(${(100 / visibleItems)}% - ${((visibleItems - 1) * 20) / visibleItems}px)`, userSelect: 'none' }}
                   onMouseEnter={() => setHoveredProduct(`recent-${product.id}-${index}`)}
                   onMouseLeave={() => setHoveredProduct(null)}
-                  onClick={(e) => handleCardClick(product, e)}
+                  onClick={() => addToRecentlyViewed(product)}
                 >
                   <div className="relative overflow-hidden bg-gray-100 w-full aspect-[3/5]">
                     <Image
@@ -806,7 +808,8 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                       </div>
                     </div>
                   </div>
-                </div>
+                  <span className="sr-only">View {product.name} - ${product.salePrice && Number(product.salePrice) > 0 ? product.salePrice : product.price}</span>
+                </Link>
               ))}
             </motion.div>
           </div>
