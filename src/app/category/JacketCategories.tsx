@@ -89,7 +89,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
   const handleCategoryClick = (slug: string) => {
     if (typeof window !== 'undefined') {
       const currentPath = window.location.pathname;
-      const targetPath = `/collections/${slug}`;
+      const targetPath = `/us/collections/${slug}`;
 
       if (currentPath === targetPath) {
         window.dispatchEvent(new CustomEvent('route-loading:end'));
@@ -106,7 +106,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
 
     if (typeof window !== 'undefined') {
       const currentPath = window.location.pathname;
-      const targetPath = `/collections/${categorySlug}`;
+      const targetPath = `/us/collections/${categorySlug}`;
 
       if (currentPath === targetPath) {
         return;
@@ -119,7 +119,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
     if (onCategoryClick) {
       onCategoryClick(categorySlug);
     } else {
-      router.push(`/collections/${categorySlug}`);
+      router.push(`/us/collections/${categorySlug}`);
     }
   };
 
@@ -350,7 +350,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
                     <CategoryContent />
                   ) : (
                     <Link
-                      href={`/collections/${categorySlug}`}
+                      href={`/us/collections/${categorySlug}`}
                       onClick={(e) => handleLinkClick(e, categorySlug)}
                     >
                       <CategoryContent />

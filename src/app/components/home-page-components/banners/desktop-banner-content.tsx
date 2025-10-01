@@ -17,9 +17,9 @@ export const DesktopBannerContent = () => {
   const handleShopClick = (gender: string) => {
     let url: string;
     if (gender === "men") {
-      url = "/collections/leather-bomber-jacket-mens";
+      url = "/us/collections/leather-bomber-jacket-mens";
     } else if (gender === "women") {
-      url = "/collections/womens-leather-bomber-jackets";
+      url = "/us/collections/womens-leather-bomber-jackets";
     } else {
       notFound();
       return;

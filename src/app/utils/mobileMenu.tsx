@@ -30,12 +30,12 @@ const discoverData: Record<string, { title: string; items: string[]; links: stri
     {
       title: "LEATHER JACKETS",
       items: ["Leather Jackets", "Fashion Leather Jackets", "Leather Bomber Jackets", "Leather Biker Jackets", "Suede Leather Jackets", "Leather Blazers", "Leather Vests"],
-      links: ["/us/us/collections/womens-leather-bomber-jackets", "/us/us/collections/womens-fashion-leather-jackets", "/us/us/collections/womens-leather-bomber-jackets", "/us/us/collections/womens-leather-biker-jackets", "/us/us/collections/womens-suede-leather-jackets", "/us/us/collections/womens-leather-blazers", "/us/collections/womens-leather-vests"]
+      links: ["/us/collections/womens-leather-bomber-jackets", "/us/collections/womens-fashion-leather-jackets", "/us/collections/womens-leather-bomber-jackets", "/us/collections/womens-leather-biker-jackets", "/us/collections/womens-suede-leather-jackets", "/us/collections/womens-leather-blazers", "/us/collections/womens-leather-vests"]
     },
     {
       title: "COATS",
       items: ["Shearling Coats", "Trench Coats", "Winter Coats", "Rain Coats", "Puffer Jackets", "Quilted Jackets"],
-      links: ["/us/us/collections/womens-shearling-coats", "/us/collections/womens-trench-coats", "/us/collections/womens-winter-coats", "/us/collections/womens-rain-coats", "/us/collections/womens-puffer-jackets", "/us/collections/womens-quilted-jackets"]
+      links: ["/us/collections/womens-shearling-coats", "/us/collections/womens-trench-coats", "/us/collections/womens-winter-coats", "/us/collections/womens-rain-coats", "/us/collections/womens-puffer-jackets", "/us/collections/womens-quilted-jackets"]
     },
     {
       title: "STYLES",

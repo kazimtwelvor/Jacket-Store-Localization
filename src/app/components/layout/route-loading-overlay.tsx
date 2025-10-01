@@ -96,8 +96,8 @@ function RouteLoadingOverlayContent() {
         const fromPath = location.pathname + location.search + location.hash;
         if (toPath === fromPath) return;
         if (
-          url.pathname.startsWith("/collections/") &&
-          location.pathname.startsWith("/collections/") &&
+          url.pathname.startsWith("/us/collections/") &&
+          location.pathname.startsWith("/us/collections/") &&
           url.pathname === location.pathname
         )
           return;

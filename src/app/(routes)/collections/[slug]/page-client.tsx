@@ -1086,7 +1086,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                                             <button
                                                 key={cat.id}
                                                 onClick={() => {
-                                                    router.push(`/collections/${categorySlug}`)
+                                                    router.push(`/us/collections/${categorySlug}`)
                                                     setCategoriesSidebarOpen(false)
                                                 }}
                                                 className={cn(
@@ -1376,7 +1376,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     description: ''
                 }}
                 onCategorySelect={(selectedCategory) => {
-                    router.push(`/collections/${selectedCategory.slug}`);
+                    router.push(`/us/collections/${selectedCategory.slug}`);
                     setCategorySliderOpen(false);
                 }}
             />

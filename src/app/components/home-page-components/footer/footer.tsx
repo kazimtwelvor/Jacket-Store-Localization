@@ -158,27 +158,27 @@ const Footer = () => {
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'categories' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/collections/mens-leather-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/collections/mens-leather-jackets" className="text-black hover:font-bold transition-all">
                                         Men's Leather Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/collections/mens-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/collections/mens-jackets" className="text-black hover:font-bold transition-all">
                                         Men's Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/collections/mens-letterman-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/collections/mens-letterman-jackets" className="text-black hover:font-bold transition-all">
                                         Men's Letterman Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/collections/mens-denim-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/collections/mens-denim-jackets" className="text-black hover:font-bold transition-all">
                                         Men's Denim Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/collections" className="text-black  hover:font-bold transition-all">
+                                    <Link href="/us/collections" className="text-black  hover:font-bold transition-all">
                                         View All
                                     </Link>
                                 </li>

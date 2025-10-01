@@ -430,7 +430,7 @@ export function CapsuleNav() {
   });
 
   const isCategoryPage = pathname?.startsWith("/category/");
-  const isCollectionsPage = pathname?.startsWith("/collections/");
+  const isCollectionsPage = pathname?.startsWith("/us/collections/");
   const isShopPage = pathname === "/us/shop";
   const lastScrollY = useRef(0);
 

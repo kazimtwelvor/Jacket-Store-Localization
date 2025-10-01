@@ -337,7 +337,7 @@ const Navbar = () => {
 
   const navigateToCategory = (category: string, _gender?: "men" | "women") => {
     const slug = toSlug(category);
-    router.push(`/collections/${slug}`);
+    router.push(`/us/collections/${slug}`);
     setIsSearchOpen(false);
     setSelectedCategory(null);
     setSearchQuery("");
@@ -428,7 +428,7 @@ const Navbar = () => {
                   <Button
                     variant="ghost"
                     className={`h-full rounded-none bg-transparent hover:!bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
-                    onClick={() => router.push("/collections")}
+                    onClick={() => router.push("/us/collections")}
                   >
                     COATS
                   </Button>
@@ -953,7 +953,7 @@ const Navbar = () => {
                                 className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
                                 onClick={() => {
                                   const categorySlug = toSlug(product.category || "");
-                                  router.push(`/collections/${categorySlug}`);
+                                  router.push(`/us/collections/${categorySlug}`);
                                   setIsSearchOpen(false);
                                   setSelectedCategory(null);
                                   setSearchQuery("");
@@ -1005,7 +1005,7 @@ const Navbar = () => {
                           <div
                             className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
                             onClick={() => {
-                              router.push("/collections");
+                              router.push("/us/collections");
                               setIsSearchOpen(false);
                               setSelectedCategory(null);
                               setSearchQuery("");

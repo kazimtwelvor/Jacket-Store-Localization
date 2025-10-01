@@ -69,7 +69,7 @@ const ShopCategories: React.FC<ShopCategoriesProps> = ({ keywordCategories }) =>
     if (!slug) return;
     if (isNavigatingRef.current) return;
     isNavigatingRef.current = true;
-    router.push(`/collections/${slug}`);
+    router.push(`/us/collections/${slug}`);
   }
 
   const checkForScrollability = useCallback(() => {
