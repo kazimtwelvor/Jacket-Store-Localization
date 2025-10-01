@@ -58,8 +58,11 @@ export default function MobileAddToCartModal({
     if (mobileSizeId) {
       const selectedSize = sizesToShow.find((s: Size) => s.id === mobileSizeId);
       const selectedSizeName = selectedSize?.name || "Default";
+      
+      const selectedColor = availableColors.find((c: Color) => c.id === selectedColorId);
+      const selectedColorName = selectedColor?.name || "Default";
 
-      addToCart(product, selectedSizeName);
+      addToCart(product, selectedSizeName, selectedColorName);
       setStep("cart-confirmation");
     }
   };

@@ -12,7 +12,9 @@ interface ProductCardFallbackProps {
   hoveredProduct: string | null
   setHoveredProduct: (productId: string | null) => void
   selectedSizes: Record<string, string>
+  selectedColors: Record<string, string>
   handleSizeSelect: (productId: string, size: string) => void
+  handleColorSelect: (colorId: string, productId: string) => void
   handleClick: (product: Product) => void
   addToRecentlyViewed: (product: Product) => void
   wishlist: any
@@ -31,7 +33,9 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
   hoveredProduct,
   setHoveredProduct,
   selectedSizes,
+  selectedColors,
   handleSizeSelect,
+  handleColorSelect,
   handleClick,
   addToRecentlyViewed,
   wishlist,

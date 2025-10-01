@@ -16,9 +16,11 @@ interface WeThinkYouWillLoveProps {
   hoveredProduct: string | null
   setHoveredProduct: (id: string | null) => void
   selectedSizes: Record<string, string>
+  selectedColors: Record<string, string>
   addToRecentlyViewed: (product: Product) => void
   handleClick: (product: Product) => void
   handleSizeSelect: (productId: string, size: string) => void
+  handleColorSelect: (colorId: string, productId: string) => void
   onAddToCartClick: (product: Product) => void;
 }
 
@@ -27,9 +29,11 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
   hoveredProduct,
   setHoveredProduct,
   selectedSizes,
+  selectedColors,
   addToRecentlyViewed,
   handleClick,
   handleSizeSelect,
+  handleColorSelect,
   onAddToCartClick,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -317,15 +321,23 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                       className="relative inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-black"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      {((product as any).colorDetails || (product as any).colors || [{ value: '#000000', name: 'Black' }]).slice(0, 1).map((color: any, index: number) => (
-                        <div key={index} className="flex items-center gap-1">
-                          <div
-                            className="w-4 h-4 rounded-full border border-black/30"
-                            style={{ backgroundColor: color.value || '#000000' }}
-                          />
-                          <span className="text-xs text-gray-700">{color.name || 'Black'}</span>
-                        </div>
-                      ))}
+                      {(() => {
+                        const availableColors = (product as any).colorDetails || (product as any).colors || [{ value: '#000000', name: 'Black' }];
+                        const selectedColorId = selectedColors[product.id];
+                        const selectedColor = selectedColorId 
+                          ? availableColors.find((color: any) => color.id === selectedColorId) || availableColors[0]
+                          : availableColors[0];
+                        
+                        return (
+                          <div className="flex items-center gap-1">
+                            <div
+                              className="w-4 h-4 rounded-full border border-black/30"
+                              style={{ backgroundColor: selectedColor.value || '#000000' }}
+                            />
+                            <span className="text-xs text-gray-700">{selectedColor.name || 'Black'}</span>
+                          </div>
+                        );
+                      })()}
                       {((product as any).colorDetails || (product as any).colors || []).length > 1 && (
                         <button
                           onClick={(e) => {
@@ -392,16 +404,19 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                             e.preventDefault()
                             e.stopPropagation()
 
+                            handleColorSelect(color.id || color.name, product.id)
+
+                            const colorLinks = product?.colorLinks || {}
+                            const colorLink = colorLinks[color.name]
+
                             if (colorLink && colorLink.trim() !== '') {
-                              const productKey = colorPopup.productKey
-                              const currentProductIndex = parseInt(productKey.split('-').pop() || '0')
+                              const currentProductIndex = displayedProducts.findIndex(p => p.id === product.id)
                               if (currentProductIndex === -1) return
 
                               const loadingKey = `${product.id}-${currentProductIndex}`
                               setLoadingProducts(prev => new Set([...prev, loadingKey]))
                               
                               try {
-
                                 const response = await fetch(`/api/product-by-url?url=${encodeURIComponent(colorLink)}`)
 
                                 if (response.ok) {

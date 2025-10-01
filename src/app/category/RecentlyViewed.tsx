@@ -13,9 +13,11 @@ interface RecentlyViewedProps {
   hoveredProduct: string | null
   setHoveredProduct: (id: string | null) => void
   selectedSizes: Record<string, string>
+  selectedColors: Record<string, string>
   addToRecentlyViewed: (product: Product) => void
   handleClick: (product: Product) => void
   handleSizeSelect: (productId: string, size: string) => void
+  handleColorSelect: (colorId: string, productId: string) => void
   onAddToCartClick: (product: Product) => void;
 }
 
@@ -24,9 +26,11 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
   hoveredProduct,
   setHoveredProduct,
   selectedSizes,
+  selectedColors,
   addToRecentlyViewed,
   handleClick,
   handleSizeSelect,
+  handleColorSelect,
   onAddToCartClick,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -320,15 +324,23 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                       className="relative inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-black"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      {((product as any).colorDetails || (product as any).colors || [{ value: '#000000', name: 'Black' }]).slice(0, 1).map((color: any, index: number) => (
-                        <div key={index} className="flex items-center gap-1">
-                          <div
-                            className="w-4 h-4 rounded-full border border-black/30"
-                            style={{ backgroundColor: color.value || '#000000' }}
-                          />
-                          <span className="text-xs text-gray-700">{color.name || 'Black'}</span>
-                        </div>
-                      ))}
+                      {(() => {
+                        const availableColors = (product as any).colorDetails || (product as any).colors || [{ value: '#000000', name: 'Black' }];
+                        const selectedColorId = selectedColors[product.id];
+                        const selectedColor = selectedColorId 
+                          ? availableColors.find((color: any) => color.id === selectedColorId) || availableColors[0]
+                          : availableColors[0];
+                        
+                        return (
+                          <div className="flex items-center gap-1">
+                            <div
+                              className="w-4 h-4 rounded-full border border-black/30"
+                              style={{ backgroundColor: selectedColor.value || '#000000' }}
+                            />
+                            <span className="text-xs text-gray-700">{selectedColor.name || 'Black'}</span>
+                          </div>
+                        );
+                      })()}
                       {((product as any).colorDetails || (product as any).colors || []).length > 1 && (
                         <button
                           ref={(el) => {

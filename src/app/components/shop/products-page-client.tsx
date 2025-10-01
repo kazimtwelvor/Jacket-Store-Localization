@@ -169,6 +169,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>(
     {}
   );
+  const [selectedColors, setSelectedColors] = useState<Record<string, string>>(
+    {}
+  );
   const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
   const [visibleProducts, setVisibleProducts] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(
@@ -565,6 +568,13 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     });
   };
 
+  const handleColorSelect = (colorId: string, productId: string) => {
+    setSelectedColors((prev) => ({
+      ...prev,
+      [productId]: colorId,
+    }));
+  };
+
   const handleSizeSelect = (productId: string, size: string) => {
     const product =
       (currentProducts.length > 0
@@ -573,7 +583,12 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       ).find((p) => p.id === productId) ||
       recentlyViewed.find((p) => p.id === productId);
     if (product) {
-      addToCart(product, size);
+      const selectedColorId = selectedColors[productId];
+      const selectedColor = selectedColorId 
+        ? product.colorDetails?.find(color => color.id === selectedColorId)?.name 
+        : product.colorDetails?.[0]?.name || "Default";
+      
+      addToCart(product, size, selectedColor);
       if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("openCart"));
       }
@@ -1020,7 +1035,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
                     hoveredProduct={hoveredProduct}
                     setHoveredProduct={setHoveredProduct}
                     selectedSizes={selectedSizes}
+                    selectedColors={selectedColors}
                     handleSizeSelect={handleSizeSelect}
+                    handleColorSelect={handleColorSelect}
                     handleClick={handleClick}
                     addToRecentlyViewed={addToRecentlyViewed}
                     wishlist={wishlist}
@@ -1102,9 +1119,11 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             hoveredProduct={hoveredProduct}
             setHoveredProduct={setHoveredProduct}
             selectedSizes={selectedSizes}
+            selectedColors={selectedColors}
             addToRecentlyViewed={addToRecentlyViewed}
             handleClick={handleClick}
             handleSizeSelect={handleSizeSelect}
+            handleColorSelect={handleColorSelect}
             onAddToCartClick={(product) =>
               setMobileCartModal({ isOpen: true, product })
             }
@@ -1117,9 +1136,11 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             hoveredProduct={hoveredProduct}
             setHoveredProduct={setHoveredProduct}
             selectedSizes={selectedSizes}
+            selectedColors={selectedColors}
             addToRecentlyViewed={addToRecentlyViewed}
             handleClick={handleClick}
             handleSizeSelect={handleSizeSelect}
+            handleColorSelect={handleColorSelect}
             onAddToCartClick={(product) =>
               setMobileCartModal({ isOpen: true, product })
             }
@@ -1177,7 +1198,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             availableSizes={mobileCartModal.product?.sizeDetails || []}
             availableColors={mobileCartModal.product?.colorDetails || []}
             selectedColorId={
-              mobileCartModal.product?.colorDetails?.[0]?.id || ""
+              selectedColors[mobileCartModal.product.id] || 
+              mobileCartModal.product?.colorDetails?.[0]?.id || 
+              ""
             }
           />
         )}
