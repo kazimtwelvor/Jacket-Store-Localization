@@ -29,3 +29,29 @@ export const trackAddToCart = (product: any, size: string, selectedColor?: strin
     }
   });
 };
+
+export const trackBeginCheckout = (cartItems: any[]) => {
+  if (typeof window === 'undefined') return;
+
+  window.dataLayer = window.dataLayer || [];
+  
+  const items = cartItems.map(item => ({
+    item_id: item.product.id,
+    item_name: item.product.name,
+    item_category: item.product.category?.name || 'Jackets',
+    item_variant: `${item.size}${item.selectedColor ? ` - ${item.selectedColor}` : ''}`,
+    price: item.unitPrice,
+    quantity: item.quantity
+  }));
+
+  const totalValue = cartItems.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
+
+  window.dataLayer.push({
+    event: 'begin_checkout',
+    ecommerce: {
+      currency: 'USD',
+      value: totalValue,
+      items: items
+    }
+  });
+};
