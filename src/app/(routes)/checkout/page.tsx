@@ -36,6 +36,10 @@ import Container from "../../ui/container";
 import { cn } from "../../lib/utils";
 import { useCart } from "../../contexts/CartContext";
 import { decrypt } from "../../utils/decrypt";
+import {
+  STATES_BY_COUNTRY,
+  getStatesForCountry,
+} from "../../utils/states-data";
 
 // Initialize Stripe
 let stripePromise: any = null;
@@ -443,6 +447,8 @@ const CheckoutPage = () => {
     billingState: "",
     billingZipCode: "",
     billingCountry: "US",
+    customState: "",
+    customBillingState: "",
   });
 
   // Add formTouched state to track touched fields
@@ -459,6 +465,10 @@ const CheckoutPage = () => {
     password: false,
     phone: false,
   });
+
+  // Get states for selected country
+  const availableStates = getStatesForCountry(formData.country);
+  const availableBillingStates = getStatesForCountry(formData.billingCountry);
 
   const totalPrice = cartTotalPrice;
   const shippingPrice =
@@ -746,10 +756,24 @@ const CheckoutPage = () => {
     const checked =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    setFormData((prev) => {
+      const newData = {
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      };
+
+      // Reset state when country changes
+      if (name === "country") {
+        newData.state = "";
+        newData.customState = "";
+      }
+      if (name === "billingCountry") {
+        newData.billingState = "";
+        newData.customBillingState = "";
+      }
+
+      return newData;
+    });
   };
 
   // Update handleInputChange to mark fields as touched on blur
@@ -1126,39 +1150,69 @@ const CheckoutPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     <div>
                       <div className="relative w-full">
-                        <select
-                          name="state"
-                          value={formData.state}
-                          onChange={handleInputChange}
-                          onBlur={handleBlur} // Mark as touched on blur
-                          required
-                          className={cn(
-                            "block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white]",
-                            !formData.state && formTouched.state
-                              ? "border-red-500"
-                              : "border-gray-300"
-                          )}
-                        >
-                          <option value=""></option>
-                          <option value="CA">California</option>
-                          <option value="NY">New York</option>
-                          <option value="TX">Texas</option>
-                        </select>
-                        <label
-                          className={cn(
-                            "absolute left-3 top-3 pointer-events-none transition-all duration-200",
-                            formData.state && formData.state !== ""
-                              ? "-translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold" // Label for filled state
-                              : "text-base text-gray-500",
-                            !formData.state && formTouched.state
-                              ? "text-red-600"
-                              : "text-gray-700"
-                          )}
-                        >
-                          State *
-                        </label>
+                        {availableStates.length > 0 ? (
+                          <select
+                            name="state"
+                            value={formData.state}
+                            onChange={handleInputChange}
+                            onBlur={handleBlur}
+                            required
+                            className={cn(
+                              "block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white]",
+                              !formData.state && formTouched.state
+                                ? "border-red-500"
+                                : "border-gray-300"
+                            )}
+                          >
+                            <option value=""></option>
+                            {availableStates.map((state) => (
+                              <option key={state.code} value={state.code}>
+                                {state.name}
+                              </option>
+                            ))}
+                            <option value="OTHER">Enter your state</option>
+                          </select>
+                        ) : (
+                          <FloatingLabelInput
+                            label="State/Province"
+                            name="state"
+                            value={formData.state}
+                            onChange={handleInputChange}
+                            onBlur={handleBlur}
+                            required
+                            error={!formData.state && formTouched.state}
+                          />
+                        )}
+                        {availableStates.length > 0 && (
+                          <label
+                            className={cn(
+                              "absolute left-3 top-3 pointer-events-none transition-all duration-200",
+                              formData.state && formData.state !== ""
+                                ? "-translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold"
+                                : "text-base text-gray-500",
+                              !formData.state && formTouched.state
+                                ? "text-red-600"
+                                : "text-gray-700"
+                            )}
+                          >
+                            State *
+                          </label>
+                        )}
                       </div>
                     </div>
+                    {formData.state === "OTHER" &&
+                      availableStates.length > 0 && (
+                        <div>
+                          <FloatingLabelInput
+                            label="Enter your state/province"
+                            name="customState"
+                            value={formData.customState || ""}
+                            onChange={handleInputChange}
+                            onBlur={handleBlur}
+                            required
+                          />
+                        </div>
+                      )}
                     <div>
                       <FloatingLabelInput
                         label="Zip Code"
@@ -1332,38 +1386,69 @@ const CheckoutPage = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                           <div>
                             <div className="relative w-full">
-                              <select
-                                name="billingState"
-                                value={formData.billingState}
-                                onChange={handleInputChange}
-                                onBlur={handleBlur} // Mark as touched on blur
-                                required
-                                className="block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white] border-gray-300"
-                              >
-                                <option value=""></option>
-                                <option value="CA">California</option>
-                                <option value="NY">New York</option>
-                                <option value="TX">Texas</option>
-                              </select>
-                              <label
-                                className={`absolute left-3 top-3 pointer-events-none transition-all duration-200 ${
-                                  formData.billingState &&
-                                  formData.billingState !== ""
-                                    ? "-translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold" // Label for filled state
-                                    : "text-base text-gray-500"
-                                } text-gray-700`}
-                              >
-                                State *
-                              </label>
+                              {availableBillingStates.length > 0 ? (
+                                <select
+                                  name="billingState"
+                                  value={formData.billingState}
+                                  onChange={handleInputChange}
+                                  onBlur={handleBlur}
+                                  required
+                                  className="block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white] border-gray-300"
+                                >
+                                  <option value=""></option>
+                                  {availableBillingStates.map((state) => (
+                                    <option key={state.code} value={state.code}>
+                                      {state.name}
+                                    </option>
+                                  ))}
+                                  <option value="OTHER">
+                                    Enter your state
+                                  </option>
+                                </select>
+                              ) : (
+                                <FloatingLabelInput
+                                  label="State/Province"
+                                  name="billingState"
+                                  value={formData.billingState}
+                                  onChange={handleInputChange}
+                                  onBlur={handleBlur}
+                                  required
+                                />
+                              )}
+                              {availableBillingStates.length > 0 && (
+                                <label
+                                  className={`absolute left-3 top-3 pointer-events-none transition-all duration-200 ${
+                                    formData.billingState &&
+                                    formData.billingState !== ""
+                                      ? "-translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold"
+                                      : "text-base text-gray-500"
+                                  } text-gray-700`}
+                                >
+                                  State *
+                                </label>
+                              )}
                             </div>
                           </div>
+                          {formData.billingState === "OTHER" &&
+                            availableBillingStates.length > 0 && (
+                              <div>
+                                <FloatingLabelInput
+                                  label="Enter your state/province"
+                                  name="customBillingState"
+                                  value={formData.customBillingState || ""}
+                                  onChange={handleInputChange}
+                                  onBlur={handleBlur}
+                                  required
+                                />
+                              </div>
+                            )}
                           <div>
                             <FloatingLabelInput
                               label="Zip Code"
                               name="billingZipCode"
                               value={formData.billingZipCode}
                               onChange={handleInputChange}
-                              onBlur={handleBlur} // Mark as touched on blur
+                              onBlur={handleBlur}
                               required
                             />
                           </div>
@@ -1697,10 +1782,6 @@ const CheckoutPage = () => {
                             <p className="text-sm text-gray-700 mb-2">
                               Enter your card details securely
                             </p>
-                            <div className="flex items-center text-xs text-gray-600">
-                              <Shield className="w-3 h-3 mr-1" />
-                              <span>256-bit SSL encryption</span>
-                            </div>
                           </div>
 
                           {isStripeEnabled ? (
@@ -1783,7 +1864,7 @@ const CheckoutPage = () => {
                     </div>
 
                     {/* Afterpay */}
-                    <div className="group">
+                    {/* <div className="group">
                       <label
                         className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
                           formData.selectedPaymentMethod === "afterpay"
@@ -1830,7 +1911,7 @@ const CheckoutPage = () => {
                       </label>
 
                       {/* Afterpay Component */}
-                      {formData.selectedPaymentMethod === "afterpay" && (
+                    {/* {formData.selectedPaymentMethod === "afterpay" && (
                         <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
                           <div className="mb-4">
                             <p className="text-sm text-gray-700 mb-2">
@@ -1857,7 +1938,7 @@ const CheckoutPage = () => {
                           />
                         </div>
                       )}
-                    </div>
+                    </div> } */}
 
                     {/* Google Pay */}
                     {!isStripeEnabled && (

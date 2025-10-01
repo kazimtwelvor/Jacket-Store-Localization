@@ -17,6 +17,7 @@ import Button from "@/src/app/ui/button";
 import Container from "@/src/app/ui/container";
 import { Skeleton } from "@/src/app/ui/skeleton";
 import Currency from "@/src/app/ui/currency";
+import { trackPurchase } from "@/src/app/lib/analytics";
 
 interface OrderItem {
   id: string;
@@ -75,6 +76,15 @@ const ConfirmationPage = () => {
 
   useEffect(() => {
     setIsMounted(true);
+
+    // Check if this page has been visited before in this session
+    const hasVisited = sessionStorage.getItem('confirmation-visited');
+    if (hasVisited) {
+      router.push('/');
+      return;
+    }
+    // Mark as visited
+    sessionStorage.setItem('confirmation-visited', 'true');
 
     if (!orderId) {
       setError("No order ID provided");
@@ -162,6 +172,9 @@ const ConfirmationPage = () => {
         };
 
         setOrder(formattedOrder);
+        
+        // Track purchase event
+        trackPurchase(data.id, formattedOrder.items, calculatedTotalPrice || '0');
         
         // Send order confirmation email
         const customerEmail = data.email || data.customerEmail || data.address?.email || data.billingAddress?.email
