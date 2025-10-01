@@ -31,6 +31,7 @@ import useWishlist from "@/src/app/hooks/use-wishlist";
 import Currency from "@/src/app/ui/currency";
 import Button from "@/src/app/ui/button";
 import { toast } from "react-hot-toast";
+import { trackBeginCheckout } from "@/src/app/lib/analytics";
 
 interface AddMoreOfferProps {
   onContinueShopping: () => void;
@@ -67,7 +68,11 @@ const MobileStripeExpressCheckout = ({
   totalAmount: number;
   onSuccess: (orderId?: string) => void;
   items: any[];
-  setPaymentModal: (modal: { isOpen: boolean; status: "processing" | "success" | "error"; message: string }) => void;
+  setPaymentModal: (modal: {
+    isOpen: boolean;
+    status: "processing" | "success" | "error";
+    message: string;
+  }) => void;
 }) => {
   const stripe = useStripe();
 
@@ -105,19 +110,47 @@ const MobileStripeExpressCheckout = ({
         });
 
         if (result.error) {
-          setPaymentModal({ isOpen: true, status: "error", message: result.error.message || "Payment failed" });
-          setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
+          setPaymentModal({
+            isOpen: true,
+            status: "error",
+            message: result.error.message || "Payment failed",
+          });
+          setTimeout(
+            () =>
+              setPaymentModal({
+                isOpen: false,
+                status: "processing",
+                message: "",
+              }),
+            3000
+          );
         } else {
-          setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+          setPaymentModal({
+            isOpen: true,
+            status: "success",
+            message: "Payment successful! Redirecting...",
+          });
           setTimeout(() => {
-            setPaymentModal({ isOpen: false, status: "processing", message: "" });
+            setPaymentModal({
+              isOpen: false,
+              status: "processing",
+              message: "",
+            });
             onSuccess();
           }, 2000);
         }
       }
     } catch (error) {
-      setPaymentModal({ isOpen: true, status: "error", message: "Payment failed. Please try again." });
-      setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
+      setPaymentModal({
+        isOpen: true,
+        status: "error",
+        message: "Payment failed. Please try again.",
+      });
+      setTimeout(
+        () =>
+          setPaymentModal({ isOpen: false, status: "processing", message: "" }),
+        3000
+      );
     }
   };
 
@@ -151,7 +184,11 @@ const CartPage = () => {
   const sentinelBottomRef = useRef<HTMLDivElement>(null);
   const [stripePromise, setStripePromise] = useState<any>(null);
   const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
-  const [paymentModal, setPaymentModal] = useState({ isOpen: false, status: "processing" as "processing" | "success" | "error", message: "" });
+  const [paymentModal, setPaymentModal] = useState({
+    isOpen: false,
+    status: "processing" as "processing" | "success" | "error",
+    message: "",
+  });
   const isStripe = process.env.NEXT_PUBLIC_USE_STRIPE === "true";
 
   const getDeliveryDates = () => {
@@ -174,7 +211,7 @@ const CartPage = () => {
 
   const shippingPrice = totalPrice > 100 ? 0 : 10;
   const taxRate = 0.08;
-  const taxAmount = totalPrice * taxRate;
+  const taxAmount = 0;
   const grandTotal = totalPrice + shippingPrice + taxAmount;
 
   useEffect(() => {
@@ -308,11 +345,16 @@ const CartPage = () => {
   };
 
   const handleCheckout = () => {
+    trackBeginCheckout(items);
     window.location.href = "/checkout";
   };
 
   const handlePaymentSuccess = (orderId?: string) => {
-    setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+    setPaymentModal({
+      isOpen: true,
+      status: "success",
+      message: "Payment successful! Redirecting...",
+    });
     setTimeout(() => {
       setPaymentModal({ isOpen: false, status: "processing", message: "" });
       const url = orderId
@@ -833,7 +875,7 @@ const CartPage = () => {
           </div>
         </motion.div>
       </Container>
-      
+
       <PaymentProcessingModal
         isOpen={paymentModal.isOpen}
         status={paymentModal.status}
