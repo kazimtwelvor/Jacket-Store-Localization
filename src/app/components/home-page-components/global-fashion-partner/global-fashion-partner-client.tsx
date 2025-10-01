@@ -64,6 +64,8 @@ export default function GlobalFashionPartnerClient({ partners }: GlobalFashionPa
                       <img
                         src={partner.logoUrl}
                         alt={partner.brand}
+                        width={120}
+                        height={56}
                         className="h-14 object-contain"
                         style={{ imageRendering: 'crisp-edges' }}
                         loading="eager"
@@ -94,6 +96,8 @@ export default function GlobalFashionPartnerClient({ partners }: GlobalFashionPa
                   <img
                     src={partner.logoUrl}
                     alt={partner.brand}
+                    width={120}
+                    height={64}
                     className={`h-12 md:h-16 object-contain transition-all duration-500 ${index === currentPartner ? 'scale-110 opacity-100' : ''
                       }`}
                     style={{
