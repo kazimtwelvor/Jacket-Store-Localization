@@ -39,6 +39,227 @@ import { decrypt } from "../../utils/decrypt";
 // Initialize Stripe
 let stripePromise: any = null;
 
+// Country list for the checkout form
+const COUNTRIES: { code: string; name: string }[] = [
+  { code: "AF", name: "Afghanistan" },
+  { code: "AL", name: "Albania" },
+  { code: "DZ", name: "Algeria" },
+  { code: "AS", name: "American Samoa" },
+  { code: "AD", name: "Andorra" },
+  { code: "AO", name: "Angola" },
+  { code: "AI", name: "Anguilla" },
+  { code: "AQ", name: "Antarctica" },
+  { code: "AG", name: "Antigua and Barbuda" },
+  { code: "AR", name: "Argentina" },
+  { code: "AM", name: "Armenia" },
+  { code: "AW", name: "Aruba" },
+  { code: "AU", name: "Australia" },
+  { code: "AT", name: "Austria" },
+  { code: "AZ", name: "Azerbaijan" },
+  { code: "BS", name: "Bahamas" },
+  { code: "BH", name: "Bahrain" },
+  { code: "BD", name: "Bangladesh" },
+  { code: "BB", name: "Barbados" },
+  { code: "BY", name: "Belarus" },
+  { code: "BE", name: "Belgium" },
+  { code: "BZ", name: "Belize" },
+  { code: "BJ", name: "Benin" },
+  { code: "BM", name: "Bermuda" },
+  { code: "BT", name: "Bhutan" },
+  { code: "BO", name: "Bolivia" },
+  { code: "BA", name: "Bosnia and Herzegovina" },
+  { code: "BW", name: "Botswana" },
+  { code: "BR", name: "Brazil" },
+  { code: "IO", name: "British Indian Ocean Territory" },
+  { code: "BN", name: "Brunei Darussalam" },
+  { code: "BG", name: "Bulgaria" },
+  { code: "BF", name: "Burkina Faso" },
+  { code: "BI", name: "Burundi" },
+  { code: "KH", name: "Cambodia" },
+  { code: "CM", name: "Cameroon" },
+  { code: "CA", name: "Canada" },
+  { code: "CV", name: "Cape Verde" },
+  { code: "KY", name: "Cayman Islands" },
+  { code: "CF", name: "Central African Republic" },
+  { code: "TD", name: "Chad" },
+  { code: "CL", name: "Chile" },
+  { code: "CN", name: "China" },
+  { code: "CO", name: "Colombia" },
+  { code: "KM", name: "Comoros" },
+  { code: "CG", name: "Congo" },
+  { code: "CD", name: "Congo, the Democratic Republic of the" },
+  { code: "CK", name: "Cook Islands" },
+  { code: "CR", name: "Costa Rica" },
+  { code: "CI", name: "Côte d’Ivoire" },
+  { code: "HR", name: "Croatia" },
+  { code: "CU", name: "Cuba" },
+  { code: "CY", name: "Cyprus" },
+  { code: "CZ", name: "Czechia" },
+  { code: "DK", name: "Denmark" },
+  { code: "DJ", name: "Djibouti" },
+  { code: "DM", name: "Dominica" },
+  { code: "DO", name: "Dominican Republic" },
+  { code: "EC", name: "Ecuador" },
+  { code: "EG", name: "Egypt" },
+  { code: "SV", name: "El Salvador" },
+  { code: "GQ", name: "Equatorial Guinea" },
+  { code: "ER", name: "Eritrea" },
+  { code: "EE", name: "Estonia" },
+  { code: "ET", name: "Ethiopia" },
+  { code: "FK", name: "Falkland Islands (Malvinas)" },
+  { code: "FO", name: "Faroe Islands" },
+  { code: "FJ", name: "Fiji" },
+  { code: "FI", name: "Finland" },
+  { code: "FR", name: "France" },
+  { code: "GF", name: "French Guiana" },
+  { code: "PF", name: "French Polynesia" },
+  { code: "GA", name: "Gabon" },
+  { code: "GM", name: "Gambia" },
+  { code: "GE", name: "Georgia" },
+  { code: "DE", name: "Germany" },
+  { code: "GH", name: "Ghana" },
+  { code: "GI", name: "Gibraltar" },
+  { code: "GR", name: "Greece" },
+  { code: "GL", name: "Greenland" },
+  { code: "GD", name: "Grenada" },
+  { code: "GP", name: "Guadeloupe" },
+  { code: "GU", name: "Guam" },
+  { code: "GT", name: "Guatemala" },
+  { code: "GG", name: "Guernsey" },
+  { code: "GN", name: "Guinea" },
+  { code: "GW", name: "Guinea-Bissau" },
+  { code: "GY", name: "Guyana" },
+  { code: "HT", name: "Haiti" },
+  { code: "HN", name: "Honduras" },
+  { code: "HK", name: "Hong Kong" },
+  { code: "HU", name: "Hungary" },
+  { code: "IS", name: "Iceland" },
+  { code: "IN", name: "India" },
+  { code: "ID", name: "Indonesia" },
+  { code: "IR", name: "Iran" },
+  { code: "IQ", name: "Iraq" },
+  { code: "IE", name: "Ireland" },
+  { code: "IM", name: "Isle of Man" },
+  { code: "IL", name: "Israel" },
+  { code: "IT", name: "Italy" },
+  { code: "JM", name: "Jamaica" },
+  { code: "JP", name: "Japan" },
+  { code: "JE", name: "Jersey" },
+  { code: "JO", name: "Jordan" },
+  { code: "KZ", name: "Kazakhstan" },
+  { code: "KE", name: "Kenya" },
+  { code: "KI", name: "Kiribati" },
+  { code: "KR", name: "Korea, Republic of" },
+  { code: "KW", name: "Kuwait" },
+  { code: "KG", name: "Kyrgyzstan" },
+  { code: "LA", name: "Lao People's Democratic Republic" },
+  { code: "LV", name: "Latvia" },
+  { code: "LB", name: "Lebanon" },
+  { code: "LS", name: "Lesotho" },
+  { code: "LR", name: "Liberia" },
+  { code: "LY", name: "Libya" },
+  { code: "LI", name: "Liechtenstein" },
+  { code: "LT", name: "Lithuania" },
+  { code: "LU", name: "Luxembourg" },
+  { code: "MO", name: "Macao" },
+  { code: "MK", name: "North Macedonia" },
+  { code: "MG", name: "Madagascar" },
+  { code: "MW", name: "Malawi" },
+  { code: "MY", name: "Malaysia" },
+  { code: "MV", name: "Maldives" },
+  { code: "ML", name: "Mali" },
+  { code: "MT", name: "Malta" },
+  { code: "MH", name: "Marshall Islands" },
+  { code: "MQ", name: "Martinique" },
+  { code: "MR", name: "Mauritania" },
+  { code: "MU", name: "Mauritius" },
+  { code: "YT", name: "Mayotte" },
+  { code: "MX", name: "Mexico" },
+  { code: "FM", name: "Micronesia" },
+  { code: "MD", name: "Moldova" },
+  { code: "MC", name: "Monaco" },
+  { code: "MN", name: "Mongolia" },
+  { code: "ME", name: "Montenegro" },
+  { code: "MA", name: "Morocco" },
+  { code: "MZ", name: "Mozambique" },
+  { code: "MM", name: "Myanmar" },
+  { code: "NA", name: "Namibia" },
+  { code: "NP", name: "Nepal" },
+  { code: "NL", name: "Netherlands" },
+  { code: "NC", name: "New Caledonia" },
+  { code: "NZ", name: "New Zealand" },
+  { code: "NI", name: "Nicaragua" },
+  { code: "NE", name: "Niger" },
+  { code: "NG", name: "Nigeria" },
+  { code: "NO", name: "Norway" },
+  { code: "OM", name: "Oman" },
+  { code: "PK", name: "Pakistan" },
+  { code: "PW", name: "Palau" },
+  { code: "PS", name: "Palestine, State of" },
+  { code: "PA", name: "Panama" },
+  { code: "PG", name: "Papua New Guinea" },
+  { code: "PY", name: "Paraguay" },
+  { code: "PE", name: "Peru" },
+  { code: "PH", name: "Philippines" },
+  { code: "PL", name: "Poland" },
+  { code: "PT", name: "Portugal" },
+  { code: "PR", name: "Puerto Rico" },
+  { code: "QA", name: "Qatar" },
+  { code: "RE", name: "Réunion" },
+  { code: "RO", name: "Romania" },
+  { code: "RU", name: "Russian Federation" },
+  { code: "RW", name: "Rwanda" },
+  { code: "KN", name: "Saint Kitts and Nevis" },
+  { code: "LC", name: "Saint Lucia" },
+  { code: "VC", name: "Saint Vincent and the Grenadines" },
+  { code: "WS", name: "Samoa" },
+  { code: "SM", name: "San Marino" },
+  { code: "ST", name: "Sao Tome and Principe" },
+  { code: "SA", name: "Saudi Arabia" },
+  { code: "SN", name: "Senegal" },
+  { code: "RS", name: "Serbia" },
+  { code: "SC", name: "Seychelles" },
+  { code: "SL", name: "Sierra Leone" },
+  { code: "SG", name: "Singapore" },
+  { code: "SK", name: "Slovakia" },
+  { code: "SI", name: "Slovenia" },
+  { code: "SB", name: "Solomon Islands" },
+  { code: "SO", name: "Somalia" },
+  { code: "ZA", name: "South Africa" },
+  { code: "ES", name: "Spain" },
+  { code: "LK", name: "Sri Lanka" },
+  { code: "SD", name: "Sudan" },
+  { code: "SR", name: "Suriname" },
+  { code: "SZ", name: "Eswatini" },
+  { code: "SE", name: "Sweden" },
+  { code: "CH", name: "Switzerland" },
+  { code: "TW", name: "Taiwan" },
+  { code: "TJ", name: "Tajikistan" },
+  { code: "TZ", name: "Tanzania" },
+  { code: "TH", name: "Thailand" },
+  { code: "TG", name: "Togo" },
+  { code: "TO", name: "Tonga" },
+  { code: "TT", name: "Trinidad and Tobago" },
+  { code: "TN", name: "Tunisia" },
+  { code: "TR", name: "Türkiye" },
+  { code: "TM", name: "Turkmenistan" },
+  { code: "TC", name: "Turks and Caicos Islands" },
+  { code: "UG", name: "Uganda" },
+  { code: "UA", name: "Ukraine" },
+  { code: "AE", name: "United Arab Emirates" },
+  { code: "GB", name: "United Kingdom" },
+  { code: "US", name: "United States" },
+  { code: "UY", name: "Uruguay" },
+  { code: "UZ", name: "Uzbekistan" },
+  { code: "VU", name: "Vanuatu" },
+  { code: "VE", name: "Venezuela" },
+  { code: "VN", name: "Viet Nam" },
+  { code: "VI", name: "Virgin Islands, U.S." },
+  { code: "YE", name: "Yemen" },
+  { code: "ZM", name: "Zambia" },
+  { code: "ZW", name: "Zimbabwe" },
+];
+
 // Payment Form Component
 const PaymentForm = ({
   clientSecret,
@@ -184,6 +405,7 @@ const CheckoutPage = () => {
     billingCity: "",
     billingState: "",
     billingZipCode: "",
+    billingCountry: "US",
   });
 
   // Add formTouched state to track touched fields
@@ -195,6 +417,7 @@ const CheckoutPage = () => {
     city: false,
     state: false,
     zipCode: false,
+    country: false,
     email: false,
     password: false,
     phone: false,
@@ -306,11 +529,11 @@ const CheckoutPage = () => {
         customerEmail: formData.email,
         customerName: `${formData.firstName} ${formData.lastName}`,
         phone: formData.phone,
-        address: `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}`,
+          address: `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}, ${formData.country}`,
         billingAddress: formData.billingAddressSame
-          ? `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}`
-          : `${formData.billingAddress1}, ${formData.billingCity}, ${formData.billingState}, ${formData.billingZipCode}`,
-        shippingAddress: `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}`,
+          ? `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}, ${formData.country}`
+          : `${formData.billingAddress1}, ${formData.billingCity}, ${formData.billingState}, ${formData.billingZipCode}, ${formData.billingCountry}`,
+        shippingAddress: `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}, ${formData.country}`,
         zipCode: formData.zipCode,
         city: formData.city,
         state: formData.state,
@@ -503,7 +726,8 @@ const CheckoutPage = () => {
     formData.address1 &&
     formData.city &&
     formData.state &&
-    formData.zipCode;
+    formData.zipCode &&
+    formData.country;
 
   return (
     <div className="min-h-screen bg-gray-50 px-0 py-12">
@@ -810,6 +1034,42 @@ const CheckoutPage = () => {
                     />
                   </div>
 
+                  {/* Country */}
+                  <div className="relative w-full">
+                    <select
+                      name="country"
+                      value={formData.country}
+                      onChange={handleInputChange}
+                      onBlur={handleBlur}
+                      required
+                      className={cn(
+                        "block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white]",
+                        !formData.country && formTouched.country
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      )}
+                    >
+                      {COUNTRIES.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                    <label
+                      className={cn(
+                        "absolute left-3 top-3 pointer-events-none transition-all duration-200",
+                        formData.country && formData.country !== ""
+                          ? "-translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold"
+                          : "text-base text-gray-500",
+                        !formData.country && formTouched.country
+                          ? "text-red-600"
+                          : "text-gray-700"
+                      )}
+                    >
+                      Country *
+                    </label>
+                  </div>
+
                   <div>
                     <FloatingLabelInput
                       label="City"
@@ -986,6 +1246,27 @@ const CheckoutPage = () => {
                           />
                         </div>
 
+                        {/* Billing Country */}
+                        <div className="relative w-full">
+                          <select
+                            name="billingCountry"
+                            value={formData.billingCountry}
+                            onChange={handleInputChange}
+                            onBlur={handleBlur}
+                            required
+                            className="block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white] border-gray-300"
+                          >
+                            {COUNTRIES.map((c) => (
+                              <option key={c.code} value={c.code}>
+                                {c.name}
+                              </option>
+                            ))}
+                          </select>
+                          <label className="absolute left-3 top-3 pointer-events-none transition-all duration-200 -translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold text-gray-700">
+                            Country *
+                          </label>
+                        </div>
+
                         <div>
                           <FloatingLabelInput
                             label="Additional address details"
@@ -1114,6 +1395,7 @@ const CheckoutPage = () => {
                         <p>
                           {formData.city}, {formData.state} {formData.zipCode}
                         </p>
+                        <p>{COUNTRIES.find((c) => c.code === formData.country)?.name || formData.country}</p>
                         <p>{formData.email}</p>
                         <p>{formData.phone}</p>
                       </div>
@@ -1138,9 +1420,9 @@ const CheckoutPage = () => {
                               <p>{formData.billingAddress2}</p>
                             )}
                             <p>
-                              {formData.billingCity}, {formData.billingState}{" "}
-                              {formData.billingZipCode}
+                              {formData.billingCity}, {formData.billingState} {formData.billingZipCode}
                             </p>
+                            <p>{COUNTRIES.find((c) => c.code === formData.billingCountry)?.name || formData.billingCountry}</p>
                           </>
                         )}
                       </div>
