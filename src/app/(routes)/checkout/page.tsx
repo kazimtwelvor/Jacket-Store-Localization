@@ -25,6 +25,7 @@ import {
 import PayPalButtons from "../../components/cart/PayPalButtons";
 import PayPalCardForm from "../../components/cart/PayPalCardForm";
 import GooglePayWithPaypal from "../../components/GooglePayWithPaypal";
+import AfterpayExpressCheckout from "../../components/AfterpayExpressCheckout";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import PaymentProcessingModal from "../../components/PaymentProcessingModal";
 import Currency from "../../ui/currency";
@@ -276,7 +277,11 @@ const PaymentForm = ({
   onBack: () => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
-  setPaymentModal: (modal: { isOpen: boolean; status: "processing" | "success" | "error"; message: string }) => void;
+  setPaymentModal: (modal: {
+    isOpen: boolean;
+    status: "processing" | "success" | "error";
+    message: string;
+  }) => void;
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -304,10 +309,29 @@ const PaymentForm = ({
 
       if (result.error) {
         setError(result.error.message || "An error occurred during payment");
-        setPaymentModal({ isOpen: true, status: "error", message: result.error.message || "Payment failed" });
-        setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
-      } else if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
-        setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+        setPaymentModal({
+          isOpen: true,
+          status: "error",
+          message: result.error.message || "Payment failed",
+        });
+        setTimeout(
+          () =>
+            setPaymentModal({
+              isOpen: false,
+              status: "processing",
+              message: "",
+            }),
+          3000
+        );
+      } else if (
+        result.paymentIntent &&
+        result.paymentIntent.status === "succeeded"
+      ) {
+        setPaymentModal({
+          isOpen: true,
+          status: "success",
+          message: "Payment successful! Redirecting...",
+        });
         setTimeout(() => {
           setPaymentModal({ isOpen: false, status: "processing", message: "" });
           onSuccess();
@@ -316,8 +340,16 @@ const PaymentForm = ({
     } catch (err) {
       console.error("Payment error:", err);
       setError("An unexpected error occurred");
-      setPaymentModal({ isOpen: true, status: "error", message: "Payment failed. Please try again." });
-      setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
+      setPaymentModal({
+        isOpen: true,
+        status: "error",
+        message: "Payment failed. Please try again.",
+      });
+      setTimeout(
+        () =>
+          setPaymentModal({ isOpen: false, status: "processing", message: "" }),
+        3000
+      );
     } finally {
       setIsLoading(false);
     }
@@ -377,7 +409,12 @@ const CheckoutPage = () => {
   const [voucherApplying, setVoucherApplying] = useState(false);
   const [voucherMessage, setVoucherMessage] = useState("");
   const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
-  const [paymentModal, setPaymentModal] = useState({ isOpen: false, status: "processing" as "processing" | "success" | "error", message: "" });
+  const [paymentModal, setPaymentModal] = useState({
+    isOpen: false,
+    status: "processing" as "processing" | "success" | "error",
+    message: "",
+  });
+  const [isOrderConfirming, setIsOrderConfirming] = useState(false);
 
   // Form states
   const [formData, setFormData] = useState({
@@ -529,7 +566,7 @@ const CheckoutPage = () => {
         customerEmail: formData.email,
         customerName: `${formData.firstName} ${formData.lastName}`,
         phone: formData.phone,
-          address: `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}, ${formData.country}`,
+        address: `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}, ${formData.country}`,
         billingAddress: formData.billingAddressSame
           ? `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}, ${formData.country}`
           : `${formData.billingAddress1}, ${formData.billingCity}, ${formData.billingState}, ${formData.billingZipCode}, ${formData.billingCountry}`,
@@ -593,31 +630,35 @@ const CheckoutPage = () => {
   };
 
   const handlePaymentSuccess = async () => {
-    setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
-    
+    setPaymentModal({
+      isOpen: true,
+      status: "success",
+      message: "Payment successful! Redirecting...",
+    });
+
     // Send emails immediately after successful payment
     try {
-      const orderItems = items.map(item => ({
+      const orderItems = items.map((item) => ({
         name: item.product.name,
         quantity: item.quantity,
-        price: item.unitPrice.toString()
+        price: item.unitPrice.toString(),
       }));
-      
-      await fetch('/api/orders/send-order-emails', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+
+      await fetch("/api/orders/send-order-emails", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           customerEmail: formData.email,
           customerName: `${formData.firstName} ${formData.lastName}`,
-          orderNumber: orderId || 'unknown',
+          orderNumber: orderId || "unknown",
           orderTotal: effectiveGrandTotal.toString(),
-          items: orderItems
-        })
+          items: orderItems,
+        }),
       });
     } catch (error) {
-      console.error('Failed to send order emails:', error);
+      console.error("Failed to send order emails:", error);
     }
-    
+
     setTimeout(() => {
       setPaymentModal({ isOpen: false, status: "processing", message: "" });
       clearCart();
@@ -1395,7 +1436,10 @@ const CheckoutPage = () => {
                         <p>
                           {formData.city}, {formData.state} {formData.zipCode}
                         </p>
-                        <p>{COUNTRIES.find((c) => c.code === formData.country)?.name || formData.country}</p>
+                        <p>
+                          {COUNTRIES.find((c) => c.code === formData.country)
+                            ?.name || formData.country}
+                        </p>
                         <p>{formData.email}</p>
                         <p>{formData.phone}</p>
                       </div>
@@ -1420,9 +1464,14 @@ const CheckoutPage = () => {
                               <p>{formData.billingAddress2}</p>
                             )}
                             <p>
-                              {formData.billingCity}, {formData.billingState} {formData.billingZipCode}
+                              {formData.billingCity}, {formData.billingState}{" "}
+                              {formData.billingZipCode}
                             </p>
-                            <p>{COUNTRIES.find((c) => c.code === formData.billingCountry)?.name || formData.billingCountry}</p>
+                            <p>
+                              {COUNTRIES.find(
+                                (c) => c.code === formData.billingCountry
+                              )?.name || formData.billingCountry}
+                            </p>
                           </>
                         )}
                       </div>
@@ -1438,6 +1487,7 @@ const CheckoutPage = () => {
                       Choose Payment Method
                     </h3>
                   </div>
+
                   <div className="space-y-4">
                     {/* PayPal */}
                     <div className="group">
@@ -1728,6 +1778,83 @@ const CheckoutPage = () => {
                               voucherCode={voucherCode}
                             />
                           )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Afterpay */}
+                    <div className="group">
+                      <label
+                        className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          formData.selectedPaymentMethod === "afterpay"
+                            ? "border-black bg-gray-100 shadow-md"
+                            : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          <div className="relative mr-4">
+                            <input
+                              type="radio"
+                              name="selectedPaymentMethod"
+                              value="afterpay"
+                              checked={
+                                formData.selectedPaymentMethod === "afterpay"
+                              }
+                              onChange={handleInputChange}
+                              className="sr-only"
+                            />
+                            <div
+                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                formData.selectedPaymentMethod === "afterpay"
+                                  ? "bg-black border-black"
+                                  : "border-gray-300 group-hover:border-gray-500"
+                              }`}
+                            >
+                              {formData.selectedPaymentMethod === "afterpay" && (
+                                <Check className="w-4 h-4 text-white" />
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center">
+                            <div className="bg-[#b2fce3] px-4 py-2 rounded text-black font-semibold text-sm">
+                              afterpay
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="text-sm text-gray-500 mr-2">
+                            Buy now, pay later
+                          </span>
+                          <Shield className="w-4 h-4 text-gray-600" />
+                        </div>
+                      </label>
+
+                      {/* Afterpay Component */}
+                      {formData.selectedPaymentMethod === "afterpay" && (
+                        <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
+                          <div className="mb-4">
+                            <p className="text-sm text-gray-700 mb-2">
+                              Pay in 4 interest-free installments
+                            </p>
+                          </div>
+                          <AfterpayExpressCheckout
+                            onCaptureSuccess={(orderId) => {
+                              console.log("Afterpay payment successful:", orderId);
+                              handlePaymentSuccess();
+                            }}
+                            onError={(error) => {
+                              console.error("Afterpay payment error:", error);
+                              toast.error(error);
+                            }}
+                            setIsOrderConfirming={setIsOrderConfirming}
+                            totalAmount={effectiveGrandTotal}
+                            currencyCode="USD"
+                            countryCode="US"
+                            termsAccepted={true}
+                            onTermsError={(error) => toast.error(error)}
+                            discountAmount={discountAmount}
+                            coupon={voucherCode ? { code: voucherCode } : undefined}
+                          />
                         </div>
                       )}
                     </div>
@@ -2049,7 +2176,7 @@ const CheckoutPage = () => {
           </div>
         </div>
       </motion.div>
-      
+
       <PaymentProcessingModal
         isOpen={paymentModal.isOpen}
         status={paymentModal.status}

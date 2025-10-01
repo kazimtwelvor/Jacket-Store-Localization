@@ -21,6 +21,7 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import PayPalButtons from "../cart/PayPalButtons";
 import { decrypt } from "../../utils/decrypt";
 import PaymentProcessingModal from "../PaymentProcessingModal";
+import { trackBeginCheckout } from "../../lib/analytics";
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -610,6 +611,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
         <div className="border-t  p-4">
           <button
             onClick={() => {
+              trackBeginCheckout(items);
               onClose();
               router.push("/checkout");
             }}

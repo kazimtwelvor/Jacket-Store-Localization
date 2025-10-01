@@ -1,5 +1,3 @@
-"use client";
-
 "use client"
 
 import Button from "@/src/app/ui/button"
@@ -8,6 +6,7 @@ import { useCart } from "@/src/app/contexts/CartContext"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
+import { trackBeginCheckout } from "@/src/app/lib/analytics"
 
 const Summary = () => {
   // Removed useSearchParams to avoid SSR issues
@@ -35,6 +34,9 @@ const Summary = () => {
   const onCheckout = async () => {
     try {
       setLoading(true);
+      
+      // Track begin checkout event
+      trackBeginCheckout(items);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
         method: "POST",

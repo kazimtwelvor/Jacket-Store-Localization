@@ -2,6 +2,7 @@
 
 import { Product } from '@/types'
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
+import { trackAddToCart } from '../lib/analytics'
 
 export interface CartItem {
   id: string
@@ -63,6 +64,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             ? { ...item, quantity: item.quantity + 1 }
             : item
         )
+        // Track add to cart for existing item (quantity +1)
+        trackAddToCart(product, size, selectedColor, 1)
       } else {
         newItems = [...prev, {
           id: itemId,
@@ -76,6 +79,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           quantity: 1,
           unitPrice
         }]
+        // Track add to cart for new item
+        trackAddToCart(product, size, selectedColor, 1)
       }
       const cartData = {
         items: newItems,
