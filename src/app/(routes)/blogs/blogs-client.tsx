@@ -155,7 +155,7 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
           ) : (
             <div id="posts-container" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {currentlyVisiblePosts.map((post) => (
-                <Link href={`/blogs/${post.slug || post.id}`} key={post.id} className="group">
+                <Link href={`/us/blogs/${post.slug || post.id}`} key={post.id} className="group">
                   <div className="h-full flex flex-col border border-[#eaeaea] rounded-lg overflow-hidden transition-all hover:shadow-md">
                     <div className="relative h-48 overflow-hidden">
                       <Image

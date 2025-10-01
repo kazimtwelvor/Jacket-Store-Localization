@@ -141,7 +141,7 @@ export default function AboutUsPage() {
                   className="rounded-none"
                   asChild
                 >
-                  <Link href="/blogs">Learn More</Link>
+                  <Link href="/us/blogs">Learn More</Link>
                 </Button>
               </div>
             </div>

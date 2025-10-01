@@ -33,7 +33,7 @@ export default function ContactUsPage() {
     "@type": "ContactPage",
     "name": "Contact Us - Fineyst",
     "description": "Get in touch with our team for any questions, feedback, or support.",
-    "url": "https://www.fineystjackets.com/contact-us"
+    "url": "https://www.fineystjackets.com/us/contact-us"
   }
 
   const organizationSchema = {

@@ -194,7 +194,7 @@ const Footer = () => {
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'company' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/blogs" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/blogs" className="text-black hover:font-bold transition-all">
                                         Blogs
                                     </Link>
                                 </li>
@@ -252,18 +252,18 @@ const Footer = () => {
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'help' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/privacy-policy" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/privacy-policy" className="text-black hover:font-bold transition-all">
                                         Privacy Policy
                                     </Link>
                                 </li>
 
                                 <li>
-                                    <Link href="/terms-conditions" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/terms-conditions" className="text-black hover:font-bold transition-all">
                                         Terms & Conditions
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/shipping-and-delivery-policy" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/shipping-and-delivery-policy" className="text-black hover:font-bold transition-all">
                                         Shipping & Delivery
                                     </Link>
                                 </li>

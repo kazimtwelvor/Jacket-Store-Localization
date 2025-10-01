@@ -323,7 +323,7 @@ const CartPage = () => {
                 Explore our collection and find something you&apos;ll love.
               </p>
               <Button
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/us/")}
                 className="bg-black hover:bg-[#2b2b2b] text-white mt-4"
               >
                 Continue Shopping
@@ -341,7 +341,7 @@ const CartPage = () => {
   };
 
   const handleContinueShopping = () => {
-    window.location.href = "/";
+    window.location.href = "/us/";
   };
 
   const handleCheckout = () => {
@@ -840,7 +840,7 @@ const CartPage = () => {
                       </Link>{" "}
                       apply. The{" "}
                       <Link
-                        href="/privacy-policy"
+                        href="/us/privacy-policy"
                         className="underline cursor-pointer hover:text-gray-600"
                       >
                         data protection regulations

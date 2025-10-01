@@ -883,7 +883,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     categories={categories}
                     onCategoryClick={(categorySlug) => {
                         const currentPath = window.location.pathname;
-                        const targetPath = `/collections/${categorySlug}`;
+                        const targetPath = `/us/collections/${categorySlug}`;
                         
                         if (currentPath === targetPath) {
                             window.dispatchEvent(new CustomEvent('route-loading:end'));

@@ -274,13 +274,13 @@ const ReviewCard = ({ review, showH3 = true }: { review: (typeof reviews)[0]; sh
         <section
             className="bg-[#F6F6F6] p-8 rounded-lg shadow-md mx-6 my-6 flex flex-col justify-center h-[200px] sm:h-[220px] md:h-[240px] cursor-pointer  hover:scale-105 hover:shadow-lg"
             style={{ minWidth: '350px', width: '55vw', maxWidth: '650px' }}
-            onClick={() => router.push("/reviews")}
+            onClick={() => router.push("/us/reviews")}
             role="button"
             tabIndex={0}
             aria-label={`Read review by ${review.name}`}
             onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
-                    router.push("/reviews")
+                    router.push("/us/reviews")
                 }
             }}
         >

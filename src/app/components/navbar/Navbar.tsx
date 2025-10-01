@@ -255,7 +255,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    router.push("/");
+    router.push("/us/");
   };
 
   const performSearch = async (query: string) => {
@@ -309,11 +309,11 @@ const Navbar = () => {
         currentSearch &&
         currentSearch !== searchQuery.trim()
       ) {
-        router.push(`/shop?search=${encodeURIComponent(
+        router.push(`/us/shop?search=${encodeURIComponent(
           searchQuery.trim()
         )}`);
       } else {
-        router.push(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+        router.push(`/us/shop?search=${encodeURIComponent(searchQuery.trim())}`);
       }
       setIsSearchOpen(false);
     }
@@ -657,7 +657,7 @@ const Navbar = () => {
                                         className="flex items-center space-x-4 py-3 cursor-pointer hover:bg-gray-800 px-3 rounded transition-colors"
                                         onClick={() => {
                                           router.push(
-                                            `/shop?category=${product.category
+                                            `/us/shop?category=${product.category
                                             }&product=${product.name
                                               .toLowerCase()
                                               .replace(/\s+/g, "-")}`

@@ -232,7 +232,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/shop?genders=women&style=vintage"
+                    href="/us/shop?genders=women&style=vintage"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -241,7 +241,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/shop?genders=women&style=elegant"
+                    href="/us/shop?genders=women&style=elegant"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -250,7 +250,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/shop?genders=women&price=luxury"
+                    href="/us/shop?genders=women&price=luxury"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >

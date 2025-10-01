@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
 export function middleware(request: NextRequest) {
-  const { pathname, searchParams } = request.nextUrl
+  const { pathname } = request.nextUrl
   
   if (pathname.startsWith("/api")) {
     const origin = request.headers.get("origin") || "http://localhost:4000"
@@ -14,7 +14,6 @@ export function middleware(request: NextRequest) {
     response.headers.set("Access-Control-Max-Age", "86400")
     return response
   }
-
 
   return NextResponse.next()
 }

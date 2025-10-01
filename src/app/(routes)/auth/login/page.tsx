@@ -1095,7 +1095,7 @@ function LoginContent() {
                       >
                         I agree to the{" "}
                         <Link
-                          href="/terms-conditions"
+                          href="/us/terms-conditions"
                           className="text-gray-800 hover:underline font-medium"
                         >
                           Terms and Conditions
@@ -1119,7 +1119,7 @@ function LoginContent() {
                       >
                         I agree to the{" "}
                         <Link
-                          href="/privacy-policy"
+                          href="/us/privacy-policy"
                           className="text-blue-600 hover:underline font-medium"
                         >
                           Privacy Policy

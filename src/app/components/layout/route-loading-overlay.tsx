@@ -63,7 +63,7 @@ function RouteLoadingOverlayContent() {
           return;
         }
 
-        if (url.pathname === "/") return;
+        if (url.pathname === "/us/") return;
 
         // Check for error pages in both current and target URLs
         if (

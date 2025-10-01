@@ -45,7 +45,7 @@ const discoverData: Record<string, { title: string; items: string[]; links: stri
     {
       title: "SPECIAL COLLECTIONS",
       items: ["Puffer Vests", "Vintage Style", "Elegant Style", "Luxury Collection"],
-      links: ["/us/collections/womens-puffer-vests", "/shop?genders=women&style=vintage", "/shop?genders=women&style=elegant", "/shop?genders=women&price=luxury"]
+      links: ["/us/collections/womens-puffer-vests", "/us/shop?genders=women&style=vintage", "/us/shop?genders=women&style=elegant", "/us/shop?genders=women&price=luxury"]
     }
   ],
   "Men's Jackets": [
@@ -67,29 +67,29 @@ const discoverData: Record<string, { title: string; items: string[]; links: stri
     {
       title: "SPECIAL COLLECTIONS",
       items: ["Plus Size Leather Jackets", "Puffer Vests", "Vintage Style", "Luxury Collection"],
-      links: ["/us/collections/plus-size-leather-jackets", "/us/collections/mens-puffer-vests", "/shop?genders=men&style=vintage", "/shop?genders=men&price=luxury"]
+      links: ["/us/collections/plus-size-leather-jackets", "/us/collections/mens-puffer-vests", "/us/shop?genders=men&style=vintage", "/us/shop?genders=men&price=luxury"]
     }
   ],
   "Coats": [
     {
       title: "LEATHER JACKETS",
       items: ["Biker Jackets", "Bomber Jackets", "Moto Jackets", "Racing Jackets", "Vintage Leather"],
-      links: ["/shop?category=biker-jackets", "/shop?category=bomber-jackets", "/shop?category=moto-jackets", "/shop?category=racing-jackets", "/shop?category=vintage-leather"]
+      links: ["/us/shop?category=biker-jackets", "/us/shop?category=bomber-jackets", "/us/shop?category=moto-jackets", "/us/shop?category=racing-jackets", "/us/shop?category=vintage-leather"]
     },
     {
       title: "COATS & OUTERWEAR",
       items: ["Trench Coats", "Wool Coats", "Puffer Jackets", "Peacoats", "Parkas"],
-      links: ["/shop?category=trench-coats", "/shop?category=wool-coats", "/shop?category=puffer-jackets", "/shop?category=peacoats", "/shop?category=parkas"]
+      links: ["/us/shop?category=trench-coats", "/us/shop?category=wool-coats", "/us/shop?category=puffer-jackets", "/us/shop?category=peacoats", "/us/shop?category=parkas"]
     },
     {
       title: "SPECIALTY",
       items: ["Varsity Jackets", "Denim Jackets", "Blazers", "Windbreakers", "Hooded Jackets"],
-      links: ["/shop?category=varsity-jackets", "/shop?category=denim-jackets", "/shop?category=blazers", "/shop?category=windbreakers", "/shop?category=hooded-jackets"]
+      links: ["/us/shop?category=varsity-jackets", "/us/shop?category=denim-jackets", "/us/shop?category=blazers", "/us/shop?category=windbreakers", "/us/shop?category=hooded-jackets"]
     },
     {
       title: "COLLECTIONS",
       items: ["Men's Collection", "Women's Collection", "Unisex Styles", "Luxury Collection", "Size Guide"],
-      links: ["/shop?gender=mens", "/shop?gender=womens", "/shop?category=unisex", "/shop?price=luxury", "/size-guide"]
+      links: ["/us/shop?gender=mens", "/us/shop?gender=womens", "/us/shop?category=unisex", "/us/shop?price=luxury", "/size-guide"]
     }
   ],
   "BRANDS": [
