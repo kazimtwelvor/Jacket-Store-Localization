@@ -65,7 +65,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const availableColors = product.colorDetails || []
   
   const getProductUrl = (product: Product) => {
-    if (product.slug) return `/product/${product.slug}`
+    if (product.slug) return `/us/product/${product.slug}`
     if (product.name) {
       const baseSlug = product.name
         .toLowerCase()
@@ -73,9 +73,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         .replace(/\s+/g, "-")
         .replace(/-+/g, "-")
         .trim()
-      return product.id ? `/product/${baseSlug}-${product.id.substring(0, 8)}` : `/product/${baseSlug}`
+      return product.id ? `/us/product/${baseSlug}-${product.id.substring(0, 8)}` : `/us/product/${baseSlug}`
     }
-    return `/product/${product.id}`
+    return `/us/product/${product.id}`
   }
 
   return (

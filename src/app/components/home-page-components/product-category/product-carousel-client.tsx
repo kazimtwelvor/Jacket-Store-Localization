@@ -305,7 +305,7 @@ export default function ProductCarouselClient({
                           }}
                         >
                           {isCenter ? (
-                            <Link href={`/product/${product.slug}`}>
+                            <Link href={`/us/product/${product.slug}`}>
                               <img
                                 src={getImageUrl(product)}
                                 alt={product.name}
@@ -413,7 +413,7 @@ export default function ProductCarouselClient({
                             isJumping ? { duration: 0 } : SPRING_OPTIONS
                           }
                         >
-                          <Link href={`/product/${product.slug}`}>
+                          <Link href={`/us/product/${product.slug}`}>
                             <div
                               className="relative group overflow-hidden bg-gray-100"
                               style={{ aspectRatio: "280/420" }}

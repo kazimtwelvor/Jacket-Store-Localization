@@ -58,7 +58,7 @@ const ProductCard = ({ data, onMouseEnter }: ProductCardProps) => {
       setShopPage(currentPage);
       window.dispatchEvent(new CustomEvent('route-loading:start'))
     }
-    router.push(`/product/${data.slug || data.id}`)
+    router.push(`/us/product/${data.slug || data.id}`)
   }
 
   const handleSizeSelect = (size: { id: string; name: string; value: string }) => {

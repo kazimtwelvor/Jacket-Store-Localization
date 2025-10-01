@@ -632,7 +632,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
         if (typeof window !== 'undefined') {
             window.dispatchEvent(new CustomEvent('route-loading:start'))
         }
-        router.push(`/product/${slug}`)
+        router.push(`/us/product/${slug}`)
     }
 
 
