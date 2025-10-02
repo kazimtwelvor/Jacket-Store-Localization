@@ -15,6 +15,7 @@ import {
   PaymentRequestButtonElement,
   ExpressCheckoutElement,
   useStripe,
+  useElements,
 } from "@stripe/react-stripe-js";
 import GooglePayWithPaypal from "../GooglePayWithPaypal";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -33,62 +34,144 @@ const StripeExpressCheckout = ({
   totalAmount,
   onSuccess,
   items,
+  setPaymentModal,
 }: {
   totalAmount: number;
   onSuccess: (orderId?: string) => void;
   items: any[];
+  setPaymentModal: (modal: {
+    isOpen: boolean;
+    status: "processing" | "success" | "error";
+    message: string;
+  }) => void;
 }) => {
   const stripe = useStripe();
+  const elements = useElements();
 
   const handleExpressCheckout = async (event: any) => {
-    if (!stripe) return;
+    console.log("Express checkout event details:", event);
+    if (!stripe || !elements) return;
 
-    setPaymentModal({ isOpen: true, status: "processing", message: "" });
+    console.log("Express checkout event:", event);
+
+    setPaymentModal({
+      isOpen: true,
+      status: "processing",
+      message: "Processing payment...",
+    });
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/create-payment-intent`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            amount: Math.round(totalAmount * 100),
-            currency: "usd",
-            items: items.map((i) => ({
-              id: i.product.id,
-              name: i.product.name,
-              price: i.unitPrice,
-              quantity: i.quantity,
-            })),
-          }),
-        }
-      );
+      // Create payment intent for express checkout
+      const response = await fetch(`/api/stripe/express-checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((i) => ({
+            id: i.product.id,
+            name: i.product.name,
+            quantity: i.quantity,
+            price: i.unitPrice,
+            size: i.size,
+            color: i.selectedColor,
+          })),
+          totalAmount,
+        }),
+      });
 
-      if (response.ok) {
-        const { client_secret } = await response.json();
-        const result = await stripe.confirmPayment({
-          clientSecret: client_secret,
-          confirmParams: {
-            return_url: `${window.location.origin}/checkout/confirmation?success=1`,
-          },
+      if (!response.ok) {
+        throw new Error("Failed to create payment intent");
+      }
+
+      const { clientSecret, paymentIntentId } = await response.json();
+
+      // ✅ Use confirmPayment with elements instead of payment_method
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/checkout/confirmation?paymentIntentId=${paymentIntentId}&success=1`,
+        },
+        redirect: "if_required",
+      });
+
+      if (error) {
+        setPaymentModal({
+          isOpen: true,
+          status: "error",
+          message: error.message || "Payment failed",
         });
+        setTimeout(
+          () =>
+            setPaymentModal({
+              isOpen: false,
+              status: "processing",
+              message: "",
+            }),
+          3000
+        );
+      } else {
+        // Call checkout API after successful payment
+        const checkoutResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              productIds: items.map((item) => item.product.id),
+              paymentMethod: "stripe",
+              customerEmail: event.billingDetails?.email || "",
+              customerName:
+                event.billingDetails?.name || event.shippingAddress?.name || "",
+              phone: event.billingDetails?.phone || "",
+              address: `${event.shippingAddress?.address?.line1 || ""}, ${
+                event.shippingAddress?.address?.city || ""
+              }, ${event.shippingAddress?.address?.state || ""}, ${
+                event.shippingAddress?.address?.postal_code || ""
+              }, ${event.shippingAddress?.address?.country || "US"}`,
+              billingAddress: `${
+                event.billingDetails?.address?.line1 ||
+                event.shippingAddress?.address?.line1 ||
+                ""
+              }, ${
+                event.billingDetails?.address?.city ||
+                event.shippingAddress?.address?.city ||
+                ""
+              }, ${
+                event.billingDetails?.address?.state ||
+                event.shippingAddress?.address?.state ||
+                ""
+              }, ${
+                event.billingDetails?.address?.postal_code ||
+                event.shippingAddress?.address?.postal_code ||
+                ""
+              }, ${
+                event.billingDetails?.address?.country ||
+                event.shippingAddress?.address?.country ||
+                "US"
+              }`,
+              shippingAddress: `${
+                event.shippingAddress?.address?.line1 || ""
+              }, ${event.shippingAddress?.address?.city || ""}, ${
+                event.shippingAddress?.address?.state || ""
+              }, ${event.shippingAddress?.address?.postal_code || ""}, ${
+                event.shippingAddress?.address?.country || "US"
+              }`,
+              zipCode: event.shippingAddress?.address?.postal_code || "",
+              city: event.shippingAddress?.address?.city || "",
+              state: event.shippingAddress?.address?.state || "",
+              country: event.shippingAddress?.address?.country || "US",
+              embedded: true,
+              totalAmount: totalAmount,
+              discountAmount: 0,
+              voucherCode: null,
+              paymentIntentId,
+              paymentStatus: paymentIntent?.status || "succeeded",
+            }),
+          }
+        );
 
-        if (result.error) {
-          setPaymentModal({
-            isOpen: true,
-            status: "error",
-            message: result.error.message || "Payment failed",
-          });
-          setTimeout(
-            () =>
-              setPaymentModal({
-                isOpen: false,
-                status: "processing",
-                message: "",
-              }),
-            3000
-          );
-        } else {
+        if (checkoutResponse.ok) {
+          const { orderId } = await checkoutResponse.json();
           setPaymentModal({
             isOpen: true,
             status: "success",
@@ -100,11 +183,22 @@ const StripeExpressCheckout = ({
               status: "processing",
               message: "",
             });
-            onSuccess();
+            onSuccess(orderId);
           }, 2000);
+        } else {
+          const errorData = await checkoutResponse.json();
+          console.error("Checkout API error:", errorData);
+          setPaymentModal({
+            isOpen: true,
+            status: "error",
+            message: `Order creation failed: ${
+              errorData.message || "Unknown error"
+            }`,
+          });
         }
       }
     } catch (error) {
+      console.error("Express checkout error:", error);
       setPaymentModal({
         isOpen: true,
         status: "error",
@@ -128,6 +222,13 @@ const StripeExpressCheckout = ({
             googlePay: "auto",
             link: "auto",
           },
+          layout: {
+            maxColumns: 1,
+            maxRows: 1,
+          },
+          emailRequired: true,
+          phoneNumberRequired: true,
+          shippingAddressRequired: true,
         }}
       />
     </div>
@@ -621,7 +722,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
           </button>
 
           <p className="text-center text-sm text-gray-600 mb-4">
-            Express checkout options
+            Express checkout options ululul
           </p>
 
           <div className="space-y-2 mb-4">
@@ -644,6 +745,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
                       totalAmount={effectiveGrandTotal}
                       onSuccess={handlePaymentSuccess}
                       items={items}
+                      setPaymentModal={setPaymentModal}
                     />
                   </Elements>
                 )}

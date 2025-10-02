@@ -18,6 +18,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
   ExpressCheckoutElement,
+  useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -59,7 +60,7 @@ const AddMoreOffer: React.FC<AddMoreOfferProps> = ({ onContinueShopping }) => {
 };
 
 // Stripe Express Checkout Component for Mobile Cart
-const MobileStripeExpressCheckout = ({
+const StripeExpressCheckout = ({
   totalAmount,
   onSuccess,
   items,
@@ -75,72 +76,85 @@ const MobileStripeExpressCheckout = ({
   }) => void;
 }) => {
   const stripe = useStripe();
+  const elements = useElements();
 
   const handleExpressCheckout = async (event: any) => {
-    if (!stripe) return;
+    if (!stripe || !elements) return;
 
-    setPaymentModal({ isOpen: true, status: "processing", message: "" });
+    console.log("Express checkout event:", event);
+
+    setPaymentModal({
+      isOpen: true,
+      status: "processing",
+      message: "Processing payment...",
+    });
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/create-payment-intent`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            amount: Math.round(totalAmount * 100),
-            currency: "usd",
-            items: items.map((i) => ({
-              id: i.product.id,
-              name: i.product.name,
-              price: i.unitPrice,
-              quantity: i.quantity,
-            })),
-          }),
-        }
-      );
+      // Create payment intent for express checkout
+      const response = await fetch(`/api/stripe/express-checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((i) => ({
+            id: i.product.id,
+            name: i.product.name,
+            quantity: i.quantity,
+            price: i.unitPrice,
+            size: i.size,
+            color: i.selectedColor,
+          })),
+          totalAmount,
+        }),
+      });
 
-      if (response.ok) {
-        const { client_secret } = await response.json();
-        const result = await stripe.confirmPayment({
-          clientSecret: client_secret,
-          confirmParams: {
-            return_url: `${window.location.origin}/checkout/confirmation?success=1`,
-          },
+      if (!response.ok) {
+        throw new Error("Failed to create payment intent");
+      }
+
+      const { clientSecret, paymentIntentId } = await response.json();
+
+      // ✅ Use confirmPayment with elements instead of payment_method
+      const { error } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/checkout/confirmation?paymentIntentId=${paymentIntentId}&success=1`,
+        },
+        redirect: "if_required",
+      });
+
+      if (error) {
+        setPaymentModal({
+          isOpen: true,
+          status: "error",
+          message: error.message || "Payment failed",
         });
-
-        if (result.error) {
-          setPaymentModal({
-            isOpen: true,
-            status: "error",
-            message: result.error.message || "Payment failed",
-          });
-          setTimeout(
-            () =>
-              setPaymentModal({
-                isOpen: false,
-                status: "processing",
-                message: "",
-              }),
-            3000
-          );
-        } else {
-          setPaymentModal({
-            isOpen: true,
-            status: "success",
-            message: "Payment successful! Redirecting...",
-          });
-          setTimeout(() => {
+        setTimeout(
+          () =>
             setPaymentModal({
               isOpen: false,
               status: "processing",
               message: "",
-            });
-            onSuccess();
-          }, 2000);
-        }
+            }),
+          3000
+        );
+      } else {
+        setPaymentModal({
+          isOpen: true,
+          status: "success",
+          message: "Payment successful! Redirecting...",
+        });
+        setTimeout(() => {
+          setPaymentModal({
+            isOpen: false,
+            status: "processing",
+            message: "",
+          });
+          onSuccess(paymentIntentId);
+        }, 2000);
       }
     } catch (error) {
+      console.error("Express checkout error:", error);
       setPaymentModal({
         isOpen: true,
         status: "error",
@@ -155,16 +169,22 @@ const MobileStripeExpressCheckout = ({
   };
 
   return (
-    <ExpressCheckoutElement
-      onConfirm={handleExpressCheckout}
-      options={{
-        paymentMethods: {
-          applePay: "auto",
-          googlePay: "auto",
-          link: "auto",
-        },
-      }}
-    />
+    <div className="space-y-2">
+      <ExpressCheckoutElement
+        onConfirm={handleExpressCheckout}
+        options={{
+          paymentMethods: {
+            applePay: "auto",
+            googlePay: "auto",
+            link: "auto",
+          },
+          layout: {
+            maxColumns: 1,
+            maxRows: 1,
+          },
+        }}
+      />
+    </div>
   );
 };
 
@@ -771,7 +791,7 @@ const CartPage = () => {
                               },
                             }}
                           >
-                            <MobileStripeExpressCheckout
+                            <StripeExpressCheckout
                               totalAmount={grandTotal}
                               onSuccess={handlePaymentSuccess}
                               items={items}

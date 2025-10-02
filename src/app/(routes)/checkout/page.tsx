@@ -331,6 +331,20 @@ const PaymentForm = ({
         result.paymentIntent &&
         result.paymentIntent.status === "succeeded"
       ) {
+        // Update backend payment status
+        try {
+          await fetch("/api/stripe/update-payment-status", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId,
+              paymentIntentId: result.paymentIntent.id,
+            }),
+          });
+        } catch (error) {
+          console.error("Failed to update payment status:", error);
+        }
+
         setPaymentModal({
           isOpen: true,
           status: "success",
@@ -465,6 +479,65 @@ const CheckoutPage = () => {
     password: false,
     phone: false,
   });
+
+  // Validation functions
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateZipCode = (zipCode: string, country: string): boolean => {
+    if (country === "US") {
+      return /^\d{5}(-\d{4})?$/.test(zipCode);
+    }
+    if (country === "CA") {
+      return /^[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d$/.test(zipCode);
+    }
+    if (country === "GB") {
+      return /^[A-Za-z]{1,2}\d[A-Za-z\d]? ?\d[A-Za-z]{2}$/.test(zipCode);
+    }
+    return zipCode.length >= 3; // Basic validation for other countries
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    const phoneRegex = /^[\+]?[1-9][\d\s\-\(\)]{7,14}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+  };
+
+  // Get validation errors
+  const getFieldError = (fieldName: string): string | null => {
+    if (!formTouched[fieldName as keyof typeof formTouched]) return null;
+    
+    switch (fieldName) {
+      case 'email':
+        if (!formData.email) return 'Email is required';
+        if (!validateEmail(formData.email)) return 'Please enter a valid email address';
+        return null;
+      case 'zipCode':
+        if (!formData.zipCode) return 'Zip code is required';
+        if (!validateZipCode(formData.zipCode, formData.country)) return 'Please enter a valid zip code';
+        return null;
+      case 'phone':
+        if (!formData.phone) return 'Phone number is required';
+        if (!validatePhone(formData.phone)) return 'Please enter a valid phone number';
+        return null;
+      case 'firstName':
+        return !formData.firstName ? 'First name is required' : null;
+      case 'lastName':
+        return !formData.lastName ? 'Last name is required' : null;
+      case 'address1':
+        return !formData.address1 ? 'Address is required' : null;
+      case 'city':
+        return !formData.city ? 'City is required' : null;
+      case 'state':
+        return !formData.state ? 'State is required' : null;
+      case 'password':
+        if (formData.createAccount && !formData.password) return 'Password is required';
+        return null;
+      default:
+        return null;
+    }
+  };
 
   // Get states for selected country
   const availableStates = getStatesForCountry(formData.country);
@@ -788,11 +861,16 @@ const CheckoutPage = () => {
     formData.firstName &&
     formData.lastName &&
     formData.email &&
+    validateEmail(formData.email) &&
     formData.address1 &&
     formData.city &&
     formData.state &&
     formData.zipCode &&
-    formData.country;
+    validateZipCode(formData.zipCode, formData.country) &&
+    formData.country &&
+    formData.phone &&
+    validatePhone(formData.phone) &&
+    (!formData.createAccount || formData.password);
 
   return (
     <div className="min-h-screen bg-gray-50 px-0 py-12">
@@ -1060,7 +1138,8 @@ const CheckoutPage = () => {
                         onChange={handleInputChange}
                         onBlur={handleBlur}
                         required
-                        error={!formData.firstName && formTouched.firstName}
+                        error={!!getFieldError('firstName')}
+                        helperText={getFieldError('firstName')}
                       />
                     </div>
                     <div>
@@ -1071,7 +1150,8 @@ const CheckoutPage = () => {
                         onChange={handleInputChange}
                         onBlur={handleBlur}
                         required
-                        error={!formData.lastName && formTouched.lastName}
+                        error={!!getFieldError('lastName')}
+                        helperText={getFieldError('lastName')}
                       />
                     </div>
                   </div>
@@ -1085,7 +1165,8 @@ const CheckoutPage = () => {
                       onChange={handleInputChange}
                       onBlur={handleBlur}
                       required
-                      error={!formData.address1 && formTouched.address1}
+                      error={!!getFieldError('address1')}
+                      helperText={getFieldError('address1')}
                     />
                   </div>
 
@@ -1143,7 +1224,8 @@ const CheckoutPage = () => {
                       onChange={handleInputChange}
                       onBlur={handleBlur}
                       required
-                      error={!formData.city && formTouched.city}
+                      error={!!getFieldError('city')}
+                      helperText={getFieldError('city')}
                     />
                   </div>
 
@@ -1221,7 +1303,8 @@ const CheckoutPage = () => {
                         onChange={handleInputChange}
                         onBlur={handleBlur}
                         required
-                        error={!formData.zipCode && formTouched.zipCode}
+                        error={!!getFieldError('zipCode')}
+                        helperText={getFieldError('zipCode')}
                       />
                     </div>
                   </div>
@@ -1230,11 +1313,13 @@ const CheckoutPage = () => {
                     <FloatingLabelInput
                       label="E-mail address"
                       name="email"
+                      type="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       onBlur={handleBlur}
                       required
-                      error={!formData.email && formTouched.email}
+                      error={!!getFieldError('email')}
+                      helperText={getFieldError('email')}
                     />
                   </div>
 
@@ -1264,7 +1349,8 @@ const CheckoutPage = () => {
                           onChange={handleInputChange}
                           onBlur={handleBlur}
                           required={formData.createAccount}
-                          error={!formData.password && formTouched.password}
+                          error={!!getFieldError('password')}
+                          helperText={getFieldError('password')}
                         />
                       </div>
                     )}
@@ -1274,12 +1360,14 @@ const CheckoutPage = () => {
                     <FloatingLabelInput
                       label="Phone"
                       name="phone"
+                      type="tel"
                       value={formData.phone}
                       onChange={handleInputChange}
                       onBlur={handleBlur}
                       placeholder=""
                       required
-                      error={!formData.phone && formTouched.phone}
+                      error={!!getFieldError('phone')}
+                      helperText={getFieldError('phone')}
                     />
                   </div>
 
