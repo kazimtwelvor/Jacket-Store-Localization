@@ -118,7 +118,7 @@ export default function ReviewsClient() {
 
             {/* Static Reviews Section */}
             <div className="mt-20">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">Customer Reviews</h2>
+              <h3 className="text-3xl md:text-4xl font-bold text-center mb-2">Customer Reviews</h3>
               <div className="w-20 h-1 bg-[#eaeaea] mx-auto mb-8"></div>
 
               {/* Static Filter */}
@@ -169,7 +169,7 @@ export default function ReviewsClient() {
           {/* Static Gallery */}
           <ResponsiveContainer className="py-16">
             <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-4xl font-bold mb-2">Customer Reviews</h2>
+              <h3 className="text-3xl md:text-4xl font-bold mb-2">Customer Reviews</h3>
               <div className="w-20 h-1 bg-[#eaeaea] mx-auto mb-4"></div>
               <p className="text-gray-600 max-w-2xl mx-auto">See what our customers are saying across the web</p>
             </div>
@@ -186,7 +186,7 @@ export default function ReviewsClient() {
           <div className="py-16 bg-[#eaeaea] text-black">
             <ResponsiveContainer>
               <div className="text-center max-w-3xl mx-auto px-4">
-                <h2 className="text-3xl  md:text-4xl font-bold mb-4">Share Your Experience</h2>
+                <h3 className="text-3xl  md:text-4xl font-bold mb-4">Share Your Experience</h3>
                 <p className="text-lg text-black mb-8">
                   We value your feedback! Let us know about your experience with our products and service.
                 </p>
@@ -212,7 +212,7 @@ export default function ReviewsClient() {
           </div>
 
           <section id="reviews-content" className="reviews-content py-16 bg-white">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">Why Customers Love Finest Jackets</h2>
+            <h3 className="text-3xl md:text-4xl font-bold text-center mb-2">Why Customers Love Finest Jackets</h3>
             <div className="w-20 h-1 bg-[#eaeaea]  mx-auto mb-8"></div>
 
             {/* Render filter buttons immediately */}
@@ -309,7 +309,7 @@ export default function ReviewsClient() {
 
         <section className="py-16 bg-[#eaeaea]">
           <div className="container mx-auto px-4">
-            <p className="text-3xl font-bold text-center mb-12">Additional Reviews</p>
+            <h3 className="text-3xl font-bold text-center mb-12">Additional Reviews</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4 md:px-0">
               {/* Google Reviews */}

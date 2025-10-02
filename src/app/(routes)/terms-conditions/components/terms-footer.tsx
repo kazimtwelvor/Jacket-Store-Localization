@@ -34,7 +34,7 @@ export default function TermsFooter() {
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 </svg>
               </div>
-              <h3 className="font-semibold">Privacy Policy</h3>
+              <span className="font-semibold">Privacy Policy</span>
             </div>
             <p className="text-sm text-slate-600">Learn how we collect, use, and protect your personal information.</p>
           </div>
@@ -88,7 +88,7 @@ export default function TermsFooter() {
                   <polyline points="10 9 9 9 8 9"></polyline>
                 </svg>
               </div>
-              <h3 className="font-semibold">Contact Support</h3>
+              <span className="font-semibold">Contact Support</span>
             </div>
             <p className="text-sm text-slate-600">
               Need help understanding our terms? Our support team is here to help.
@@ -114,7 +114,7 @@ export default function TermsFooter() {
         >
           <div className="flex items-center mb-3">
             <Shield className="h-5 w-5 mr-2 text-[#2b2b2b]" />
-            <h3 className="font-semibold text-[#333333]">Privacy Policy</h3>
+            <span className="font-semibold text-[#333333]">Privacy Policy</span>
           </div>
           <p className="text-sm text-[#666666]">Learn how we collect, use, and protect your personal information.</p>
         </motion.div>
@@ -128,7 +128,7 @@ export default function TermsFooter() {
         >
           <div className="flex items-center mb-3">
             <HelpCircle className="h-5 w-5 mr-2 text-[#2b2b2b]" />
-            <h3 className="font-semibold text-[#333333]">FAQs</h3>
+            <span className="font-semibold text-[#333333]">FAQs</span>
           </div>
           <p className="text-sm text-[#666666]">Find answers to frequently asked questions about our services.</p>
         </motion.div>
@@ -142,7 +142,7 @@ export default function TermsFooter() {
         >
           <div className="flex items-center mb-3">
             <FileText className="h-5 w-5 mr-2 text-[#2b2b2b]" />
-            <h3 className="font-semibold text-[#333333]">Contact Support</h3>
+            <span className="font-semibold text-[#333333]">Contact Support</span>
           </div>
           <p className="text-sm text-[#666666]">Need help understanding our terms? Our support team is here to help.</p>
         </motion.div>

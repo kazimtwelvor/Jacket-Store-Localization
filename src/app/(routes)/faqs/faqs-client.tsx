@@ -87,7 +87,7 @@ export default function FAQsClient() {
             <div className="space-y-8">
               {faqData.map((category) => (
                 <div key={category.category} className="mb-12">
-                  <h2 className="text-2xl font-bold mb-6 text-black-800">{category.title}</h2>
+                  <h3 className="text-2xl font-bold mb-6 text-black-800">{category.title}</h3>
                   <div className="space-y-4">
                     {category.items.map((item, itemIndex) => (
                       <div
@@ -174,7 +174,7 @@ export default function FAQsClient() {
               ) : (
                 filteredFAQs.map((category) => (
                   <div key={category.category} className="mb-12">
-                    <h2 className="text-2xl font-bold mb-6 text-black-800">{category.title}</h2>
+                    <h3 className="text-2xl font-bold mb-6 text-black-800">{category.title}</h3>
                     <div className="space-y-4">
                       {category.items
                         .filter((item) => {

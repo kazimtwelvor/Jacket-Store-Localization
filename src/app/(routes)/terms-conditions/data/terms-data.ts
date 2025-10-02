@@ -15,13 +15,13 @@ export interface TermsData {
 }
 
 export const termsData: TermsData = {
-  introduction: {
-    title: "Introduction",
-    content: [
-      "Welcome to Fineyst. These Terms & Conditions govern your use of our website located at fineyst.com and any related services provided by Fineyst.",
-      "By accessing our website or purchasing products, you agree to abide by these Terms & Conditions and to comply with all applicable laws and regulations. If you do not agree with these Terms & Conditions, you are prohibited from using or accessing this website or using any other services provided by Fineyst.",
-    ],
-  },
+  // introduction: {
+  //   title: "Introduction",
+  //   content: [
+  //     "Welcome to Fineyst. These Terms & Conditions govern your use of our website located at fineyst.com and any related services provided by Fineyst.",
+  //     "By accessing our website or purchasing products, you agree to abide by these Terms & Conditions and to comply with all applicable laws and regulations. If you do not agree with these Terms & Conditions, you are prohibited from using or accessing this website or using any other services provided by Fineyst.",
+  //   ],
+  // },
   definitions: {
     title: "Definitions",
     content: [

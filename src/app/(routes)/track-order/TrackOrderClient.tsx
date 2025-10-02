@@ -166,6 +166,9 @@ export default function TrackOrderClient() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Track Your Order
           </h1>
+          <h2 className="text-lg text-gray-700 mb-2">
+            Real-Time Order Tracking
+          </h2>
           <p className="text-gray-600">
             Enter your order number to get real-time updates
           </p>
