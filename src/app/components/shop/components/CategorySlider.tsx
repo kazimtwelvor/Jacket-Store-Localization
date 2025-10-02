@@ -15,6 +15,8 @@ interface KeywordCategory {
   slug: string
   imageUrl?: string
   description?: string
+  materials?: string[]
+  styles?: string[]
 }
 
 interface CategorySliderProps {
@@ -23,6 +25,7 @@ interface CategorySliderProps {
   keywordCategories: KeywordCategory[]
   onCategorySelect?: (category: KeywordCategory) => void
   currentCategory?: KeywordCategory
+  relatedCategories?: KeywordCategory[]
 }
 
 export const CategorySlider: React.FC<CategorySliderProps> = ({
@@ -31,6 +34,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
   keywordCategories,
   onCategorySelect,
   currentCategory,
+  relatedCategories = [],
 }) => {
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
@@ -43,16 +47,37 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
     }
   }, [isOpen])
 
-  // Filter categories based on search query
-  const filteredCategories = useMemo(() => {
+  const sortedCategories = useMemo(() => {
     if (!keywordCategories || !Array.isArray(keywordCategories)) return []
-    if (!searchQuery.trim()) return keywordCategories
     
-    return keywordCategories.filter(category =>
+    // Create a map for quick lookup of keyword categories
+    const keywordCategoriesMap = new Map(
+      keywordCategories.map(cat => [cat.id || cat.slug, cat])
+    )
+    
+    // Get related categories in the exact order they appear in JacketCategories
+    const orderedRelated = relatedCategories
+      .map(relatedCat => keywordCategoriesMap.get(relatedCat.id || relatedCat.slug))
+      .filter((cat): cat is KeywordCategory => cat !== undefined)
+    
+    // Get remaining categories (not in related)
+    const relatedIds = new Set(relatedCategories.map(cat => cat.id || cat.slug))
+    const others = keywordCategories.filter(category => 
+      !relatedIds.has(category.id || category.slug)
+    )
+    
+    return [...orderedRelated, ...others]
+  }, [keywordCategories, relatedCategories])
+
+  const filteredCategories = useMemo(() => {
+    if (!sortedCategories || !Array.isArray(sortedCategories)) return []
+    if (!searchQuery.trim()) return sortedCategories
+    
+    return sortedCategories.filter(category =>
       category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       category.description?.toLowerCase().includes(searchQuery.toLowerCase())
     )
-  }, [keywordCategories, searchQuery])
+  }, [sortedCategories, searchQuery])
 
   const handleCategoryClick = (category: KeywordCategory) => {
     setSelectedCategory(category)
@@ -68,112 +93,41 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
 
   const CategoryCard = ({ category }: { category: KeywordCategory }) => (
     <motion.div
-      whileHover={{ scale: 1.02, y: -4 }}
-      whileTap={{ scale: 0.98 }}
-      className="group cursor-pointer"
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="group cursor-pointer flex flex-col items-center text-center"
       onClick={() => handleCategoryClick(category)}
     >
-      <div className={cn(
-        "relative overflow-hidden rounded-xl border transition-all duration-300",
-        currentCategory?.id === category.id
-          ? "border-gray-800 bg-white shadow-[0_8px_32px_rgba(0,0,0,0.12)] ring-2 ring-gray-800/20"
-          : "border-gray-200 bg-white hover:border-gray-400 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
-      )}>
-        {/* Category Image */}
-        <div className="relative h-32 w-full overflow-hidden">
-          {category.imageUrl ? (
-            <Image
-              src={category.imageUrl}
-              alt={category.name}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-              <Grid3X3 className="w-8 h-8 text-gray-400" />
-            </div>
-          )}
-          
-          {/* Overlay */}
-          <div className={cn(
-            "absolute inset-0 transition-colors duration-300",
-            currentCategory?.id === category.id
-              ? "bg-black/30"
-              : "bg-black/20 group-hover:bg-black/30"
-          )} />
-          
-          {/* Category Badge - Removed */}
-        </div>
-
-        {/* Category Info */}
-        <div className="p-3">
-          <h3 className={cn(
-            "font-bold text-base mb-1 transition-colors",
-            currentCategory?.id === category.id
-              ? "text-gray-900"
-              : "text-gray-800 group-hover:text-gray-900"
-          )}>
-            {category.name}
-          </h3>
-          
-          {category.description && (
-            <p className="text-xs text-gray-600 line-clamp-2 mb-2">
-              {category.description}
-            </p>
-          )}
-          
-          {/* Tags */}
-          <div className="flex items-center gap-2 mt-2">
-            {category.materials && category.materials.length > 0 ? (
-              <>
-                {category.materials.slice(0, 2).map((material, index) => (
-                  <span
-                    key={index}
-                    className={cn(
-                      "px-2 py-1 text-xs rounded-full transition-colors",
-                      currentCategory?.id === category.id
-                        ? "bg-gray-100 text-gray-700 border border-gray-200"
-                        : "bg-gray-50 text-gray-600"
-                    )}
-                  >
-                    {material}
-                  </span>
-                ))}
-                {category.materials.length > 2 && (
-                  <span className="text-xs text-gray-500">
-                    +{category.materials.length - 2} more
-                  </span>
-                )}
-              </>
-            ) : category.styles && category.styles.length > 0 ? (
-              <>
-                {category.styles.slice(0, 2).map((style, index) => (
-                  <span
-                    key={index}
-                    className={cn(
-                      "px-2 py-1 text-xs rounded-full transition-colors",
-                      currentCategory?.id === category.id
-                        ? "bg-gray-100 text-gray-700 border border-gray-200"
-                        : "bg-gray-50 text-gray-600"
-                    )}
-                  >
-                    {style}
-                  </span>
-                ))}
-                {category.styles.length > 2 && (
-                  <span className="text-xs text-gray-500">
-                    +{category.styles.length - 2} more
-                  </span>
-                )}
-              </>
-            ) : (
-              <span className="text-xs text-gray-500 italic">
-                Premium Collection
-              </span>
-            )}
+      <div
+        className={cn(
+          "relative w-24 h-24 mb-3 rounded-full overflow-hidden transition-all duration-300",
+          currentCategory?.id === category.id
+            ? "shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
+            : "ring-2 ring-gray-100 hover:ring-gray-300"
+        )}
+      >
+        {category.imageUrl ? (
+          <Image
+            src={category.imageUrl}
+            alt={category.name}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+            <Grid3X3 className="w-6 h-6 text-gray-400" />
           </div>
-        </div>
+        )}
       </div>
+
+      <h3 className={cn(
+        "font-bold text-sm transition-colors",
+        currentCategory?.id === category.id
+          ? "text-gray-900"
+          : "text-gray-400 group-hover:text-gray-700"
+      )}>
+        {category.name}
+      </h3>
     </motion.div>
   )
 
@@ -190,7 +144,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
     >
       <div className="flex items-center gap-4 p-4 transition-colors duration-200">
         {/* Category Image */}
-        <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+        <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
           {category.imageUrl ? (
             <Image
               src={category.imageUrl}
@@ -445,7 +399,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
                     </p>
                     
                     {viewMode === "grid" ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-4 gap-6">
                         {filteredCategories.map((category) => (
                           <CategoryCard key={category.id} category={category} />
                         ))}
