@@ -156,7 +156,7 @@ export default function PolicyTimeline() {
                 <div
                   className={`w-12 h-12 rounded-full ${item.iconBg} flex items-center justify-center flex-shrink-0 shadow-md z-10`}
                 >
-                  {item.icon}
+                  <span className="text-white">{item.icon}</span>
                 </div>
 
                 <div className={`flex-1 p-4 rounded-lg border ${item.color}`}>

@@ -171,7 +171,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-pilot-aviator-jackets"
+                    href="/us/collections/womens-pilot-jackets"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -207,7 +207,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-anorak-ski-jackets"
+                    href="/us/collections/womens-anorak-jackets"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -229,44 +229,11 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                   >
                     Puffer Vests
                   </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/us/shop?genders=women&style=vintage"
-                    className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                    onClick={onClose}
-                  >
-                    Vintage Style
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/us/shop?genders=women&style=elegant"
-                    className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                    onClick={onClose}
-                  >
-                    Elegant Style
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/us/shop?genders=women&price=luxury"
-                    className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
-                    onClick={onClose}
-                  >
-                    Luxury Collection
-                  </Link>
-                </li>
+                </li>            
               </ul>
             </div>
             </div>
-          </div>
-          {/* <div className="mt-20">
-            <h3 className="font-bold text-white mb-8 text-4xl uppercase tracking-widest text-left">
-              Collection
-            </h3>
-            <MegaMenuCarousel />
-          </div> */}
+          </div>         
         </div>
       </div>
     </div>
