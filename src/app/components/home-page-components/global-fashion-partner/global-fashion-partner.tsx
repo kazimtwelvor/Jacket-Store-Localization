@@ -46,7 +46,7 @@ const GlobalFashionPartners = () => {
 
     return (
         <section className="bg-gradient-to-br from-white to-gray-50 py-12 md:py-16 lg:py-20 relative overflow-hidden">
-            <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-5"></div>
+            <div className="absolute inset-0 opacity-5"></div>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
