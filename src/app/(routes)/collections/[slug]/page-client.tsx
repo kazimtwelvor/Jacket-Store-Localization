@@ -1368,6 +1368,13 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     imageUrl: cat.imageUrl,
                     description: cat.description
                 }))}
+                relatedCategories={categories.map(cat => ({
+                    id: cat.categoryId || cat.slug || '',
+                    name: cat.name || cat.categoryName || '',
+                    slug: cat.slug || cat.categoryId || '',
+                    imageUrl: cat.icon || cat.imageUrl,
+                    description: cat.description || ''
+                }))}
                 currentCategory={{
                     id: category.id,
                     name: category.name,
