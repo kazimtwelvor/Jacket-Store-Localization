@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, useLayoutEffect } from "react"
 import Image from "next/image"
 
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { X } from "lucide-react"
 import { motion, AnimatePresence, useMotionValue, animate, PanInfo } from "framer-motion"
 import WhatsMySize from "@/src/components/WhatsMySize"
@@ -1358,6 +1359,22 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                 />
             )}
 
+            {/* SEO: Hidden category links for search engines */}
+            <div className="sr-only" aria-hidden="true">
+                <nav aria-label="Category Navigation">
+                    <h2 className="sr-only">Available Categories</h2>
+                    {keywordCategories.map((cat, index) => (
+                        <Link 
+                            key={cat.id || index}
+                            href={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fineystjackets.com/us'}/collections/${cat.slug}`}
+                            className="sr-only"
+                        >
+                            {cat.name}
+                        </Link>
+                    ))}
+                </nav>
+            </div>
+
             <CategorySlider
                 isOpen={categorySliderOpen}
                 onClose={() => setCategorySliderOpen(false)}
@@ -1370,10 +1387,10 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                 }))}
                 relatedCategories={categories.map(cat => ({
                     id: cat.categoryId || cat.slug || '',
-                    name: cat.name || cat.categoryName || '',
+                    name: cat.name || '',
                     slug: cat.slug || cat.categoryId || '',
-                    imageUrl: cat.icon || cat.imageUrl,
-                    description: cat.description || ''
+                    imageUrl: cat.icon || '',
+                    description: ''
                 }))}
                 currentCategory={{
                     id: category.id,

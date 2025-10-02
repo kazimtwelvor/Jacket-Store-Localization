@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import type { Product, Category, Color, Size } from "@/types";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useCart } from "../../contexts/CartContext";
 import useWishlist from "../../hooks/use-wishlist";
 import getProducts from "../../actions/get-products";
@@ -1171,6 +1172,21 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             setFilterSidebarOpen(false);
           }}
         />
+
+        <div className="sr-only" aria-hidden="true">
+          <nav aria-label="Category Navigation">
+            <h2 className="sr-only">Available Categories</h2>
+            {keywordCategories?.map((cat, index) => (
+              <Link 
+                key={cat.id || index}
+                href={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fineystjackets.com/us'}/collections/${cat.slug}`}
+                className="sr-only"
+              >
+                {cat.name}
+              </Link>
+            ))}
+          </nav>
+        </div>
 
         <CategorySlider
           isOpen={categorySliderOpen}
