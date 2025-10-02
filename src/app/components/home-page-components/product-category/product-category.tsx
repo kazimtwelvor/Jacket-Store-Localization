@@ -241,8 +241,6 @@ export default function ProductCategory({
                         <Image
                           src={item.imageUrl || "/placeholder.svg"}
                           alt={item.name}
-                          width={360}
-                          height={560}
                           fill
                           unoptimized
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
@@ -274,8 +272,6 @@ export default function ProductCategory({
                         <Image
                           src={item.imageUrl || "/placeholder.svg"}
                           alt={item.name}
-                          width={360}
-                          height={560}
                           fill
                           unoptimized
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"

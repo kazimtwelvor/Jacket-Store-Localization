@@ -46,7 +46,7 @@ export default function FitGuide() {
     return (
       <div className="space-y-8">
         <div className="mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">Fit Guide</h2>
+          <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">Fit Guide</h3>
           <p className="text-muted-foreground max-w-3xl">
             Understand the different fits we offer to find the style that suits you best.
           </p>
@@ -116,7 +116,7 @@ export default function FitGuide() {
       viewport={{ once: true }}
       className="space-y-8"
     >
-      <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-white">Fit Guide</h2>
+      <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-white">Fit Guide</h3>
       <p className="text-[#666666] max-w-3xl mb-6">
         Understand the different fits we offer to find the style that suits you best.
       </p>

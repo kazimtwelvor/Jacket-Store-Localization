@@ -72,7 +72,7 @@ export default function TermsNavigation({
       >
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-[#2b2b2b]">Table of Contents</h2>
+            <span className="text-xl font-bold text-[#2b2b2b]">Table of Contents</span>
             <button
               onClick={() => setIsOpen(false)}
               className="p-2 rounded-full hover:bg-white"
@@ -129,7 +129,7 @@ export default function TermsNavigation({
       {/* Desktop Sidebar */}
       <div className="hidden lg:block lg:w-1/4 self-start sticky top-24">
         <div className="bg-white rounded-lg shadow-sm border border-[#2b2b2b] p-6">
-          <h2 className="text-xl font-bold mb-4 text-[#2b2b2b]">Table of Contents</h2>
+          <span className="text-xl font-bold mb-4 text-[#2b2b2b]">Table of Contents</span>
 
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">

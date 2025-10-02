@@ -72,7 +72,7 @@ const Footer = () => {
                     <div className="space-y-4 flex-shrink-0 md:w-64 flex flex-col items-center md:items-start">
                         <div className="flex flex-col items-center md:items-start">
                             <div className="mb-3 flex justify-center md:justify-start">
-                                <Link href="/us" className="flex items-center justify-center">
+                                <Link href="/us/" className="flex items-center justify-center">
                                     <img
                                         src="/images/logo-footer.webp"
                                         alt="Fineyst Logo"
@@ -134,7 +134,7 @@ const Footer = () => {
                                 className="flex bg[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('shop')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>SHOP</h3>
+                                <p className={`w-full text-center md:text-left ${avertaBold.className}`}>SHOP</p>
                                 <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'shop' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'shop' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
@@ -153,7 +153,7 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('categories')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>CATEGORIES</h3>
+                                <p className={`w-full text-center md:text-left ${avertaBold.className}`}>CATEGORIES</p>
                                 <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'categories' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'categories' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
@@ -189,7 +189,7 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('company')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>COMPANY</h3>
+                                <p className={`w-full text-center md:text-left ${avertaBold.className}`}>COMPANY</p>
                                 <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'company' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'company' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
@@ -210,7 +210,7 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('support')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>SUPPORT</h3>
+                                <p className={`w-full text-center md:text-left ${avertaBold.className}`}>SUPPORT</p>
                                 <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'support' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'support' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
@@ -247,7 +247,7 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('help')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>HELP</h3>
+                                <p className={`w-full text-center md:text-left ${avertaBold.className}`}>HELP</p>
                                 <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'help' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'help' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
@@ -274,7 +274,7 @@ const Footer = () => {
                 </div>
                 <div className="flex flex-col md:flex-row  items-center mt-6 pt-6">
                     <div className="flex flex-col md:flex-row items-center mb-4 md:mb-0">
-                        <h3 className="text-black font-semibold mr-4 mb-3 md:mb-0">FOLLOW US</h3>
+                        <p className="text-black font-semibold mr-4 mb-3 md:mb-0">FOLLOW US</p>
                         <div className="flex space-x-3">
                             <div className="w-10 h-10 bg-[#2b2b2b] rounded-full flex items-center justify-center">
                                 <Link

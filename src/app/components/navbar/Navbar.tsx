@@ -380,7 +380,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex-1 flex justify-center lg:justify-start pr-5">
-            <Link href="/us" className="flex items-center justify-center">
+            <Link href="/us/" className="flex items-center justify-center">
               <Image
                 src="/logo.webp"
                 alt="Leather Jacket Logo"

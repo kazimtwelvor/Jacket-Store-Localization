@@ -7,7 +7,7 @@ import Button from "../../ui/button"
 
 export const metadata: Metadata = {
   title: "About Us - Our Story and Mission | FINEYST",
-  description: "Learn about our story, mission, and the team behind FINEYST.",
+  description: "Discover FINEYST's journey since 2010 - our sustainable fashion mission, passionate team, and commitment to quality craftsmanship. Learn about our values and vision for the future.",
   alternates: {
     canonical: "https://www.fineystjackets.com/us/about-us"
   }
@@ -233,7 +233,7 @@ export default function AboutUsPage() {
               },
             ].map((member, index) => (
               <div key={index} className="group">
-                <div className="relative h-[300px]  overflow-hidden mb-4 transition-all duration-300 group-hover:shadow-xl">
+                <div className="relative h-[300px] w-full aspect-[3/4] overflow-hidden mb-4 transition-all duration-300 group-hover:shadow-xl">
                   <Image
                     src={member.image || "/placeholder.svg"}
                     alt={member.name}
@@ -267,8 +267,8 @@ export default function AboutUsPage() {
             <div className="space-y-16">
               {/* 2010 - Left */}
               <div className="relative md:grid md:grid-cols-2 items-center">
-                <div className="hidden md:block">
-                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mr-8 ml-auto">
+                <div>
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 md:mr-8 md:ml-auto">
                     <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
                       2010
                     </span>
@@ -284,18 +284,7 @@ export default function AboutUsPage() {
 
                 <div className="hidden md:block"></div>
 
-                <div className="md:hidden">
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
-                      2010
-                    </span>
-                    <h3 className="text-xl font-bold mb-2">The Beginning</h3>
-                    <p className="text-muted-foreground">
-                      FINEYST was founded with a simple mission: to create sustainable fashion that doesn't compromise
-                      on style.
-                    </p>
-                  </div>
-                </div>
+
               </div>
 
               <div className="relative md:grid md:grid-cols-2 items-center">
@@ -303,8 +292,8 @@ export default function AboutUsPage() {
 
                 <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#2b2b2b] rounded-full hidden md:block"></div>
 
-                <div className="hidden md:block">
-                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ml-8">
+                <div>
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 md:ml-8">
                     <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
                       2015
                     </span>
@@ -316,23 +305,12 @@ export default function AboutUsPage() {
                   </div>
                 </div>
 
-                <div className="md:hidden">
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
-                      2015
-                    </span>
-                    <h3 className="text-xl font-bold mb-2">Going Global</h3>
-                    <p className="text-muted-foreground">
-                      We expanded our operations to reach customers worldwide, bringing our sustainable fashion to new
-                      markets.
-                    </p>
-                  </div>
-                </div>
+
               </div>
 
               <div className="relative md:grid md:grid-cols-2 items-center">
-                <div className="hidden md:block">
-                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mr-8 ml-auto">
+                <div>
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 md:mr-8 md:ml-auto">
                     <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
                       2018
                     </span>
@@ -347,17 +325,7 @@ export default function AboutUsPage() {
 
                 <div className="hidden md:block"></div>
 
-                <div className="md:hidden">
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <span className="inline-block px-3 py-1 bg-[#EAEAEA] text-black rounded-full text-sm font-medium mb-3">
-                      2018
-                    </span>
-                    <h3 className="text-xl font-bold mb-2">Sustainability Pledge</h3>
-                    <p className="text-muted-foreground">
-                      We committed to using 100% sustainable materials by 2025, setting a new standard in the industry.
-                    </p>
-                  </div>
-                </div>
+
               </div>
 
               <div className="relative md:grid md:grid-cols-2 items-center">
@@ -365,8 +333,8 @@ export default function AboutUsPage() {
 
                 <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full hidden md:block"></div>
 
-                <div className="hidden md:block">
-                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ml-8">
+                <div>
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 md:ml-8">
                     <span className="inline-block px-3 py-1 bg-[#EAEAEA] text-black rounded-full text-sm font-medium mb-3">
                       2023
                     </span>
@@ -377,17 +345,7 @@ export default function AboutUsPage() {
                   </div>
                 </div>
 
-                <div className="md:hidden">
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <span className="inline-block px-3 py-1 bg-[#EAEAEA] text-black rounded-full text-sm font-medium mb-3">
-                      2023
-                    </span>
-                    <h3 className="text-xl font-bold mb-2">Innovation Hub</h3>
-                    <p className="text-muted-foreground">
-                      We launched our innovation center to develop new sustainable fabrics and manufacturing processes.
-                    </p>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -396,7 +354,7 @@ export default function AboutUsPage() {
 
       <Container>
         <section className="py-16 md:py-24 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Join Our Journey</h2>
+          <span className="text-3xl md:text-4xl font-bold mb-6">Join Our Journey</span>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
             Be part of our story as we continue to redefine sustainable fashion for the future.
           </p>

@@ -96,7 +96,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="relative w-full aspect-[3/5] bg-gray-100 overflow-visible md:overflow-hidden">
+      <div className="relative w-full aspect-[3/5] bg-gray-100 overflow-visible lg:overflow-hidden">
         {isDesktop ? (
           <div className="w-full h-full overflow-hidden relative">
             <Link href={getProductUrl(product)}>
@@ -120,7 +120,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
 
         <motion.button
-          className="absolute md:top-2 md:right-2 w-8 h-8 md:w-9 md:h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 -bottom-4 right-12"
+          className="absolute lg:top-2 lg:right-2 w-8 h-8 lg:w-9 lg:h-9 rounded-full bg-white flex items-center justify-center shadow-md z-10 -bottom-4 right-12"
           aria-label="Add to wishlist"
           whileHover={{ scale: 1.2, backgroundColor: "#f8f8f8" }}
           whileTap={{ scale: 0.9 }}
@@ -148,7 +148,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </motion.button>
 
         <button
-          className="md:hidden absolute w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-md z-48 right-2  -bottom-4 md:top-3 md:right-3 md:bottom-auto"
+          className="lg:hidden absolute w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-md z-48 right-2  -bottom-4 lg:top-3 lg:right-3 lg:bottom-auto"
           aria-label="Add to cart"
           onClick={(e) => {
             e.stopPropagation()

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 }) {
   return (
     <div className="mb-8">
-      <h2 className="text-2xl font-bold mb-4">{title}</h2>
+      <h3 className="text-2xl font-bold mb-4">{title}</h3>
       {content.map((paragraph, idx) => (
         <p key={idx} className="mb-4 text-gray-700">
           {paragraph}
@@ -62,7 +62,7 @@ export default function TermsConditionsPage() {
       <h1 className="sr-only">Terms & Conditions</h1>
       
       {/* Server-rendered content for SEO - visible in page source */}
-      <div aria-hidden="true" className="sr-only">
+      <div aria-hidden="true" className="hidden">
         <div className="bg-background">
           <div className="relative bg-white overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -79,15 +79,9 @@ export default function TermsConditionsPage() {
 
           <Container>
             <div className="max-w-4xl mx-auto py-12">
-              {/* Render all terms sections for SEO */}
-              {Object.entries(termsData).map(([key, section]) => (
-                <ServerTermsSection
-                  key={key}
-                  title={section.title}
-                  content={section.content}
-                  subsections={section.subsections}
-                />
-              ))}
+              <div className="text-center">
+                <p className="text-gray-600">Loading content...</p>
+              </div>
             </div>
           </Container>
         </div>
