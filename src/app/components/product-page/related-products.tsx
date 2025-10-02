@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect } from "react"
 import Image from "next/image"
-import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Heart, ChevronLeft, ChevronRight, X } from "lucide-react"
 
@@ -270,11 +269,10 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
             onTouchEnd={handleTouchEnd}
           >
             {displayedProducts.map((product, index) => (
-              <Link
+              <div
                 key={`related-mobile-${product.id}-${index}`}
-                href={`/us/product/${product.slug || product.id}`}
                 className="flex-shrink-0 w-[calc(58vw-16px)] cursor-pointer flex flex-col h-full"
-                onClick={() => addToRecentlyViewed(product)}
+                onClick={(e) => handleCardClick(product, e)}
               >
                 <div className="relative flex-1 aspect-[3/5] overflow-visible bg-gray-100">
                   <Image
@@ -378,8 +376,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                     </div>
                   </div>
                 </div>
-                <span className="sr-only">View {product.name} - ${product.salePrice && Number(product.salePrice) > 0 ? product.salePrice : product.price}</span>
-              </Link>
+              </div>
             ))}
           </motion.div>
         </div>
@@ -396,14 +393,13 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
               onMouseLeave={handleMouseUp}
             >
               {displayedProducts.map((product, index) => (
-                <Link
+                <div
                   key={`related-${product.id}-${index}`}
-                  href={`/us/product/${product.slug || product.id}`}
                   className="group/item flex-shrink-0 cursor-pointer flex flex-col"
                   style={{ width: `calc(${(100 / visibleItems)}% - ${((visibleItems - 1) * 20) / visibleItems}px)`, userSelect: 'none' }}
                   onMouseEnter={() => setHoveredProduct(`related-${product.id}-${index}`)}
                   onMouseLeave={() => setHoveredProduct(null)}
-                  onClick={() => addToRecentlyViewed(product)}
+                  onClick={(e) => handleCardClick(product, e)}
                 >
                   <div className="relative overflow-hidden bg-gray-100 w-full aspect-[3/5]">
                     <Image
@@ -629,8 +625,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                       </div>
                     </div>
                   </div>
-                  <span className="sr-only">View {product.name} - ${product.salePrice && Number(product.salePrice) > 0 ? product.salePrice : product.price}</span>
-                </Link>
+                </div>
               ))}
             </motion.div>
           </div>
