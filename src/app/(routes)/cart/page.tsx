@@ -79,6 +79,7 @@ const StripeExpressCheckout = ({
   const elements = useElements();
 
   const handleExpressCheckout = async (event: any) => {
+    console.log("Express checkout event details:", event);
     if (!stripe || !elements) return;
 
     console.log("Express checkout event:", event);
@@ -114,7 +115,7 @@ const StripeExpressCheckout = ({
       const { clientSecret, paymentIntentId } = await response.json();
 
       // ✅ Use confirmPayment with elements instead of payment_method
-      const { error } = await stripe.confirmPayment({
+      const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         clientSecret,
         confirmParams: {
@@ -139,19 +140,108 @@ const StripeExpressCheckout = ({
           3000
         );
       } else {
-        setPaymentModal({
-          isOpen: true,
-          status: "success",
-          message: "Payment successful! Redirecting...",
-        });
-        setTimeout(() => {
-          setPaymentModal({
-            isOpen: false,
-            status: "processing",
-            message: "",
+        // Call checkout API after successful payment
+        const checkoutResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              productIds: items.map((item) => item.product.id),
+              paymentMethod: "stripe",
+              customerEmail: event.billingDetails?.email || "",
+              customerName:
+                event.billingDetails?.name || event.shippingAddress?.name || "",
+              phone: event.billingDetails?.phone || "",
+              address: `${event.shippingAddress?.address?.line1 || ""}, ${
+                event.shippingAddress?.address?.city || ""
+              }, ${event.shippingAddress?.address?.state || ""}, ${
+                event.shippingAddress?.address?.postal_code || ""
+              }, ${event.shippingAddress?.address?.country || "US"}`,
+              billingAddress: `${
+                event.billingDetails?.address?.line1 ||
+                event.shippingAddress?.address?.line1 ||
+                ""
+              }, ${
+                event.billingDetails?.address?.city ||
+                event.shippingAddress?.address?.city ||
+                ""
+              }, ${
+                event.billingDetails?.address?.state ||
+                event.shippingAddress?.address?.state ||
+                ""
+              }, ${
+                event.billingDetails?.address?.postal_code ||
+                event.shippingAddress?.address?.postal_code ||
+                ""
+              }, ${
+                event.billingDetails?.address?.country ||
+                event.shippingAddress?.address?.country ||
+                "US"
+              }`,
+              shippingAddress: `${
+                event.shippingAddress?.address?.line1 || ""
+              }, ${event.shippingAddress?.address?.city || ""}, ${
+                event.shippingAddress?.address?.state || ""
+              }, ${event.shippingAddress?.address?.postal_code || ""}, ${
+                event.shippingAddress?.address?.country || "US"
+              }`,
+              zipCode: event.shippingAddress?.address?.postal_code || "",
+              city: event.shippingAddress?.address?.city || "",
+              state: event.shippingAddress?.address?.state || "",
+              country: event.shippingAddress?.address?.country || "US",
+              embedded: true,
+              totalAmount: totalAmount,
+              discountAmount: 0,
+              voucherCode: null,
+              paymentIntentId,
+              paymentStatus: paymentIntent?.status || "succeeded",
+            }),
+          }
+        );
+
+        if (checkoutResponse.ok) {
+          const { orderId } = await checkoutResponse.json();
+          await fetch("/api/orders/send-order-emails", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              customerEmail: event.billingDetails?.email,
+              customerName:
+                event.billingDetails?.name || event.shippingAddress?.name,
+              orderNumber: orderId || "unknown",
+              orderTotal: totalAmount,
+              items: items.map((item) => ({
+                name: item.product.name,
+                quantity: item.quantity,
+                price: item.unitPrice
+              })),
+            }),
           });
-          onSuccess(paymentIntentId);
-        }, 2000);
+          setPaymentModal({
+            isOpen: true,
+            status: "success",
+            message: "Payment successful! Redirecting...",
+          });
+          setTimeout(() => {
+            setPaymentModal({
+              isOpen: false,
+              status: "processing",
+              message: "",
+            });
+            onSuccess(orderId);
+          }, 2000);
+        } else {
+          const errorData = await checkoutResponse.json();
+          console.error("Checkout API error:", errorData);
+          setPaymentModal({
+            isOpen: true,
+            status: "error",
+            message: `Order creation failed: ${
+              errorData.message || "Unknown error"
+            }`,
+          });
+        }
       }
     } catch (error) {
       console.error("Express checkout error:", error);
@@ -182,6 +272,9 @@ const StripeExpressCheckout = ({
             maxColumns: 1,
             maxRows: 1,
           },
+          emailRequired: true,
+          phoneNumberRequired: true,
+          shippingAddressRequired: true,
         }}
       />
     </div>

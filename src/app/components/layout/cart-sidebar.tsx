@@ -172,6 +172,22 @@ const StripeExpressCheckout = ({
 
         if (checkoutResponse.ok) {
           const { orderId } = await checkoutResponse.json();
+          await fetch("/api/orders/send-order-emails", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              customerEmail: event.billingDetails?.email,
+              customerName:
+                event.billingDetails?.name || event.shippingAddress?.name,
+              orderNumber: orderId || "unknown",
+              orderTotal: totalAmount,
+              items: items.map((item) => ({
+                name: item.product.name,
+                quantity: item.quantity,
+                price: item.unitPrice,
+              })),
+            }),
+          });
           setPaymentModal({
             isOpen: true,
             status: "success",
