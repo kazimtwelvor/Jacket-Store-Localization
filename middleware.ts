@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+  const { pathname, searchParams } = request.nextUrl
   
   if (pathname.startsWith("/api")) {
     const origin = request.headers.get("origin") || "http://localhost:4000"
@@ -15,6 +15,7 @@ export function middleware(request: NextRequest) {
     return response
   }
 
+
   return NextResponse.next()
 }
 
@@ -24,4 +25,3 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|.*\\..*|_next).*)"
   ],
 }
-
