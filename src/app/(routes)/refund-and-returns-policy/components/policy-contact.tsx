@@ -31,7 +31,7 @@ export default function PolicyContact() {
     return (
       <div className="mt-8 bg-white rounded-xl border border-[#2b2b2b] shadow-sm overflow-hidden">
         <div className="bg-[#2b2b2b] p-4 border-b border-[#2b2b2b]">
-          <h3 className="font-semibold text-[#2b2b2b]">Need Help?</h3>
+          <h3 className="font-semibold text-white">Need Help?</h3>
         </div>
         <div className="p-4 space-y-4">
           <p className="text-sm text-[#666666]">
@@ -83,7 +83,7 @@ export default function PolicyContact() {
       transition={{ duration: 0.5, delay: 0.4 }}
     >
       <div className="bg-[#2b2b2b] p-4 border-b border-[#2b2b2b]">
-        <h3 className="font-semibold text-[#2b2b2b]">Need Help?</h3>
+        <h3 className="font-semibold text-white">Need Help?</h3>
       </div>
 
       <div className="p-4 space-y-4">

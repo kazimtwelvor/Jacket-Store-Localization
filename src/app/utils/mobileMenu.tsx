@@ -40,24 +40,24 @@ const discoverData: Record<string, { title: string; items: string[]; links: stri
     {
       title: "STYLES",
       items: ["Cropped Jackets", "Pilot & Aviator Jackets", "Varsity Jackets", "Letterman Jackets", "Denim Jackets", "Anorak & Ski Jackets"],
-      links: ["/us/collections/womens-cropped-jackets", "/us/collections/womens-pilot-aviator-jackets", "/us/collections/womens-varsity-jackets", "/us/collections/womens-letterman-jackets", "/us/collections/womens-denim-jackets", "/us/collections/womens-anorak-ski-jackets"]
+      links: ["/us/collections/womens-cropped-jackets", "/us/collections/womens-pilot-jackets", "/us/collections/womens-varsity-jackets", "/us/collections/womens-letterman-jackets", "/us/collections/womens-denim-jackets", "/us/collections/womens-anorak-jackets"]
     },
     {
       title: "SPECIAL COLLECTIONS",
-      items: ["Puffer Vests", "Vintage Style", "Elegant Style", "Luxury Collection"],
-      links: ["/us/collections/womens-puffer-vests", "/us/shop?genders=women&style=vintage", "/us/shop?genders=women&style=elegant", "/us/shop?genders=women&price=luxury"]
+      items: ["Puffer Vests"],
+      links: ["/us/collections/womens-puffer-vests"]
     }
   ],
   "Men's Jackets": [
     {
       title: "LEATHER JACKETS",
       items: ["Leather Jackets", "Leather Bomber Jackets", "Biker & Moto Jackets", "Aviator & Flight Jackets", "Hooded Leather Jackets", "Suede Jackets", "Leather Vests"],
-      links: ["/us/collections/leather-bomber-jacket-mens", "collections/leather-bomber-jacket-mens", "/us/collections/mens-biker-moto-jackets", "/us/collections/mens-aviator-jackets", "/us/collections/mens-hooded-leather-jackets", "/us/collections/mens-suede-jackets", "/us/collections/mens-leather-vests"]
+      links: ["/us/collections/leather-bomber-jacket-mens", "/us/collections/leather-bomber-jacket-mens", "/us/collections/biker-jacket-men", "/us/collections/mens-aviator-jackets", "/us/collections/mens-hooded-leather-jackets", "/us/collections/mens-suede-jackets", "/us/collections/mens-leather-vests"]
     },
     {
       title: "COATS",
       items: ["Leather Dusters", "Long Leather Coats", "Shearling Coats", "Winter Coats", "Puffer Jackets", "Fur & Shearling Jackets"],
-      links: ["/us/collections/mens-leather-dusters", "/us/collections/mens-long-leather-coats", "/us/collections/mens-shearling-coats", "/us/collections/mens-winter-coats", "/us/collections/mens-puffer-jackets", "/us/collections/mens-fur-shearling-jackets"]
+      links: ["/us/collections/mens-duster-jackets", "/us/collections/mens-long-leather-coats", "/us/collections/mens-shearling-coats", "/us/collections/mens-winter-coats", "/us/collections/mens-puffer-jackets", "/us/collections/mens-fur-jackets"]
     },
     {
       title: "STYLES",
@@ -66,8 +66,8 @@ const discoverData: Record<string, { title: string; items: string[]; links: stri
     },
     {
       title: "SPECIAL COLLECTIONS",
-      items: ["Plus Size Leather Jackets", "Puffer Vests", "Vintage Style", "Luxury Collection"],
-      links: ["/us/collections/plus-size-leather-jackets", "/us/collections/mens-puffer-vests", "/us/shop?genders=men&style=vintage", "/us/shop?genders=men&price=luxury"]
+      items: ["Plus Size Leather Jackets", "Puffer Vests", "Vintage Style"],
+      links: ["/us/collections/plus-size-leather-jackets", "/us/collections/mens-puffer-vests", "/us/collections/mens-brown-vintage-leather-jackets"]
     }
   ],
   "Coats": [
