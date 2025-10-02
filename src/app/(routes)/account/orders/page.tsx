@@ -290,7 +290,7 @@ export default function OrdersPage() {
                   collection and find your perfect style.
                 </p>
                 <Link
-                  href="/shop"
+                  href="/us/shop"
                   className="inline-flex items-center px-8 py-4 bg-[#2B2B2B] text-white rounded-lg hover:bg-[#1a1a1a] transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 >
                   Explore Collection

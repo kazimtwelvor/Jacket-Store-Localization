@@ -883,7 +883,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     categories={categories}
                     onCategoryClick={(categorySlug) => {
                         const currentPath = window.location.pathname;
-                        const targetPath = `/collections/${categorySlug}`;
+                        const targetPath = `/us/collections/${categorySlug}`;
                         
                         if (currentPath === targetPath) {
                             window.dispatchEvent(new CustomEvent('route-loading:end'));
@@ -1086,7 +1086,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                                             <button
                                                 key={cat.id}
                                                 onClick={() => {
-                                                    router.push(`/collections/${categorySlug}`)
+                                                    router.push(`/us/collections/${categorySlug}`)
                                                     setCategoriesSidebarOpen(false)
                                                 }}
                                                 className={cn(
@@ -1376,7 +1376,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     description: ''
                 }}
                 onCategorySelect={(selectedCategory) => {
-                    router.push(`/collections/${selectedCategory.slug}`);
+                    router.push(`/us/collections/${selectedCategory.slug}`);
                     setCategorySliderOpen(false);
                 }}
             />

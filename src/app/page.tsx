@@ -57,7 +57,9 @@ export default function Home() {
         "image": "https://www.fineystjackets.com/images/banner.webp",
         "description": "www.fineystjackets.com/us is a U.S.-based brand specializing in premium leather jackets, offering biker, bomber, cropped, custom, and trench styles crafted from high-quality cowhide, lambskin, goatskin, and suede. Designed for durability and timeless style, our jackets deliver comfort, edge, and authenticity. Fast nationwide shipping, secure ordering, and dedicated customer service.",
         "email": "info@www.fineystjackets.com",
+
         "telephone": "+1 (888) 840-0885",
+
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Address",

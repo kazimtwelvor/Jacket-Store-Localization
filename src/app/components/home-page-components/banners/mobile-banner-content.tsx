@@ -36,12 +36,12 @@ export const MobileBannerContent = () => {
                     transition={{ duration: 0 }}
                     className="flex justify-center gap-5 w-full"
                 >
-                    <Link href="/shop?genders=men" aria-label="Shop men's collection">
+                    <Link href="/us/shop?genders=men" aria-label="Shop men's collection">
                         <button className={`${avertaBlack.className} bg-[#2b2b2b] text-white font-bold py-3 px-8 text-sm uppercase block min-w-[120px]`}>
                             SHOP MEN
                         </button>
                     </Link>
-                    <Link href="/shop?genders=women" aria-label="Shop women's collection">
+                    <Link href="/us/shop?genders=women" aria-label="Shop women's collection">
                         <button className={`${avertaBlack.className} bg-[#2b2b2b] text-white font-bold py-3 px-8 text-sm uppercase block min-w-[120px]`}>
                             SHOP WOMEN
                         </button>

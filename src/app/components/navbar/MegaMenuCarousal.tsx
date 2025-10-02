@@ -25,7 +25,7 @@ const carouselItems = [
     id: "boss-lines",
     title: "Boss Brand Lines",
     imageUrl: "/images/mega-carousel-3.jpg",
-    href: "/shop?brand=boss",
+    href: "/us/shop?brand=boss",
   },
   {
     id: "made-to-order",
@@ -37,13 +37,13 @@ const carouselItems = [
     id: "new-arrivals",
     title: "New Arrivals",
     imageUrl: "/images/mega-carousel-5.jpg",
-    href: "/shop?sort=newest",
+    href: "/us/shop?sort=newest",
   },
   {
     id: "mens-collection",
     title: "Men's Collection",
     imageUrl: "/images/mega-carousel-men.jpg",
-    href: "/shop?gender=men",
+    href: "/us/shop?gender=men",
   },
 ]
 

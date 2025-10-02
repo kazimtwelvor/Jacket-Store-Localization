@@ -89,7 +89,7 @@ export default function PolicyContact() {
       <div className="p-4 space-y-4">
         <p className="text-sm text-[#666666]">
           If you have any questions about our return policy or need assistance with a return, our customer service team
-          is here to help. You can also visit our <a href="/contact-us" className="text-[#2b2b2b] underline hover:text-[#1b1b1b]">Contact Us</a> page for more information.
+          is here to help. You can also visit our <a href="/us/contact-us" className="text-[#2b2b2b] underline hover:text-[#1b1b1b]">Contact Us</a> page for more information.
         </p>
 
         <div className="space-y-3 pt-2">

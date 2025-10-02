@@ -737,7 +737,7 @@ const CheckoutPage = () => {
                 Your cart is empty. Add some items before checking out.
               </p>
               <Button
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/us/")}
                 className="bg-[#B01E23] hover:bg-[#8a1a1e] text-white"
               >
                 Continue Shopping

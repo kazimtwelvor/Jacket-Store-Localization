@@ -97,7 +97,7 @@ const WishlistPage = () => {
   }
 
   const handleContinueShopping = () => {
-    router.push("/shop")
+    router.push("/us/shop")
   }
 
   if (wishlist.items.length === 0) {

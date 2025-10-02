@@ -28,7 +28,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/blogs"
+                    href="/us/blogs"
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -37,7 +37,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/about-us"
+                    href="/us/about-us"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -53,7 +53,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/faqs"
+                    href="/us/faqs"
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -62,7 +62,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/reviews"
+                    href="/us/reviews"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -71,7 +71,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/contact-us"
+                    href="/us/contact-us"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -96,7 +96,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/privacy-policy"
+                    href="/us/privacy-policy"
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -105,7 +105,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/terms-conditions"
+                    href="/us/terms-conditions"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -114,7 +114,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/shipping-and-delivery-policy"
+                    href="/us/shipping-and-delivery-policy"
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >

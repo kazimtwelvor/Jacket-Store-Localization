@@ -71,7 +71,7 @@ export default function WishlistPage() {
                   <button
                     onClick={() => {
                       logout()
-                      router.push("/")
+                      router.push("/us/")
                     }}
                     className="py-2 px-4 hover:bg-gray-100 rounded text-sm uppercase font-medium text-left flex items-center"
                   >

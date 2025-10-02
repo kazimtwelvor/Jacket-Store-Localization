@@ -249,7 +249,7 @@ const ConfirmationPage = () => {
               </h1>
               <p className="text-lg text-gray-600 mb-8">{error}</p>
               <Button
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/us/")}
                 className="bg-[#B01E23] hover:bg-[#8a1a1e] text-white"
               >
                 Return to home
@@ -489,7 +489,7 @@ const ConfirmationPage = () => {
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
-                    onClick={() => router.push("/")}
+                    onClick={() => router.push("/us/")}
                     className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
                   >
                     Continue Shopping

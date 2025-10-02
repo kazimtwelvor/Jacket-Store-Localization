@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-const BASE_URL = 'https://fineystjackets.com'
+const BASE_URL = 'https://www.fineystjackets.com'
 
 export async function GET() {
   // Generate main sitemap index that references all sub-sitemaps

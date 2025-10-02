@@ -133,7 +133,7 @@ export default function AboutUsPage() {
               </p>
               <div className="mt-8">
                 <Button size="lg" className="mr-4 bg-[#eaeaea] hover:bg-[#f6f6f6] text-black rounded-none" asChild>
-                  <Link href="/shop">Shop Collection</Link>
+                  <Link href="/us/shop">Shop Collection</Link>
                 </Button>
                 <Button
                   variant="blackInvert"
@@ -141,7 +141,7 @@ export default function AboutUsPage() {
                   className="rounded-none"
                   asChild
                 >
-                  <Link href="/blogs">Learn More</Link>
+                  <Link href="/us/blogs">Read Our Blog Articles</Link>
                 </Button>
               </div>
             </div>
@@ -402,7 +402,7 @@ export default function AboutUsPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button size="lg" className="bg-[#EAEAEA] hover:bg-[#eaeaea] text-black rounded-none" asChild>
-              <Link href="/shop">Explore Collection</Link>
+              <Link href="/us/shop">Explore Collection</Link>
             </Button>
             <Button
               variant="blackInvert"
@@ -410,7 +410,7 @@ export default function AboutUsPage() {
               className="rounded-none"
               asChild
             >
-              <Link href="/contact-us">Get in Touch</Link>
+              <Link href="/us/contact-us">Get in Touch</Link>
             </Button>
           </div>
         </section>

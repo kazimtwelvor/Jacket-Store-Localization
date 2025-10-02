@@ -54,7 +54,7 @@ const CategoriesPage = ({ categories }: CategoriesPageProps) => {
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredCategories.map((category) => (
               <div key={category.id} className="group">
-                <Link href={`/collections/${category.slug}`}>
+                <Link href={`/us/collections/${category.slug}`}>
                   <div className="relative overflow-hidden bg-white shadow-md w-full h-[290px] sm:h-[320px] md:h-[400px] lg:h-[430px] xl:h-[460px]">
                     <Image
                       src={category.imageUrl || "/placeholder.svg"}

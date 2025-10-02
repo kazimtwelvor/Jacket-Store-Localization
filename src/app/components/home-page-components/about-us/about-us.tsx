@@ -49,7 +49,7 @@ const AboutSection = () => {
                                 We believe that streetwear should be both expressive and responsibly made.
                             </p>
 
-                            <Link href="/about-us" className="inline-flex items-center space-x-2 text-[#2b2b2b] hover:text-[#2b2b2b] font-semibold text-lg group transition-colors duration-300">
+                            <Link href="/us/about-us" className="inline-flex items-center space-x-2 text-[#2b2b2b] hover:text-[#2b2b2b] font-semibold text-lg group transition-colors duration-300">
                                 <span>Discover our full story</span>
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                             </Link>

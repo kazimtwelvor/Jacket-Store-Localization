@@ -14,18 +14,18 @@ export default function NotFound() {
         
         <div className="space-y-4">
           <Link 
-            href="/"
+            href="/us/"
             className="inline-block bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition-colors"
           >
             Go Home
           </Link>
           
           <div className="text-sm text-gray-400">
-            <Link href="/shop" className="hover:text-gray-600 transition-colors">
+            <Link href="/us/shop" className="hover:text-gray-600 transition-colors">
               Browse Products
             </Link>
             {' • '}
-            <Link href="/contact-us" className="hover:text-gray-600 transition-colors">
+            <Link href="/us/contact-us" className="hover:text-gray-600 transition-colors">
               Contact Support
             </Link>
           </div>

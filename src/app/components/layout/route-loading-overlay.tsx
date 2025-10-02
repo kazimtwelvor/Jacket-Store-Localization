@@ -63,7 +63,7 @@ function RouteLoadingOverlayContent() {
           return;
         }
 
-        if (url.pathname === "/") return;
+        if (url.pathname === "/us/") return;
 
         // Check for error pages in both current and target URLs
         if (
@@ -96,8 +96,8 @@ function RouteLoadingOverlayContent() {
         const fromPath = location.pathname + location.search + location.hash;
         if (toPath === fromPath) return;
         if (
-          url.pathname.startsWith("/collections/") &&
-          location.pathname.startsWith("/collections/") &&
+          url.pathname.startsWith("/us/collections/") &&
+          location.pathname.startsWith("/us/collections/") &&
           url.pathname === location.pathname
         )
           return;

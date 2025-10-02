@@ -190,7 +190,7 @@ export default function ReviewsClient() {
                 <p className="text-lg text-black mb-8">
                   We value your feedback! Let us know about your experience with our products and service.
                 </p>
-                <a href="/contact-us" className="inline-block bg-white text-black font-bold py-3 px-8 rounded-full">
+                <a href="/us/contact-us" className="inline-block bg-white text-black font-bold py-3 px-8 rounded-full">
                   Write a Review
                 </a>
               </div>
