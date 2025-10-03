@@ -166,11 +166,20 @@ export default function TrackOrderClient() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Track Your Order
           </h1>
-          <h2 className="text-lg text-gray-700 mb-2">
-            Real-Time Order Tracking
+          <h2 className="text-lg text-gray-700 mb-4">
+            Real-Time Order Tracking System
           </h2>
+          <p className="text-gray-600 mb-4">
+            Welcome to our comprehensive order tracking system, designed to keep you informed every step of the way. Simply enter your unique order number below to access detailed information about your purchase, including current status, shipping progress, and estimated delivery date.
+          </p>
+          <p className="text-gray-600 mb-4">
+            Our advanced tracking technology provides real-time updates from the moment your order is confirmed until it reaches your doorstep. You'll receive detailed information about processing times, shipping carrier details, and precise location updates throughout the delivery journey.
+          </p>
+          <p className="text-gray-600 mb-4">
+            For your convenience, we also send automated email notifications at key milestones, including order confirmation, shipping dispatch, and delivery completion. Our customer service team monitors all shipments to ensure timely delivery and can assist with any questions or concerns.
+          </p>
           <p className="text-gray-600">
-            Enter your order number to get real-time updates
+            Your order number can be found in your confirmation email or account dashboard. If you experience any issues with tracking or need additional assistance, our dedicated support team is available to help ensure your complete satisfaction with your Fineyst shopping experience.
           </p>
         </div>
 

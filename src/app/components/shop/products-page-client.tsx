@@ -1175,7 +1175,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
         <div className="sr-only" aria-hidden="true">
           <nav aria-label="Category Navigation">
-            <h2 className="sr-only">Available Categories</h2>
+            <span className="sr-only">Available Categories</span>
             {keywordCategories?.map((cat, index) => (
               <Link 
                 key={cat.id || index}

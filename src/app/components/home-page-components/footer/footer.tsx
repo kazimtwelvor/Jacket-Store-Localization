@@ -73,10 +73,12 @@ const Footer = () => {
                         <div className="flex flex-col items-center md:items-start">
                             <div className="mb-3 flex justify-center md:justify-start">
                                 <Link href="/us/" className="flex items-center justify-center">
-                                    <img
+                                    <Image
                                         src="/images/logo-footer.webp"
                                         alt="Fineyst Logo"
-                                        style={{ display: 'block', maxWidth: '250px', width: '100%', height: 'auto' }}
+                                        width={250}
+                                        height={80}
+                                        className="block max-w-[250px] w-full h-auto"
                                     />
                                 </Link>
                             </div>

@@ -278,8 +278,9 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                   <Image
                     src={(product.images?.[0] as any)?.url || "/placeholder.svg"}
                     alt={product.name}
-                    fill
-                    className="object-cover object-top transition-all duration-300"
+                    width={250}
+                    height={375}
+                    className="object-cover object-top w-full h-full transition-all duration-300"
                     sizes="250px"
                   />
                   {loadingProducts.has(product.id) && (
@@ -405,9 +406,10 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                     <Image
                       src={hoveredProduct === `related-${product.id}-${index}` && (product.images?.[1] as any)?.url ? (product.images[1] as any).url : ((product.images?.[0] as any)?.url || "/placeholder.svg")}
                       alt={product.name}
-                      fill
+                      width={300}
+                      height={450}
                       className={cn(
-                        "object-cover object-top transition-all duration-300 pointer-events-none select-none",
+                        "object-cover object-top w-full h-full transition-all duration-300 pointer-events-none select-none",
                         hoveredProduct === `related-${product.id}-${index}` && (product.images?.[1] as any)?.url ? "scale-110" : "scale-100"
                       )}
                       sizes="(max-width: 768px) 33vw, (max-width: 1280px) 33vw, 25vw"
