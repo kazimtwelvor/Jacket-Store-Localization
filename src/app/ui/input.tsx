@@ -24,10 +24,11 @@ interface FloatingLabelInputProps extends React.InputHTMLAttributes<HTMLInputEle
   label: string
   error?: boolean
   required?: boolean
+  helperText?: string | null
 }
 
 export const FloatingLabelInput = React.forwardRef<HTMLInputElement, FloatingLabelInputProps>(
-  ({ label, error, required, className, value, onFocus, onBlur, ...props }, ref) => {
+  ({ label, error, required, helperText, className, value, onFocus, onBlur, ...props }, ref) => {
     const [isFocused, setIsFocused] = React.useState(false)
     const hasValue = value !== undefined && value !== null && String(value).length > 0
     // Only show error if error prop is true
@@ -66,6 +67,14 @@ export const FloatingLabelInput = React.forwardRef<HTMLInputElement, FloatingLab
         >
           {label}{required && " *"}
         </label>
+        {helperText && (
+          <p className={cn(
+            "mt-1 text-xs",
+            showError ? "text-red-600" : "text-gray-500"
+          )}>
+            {helperText}
+          </p>
+        )}
       </div>
     )
   }
