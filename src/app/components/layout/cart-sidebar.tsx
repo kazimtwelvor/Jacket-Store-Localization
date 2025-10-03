@@ -451,7 +451,10 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
           <h2 className="text-lg font-semibold">MY SHOPPING CART</h2>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => router.push("/cart")}
+              onClick={() => {
+                onClose();
+                router.push("/cart");
+              }}
               className="text-sm text-gray-600 hover:text-gray-800"
             >
               SEE DETAILS
