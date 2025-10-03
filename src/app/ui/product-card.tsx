@@ -91,8 +91,9 @@ const ProductCard = ({ data, onMouseEnter }: ProductCardProps) => {
           <Image 
             src={data?.images?.[0]?.url || "/placeholder.svg"} 
             alt={data.name} 
-            fill 
-            className="object-cover" 
+            width={300}
+            height={400}
+            className="object-cover w-full h-full" 
           />
         </div>
         <div>
@@ -136,13 +137,14 @@ const ProductCard = ({ data, onMouseEnter }: ProductCardProps) => {
         <Image
           src={data?.images?.[0]?.url || "/placeholder.svg"}
           alt={data.name}
-          fill
+          width={300}
+          height={400}
           className={cn(
-            "object-cover transition-transform duration-300",
+            "object-cover transition-transform duration-300 w-full h-full",
             isHovered ? "scale-110" : "scale-100"
           )}
           placeholder="blur"
-          blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(400, 400))}`}
+          blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(300, 400))}`}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
         

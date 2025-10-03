@@ -49,19 +49,19 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
       {/* Product Title */}
       <div className={cn("mt-2", isMobile ? "mb-3" : "mt-2")}>
         {isMobile ? (
-          <h1 id="product-title" className={cn(
+          <span id="product-title" className={cn(
             `${avertaBlack.className} font-bold leading-tight`,
             "text-lg md:text-xl sm:text-2xl line-clamp-2"
           )}>
             {data?.name?.toUpperCase()}
-          </h1>
+          </span>
         ) : (
-          <h2 id="product-title" className={cn(
+          <h1 id="product-title" className={cn(
             `${avertaBlack.className} font-bold leading-tight`,
             "text-xl lg:text-2xl line-clamp-2"
           )}>
             {data?.name?.toUpperCase()}
-          </h2>
+          </h1>
         )}
 
 

@@ -50,7 +50,7 @@ export default function PolicyEligibility() {
   if (!isMounted) {
     return (
       <section id="eligibility" className="scroll-mt-24">
-        <h2 className="text-3xl font-bold tracking-tight text-foreground mb-8">Return Eligibility</h2>
+        <h3 className="text-3xl font-bold tracking-tight text-foreground mb-8">Return Eligibility</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-gradient-to-br from-green-50 to-white rounded-xl p-6 border border-green-100 shadow-sm">
@@ -104,9 +104,9 @@ export default function PolicyEligibility() {
       viewport={{ once: true, margin: "-100px" }}
       variants={containerVariants}
     >
-      <motion.h2 className="text-3xl font-bold tracking-tight text-foreground mb-8" variants={itemVariants}>
+      <motion.h3 className="text-3xl font-bold tracking-tight text-foreground mb-8" variants={itemVariants}>
         Return Eligibility
-      </motion.h2>
+      </motion.h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <motion.div

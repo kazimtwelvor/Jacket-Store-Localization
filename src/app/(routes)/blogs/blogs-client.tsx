@@ -220,7 +220,7 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
       <div className="bg-[#eaeaea] py-16">
         <Container>
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#2b2b2b]">Stay Updated with Fashion Insights</h2>
+            <h3 className="text-2xl md:text-3xl font-bold mb-4 text-[#2b2b2b]">Stay Updated with Fashion Insights</h3>
             <p className="text-muted-foreground mb-8">
               Subscribe to our newsletter to receive the latest articles, style guides, and exclusive offers directly to
               your inbox.
