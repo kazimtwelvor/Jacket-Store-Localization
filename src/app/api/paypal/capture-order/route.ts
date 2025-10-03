@@ -3,7 +3,7 @@ import { decrypt } from "../../../utils/decrypt"
 
 export async function POST(req: NextRequest) {
   try {
-    const { orderID } = await req.json()
+    const { orderID, orderId } = await req.json()
     
     if (!orderID) {
       return NextResponse.json({ error: "Order ID required" }, { status: 400 })
@@ -55,6 +55,34 @@ export async function POST(req: NextRequest) {
     }
 
     const captureData = await captureResponse.json()
+    const paymentStatus = captureData.status
+    
+    // Update backend payment status
+    if (orderId && process.env.NEXT_PUBLIC_API_URL) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            paymentIntentId: captureData.id,
+            paymentMethod: "paypal_button",
+            paymentStatus,
+            isPaid: paymentStatus === 'COMPLETED',
+            paymentValidation: process.env.IS_SKIP_VALIDATION || ""
+          })
+        });
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Backend update failed:", {
+            status: response.status,
+            error: errorText
+          });
+        }
+      } catch (error) {
+        console.error("Failed to update backend:", error);
+      }
+    }
     
     return NextResponse.json({ 
       success: true, 
