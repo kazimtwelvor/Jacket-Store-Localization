@@ -58,7 +58,7 @@ export default function FitGuide() {
               <div className="flex flex-col md:flex-row">
                 <div className="md:w-1/3 relative">
                   <div className="aspect-[2/3] relative bg-muted">
-                    <Image src={fit.image || "/placeholder.svg"} alt={fit.title} fill className="object-cover" />
+                    <Image src={fit.image || "/placeholder.svg"} alt={fit.title} width={200} height={300} className="object-cover w-full h-full" />
                   </div>
                 </div>
                 <div className="md:w-2/3 p-6">
@@ -134,7 +134,7 @@ export default function FitGuide() {
             <div className="flex flex-col md:flex-row">
               <div className="md:w-1/3 relative">
                 <div className="aspect-[2/3] relative bg-white">
-                  <Image src={fit.image || "/placeholder.svg"} alt={fit.title} fill className="object-cover" />
+                  <Image src={fit.image || "/placeholder.svg"} alt={fit.title} width={200} height={300} className="object-cover w-full h-full" />
                 </div>
               </div>
               <div className="md:w-2/3 p-6">

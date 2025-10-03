@@ -61,7 +61,7 @@ export default function MeasurementGuide() {
           {measurementSteps.map((step, index) => (
             <div key={index} className="bg-card rounded-lg border shadow-sm overflow-hidden">
               <div className="aspect-video relative bg-muted">
-                <Image src={step.image || "/placeholder.svg"} alt={step.title} fill className="object-cover" />
+                <Image src={step.image || "/placeholder.svg"} alt={step.title} width={400} height={225} className="object-cover w-full h-full" />
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
@@ -110,7 +110,7 @@ export default function MeasurementGuide() {
             className="bg-white rounded-lg border border-[#2b2b2b] shadow-sm overflow-hidden"
           >
             <div className="aspect-video relative bg-[#f6f6f6]">
-              <Image src={step.image || "/placeholder.svg"} alt={step.title} fill className="object-cover" />
+              <Image src={step.image || "/placeholder.svg"} alt={step.title} width={400} height={225} className="object-cover w-full h-full" />
             </div>
             <div className="p-6">
               <h3 className="text-xl font-semibold mb-2 text-[#333333]">{step.title}</h3>
