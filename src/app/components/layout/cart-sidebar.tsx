@@ -738,7 +738,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
           </button>
 
           <p className="text-center text-sm text-gray-600 mb-4">
-            Express checkout options ululul
+            Express checkout options
           </p>
 
           <div className="space-y-2 mb-4">
