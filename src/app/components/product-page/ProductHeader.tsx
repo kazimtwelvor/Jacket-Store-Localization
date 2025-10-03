@@ -21,7 +21,7 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
               SHOP
             </Link>
             <span className="mx-1 text-gray-500">/</span>
-            <Link href="us/shop?materials=Leather" className="text-gray-500 hover:text-black uppercase font-medium">
+            <Link href="/us/collections/mens-leather-jackets" className="text-gray-500 hover:text-black uppercase font-medium">
               LEATHER
             </Link>
             <span className="mx-1 text-gray-500">/</span>

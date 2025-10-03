@@ -118,7 +118,7 @@ export default function ReviewsClient() {
 
             {/* Static Reviews Section */}
             <div className="mt-20">
-              <h3 className="text-3xl md:text-4xl font-bold text-center mb-2">Customer Reviews</h3>
+              <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">Why Customers Love Finest Jackets</h2>
               <div className="w-20 h-1 bg-[#eaeaea] mx-auto mb-8"></div>
 
               {/* Static Filter */}
@@ -212,7 +212,7 @@ export default function ReviewsClient() {
           </div>
 
           <section id="reviews-content" className="reviews-content py-16 bg-white">
-            <h3 className="text-3xl md:text-4xl font-bold text-center mb-2">Why Customers Love Finest Jackets</h3>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">Why Customers Love Finest Jackets</h2>
             <div className="w-20 h-1 bg-[#eaeaea]  mx-auto mb-8"></div>
 
             {/* Render filter buttons immediately */}
