@@ -79,8 +79,13 @@ export default function TermsConditionsPage() {
 
           <Container>
             <div className="max-w-4xl mx-auto py-12">
-              <div className="text-center">
-                <p className="text-gray-600">Loading content...</p>
+              <h2 className="text-3xl font-bold mb-8 text-black">Introduction</h2>
+              <p className="text-gray-600 mb-6">Last updated: April 20, 2025</p>
+              <div className="mb-8">
+                <p className="text-gray-700">
+                  Welcome to Fineyst. These Terms & Conditions govern your use of our website, services, and products.
+                  Please read these terms carefully before making a purchase or using our services.
+                </p>
               </div>
             </div>
           </Container>

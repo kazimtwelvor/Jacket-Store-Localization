@@ -52,7 +52,7 @@ export default function PrivacyPolicyClient() {
               ref={sidebarRef}
               className="sidebar fixedsticky bg-muted p-6 rounded-lg shadow-md border border-black"
             >
-              <h3 className="text-xl font-bold mb-4 border-black">Contents</h3>
+              <h2 className="text-xl font-bold mb-4 border-black">Contents</h2>
               <ul className="space-y-3">
                 {[
                   { id: "information-we-collect", title: "Information We Collect" },
