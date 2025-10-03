@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { decrypt } from "../../../utils/decrypt";
+import { is } from "date-fns/locale";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { orderId, paymentIntentId } = body;
+    const { orderId, paymentIntentId, paymentMethod } = body;
 
     if (!orderId || !paymentIntentId) {
       return NextResponse.json(
@@ -14,24 +15,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get Stripe secret key
-    let stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-    
-    if (!stripeSecretKey && process.env.NEXT_PUBLIC_API_URL) {
-      try {
-        const stripeResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/stripe-secret-key`
-        );
-        
-        if (stripeResponse.ok) {
-          const stripeConfig = await stripeResponse.json();
-          const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
-          stripeSecretKey = decrypt(stripeConfig.secretKey, encryptionKey);
-        }
-      } catch (error) {
-        console.error("Failed to fetch Stripe config:", error);
-      }
+      const stripeResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/payment-settings`
+    );
+    console.log("Stripe response status:", stripeResponse);
+    if (!stripeResponse.ok) {
+      throw new Error("Failed to fetch Stripe configuration");
     }
+
+    const stripeConfig = await stripeResponse.json();
+    console.log("Fetched Stripe config:", stripeConfig);
+    const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
+    const stripeSecretKey = decrypt(
+      stripeConfig.stripeSecretKey,
+      encryptionKey
+    );
 
     if (!stripeSecretKey) {
       throw new Error("Stripe secret key not configured");
@@ -39,9 +37,8 @@ export async function POST(request: NextRequest) {
 
     const stripe = new Stripe(stripeSecretKey);
 
-    // Verify payment with Stripe
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-
+    console.log("Retrieved payment intent:", paymentIntent);
     if (paymentIntent.status !== "succeeded") {
       return NextResponse.json(
         { error: "Payment not successful" },
@@ -49,26 +46,42 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update backend order status
-    if (process.env.NEXT_PUBLIC_API_URL) {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            paymentIntentId,
-            paymentMethod: "stripe",
-            status: paymentIntent.status,
-            paidAt: new Date().toISOString(),
-          }),
-        }
-      );
 
-      if (!response.ok) {
-        console.error("Failed to update backend order status");
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              paymentIntentId,
+              paymentMethod: "stripe",
+              paymentStatus: paymentIntent.status   ,
+              isPaid: true,
+              paymentValidation: process.env.IS_SKIP_VALIDATION || "",
+            }),
+          }
+        );
+        
+        console.log("Backend update response status:", response.status);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Backend API error:", {
+            status: response.status,
+            statusText: response.statusText,
+            error: errorText,
+            url: response.url
+          });
+        } else {
+          const result = await response.json();
+          console.log("Backend update successful:", result);
+        }
+      } catch (fetchError) {
+        console.error("Network error updating backend:", fetchError);
       }
     }
 

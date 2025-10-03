@@ -12,6 +12,7 @@ type CartItem = {
 type PayPalButtonsProps = {
   items: CartItem[];
   onApproveSuccess: (orderId?: string) => void;
+  orderId?: string;
 };
 
 declare global {
@@ -23,6 +24,7 @@ declare global {
 export default function PayPalButtons({
   items,
   onApproveSuccess,
+  orderId,
 }: PayPalButtonsProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
@@ -60,8 +62,8 @@ export default function PayPalButtons({
 
         if (!isMounted || !containerRef.current) return;
 
-        window.paypal
-          .Buttons({
+        window?.paypal
+          ?.Buttons({
             style: {
               layout: "vertical",
               color: "gold",
@@ -110,7 +112,7 @@ export default function PayPalButtons({
               const res = await fetch(`/api/paypal/capture-order`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ orderID: data.orderID }),
+                body: JSON.stringify({ orderID: data.orderID, orderId }),
               });
               if (!res.ok) throw new Error("Failed to capture PayPal order");
               onApproveSuccess(data.orderID);

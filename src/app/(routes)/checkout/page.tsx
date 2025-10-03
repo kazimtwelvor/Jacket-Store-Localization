@@ -1723,6 +1723,7 @@ const CheckoutPage = () => {
                               quantity: i.quantity,
                             }))}
                             onApproveSuccess={handlePaymentSuccess}
+                            orderId={orderId!}
                           />
                         </div>
                       )}
@@ -1945,6 +1946,7 @@ const CheckoutPage = () => {
                               effectiveGrandTotal={effectiveGrandTotal}
                               discountAmount={discountAmount}
                               voucherCode={voucherCode}
+                              orderId={orderId!}
                             />
                           )}
                         </div>
