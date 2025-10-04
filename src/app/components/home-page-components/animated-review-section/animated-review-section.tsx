@@ -6,136 +6,6 @@ import { Star } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { avertaBlack, avertaBold } from "@/src/lib/fonts"
 
-// const reviews = [
-//     {
-//         id: 1,
-//         name: "Sarah J.",
-//         rating: 5,
-//         date: "May 15, 2023",
-//         text: "The quality of these clothes is exceptional! I've been wearing the jeans for months and they still look brand new.",
-//         image: "/images/reviews/sarah-j.webp",
-//     },
-//     {
-//         id: 2,
-//         name: "Michael T.",
-//         rating: 5,
-//         date: "April 3, 2023",
-//         text: "Fast shipping and the fit is perfect. Will definitely be ordering more items soon!",
-//         image: "/images/reviews/michael-t.webp",
-//     },
-//     {
-//         id: 3,
-//         name: "Emma R.",
-//         rating: 4,
-//         date: "June 20, 2023",
-//         text: "Love the style and comfort of their t-shirts. The only reason for 4 stars is that I wish they had more color options.",
-//         image: "/images/reviews/emma-r.webp",
-//     },
-//     {
-//         id: 4,
-//         name: "David L.",
-//         rating: 5,
-//         date: "March 12, 2023",
-//         text: "The attention to detail in these clothes is amazing. Worth every penny!",
-//         image: "/images/reviews/david-l.webp",
-//     },
-//     {
-//         id: 5,
-//         name: "Jessica M.",
-//         rating: 5,
-//         date: "July 8, 2023",
-//         text: "I've received so many compliments on my new dress. The fabric is high quality and the design is unique.",
-//         image: "/images/reviews/jessica-m.webp",
-//     },
-//     {
-//         id: 6,
-//         name: "Robert K.",
-//         rating: 5,
-//         date: "February 28, 2023",
-//         text: "Great customer service! Had an issue with sizing and they helped me exchange it with no hassle.",
-//         image: "/images/reviews/robert-k.webp",
-//     },
-//     {
-//         id: 7,
-//         name: "Olivia P.",
-//         rating: 4,
-//         date: "August 5, 2023",
-//         text: "The sweater I ordered is so cozy and stylish. Perfect for fall weather!",
-//         image: "/images/reviews/olivia-p.webp",
-//     },
-//     {
-//         id: 8,
-//         name: "James H.",
-//         rating: 5,
-//         date: "January 17, 2023",
-//         text: "These are the best fitting jeans I've ever owned. Will be buying more pairs in different colors.",
-//         image: "/images/reviews/james-h.webp",
-//     },
-//     {
-//         id: 9,
-//         name: "Alex M.",
-//         rating: 5,
-//         date: "September 10, 2023",
-//         text: "Outstanding quality and craftsmanship. The jacket exceeded my expectations in every way!",
-//         image: "/images/reviews/alex-m.webp",
-//     },
-//     {
-//         id: 10,
-//         name: "Sophia L.",
-//         rating: 4,
-//         date: "October 22, 2023",
-//         text: "Beautiful design and comfortable fit. The material feels premium and looks elegant.",
-//         image: "/images/reviews/sophia-l.webp",
-//     },
-//     {
-//         id: 11,
-//         name: "Ryan K.",
-//         rating: 5,
-//         date: "November 5, 2023",
-//         text: "Perfect for both casual and formal occasions. The versatility of this piece is amazing.",
-//         image: "/images/reviews/ryan-k.webp",
-//     },
-//     {
-//         id: 12,
-//         name: "Maya S.",
-//         rating: 5,
-//         date: "December 1, 2023",
-//         text: "Love the attention to detail and the sustainable materials used. Highly recommend!",
-//         image: "/images/reviews/maya-s.webp",
-//     },
-//     {
-//         id: 13,
-//         name: "Ethan W.",
-//         rating: 4,
-//         date: "December 15, 2023",
-//         text: "Great value for money. The fit is perfect and the style is exactly what I was looking for.",
-//         image: "/images/reviews/ethan-w.webp",
-//     },
-//     {
-//         id: 14,
-//         name: "Zoe P.",
-//         rating: 5,
-//         date: "January 3, 2024",
-//         text: "Absolutely love this purchase! The quality is exceptional and it arrived quickly.",
-//         image: "/images/reviews/zoe-p.webp",
-//     },
-//     {
-//         id: 15,
-//         name: "Noah B.",
-//         rating: 5,
-//         date: "January 20, 2024",
-//         text: "This has become my go-to piece. The comfort and style combination is unbeatable.",
-//         image: "/images/reviews/noah-b.webp",
-//     },
-//     {
-//         id: 16,
-//         name: "Ava R.",
-//         rating: 4,
-//         date: "February 8, 2024",
-//         text: "Really impressed with the quality and the customer service. Will definitely shop here again.",
-//         image: "/images/reviews/ava-r.webp",
-//     },
-// ]
 const reviews = [
     {
         id: 1,
@@ -274,20 +144,20 @@ const ReviewCard = ({ review, showH3 = true }: { review: (typeof reviews)[0]; sh
         <section
             className="bg-[#F6F6F6] p-8 rounded-lg shadow-md mx-6 my-6 flex flex-col justify-center h-[200px] sm:h-[220px] md:h-[240px] cursor-pointer  hover:scale-105 hover:shadow-lg"
             style={{ minWidth: '350px', width: '55vw', maxWidth: '650px' }}
-            onClick={() => router.push("/reviews")}
+            onClick={() => router.push("/us/reviews")}
             role="button"
             tabIndex={0}
             aria-label={`Read review by ${review.name}`}
             onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
-                    router.push("/reviews")
+                    router.push("/us/reviews")
                 }
             }}
         >
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-left ">
                     <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
-                        <Image src={review.image || "/placeholder.svg"} alt={review.name} fill className="object-cover" />
+                        <Image src={review.image || "/placeholder.svg"} alt={review.name} width={40} height={40} className="object-cover w-full h-full" />
                     </div>
                     <div>
                         <div className="flex mb-1">
@@ -303,7 +173,7 @@ const ReviewCard = ({ review, showH3 = true }: { review: (typeof reviews)[0]; sh
                     </div>
                 </div>
                 <div className="relative w-20 h-12">
-                    <Image src="/images/reviews/google-trusted-badge.png" alt="Google Trusted Reviews" fill className="object-contain" />
+                    <Image src="/images/reviews/google-trusted-badge.png" alt="Google Trusted Reviews" width={80} height={48} className="object-contain w-full h-full" />
                 </div>
             </div>
             <div className="mb-3 mt-3">
@@ -379,7 +249,7 @@ export default function AnimatedReviewsSection() {
                             <div key={review.id} className="bg-[#1a1a1a] p-6 rounded-lg shadow-md">
                                 <div className="flex items-center mb-4">
                                     <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
-                                        <Image src={review.image || "/placeholder.svg"} alt={review.name} fill className="object-cover" />
+                                        <Image src={review.image || "/placeholder.svg"} alt={review.name} width={40} height={40} className="object-cover w-full h-full" />
                                     </div>
                                     <div>
                                         <h3 className="font-semibold text-white">{review.name}</h3>

@@ -18,20 +18,20 @@ export async function POST(request: NextRequest) {
     const stripeResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe-secret-key`
     );
-    
+
     if (!stripeResponse.ok) {
       throw new Error("Failed to fetch Stripe configuration");
     }
-    
+
     const stripeConfig = await stripeResponse.json();
     const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
     const stripeSecretKey = decrypt(stripeConfig.secretKey, encryptionKey);
-    
+
     const stripe = new Stripe(stripeSecretKey);
 
     // Verify payment intent with Stripe
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-    
+
     if (paymentIntent.status !== "succeeded") {
       throw new Error("Payment not successful");
     }
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json();
-    
+
     return NextResponse.json({
       success: true,
       order: data,

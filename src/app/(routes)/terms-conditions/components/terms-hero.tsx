@@ -57,7 +57,7 @@ export default function TermsHero({ completionPercentage }: TermsHeroProps) {
                   </div>
                 </div>
                 <div className="text-left">
-                  <h3 className="font-semibold text-black">Last Updated</h3>
+                  <span className="font-semibold text-black">Last Updated</span>
                   <p className="text-sm text-[#666666]">April 20, 2025</p>
                 </div>
               </div>
@@ -81,7 +81,7 @@ export default function TermsHero({ completionPercentage }: TermsHeroProps) {
                   </div>
                 </div>
                 <div className="text-left">
-                  <h3 className="font-semibold text-[#333333]">Privacy Compliant</h3>
+                  <span className="font-semibold text-[#333333]">Privacy Compliant</span>
                   <p className="text-sm text-[#666666]">GDPR & CCPA</p>
                 </div>
               </div>
@@ -135,7 +135,7 @@ export default function TermsHero({ completionPercentage }: TermsHeroProps) {
                 </div>
               </div>
               <div className="text-left">
-                <h3 className="font-semibold text-[#333333]">Last Updated</h3>
+                <span className="font-semibold text-[#333333]">Last Updated</span>
                 <p className="text-sm text-[#666666]">April 20, 2025</p>
               </div>
             </div>
@@ -159,7 +159,7 @@ export default function TermsHero({ completionPercentage }: TermsHeroProps) {
                 </div>
               </div>
               <div className="text-left">
-                <h3 className="font-semibold text-[#333333]">Privacy Compliant</h3>
+                <span className="font-semibold text-[#333333]">Privacy Compliant</span>
                 <p className="text-sm text-[#666666]">GDPR & CCPA</p>
               </div>
             </div>

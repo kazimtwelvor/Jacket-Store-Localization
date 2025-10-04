@@ -82,7 +82,7 @@ export default function PolicyHero() {
             className="flex flex-col items-center"
           >
             <div className="w-14 h-14 rounded-full bg-[#2b2b2b] flex items-center justify-center mb-3 shadow-md">
-              <item.icon className="w-7 h-7 text-[#2b2b2b]" />
+              <item.icon className="w-7 h-7 text-white" />
             </div>
             <p className="font-medium text-[#333333]">{item.text}</p>
           </motion.div>

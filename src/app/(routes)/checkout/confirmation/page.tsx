@@ -17,6 +17,7 @@ import Button from "@/src/app/ui/button";
 import Container from "@/src/app/ui/container";
 import { Skeleton } from "@/src/app/ui/skeleton";
 import Currency from "@/src/app/ui/currency";
+import { trackPurchase } from "@/src/app/lib/analytics";
 
 interface OrderItem {
   id: string;
@@ -59,6 +60,10 @@ const ConfirmationPage = () => {
 
   const orderId = searchParams.get("orderId");
   const success = searchParams.get("success") === "1";
+  const customerEmail = searchParams.get("email");
+  const customerName = searchParams.get("name");
+  const orderTotal = searchParams.get("total");
+  const itemsParam = searchParams.get("items");
 
   // Format date for estimated delivery (5 days from now)
   const estimatedDelivery = new Date();
@@ -72,6 +77,15 @@ const ConfirmationPage = () => {
   useEffect(() => {
     setIsMounted(true);
 
+    // Check if this page has been visited before in this session
+    const hasVisited = sessionStorage.getItem('confirmation-visited');
+    if (hasVisited) {
+      router.push('/');
+      return;
+    }
+    // Mark as visited
+    sessionStorage.setItem('confirmation-visited', 'true');
+
     if (!orderId) {
       setError("No order ID provided");
       setIsLoading(false);
@@ -84,118 +98,123 @@ const ConfirmationPage = () => {
       return;
     }
 
+    setIsLoading(false)
+
     // Fetch order details from our Store API
-    // const fetchOrder = async () => {
-    //   try {
-    //     // Use the Store API URL to fetch order details (no store segment)
-    //     const response = await fetch(`/api/orders/${orderId}`);
+    const fetchOrder = async () => {
+      try {
+        // Use the Store API URL to fetch order details (no store segment)
+        const response = await fetch(`/api/orders/${orderId}`);
 
-    //     if (!response.ok) {
-    //       const errorText = await response.text();
-    //       console.error(`Error response: ${response.status} - ${errorText}`);
-    //       throw new Error(`Failed to fetch order details: ${response.status}`);
-    //     }
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`Error response: ${response.status} - ${errorText}`);
+          throw new Error(`Failed to fetch order details: ${response.status}`);
+        }
 
-    //     const data = await response.json();
+        const data = await response.json();
 
-    //     // Calculate the total price from items if totalPrice is missing or zero
-    //     let calculatedTotalPrice = data.totalPrice;
+        // Calculate the total price from items if totalPrice is missing or zero
+        let calculatedTotalPrice = data.totalPrice;
 
-    //     // If totalPrice is missing, zero, or "0", calculate from items
-    //     if (
-    //       !calculatedTotalPrice ||
-    //       calculatedTotalPrice === "0" ||
-    //       Number.parseFloat(calculatedTotalPrice) === 0
-    //     ) {
-    //       if (data.orderItems && data.orderItems.length > 0) {
-    //         calculatedTotalPrice = data.orderItems
-    //           .reduce((total: number, item: any) => {
-    //             const itemPrice = Number.parseFloat(item.product?.price || "0");
-    //             const quantity = item.quantity || 1;
-    //             return total + itemPrice * quantity;
-    //           }, 0)
-    //           .toString();
-    //       }
-    //     }
+        // If totalPrice is missing, zero, or "0", calculate from items
+        if (
+          !calculatedTotalPrice ||
+          calculatedTotalPrice === "0" ||
+          Number.parseFloat(calculatedTotalPrice) === 0
+        ) {
+          if (data.orderItems && data.orderItems.length > 0) {
+            calculatedTotalPrice = data.orderItems
+              .reduce((total: number, item: any) => {
+                const itemPrice = Number.parseFloat(item.product?.price || "0");
+                const quantity = item.quantity || 1;
+                return total + itemPrice * quantity;
+              }, 0)
+              .toString();
+          }
+        }
 
-    //     // Format the order data if needed
-    //     const formattedOrder = {
-    //       id: data.id,
-    //       orderNumber: data.id,
-    //       createdAt: data.createdAt,
-    //       status: data.status || "processing",
-    //       totalPrice:
-    //         data.total?.toString() ||
-    //         data.totalAmount ||
-    //         calculatedTotalPrice ||
-    //         "0",
-    //       discountAmount:
-    //         data.discount?.toString() || data.discountAmount || "0",
-    //       voucherCode: data.voucherCode,
-    //       items:
-    //         data.orderItems?.map((item: any) => ({
-    //           id: item.id,
-    //           name: item.product?.name || "Product",
-    //           price: item.product?.price?.toString() || "0",
-    //           quantity: item.quantity || 1,
-    //           color: item.product?.color?.name,
-    //           size: item.product?.size?.name,
-    //           images: item.product?.images || [],
-    //         })) || [],
-    //       shippingAddress: data.address
-    //         ? {
-    //             line1: data.address.line1 || "",
-    //             line2: data.address.line2,
-    //             city: data.address.city || "",
-    //             state: data.address.state || "",
-    //             postalCode: data.address.postalCode || "",
-    //             country: data.address.country || "",
-    //           }
-    //         : undefined,
-    //       paymentMethod: data.paymentMethod || "Credit Card",
-    //     };
+        // Format the order data if needed
+        const formattedOrder = {
+          id: data.id,
+          orderNumber: data.id,
+          createdAt: data.createdAt,
+          status: data.status || "processing",
+          totalPrice:
+            data.total?.toString() ||
+            data.totalAmount ||
+            calculatedTotalPrice ||
+            "0",
+          discountAmount:
+            data.discount?.toString() || data.discountAmount || "0",
+          voucherCode: data.voucherCode,
+          items:
+            data.orderItems?.map((item: any) => ({
+              id: item.id,
+              name: item.product?.name || "Product",
+              price: item.product?.price?.toString() || "0",
+              quantity: item.quantity || 1,
+              color: item.product?.color?.name,
+              size: item.product?.size?.name,
+              images: item.product?.images || [],
+            })) || [],
+          shippingAddress: data.address
+            ? {
+                line1: data.address.line1 || "",
+                line2: data.address.line2,
+                city: data.address.city || "",
+                state: data.address.state || "",
+                postalCode: data.address.postalCode || "",
+                country: data.address.country || "",
+              }
+            : undefined,
+          paymentMethod: data.paymentMethod || "Credit Card",
+        };
 
-    //     setOrder(formattedOrder);
+        setOrder(formattedOrder);
         
-    //     // Send order confirmation email
-    //     const customerEmail = data.email || data.customerEmail || data.address?.email || data.billingAddress?.email
-    //     const customerName = data.customerName || data.name || data.address?.firstName || data.billingAddress?.firstName || 'Customer'
+        // Track purchase event
+        trackPurchase(data.id, formattedOrder.items, calculatedTotalPrice || '0');
         
-    //     if (customerEmail && data.id) {
-    //       try {
-    //         await fetch('/api/orders/send-confirmation', {
-    //           method: 'POST',
-    //           headers: {
-    //             'Content-Type': 'application/json',
-    //           },
-    //           body: JSON.stringify({
-    //             email: customerEmail,
-    //             name: customerName,
-    //             orderNumber: data.id,
-    //             orderTotal: data.total?.toString() || data.totalAmount || calculatedTotalPrice || "0",
-    //             items: data.orderItems?.map((item: any) => ({
-    //               name: item.product?.name || "Product",
-    //               quantity: item.quantity || 1,
-    //               price: parseFloat(item.product?.price || "0")
-    //             })) || []
-    //           })
-    //         })
-    //       } catch (emailError) {
-    //         console.error('Failed to send confirmation email:', emailError)
-    //       }
-    //     }
-    //   } catch (err) {
-    //     console.error("Error fetching order:", err);
-    //     setError(
-    //       "Could not load order details. Please check your order history."
-    //     );
-    //     toast.error("Failed to load order details");
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // };
+        // Send order confirmation email
+        const customerEmail = data.email || data.customerEmail || data.address?.email || data.billingAddress?.email
+        const customerName = data.customerName || data.name || data.address?.firstName || data.billingAddress?.firstName || 'Customer'
+        
+        if (customerEmail && data.id) {
+          try {
+            await fetch('/api/orders/send-order-emails', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                customerEmail: customerEmail,
+                customerName: customerName,
+                orderNumber: data.id,
+                orderTotal: data.total?.toString() || data.totalAmount || calculatedTotalPrice || "0",
+                items: data.orderItems?.map((item: any) => ({
+                  name: item.product?.name || "Product",
+                  quantity: item.quantity || 1,
+                  price: parseFloat(item.product?.price || "0")
+                })) || []
+              })
+            })
+          } catch (emailError) {
+            console.error('Failed to send confirmation email:', emailError)
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching order:", err);
+        setError(
+          "Could not load order details. Please check your order history."
+        );
+        toast.error("Failed to load order details");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    // fetchOrder();
+    fetchOrder();
   }, [orderId, success]);
 
   // Calculate subtotal from items for display
@@ -230,7 +249,7 @@ const ConfirmationPage = () => {
               </h1>
               <p className="text-lg text-gray-600 mb-8">{error}</p>
               <Button
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/us/")}
                 className="bg-[#B01E23] hover:bg-[#8a1a1e] text-white"
               >
                 Return to home
@@ -470,7 +489,7 @@ const ConfirmationPage = () => {
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
-                    onClick={() => router.push("/")}
+                    onClick={() => router.push("/us/")}
                     className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
                   >
                     Continue Shopping

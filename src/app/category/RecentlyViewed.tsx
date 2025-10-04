@@ -196,7 +196,7 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
     <div className="w-full pl-4 pr-0 sm:pl-6 md:pl-8 lg:px-8 mb-8 md:mb-12 mt-16 h-auto min-h-[200px]">
       <div className="relative">
         <div className="flex justify-between items-center mb-4 pr-4 sm:pr-6 md:pr-0">
-          <h2 className="text-xl font-bold">Recently Viewed</h2>
+          <span className="text-xl font-bold">Recently Viewed</span>
 
           {/* Mobile Arrows - Updated Style */}
           <div className="md:hidden flex items-center gap-2">

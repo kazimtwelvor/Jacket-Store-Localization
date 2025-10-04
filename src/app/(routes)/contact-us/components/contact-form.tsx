@@ -166,7 +166,7 @@ export default function ContactForm() {
           />
           <label htmlFor="privacy" className="ml-2 block text-sm text-muted-foreground">
             I agree to the{" "}
-            <Link href="/privacy-policy" className="text-[#2b2b2b] hover:underline">
+            <Link href="/us/privacy-policy" className="text-[#2b2b2b] hover:underline">
               Privacy Policy
             </Link>
           </label>

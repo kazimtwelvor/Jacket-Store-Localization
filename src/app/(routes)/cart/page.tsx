@@ -18,6 +18,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
   ExpressCheckoutElement,
+  useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -31,6 +32,7 @@ import useWishlist from "@/src/app/hooks/use-wishlist";
 import Currency from "@/src/app/ui/currency";
 import Button from "@/src/app/ui/button";
 import { toast } from "react-hot-toast";
+import { trackBeginCheckout } from "@/src/app/lib/analytics";
 
 interface AddMoreOfferProps {
   onContinueShopping: () => void;
@@ -58,7 +60,7 @@ const AddMoreOffer: React.FC<AddMoreOfferProps> = ({ onContinueShopping }) => {
 };
 
 // Stripe Express Checkout Component for Mobile Cart
-const MobileStripeExpressCheckout = ({
+const StripeExpressCheckout = ({
   totalAmount,
   onSuccess,
   items,
@@ -67,71 +69,215 @@ const MobileStripeExpressCheckout = ({
   totalAmount: number;
   onSuccess: (orderId?: string) => void;
   items: any[];
-  setPaymentModal: (modal: { isOpen: boolean; status: "processing" | "success" | "error"; message: string }) => void;
+  setPaymentModal: (modal: {
+    isOpen: boolean;
+    status: "processing" | "success" | "error";
+    message: string;
+  }) => void;
 }) => {
   const stripe = useStripe();
+  const elements = useElements();
 
   const handleExpressCheckout = async (event: any) => {
-    if (!stripe) return;
+    console.log("Express checkout event details:", event);
+    if (!stripe || !elements) return;
 
-    setPaymentModal({ isOpen: true, status: "processing", message: "" });
+    console.log("Express checkout event:", event);
+
+    setPaymentModal({
+      isOpen: true,
+      status: "processing",
+      message: "Processing payment...",
+    });
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/create-payment-intent`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            amount: Math.round(totalAmount * 100),
-            currency: "usd",
-            items: items.map((i) => ({
-              id: i.product.id,
-              name: i.product.name,
-              price: i.unitPrice,
-              quantity: i.quantity,
-            })),
-          }),
-        }
-      );
+      // Create payment intent for express checkout
+      const response = await fetch(`/api/stripe/express-checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((i) => ({
+            id: i.product.id,
+            name: i.product.name,
+            quantity: i.quantity,
+            price: i.unitPrice,
+            size: i.size,
+            color: i.selectedColor,
+          })),
+          totalAmount,
+        }),
+      });
 
-      if (response.ok) {
-        const { client_secret } = await response.json();
-        const result = await stripe.confirmPayment({
-          clientSecret: client_secret,
-          confirmParams: {
-            return_url: `${window.location.origin}/checkout/confirmation?success=1`,
-          },
+      if (!response.ok) {
+        throw new Error("Failed to create payment intent");
+      }
+
+      const { clientSecret, paymentIntentId } = await response.json();
+
+      // ✅ Use confirmPayment with elements instead of payment_method
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/checkout/confirmation?paymentIntentId=${paymentIntentId}&success=1`,
+        },
+        redirect: "if_required",
+      });
+
+      if (error) {
+        setPaymentModal({
+          isOpen: true,
+          status: "error",
+          message: error.message || "Payment failed",
         });
+        setTimeout(
+          () =>
+            setPaymentModal({
+              isOpen: false,
+              status: "processing",
+              message: "",
+            }),
+          3000
+        );
+      } else {
+        // Call checkout API after successful payment
+        const checkoutResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              productIds: items.map((item) => item.product.id),
+              paymentMethod: "stripe_express",
+              customerEmail: event.billingDetails?.email || "",
+              customerName:
+                event.billingDetails?.name || event.shippingAddress?.name || "",
+              phone: event.billingDetails?.phone || "",
+              address: `${event.shippingAddress?.address?.line1 || ""}, ${
+                event.shippingAddress?.address?.city || ""
+              }, ${event.shippingAddress?.address?.state || ""}, ${
+                event.shippingAddress?.address?.postal_code || ""
+              }, ${event.shippingAddress?.address?.country || "US"}`,
+              billingAddress: `${
+                event.billingDetails?.address?.line1 ||
+                event.shippingAddress?.address?.line1 ||
+                ""
+              }, ${
+                event.billingDetails?.address?.city ||
+                event.shippingAddress?.address?.city ||
+                ""
+              }, ${
+                event.billingDetails?.address?.state ||
+                event.shippingAddress?.address?.state ||
+                ""
+              }, ${
+                event.billingDetails?.address?.postal_code ||
+                event.shippingAddress?.address?.postal_code ||
+                ""
+              }, ${
+                event.billingDetails?.address?.country ||
+                event.shippingAddress?.address?.country ||
+                "US"
+              }`,
+              shippingAddress: `${
+                event.shippingAddress?.address?.line1 || ""
+              }, ${event.shippingAddress?.address?.city || ""}, ${
+                event.shippingAddress?.address?.state || ""
+              }, ${event.shippingAddress?.address?.postal_code || ""}, ${
+                event.shippingAddress?.address?.country || "US"
+              }`,
+              zipCode: event.shippingAddress?.address?.postal_code || "",
+              city: event.shippingAddress?.address?.city || "",
+              state: event.shippingAddress?.address?.state || "",
+              country: event.shippingAddress?.address?.country || "US",
+              embedded: true,
+              totalAmount: totalAmount,
+              discountAmount: 0,
+              voucherCode: null,
+              paymentIntentId,
+              paymentStatus: paymentIntent?.status || "succeeded",
+            }),
+          }
+        );
 
-        if (result.error) {
-          setPaymentModal({ isOpen: true, status: "error", message: result.error.message || "Payment failed" });
-          setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
-        } else {
-          setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+        if (checkoutResponse.ok) {
+          const { orderId } = await checkoutResponse.json();
+          await fetch("/api/orders/send-order-emails", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              customerEmail: event.billingDetails?.email,
+              customerName:
+                event.billingDetails?.name || event.shippingAddress?.name,
+              orderNumber: orderId || "unknown",
+              orderTotal: totalAmount,
+              items: items.map((item) => ({
+                name: item.product.name,
+                quantity: item.quantity,
+                price: item.unitPrice
+              })),
+            }),
+          });
+          setPaymentModal({
+            isOpen: true,
+            status: "success",
+            message: "Payment successful! Redirecting...",
+          });
           setTimeout(() => {
-            setPaymentModal({ isOpen: false, status: "processing", message: "" });
-            onSuccess();
+            setPaymentModal({
+              isOpen: false,
+              status: "processing",
+              message: "",
+            });
+            onSuccess(orderId);
           }, 2000);
+        } else {
+          const errorData = await checkoutResponse.json();
+          console.error("Checkout API error:", errorData);
+          setPaymentModal({
+            isOpen: true,
+            status: "error",
+            message: `Order creation failed: ${
+              errorData.message || "Unknown error"
+            }`,
+          });
         }
       }
     } catch (error) {
-      setPaymentModal({ isOpen: true, status: "error", message: "Payment failed. Please try again." });
-      setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
+      console.error("Express checkout error:", error);
+      setPaymentModal({
+        isOpen: true,
+        status: "error",
+        message: "Payment failed. Please try again.",
+      });
+      setTimeout(
+        () =>
+          setPaymentModal({ isOpen: false, status: "processing", message: "" }),
+        3000
+      );
     }
   };
 
   return (
-    <ExpressCheckoutElement
-      onConfirm={handleExpressCheckout}
-      options={{
-        paymentMethods: {
-          applePay: "auto",
-          googlePay: "auto",
-          link: "auto",
-        },
-      }}
-    />
+    <div className="space-y-2">
+      <ExpressCheckoutElement
+        onConfirm={handleExpressCheckout}
+        options={{
+          paymentMethods: {
+            applePay: "auto",
+            googlePay: "auto",
+            link: "auto",
+          },
+          layout: {
+            maxColumns: 1,
+            maxRows: 1,
+          },
+          emailRequired: true,
+          phoneNumberRequired: true,
+          shippingAddressRequired: true,
+        }}
+      />
+    </div>
   );
 };
 
@@ -151,7 +297,11 @@ const CartPage = () => {
   const sentinelBottomRef = useRef<HTMLDivElement>(null);
   const [stripePromise, setStripePromise] = useState<any>(null);
   const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
-  const [paymentModal, setPaymentModal] = useState({ isOpen: false, status: "processing" as "processing" | "success" | "error", message: "" });
+  const [paymentModal, setPaymentModal] = useState({
+    isOpen: false,
+    status: "processing" as "processing" | "success" | "error",
+    message: "",
+  });
   const isStripe = process.env.NEXT_PUBLIC_USE_STRIPE === "true";
 
   const getDeliveryDates = () => {
@@ -174,7 +324,7 @@ const CartPage = () => {
 
   const shippingPrice = totalPrice > 100 ? 0 : 10;
   const taxRate = 0.08;
-  const taxAmount = totalPrice * taxRate;
+  const taxAmount = 0;
   const grandTotal = totalPrice + shippingPrice + taxAmount;
 
   useEffect(() => {
@@ -286,7 +436,7 @@ const CartPage = () => {
                 Explore our collection and find something you&apos;ll love.
               </p>
               <Button
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/us/")}
                 className="bg-black hover:bg-[#2b2b2b] text-white mt-4"
               >
                 Continue Shopping
@@ -304,15 +454,20 @@ const CartPage = () => {
   };
 
   const handleContinueShopping = () => {
-    window.location.href = "/";
+    window.location.href = "/us/";
   };
 
   const handleCheckout = () => {
+    trackBeginCheckout(items);
     window.location.href = "/checkout";
   };
 
   const handlePaymentSuccess = (orderId?: string) => {
-    setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+    setPaymentModal({
+      isOpen: true,
+      status: "success",
+      message: "Payment successful! Redirecting...",
+    });
     setTimeout(() => {
       setPaymentModal({ isOpen: false, status: "processing", message: "" });
       const url = orderId
@@ -523,7 +678,7 @@ const CartPage = () => {
                   </button>
                 </div>
 
-                <AddMoreOffer onContinueShopping={() => router.push("/shop")} />
+                <AddMoreOffer onContinueShopping={() => router.push("/us/shop")} />
               </div>
 
               <div className="lg:col-span-5">
@@ -729,7 +884,7 @@ const CartPage = () => {
                               },
                             }}
                           >
-                            <MobileStripeExpressCheckout
+                            <StripeExpressCheckout
                               totalAmount={grandTotal}
                               onSuccess={handlePaymentSuccess}
                               items={items}
@@ -798,7 +953,7 @@ const CartPage = () => {
                       </Link>{" "}
                       apply. The{" "}
                       <Link
-                        href="/privacy-policy"
+                        href="/us/privacy-policy"
                         className="underline cursor-pointer hover:text-gray-600"
                       >
                         data protection regulations
@@ -811,7 +966,7 @@ const CartPage = () => {
                     <div className="flex items-center gap-2 text-sm text-black">
                       <Truck className="h-4 w-4" />
                       <Link
-                        href="/shipping-and-delivery-policy"
+                        href="/us/shipping-and-delivery-policy"
                         className="underline cursor-pointer hover:text-gray-600"
                       >
                         Free Shipping over 99 USD
@@ -833,7 +988,7 @@ const CartPage = () => {
           </div>
         </motion.div>
       </Container>
-      
+
       <PaymentProcessingModal
         isOpen={paymentModal.isOpen}
         status={paymentModal.status}

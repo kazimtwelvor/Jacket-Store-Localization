@@ -64,8 +64,9 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({
         <Image 
           src={images[0].url} 
           alt={product.name} 
-          fill 
-          className="object-cover object-top" 
+          width={300}
+          height={500}
+          className="object-cover object-top w-full h-full" 
           sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw" 
           draggable={false} 
         />
@@ -89,8 +90,9 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({
             <Image 
               src={image.url} 
               alt={product.name} 
-              fill 
-              className="object-cover object-top pointer-events-none" 
+              width={300}
+              height={500}
+              className="object-cover object-top pointer-events-none w-full h-full" 
               sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw" 
               draggable={false} 
               onDragStart={(e) => e.preventDefault()} 

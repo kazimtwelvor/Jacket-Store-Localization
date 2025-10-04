@@ -10,6 +10,5 @@ export const metadata = {
 }
 
 export default function ReviewsPage() {
-
   return <ReviewsClient />
 }

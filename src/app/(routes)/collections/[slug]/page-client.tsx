@@ -139,8 +139,9 @@ const ProductImageCarousel = React.memo(({ product, wasDragged }: { product: Pro
                 <Image
                     src={(images[0] as any).url}
                     alt={product.name}
-                    fill
-                    className="object-cover object-top"
+                    width={400}
+                    height={600}
+                    className="object-cover object-top w-full h-full"
                     sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw"
                     priority={false}
                     loading="lazy"
@@ -166,8 +167,9 @@ const ProductImageCarousel = React.memo(({ product, wasDragged }: { product: Pro
                         <Image
                             src={(image as any).url}
                             alt={product.name}
-                            fill
-                            className="object-cover object-top pointer-events-none"
+                            width={400}
+                            height={600}
+                            className="object-cover object-top pointer-events-none w-full h-full"
                             sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw"
                             priority={i === 0}
                             loading={i === 0 ? "eager" : "lazy"}
@@ -651,7 +653,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
         if (typeof window !== 'undefined') {
             window.dispatchEvent(new CustomEvent('route-loading:start'))
         }
-        router.push(`/product/${slug}`)
+        router.push(`/us/product/${slug}`)
     }
 
 
@@ -884,7 +886,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     categories={categories}
                     onCategoryClick={(categorySlug) => {
                         const currentPath = window.location.pathname;
-                        const targetPath = `/collections/${categorySlug}`;
+                        const targetPath = `/us/collections/${categorySlug}`;
                         
                         if (currentPath === targetPath) {
                             window.dispatchEvent(new CustomEvent('route-loading:end'));
@@ -1087,7 +1089,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                                             <button
                                                 key={cat.id}
                                                 onClick={() => {
-                                                    router.push(`/collections/${categorySlug}`)
+                                                    router.push(`/us/collections/${categorySlug}`)
                                                     setCategoriesSidebarOpen(false)
                                                 }}
                                                 className={cn(
@@ -1362,7 +1364,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             {/* SEO: Hidden category links for search engines */}
             <div className="sr-only" aria-hidden="true">
                 <nav aria-label="Category Navigation">
-                    <h2 className="sr-only">Available Categories</h2>
+                    <span className="sr-only">Available Categories</span>
                     {keywordCategories.map((cat, index) => (
                         <Link 
                             key={cat.id || index}
@@ -1400,7 +1402,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     description: ''
                 }}
                 onCategorySelect={(selectedCategory) => {
-                    router.push(`/collections/${selectedCategory.slug}`);
+                    router.push(`/us/collections/${selectedCategory.slug}`);
                     setCategorySliderOpen(false);
                 }}
             />

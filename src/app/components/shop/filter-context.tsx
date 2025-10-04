@@ -104,7 +104,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
     }
     
     const queryString = params.toString()
-    router.push(`/shop${queryString ? `?${queryString}` : ""}`, { scroll: false })
+    router.push(`/us/shop${queryString ? `?${queryString}` : ""}`, { scroll: false })
   }
 
   // Calculate total active filters

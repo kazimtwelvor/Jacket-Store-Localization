@@ -219,7 +219,7 @@ const CategorySEOSection: React.FC<CategorySEOSectionProps> = ({
             ).map((blog: any, index: number) => (
               <Link
                 key={index}
-                href={`/blogs/${blog.blogSlug}`}
+                href={`/us/blogs/${blog.blogSlug}`}
                 className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-full text-sm text-gray-700 transition-colors"
               >
                 {blog.blogTitle}

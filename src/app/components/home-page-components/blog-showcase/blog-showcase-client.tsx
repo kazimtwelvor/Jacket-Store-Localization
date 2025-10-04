@@ -374,7 +374,7 @@ export default function BlogsShowcaseClient({ blogItems }: BlogsShowcaseClientPr
 
         <div className={`text-center mt-12 md:mt-16 ${avertaBlack.className}`}>
           <Link
-            href="/blogs"
+            href="/us/blogs"
             className="inline-flex items-center gap-3 bg-black text-white px-8 py-4 font-bold text-lg hover:bg-[#2b2b2b] transition-colors duration-300"
           >
             VIEW ALL ARTICLES

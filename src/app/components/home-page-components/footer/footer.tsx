@@ -72,11 +72,13 @@ const Footer = () => {
                     <div className="space-y-4 flex-shrink-0 md:w-64 flex flex-col items-center md:items-start">
                         <div className="flex flex-col items-center md:items-start">
                             <div className="mb-3 flex justify-center md:justify-start">
-                                <Link href="/us" className="flex items-center justify-center">
-                                    <img
+                                <Link href="/us/" className="flex items-center justify-center">
+                                    <Image
                                         src="/images/logo-footer.webp"
                                         alt="Fineyst Logo"
-                                        style={{ display: 'block', maxWidth: '250px', width: '100%', height: 'auto' }}
+                                        width={250}
+                                        height={80}
+                                        className="block max-w-[250px] w-full h-auto"
                                     />
                                 </Link>
                             </div>
@@ -134,14 +136,14 @@ const Footer = () => {
                                 className="flex bg[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('shop')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>SHOP</h3>
+                                <p className={`w-full text-center md:text-left ${avertaBold.className}`}>SHOP</p>
                                 <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'shop' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'shop' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
 
 
                                 <li>
-                                    <Link href="/shop" className="text-black  hover:font-semibold transition-all" >
+                                    <Link href="/us/shop" className="text-black  hover:font-semibold transition-all" >
                                         Shop
                                     </Link>
                                 </li>
@@ -153,32 +155,32 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('categories')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>CATEGORIES</h3>
+                                <p className={`w-full text-center md:text-left ${avertaBold.className}`}>CATEGORIES</p>
                                 <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'categories' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'categories' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/collections/mens-leather-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/collections/mens-leather-jackets" className="text-black hover:font-bold transition-all">
                                         Men's Leather Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/collections/mens-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/collections/mens-jackets" className="text-black hover:font-bold transition-all">
                                         Men's Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/collections/mens-letterman-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/collections/mens-letterman-jackets" className="text-black hover:font-bold transition-all">
                                         Men's Letterman Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/collections/mens-denim-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/collections/mens-denim-jackets" className="text-black hover:font-bold transition-all">
                                         Men's Denim Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/collections" className="text-black  hover:font-bold transition-all">
+                                    <Link href="/us/collections" className="text-black  hover:font-bold transition-all">
                                         View All
                                     </Link>
                                 </li>
@@ -189,17 +191,17 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('company')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>COMPANY</h3>
+                                <p className={`w-full text-center md:text-left ${avertaBold.className}`}>COMPANY</p>
                                 <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'company' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'company' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/blogs" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/blogs" className="text-black hover:font-bold transition-all">
                                         Blogs
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/about-us" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/about-us" className="text-black hover:font-bold transition-all">
                                         About Us
                                     </Link>
                                 </li>
@@ -210,32 +212,32 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('support')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>SUPPORT</h3>
+                                <p className={`w-full text-center md:text-left ${avertaBold.className}`}>SUPPORT</p>
                                 <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'support' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'support' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/faqs" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/faqs" className="text-black hover:font-bold transition-all">
                                         FAQs
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/reviews" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/reviews" className="text-black hover:font-bold transition-all">
                                         Reviews
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/contact-us" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/contact-us" className="text-black hover:font-bold transition-all">
                                         Contact Us
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/size-guide" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/size-guide" className="text-black hover:font-bold transition-all">
                                         Size Guide
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/track-order" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/track-order" className="text-black hover:font-bold transition-all">
                                         Track My Order
                                     </Link>
                                 </li>
@@ -247,23 +249,23 @@ const Footer = () => {
                                 className="flex bg-[#efefef] lg:bg-transparent border border-gray-300 lg:border-none px-4 py-3 lg:px-0 lg:py-0 rounded-lg lg:rounded-none justify-between items-center w-full text-black font-semibold text-xl mb-0 lg:mb-4 lg:cursor-default text-center md:text-left"
                                 onClick={() => toggleSection('help')}
                             >
-                                <h3 className={`w-full text-center md:text-left ${avertaBold.className}`}>HELP</h3>
+                                <p className={`w-full text-center md:text-left ${avertaBold.className}`}>HELP</p>
                                 <ChevronDown className={`h-5 w-5 lg:hidden transition-transform text-black ${expandedSection === 'help' ? 'rotate-180' : ''}`} />
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'help' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/privacy-policy" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/privacy-policy" className="text-black hover:font-bold transition-all">
                                         Privacy Policy
                                     </Link>
                                 </li>
 
                                 <li>
-                                    <Link href="/terms-conditions" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/terms-conditions" className="text-black hover:font-bold transition-all">
                                         Terms & Conditions
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/shipping-and-delivery-policy" className="text-black hover:font-bold transition-all">
+                                    <Link href="/us/shipping-and-delivery-policy" className="text-black hover:font-bold transition-all">
                                         Shipping & Delivery
                                     </Link>
                                 </li>
@@ -274,7 +276,7 @@ const Footer = () => {
                 </div>
                 <div className="flex flex-col md:flex-row  items-center mt-6 pt-6">
                     <div className="flex flex-col md:flex-row items-center mb-4 md:mb-0">
-                        <h3 className="text-black font-semibold mr-4 mb-3 md:mb-0">FOLLOW US</h3>
+                        <p className="text-black font-semibold mr-4 mb-3 md:mb-0">FOLLOW US</p>
                         <div className="flex space-x-3">
                             <div className="w-10 h-10 bg-[#2b2b2b] rounded-full flex items-center justify-center">
                                 <Link
@@ -381,19 +383,19 @@ const Footer = () => {
                         {/* Legal Links - Center */}
                         <div className="mb-4 md:mb-0 md:w-1/3 flex justify-center">
                             <div className="flex flex-wrap justify-center gap-3 text-sm">
-                                <Link href="/faqs" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href="/us/faqs" className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     FAQs
                                 </Link>
-                                <Link href="/privacy-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href="/us/privacy-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Privacy
                                 </Link>
-                                <Link href="/terms-conditions" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href="/us/terms-conditions" className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Terms
                                 </Link>
-                                <Link href="/shipping-and-delivery-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href="/us/shipping-and-delivery-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Shipping
                                 </Link>
-                                <Link href="/refund-and-returns-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href="/us/refund-and-returns-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Returns
                                 </Link>
                             </div>

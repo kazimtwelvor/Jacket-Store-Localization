@@ -569,8 +569,9 @@ const Gallery: React.FC<GalleryProps> = ({
               <Image
                 src={image.image.url || "/placeholder.svg"}
                 alt={image.image.altText || `Product image ${idx + 1}`}
-                fill
-                className="object-cover transition-transform duration-200 group-hover:scale-[1.5]"
+                width={800}
+                height={1200}
+                className="object-cover w-full h-full transition-transform duration-200 group-hover:scale-[1.5]"
                 sizes="30vw"
                 priority={idx === 0}
               />
@@ -612,7 +613,8 @@ const Gallery: React.FC<GalleryProps> = ({
           <Image
             src={sortedImages[currentIndex]?.image.url || "/placeholder.svg"}
             alt={sortedImages[currentIndex]?.image.altText || "Product image"}
-            fill
+            width={400}
+            height={600}
             className="object-cover w-full h-full"
             sizes="100vw"
             priority

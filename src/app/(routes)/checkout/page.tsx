@@ -25,6 +25,7 @@ import {
 import PayPalButtons from "../../components/cart/PayPalButtons";
 import PayPalCardForm from "../../components/cart/PayPalCardForm";
 import GooglePayWithPaypal from "../../components/GooglePayWithPaypal";
+import AfterpayExpressCheckout from "../../components/AfterpayExpressCheckout";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import PaymentProcessingModal from "../../components/PaymentProcessingModal";
 import Currency from "../../ui/currency";
@@ -35,9 +36,234 @@ import Container from "../../ui/container";
 import { cn } from "../../lib/utils";
 import { useCart } from "../../contexts/CartContext";
 import { decrypt } from "../../utils/decrypt";
+import {
+  STATES_BY_COUNTRY,
+  getStatesForCountry,
+} from "../../utils/states-data";
 
 // Initialize Stripe
 let stripePromise: any = null;
+
+// Country list for the checkout form
+const COUNTRIES: { code: string; name: string }[] = [
+  { code: "AF", name: "Afghanistan" },
+  { code: "AL", name: "Albania" },
+  { code: "DZ", name: "Algeria" },
+  { code: "AS", name: "American Samoa" },
+  { code: "AD", name: "Andorra" },
+  { code: "AO", name: "Angola" },
+  { code: "AI", name: "Anguilla" },
+  { code: "AQ", name: "Antarctica" },
+  { code: "AG", name: "Antigua and Barbuda" },
+  { code: "AR", name: "Argentina" },
+  { code: "AM", name: "Armenia" },
+  { code: "AW", name: "Aruba" },
+  { code: "AU", name: "Australia" },
+  { code: "AT", name: "Austria" },
+  { code: "AZ", name: "Azerbaijan" },
+  { code: "BS", name: "Bahamas" },
+  { code: "BH", name: "Bahrain" },
+  { code: "BD", name: "Bangladesh" },
+  { code: "BB", name: "Barbados" },
+  { code: "BY", name: "Belarus" },
+  { code: "BE", name: "Belgium" },
+  { code: "BZ", name: "Belize" },
+  { code: "BJ", name: "Benin" },
+  { code: "BM", name: "Bermuda" },
+  { code: "BT", name: "Bhutan" },
+  { code: "BO", name: "Bolivia" },
+  { code: "BA", name: "Bosnia and Herzegovina" },
+  { code: "BW", name: "Botswana" },
+  { code: "BR", name: "Brazil" },
+  { code: "IO", name: "British Indian Ocean Territory" },
+  { code: "BN", name: "Brunei Darussalam" },
+  { code: "BG", name: "Bulgaria" },
+  { code: "BF", name: "Burkina Faso" },
+  { code: "BI", name: "Burundi" },
+  { code: "KH", name: "Cambodia" },
+  { code: "CM", name: "Cameroon" },
+  { code: "CA", name: "Canada" },
+  { code: "CV", name: "Cape Verde" },
+  { code: "KY", name: "Cayman Islands" },
+  { code: "CF", name: "Central African Republic" },
+  { code: "TD", name: "Chad" },
+  { code: "CL", name: "Chile" },
+  { code: "CN", name: "China" },
+  { code: "CO", name: "Colombia" },
+  { code: "KM", name: "Comoros" },
+  { code: "CG", name: "Congo" },
+  { code: "CD", name: "Congo, the Democratic Republic of the" },
+  { code: "CK", name: "Cook Islands" },
+  { code: "CR", name: "Costa Rica" },
+  { code: "CI", name: "Côte d’Ivoire" },
+  { code: "HR", name: "Croatia" },
+  { code: "CU", name: "Cuba" },
+  { code: "CY", name: "Cyprus" },
+  { code: "CZ", name: "Czechia" },
+  { code: "DK", name: "Denmark" },
+  { code: "DJ", name: "Djibouti" },
+  { code: "DM", name: "Dominica" },
+  { code: "DO", name: "Dominican Republic" },
+  { code: "EC", name: "Ecuador" },
+  { code: "EG", name: "Egypt" },
+  { code: "SV", name: "El Salvador" },
+  { code: "GQ", name: "Equatorial Guinea" },
+  { code: "ER", name: "Eritrea" },
+  { code: "EE", name: "Estonia" },
+  { code: "ET", name: "Ethiopia" },
+  { code: "FK", name: "Falkland Islands (Malvinas)" },
+  { code: "FO", name: "Faroe Islands" },
+  { code: "FJ", name: "Fiji" },
+  { code: "FI", name: "Finland" },
+  { code: "FR", name: "France" },
+  { code: "GF", name: "French Guiana" },
+  { code: "PF", name: "French Polynesia" },
+  { code: "GA", name: "Gabon" },
+  { code: "GM", name: "Gambia" },
+  { code: "GE", name: "Georgia" },
+  { code: "DE", name: "Germany" },
+  { code: "GH", name: "Ghana" },
+  { code: "GI", name: "Gibraltar" },
+  { code: "GR", name: "Greece" },
+  { code: "GL", name: "Greenland" },
+  { code: "GD", name: "Grenada" },
+  { code: "GP", name: "Guadeloupe" },
+  { code: "GU", name: "Guam" },
+  { code: "GT", name: "Guatemala" },
+  { code: "GG", name: "Guernsey" },
+  { code: "GN", name: "Guinea" },
+  { code: "GW", name: "Guinea-Bissau" },
+  { code: "GY", name: "Guyana" },
+  { code: "HT", name: "Haiti" },
+  { code: "HN", name: "Honduras" },
+  { code: "HK", name: "Hong Kong" },
+  { code: "HU", name: "Hungary" },
+  { code: "IS", name: "Iceland" },
+  { code: "IN", name: "India" },
+  { code: "ID", name: "Indonesia" },
+  { code: "IR", name: "Iran" },
+  { code: "IQ", name: "Iraq" },
+  { code: "IE", name: "Ireland" },
+  { code: "IM", name: "Isle of Man" },
+  { code: "IL", name: "Israel" },
+  { code: "IT", name: "Italy" },
+  { code: "JM", name: "Jamaica" },
+  { code: "JP", name: "Japan" },
+  { code: "JE", name: "Jersey" },
+  { code: "JO", name: "Jordan" },
+  { code: "KZ", name: "Kazakhstan" },
+  { code: "KE", name: "Kenya" },
+  { code: "KI", name: "Kiribati" },
+  { code: "KR", name: "Korea, Republic of" },
+  { code: "KW", name: "Kuwait" },
+  { code: "KG", name: "Kyrgyzstan" },
+  { code: "LA", name: "Lao People's Democratic Republic" },
+  { code: "LV", name: "Latvia" },
+  { code: "LB", name: "Lebanon" },
+  { code: "LS", name: "Lesotho" },
+  { code: "LR", name: "Liberia" },
+  { code: "LY", name: "Libya" },
+  { code: "LI", name: "Liechtenstein" },
+  { code: "LT", name: "Lithuania" },
+  { code: "LU", name: "Luxembourg" },
+  { code: "MO", name: "Macao" },
+  { code: "MK", name: "North Macedonia" },
+  { code: "MG", name: "Madagascar" },
+  { code: "MW", name: "Malawi" },
+  { code: "MY", name: "Malaysia" },
+  { code: "MV", name: "Maldives" },
+  { code: "ML", name: "Mali" },
+  { code: "MT", name: "Malta" },
+  { code: "MH", name: "Marshall Islands" },
+  { code: "MQ", name: "Martinique" },
+  { code: "MR", name: "Mauritania" },
+  { code: "MU", name: "Mauritius" },
+  { code: "YT", name: "Mayotte" },
+  { code: "MX", name: "Mexico" },
+  { code: "FM", name: "Micronesia" },
+  { code: "MD", name: "Moldova" },
+  { code: "MC", name: "Monaco" },
+  { code: "MN", name: "Mongolia" },
+  { code: "ME", name: "Montenegro" },
+  { code: "MA", name: "Morocco" },
+  { code: "MZ", name: "Mozambique" },
+  { code: "MM", name: "Myanmar" },
+  { code: "NA", name: "Namibia" },
+  { code: "NP", name: "Nepal" },
+  { code: "NL", name: "Netherlands" },
+  { code: "NC", name: "New Caledonia" },
+  { code: "NZ", name: "New Zealand" },
+  { code: "NI", name: "Nicaragua" },
+  { code: "NE", name: "Niger" },
+  { code: "NG", name: "Nigeria" },
+  { code: "NO", name: "Norway" },
+  { code: "OM", name: "Oman" },
+  { code: "PK", name: "Pakistan" },
+  { code: "PW", name: "Palau" },
+  { code: "PS", name: "Palestine, State of" },
+  { code: "PA", name: "Panama" },
+  { code: "PG", name: "Papua New Guinea" },
+  { code: "PY", name: "Paraguay" },
+  { code: "PE", name: "Peru" },
+  { code: "PH", name: "Philippines" },
+  { code: "PL", name: "Poland" },
+  { code: "PT", name: "Portugal" },
+  { code: "PR", name: "Puerto Rico" },
+  { code: "QA", name: "Qatar" },
+  { code: "RE", name: "Réunion" },
+  { code: "RO", name: "Romania" },
+  { code: "RU", name: "Russian Federation" },
+  { code: "RW", name: "Rwanda" },
+  { code: "KN", name: "Saint Kitts and Nevis" },
+  { code: "LC", name: "Saint Lucia" },
+  { code: "VC", name: "Saint Vincent and the Grenadines" },
+  { code: "WS", name: "Samoa" },
+  { code: "SM", name: "San Marino" },
+  { code: "ST", name: "Sao Tome and Principe" },
+  { code: "SA", name: "Saudi Arabia" },
+  { code: "SN", name: "Senegal" },
+  { code: "RS", name: "Serbia" },
+  { code: "SC", name: "Seychelles" },
+  { code: "SL", name: "Sierra Leone" },
+  { code: "SG", name: "Singapore" },
+  { code: "SK", name: "Slovakia" },
+  { code: "SI", name: "Slovenia" },
+  { code: "SB", name: "Solomon Islands" },
+  { code: "SO", name: "Somalia" },
+  { code: "ZA", name: "South Africa" },
+  { code: "ES", name: "Spain" },
+  { code: "LK", name: "Sri Lanka" },
+  { code: "SD", name: "Sudan" },
+  { code: "SR", name: "Suriname" },
+  { code: "SZ", name: "Eswatini" },
+  { code: "SE", name: "Sweden" },
+  { code: "CH", name: "Switzerland" },
+  { code: "TW", name: "Taiwan" },
+  { code: "TJ", name: "Tajikistan" },
+  { code: "TZ", name: "Tanzania" },
+  { code: "TH", name: "Thailand" },
+  { code: "TG", name: "Togo" },
+  { code: "TO", name: "Tonga" },
+  { code: "TT", name: "Trinidad and Tobago" },
+  { code: "TN", name: "Tunisia" },
+  { code: "TR", name: "Türkiye" },
+  { code: "TM", name: "Turkmenistan" },
+  { code: "TC", name: "Turks and Caicos Islands" },
+  { code: "UG", name: "Uganda" },
+  { code: "UA", name: "Ukraine" },
+  { code: "AE", name: "United Arab Emirates" },
+  { code: "GB", name: "United Kingdom" },
+  { code: "US", name: "United States" },
+  { code: "UY", name: "Uruguay" },
+  { code: "UZ", name: "Uzbekistan" },
+  { code: "VU", name: "Vanuatu" },
+  { code: "VE", name: "Venezuela" },
+  { code: "VN", name: "Viet Nam" },
+  { code: "VI", name: "Virgin Islands, U.S." },
+  { code: "YE", name: "Yemen" },
+  { code: "ZM", name: "Zambia" },
+  { code: "ZW", name: "Zimbabwe" },
+];
 
 // Payment Form Component
 const PaymentForm = ({
@@ -55,7 +281,11 @@ const PaymentForm = ({
   onBack: () => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
-  setPaymentModal: (modal: { isOpen: boolean; status: "processing" | "success" | "error"; message: string }) => void;
+  setPaymentModal: (modal: {
+    isOpen: boolean;
+    status: "processing" | "success" | "error";
+    message: string;
+  }) => void;
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -83,10 +313,43 @@ const PaymentForm = ({
 
       if (result.error) {
         setError(result.error.message || "An error occurred during payment");
-        setPaymentModal({ isOpen: true, status: "error", message: result.error.message || "Payment failed" });
-        setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
-      } else if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
-        setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+        setPaymentModal({
+          isOpen: true,
+          status: "error",
+          message: result.error.message || "Payment failed",
+        });
+        setTimeout(
+          () =>
+            setPaymentModal({
+              isOpen: false,
+              status: "processing",
+              message: "",
+            }),
+          3000
+        );
+      } else if (
+        result.paymentIntent &&
+        result.paymentIntent.status === "succeeded"
+      ) {
+        // Update backend payment status
+        try {
+          await fetch("/api/stripe/update-payment-status", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId,
+              paymentIntentId: result.paymentIntent.id,
+            }),
+          });
+        } catch (error) {
+          console.error("Failed to update payment status:", error);
+        }
+
+        setPaymentModal({
+          isOpen: true,
+          status: "success",
+          message: "Payment successful! Redirecting...",
+        });
         setTimeout(() => {
           setPaymentModal({ isOpen: false, status: "processing", message: "" });
           onSuccess();
@@ -95,8 +358,16 @@ const PaymentForm = ({
     } catch (err) {
       console.error("Payment error:", err);
       setError("An unexpected error occurred");
-      setPaymentModal({ isOpen: true, status: "error", message: "Payment failed. Please try again." });
-      setTimeout(() => setPaymentModal({ isOpen: false, status: "processing", message: "" }), 3000);
+      setPaymentModal({
+        isOpen: true,
+        status: "error",
+        message: "Payment failed. Please try again.",
+      });
+      setTimeout(
+        () =>
+          setPaymentModal({ isOpen: false, status: "processing", message: "" }),
+        3000
+      );
     } finally {
       setIsLoading(false);
     }
@@ -156,7 +427,12 @@ const CheckoutPage = () => {
   const [voucherApplying, setVoucherApplying] = useState(false);
   const [voucherMessage, setVoucherMessage] = useState("");
   const [paypalClientId, setPaypalClientId] = useState<string | null>(null);
-  const [paymentModal, setPaymentModal] = useState({ isOpen: false, status: "processing" as "processing" | "success" | "error", message: "" });
+  const [paymentModal, setPaymentModal] = useState({
+    isOpen: false,
+    status: "processing" as "processing" | "success" | "error",
+    message: "",
+  });
+  const [isOrderConfirming, setIsOrderConfirming] = useState(false);
 
   // Form states
   const [formData, setFormData] = useState({
@@ -184,6 +460,9 @@ const CheckoutPage = () => {
     billingCity: "",
     billingState: "",
     billingZipCode: "",
+    billingCountry: "US",
+    customState: "",
+    customBillingState: "",
   });
 
   // Add formTouched state to track touched fields
@@ -195,10 +474,74 @@ const CheckoutPage = () => {
     city: false,
     state: false,
     zipCode: false,
+    country: false,
     email: false,
     password: false,
     phone: false,
   });
+
+  // Validation functions
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateZipCode = (zipCode: string, country: string): boolean => {
+    if (country === "US") {
+      return /^\d{5}(-\d{4})?$/.test(zipCode);
+    }
+    if (country === "CA") {
+      return /^[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d$/.test(zipCode);
+    }
+    if (country === "GB") {
+      return /^[A-Za-z]{1,2}\d[A-Za-z\d]? ?\d[A-Za-z]{2}$/.test(zipCode);
+    }
+    return zipCode.length >= 3; // Basic validation for other countries
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    const phoneRegex = /^[\+]?[1-9][\d\s\-\(\)]{7,14}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+  };
+
+  // Get validation errors
+  const getFieldError = (fieldName: string): string | null => {
+    if (!formTouched[fieldName as keyof typeof formTouched]) return null;
+    
+    switch (fieldName) {
+      case 'email':
+        if (!formData.email) return 'Email is required';
+        if (!validateEmail(formData.email)) return 'Please enter a valid email address';
+        return null;
+      case 'zipCode':
+        if (!formData.zipCode) return 'Zip code is required';
+        if (!validateZipCode(formData.zipCode, formData.country)) return 'Please enter a valid zip code';
+        return null;
+      case 'phone':
+        if (!formData.phone) return 'Phone number is required';
+        if (!validatePhone(formData.phone)) return 'Please enter a valid phone number';
+        return null;
+      case 'firstName':
+        return !formData.firstName ? 'First name is required' : null;
+      case 'lastName':
+        return !formData.lastName ? 'Last name is required' : null;
+      case 'address1':
+        return !formData.address1 ? 'Address is required' : null;
+      case 'city':
+        return !formData.city ? 'City is required' : null;
+      case 'state':
+        return !formData.state ? 'State is required' : null;
+      case 'password':
+        if (formData.createAccount && !formData.password) return 'Password is required';
+        return null;
+      default:
+        return null;
+    }
+  };
+
+  // Get states for selected country
+  const availableStates = getStatesForCountry(formData.country);
+  const availableBillingStates = getStatesForCountry(formData.billingCountry);
 
   const totalPrice = cartTotalPrice;
   const shippingPrice =
@@ -306,11 +649,11 @@ const CheckoutPage = () => {
         customerEmail: formData.email,
         customerName: `${formData.firstName} ${formData.lastName}`,
         phone: formData.phone,
-        address: `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}`,
+        address: `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}, ${formData.country}`,
         billingAddress: formData.billingAddressSame
-          ? `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}`
-          : `${formData.billingAddress1}, ${formData.billingCity}, ${formData.billingState}, ${formData.billingZipCode}`,
-        shippingAddress: `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}`,
+          ? `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}, ${formData.country}`
+          : `${formData.billingAddress1}, ${formData.billingCity}, ${formData.billingState}, ${formData.billingZipCode}, ${formData.billingCountry}`,
+        shippingAddress: `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}, ${formData.country}`,
         zipCode: formData.zipCode,
         city: formData.city,
         state: formData.state,
@@ -369,8 +712,36 @@ const CheckoutPage = () => {
     }
   };
 
-  const handlePaymentSuccess = () => {
-    setPaymentModal({ isOpen: true, status: "success", message: "Payment successful! Redirecting..." });
+  const handlePaymentSuccess = async () => {
+    setPaymentModal({
+      isOpen: true,
+      status: "success",
+      message: "Payment successful! Redirecting...",
+    });
+
+    // Send emails immediately after successful payment
+    try {
+      const orderItems = items.map((item) => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        price: item.unitPrice.toString(),
+      }));
+
+      await fetch("/api/orders/send-order-emails", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerEmail: formData.email,
+          customerName: `${formData.firstName} ${formData.lastName}`,
+          orderNumber: orderId || "unknown",
+          orderTotal: effectiveGrandTotal.toString(),
+          items: orderItems,
+        }),
+      });
+    } catch (error) {
+      console.error("Failed to send order emails:", error);
+    }
+
     setTimeout(() => {
       setPaymentModal({ isOpen: false, status: "processing", message: "" });
       clearCart();
@@ -439,7 +810,7 @@ const CheckoutPage = () => {
                 Your cart is empty. Add some items before checking out.
               </p>
               <Button
-                onClick={() => router.push("/")}
+                onClick={() => router.push("/us/")}
                 className="bg-[#B01E23] hover:bg-[#8a1a1e] text-white"
               >
                 Continue Shopping
@@ -458,10 +829,24 @@ const CheckoutPage = () => {
     const checked =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    setFormData((prev) => {
+      const newData = {
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      };
+
+      // Reset state when country changes
+      if (name === "country") {
+        newData.state = "";
+        newData.customState = "";
+      }
+      if (name === "billingCountry") {
+        newData.billingState = "";
+        newData.customBillingState = "";
+      }
+
+      return newData;
+    });
   };
 
   // Update handleInputChange to mark fields as touched on blur
@@ -476,10 +861,16 @@ const CheckoutPage = () => {
     formData.firstName &&
     formData.lastName &&
     formData.email &&
+    validateEmail(formData.email) &&
     formData.address1 &&
     formData.city &&
     formData.state &&
-    formData.zipCode;
+    formData.zipCode &&
+    validateZipCode(formData.zipCode, formData.country) &&
+    formData.country &&
+    formData.phone &&
+    validatePhone(formData.phone) &&
+    (!formData.createAccount || formData.password);
 
   return (
     <div className="min-h-screen bg-gray-50 px-0 py-12">
@@ -747,7 +1138,8 @@ const CheckoutPage = () => {
                         onChange={handleInputChange}
                         onBlur={handleBlur}
                         required
-                        error={!formData.firstName && formTouched.firstName}
+                        error={!!getFieldError('firstName')}
+                        helperText={getFieldError('firstName')}
                       />
                     </div>
                     <div>
@@ -758,7 +1150,8 @@ const CheckoutPage = () => {
                         onChange={handleInputChange}
                         onBlur={handleBlur}
                         required
-                        error={!formData.lastName && formTouched.lastName}
+                        error={!!getFieldError('lastName')}
+                        helperText={getFieldError('lastName')}
                       />
                     </div>
                   </div>
@@ -772,7 +1165,8 @@ const CheckoutPage = () => {
                       onChange={handleInputChange}
                       onBlur={handleBlur}
                       required
-                      error={!formData.address1 && formTouched.address1}
+                      error={!!getFieldError('address1')}
+                      helperText={getFieldError('address1')}
                     />
                   </div>
 
@@ -786,6 +1180,42 @@ const CheckoutPage = () => {
                     />
                   </div>
 
+                  {/* Country */}
+                  <div className="relative w-full">
+                    <select
+                      name="country"
+                      value={formData.country}
+                      onChange={handleInputChange}
+                      onBlur={handleBlur}
+                      required
+                      className={cn(
+                        "block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white]",
+                        !formData.country && formTouched.country
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      )}
+                    >
+                      {COUNTRIES.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                    <label
+                      className={cn(
+                        "absolute left-3 top-3 pointer-events-none transition-all duration-200",
+                        formData.country && formData.country !== ""
+                          ? "-translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold"
+                          : "text-base text-gray-500",
+                        !formData.country && formTouched.country
+                          ? "text-red-600"
+                          : "text-gray-700"
+                      )}
+                    >
+                      Country *
+                    </label>
+                  </div>
+
                   <div>
                     <FloatingLabelInput
                       label="City"
@@ -794,46 +1224,77 @@ const CheckoutPage = () => {
                       onChange={handleInputChange}
                       onBlur={handleBlur}
                       required
-                      error={!formData.city && formTouched.city}
+                      error={!!getFieldError('city')}
+                      helperText={getFieldError('city')}
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     <div>
                       <div className="relative w-full">
-                        <select
-                          name="state"
-                          value={formData.state}
-                          onChange={handleInputChange}
-                          onBlur={handleBlur} // Mark as touched on blur
-                          required
-                          className={cn(
-                            "block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white]",
-                            !formData.state && formTouched.state
-                              ? "border-red-500"
-                              : "border-gray-300"
-                          )}
-                        >
-                          <option value=""></option>
-                          <option value="CA">California</option>
-                          <option value="NY">New York</option>
-                          <option value="TX">Texas</option>
-                        </select>
-                        <label
-                          className={cn(
-                            "absolute left-3 top-3 pointer-events-none transition-all duration-200",
-                            formData.state && formData.state !== ""
-                              ? "-translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold" // Label for filled state
-                              : "text-base text-gray-500",
-                            !formData.state && formTouched.state
-                              ? "text-red-600"
-                              : "text-gray-700"
-                          )}
-                        >
-                          State *
-                        </label>
+                        {availableStates.length > 0 ? (
+                          <select
+                            name="state"
+                            value={formData.state}
+                            onChange={handleInputChange}
+                            onBlur={handleBlur}
+                            required
+                            className={cn(
+                              "block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white]",
+                              !formData.state && formTouched.state
+                                ? "border-red-500"
+                                : "border-gray-300"
+                            )}
+                          >
+                            <option value=""></option>
+                            {availableStates.map((state) => (
+                              <option key={state.code} value={state.code}>
+                                {state.name}
+                              </option>
+                            ))}
+                            <option value="OTHER">Enter your state</option>
+                          </select>
+                        ) : (
+                          <FloatingLabelInput
+                            label="State/Province"
+                            name="state"
+                            value={formData.state}
+                            onChange={handleInputChange}
+                            onBlur={handleBlur}
+                            required
+                            error={!formData.state && formTouched.state}
+                          />
+                        )}
+                        {availableStates.length > 0 && (
+                          <label
+                            className={cn(
+                              "absolute left-3 top-3 pointer-events-none transition-all duration-200",
+                              formData.state && formData.state !== ""
+                                ? "-translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold"
+                                : "text-base text-gray-500",
+                              !formData.state && formTouched.state
+                                ? "text-red-600"
+                                : "text-gray-700"
+                            )}
+                          >
+                            State *
+                          </label>
+                        )}
                       </div>
                     </div>
+                    {formData.state === "OTHER" &&
+                      availableStates.length > 0 && (
+                        <div>
+                          <FloatingLabelInput
+                            label="Enter your state/province"
+                            name="customState"
+                            value={formData.customState || ""}
+                            onChange={handleInputChange}
+                            onBlur={handleBlur}
+                            required
+                          />
+                        </div>
+                      )}
                     <div>
                       <FloatingLabelInput
                         label="Zip Code"
@@ -842,7 +1303,8 @@ const CheckoutPage = () => {
                         onChange={handleInputChange}
                         onBlur={handleBlur}
                         required
-                        error={!formData.zipCode && formTouched.zipCode}
+                        error={!!getFieldError('zipCode')}
+                        helperText={getFieldError('zipCode')}
                       />
                     </div>
                   </div>
@@ -851,11 +1313,13 @@ const CheckoutPage = () => {
                     <FloatingLabelInput
                       label="E-mail address"
                       name="email"
+                      type="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       onBlur={handleBlur}
                       required
-                      error={!formData.email && formTouched.email}
+                      error={!!getFieldError('email')}
+                      helperText={getFieldError('email')}
                     />
                   </div>
 
@@ -885,7 +1349,8 @@ const CheckoutPage = () => {
                           onChange={handleInputChange}
                           onBlur={handleBlur}
                           required={formData.createAccount}
-                          error={!formData.password && formTouched.password}
+                          error={!!getFieldError('password')}
+                          helperText={getFieldError('password')}
                         />
                       </div>
                     )}
@@ -895,12 +1360,14 @@ const CheckoutPage = () => {
                     <FloatingLabelInput
                       label="Phone"
                       name="phone"
+                      type="tel"
                       value={formData.phone}
                       onChange={handleInputChange}
                       onBlur={handleBlur}
                       placeholder=""
                       required
-                      error={!formData.phone && formTouched.phone}
+                      error={!!getFieldError('phone')}
+                      helperText={getFieldError('phone')}
                     />
                   </div>
 
@@ -962,6 +1429,27 @@ const CheckoutPage = () => {
                           />
                         </div>
 
+                        {/* Billing Country */}
+                        <div className="relative w-full">
+                          <select
+                            name="billingCountry"
+                            value={formData.billingCountry}
+                            onChange={handleInputChange}
+                            onBlur={handleBlur}
+                            required
+                            className="block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white] border-gray-300"
+                          >
+                            {COUNTRIES.map((c) => (
+                              <option key={c.code} value={c.code}>
+                                {c.name}
+                              </option>
+                            ))}
+                          </select>
+                          <label className="absolute left-3 top-3 pointer-events-none transition-all duration-200 -translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold text-gray-700">
+                            Country *
+                          </label>
+                        </div>
+
                         <div>
                           <FloatingLabelInput
                             label="Additional address details"
@@ -986,38 +1474,69 @@ const CheckoutPage = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                           <div>
                             <div className="relative w-full">
-                              <select
-                                name="billingState"
-                                value={formData.billingState}
-                                onChange={handleInputChange}
-                                onBlur={handleBlur} // Mark as touched on blur
-                                required
-                                className="block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white] border-gray-300"
-                              >
-                                <option value=""></option>
-                                <option value="CA">California</option>
-                                <option value="NY">New York</option>
-                                <option value="TX">Texas</option>
-                              </select>
-                              <label
-                                className={`absolute left-3 top-3 pointer-events-none transition-all duration-200 ${
-                                  formData.billingState &&
-                                  formData.billingState !== ""
-                                    ? "-translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold" // Label for filled state
-                                    : "text-base text-gray-500"
-                                } text-gray-700`}
-                              >
-                                State *
-                              </label>
+                              {availableBillingStates.length > 0 ? (
+                                <select
+                                  name="billingState"
+                                  value={formData.billingState}
+                                  onChange={handleInputChange}
+                                  onBlur={handleBlur}
+                                  required
+                                  className="block w-full h-12 py-3 px-3 border rounded-none bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-black transition-all [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_white] border-gray-300"
+                                >
+                                  <option value=""></option>
+                                  {availableBillingStates.map((state) => (
+                                    <option key={state.code} value={state.code}>
+                                      {state.name}
+                                    </option>
+                                  ))}
+                                  <option value="OTHER">
+                                    Enter your state
+                                  </option>
+                                </select>
+                              ) : (
+                                <FloatingLabelInput
+                                  label="State/Province"
+                                  name="billingState"
+                                  value={formData.billingState}
+                                  onChange={handleInputChange}
+                                  onBlur={handleBlur}
+                                  required
+                                />
+                              )}
+                              {availableBillingStates.length > 0 && (
+                                <label
+                                  className={`absolute left-3 top-3 pointer-events-none transition-all duration-200 ${
+                                    formData.billingState &&
+                                    formData.billingState !== ""
+                                      ? "-translate-y-6 scale-95 text-sm bg-white px-1 z-10 font-semibold"
+                                      : "text-base text-gray-500"
+                                  } text-gray-700`}
+                                >
+                                  State *
+                                </label>
+                              )}
                             </div>
                           </div>
+                          {formData.billingState === "OTHER" &&
+                            availableBillingStates.length > 0 && (
+                              <div>
+                                <FloatingLabelInput
+                                  label="Enter your state/province"
+                                  name="customBillingState"
+                                  value={formData.customBillingState || ""}
+                                  onChange={handleInputChange}
+                                  onBlur={handleBlur}
+                                  required
+                                />
+                              </div>
+                            )}
                           <div>
                             <FloatingLabelInput
                               label="Zip Code"
                               name="billingZipCode"
                               value={formData.billingZipCode}
                               onChange={handleInputChange}
-                              onBlur={handleBlur} // Mark as touched on blur
+                              onBlur={handleBlur}
                               required
                             />
                           </div>
@@ -1090,6 +1609,10 @@ const CheckoutPage = () => {
                         <p>
                           {formData.city}, {formData.state} {formData.zipCode}
                         </p>
+                        <p>
+                          {COUNTRIES.find((c) => c.code === formData.country)
+                            ?.name || formData.country}
+                        </p>
                         <p>{formData.email}</p>
                         <p>{formData.phone}</p>
                       </div>
@@ -1117,6 +1640,11 @@ const CheckoutPage = () => {
                               {formData.billingCity}, {formData.billingState}{" "}
                               {formData.billingZipCode}
                             </p>
+                            <p>
+                              {COUNTRIES.find(
+                                (c) => c.code === formData.billingCountry
+                              )?.name || formData.billingCountry}
+                            </p>
                           </>
                         )}
                       </div>
@@ -1132,6 +1660,7 @@ const CheckoutPage = () => {
                       Choose Payment Method
                     </h3>
                   </div>
+
                   <div className="space-y-4">
                     {/* PayPal */}
                     <div className="group">
@@ -1194,6 +1723,7 @@ const CheckoutPage = () => {
                               quantity: i.quantity,
                             }))}
                             onApproveSuccess={handlePaymentSuccess}
+                            orderId={orderId!}
                           />
                         </div>
                       )}
@@ -1341,10 +1871,6 @@ const CheckoutPage = () => {
                             <p className="text-sm text-gray-700 mb-2">
                               Enter your card details securely
                             </p>
-                            <div className="flex items-center text-xs text-gray-600">
-                              <Shield className="w-3 h-3 mr-1" />
-                              <span>256-bit SSL encryption</span>
-                            </div>
                           </div>
 
                           {isStripeEnabled ? (
@@ -1420,11 +1946,89 @@ const CheckoutPage = () => {
                               effectiveGrandTotal={effectiveGrandTotal}
                               discountAmount={discountAmount}
                               voucherCode={voucherCode}
+                              orderId={orderId!}
                             />
                           )}
                         </div>
                       )}
                     </div>
+
+                    {/* Afterpay */}
+                    {/* <div className="group">
+                      <label
+                        className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                          formData.selectedPaymentMethod === "afterpay"
+                            ? "border-black bg-gray-100 shadow-md"
+                            : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          <div className="relative mr-4">
+                            <input
+                              type="radio"
+                              name="selectedPaymentMethod"
+                              value="afterpay"
+                              checked={
+                                formData.selectedPaymentMethod === "afterpay"
+                              }
+                              onChange={handleInputChange}
+                              className="sr-only"
+                            />
+                            <div
+                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                formData.selectedPaymentMethod === "afterpay"
+                                  ? "bg-black border-black"
+                                  : "border-gray-300 group-hover:border-gray-500"
+                              }`}
+                            >
+                              {formData.selectedPaymentMethod === "afterpay" && (
+                                <Check className="w-4 h-4 text-white" />
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center">
+                            <div className="bg-[#b2fce3] px-4 py-2 rounded text-black font-semibold text-sm">
+                              afterpay
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="text-sm text-gray-500 mr-2">
+                            Buy now, pay later
+                          </span>
+                          <Shield className="w-4 h-4 text-gray-600" />
+                        </div>
+                      </label>
+
+                      {/* Afterpay Component */}
+                    {/* {formData.selectedPaymentMethod === "afterpay" && (
+                        <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
+                          <div className="mb-4">
+                            <p className="text-sm text-gray-700 mb-2">
+                              Pay in 4 interest-free installments
+                            </p>
+                          </div>
+                          <AfterpayExpressCheckout
+                            onCaptureSuccess={(orderId) => {
+                              console.log("Afterpay payment successful:", orderId);
+                              handlePaymentSuccess();
+                            }}
+                            onError={(error) => {
+                              console.error("Afterpay payment error:", error);
+                              toast.error(error);
+                            }}
+                            setIsOrderConfirming={setIsOrderConfirming}
+                            totalAmount={effectiveGrandTotal}
+                            currencyCode="USD"
+                            countryCode="US"
+                            termsAccepted={true}
+                            onTermsError={(error) => toast.error(error)}
+                            discountAmount={discountAmount}
+                            coupon={voucherCode ? { code: voucherCode } : undefined}
+                          />
+                        </div>
+                      )}
+                    </div> } */}
 
                     {/* Google Pay */}
                     {!isStripeEnabled && (
@@ -1743,7 +2347,7 @@ const CheckoutPage = () => {
           </div>
         </div>
       </motion.div>
-      
+
       <PaymentProcessingModal
         isOpen={paymentModal.isOpen}
         status={paymentModal.status}

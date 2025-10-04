@@ -6,7 +6,7 @@ import getKeywordCategories from '@/src/app/actions/get-keyword-categories';
 
 export const metadata: Metadata = {
   title: 'All Categories | Jackets Store',
-  description: 'Browse all our jacket categories and find your perfect style.',
+  description: 'Explore FINEYST\'s complete collection of premium jackets and outerwear. From leather jackets to winter coats, find your perfect style with free shipping on orders over $100.',
   alternates: {
     canonical: "https://www.fineystjackets.com/us/collections"
   }

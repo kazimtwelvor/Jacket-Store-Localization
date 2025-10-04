@@ -51,7 +51,7 @@ export default function ShippingPolicyClient() {
           {/* Static versions of all components */}
           <div className="pt-6 pb-12">
             <div className="mb-6 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Shipping Methods</h2>
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Shipping Methods</h3>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Choose the shipping option that best suits your needs, from standard to express delivery.
               </p>
@@ -94,7 +94,7 @@ export default function ShippingPolicyClient() {
 
           <div className="py-16">
             <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Delivery Zones</h2>
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Delivery Zones</h3>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 We ship to locations worldwide with varying delivery timeframes based on your region.
               </p>
@@ -182,7 +182,7 @@ export default function ShippingPolicyClient() {
 
           <div className="py-16">
             <div className="mb-16 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Shipping Process</h2>
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Shipping Process</h3>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 From the moment you place your order to delivery at your doorstep, here's what happens.
               </p>
@@ -246,7 +246,7 @@ export default function ShippingPolicyClient() {
 
           <div className="py-16">
             <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Shipping Costs</h2>
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Shipping Costs</h3>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Transparent shipping rates with free standard shipping on orders over $100.
               </p>
@@ -314,7 +314,7 @@ export default function ShippingPolicyClient() {
 
           <div className="py-16">
             <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h3>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Find answers to common questions about our shipping and delivery process.
               </p>
@@ -360,7 +360,7 @@ export default function ShippingPolicyClient() {
 
           <div className="py-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Need Help?</h2>
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Need Help?</h3>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Our customer service team is here to assist you with any shipping or delivery questions.
               </p>

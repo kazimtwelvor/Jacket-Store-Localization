@@ -18,7 +18,7 @@ export default function AccountPage() {
 
   const handleLogout = () => {
     logout()
-    router.push("/")
+    router.push("/us/")
   }
 
   if (!isAuthenticated) {

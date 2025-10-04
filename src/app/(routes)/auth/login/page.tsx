@@ -492,7 +492,7 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-slate-100 to-zinc-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-slate-100 to-zinc-100 flex items-center justify-center p-4 pt-20 md:pt-4">
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden">
         {/* Header with Logo */}
         <div className="bg-[#2B2B2B] text-white p-8 text-center">
@@ -1095,7 +1095,7 @@ function LoginContent() {
                       >
                         I agree to the{" "}
                         <Link
-                          href="/terms-conditions"
+                          href="/us/terms-conditions"
                           className="text-gray-800 hover:underline font-medium"
                         >
                           Terms and Conditions
@@ -1119,7 +1119,7 @@ function LoginContent() {
                       >
                         I agree to the{" "}
                         <Link
-                          href="/privacy-policy"
+                          href="/us/privacy-policy"
                           className="text-blue-600 hover:underline font-medium"
                         >
                           Privacy Policy

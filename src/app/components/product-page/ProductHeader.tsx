@@ -17,11 +17,11 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
       {!isMobile && (
         <div className="pt-0 text-sm">
           <nav className="flex items-center">
-            <Link href="/shop" className="text-gray-500 hover:text-black uppercase font-medium">
+            <Link href="/us/shop" className="text-gray-500 hover:text-black uppercase font-medium">
               SHOP
             </Link>
             <span className="mx-1 text-gray-500">/</span>
-            <Link href="/shop?materials=Leather" className="text-gray-500 hover:text-black uppercase font-medium">
+            <Link href="/us/collections/mens-leather-jackets" className="text-gray-500 hover:text-black uppercase font-medium">
               LEATHER
             </Link>
             <span className="mx-1 text-gray-500">/</span>
@@ -49,19 +49,19 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
       {/* Product Title */}
       <div className={cn("mt-2", isMobile ? "mb-3" : "mt-2")}>
         {isMobile ? (
-          <h1 id="product-title" className={cn(
+          <span id="product-title" className={cn(
             `${avertaBlack.className} font-bold leading-tight`,
             "text-lg md:text-xl sm:text-2xl line-clamp-2"
           )}>
             {data?.name?.toUpperCase()}
-          </h1>
+          </span>
         ) : (
-          <h2 id="product-title" className={cn(
+          <h1 id="product-title" className={cn(
             `${avertaBlack.className} font-bold leading-tight`,
             "text-xl lg:text-2xl line-clamp-2"
           )}>
             {data?.name?.toUpperCase()}
-          </h2>
+          </h1>
         )}
 
 

@@ -139,10 +139,11 @@ export default function ProductCategoryClient({
                         <Image
                           src={item.imageUrl || "/placeholder.svg"}
                           alt={item.name}
-                          fill
+                          width={360}
+                          height={560}
                           unoptimized
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                          className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
 
@@ -170,10 +171,11 @@ export default function ProductCategoryClient({
                         <Image
                           src={item.imageUrl || "/placeholder.svg"}
                           alt={item.name}
-                          fill
+                          width={360}
+                          height={560}
                           unoptimized
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                          className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
                         />
                         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent"></div>
 

@@ -10,13 +10,13 @@ export default function SizeGuideCTA() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/shop?genders=female"
+            href="/us/collections/womens-leather-bomber-jackets"
             className="inline-flex items-center justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b2b2b] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#2b2b2b] text-white hover:bg-[#2b2b2b]/90 h-11 px-8 py-2"
           >
             Shop Women's Collection
           </Link>
           <Link
-            href="/shop?genders=male"
+            href="/us/collections/leather-bomber-jacket-mens"
             className="inline-flex items-center justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b2b2b] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-[#2b2b2b] bg-white hover:bg-[#2b2b2b] text-[#333333] h-11 px-8 py-2"
 
           >

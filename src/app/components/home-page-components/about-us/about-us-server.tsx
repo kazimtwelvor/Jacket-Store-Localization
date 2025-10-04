@@ -24,7 +24,7 @@ const getCachedAboutData = unstable_cache(
       mission: "What sets Fineyst apart is our unwavering commitment to quality, authenticity, and customer satisfaction. We believe that streetwear should be both expressive and responsibly made.",
       values: "We believe that streetwear should be both expressive and responsibly made.",
       ctaText: "Discover our full story",
-      ctaLink: "/about-us"
+      ctaLink: "/us/about-us"
     };
   },
   ['about-section'],

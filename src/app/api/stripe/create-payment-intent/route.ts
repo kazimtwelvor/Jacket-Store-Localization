@@ -23,18 +23,28 @@ export async function POST(request: NextRequest) {
       voucherCode,
     } = body;
 
-    // Fetch Stripe secret key from backend API
-    const stripeResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/stripe-secret-key`
-    );
+    // Get Stripe secret key from environment or backend API
+    let stripeSecretKey = process.env.STRIPE_SECRET_KEY;
     
-    if (!stripeResponse.ok) {
-      throw new Error("Failed to fetch Stripe configuration");
+    if (!stripeSecretKey && process.env.NEXT_PUBLIC_API_URL) {
+      try {
+        const stripeResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/stripe-secret-key`
+        );
+        
+        if (stripeResponse.ok) {
+          const stripeConfig = await stripeResponse.json();
+          const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
+          stripeSecretKey = decrypt(stripeConfig.secretKey, encryptionKey);
+        }
+      } catch (error) {
+        console.error("Failed to fetch Stripe config from backend:", error);
+      }
     }
     
-    const stripeConfig = await stripeResponse.json();
-    const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
-    const stripeSecretKey = decrypt(stripeConfig.secretKey, encryptionKey);
+    if (!stripeSecretKey) {
+      throw new Error("Stripe secret key not configured");
+    }
     
     const stripe = new Stripe(stripeSecretKey);
 
@@ -50,47 +60,12 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Create order in the backend API using existing checkout endpoint
-    const orderData = {
-      productIds,
-      paymentMethod: "stripe",
-      customerEmail,
-      customerName,
-      phone,
-      address,
-      billingAddress,
-      shippingAddress,
-      zipCode,
-      city,
-      state,
-      country,
-      totalAmount,
-      discountAmount,
-      voucherCode,
-      paymentIntentId: paymentIntent.id,
-      embedded: true,
-    };
-
-    const orderResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      }
-    );
-
-    if (!orderResponse.ok) {
-      throw new Error("Failed to create order");
-    }
-
-    const orderData2 = await orderResponse.json();
+    // Generate a simple order ID for express checkout
+    const orderId = `stripe_${paymentIntent.id}`;
     
     return NextResponse.json({
       clientSecret: paymentIntent.client_secret,
-      orderId: orderData2.orderId || orderData2.id,
+      orderId,
     });
   } catch (error) {
     console.error("Error creating payment intent:", error);

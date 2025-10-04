@@ -231,6 +231,8 @@ export default function MobileAddToCartModal({
                           "/placeholder.svg"
                         }
                         alt={product.name}
+                        width={128}
+                        height={192}
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;

@@ -52,7 +52,6 @@ export async function POST(req: Request) {
     const {
       items,
       total_amount,
-      invoice_id,
       coupon,
       discount_amount,
       sca_method = "SCA_WHEN_REQUIRED", // Allow configurable SCA method
@@ -64,7 +63,6 @@ export async function POST(req: Request) {
         id?: string;
       }>;
       total_amount: number;
-      invoice_id?: string;
       coupon?: { code: string; id: number; description?: string };
       discount_amount?: number;
       sca_method?: "SCA_ALWAYS" | "SCA_WHEN_REQUIRED";
@@ -164,7 +162,6 @@ export async function POST(req: Request) {
           intent: "CAPTURE",
           purchase_units: [
             {
-              invoice_id: invoice_id,
               amount: {
                 currency_code: "USD",
                 value: total_amount.toFixed(2),
@@ -234,7 +231,6 @@ export async function POST(req: Request) {
         statusText: orderResp.statusText,
         error: errorData,
         total: total_amount,
-        invoiceId: invoice_id,
       });
 
       // Check for specific PayPal errors and provide user-friendly messages
@@ -276,7 +272,7 @@ export async function POST(req: Request) {
             statusText: orderResp.statusText,
             fullError: errorData,
             filteredError: paypalError,
-            orderId: invoice_id,
+            orderId: orderResp.headers.get("paypal-debug-id") || null,
           },
         },
         { status: 400 }
@@ -300,14 +296,12 @@ export async function POST(req: Request) {
       orderId: pp.id,
       status: pp.status,
       total: total_amount,
-      invoiceId: invoice_id,
     });
 
     return NextResponse.json({
       id: pp.id,
       status: pp.status,
       links: pp.links,
-      invoice_id: invoice_id,
     });
   } catch (e) {
     console.error("PayPal Google Pay order creation error:", e);

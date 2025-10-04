@@ -126,7 +126,7 @@ export default function SignatureStylesSection() {
                   <div className="mt-6 text-center">
                     <ShopButton
                       variant="bordered"
-                      href="/collections/leather-bomber-jacket-mens"
+                      href="/us/collections/leather-bomber-jacket-mens"
                       size="sm"
                       showArrow={true}
                       className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}
@@ -176,7 +176,7 @@ export default function SignatureStylesSection() {
                   <div className="mt-6 text-center">
                     <ShopButton
                       variant="bordered"
-                      href="/collections/womens-leather-bomber-jackets"
+                      href="/us/collections/womens-leather-bomber-jackets"
                       size="sm"
                       showArrow={true}
                       className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}

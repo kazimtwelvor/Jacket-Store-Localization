@@ -88,7 +88,7 @@ export default function PrivacyPolicyClient() {
                   asChild
                   className="w-full"
                 >
-                  <Link href="/contact-us">Questions? Contact Us</Link>
+                  <Link href="/us/contact-us">Questions? Contact Us</Link>
                 </Button>
               </div>
             </div>
@@ -98,7 +98,7 @@ export default function PrivacyPolicyClient() {
             <div className="prose prose-lg max-w-none">
               <div id="information-we-collect" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
-                  <h2 className="text-2xl font-bold mb-4 border-black">1. Information We Collect</h2>
+                  <h3 className="text-2xl font-bold mb-4 border-black">1. Information We Collect</h3>
 
                   <h3 className="text-xl font-semibold mt-6 mb-3 text-gray-800">Personal Information</h3>
                   <p className="text-gray-600 mb-4">
@@ -135,7 +135,7 @@ export default function PrivacyPolicyClient() {
 
               <div id="how-we-use-information" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
-                  <h2 className="text-2xl font-bold mb-4 border-black">2. How We Use Your Information</h2>
+                  <h3 className="text-2xl font-bold mb-4 border-black">2. How We Use Your Information</h3>
 
                   <p className="text-gray-600 mb-4">
                     We use the Order Information that we collect generally to fulfill any orders placed through the Site
@@ -162,7 +162,7 @@ export default function PrivacyPolicyClient() {
 
               <div id="sharing-your-information" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
-                  <h2 className="text-2xl font-bold mb-4 border-black">3. Sharing Your Information</h2>
+                  <h3 className="text-2xl font-bold mb-4 border-black">3. Sharing Your Information</h3>
 
                   <p className="text-gray-600 mb-4">
                     We share your Personal Information with third parties to help us use your Personal Information, as
@@ -191,7 +191,7 @@ export default function PrivacyPolicyClient() {
 
               <div id="cookies" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
-                  <h2 className="text-2xl font-bold mb-4 border-black">4. Cookies and Tracking Technologies</h2>
+                  <h3 className="text-2xl font-bold mb-4 border-black">4. Cookies and Tracking Technologies</h3>
 
                   <p className="text-gray-600 mb-4">
                     Most web browsers are set to accept cookies by default. If you prefer, you can usually choose to set
@@ -208,7 +208,7 @@ export default function PrivacyPolicyClient() {
 
               <div id="data-retention" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
-                  <h2 className="text-2xl font-bold mb-4 border-black">5. Data Retention</h2>
+                  <h3 className="text-2xl font-bold mb-4 border-black">5. Data Retention</h3>
 
                   <p className="text-gray-600">
                     When you place an order through the Site, we will maintain your Order Information for our records
@@ -220,7 +220,7 @@ export default function PrivacyPolicyClient() {
 
               <div id="your-rights" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
-                  <h2 className="text-2xl font-bold mb-4 border-black">6. Your Rights</h2>
+                  <h3 className="text-2xl font-bold mb-4 border-black">6. Your Rights</h3>
 
                   <p className="text-gray-600 mb-4">
                     If you are a European resident, you have the right to access personal information we hold about you
@@ -244,7 +244,7 @@ export default function PrivacyPolicyClient() {
 
               <div id="childrens-privacy" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
-                  <h2 className="text-2xl font-bold mb-4 border-black">7. Children's Privacy</h2>
+                  <h3 className="text-2xl font-bold mb-4 border-black">7. Children's Privacy</h3>
 
                   <p className="text-gray-600">
                     Our Site is not intended for individuals under the age of 16. We do not knowingly collect personal
@@ -257,7 +257,7 @@ export default function PrivacyPolicyClient() {
 
               <div id="changes" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md mb-8 border border-black hover:shadow-lg transition-shadow">
-                  <h2 className="text-2xl font-bold mb-4 border-black">8. Changes to This Privacy Policy</h2>
+                  <h3 className="text-2xl font-bold mb-4 border-black">8. Changes to This Privacy Policy</h3>
 
                   <p className="text-gray-600">
                     We may update this privacy policy from time to time in order to reflect, for example, changes to our
@@ -270,7 +270,7 @@ export default function PrivacyPolicyClient() {
 
               <div id="contact-us" className="scroll-mt-24">
                 <div className="bg-white p-8 rounded-lg shadow-md border border-black hover:shadow-lg transition-shadow">
-                  <h2 className="text-2xl font-bold mb-4 border-black">9. Contact Us</h2>
+                  <h3 className="text-2xl font-bold mb-4 border-black">9. Contact Us</h3>
 
                   <p className="text-gray-600 mb-6">
                     For more information about our privacy practices, if you have questions, or if you would like to

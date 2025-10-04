@@ -83,7 +83,7 @@ export default function PolicyProcess() {
   if (!isMounted) {
     return (
       <section id="process" className="scroll-mt-24">
-        <h2 className="text-3xl font-bold tracking-tight text-[#2b2b2b] mb-8">Return Process</h2>
+        <h3 className="text-3xl font-bold tracking-tight text-[#2b2b2b] mb-8">Return Process</h3>
 
         <div className="relative">
           {/* Connecting line */}
@@ -123,9 +123,9 @@ export default function PolicyProcess() {
       initial="hidden"
       animate={controls}
     >
-      <motion.h2 className="text-3xl font-bold tracking-tight text-[#2b2b2b] mb-8" variants={itemVariants}>
+      <motion.h3 className="text-3xl font-bold tracking-tight text-[#2b2b2b] mb-8" variants={itemVariants}>
         Return Process
-      </motion.h2>
+      </motion.h3>
 
       <motion.div className="relative" variants={itemVariants}>
         {/* Connecting line */}
