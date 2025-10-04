@@ -521,7 +521,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     colors: filterParams?.colors || [],
                     genders: filterParams?.genders || [],
                     page: loadMorePage,
-                    limit: 20,
+                    limit: 40,
                     sort: currentSort
                 }),
             })
