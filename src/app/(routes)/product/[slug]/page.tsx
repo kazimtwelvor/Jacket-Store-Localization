@@ -204,8 +204,16 @@ const ProductPage = async ({ params }: ProductPageProps) => {
       const schemaData = typeof product.schema === "string" ? JSON.parse(product.schema) : product.schema
 
       if (schemaData && typeof schemaData === "object") {
-        Object.values(schemaData).forEach((schema) => {
+        Object.values(schemaData).forEach((schema: any) => {
           if (schema && typeof schema === "object") {
+            if (schema.offers && !schema.offers.hasRefundPolicy) {
+              schema.offers.hasRefundPolicy = {
+                "@type": "RefundPolicy",
+                "refundType": "FullRefund",
+                "refundMethod": "OriginalPaymentMethod",
+                "returnFees": "FreeReturn"
+              }
+            }
             schemaArray.push(schema)
           }
         })
@@ -234,6 +242,12 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         price: product?.isDiscounted && product?.salePrice ? product?.salePrice : product?.price,
         availability: "https://schema.org/InStock",
         itemCondition: "https://schema.org/NewCondition",
+        hasRefundPolicy: {
+          "@type": "RefundPolicy",
+          "refundType": "FullRefund",
+          "refundMethod": "OriginalPaymentMethod",
+          "returnFees": "FreeReturn"
+        },
       },
     }
 
