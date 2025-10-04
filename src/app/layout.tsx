@@ -4,6 +4,8 @@ import "./styles/mobile-fixes.css";
 import Navbar from "@/src/app/components/navbar/Navbar";
 import { FontProvider } from "@/src/components/font-provider";
 import { CartProvider } from "@/src/app/contexts/CartContext";
+import { ClarityProvider } from "@/src/app/providers/clarity-provider";
+import { ClarityScript } from "@/src/app/components/clarity-script";
 import { avertaBold, avertaDefault } from "@/src/lib/fonts";
 import Footer from "./components/home-page-components/footer/footer";
 import RouteLoadingOverlay from "@/src/app/components/layout/route-loading-overlay";
@@ -82,6 +84,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             __html: `window.dataLayer = window.dataLayer || [];`
           }}
         />
+        
+        {/* Microsoft Clarity Script */}
+        <ClarityScript />
       </head>
       <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0 bg-[#000000] min-h-screen flex flex-col`}>
         {/* Google Tag Manager (noscript) */}
@@ -96,28 +101,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* End Google Tag Manager (noscript) */}
         
         <FontProvider>
-          {/* <Suspense fallback={<div />}> */}
-              <CartProvider>
-              <noscript>
-                <div style={{background:'#111', color:'#fff', padding:'8px 12px', textAlign:'center'}}>
-                  For the best experience, enable JavaScript. Basic content is still available.
-                </div>
-              </noscript>
-              {/* <Suspense fallback={<div />}> */}
-                <Navbar />
-              {/* </Suspense> */}
-              <Suspense fallback={null}>
-                <RouteLoadingOverlay />
-              </Suspense>
-              <main className="flex-1">
-                {/* <Suspense fallback={<div className="min-h-[50vh]" />}> */}
-                  {children}
+          <ClarityProvider>
+            {/* <Suspense fallback={<div />}> */}
+                <CartProvider>
+                <noscript>
+                  <div style={{background:'#111', color:'#fff', padding:'8px 12px', textAlign:'center'}}>
+                    For the best experience, enable JavaScript. Basic content is still available.
+                  </div>
+                </noscript>
+                {/* <Suspense fallback={<div />}> */}
+                  <Navbar />
                 {/* </Suspense> */}
-              </main>
-              <Footer />
-              <CartSidebarWrapper />
-              </CartProvider>
-          {/* </Suspense> */}
+                <Suspense fallback={null}>
+                  <RouteLoadingOverlay />
+                </Suspense>
+                <main className="flex-1">
+                  {/* <Suspense fallback={<div className="min-h-[50vh]" />}> */}
+                    {children}
+                  {/* </Suspense> */}
+                </main>
+                <Footer />
+                <CartSidebarWrapper />
+                </CartProvider>
+            {/* </Suspense> */}
+          </ClarityProvider>
         </FontProvider>
       </body>
     </html>
