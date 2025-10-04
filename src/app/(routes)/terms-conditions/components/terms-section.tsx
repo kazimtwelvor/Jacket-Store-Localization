@@ -34,7 +34,7 @@ export default function TermsSection({
         <div className="p-4">
           <div className="flex items-center">
             <div className="h-5 w-5 rounded-full mr-2 flex-shrink-0 bg-slate-300" />
-            <h2 className="text-xl font-semibold">{section.title}</h2>
+            <h3 className="text-xl font-semibold">{section.title}</h3>
           </div>
         </div>
         <div className="p-4 pt-0 border-t">
@@ -48,7 +48,7 @@ export default function TermsSection({
             <div className="mt-6 space-y-4">
               {section.subsections.map((subsection, idx) => (
                 <div key={idx}>
-                  <h3 className="text-lg font-semibold mb-2">{subsection.title}</h3>
+                  <h4 className="text-lg font-semibold mb-2">{subsection.title}</h4>
                   {subsection.content.map((paragraph, pidx) => (
                     <p key={pidx} className="mb-2 last:mb-0">
                       {paragraph}
@@ -86,7 +86,7 @@ export default function TermsSection({
                 className={`h-5 w-5 rounded-full mr-2 flex-shrink-0 ${isActive ? "bg-[#eaeaea]" : "bg-[#eaeaea]"}`}
               />
             )}
-            <h2 className="text-xl font-semibold text-[#333333]">{section.title}</h2>
+            <h3 className="text-xl font-semibold text-[#333333]">{section.title}</h3>
           </div>
           <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.3 }}>
             <ChevronDown className="h-5 w-5 text-[#666666]" />
@@ -125,7 +125,7 @@ export default function TermsSection({
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ delay: (section.content.length + idx) * 0.1 }}
                     >
-                      <h3 className="text-lg font-semibold mb-2 text-[#2b2b2b]">{subsection.title}</h3>
+                      <h4 className="text-lg font-semibold mb-2 text-[#2b2b2b]">{subsection.title}</h4>
                       {subsection.content.map((paragraph, pidx) => (
                         <p key={pidx} className="mb-2 last:mb-0 text-[#333333]">
                           {paragraph}

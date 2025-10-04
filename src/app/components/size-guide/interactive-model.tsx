@@ -333,8 +333,9 @@ export default function InteractiveModel() {
                 <Image
                   src={getModelImage() || "/placeholder.svg"}
                   alt="Model visualization"
-                  fill
-                  className="object-cover object-top"
+                  width={400}
+                  height={600}
+                  className="object-cover object-top w-full h-full"
                 />
               </div>
               <div className="p-4  rounded-b-lg flex-grow">

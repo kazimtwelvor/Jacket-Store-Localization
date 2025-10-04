@@ -15,6 +15,7 @@ type PayPalCardFormProps = {
   effectiveGrandTotal: number;
   discountAmount: number;
   voucherCode: string;
+  orderId: string;
 };
 
 export default function PayPalCardForm({
@@ -27,6 +28,7 @@ export default function PayPalCardForm({
   effectiveGrandTotal,
   discountAmount,
   voucherCode,
+  orderId,
 }: PayPalCardFormProps) {
   const [cardData, setCardData] = useState({
     cardNumber: "",
@@ -177,6 +179,7 @@ export default function PayPalCardForm({
             address: `${formData.address1}, ${formData.city}, ${formData.state}, ${formData.zipCode}`,
           },
           totalAmount: effectiveGrandTotal,
+          orderId,
         }),
       });
 

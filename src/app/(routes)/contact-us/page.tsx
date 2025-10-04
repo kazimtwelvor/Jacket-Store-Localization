@@ -21,7 +21,7 @@ import ContactForm from "./components/contact-form"
 
 export const metadata: Metadata = {
   title: "Contact Us - Get in Touch with Our Team | Fineyst",
-  description: "Get in touch with our team for any questions, feedback, or support.",
+  description: "Contact FINEYST's expert support team 24/7. Get help with orders, returns, sizing, or product questions. Email, phone, live chat available. Fast response guaranteed.",
   alternates: {
     canonical: "https://www.fineystjackets.com/us/contact-us"
   }
@@ -33,7 +33,7 @@ export default function ContactUsPage() {
     "@type": "ContactPage",
     "name": "Contact Us - Fineyst",
     "description": "Get in touch with our team for any questions, feedback, or support.",
-    "url": "https://www.fineystjackets.com/contact-us"
+    "url": "https://www.fineystjackets.com/us/contact-us"
   }
 
   const organizationSchema = {
@@ -132,7 +132,7 @@ export default function ContactUsPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Email Us</h3>
                     <p className="text-muted-foreground">
-                      <a href="info@fineystjackets.com" className="hover:text-[#2b2b2b] transition-colors">
+                      <a href="mailto:info@fineystjackets.com" className="hover:text-[#2b2b2b] transition-colors">
                       info@fineystjackets.com
                       </a>
                     </p>
@@ -246,7 +246,7 @@ export default function ContactUsPage() {
               <div className="mx-auto w-16 h-16 bg-[#EAEAEA] rounded-full flex items-center justify-center mb-6">
                 <HeadphonesIcon className="h-8 w-8 text-[#2b2b2b]" />
               </div>
-              <h3 className="text-xl font-bold mb-3">24/7 Support</h3>
+              <h4 className="text-xl font-bold mb-3">24/7 Support</h4>
               <p className="text-muted-foreground mb-4">
                 Our dedicated team is available around the clock to assist you with any questions or concerns.
               </p>
@@ -259,7 +259,7 @@ export default function ContactUsPage() {
               <div className="mx-auto w-16 h-16 bg-[#EAEAEA] rounded-full flex items-center justify-center mb-6">
                 <ShieldCheck className="h-8 w-8 text-[#2b2b2b]" />
               </div>
-              <h3 className="text-xl font-bold mb-3">Satisfaction Guarantee</h3>
+              <h4 className="text-xl font-bold mb-3">Satisfaction Guarantee</h4>
               <p className="text-muted-foreground mb-4">
                 Not happy with your purchase? Our hassle-free return policy ensures your complete satisfaction.
               </p>
@@ -272,7 +272,7 @@ export default function ContactUsPage() {
               <div className="mx-auto w-16 h-16 bg-[#EAEAEA] rounded-full flex items-center justify-center mb-6">
                 <Clock8 className="h-8 w-8 text-[#2b2b2b]" />
               </div>
-              <h3 className="text-xl font-bold mb-3">Fast Resolution</h3>
+              <h4 className="text-xl font-bold mb-3">Fast Resolution</h4>
               <p className="text-muted-foreground mb-4">
                 We pride ourselves on quick issue resolution and personalized attention to every customer inquiry.
               </p>

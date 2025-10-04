@@ -10,7 +10,7 @@ import ProductCategory from "../home-page-components/product-category/product-ca
 
 export const metadata = {
   title: "Shop Premium Jackets and Outerwear | Fineyst",
-  description: "Browse our collection of premium clothing and accessories.",
+  description: "Shop FINEYST's premium jackets, coats, and outerwear collection. Sustainable fashion with free shipping over $100, easy returns, and expert customer support. Find your perfect fit today.",
   alternates: {
     canonical: "https://www.fineystjackets.com/us/shop"
   }

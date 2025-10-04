@@ -26,20 +26,20 @@ const ReviewCard = ({ review, showH3 = true }: { review: Review; showH3?: boolea
     <section
       className="bg-[#F6F6F6] p-8 rounded-lg shadow-md mx-6 my-6 flex flex-col justify-center h-[200px] sm:h-[220px] md:h-[240px] cursor-pointer hover:scale-105 hover:shadow-lg"
       style={{ minWidth: '350px', width: '55vw', maxWidth: '650px' }}
-      onClick={() => router.push("/reviews")}
+      onClick={() => router.push("/us/reviews")}
       role="button"
       tabIndex={0}
       aria-label={`Read review by ${review.name}`}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
-          router.push("/reviews");
+          router.push("/us/reviews");
         }
       }}
     >
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-left ">
           <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
-            <Image src={review.image || "/placeholder.svg"} alt={review.name} fill className="object-cover" />
+            <Image src={review.image || "/placeholder.svg"} alt={review.name} width={40} height={40} className="object-cover" />
           </div>
           <div>
             <div className="flex mb-1">
@@ -55,7 +55,7 @@ const ReviewCard = ({ review, showH3 = true }: { review: Review; showH3?: boolea
           </div>
         </div>
         <div className="relative w-20 h-12">
-          <Image src="/images/reviews/google-trusted-badge.png" alt="Google Trusted Reviews" fill className="object-contain" />
+          <Image src="/images/reviews/google-trusted-badge.png" alt="Google Trusted Reviews" width={80} height={48} className="object-contain" />
         </div>
       </div>
       <div className="mb-3 mt-3">
@@ -131,7 +131,7 @@ export default function AnimatedReviewSectionClient({ reviews }: AnimatedReviewS
               <div key={review.id} className="bg-[#1a1a1a] p-6 rounded-lg shadow-md">
                 <div className="flex items-center mb-4">
                   <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
-                    <Image src={review.image || "/placeholder.svg"} alt={review.name} fill className="object-cover" />
+                    <Image src={review.image || "/placeholder.svg"} alt={review.name} width={40} height={40} className="object-cover" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-white">{review.name}</h3>

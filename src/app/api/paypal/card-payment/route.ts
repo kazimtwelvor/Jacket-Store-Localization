@@ -3,9 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { items, cardDetails, customerInfo, totalAmount } = await req.json();
-
-    if (!items || !cardDetails || !customerInfo) {
+    const { items, cardDetails, customerInfo, totalAmount, orderId } = await req.json();
+    if (!items || !cardDetails || !customerInfo || !orderId) {
       return NextResponse.json({ error: "Missing required data" }, { status: 400 });
     }
 
@@ -73,8 +72,42 @@ export async function POST(req: NextRequest) {
     }
 
     const orderData = await orderResponse.json();
-    return NextResponse.json({ success: true, orderId: orderData.id });
+    const paymentStatus = orderData.purchase_units?.[0]?.payments?.captures?.[0]?.status || 'PENDING';
     
+    // Update backend payment status
+    if (orderId && process.env.NEXT_PUBLIC_API_URL) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            paymentIntentId: orderData.id,
+            paymentMethod: "paypal_card",
+            paymentStatus,
+            isPaid: paymentStatus === 'COMPLETED',
+            paymentValidation: process.env.IS_SKIP_VALIDATION || ""
+          })
+        });
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Backend update failed:", {
+            status: response.status,
+            error: errorText
+          });
+        }
+      } catch (error) {
+        console.error("Failed to update backend:", error);
+      }
+    }
+    
+    return NextResponse.json({ 
+      success: true, 
+      orderId: orderData.id,
+      status: orderData.status,
+      paymentStatus
+    });
+
   } catch (error: any) {
     console.error("PayPal card payment error:", error);
     return NextResponse.json(

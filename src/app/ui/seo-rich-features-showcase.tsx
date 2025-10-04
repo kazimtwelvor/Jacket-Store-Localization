@@ -579,9 +579,9 @@ const SEORichFeaturesShowcase = () => {
         location: "Austin, TX",
       },
       resources: [
-        { title: "Contact Our Support Team", url: "/contact-us" },
-        { title: "Frequently Asked Questions", url: "/faqs" },
-        { title: "Order Assistance Guide", url: "/order-help" },
+        { title: "Contact Our Support Team", url: "/us/contact-us" },
+        { title: "Frequently Asked Questions", url: "/us/faqs" },
+        { title: "Order Assistance Guide", url: "/us/order-help" },
       ],
       faqContent: {
         how: "Our customer support is available 24/7 through multiple channels. Live chat is accessible directly on our website and typically connects you with a representative in under 60 seconds. Phone support is available at our toll-free number, and email inquiries receive responses within 2 hours, even overnight.",

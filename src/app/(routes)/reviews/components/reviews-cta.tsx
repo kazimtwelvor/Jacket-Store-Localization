@@ -30,11 +30,11 @@ export default function ReviewsCTA() {
     return (
       <div className="py-16 bg-[#eaeaea] text-black">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Share Your Experience</h2>
+          <span className="text-3xl md:text-4xl font-bold mb-4">Share Your Experience</span>
           <p className="text-lg text-white/80 mb-8">
             We value your feedback! Let us know about your experience with our products and service.
           </p>
-          <a href="/contact-us" className="inline-block bg-white text-black font-bold py-3 px-8 rounded-full">
+          <a href="/us/contact-us" className="inline-block bg-white text-black font-bold py-3 px-8 rounded-full">
             Write a Review
           </a>
         </div>
@@ -46,7 +46,7 @@ export default function ReviewsCTA() {
     <>
       <div className="py-16 bg-[#eaeaea] text-black">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Share Your Experience</h2>
+          <span className="text-3xl md:text-4xl font-bold mb-4">Share Your Experience</span>
           <p className="text-lg text-black mb-8">
             We value your feedback! Let us know about your experience with our products and service.
           </p>

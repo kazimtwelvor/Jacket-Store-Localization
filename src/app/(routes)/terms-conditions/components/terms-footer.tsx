@@ -16,7 +16,7 @@ export default function TermsFooter() {
   if (!isMounted) {
     return (
       <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Link href="/privacy-policy" className="block">
+        <Link href="/us/privacy-policy" className="block">
           <div className="bg-white p-6 rounded-lg border shadow-sm hover:border-primary/20 h-full">
             <div className="flex items-center mb-3">
               <div className="h-5 w-5 mr-2 text-primary">
@@ -34,13 +34,13 @@ export default function TermsFooter() {
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 </svg>
               </div>
-              <h3 className="font-semibold">Privacy Policy</h3>
+              <span className="font-semibold">Privacy Policy</span>
             </div>
             <p className="text-sm text-slate-600">Learn how we collect, use, and protect your personal information.</p>
           </div>
         </Link>
 
-        <Link href="/faqs" className="block">
+        <Link href="/us/faqs" className="block">
           <div className="bg-white p-6 rounded-lg border shadow-sm hover:border-primary/20 h-full">
             <div className="flex items-center mb-3">
               <div className="h-5 w-5 mr-2 text-primary">
@@ -66,7 +66,7 @@ export default function TermsFooter() {
           </div>
         </Link>
 
-        <Link href="/contact-us" className="block">
+        <Link href="/us/contact-us" className="block">
           <div className="bg-white p-6 rounded-lg border shadow-sm hover:border-primary/20 h-full">
             <div className="flex items-center mb-3">
               <div className="h-5 w-5 mr-2 text-primary">
@@ -88,7 +88,7 @@ export default function TermsFooter() {
                   <polyline points="10 9 9 9 8 9"></polyline>
                 </svg>
               </div>
-              <h3 className="font-semibold">Contact Support</h3>
+              <span className="font-semibold">Contact Support</span>
             </div>
             <p className="text-sm text-slate-600">
               Need help understanding our terms? Our support team is here to help.
@@ -106,7 +106,7 @@ export default function TermsFooter() {
       transition={{ delay: 0.5, duration: 0.5 }}
       className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4"
     >
-      <Link href="/privacy-policy" className="block">
+      <Link href="/us/privacy-policy" className="block">
         <motion.div
           whileHover={{ y: -4, boxShadow: "0 10px 25px -5px rgba(176, 30, 35, 0.1)" }}
           transition={{ duration: 0.2 }}
@@ -114,13 +114,13 @@ export default function TermsFooter() {
         >
           <div className="flex items-center mb-3">
             <Shield className="h-5 w-5 mr-2 text-[#2b2b2b]" />
-            <h3 className="font-semibold text-[#333333]">Privacy Policy</h3>
+            <span className="font-semibold text-[#333333]">Privacy Policy</span>
           </div>
           <p className="text-sm text-[#666666]">Learn how we collect, use, and protect your personal information.</p>
         </motion.div>
       </Link>
 
-      <Link href="/faqs" className="block">
+      <Link href="/us/faqs" className="block">
         <motion.div
           whileHover={{ y: -4, boxShadow: "0 10px 25px -5px rgba(176, 30, 35, 0.1)" }}
           transition={{ duration: 0.2 }}
@@ -128,13 +128,13 @@ export default function TermsFooter() {
         >
           <div className="flex items-center mb-3">
             <HelpCircle className="h-5 w-5 mr-2 text-[#2b2b2b]" />
-            <h3 className="font-semibold text-[#333333]">FAQs</h3>
+            <span className="font-semibold text-[#333333]">FAQs</span>
           </div>
           <p className="text-sm text-[#666666]">Find answers to frequently asked questions about our services.</p>
         </motion.div>
       </Link>
 
-      <Link href="/contact-us" className="block">
+      <Link href="/us/contact-us" className="block">
         <motion.div
           whileHover={{ y: -4, boxShadow: "0 10px 25px -5px rgba(176, 30, 35, 0.1)" }}
           transition={{ duration: 0.2 }}
@@ -142,7 +142,7 @@ export default function TermsFooter() {
         >
           <div className="flex items-center mb-3">
             <FileText className="h-5 w-5 mr-2 text-[#2b2b2b]" />
-            <h3 className="font-semibold text-[#333333]">Contact Support</h3>
+            <span className="font-semibold text-[#333333]">Contact Support</span>
           </div>
           <p className="text-sm text-[#666666]">Need help understanding our terms? Our support team is here to help.</p>
         </motion.div>

@@ -84,10 +84,11 @@ export default function FAQsClient() {
               </div>
             </div>
 
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-black">Common Questions & Answers</h2>
             <div className="space-y-8">
               {faqData.map((category) => (
                 <div key={category.category} className="mb-12">
-                  <h2 className="text-2xl font-bold mb-6 text-black-800">{category.title}</h2>
+                  <h3 className="text-2xl font-bold mb-6 text-black-800">{category.title}</h3>
                   <div className="space-y-4">
                     {category.items.map((item, itemIndex) => (
                       <div
@@ -95,7 +96,7 @@ export default function FAQsClient() {
                         className="border rounded-lg overflow-hidden border-black-100"
                       >
                         <div className="p-5 font-medium">
-                          <h3 className="text-lg">{item.question}</h3>
+                          <span className="text-lg">{item.question}</span>
                         </div>
                         <div className="p-5 pt-0 text-black-600 border-t border-black-100">
                           <p>{item.answer}</p>
@@ -165,6 +166,7 @@ export default function FAQsClient() {
               </div>
             </div>
 
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-black">Common Questions & Answers</h2>
             <div className="space-y-8">
               {filteredFAQs.length === 0 ? (
                 <div className="text-center py-12">
@@ -174,7 +176,7 @@ export default function FAQsClient() {
               ) : (
                 filteredFAQs.map((category) => (
                   <div key={category.category} className="mb-12">
-                    <h2 className="text-2xl font-bold mb-6 text-black-800">{category.title}</h2>
+                    <h3 className="text-2xl font-bold mb-6 text-black-800">{category.title}</h3>
                     <div className="space-y-4">
                       {category.items
                         .filter((item) => {

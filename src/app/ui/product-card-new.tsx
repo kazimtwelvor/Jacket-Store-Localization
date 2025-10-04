@@ -45,7 +45,7 @@ const ProductCardNew = ({ product }: ProductCardProps) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link href={`/product/${slug}`}>
+      <Link href={`/us/product/${slug}`}>
         <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
           <Image
             src={product.images?.[0]?.image?.url || "/placeholder.svg"}

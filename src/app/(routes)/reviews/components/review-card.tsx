@@ -69,7 +69,7 @@ export default function ReviewCard({ review, index }: ReviewCardProps) {
                 ))}
             </div>
           </div>
-          <h4 className="font-bold text-lg mb-2">{review.title}</h4>
+          <span className="font-bold text-lg mb-2">{review.title}</span>
           <p className="text-black-600 text-sm mb-4 flex-grow">{truncatedText}</p>
           {review.productName && (
             <div className="bg-gray-50 p-2 rounded-md text-xs text-black-500 mb-4 border border-gray-100">
@@ -142,7 +142,7 @@ export default function ReviewCard({ review, index }: ReviewCardProps) {
               ))}
           </div>
         </div>
-        <h4 className="font-bold text-lg mb-2">{review.title}</h4>
+        <span className="font-bold text-lg mb-2">{review.title}</span>
         <p className="text-black-600 text-sm mb-4 flex-grow">
           {truncatedText}
           {needsTruncation && (

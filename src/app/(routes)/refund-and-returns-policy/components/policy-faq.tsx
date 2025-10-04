@@ -54,8 +54,8 @@ export default function PolicyFAQ() {
     return (
       <div className="bg-white rounded-xl border border-[#2b2b2b] shadow-sm overflow-hidden">
         <div className="bg-[#2b2b2b] p-4 border-b border-[#2b2b2b] flex items-center gap-2">
-          <span className="h-5 w-5 text-[#2b2b2b]">❓</span>
-          <h3 className="font-semibold text-[#2b2b2b]">Frequently Asked Questions</h3>
+          <span className="h-5 w-5 text-white">❓</span>
+          <h3 className="font-semibold text-white">Frequently Asked Questions</h3>
         </div>
 
         <div className="divide-y divide-[#2b2b2b]">
@@ -81,8 +81,8 @@ export default function PolicyFAQ() {
       transition={{ duration: 0.5, delay: 0.3 }}
     >
       <div className="bg-[#2b2b2b] p-4 border-b border-[#2b2b2b] flex items-center gap-2">
-        <HelpCircle className="h-5 w-5 text-[#2b2b2b]" />
-        <h3 className="font-semibold text-[#2b2b2b]">Frequently Asked Questions</h3>
+        <HelpCircle className="h-5 w-5 text-white" />
+        <h3 className="font-semibold text-white">Frequently Asked Questions</h3>
       </div>
 
       <div className="divide-y divide-[#2b2b2b]">

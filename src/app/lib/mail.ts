@@ -71,25 +71,20 @@ export const sendEmail = async (config: EmailConfig): Promise<boolean> => {
   try {
     const transporter = createTransporter();
 
-    // Verify transporter configuration
-    await transporter.verify();
-
     const mailOptions = {
       from: config.from || getEmailFromAlias(EmailAlias.NOREPLY),
       to: Array.isArray(config.to) ? config.to.join(", ") : config.to,
       subject: config.subject,
       html: config.html,
       text: config.text || stripHtml(config.html),
-      headers: {
-        "X-Priority": "1",
-        "X-MSMail-Priority": "High",
-        Importance: "high",
-      },
     };
 
+    console.log('📧 Sending email to:', mailOptions.to, 'from:', mailOptions.from);
     const result = await transporter.sendMail(mailOptions);
+    console.log('✅ Email sent successfully to:', mailOptions.to);
     return true;
   } catch (error) {
+    console.error('❌ Email failed to:', config.to, 'Error:', error.message);
     return false;
   }
 };
@@ -179,7 +174,78 @@ export const sendOrderConfirmationEmail = async (
   return sendEmail({
     to,
     subject: `Order Confirmation #${orderNumber}`,
-    html: getOrderConfirmationTemplate(name, orderNumber, orderTotal, items, trackOrderUrl),
-    from: getEmailFromAlias(EmailAlias.ORDERS),
+    html: getOrderConfirmationTemplate(
+      name,
+      orderNumber,
+      orderTotal,
+      items,
+      trackOrderUrl
+    ),
+    from: "info@fineystjackets.com",
   });
+};
+
+export const sendAdminOrderNotification = async (
+  customerEmail: string,
+  customerName: string,
+  orderNumber: string,
+  orderTotal: string,
+  items: any[]
+): Promise<boolean> => {
+  const { getAdminOrderNotificationTemplate } = await import(
+    "./email-template"
+  );
+
+  const adminEmails = [
+    process.env.ADMIN_USER_1,
+    process.env.ADMIN_USER_2,
+    process.env.ADMIN_USER_3,
+  ].filter(Boolean);
+
+  if (adminEmails.length === 0) {
+    console.warn("No admin emails configured");
+    return false;
+  }
+
+  return sendEmail({
+    to: adminEmails,
+    subject: `New Order Received #${orderNumber}`,
+    html: getAdminOrderNotificationTemplate(
+      customerEmail,
+      customerName,
+      orderNumber,
+      orderTotal,
+      items
+    ),
+    from: "info@fineystjackets.com",
+  });
+};
+
+export const sendOrderEmails = async (
+  customerEmail: string,
+  customerName: string,
+  orderNumber: string,
+  orderTotal: string,
+  items: any[],
+  trackOrderUrl: string
+): Promise<{ customerEmailSent: boolean; adminEmailSent: boolean }> => {
+  const [customerEmailSent, adminEmailSent] = await Promise.all([
+    sendOrderConfirmationEmail(
+      customerEmail,
+      customerName,
+      orderNumber,
+      orderTotal,
+      items,
+      trackOrderUrl
+    ),
+    sendAdminOrderNotification(
+      customerEmail,
+      customerName,
+      orderNumber,
+      orderTotal,
+      items
+    ),
+  ]);
+
+  return { customerEmailSent, adminEmailSent };
 };

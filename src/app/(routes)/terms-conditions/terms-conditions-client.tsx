@@ -129,7 +129,6 @@ export default function TermsConditionsClient() {
 
           <div className="container mx-auto px-4 py-12 md:py-20 relative z-10">
             <div className="max-w-5xl mx-auto text-center">
-              <p className="text-3xl md:text-5xl font-bold mb-4  text-black">Terms & Conditions</p>
               <p className="text-lg text-black mb-8 max-w-3xl mx-auto">
                 Our commitment to transparency and fairness. These terms outline our relationship and responsibilities
                 to each other.
@@ -158,7 +157,7 @@ export default function TermsConditionsClient() {
                     </div>
                   </div>
                   <div className="text-left">
-                    <h3 className="font-semibold  text-black">Last Updated</h3>
+                    <span className="font-semibold  text-black">Last Updated</span>
                     <p className="text-sm text-black">April 20, 2025</p>
                   </div>
                 </div>
@@ -182,7 +181,7 @@ export default function TermsConditionsClient() {
                     </div>
                   </div>
                   <div className="text-left">
-                    <h3 className="font-semibold  text-black">Privacy Compliant</h3>
+                    <span className="font-semibold  text-black">Privacy Compliant</span>
                     <p className="text-sm text-black">GDPR & CCPA</p>
                   </div>
                 </div>
@@ -194,7 +193,7 @@ export default function TermsConditionsClient() {
         <div className="container mx-auto px-4 py-12 flex flex-col lg:flex-row gap-8">
           <div className="hidden lg:block lg:w-1/4 self-start">
             <div className="bg-white rounded-lg shadow-sm border  border-[#2b2b2b] p-6">
-              <h2 className="text-xl font-bold mb-4 text-black">Table of Contents</h2>
+              <span className="text-xl font-bold mb-4 text-black">Table of Contents</span>
               <nav>
                 <ul className="space-y-2">
                   {Object.entries(termsData).map(([sectionId, section]) => (
@@ -215,7 +214,6 @@ export default function TermsConditionsClient() {
           <div className="lg:w-3/4 w-full">
             <div className="bg-white rounded-lg shadow-sm border  border-[#2b2b2b] p-6 md:p-8">
               <div className="prose prose-slate max-w-none">
-                <p className="text-3xl font-bold mb-8  text-black">Terms & Conditions</p>
                 <p className="text-black mb-6">Last updated: April 20, 2025</p>
 
                 <div className="mb-8">
@@ -225,51 +223,9 @@ export default function TermsConditionsClient() {
                   </p>
                 </div>
 
-                {Object.entries(termsData).map(([sectionId, section]) => (
-                  <div key={sectionId} id={sectionId} className="mb-8 scroll-mt-24">
-                    <div className="border  border-[#2b2b2b] rounded-lg">
-                      <div className="p-4">
-                        <div className="flex items-center">
-                          <div className="h-5 w-5 rounded-full mr-2 flex-shrink-0 bg-[#2b2b2b]" />
-                          <h2 className="text-xl font-semibold  text-black">{section.title}</h2>
-                        </div>
-                      </div>
-                      <div className="p-4 pt-0 border-t border-[#2b2b2b]">
-                        {section.content.map((paragraph, idx) => (
-                          <p key={idx} className="mb-4 last:mb-0  text-black">
-                            {paragraph}
-                          </p>
-                        ))}
-
-                        {section.subsections && (
-                          <div className="mt-6 space-y-4">
-                            {section.subsections.map((subsection, idx) => (
-                              <div key={idx}>
-                                <h3 className="text-lg font-semibold mb-2 text-black">{subsection.title}</h3>
-                                {subsection.content.map((paragraph, pidx) => (
-                                  <p key={pidx} className="mb-2 last:mb-0 text-black">
-                                    {paragraph}
-                                  </p>
-                                ))}
-
-                                {/* List items */}
-                                {subsection.listItems && (
-                                  <ul className="list-disc pl-6 mt-2 space-y-1">
-                                    {subsection.listItems.map((item, lidx) => (
-                                      <li key={lidx} className="text-black">
-                                        {item}
-                                      </li>
-                                    ))}
-                                  </ul>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                <div className="text-center py-8">
+                  <p className="text-gray-600">Loading terms and conditions...</p>
+                </div>
 
                 <div className="mt-12 p-6 border  border-[#2b2b2b] rounded-lg bg-[#f6f6f6]">
                   <h3 className="text-xl font-semibold mb-4 text-black">Agreement to Terms</h3>
@@ -278,11 +234,11 @@ export default function TermsConditionsClient() {
                     agree to these terms, please do not use our services or make purchases from our website.
                   </p>
                   <div className="mt-4 flex items-center justify-between">
-                    <Link href="/" className="text-black hover:underline flex items-center">
+                    <Link href="/us/" className="text-black hover:underline flex items-center">
                       <span className="mr-1">→</span>
                       Return to Shopping
                     </Link>
-                    <Link href="/contact-us" className="text-black hover:underline flex items-center">
+                    <Link href="/us/contact-us" className="text-black hover:underline flex items-center">
                       <span className="mr-1">→</span>
                       Contact Us
                     </Link>
@@ -292,7 +248,7 @@ export default function TermsConditionsClient() {
             </div>
 
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Link href="/privacy-policy" className="block">
+              <Link href="/us/privacy-policy" className="block">
                 <div className="bg-white p-6 rounded-lg border  border-[#2b2b2b] shadow-sm hover:border-[#2b2b2b]/20 h-full">
                   <div className="flex items-center mb-3">
                     <div className="h-5 w-5 mr-2 text-black">
@@ -310,7 +266,7 @@ export default function TermsConditionsClient() {
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                       </svg>
                     </div>
-                    <h3 className="font-semiboldtext-black">Privacy Policy</h3>
+                    <span className="font-semiboldtext-black">Privacy Policy</span>
                   </div>
                   <p className="text-sm text-black">
                     Learn how we collect, use, and protect your personal information.
@@ -318,7 +274,7 @@ export default function TermsConditionsClient() {
                 </div>
               </Link>
 
-              <Link href="/faqs" className="block">
+              <Link href="/us/faqs" className="block">
                 <div className="bg-[#f6f6f6] shadow-sm  p-6 rounded-lg border  border-[#2b2b2b] hover:border-[#2b2b2b] h-full">
                   <div className="flex items-center mb-3">
                     <div className="h-5 w-5 mr-2 text-black">
@@ -338,7 +294,7 @@ export default function TermsConditionsClient() {
                         <line x1="12" y1="17" x2="12.01" y2="17"></line>
                       </svg>
                     </div>
-                    <h3 className="font-semiboldtext-black">FAQs</h3>
+                    <span className="font-semiboldtext-black">FAQs</span>
                   </div>
                   <p className="text-sm text-black">
                     Find answers to frequently asked questions about our services.
@@ -346,7 +302,7 @@ export default function TermsConditionsClient() {
                 </div>
               </Link>
 
-              <Link href="/contact-us" className="block">
+              <Link href="/us/contact-us" className="block">
                 <div className="bg-white p-6 rounded-lg border  border-[#2b2b2b] shadow-sm hover:border-[#2b2b2b]/20 h-full">
                   <div className="flex items-center mb-3">
                     <div className="h-5 w-5 mr-2 text-black">
@@ -368,7 +324,7 @@ export default function TermsConditionsClient() {
                         <polyline points="10 9 9 9 8 9"></polyline>
                       </svg>
                     </div>
-                    <h3 className="font-semiboldtext-black">Contact Support</h3>
+                    <span className="font-semiboldtext-black">Contact Support</span>
                   </div>
                   <p className="text-sm text-black">
                     Need help understanding our terms? Our support team is here to help.
@@ -402,7 +358,7 @@ export default function TermsConditionsClient() {
               transition={{ duration: 0.5 }}
               className="prose prose-slate max-w-none"
             >
-              <p className="text-3xl font-bold mb-8text-black">Introduction</p>
+              <span className="text-3xl font-bold mb-8text-black">Introduction</span>
               <p className="text-black mb-6">Last updated: April 20, 2025</p>
 
               <div className="mb-8">
@@ -444,11 +400,11 @@ export default function TermsConditionsClient() {
                   agree to these terms, please do not use our services or make purchases from our website.
                 </p>
                 <div className="mt-4 flex items-center justify-between">
-                  <Link href="/" className="text-black hover:underline flex items-center">
+                  <Link href="/us/" className="text-black hover:underline flex items-center">
                     <ChevronRight className="h-4 w-4 mr-1" />
                     Return to Shopping
                   </Link>
-                  <Link href="/contact-us" className="text-black hover:underline flex items-center">
+                  <Link href="/us/contact-us" className="text-black hover:underline flex items-center">
                     <ChevronRight className="h-4 w-4 mr-1" />
                     Contact Us
                   </Link>

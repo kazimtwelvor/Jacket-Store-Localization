@@ -371,7 +371,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
 
                   <div className="text-center">
                     <Link
-                      href={`/collections/${selectedCategory.slug || selectedCategory.id}`}
+                      href={`/us/collections/${selectedCategory.slug || selectedCategory.id}`}
                       className="inline-flex items-center gap-2 px-8 py-3 bg-[#2b2b2b] text-white font-semibold rounded-lg hover:bg-black transition-colors"
                     >
                       Explore {selectedCategory.name}

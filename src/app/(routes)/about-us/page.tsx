@@ -7,7 +7,7 @@ import Button from "../../ui/button"
 
 export const metadata: Metadata = {
   title: "About Us - Our Story and Mission | FINEYST",
-  description: "Learn about our story, mission, and the team behind FINEYST.",
+  description: "Discover FINEYST's journey since 2010 - our sustainable fashion mission, passionate team, and commitment to quality craftsmanship. Learn about our values and vision for the future.",
   alternates: {
     canonical: "https://www.fineystjackets.com/us/about-us"
   }
@@ -133,7 +133,7 @@ export default function AboutUsPage() {
               </p>
               <div className="mt-8">
                 <Button size="lg" className="mr-4 bg-[#eaeaea] hover:bg-[#f6f6f6] text-black rounded-none" asChild>
-                  <Link href="/shop">Shop Collection</Link>
+                  <Link href="/us/shop">Shop Collection</Link>
                 </Button>
                 <Button
                   variant="blackInvert"
@@ -141,7 +141,7 @@ export default function AboutUsPage() {
                   className="rounded-none"
                   asChild
                 >
-                  <Link href="/blogs">Learn More</Link>
+                  <Link href="/us/blogs">Read Our Blog Articles</Link>
                 </Button>
               </div>
             </div>
@@ -149,8 +149,9 @@ export default function AboutUsPage() {
               <Image
                 src="/images/about-us/our-mission.webp"
                 alt="Our sustainable practices"
-                fill
-                className="object-cover"
+                width={600}
+                height={400}
+                className="object-cover w-full h-full"
               />
             </div>
           </div>
@@ -233,12 +234,13 @@ export default function AboutUsPage() {
               },
             ].map((member, index) => (
               <div key={index} className="group">
-                <div className="relative h-[300px]  overflow-hidden mb-4 transition-all duration-300 group-hover:shadow-xl">
+                <div className="relative h-[300px] w-full aspect-[3/4] overflow-hidden mb-4 transition-all duration-300 group-hover:shadow-xl">
                   <Image
                     src={member.image || "/placeholder.svg"}
                     alt={member.name}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    width={300}
+                    height={400}
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
@@ -267,8 +269,8 @@ export default function AboutUsPage() {
             <div className="space-y-16">
               {/* 2010 - Left */}
               <div className="relative md:grid md:grid-cols-2 items-center">
-                <div className="hidden md:block">
-                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mr-8 ml-auto">
+                <div>
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 md:mr-8 md:ml-auto">
                     <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
                       2010
                     </span>
@@ -284,18 +286,7 @@ export default function AboutUsPage() {
 
                 <div className="hidden md:block"></div>
 
-                <div className="md:hidden">
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
-                      2010
-                    </span>
-                    <h3 className="text-xl font-bold mb-2">The Beginning</h3>
-                    <p className="text-muted-foreground">
-                      FINEYST was founded with a simple mission: to create sustainable fashion that doesn't compromise
-                      on style.
-                    </p>
-                  </div>
-                </div>
+
               </div>
 
               <div className="relative md:grid md:grid-cols-2 items-center">
@@ -303,8 +294,8 @@ export default function AboutUsPage() {
 
                 <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#2b2b2b] rounded-full hidden md:block"></div>
 
-                <div className="hidden md:block">
-                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ml-8">
+                <div>
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 md:ml-8">
                     <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
                       2015
                     </span>
@@ -316,23 +307,12 @@ export default function AboutUsPage() {
                   </div>
                 </div>
 
-                <div className="md:hidden">
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
-                      2015
-                    </span>
-                    <h3 className="text-xl font-bold mb-2">Going Global</h3>
-                    <p className="text-muted-foreground">
-                      We expanded our operations to reach customers worldwide, bringing our sustainable fashion to new
-                      markets.
-                    </p>
-                  </div>
-                </div>
+
               </div>
 
               <div className="relative md:grid md:grid-cols-2 items-center">
-                <div className="hidden md:block">
-                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mr-8 ml-auto">
+                <div>
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 md:mr-8 md:ml-auto">
                     <span className="inline-block px-3 py-1 bg-[#eaeaea] text-black rounded-full text-sm font-medium mb-3">
                       2018
                     </span>
@@ -347,17 +327,7 @@ export default function AboutUsPage() {
 
                 <div className="hidden md:block"></div>
 
-                <div className="md:hidden">
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <span className="inline-block px-3 py-1 bg-[#EAEAEA] text-black rounded-full text-sm font-medium mb-3">
-                      2018
-                    </span>
-                    <h3 className="text-xl font-bold mb-2">Sustainability Pledge</h3>
-                    <p className="text-muted-foreground">
-                      We committed to using 100% sustainable materials by 2025, setting a new standard in the industry.
-                    </p>
-                  </div>
-                </div>
+
               </div>
 
               <div className="relative md:grid md:grid-cols-2 items-center">
@@ -365,8 +335,8 @@ export default function AboutUsPage() {
 
                 <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full hidden md:block"></div>
 
-                <div className="hidden md:block">
-                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ml-8">
+                <div>
+                  <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 md:ml-8">
                     <span className="inline-block px-3 py-1 bg-[#EAEAEA] text-black rounded-full text-sm font-medium mb-3">
                       2023
                     </span>
@@ -377,17 +347,7 @@ export default function AboutUsPage() {
                   </div>
                 </div>
 
-                <div className="md:hidden">
-                  <div className="bg-white p-6 rounded-lg shadow-md">
-                    <span className="inline-block px-3 py-1 bg-[#EAEAEA] text-black rounded-full text-sm font-medium mb-3">
-                      2023
-                    </span>
-                    <h3 className="text-xl font-bold mb-2">Innovation Hub</h3>
-                    <p className="text-muted-foreground">
-                      We launched our innovation center to develop new sustainable fabrics and manufacturing processes.
-                    </p>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -396,13 +356,13 @@ export default function AboutUsPage() {
 
       <Container>
         <section className="py-16 md:py-24 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Join Our Journey</h2>
+          <span className="text-3xl md:text-4xl font-bold mb-6">Join Our Journey</span>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
             Be part of our story as we continue to redefine sustainable fashion for the future.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button size="lg" className="bg-[#EAEAEA] hover:bg-[#eaeaea] text-black rounded-none" asChild>
-              <Link href="/shop">Explore Collection</Link>
+              <Link href="/us/shop">Explore Collection</Link>
             </Button>
             <Button
               variant="blackInvert"
@@ -410,7 +370,7 @@ export default function AboutUsPage() {
               className="rounded-none"
               asChild
             >
-              <Link href="/contact-us">Get in Touch</Link>
+              <Link href="/us/contact-us">Get in Touch</Link>
             </Button>
           </div>
         </section>
