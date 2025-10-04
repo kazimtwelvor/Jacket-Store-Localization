@@ -157,7 +157,7 @@ const ReviewCard = ({ review, showH3 = true }: { review: (typeof reviews)[0]; sh
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-left ">
                     <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
-                        <Image src={review.image || "/placeholder.svg"} alt={review.name} fill className="object-cover" />
+                        <Image src={review.image || "/placeholder.svg"} alt={review.name} width={40} height={40} className="object-cover w-full h-full" />
                     </div>
                     <div>
                         <div className="flex mb-1">
@@ -173,7 +173,7 @@ const ReviewCard = ({ review, showH3 = true }: { review: (typeof reviews)[0]; sh
                     </div>
                 </div>
                 <div className="relative w-20 h-12">
-                    <Image src="/images/reviews/google-trusted-badge.png" alt="Google Trusted Reviews" fill className="object-contain" />
+                    <Image src="/images/reviews/google-trusted-badge.png" alt="Google Trusted Reviews" width={80} height={48} className="object-contain w-full h-full" />
                 </div>
             </div>
             <div className="mb-3 mt-3">
@@ -249,7 +249,7 @@ export default function AnimatedReviewsSection() {
                             <div key={review.id} className="bg-[#1a1a1a] p-6 rounded-lg shadow-md">
                                 <div className="flex items-center mb-4">
                                     <div className="relative w-10 h-10 rounded-full overflow-hidden mr-3">
-                                        <Image src={review.image || "/placeholder.svg"} alt={review.name} fill className="object-cover" />
+                                        <Image src={review.image || "/placeholder.svg"} alt={review.name} width={40} height={40} className="object-cover w-full h-full" />
                                     </div>
                                     <div>
                                         <h3 className="font-semibold text-white">{review.name}</h3>

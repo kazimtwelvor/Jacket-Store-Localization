@@ -169,8 +169,9 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
                           post.imageUrl || `/placeholder.svg?height=400&width=600&query=${encodeURIComponent(post.title || 'blog post')}`
                         }
                         alt={post.title || 'Blog post'}
-                        fill
-                        className="object-cover transition-transform group-hover:scale-105"
+                        width={600}
+                        height={400}
+                        className="object-cover w-full h-full transition-transform group-hover:scale-105"
                       />
                     </div>
                     <div className="flex-1 p-6 flex flex-col">
