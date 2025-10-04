@@ -32,7 +32,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 <li>
                   <Link
                     href="/collections/womens-leather-bomber-jackets"
-                    className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                    className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
                     Leather Jackets
@@ -102,7 +102,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 <li>
                   <Link
                     href="/collections/womens-shearling-coats"
-                    className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                    className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
                     Shearling Coats

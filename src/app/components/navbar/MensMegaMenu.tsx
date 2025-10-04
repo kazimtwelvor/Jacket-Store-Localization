@@ -32,7 +32,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 <li>
                   <Link
                     href="/collections/leather-bomber-jacket-mens"
-                    className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                    className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
                     Leather Jackets
@@ -102,7 +102,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 <li>
                   <Link
                     href="/collections/mens-leather-dusters"
-                    className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
+                    className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
                     Leather Dusters
