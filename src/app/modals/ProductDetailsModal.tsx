@@ -53,13 +53,13 @@ const ProductDetailsModal = ({ isOpen, onClose, product }: ProductDetailsModalPr
             <div className="p-4 space-y-6">
               {/* Product Name */}
               <div>
-                <h3 className="font-bold text-xl mb-2">{product.name}</h3>
+                <span className="font-bold text-xl mb-2">{product.name}</span>
                 <p className="text-gray-600">SKU: {product.sku || "N/A"}</p>
               </div>
 
               {/* Description */}
               <div>
-                <h4 className="font-semibold text-[#2b2b2b] mb-3">Description</h4>
+                <h2 className="font-semibold text-[#2b2b2b] mb-3">Description</h2>
                 <div 
                   className="text-gray-700 leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: product.description || "No description available" }}

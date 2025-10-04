@@ -212,7 +212,7 @@ export default function SizeChart() {
     return (
       <div className="space-y-8">
         <div className="mb-8">
-          <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-[#2b2b2b]">Size Charts</h3>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-[#2b2b2b]">Size Charts</h2>
           <p className="text-muted-foreground max-w-3xl">
             Find the perfect size for all our products with our detailed size charts.
           </p>
@@ -285,7 +285,7 @@ export default function SizeChart() {
       viewport={{ once: true }}
       className="space-y-8"
     >
-      <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-[#2b2b2b]">Size Charts</h3>
+      <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-[#2b2b2b]">Size Charts</h2>
       <p className="text-[#666666] max-w-3xl mb-6">
         Find the perfect size for all our products with our detailed size charts.
       </p>

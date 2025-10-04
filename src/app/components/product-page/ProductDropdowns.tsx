@@ -183,7 +183,7 @@ const ProductDropdowns = ({
                     {review.title && <h4 className="font-medium text-sm mb-1">{review.title}</h4>}
                     <p className="text-sm text-gray-700">{review.comment}</p>
                     {review.photoUrl && (
-                      <img src={review.photoUrl} alt="Review photo" className="mt-2 w-16 h-16 object-cover rounded" />
+                      <img src={review.photoUrl} alt="Review photo" width={64} height={64} className="mt-2 w-16 h-16 object-cover rounded" />
                     )}
                   </div>
                 ))}

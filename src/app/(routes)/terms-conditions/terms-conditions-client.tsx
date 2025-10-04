@@ -129,7 +129,6 @@ export default function TermsConditionsClient() {
 
           <div className="container mx-auto px-4 py-12 md:py-20 relative z-10">
             <div className="max-w-5xl mx-auto text-center">
-              <h1 className="text-3xl md:text-5xl font-bold mb-4  text-black">Terms & Conditions</h1>
               <p className="text-lg text-black mb-8 max-w-3xl mx-auto">
                 Our commitment to transparency and fairness. These terms outline our relationship and responsibilities
                 to each other.
@@ -215,7 +214,6 @@ export default function TermsConditionsClient() {
           <div className="lg:w-3/4 w-full">
             <div className="bg-white rounded-lg shadow-sm border  border-[#2b2b2b] p-6 md:p-8">
               <div className="prose prose-slate max-w-none">
-                <h1 className="text-3xl font-bold mb-8  text-black">Terms & Conditions</h1>
                 <p className="text-black mb-6">Last updated: April 20, 2025</p>
 
                 <div className="mb-8">
@@ -360,7 +358,7 @@ export default function TermsConditionsClient() {
               transition={{ duration: 0.5 }}
               className="prose prose-slate max-w-none"
             >
-              <h2 className="text-3xl font-bold mb-8text-black">Introduction</h2>
+              <span className="text-3xl font-bold mb-8text-black">Introduction</span>
               <p className="text-black mb-6">Last updated: April 20, 2025</p>
 
               <div className="mb-8">

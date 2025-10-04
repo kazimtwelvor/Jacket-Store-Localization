@@ -115,8 +115,14 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
         <Container>
           <div className="max-w-2xl mx-auto text-center">
             <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#2b2b2b]">Fashion Insights & Style Guide</h1>
-            <p className="text-lg text-muted-foreground mb-8">
-              Discover the latest trends, styling tips, and expert advice on premium fashion.
+            <p className="text-lg text-muted-foreground mb-6">
+              Welcome to our comprehensive fashion blog, where style meets substance and luxury meets accessibility. Discover the latest trends, expert styling tips, and insider knowledge about premium fashion and outerwear.
+            </p>
+            <p className="text-base text-muted-foreground mb-6">
+              Our curated collection of articles covers everything from seasonal fashion trends to timeless wardrobe essentials. Whether you're looking for guidance on choosing the perfect leather jacket, understanding fabric quality, or mastering the art of layering, our expert team provides valuable insights to elevate your personal style.
+            </p>
+            <p className="text-base text-muted-foreground mb-8">
+              From runway inspirations to street style photography, we bring you the most relevant fashion content. Our blog features detailed product guides, styling tutorials, care instructions for luxury garments, and exclusive behind-the-scenes content from the fashion industry. Stay informed about emerging designers, sustainable fashion practices, and the latest innovations in outerwear technology. Join our community of fashion enthusiasts and discover how to build a wardrobe that reflects your unique personality while maintaining the highest standards of quality and craftsmanship.
             </p>
             <div className="relative max-w-md mx-auto">
               <input
@@ -163,8 +169,9 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
                           post.imageUrl || `/placeholder.svg?height=400&width=600&query=${encodeURIComponent(post.title || 'blog post')}`
                         }
                         alt={post.title || 'Blog post'}
-                        fill
-                        className="object-cover transition-transform group-hover:scale-105"
+                        width={600}
+                        height={400}
+                        className="object-cover w-full h-full transition-transform group-hover:scale-105"
                       />
                     </div>
                     <div className="flex-1 p-6 flex flex-col">
@@ -220,7 +227,7 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
       <div className="bg-[#eaeaea] py-16">
         <Container>
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#2b2b2b]">Stay Updated with Fashion Insights</h2>
+            <h3 className="text-2xl md:text-3xl font-bold mb-4 text-[#2b2b2b]">Stay Updated with Fashion Insights</h3>
             <p className="text-muted-foreground mb-8">
               Subscribe to our newsletter to receive the latest articles, style guides, and exclusive offers directly to
               your inbox.

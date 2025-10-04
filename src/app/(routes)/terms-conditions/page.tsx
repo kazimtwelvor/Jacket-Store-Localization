@@ -82,9 +82,20 @@ export default function TermsConditionsPage() {
               <h2 className="text-3xl font-bold mb-8 text-black">Introduction</h2>
               <p className="text-gray-600 mb-6">Last updated: April 20, 2025</p>
               <div className="mb-8">
+                <p className="text-gray-700 mb-4">
+                  Welcome to Fineyst, your premier destination for luxury jackets and outerwear. These comprehensive Terms & Conditions govern your use of our website, services, and products. By accessing our platform or making a purchase, you agree to comply with these terms.
+                </p>
+                <p className="text-gray-700 mb-4">
+                  Our commitment to quality extends beyond our products to include transparent business practices and clear customer guidelines. These terms outline your rights and responsibilities as a valued customer, ensuring a secure and satisfactory shopping experience.
+                </p>
+                <p className="text-gray-700 mb-4">
+                  We regularly update these terms to reflect changes in our services and legal requirements. Your continued use of our website constitutes acceptance of any modifications. For questions about these terms, our customer service team is available to provide clarification and support.
+                </p>
+                <p className="text-gray-700 mb-4">
+                  Please review our Privacy Policy, Return Policy, and Shipping Information for additional details about your shopping experience. We appreciate your trust in Fineyst and look forward to serving you with exceptional products and service that exceed your expectations in luxury fashion.
+                </p>
                 <p className="text-gray-700">
-                  Welcome to Fineyst. These Terms & Conditions govern your use of our website, services, and products.
-                  Please read these terms carefully before making a purchase or using our services.
+                  By proceeding with your purchase, you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions in their entirety.
                 </p>
               </div>
             </div>

@@ -149,8 +149,9 @@ export default function AboutUsPage() {
               <Image
                 src="/images/about-us/our-mission.webp"
                 alt="Our sustainable practices"
-                fill
-                className="object-cover"
+                width={600}
+                height={400}
+                className="object-cover w-full h-full"
               />
             </div>
           </div>
@@ -237,8 +238,9 @@ export default function AboutUsPage() {
                   <Image
                     src={member.image || "/placeholder.svg"}
                     alt={member.name}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    width={300}
+                    height={400}
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>

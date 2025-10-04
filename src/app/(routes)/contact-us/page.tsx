@@ -235,7 +235,7 @@ export default function ContactUsPage() {
       <div className="bg-[#eaeaea] py-16">
         <Container>
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">Our Customer Support</h3>
+            <h2 className="text-3xl font-bold mb-4">Our Customer Support</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               We're committed to providing exceptional customer service through multiple support channels.
             </p>
@@ -287,7 +287,7 @@ export default function ContactUsPage() {
       <div className="bg-gray-50 py-16">
         <Container>
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold mb-4">Frequently Asked Questions</h3>
+            <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Find quick answers to common questions about our services.
             </p>

@@ -197,7 +197,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
     <div className="w-full pl-4 pr-0 sm:pl-6 md:pl-8 lg:px-8 mb-8 md:mb-12 mt-16 h-auto">
       <div className="relative">
         <div className="flex justify-between items-center mb-4 pr-4 sm:pr-6 md:pr-0">
-          <span className="text-xl font-bold">You'll Also Love</span>
+          <h2 className="text-xl font-bold">You'll Also Love</h2>
 
           {/* Mobile Arrows - Updated Style */}
           <div className="md:hidden flex items-center gap-2">
@@ -248,8 +248,9 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                   <Image
                     src={(product.images?.[0] as any)?.url || "/placeholder.svg"}
                     alt={product.name}
-                    fill
-                    className="object-cover object-top transition-all duration-300"
+                    width={250}
+                    height={375}
+                    className="object-cover object-top w-full h-full transition-all duration-300"
                     sizes="250px"
                   />
                   {loadingProducts.has(`${product.id}-${index}`) && (
@@ -488,9 +489,10 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                     <Image
                       src={hoveredProduct === `love-${product.id}-${index}` && (product.images?.[1] as any)?.url ? (product.images[1] as any).url : ((product.images?.[0] as any)?.url || "/placeholder.svg")}
                       alt={product.name}
-                      fill
+                      width={300}
+                      height={450}
                       className={cn(
-                        "object-cover object-top transition-all duration-300 pointer-events-none select-none",
+                        "object-cover object-top w-full h-full transition-all duration-300 pointer-events-none select-none",
                         hoveredProduct === `love-${product.id}-${index}` && (product.images?.[1] as any)?.url ? "scale-110" : "scale-100"
                       )}
                       sizes="(max-width: 768px) 33vw, (max-width: 1280px) 33vw, 25vw"

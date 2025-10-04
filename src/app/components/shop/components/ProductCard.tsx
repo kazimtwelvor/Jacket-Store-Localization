@@ -103,8 +103,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               <Image
                 src={isHovered && hasMultipleImages ? product.images[1].url : product.images?.[0]?.url || "/placeholder.svg"}
                 alt={product.name}
-                fill
-                className={cn("object-cover object-top transition-all duration-300", isHovered && hasMultipleImages ? "scale-110" : "scale-100")}
+                width={300}
+                height={500}
+                className={cn("object-cover object-top transition-all duration-300 w-full h-full", isHovered && hasMultipleImages ? "scale-110" : "scale-100")}
                 sizes="(max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
               />
             </Link>
