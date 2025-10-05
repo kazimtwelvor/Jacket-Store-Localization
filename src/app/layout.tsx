@@ -12,6 +12,7 @@ import RouteLoadingOverlay from "@/src/app/components/layout/route-loading-overl
 import CartSidebarWrapper from "./components/layout/cart-sidebar-wrapper";
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import CustomChatButton from "./components/custom-chat-button";
 
 export const metadata: Metadata = {
   title: 'Premium Jackets & Outerwear | Fineyst Jackets',
@@ -124,6 +125,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <CartSidebarWrapper />
                 </CartProvider>
             {/* </Suspense> */}
+            <CustomChatButton/>
           </ClarityProvider>
         </FontProvider>
       </body>

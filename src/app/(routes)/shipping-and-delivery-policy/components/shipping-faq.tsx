@@ -23,11 +23,6 @@ export default function ShippingFAQ() {
         "Once your order ships, you'll receive a shipping confirmation email with a tracking number and link. You can also track your order by logging into your account and viewing your order history.",
     },
     {
-      question: "Do you ship internationally?",
-      answer:
-        "Yes, we ship to over 180 countries worldwide. International shipping rates and delivery times vary by location. Please note that customers are responsible for any customs fees, import taxes, or duties that may apply.",
-    },
-    {
       question: "What if my package is lost or damaged?",
       answer:
         "If your package is lost or damaged during transit, please contact our customer service team within 14 days of the expected delivery date. We'll work with the shipping carrier to locate your package or process a replacement shipment.",
@@ -36,11 +31,6 @@ export default function ShippingFAQ() {
       question: "Can I change my shipping address after placing an order?",
       answer:
         "We can only change the shipping address if the order hasn't been processed yet. Please contact our customer service team immediately if you need to update your shipping address. Once an order has been shipped, we cannot redirect it to a different address.",
-    },
-    {
-      question: "Do you offer expedited shipping options?",
-      answer:
-        "Yes, we offer express shipping options at checkout for customers who need their orders more quickly. Express shipping typically delivers within 2-3 business days for domestic orders, depending on your location.",
     },
   ]
 
