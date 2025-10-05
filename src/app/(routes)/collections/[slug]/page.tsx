@@ -10,6 +10,7 @@ import CategoryPageClient from "./page-client";
 import { notFound } from "next/navigation";
 import type { Metadata, ResolvingMetadata } from "next";
 import StructuredData from "../../../components/layout/structured-data-layout";
+import CollectionSchema from "../../../components/schema/collection-schema";
 // import { Suspense } from "react";
 
 interface CategoryPageProps {
@@ -231,6 +232,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
 
     return (
       <div className="min-h-screen bg-white">
+        <CollectionSchema collectionName={keywordCategory.name} collectionSlug={slug} />
         <StructuredData data={keywordStructuredData} />
         <CategoryPageClient
           category={categoryForClient}
