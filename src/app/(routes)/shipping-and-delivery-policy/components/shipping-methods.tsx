@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Truck, Zap, Plane } from "lucide-react"
+import { Truck } from "lucide-react"
 
 export default function ShippingMethods() {
   const [isMounted, setIsMounted] = useState(false)
@@ -39,18 +39,6 @@ export default function ShippingMethods() {
       description: "Delivery within 3-4 business days",
       features: ["Tracking included", "Signature on delivery optional", "Available for most locations"],
     },
-    {
-      icon: Zap,
-      title: "Express Shipping",
-      description: "Delivery within 2-3 business days",
-      features: ["Priority handling", "Tracking included", "Signature on delivery"],
-    },
-    {
-      icon: Plane,
-      title: "International Shipping",
-      description: "Delivery within 7-14 business days",
-      features: ["Customs clearance assistance", "Tracking included", "Available for 180+ countries"],
-    },
   ]
 
   if (!isMounted) {
@@ -59,11 +47,11 @@ export default function ShippingMethods() {
         <div className="mb-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-black-900 mb-3">Shipping Methods</h2>
           <p className="text-lg text-black-600 max-w-2xl mx-auto">
-            Choose the shipping option that best suits your needs, from standard to express delivery.
+            Choose the shipping option that best suits your needs.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-1 gap-8 max-w-md mx-auto">
           {shippingMethods.map((method, index) => (
             <div key={index} className="bg-white rounded-xl p-8 shadow-lg border border-black-100">
               <div className="w-14 h-14 rounded-full bg-[#eaeaea] flex items-center justify-center mb-6"></div>
@@ -95,7 +83,7 @@ export default function ShippingMethods() {
       >
         <h2 className="text-3xl md:text-4xl font-bold text-black-900 mb-3">Shipping Methods</h2>
         <p className="text-lg text-black-600 max-w-2xl mx-auto">
-          Choose the shipping option that best suits your needs, from standard to express delivery.
+          Choose the shipping option that best suits your needs.
         </p>
       </motion.div>
 
@@ -104,7 +92,7 @@ export default function ShippingMethods() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="grid md:grid-cols-3 gap-8"
+        className="grid md:grid-cols-1 gap-8 max-w-md mx-auto"
       >
         {shippingMethods.map((method, index) => (
           <motion.div

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import PolicyHero from "./components/policy-hero"
 import ShippingMethods from "./components/shipping-methods"
 import OrderProcessingInfo from "./components/order-processing-info"
-import DeliveryZones from "./components/delivery-zones"
 import ShippingTimeline from "./components/shipping-timeline"
 import ShippingFAQ from "./components/shipping-faq"
 import ShippingContact from "./components/shipping-contact"
@@ -28,13 +27,13 @@ export default function ShippingPolicyClient() {
                 Shipping & Delivery Policy
               </h1>
               <p className="text-lg md:text-xl text-gray-600 mb-6">
-                Fast, reliable shipping to your doorstep, anywhere in the world
+                Fast, reliable shipping to your doorstep across the United States
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 {[
                   { text: "Fast Shipping" },
                   { text: "Secure Packaging" },
-                  { text: "Global Delivery" },
+                  { text: "Reliable Delivery" },
                   { text: "Real-time Tracking" },
                 ].map((item, i) => (
                   <div key={i} className="flex flex-col items-center">
@@ -53,25 +52,15 @@ export default function ShippingPolicyClient() {
             <div className="mb-6 text-center">
               <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Shipping Methods</h3>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Choose the shipping option that best suits your needs, from standard to express delivery.
+                Choose the shipping option that best suits your needs.
               </p>
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-1 gap-8 max-w-md mx-auto">
               {[
                 {
                   title: "Standard Shipping",
                   description: "Delivery within 3-4 business days",
                   features: ["Tracking included", "Signature on delivery optional", "Available for most locations"],
-                },
-                {
-                  title: "Express Shipping",
-                  description: "Delivery within 2-3 business days",
-                  features: ["Priority handling", "Tracking included", "Signature on delivery"],
-                },
-                {
-                  title: "International Shipping",
-                  description: "Delivery within 7-14 business days",
-                  features: ["Customs clearance assistance", "Tracking included", "Available for 180+ countries"],
                 },
               ].map((method, index) => (
                 <div key={index} className="bg-white rounded-xl p-8 shadow-lg border border-red-100">
@@ -92,93 +81,6 @@ export default function ShippingPolicyClient() {
           </div>
 
 
-          <div className="py-16">
-            <div className="mb-12 text-center">
-              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Delivery Zones</h3>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                We ship to locations worldwide with varying delivery timeframes based on your region.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-red-100">
-              <div className="flex flex-col md:flex-row">
-                <div className="md:w-1/3 bg-red-50 p-6">
-                  <div className="space-y-4">
-                    <button className="w-full text-left px-4 py-3 rounded-lg bg-[#2b2b2b] text-white flex items-center">
-                      <span className="font-medium">Domestic Shipping</span>
-                    </button>
-                    <button className="w-full text-left px-4 py-3 rounded-lg bg-white text-gray-700 flex items-center">
-                      <span className="font-medium">International Shipping</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="md:w-2/3 p-8">
-                  <div className="mb-6">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Domestic Shipping</h3>
-                    <p className="text-gray-600">Fast and reliable shipping across the United States</p>
-                  </div>
-
-                  <div className="overflow-hidden">
-                    <div className="relative overflow-x-auto rounded-lg">
-                      <table className="w-full text-left">
-                        <thead className="bg-red-50 text-gray-700">
-                          <tr>
-                            <th className="px-6 py-3 font-semibold">Region</th>
-                            <th className="px-6 py-3 font-semibold">Estimated Delivery</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {[
-                            { region: "East Coast", time: "3-4 business days" },
-                            { region: "Midwest", time: "3-4 business days" },
-                            { region: "West Coast", time: "3-4 business days" },
-                            { region: "Alaska & Hawaii", time: "5-7 business days" },
-                          ].map((item, index) => (
-                            <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-red-50/30"}>
-                              <td className="px-6 py-4 font-medium">{item.region}</td>
-                              <td className="px-6 py-4">{item.time}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="sr-only" aria-hidden="true">
-              <h3>International Shipping</h3>
-              <p>Global shipping to over 180 countries</p>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Region</th>
-                    <th>Estimated Delivery</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Canada & Mexico</td>
-                    <td>5-10 business days</td>
-                  </tr>
-                  <tr>
-                    <td>Europe</td>
-                    <td>7-14 business days</td>
-                  </tr>
-                  <tr>
-                    <td>Asia & Australia</td>
-                    <td>10-15 business days</td>
-                  </tr>
-                  <tr>
-                    <td>Rest of World</td>
-                    <td>14-21 business days</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
 
           <div className="py-16">
             <div className="mb-16 text-center">
@@ -260,21 +162,18 @@ export default function ShippingPolicyClient() {
                       <thead className="bg-red-50 text-gray-700">
                         <tr>
                           <th className="px-6 py-3 font-semibold">Order Value</th>
-                          <th className="px-6 py-3 font-semibold">Standard</th>
-                          <th className="px-6 py-3 font-semibold">Express</th>
+                          <th className="px-6 py-3 font-semibold">Standard Shipping</th>
                         </tr>
                       </thead>
                       <tbody>
                         {[
-                          { order: "Orders under $50", standard: "$5.99", express: "$12.99" },
-                          { order: "Orders $50-$100", standard: "$3.99", express: "$9.99" },
-                          { order: "Orders over $100", standard: "FREE", express: "$7.99" },
-                          { order: "International", standard: "$15.99", express: "$24.99" },
+                          { order: "Orders under $50", standard: "$5.99" },
+                          { order: "Orders $50-$100", standard: "$3.99" },
+                          { order: "Orders over $100", standard: "FREE" },
                         ].map((rate, index) => (
                           <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-red-50/30"}>
                             <td className="px-6 py-4 font-medium">{rate.order}</td>
                             <td className="px-6 py-4">{rate.standard}</td>
-                            <td className="px-6 py-4">{rate.express}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -328,11 +227,6 @@ export default function ShippingPolicyClient() {
                     "Once your order ships, you'll receive a shipping confirmation email with a tracking number and link. You can also track your order by logging into your account and viewing your order history.",
                 },
                 {
-                  question: "Do you ship internationally?",
-                  answer:
-                    "Yes, we ship to over 180 countries worldwide. International shipping rates and delivery times vary by location. Please note that customers are responsible for any customs fees, import taxes, or duties that may apply.",
-                },
-                {
                   question: "What if my package is lost or damaged?",
                   answer:
                     "If your package is lost or damaged during transit, please contact our customer service team within 14 days of the expected delivery date. We'll work with the shipping carrier to locate your package or process a replacement shipment.",
@@ -341,11 +235,6 @@ export default function ShippingPolicyClient() {
                   question: "Can I change my shipping address after placing an order?",
                   answer:
                     "We can only change the shipping address if the order hasn't been processed yet. Please contact our customer service team immediately if you need to update your shipping address. Once an order has been shipped, we cannot redirect it to a different address.",
-                },
-                {
-                  question: "Do you offer expedited shipping options?",
-                  answer:
-                    "Yes, we offer express shipping options at checkout for customers who need their orders more quickly. Express shipping typically delivers within 2-3 business days for domestic orders, depending on your location.",
                 },
               ].map((faq, index) => (
                 <div key={index} className="mb-4 border border-red-100 rounded-lg overflow-hidden">
@@ -428,7 +317,6 @@ export default function ShippingPolicyClient() {
       >
         <ShippingMethods />
         <OrderProcessingInfo />
-        <DeliveryZones />
         <ShippingTimeline />
         <ShippingFAQ />
         <ShippingContact />
