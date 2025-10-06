@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useCallback, useRef } from 'react'
-import { logTrackingDebugInfo } from '@/src/app/utils/tracking-debug'
 
 interface TrackingData {
   userAgent?: string
@@ -119,7 +118,7 @@ export const useViewTracking = ({
   useEffect(() => {
     if (enabled && entityId && storeId) {
       if (process.env.NODE_ENV === 'development') {
-        logTrackingDebugInfo()
+        // logTrackingDebugInfo()
       }
       trackViewWithDelay()
     }
