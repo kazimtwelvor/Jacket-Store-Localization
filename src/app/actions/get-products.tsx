@@ -13,6 +13,10 @@ export interface Query {
   colors?: string[] | string;
   baseColors?: string[] | string;
   sizes?: string[] | string;
+  collars?: string[] | string;
+  cuffs?: string[] | string;
+  closures?: string[] | string;
+  pockets?: string[] | string;
   sort?: string;
   page?: number;
   limit?: number;
