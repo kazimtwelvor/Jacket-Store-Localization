@@ -165,6 +165,10 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         styles: params.get("styles") ? params.get("styles")!.split(",").map(s => s.trim()) : [],
         colors: params.get("colors") ? params.get("colors")!.split(",").map(s => s.trim()) : [],
         genders: params.get("genders") ? params.get("genders")!.split(",").map(s => s.trim()) : [],
+        collars: params.get("collars") ? params.get("collars")!.split(",").map(s => s.trim()) : [],
+        cuffs: params.get("cuffs") ? params.get("cuffs")!.split(",").map(s => s.trim()) : [],
+        closures: params.get("closures") ? params.get("closures")!.split(",").map(s => s.trim()) : [],
+        pockets: params.get("pockets") ? params.get("pockets")!.split(",").map(s => s.trim()) : [],
       };
     };
 
@@ -198,6 +202,10 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         styles: filterParams.styles,
         colors: filterParams.colors,
         genders: filterParams.genders,
+        collars: filterParams.collars,
+        cuffs: filterParams.cuffs,
+        closures: filterParams.closures,
+        pockets: filterParams.pockets,
         limit: 40,
         page: 1,
       })),

@@ -52,6 +52,10 @@ interface CategoryPageClientProps {
         styles: string[];
         colors: string[];
         genders: string[];
+        collars: string[];
+        cuffs: string[];
+        closures: string[];
+        pockets: string[];
     }
     initialProductCount?: number
     hasMoreProducts?: boolean
@@ -255,12 +259,20 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
         materials: string[];
         styles: string[];
         genders: string[];
+        collars: string[];
+        cuffs: string[];
+        closures: string[];
+        pockets: string[];
     }>({
         sizes: [],
         colors: [],
         materials: [],
         styles: [],
         genders: [],
+        collars: [],
+        cuffs: [],
+        closures: [],
+        pockets: [],
     })
     const [hoveredProduct, setHoveredProduct] = useState<string | null>(null)
     const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({})
@@ -340,6 +352,10 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
     const materials = ["Leather", "Denim", "Cotton", "Polyester", "Wool", "Suede"]
     const styles = ["Bomber", "Biker", "Varsity", "Aviator", "Puffer", "Trench"]
     const genders = ["Men", "Women", "Unisex"]
+    const collars = ["Rib-Knitted", "Hood", "Shirt Style", "Stand"]
+    const cuffs = ["Rib-Knitted", "Regular"]
+    const closures = ["Zippered", "Button"]
+    const pockets = ["Side Pockets", "Flap Pockets", "Chest Pockets", "Welt Pockets", "Zippered Pockets"]
 
     const filteredMaterials = materials.filter(m => m.toLowerCase().includes(materialQuery.toLowerCase()))
     const filteredStyles = styles.filter(s => s.toLowerCase().includes(styleQuery.toLowerCase()))
@@ -358,15 +374,15 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
         'suede-jackets': '/images/suede.webp'
     }
 
-    const hasActiveFilters = selectedFilters.materials.length > 0 || selectedFilters.styles.length > 0 || selectedFilters.genders.length > 0 || selectedFilters.sizes.length > 0 || selectedFilters.colors.length > 0
-    const totalActiveFiltersCount = selectedFilters.materials.length + selectedFilters.styles.length + selectedFilters.genders.length + selectedFilters.sizes.length + selectedFilters.colors.length
+    const hasActiveFilters = selectedFilters.materials.length > 0 || selectedFilters.styles.length > 0 || selectedFilters.genders.length > 0 || selectedFilters.sizes.length > 0 || selectedFilters.colors.length > 0 || selectedFilters.collars.length > 0 || selectedFilters.cuffs.length > 0 || selectedFilters.closures.length > 0 || selectedFilters.pockets.length > 0
+    const totalActiveFiltersCount = selectedFilters.materials.length + selectedFilters.styles.length + selectedFilters.genders.length + selectedFilters.sizes.length + selectedFilters.colors.length + selectedFilters.collars.length + selectedFilters.cuffs.length + selectedFilters.closures.length + selectedFilters.pockets.length
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             updateFiltersInURL(selectedFilters)
         }, 300) // Debounce filter updates
         return () => clearTimeout(timeoutId)
-    }, [selectedFilters.materials, selectedFilters.styles, selectedFilters.genders, selectedFilters.sizes, selectedFilters.colors])
+    }, [selectedFilters.materials, selectedFilters.styles, selectedFilters.genders, selectedFilters.sizes, selectedFilters.colors, selectedFilters.collars, selectedFilters.cuffs, selectedFilters.closures, selectedFilters.pockets])
 
     useEffect(() => {
         setMounted(true)
@@ -496,6 +512,30 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             return { ...prev, genders: newGenders }
         })
     }
+    const toggleCollarFilter = (collar: string) => {
+        setSelectedFilters((prev) => {
+            const newCollars = prev.collars.includes(collar) ? prev.collars.filter((c) => c !== collar) : [...prev.collars, collar]
+            return { ...prev, collars: newCollars }
+        })
+    }
+    const toggleCuffFilter = (cuff: string) => {
+        setSelectedFilters((prev) => {
+            const newCuffs = prev.cuffs.includes(cuff) ? prev.cuffs.filter((c) => c !== cuff) : [...prev.cuffs, cuff]
+            return { ...prev, cuffs: newCuffs }
+        })
+    }
+    const toggleClosureFilter = (closure: string) => {
+        setSelectedFilters((prev) => {
+            const newClosures = prev.closures.includes(closure) ? prev.closures.filter((c) => c !== closure) : [...prev.closures, closure]
+            return { ...prev, closures: newClosures }
+        })
+    }
+    const togglePocketFilter = (pocket: string) => {
+        setSelectedFilters((prev) => {
+            const newPockets = prev.pockets.includes(pocket) ? prev.pockets.filter((p) => p !== pocket) : [...prev.pockets, pocket]
+            return { ...prev, pockets: newPockets }
+        })
+    }
     const clearFilters = () => {
         setSelectedFilters({
             materials: [],
@@ -503,6 +543,10 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             genders: [],
             sizes: [],
             colors: [],
+            collars: [],
+            cuffs: [],
+            closures: [],
+            pockets: [],
         })
         // Clear URL parameters
         router.push(window.location.pathname, { scroll: false })
@@ -532,6 +576,10 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     styles: filterParams?.styles || [],
                     colors: filterParams?.colors || [],
                     genders: filterParams?.genders || [],
+                    collars: filterParams?.collars || [],
+                    cuffs: filterParams?.cuffs || [],
+                    closures: filterParams?.closures || [],
+                    pockets: filterParams?.pockets || [],
                     page: loadMorePage,
                     limit: 40,
                     sort: currentSort
@@ -570,6 +618,10 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             const materials = params.get('materials')?.split(',').filter(Boolean) || []
             const styles = params.get('styles')?.split(',').filter(Boolean) || []
             const genders = params.get('genders')?.split(',').filter(Boolean) || []
+            const collars = params.get('collars')?.split(',').filter(Boolean) || []
+            const cuffs = params.get('cuffs')?.split(',').filter(Boolean) || []
+            const closures = params.get('closures')?.split(',').filter(Boolean) || []
+            const pockets = params.get('pockets')?.split(',').filter(Boolean) || []
 
             setUrlSizes(sizes)
             setUrlColors(colors)
@@ -584,10 +636,14 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                 materials,
                 styles,
                 genders,
+                collars,
+                cuffs,
+                closures,
+                pockets,
             })
         }
     }, [])
-    const updateFiltersInURL = (newFilters: { materials: string[], styles: string[], genders: string[], sizes: string[], colors: string[] }) => {
+    const updateFiltersInURL = (newFilters: { materials: string[], styles: string[], genders: string[], sizes: string[], colors: string[], collars: string[], cuffs: string[], closures: string[], pockets: string[] }) => {
         const params = new URLSearchParams(window.location.search)
         if (newFilters.materials.length > 0) {
             params.set('materials', newFilters.materials.join(','))
@@ -613,6 +669,26 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             params.set('colors', newFilters.colors.join(','))
         } else {
             params.delete('colors')
+        }
+        if (newFilters.collars.length > 0) {
+            params.set('collars', newFilters.collars.join(','))
+        } else {
+            params.delete('collars')
+        }
+        if (newFilters.cuffs.length > 0) {
+            params.set('cuffs', newFilters.cuffs.join(','))
+        } else {
+            params.delete('cuffs')
+        }
+        if (newFilters.closures.length > 0) {
+            params.set('closures', newFilters.closures.join(','))
+        } else {
+            params.delete('closures')
+        }
+        if (newFilters.pockets.length > 0) {
+            params.set('pockets', newFilters.pockets.join(','))
+        } else {
+            params.delete('pockets')
         }
         router.push(`?${params.toString()}`, { scroll: false })
     }
@@ -698,20 +774,47 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             const productStyles = ((p as any).styles || []).map((s: any) => String(s.name || s).trim().toLowerCase())
             const productGender = normalizeGender((p as any).gender || '')
 
+            let productCollars: string[] = []
+            let productCuffs: string[] = []
+            let productClosures: string[] = []
+            let productPockets: string[] = []
+            
+            if ((p as any).specifications) {
+                try {
+                    const specifications = typeof (p as any).specifications === 'string' 
+                        ? JSON.parse((p as any).specifications) 
+                        : (p as any).specifications
+                    
+                    productCollars = specifications.collar ? specifications.collar.map((c: any) => String(c).trim().toLowerCase()) : []
+                    productCuffs = specifications.cuffs ? specifications.cuffs.map((c: any) => String(c).trim().toLowerCase()) : []
+                    productClosures = specifications.closure ? specifications.closure.map((c: any) => String(c).trim().toLowerCase()) : []
+                    productPockets = specifications.pockets ? specifications.pockets.map((c: any) => String(c).trim().toLowerCase()) : []
+                } catch (e) {
+                }
+            }
+
             const wantedMaterials = selectedFilters.materials.map(v => String(v).trim().toLowerCase())
             const wantedStyles = selectedFilters.styles.map(v => String(v).trim().toLowerCase())
             const wantedGenders = selectedFilters.genders.map(v => String(v).trim().toLowerCase())
             const wantedSizes = selectedFilters.sizes.map(v => String(v).trim().toLowerCase())
             const wantedColors = selectedFilters.colors.map(v => String(v).trim().toLowerCase())
+            const wantedCollars = selectedFilters.collars.map(v => String(v).trim().toLowerCase())
+            const wantedCuffs = selectedFilters.cuffs.map(v => String(v).trim().toLowerCase())
+            const wantedClosures = selectedFilters.closures.map(v => String(v).trim().toLowerCase())
+            const wantedPockets = selectedFilters.pockets.map(v => String(v).trim().toLowerCase())
 
             const matchesMaterials = wantedMaterials.length === 0 || wantedMaterials.some(material => productMaterials.includes(material))
             const matchesStyles = wantedStyles.length === 0 || wantedStyles.some(style => productStyles.includes(style))
             const matchesGenders = wantedGenders.length === 0 || wantedGenders.some(gender => normalizeGender(gender) === productGender)
             const matchesSizes = wantedSizes.length === 0 || wantedSizes.some(size => productSizes.includes(size))
             const matchesColors = wantedColors.length === 0 || wantedColors.some(color => productColors.includes(color))
+            const matchesCollars = wantedCollars.length === 0 || wantedCollars.some(collar => productCollars.includes(collar))
+            const matchesCuffs = wantedCuffs.length === 0 || wantedCuffs.some(cuff => productCuffs.includes(cuff))
+            const matchesClosures = wantedClosures.length === 0 || wantedClosures.some(closure => productClosures.includes(closure))
+            const matchesPockets = wantedPockets.length === 0 || wantedPockets.some(pocket => productPockets.includes(pocket))
             const matchesGender = categoryGender === '' || productGender === categoryGender
 
-            return matchesMaterials && matchesStyles && matchesGenders && matchesSizes && matchesColors && matchesGender
+            return matchesMaterials && matchesStyles && matchesGenders && matchesSizes && matchesColors && matchesCollars && matchesCuffs && matchesClosures && matchesPockets && matchesGender
         }
 
         let filtered = loadedProducts.filter(filterBySelections)
@@ -772,19 +875,48 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                 }
                 const productGender = normalizeGender((p as any).gender || '')
 
+                // Parse specifications for collars, cuffs, closures, pockets
+                let productCollars: string[] = []
+                let productCuffs: string[] = []
+                let productClosures: string[] = []
+                let productPockets: string[] = []
+                
+                if ((p as any).specifications) {
+                    try {
+                        const specifications = typeof (p as any).specifications === 'string' 
+                            ? JSON.parse((p as any).specifications) 
+                            : (p as any).specifications
+                        
+                        productCollars = specifications.collar ? specifications.collar.map((c: any) => String(c).trim().toLowerCase()) : []
+                        productCuffs = specifications.cuffs ? specifications.cuffs.map((c: any) => String(c).trim().toLowerCase()) : []
+                        productClosures = specifications.closure ? specifications.closure.map((c: any) => String(c).trim().toLowerCase()) : []
+                        productPockets = specifications.pockets ? specifications.pockets.map((c: any) => String(c).trim().toLowerCase()) : []
+                    } catch (e) {
+                        // If parsing fails, use empty arrays
+                    }
+                }
+
                 const wantedMaterials = selectedFilters.materials.map(v => String(v).trim().toLowerCase())
                 const wantedStyles = selectedFilters.styles.map(v => String(v).trim().toLowerCase())
                 const wantedGenders = selectedFilters.genders.map(v => String(v).trim().toLowerCase())
                 const wantedSizes = selectedFilters.sizes.map(v => String(v).trim().toLowerCase())
                 const wantedColors = selectedFilters.colors.map(v => String(v).trim().toLowerCase())
+                const wantedCollars = selectedFilters.collars.map(v => String(v).trim().toLowerCase())
+                const wantedCuffs = selectedFilters.cuffs.map(v => String(v).trim().toLowerCase())
+                const wantedClosures = selectedFilters.closures.map(v => String(v).trim().toLowerCase())
+                const wantedPockets = selectedFilters.pockets.map(v => String(v).trim().toLowerCase())
 
                 const matchesMaterials = wantedMaterials.length === 0 || wantedMaterials.some(material => productMaterials.includes(material))
                 const matchesStyles = wantedStyles.length === 0 || wantedStyles.some(style => productStyles.includes(style))
                 const matchesGenders = wantedGenders.length === 0 || wantedGenders.some(gender => normalizeGender(gender) === productGender)
                 const matchesSizes = wantedSizes.length === 0 || wantedSizes.some(size => productSizes.includes(size))
                 const matchesColors = wantedColors.length === 0 || wantedColors.some(color => productColors.includes(color))
+                const matchesCollars = wantedCollars.length === 0 || wantedCollars.some(collar => productCollars.includes(collar))
+                const matchesCuffs = wantedCuffs.length === 0 || wantedCuffs.some(cuff => productCuffs.includes(cuff))
+                const matchesClosures = wantedClosures.length === 0 || wantedClosures.some(closure => productClosures.includes(closure))
+                const matchesPockets = wantedPockets.length === 0 || wantedPockets.some(pocket => productPockets.includes(pocket))
 
-                return matchesMaterials && matchesStyles && matchesGenders && matchesSizes && matchesColors
+                return matchesMaterials && matchesStyles && matchesGenders && matchesSizes && matchesColors && matchesCollars && matchesCuffs && matchesClosures && matchesPockets
             }
             
             const newFiltered = loadedProducts.filter(filterBySelections)
@@ -1129,7 +1261,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                                 <div className="px-6 py-3 bg-white border-b border-gray-100">
                                     <div className="flex items-start justify-between gap-3">
                                         <div className="flex flex-wrap gap-2 flex-1">
-                                            {(['materials', 'styles', 'genders', 'sizes', 'colors'] as const).map(group =>
+                                            {(['materials', 'styles', 'genders', 'sizes', 'colors', 'collars', 'cuffs', 'closures', 'pockets'] as const).map(group =>
                                                 selectedFilters[group].map((value) => (
                                                     <span
                                                         key={`${group}-${value}`}
@@ -1143,6 +1275,10 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                                                                 if (group === 'genders') toggleGenderFilter(value)
                                                                 if (group === 'sizes') toggleSizeFilter(value)
                                                                 if (group === 'colors') toggleColorFilter(value)
+                                                                if (group === 'collars') toggleCollarFilter(value)
+                                                                if (group === 'cuffs') toggleCuffFilter(value)
+                                                                if (group === 'closures') toggleClosureFilter(value)
+                                                                if (group === 'pockets') togglePocketFilter(value)
                                                             }}
                                                             className="w-4 h-4  bg-gray-300 text-gray-700 hover:bg-gray-400 transition-colors flex items-center justify-center"
                                                         >
@@ -1280,6 +1416,86 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                                         ))}
                                     </div>
                                 </div>
+
+                                {/* <div>
+                                    <h3 className="text-base font-semibold text-gray-900 mb-3">Collars</h3>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {collars.map((collar) => (
+                                            <button
+                                                key={collar}
+                                                onClick={() => toggleCollarFilter(collar)}
+                                                className={cn(
+                                                    "px-3 py-2 text-sm font-medium transition-colors border",
+                                                    selectedFilters.collars.includes(collar)
+                                                        ? "bg-gray-900 text-white border-gray-900"
+                                                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                                                )}
+                                            >
+                                                {collar}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h3 className="text-base font-semibold text-gray-900 mb-3">Cuffs</h3>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {cuffs.map((cuff) => (
+                                            <button
+                                                key={cuff}
+                                                onClick={() => toggleCuffFilter(cuff)}
+                                                className={cn(
+                                                    "px-3 py-2 text-sm font-medium transition-colors border",
+                                                    selectedFilters.cuffs.includes(cuff)
+                                                        ? "bg-gray-900 text-white border-gray-900"
+                                                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                                                )}
+                                            >
+                                                {cuff}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h3 className="text-base font-semibold text-gray-900 mb-3">Closures</h3>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {closures.map((closure) => (
+                                            <button
+                                                key={closure}
+                                                onClick={() => toggleClosureFilter(closure)}
+                                                className={cn(
+                                                    "px-3 py-2 text-sm font-medium transition-colors border",
+                                                    selectedFilters.closures.includes(closure)
+                                                        ? "bg-gray-900 text-white border-gray-900"
+                                                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                                                )}
+                                            >
+                                                {closure}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h3 className="text-base font-semibold text-gray-900 mb-3">Pockets</h3>
+                                    <div className="grid grid-cols-1 gap-2">
+                                        {pockets.map((pocket) => (
+                                            <button
+                                                key={pocket}
+                                                onClick={() => togglePocketFilter(pocket)}
+                                                className={cn(
+                                                    "px-3 py-2 text-sm font-medium transition-colors border",
+                                                    selectedFilters.pockets.includes(pocket)
+                                                        ? "bg-gray-900 text-white border-gray-900"
+                                                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                                                )}
+                                            >
+                                                {pocket}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div> */}
                             </div>
 
                             {/* Footer */}

@@ -11,6 +11,10 @@ interface Query {
     genders?: string[] | string
     colors?: string[] | string
     sizes?: string[] | string
+    collars?: string[] | string
+    cuffs?: string[] | string
+    closures?: string[] | string
+    pockets?: string[] | string
     sort?: string
     page?: number
     limit?: number
@@ -69,6 +73,14 @@ const buildQueryParams = (query: Query): Record<string, any> => {
     if (colors) params.colors = colors
     const sizes = asCSV(query.sizes)
     if (sizes) params.sizes = sizes
+    const collars = asCSV(query.collars)
+    if (collars) params.collars = collars
+    const cuffs = asCSV(query.cuffs)
+    if (cuffs) params.cuffs = cuffs
+    const closures = asCSV(query.closures)
+    if (closures) params.closures = closures
+    const pockets = asCSV(query.pockets)
+    if (pockets) params.pockets = pockets
     if (query.sort) params.sort = query.sort
     if (query.limit) params.limit = query.limit
 
