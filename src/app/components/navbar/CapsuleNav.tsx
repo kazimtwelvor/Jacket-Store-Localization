@@ -10,11 +10,10 @@ import { avertaBold } from "@/src/lib/fonts";
 
 const items = [
   { id: 0, label: "HOME", isActive: true, href: "/us/" },
-  // Use query keys/values that the shop page understands
-  { id: 1, label: "LEATHER", isActive: false, category: "materials=Leather" },
-  { id: 2, label: "BOMBER", isActive: false, category: "styles=Bomber" },
-  { id: 3, label: "VARSITY", isActive: false, category: "styles=Varsity" },
-  { id: 4, label: "BIKER", isActive: false, category: "styles=Biker" },
+  { id: 1, label: "LEATHER", isActive: false, href: "/us/collections/mens-leather-jackets" },
+  { id: 2, label: "BOMBER", isActive: false, href: "/us/collections/leather-bomber-jacket-mens" },
+  { id: 3, label: "VARSITY", isActive: false, href: "/us/collections/mens-varsity-jackets" },
+  { id: 4, label: "BIKER", isActive: false, href: "/us/collections/biker-jacket-men" },
 ];
 
 export function CapsuleNav() {
@@ -172,7 +171,7 @@ export function CapsuleNav() {
           <div className="flex touch-pan-y">
             {items.map((item) => (
               <div key={item.id} className="relative mr-1">
-                <Link href={item.href ?? `/us/shop?${item.category}`}>
+                <Link href={item.href}>
                   <Button
                     variant={item.id === activeItem && activeItem !== -1 ? "destructive" : "ghost_2"}
                     className={cn(
