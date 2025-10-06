@@ -31,7 +31,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/collections/leather-bomber-jacket-mens"
+                    href="/us/collections/mens-leather-jackets"
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
