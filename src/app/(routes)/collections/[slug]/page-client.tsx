@@ -24,6 +24,8 @@ import MobileAddToCartModal from "@/src/app/modals/MobileAddToCartModal"
 import { CategorySlider } from "@/src/app/components/shop/components/CategorySlider"
 import CategorySEOSection from "@/src/app/category/category-seo-section"
 import { ProductCardWrapper } from "./components/ProductCardWrapper"
+import { useViewTracking } from "@/src/app/hooks/use-view-tracking"
+import { getStoreId, isTrackingEnabled } from "@/src/app/utils/store-config"
 
 interface KeywordCategory {
     id: string;
@@ -285,6 +287,14 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
     const [loadMorePage, setLoadMorePage] = useState(2) // Start from page 2 since page 1 is already loaded
     const [hasMore, setHasMore] = useState(hasMoreProducts)
 
+    const { trackView: trackCategoryView, hasTracked: hasTrackedCategory } = useViewTracking({
+        storeId: getStoreId(),
+        entityId: category.id || '',
+        entityType: isKeywordCategory ? 'categoryPage' : 'category',
+        enabled: isTrackingEnabled() && !!category.id,
+        delay: 2000 
+    })
+
     const { addToCart } = useCart()
     const wishlist = useWishlist()
     const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
@@ -376,7 +386,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                 }
             }
         }
-    }, [loadedProducts])
+    }, [loadedProducts, category.id, category.name])
     useEffect(() => {
         if (currentProducts.length > 0) {
             const observer = new IntersectionObserver(

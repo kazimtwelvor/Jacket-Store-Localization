@@ -266,7 +266,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
     <div className="min-h-screen bg-white" style={{ scrollBehavior: 'smooth' }}>
       <StructuredData data={schemaArray} />
 
-      <ProductPageClient />
+      <ProductPageClient productId={product.id} />
 
 
       <div className="block lg:hidden">
