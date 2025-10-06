@@ -42,7 +42,7 @@ export const useViewTracking = ({
     return {
       userAgent: navigator.userAgent,
       referrer: document.referrer || undefined,
-      ipAddress: undefined // IP will be determined by the server
+      ipAddress: undefined 
     }
   }, [])
 
@@ -56,8 +56,7 @@ export const useViewTracking = ({
     try {
       const trackingData = getTrackingData()
       
-      // Use existing API URL pattern with store ID already included
-      const baseApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/default-store-id'
+      const baseApiUrl = process.env.NEXT_PUBLIC_API_URL 
       
       let endpoint = ''
       switch (entityType) {
@@ -81,8 +80,8 @@ export const useViewTracking = ({
           'Accept': 'application/json',
         },
         body: JSON.stringify(trackingData),
-        mode: 'cors', // Explicitly set CORS mode
-        credentials: 'omit', // Don't send cookies/credentials
+        mode: 'cors', 
+        credentials: 'omit', 
       })
 
       if (!response.ok) {
@@ -117,10 +116,8 @@ export const useViewTracking = ({
     }, delay)
   }, [trackView, delay])
 
-  // Auto-track on mount
   useEffect(() => {
     if (enabled && entityId && storeId) {
-      // Log debug info in development
       if (process.env.NODE_ENV === 'development') {
         logTrackingDebugInfo()
       }
@@ -134,7 +131,6 @@ export const useViewTracking = ({
     }
   }, [enabled, entityId, storeId, trackViewWithDelay])
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
