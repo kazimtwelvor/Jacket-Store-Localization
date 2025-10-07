@@ -18,7 +18,7 @@ export const MobileBannerContent = () => {
                     transition={{ duration: 0 }}
                     className={`${avertaBlack.className} text-[36px] sm:text-[48px] font-bold mb-5 leading-tight tracking-tight text-center w-full`}
                 >
-                    FINEYST SALE
+                    FINEYST JACKETS
                 </motion.h1>
 
                 <motion.p
@@ -27,7 +27,7 @@ export const MobileBannerContent = () => {
                     transition={{ duration: 0 }}
                     className="text-sm sm:text-base px-6 mb-10 mx-auto text-center w-full"
                 >
-                    UP TO <span className={`${avertaBlack.className} font-black`}>50% OFF</span> + CODE: <span className={`${avertaBlack.className} font-black`}>STREET15</span>
+                    <span className={`${avertaBlack.className} font-black`}>Where Leather Meets Legacy.</span>
                 </motion.p>
 
                 <motion.section
