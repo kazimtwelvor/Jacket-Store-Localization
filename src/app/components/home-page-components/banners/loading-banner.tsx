@@ -14,11 +14,10 @@ export const LoadingBanner = ({ heroImages, currentImageIndex }: LoadingBannerPr
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentImageIndex}
-                        className="absolute inset-0"
+                        className="absolute inset-0 bg-left md:bg-center"
                         style={{
                             backgroundImage: `url('${heroImages[currentImageIndex].src}')`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center",
                         }}
                         initial={{ opacity: 0, scale: 0 }}
                         animate={{
