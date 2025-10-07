@@ -507,23 +507,22 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          materials: selectedFilters.materials,
-          styles: selectedFilters.style,
-          colors: selectedFilters.colors,
+          materials: selectedFilters.materials.join(','),
+          styles: selectedFilters.style.join(','),
+          colors: selectedFilters.colors.join(','),
           genders: selectedFilters.gender.map(g => {
             const v = g.trim().toLowerCase();
             if (v === "male" || v === "men") return "male";
             if (v === "female" || v === "women") return "female";
-            // if (v === "unisex") return "unisex";
             return v;
-          }),
-          sizes: selectedFilters.sizes,
+          }).join(','),
+          sizes: selectedFilters.sizes.join(','),
           categoryId: filterParams?.categoryId,
           colorId: filterParams?.colorId,
           sizeId: filterParams?.sizeId,
           search: filterParams?.search,
-        page: loadMorePage,
-        limit: 40,
+          page: loadMorePage,
+          limit: 40,
           sort: activeSort || filterParams?.sort || "popular",
         }),
       });
