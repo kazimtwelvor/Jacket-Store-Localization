@@ -5,11 +5,11 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { 
-      materials = [], 
-      styles = [], 
-      colors = [], 
-      genders = [], 
-      sizes = [],
+      materials = '', 
+      styles = '', 
+      colors = '', 
+      genders = '', 
+      sizes = '',
       categoryId,
       colorId,
       sizeId,
@@ -20,11 +20,11 @@ export async function POST(request: NextRequest) {
     } = body
 
     const productsData = await getProducts({
-      materials,
-      styles,
-      colors,
-      genders,
-      sizes,
+      materials: materials ? materials : undefined,
+      styles: styles ? styles : undefined,
+      colors: colors ? colors : undefined,
+      genders: genders ? genders : undefined,
+      sizes: sizes ? sizes : undefined,
       categoryId,
       colorId,
       sizeId,
