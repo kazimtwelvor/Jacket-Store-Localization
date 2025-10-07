@@ -294,18 +294,10 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
               const categorySlug = category.slug
               const isCurrentCategory = category.isActive
 
-              const CategoryContent = () => (
-                <div
-                  // className={`relative flex flex-col items-center flex-shrink-0 w-[23vw] sm:w-28 text-center ${category.isActive ? 'cursor-default sticky left-3 z-10 sticky-mask' : 'cursor-pointer'} py-2`}
-                  // onClick={(e) => {
-                  //   if (isCurrentCategory) {
-                  //     e.preventDefault();
-                  //     e.stopPropagation();
-                  //     return;
-                  //   }
-                  //   handleLinkClick(e, categorySlug);
-                  // }}
-                  className={`relative flex flex-col items-center flex-shrink-0 w-[23vw] sm:w-28 text-center cursor-pointer py-2 ${category.isActive ? 'sticky left-3 z-10 sticky-mask' : ''}`}
+              return (
+                <div 
+                  key={categorySlug || index}
+                  className={`relative flex flex-col items-center flex-shrink-0 w-[23vw] sm:w-28 text-center py-2 ${category.isActive ? 'sticky left-3 z-10 sticky-mask' : ''}`}
                   onClick={(e) => {
                     if (isCurrentCategory) {
                       e.preventDefault();
@@ -314,21 +306,17 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
                     }
                     handleLinkClick(e, categorySlug);
                   }}
-
                   aria-current={category.isActive ? 'page' : undefined}
+                  style={{ cursor: isCurrentCategory ? 'default' : 'pointer' }}
                 >
                   <div
-                    className={`relative w-20 h-20 sm:w-24 sm:h-24 mb-2 rounded-full overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-105 ${category.isActive ? ' shadow-lg shadow-gray-700/50' : 'ring-gray-200'
-                      }`}
+                    className={`relative w-20 h-20 sm:w-24 sm:h-24 mb-2 rounded-full overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-105 ${category.isActive ? ' shadow-lg shadow-gray-700/50' : 'ring-gray-200'}`}
                   >
-                    <Image
+                    <img
                       src={category.icon || '/placeholder.svg'}
                       alt={category.name || ''}
-                      width={112}
-                      height={112}
                       className="w-full h-full object-cover"
-                      priority={category.isActive}
-                      unoptimized={true}
+                      loading={category.isActive ? "eager" : "lazy"}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = '/placeholder.svg';
@@ -336,26 +324,10 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
                     />
                   </div>
                   <span
-                    className={`text-xs sm:text-sm font-bold transition-colors duration-200 w-full ${category.isActive ? 'font-semibold text-black' : 'text-gray-600'
-                      }`}
+                    className={`text-xs sm:text-sm font-bold transition-colors duration-200 w-full ${category.isActive ? 'font-semibold text-black' : 'text-gray-600'}`}
                   >
                     {category.name}
                   </span>
-                </div>
-              )
-
-              return (
-                <div key={categorySlug || index}>
-                  {isCurrentCategory ? (
-                    <CategoryContent />
-                  ) : (
-                    <Link
-                      href={`/us/collections/${categorySlug}`}
-                      onClick={(e) => handleLinkClick(e, categorySlug)}
-                    >
-                      <CategoryContent />
-                    </Link>
-                  )}
                 </div>
               );
             })}

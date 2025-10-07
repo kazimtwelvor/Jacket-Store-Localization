@@ -136,9 +136,9 @@ export function CapsuleNav() {
 
   if (!isMounted) return null;
 
-  if (shouldHideOnShopPage) {
-    return null;
-  }
+  // if (shouldHideOnShopPage) {
+  //   return null;
+  // }
 
   const isProductPage = pathname?.startsWith("/product/") || pathname?.includes("/product/");
   

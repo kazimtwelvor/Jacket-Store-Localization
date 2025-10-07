@@ -226,12 +226,12 @@ const getProductSlug = (product: Product): string => {
     return product.id
 }
 
-const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({ 
-    category, 
-    products, 
-    slug, 
-    allCategories, 
-    keywordCategories = [], 
+const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
+    category,
+    products,
+    slug,
+    allCategories,
+    keywordCategories = [],
     isKeywordCategory = false,
     filterParams,
     initialProductCount = 0,
@@ -292,7 +292,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
     });
     const [materialQuery, setMaterialQuery] = useState("")
     const [styleQuery, setStyleQuery] = useState("")
-    
+
     // Load more functionality state
     const [loadedProducts, setLoadedProducts] = useState<Product[]>(products) // All loaded products (starts with initial 40)
     const [isLoadingMore, setIsLoadingMore] = useState(false)
@@ -304,7 +304,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
         entityId: category.id || '',
         entityType: isKeywordCategory ? 'categoryPage' : 'category',
         enabled: isTrackingEnabled() && !!category.id,
-        delay: 2000 
+        delay: 2000
     })
 
     const { addToCart } = useCart()
@@ -477,7 +477,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             const shouldBeSticky = scrollY >= startStickyPoint && scrollY < endStickyPoint;
             setIsFilterSticky(current => current !== shouldBeSticky ? shouldBeSticky : current);
         };
-        const throttledHandleScroll = throttle(handleScroll, 16); 
+        const throttledHandleScroll = throttle(handleScroll, 16);
         window.addEventListener('scroll', throttledHandleScroll, { passive: true });
         handleScroll();
         return () => window.removeEventListener('scroll', throttledHandleScroll);
@@ -558,13 +558,13 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
         params.set('sort', sortBy)
         router.push(`?${params.toString()}`, { scroll: false })
     }
-    
+
     // Load more functionality
     const handleLoadMore = async () => {
         if (isLoadingMore || !hasMore) return
-        
+
         setIsLoadingMore(true)
-        
+
         try {
             const response = await fetch('/api/collections/load-more', {
                 method: 'POST',
@@ -585,13 +585,13 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     sort: currentSort
                 }),
             })
-            
+
             if (!response.ok) {
                 throw new Error('Failed to load more products')
             }
-            
+
             const data = await response.json()
-            
+
             if (data.success && data.products?.length > 0) {
                 setLoadedProducts(prev => [...prev, ...data.products])
                 setLoadMorePage(prev => prev + 1)
@@ -703,17 +703,17 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
 
     const handleSizeSelect = (productId: string, size: string) => {
         // Look for the product in all possible arrays
-        const product = currentProducts.find(p => p.id === productId) || 
-                       recentlyViewed.find(p => p.id === productId) ||
-                       products.find(p => p.id === productId);
-        
+        const product = currentProducts.find(p => p.id === productId) ||
+            recentlyViewed.find(p => p.id === productId) ||
+            products.find(p => p.id === productId);
+
         if (product) {
             // Get the selected color for this product
             const selectedColorId = selectedColors[productId];
-            const selectedColor = selectedColorId 
-                ? product.colorDetails?.find(color => color.id === selectedColorId)?.name 
+            const selectedColor = selectedColorId
+                ? product.colorDetails?.find(color => color.id === selectedColorId)?.name
                 : product.colorDetails?.[0]?.name || "Default";
-            
+
             addToCart(product, size, selectedColor)
             if (typeof window !== 'undefined') {
                 window.dispatchEvent(new CustomEvent('openCart'));
@@ -778,13 +778,13 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             let productCuffs: string[] = []
             let productClosures: string[] = []
             let productPockets: string[] = []
-            
+
             if ((p as any).specifications) {
                 try {
-                    const specifications = typeof (p as any).specifications === 'string' 
-                        ? JSON.parse((p as any).specifications) 
+                    const specifications = typeof (p as any).specifications === 'string'
+                        ? JSON.parse((p as any).specifications)
                         : (p as any).specifications
-                    
+
                     productCollars = specifications.collar ? specifications.collar.map((c: any) => String(c).trim().toLowerCase()) : []
                     productCuffs = specifications.cuffs ? specifications.cuffs.map((c: any) => String(c).trim().toLowerCase()) : []
                     productClosures = specifications.closure ? specifications.closure.map((c: any) => String(c).trim().toLowerCase()) : []
@@ -852,7 +852,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
     useEffect(() => {
         setVisibleProducts(currentProducts.map(p => p.id))
     }, [currentProducts])
-    
+
     // Update loadedProducts when new products are loaded via load more
     useEffect(() => {
         if (loadedProducts.length !== products.length) {
@@ -880,13 +880,13 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                 let productCuffs: string[] = []
                 let productClosures: string[] = []
                 let productPockets: string[] = []
-                
+
                 if ((p as any).specifications) {
                     try {
-                        const specifications = typeof (p as any).specifications === 'string' 
-                            ? JSON.parse((p as any).specifications) 
+                        const specifications = typeof (p as any).specifications === 'string'
+                            ? JSON.parse((p as any).specifications)
                             : (p as any).specifications
-                        
+
                         productCollars = specifications.collar ? specifications.collar.map((c: any) => String(c).trim().toLowerCase()) : []
                         productCuffs = specifications.cuffs ? specifications.cuffs.map((c: any) => String(c).trim().toLowerCase()) : []
                         productClosures = specifications.closure ? specifications.closure.map((c: any) => String(c).trim().toLowerCase()) : []
@@ -918,7 +918,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
 
                 return matchesMaterials && matchesStyles && matchesGenders && matchesSizes && matchesColors && matchesCollars && matchesCuffs && matchesClosures && matchesPockets
             }
-            
+
             const newFiltered = loadedProducts.filter(filterBySelections)
             setFilteredProducts(newFiltered)
             setCurrentProducts(newFiltered)
@@ -939,7 +939,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
     }
     const currentCategory = React.useMemo(() => {
         if (!category.name || !category.id) return null;
-        
+
         let imageUrl = '';
         if (category.currentCategory && category.currentCategory.imageUrl) {
             imageUrl = category.currentCategory.imageUrl;
@@ -966,7 +966,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             slug: properSlug
         };
     }, [category.id, category.name, category.imageUrl, category.currentCategory?.imageUrl, keywordCategories, allCategories]);
-    
+
     const categories = React.useMemo(() => {
         let result: { name: string; icon: string; slug: string; categoryId: string; }[] = [];
         if (parsedCategoryContent?.otherCategories && parsedCategoryContent.otherCategories.length > 0) {
@@ -1034,12 +1034,12 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     onCategoryClick={(categorySlug) => {
                         const currentPath = window.location.pathname;
                         const targetPath = `/us/collections/${categorySlug}`;
-                        
+
                         if (currentPath === targetPath) {
                             window.dispatchEvent(new CustomEvent('route-loading:end'));
                             return;
                         }
-                        
+
                         router.push(targetPath);
                     }}
                     currentCategory={currentCategory || undefined}
@@ -1075,8 +1075,8 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     {currentProducts.length > 0 ? (
                         <>
                             <div className="mb-4 text-sm text-gray-600 text-center">
-                                {currentProducts.length === 0 
-                                    ? "No products found" 
+                                {currentProducts.length === 0
+                                    ? "No products found"
                                     : `Showing ${currentProducts.length} products`
                                 }
                             </div>
@@ -1121,7 +1121,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                                                 }
                                                 return newProducts
                                             })
-                                            
+
                                             setFilteredProducts(prev => {
                                                 const newProducts = [...prev]
                                                 // const productIndex = newProducts.findIndex(p => p.id === product.id)
@@ -1584,9 +1584,9 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     availableSizes={(mobileCartModal.product as any).sizeDetails || (mobileCartModal.product as any).sizes || []}
                     availableColors={(mobileCartModal.product as any).colorDetails || (mobileCartModal.product as any).colors || []}
                     selectedColorId={
-                        selectedColors[mobileCartModal.product.id] || 
-                        (mobileCartModal.product as any).colorDetails?.[0]?.id || 
-                        (mobileCartModal.product as any).colors?.[0]?.id || 
+                        selectedColors[mobileCartModal.product.id] ||
+                        (mobileCartModal.product as any).colorDetails?.[0]?.id ||
+                        (mobileCartModal.product as any).colors?.[0]?.id ||
                         ''
                     }
                 />
@@ -1597,7 +1597,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                 <nav aria-label="Category Navigation">
                     <span className="sr-only">Available Categories</span>
                     {keywordCategories.map((cat, index) => (
-                        <Link 
+                        <Link
                             key={cat.id || index}
                             href={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fineystjackets.com/us'}/collections/${cat.slug}`}
                             className="sr-only"
