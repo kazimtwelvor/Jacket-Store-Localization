@@ -197,7 +197,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
     <div className="w-full pl-4 pr-0 sm:pl-6 md:pl-8 lg:px-8 mb-8 md:mb-12 mt-16 h-auto">
       <div className="relative">
         <div className="flex justify-between items-center mb-4 pr-4 sm:pr-6 md:pr-0">
-          <h2 className="text-xl font-bold">You'll Also Love</h2>
+          <span className="text-xl font-bold">You'll Also Love</span>
 
           {/* Mobile Arrows - Updated Style */}
           <div className="md:hidden flex items-center gap-2">
