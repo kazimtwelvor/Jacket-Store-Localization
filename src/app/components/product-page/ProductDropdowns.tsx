@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react"
 import { cn } from "../../lib/utils"
 import type { Product, Review } from "@/types"
 import ProductDetailsModal from "../../modals/ProductDetailsModal"
+import { stripH2Tags } from "../../lib/stripHeadings"
 
 interface ProductDropdownsProps {
   data: Product
@@ -44,7 +45,7 @@ const ProductDropdowns = ({
               const description = data?.description || "";
               return (
                 <>
-                  <div dangerouslySetInnerHTML={{ __html: description }} />
+                  <div dangerouslySetInnerHTML={{ __html: stripH2Tags(description) }} />
                   <ul className="list-disc pl-5 mt-3 sm:mt-4 space-y-1">
                     <li>SKU: {data?.sku || "N/A"}</li>
                     <li>Material: {data?.material || "Premium fabric"}</li>
@@ -108,7 +109,7 @@ const ProductDropdowns = ({
               
               return (
                 <>
-                  <div dangerouslySetInnerHTML={{ __html: firstParagraph }} />
+                  <div dangerouslySetInnerHTML={{ __html: stripH2Tags(firstParagraph) }} />
                   
                   {restOfDescription && (
                     <button 

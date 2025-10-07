@@ -48,21 +48,12 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
 
       {/* Product Title */}
       <div className={cn("mt-2", isMobile ? "mb-3" : "mt-2")}>
-        {isMobile ? (
-          <span id="product-title" className={cn(
-            `${avertaBlack.className} font-bold leading-tight`,
-            "text-lg md:text-xl sm:text-2xl line-clamp-2"
-          )}>
-            {data?.name?.toUpperCase()}
-          </span>
-        ) : (
-          <h1 id="product-title" className={cn(
-            `${avertaBlack.className} font-bold leading-tight`,
-            "text-xl lg:text-2xl line-clamp-2"
-          )}>
-            {data?.name?.toUpperCase()}
-          </h1>
-        )}
+        <div id="product-title" className={cn(
+          `${avertaBlack.className} font-bold leading-tight`,
+          isMobile ? "text-lg md:text-xl sm:text-2xl line-clamp-2" : "text-xl lg:text-2xl line-clamp-2"
+        )}>
+          {data?.name?.toUpperCase()}
+        </div>
 
 
 

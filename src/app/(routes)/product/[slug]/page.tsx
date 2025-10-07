@@ -265,6 +265,9 @@ const ProductPage = async ({ params }: ProductPageProps) => {
   return (
     <div className="min-h-screen bg-white" style={{ scrollBehavior: 'smooth' }}>
       <StructuredData data={schemaArray} />
+      
+      {/* H1 as first element in HTML */}
+      <h1 className="sr-only">{product?.name?.toUpperCase()}</h1>
 
       <ProductPageClient productId={product.id} />
 

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { createPortal } from "react-dom"
 import { useEffect, useState } from "react"
 import type { Product } from "@/types"
+import { stripH2Tags } from "../lib/stripHeadings"
 
 interface ProductDetailsModalProps {
   isOpen: boolean
@@ -62,7 +63,7 @@ const ProductDetailsModal = ({ isOpen, onClose, product }: ProductDetailsModalPr
                 <h2 className="font-semibold text-[#2b2b2b] mb-3">Description</h2>
                 <div 
                   className="text-gray-700 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: product.description || "No description available" }}
+                  dangerouslySetInnerHTML={{ __html: stripH2Tags(product.description || "No description available") }}
                 />
               </div>
 
@@ -101,7 +102,7 @@ const ProductDetailsModal = ({ isOpen, onClose, product }: ProductDetailsModalPr
                   <h4 className="font-semibold text-[#2b2b2b] mb-3">Additional Information</h4>
                   <div 
                     className="text-gray-700 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: (product as any).additionalInfo }}
+                    dangerouslySetInnerHTML={{ __html: stripH2Tags((product as any).additionalInfo) }}
                   />
                 </div>
               )}
