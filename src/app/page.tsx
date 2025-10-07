@@ -76,8 +76,8 @@ export default function Home() {
         "openingHours": "Mon-Fri 09:00-18:00",
         "priceRange": "$",
         "sameAs": [
-          "https://www.instagram.com/fineystpatches/",
-          "https://www.facebook.com/fineystpatches/"
+          "https://www.instagram.com/fineystjackets/",
+          "https://www.facebook.com/fineystjackets"
         ],
         "aggregateRating": {
           "@type": "AggregateRating",

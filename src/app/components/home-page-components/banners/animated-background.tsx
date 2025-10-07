@@ -12,11 +12,10 @@ export const AnimatedBackground = ({
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
-          className="absolute inset-0"
+          className="absolute inset-0 bg-left md:bg-center"
           style={{
             backgroundImage: `url('${images[currentIndex].src}')`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
           }}
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 1, scale: 1 }}
