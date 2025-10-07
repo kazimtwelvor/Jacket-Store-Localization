@@ -937,8 +937,9 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
     if (!parsedCategoryContent || typeof parsedCategoryContent !== 'object') {
         parsedCategoryContent = {};
     }
-    let currentCategory = null;
-    if (category.name && category.id) {
+    const currentCategory = React.useMemo(() => {
+        if (!category.name || !category.id) return null;
+        
         let imageUrl = '';
         if (category.currentCategory && category.currentCategory.imageUrl) {
             imageUrl = category.currentCategory.imageUrl;
@@ -958,57 +959,61 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             category.slug ||
             category.name.toLowerCase().replace(/\s+/g, '-');
 
-        currentCategory = {
+        return {
             categoryId: category.id,
             categoryName: category.name,
             imageUrl: imageUrl,
             slug: properSlug
         };
-    }
-    let categories: { name: string; icon: string; slug: string; categoryId: string; }[] = [];
-    if (parsedCategoryContent?.otherCategories && parsedCategoryContent.otherCategories.length > 0) {
-        categories = parsedCategoryContent.otherCategories.map((cat: any) => {
-            const foundCategory = allCategories.find(c => c.id === cat.categoryId);
-            // First try to find a matching keyword category by name or ID
-            const matchingKeywordCategory = keywordCategories.find(kc =>
-                kc.id === cat.categoryId ||
-                kc.name.toLowerCase() === cat.categoryName.toLowerCase()
-            );
+    }, [category.id, category.name, category.imageUrl, category.currentCategory?.imageUrl, keywordCategories, allCategories]);
+    
+    const categories = React.useMemo(() => {
+        let result: { name: string; icon: string; slug: string; categoryId: string; }[] = [];
+        if (parsedCategoryContent?.otherCategories && parsedCategoryContent.otherCategories.length > 0) {
+            result = parsedCategoryContent.otherCategories.map((cat: any) => {
+                const foundCategory = allCategories.find(c => c.id === cat.categoryId);
+                // First try to find a matching keyword category by name or ID
+                const matchingKeywordCategory = keywordCategories.find(kc =>
+                    kc.id === cat.categoryId ||
+                    kc.name.toLowerCase() === cat.categoryName.toLowerCase()
+                );
 
-            // Prioritize keyword category slug, then regular category slug, then generate one
-            const categorySlug = matchingKeywordCategory?.slug ||
-                foundCategory?.slug ||
-                cat.categoryName.toLowerCase().replace(/\s+/g, '-');
+                // Prioritize keyword category slug, then regular category slug, then generate one
+                const categorySlug = matchingKeywordCategory?.slug ||
+                    foundCategory?.slug ||
+                    cat.categoryName.toLowerCase().replace(/\s+/g, '-');
 
-            let iconUrl = "";
-            iconUrl = getLocalImageUrl(cat.imageUrl);
-            if (iconUrl === "/placeholder.svg") {
-                iconUrl = categoryIcons[categorySlug] || categoryIcons[cat.categoryName.toLowerCase()];
-            }
-            if (!iconUrl) {
-                iconUrl = "/placeholder.svg";
-            }
-            return {
-                name: cat.categoryName,
-                icon: iconUrl,
-                slug: categorySlug,
-                categoryId: cat.categoryId
-            };
-        });
-    } else {
-        // When no otherCategories, prioritize keyword categories over regular categories
-        const categoriesToUse = keywordCategories.length > 0 ? keywordCategories.slice(0, 5) : allCategories.slice(0, 5);
-        categories = categoriesToUse.map(cat => {
-            const categorySlug = cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-');
-            const iconUrl = categoryIcons[categorySlug] || categoryIcons[cat.name.toLowerCase()] || "/placeholder.svg";
-            return {
-                name: cat.name,
-                icon: iconUrl,
-                slug: categorySlug,
-                categoryId: cat.id
-            };
-        });
-    }
+                let iconUrl = "";
+                iconUrl = getLocalImageUrl(cat.imageUrl);
+                if (iconUrl === "/placeholder.svg") {
+                    iconUrl = categoryIcons[categorySlug] || categoryIcons[cat.categoryName.toLowerCase()];
+                }
+                if (!iconUrl) {
+                    iconUrl = "/placeholder.svg";
+                }
+                return {
+                    name: cat.categoryName,
+                    icon: iconUrl,
+                    slug: categorySlug,
+                    categoryId: cat.categoryId
+                };
+            });
+        } else {
+            // When no otherCategories, prioritize keyword categories over regular categories
+            const categoriesToUse = keywordCategories.length > 0 ? keywordCategories.slice(0, 5) : allCategories.slice(0, 5);
+            result = categoriesToUse.map(cat => {
+                const categorySlug = cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-');
+                const iconUrl = categoryIcons[categorySlug] || categoryIcons[cat.name.toLowerCase()] || "/placeholder.svg";
+                return {
+                    name: cat.name,
+                    icon: iconUrl,
+                    slug: categorySlug,
+                    categoryId: cat.id
+                };
+            });
+        }
+        return result;
+    }, [parsedCategoryContent?.otherCategories, allCategories, keywordCategories, categoryIcons]);
     const structuredData = []
     if (category.enableSchema && category.customSchema) {
         try {
