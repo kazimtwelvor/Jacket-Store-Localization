@@ -768,7 +768,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
         const categoryGender = deriveCategoryGender()
 
         const filterBySelections = (p: Product) => {
-            const productColors = ((p as any).colorDetails || (p as any).colors || []).map((c: any) => String(c.name || c).trim().toLowerCase())
+            const baseColorName = ((p as any).baseColor?.name || '').toString().trim().toLowerCase()
             const productSizes = ((p as any).sizeDetails || (p as any).sizes || []).map((s: any) => String(s.name || s).trim().toLowerCase())
             const productMaterials = ((p as any).materials || []).map((m: any) => String(m.name || m).trim().toLowerCase())
             const productStyles = ((p as any).styles || []).map((s: any) => String(s.name || s).trim().toLowerCase())
@@ -807,7 +807,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             const matchesStyles = wantedStyles.length === 0 || wantedStyles.some(style => productStyles.includes(style))
             const matchesGenders = wantedGenders.length === 0 || wantedGenders.some(gender => normalizeGender(gender) === productGender)
             const matchesSizes = wantedSizes.length === 0 || wantedSizes.some(size => productSizes.includes(size))
-            const matchesColors = wantedColors.length === 0 || wantedColors.some(color => productColors.includes(color))
+            const matchesColors = wantedColors.length === 0 || wantedColors.some(color => color === baseColorName)
             const matchesCollars = wantedCollars.length === 0 || wantedCollars.some(collar => productCollars.includes(collar))
             const matchesCuffs = wantedCuffs.length === 0 || wantedCuffs.some(cuff => productCuffs.includes(cuff))
             const matchesClosures = wantedClosures.length === 0 || wantedClosures.some(closure => productClosures.includes(closure))
@@ -856,10 +856,9 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
     // Update loadedProducts when new products are loaded via load more
     useEffect(() => {
         if (loadedProducts.length !== products.length) {
-            // Re-apply current filters to include newly loaded products
             const filterBySelections = (p: Product) => {
-                // Use the same filtering logic as the main filter effect
-                const productColors = ((p as any).colorDetails || (p as any).colors || []).map((c: any) => String(c.name || c).trim().toLowerCase())
+                // Use baseColor instead of colorDetails for filtering
+                const baseColorName = ((p as any).baseColor?.name || '').toString().trim().toLowerCase()
                 const productSizes = ((p as any).sizeDetails || (p as any).sizes || []).map((s: any) => String(s.name || s).trim().toLowerCase())
                 const productMaterials = ((p as any).materials || []).map((m: any) => String(m.name || m).trim().toLowerCase())
                 const productStyles = ((p as any).styles || []).map((s: any) => String(s.name || s).trim().toLowerCase())
@@ -910,7 +909,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                 const matchesStyles = wantedStyles.length === 0 || wantedStyles.some(style => productStyles.includes(style))
                 const matchesGenders = wantedGenders.length === 0 || wantedGenders.some(gender => normalizeGender(gender) === productGender)
                 const matchesSizes = wantedSizes.length === 0 || wantedSizes.some(size => productSizes.includes(size))
-                const matchesColors = wantedColors.length === 0 || wantedColors.some(color => productColors.includes(color))
+                const matchesColors = wantedColors.length === 0 || wantedColors.some(color => color === baseColorName)
                 const matchesCollars = wantedCollars.length === 0 || wantedCollars.some(collar => productCollars.includes(collar))
                 const matchesCuffs = wantedCuffs.length === 0 || wantedCuffs.some(cuff => productCuffs.includes(cuff))
                 const matchesClosures = wantedClosures.length === 0 || wantedClosures.some(closure => productClosures.includes(closure))
