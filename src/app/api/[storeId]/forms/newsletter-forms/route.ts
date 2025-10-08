@@ -28,7 +28,6 @@ export async function POST(
       { status: 200 }
     )
   } catch (error) {
-    console.error('Newsletter subscription error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

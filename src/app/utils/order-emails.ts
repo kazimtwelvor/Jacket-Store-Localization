@@ -27,11 +27,9 @@ export const sendOrderEmails = async (orderData: OrderEmailData) => {
     if (result.success) {
       return { success: true, ...result }
     } else {
-      console.error('❌ Failed to send order emails:', result.error)
       return { success: false, error: result.error }
     }
   } catch (error) {
-    console.error('❌ Error sending order emails:', error)
     return { success: false, error: 'Network error' }
   }
 }

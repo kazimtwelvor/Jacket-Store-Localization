@@ -55,10 +55,6 @@ export async function POST(req: NextRequest) {
     }
 
     const captureData = await captureResponse.json()
-    
-    // Here you would typically save the order to your database
-    // For now, just return success
-    
     return NextResponse.json({ 
       success: true, 
       captureId: captureData.id,
@@ -66,7 +62,6 @@ export async function POST(req: NextRequest) {
     })
 
   } catch (error: any) {
-    console.error("PayPal capture order error:", error)
     return NextResponse.json(
       { error: error.message || "Failed to capture PayPal order" },
       { status: 500 }

@@ -82,7 +82,6 @@ export const sendEmail = async (config: EmailConfig): Promise<boolean> => {
     const result = await transporter.sendMail(mailOptions);
     return true;
   } catch (error) {
-    console.error('❌ Email failed to:', config.to, 'Error:', error.message);
     return false;
   }
 };

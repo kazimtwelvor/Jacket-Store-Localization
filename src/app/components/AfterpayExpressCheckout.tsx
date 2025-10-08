@@ -94,9 +94,6 @@ export default function AfterpayExpressCheckout({
             if (window.Afterpay) {
               setIsScriptLoaded(true);
             } else {
-              console.error(
-                "Afterpay object still not available after script load"
-              );
               setError("Failed to load Afterpay properly");
             }
           }, 100);
@@ -133,9 +130,6 @@ export default function AfterpayExpressCheckout({
             } else if (attempts < maxAttempts) {
               setTimeout(checkForGlobal, attempts * 50);
             } else {
-              console.error(
-                "Afterpay object not available after multiple attempts"
-              );
               setError("Failed to initialize Afterpay - object not found");
             }
           };
@@ -145,7 +139,6 @@ export default function AfterpayExpressCheckout({
       };
 
       script.onerror = (e) => {
-        console.error("Failed to load Afterpay script:", e);
         setError("Failed to load Afterpay script");
       };
       document.head.appendChild(script);
@@ -183,7 +176,6 @@ export default function AfterpayExpressCheckout({
         const data = await response.json();
         return data.shippingOptions;
       } catch (error) {
-        console.error("Shipping calculation error:", error);
         const fallbackOptions =
           SHIPPING_OPTIONS[
             address.countryCode as keyof typeof SHIPPING_OPTIONS
@@ -240,7 +232,6 @@ export default function AfterpayExpressCheckout({
       const data = await response.json();
       return data.token;
     } catch (error) {
-      console.error("Afterpay token creation failed:", error);
       throw error;
     }
   }, [items, totalAmount, currencyCode, invoiceId, coupon, discountAmount]);
@@ -269,7 +260,6 @@ export default function AfterpayExpressCheckout({
 
         actions.resolve(shippingOptions);
       } catch (error) {
-        console.error("Shipping address change error:", error);
 
         if (error instanceof Error) {
           if (error.message.includes("SHIPPING_UNSUPPORTED")) {
@@ -346,7 +336,6 @@ export default function AfterpayExpressCheckout({
           const result = await captureResponse.json();
           onCaptureSuccess(result.orderId);
         } catch (error) {
-          console.error("Afterpay completion error:", error);
           const errorMessage =
             error instanceof Error ? error.message : "Payment failed";
           onError(errorMessage);
@@ -389,7 +378,6 @@ export default function AfterpayExpressCheckout({
           window.location.href = `${checkoutBaseURL}/?token=${token}`;
         }
       } catch (error) {
-        console.error("Checkout commencement error:", error);
         const errorMessage =
           error instanceof Error ? error.message : "Failed to start checkout";
         setError(errorMessage);
@@ -421,9 +409,6 @@ export default function AfterpayExpressCheckout({
         } else if (attempts < maxAttempts) {
           setTimeout(checkAfterpay, attempts * 100);
         } else {
-          console.error(
-            "Afterpay object not available after multiple attempts"
-          );
           setError("Afterpay failed to load. Please refresh the page.");
         }
       };
@@ -451,7 +436,6 @@ export default function AfterpayExpressCheckout({
             "afterpay-express-button"
           );
           if (!targetElement) {
-            console.error("Target button element not found");
             setError("Button element not ready");
             return;
           }
@@ -478,7 +462,6 @@ export default function AfterpayExpressCheckout({
               window.Afterpay.initializeForPopup(config);
               initSuccess = true;
             } catch (error) {
-              console.error("initializeForPopup failed:", error);
             }
           }
 
@@ -496,7 +479,6 @@ export default function AfterpayExpressCheckout({
               });
               initSuccess = true;
             } catch (error) {
-              console.error("initialize failed:", error);
             }
           }
 
@@ -515,19 +497,16 @@ export default function AfterpayExpressCheckout({
                     const checkoutUrl = `${checkoutBaseURL}/?token=${token}`;
                     window.location.href = checkoutUrl;
                   } catch (error) {
-                    console.error("Token creation failed:", error);
                     setError("Failed to start checkout");
                   }
                 });
                 initSuccess = true;
               }
             } catch (error) {
-              console.error("Button binding failed:", error);
             }
           }
 
           if (!initSuccess) {
-            console.error("All initialization methods failed");
             setError(
               "Unable to initialize Afterpay - incompatible API version"
             );
@@ -536,7 +515,6 @@ export default function AfterpayExpressCheckout({
 
           setIsInitialized(true);
         } catch (error) {
-          console.error("Afterpay initialization error:", error);
           setError(
             `Failed to initialize Afterpay: ${
               error instanceof Error ? error.message : "Unknown error"
@@ -564,7 +542,6 @@ export default function AfterpayExpressCheckout({
     if (window.Afterpay && isScriptLoaded) {
       window.Afterpay.onMessage = (payload: any) => {
         if (payload.severity === "error") {
-          console.error("Afterpay error:", payload.message);
           setError(payload.message);
         } else if (payload.severity === "warning") {
           console.warn("Afterpay warning:", payload.message);
@@ -576,13 +553,11 @@ export default function AfterpayExpressCheckout({
 
   const handleButtonClick = useCallback(async () => {
     if (!isInitialized) {
-      console.error("Afterpay not initialized");
       setError("Afterpay not ready. Please refresh the page.");
       return;
     }
 
     if (!window.Afterpay) {
-      console.error("Afterpay object not available");
       setError("Afterpay not loaded. Please refresh the page.");
       return;
     }
@@ -600,7 +575,6 @@ export default function AfterpayExpressCheckout({
         },
       });
     } catch (error) {
-      console.error("Manual checkout failed:", error);
       setError("Failed to start checkout");
     }
   }, [isScriptLoaded, isInitialized, loading, onCommenceCheckout]);

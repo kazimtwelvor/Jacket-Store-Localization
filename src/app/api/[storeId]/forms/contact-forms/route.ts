@@ -7,8 +7,6 @@ export async function POST(
   try {
     const body = await request.json()
     const { firstName, lastName, email, subject, message, agreeToPrivacyPolicy } = body
-
-    // Validate required fields
     if (!firstName || !lastName || !email || !subject || !message || !agreeToPrivacyPolicy) {
       return NextResponse.json(
         { error: 'All fields are required and privacy policy must be agreed to' },
@@ -28,7 +26,6 @@ export async function POST(
       { status: 200 }
     )
   } catch (error) {
-    console.error('Contact form submission error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

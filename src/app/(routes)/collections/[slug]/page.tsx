@@ -31,7 +31,6 @@ export async function generateStaticParams() {
         const regularCategories = await getCategories();
         categoriesResult = regularCategories?.slice(0, 20) || [];
       } catch (error2) {
-        console.error('❌ All category fetch strategies failed:', error2);
         return [];
       }
     }
@@ -49,7 +48,6 @@ export async function generateStaticParams() {
     return params;
     
   } catch (error) {
-    console.error('❌ Critical error in generateStaticParams:', error);
     return [];
   }
 }

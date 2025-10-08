@@ -97,7 +97,6 @@ const useAuth = create(
             };
           }
         } catch (error) {
-          console.error("Login error:", error);
           set({ isLoading: false });
           return { success: false, message: "An error occurred during login" };
         }
@@ -105,21 +104,17 @@ const useAuth = create(
 
       logout: async () => {
         try {
-          // Use external API URL for authentication
           await fetch(`https://jacket.us.com/api/auth/logout`, {
             method: "POST",
           });
         } catch (error) {
-          console.error("Logout error:", error);
         }
 
-        // Clear local state regardless of API success
         set({ user: null, token: null, isAuthenticated: false });
       },
 
       forgotPassword: async (email: string) => {
         try {
-          // Call local API route where the logic is implemented
           const response = await fetch(`/api/auth/forgot-password`, {
             method: "POST",
             headers: {
@@ -139,7 +134,6 @@ const useAuth = create(
             };
           }
         } catch (error) {
-          console.error("Forgot password error:", error);
           return { success: false, message: "An error occurred" };
         }
       },
@@ -169,7 +163,6 @@ const useAuth = create(
             };
           }
         } catch (error) {
-          console.error("Reset password error:", error);
           return { success: false, message: "An error occurred" };
         }
       },
@@ -218,7 +211,6 @@ const useAuth = create(
             };
           }
         } catch (error) {
-          console.error("Registration error:", error);
           return {
             success: false,
             message: "An error occurred during registration",
@@ -228,7 +220,6 @@ const useAuth = create(
 
       googleRegister: async (user: any, token: string) => {
         try {
-          // Normalize Google/user payload to our internal User shape
           const fullName: string | undefined =
             user?.name ||
             [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
@@ -285,7 +276,6 @@ const useAuth = create(
           toast.success("Google sign-up successful!");
           return { success: true, message: "Google registration successful" };
         } catch (error) {
-          console.error("Google registration error:", error);
           return {
             success: false,
             message: "An error occurred during Google registration",
@@ -318,7 +308,6 @@ const useAuth = create(
             };
           }
         } catch (error) {
-          console.error("Email verification error:", error);
           return {
             success: false,
             message: "An error occurred during email verification",

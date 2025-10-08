@@ -86,7 +86,6 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
         const validProducts = fetchedProducts.filter(product => product !== null)
         setProducts(validProducts)
       } catch (error) {
-        console.error('Error fetching related products:', error)
         setProducts([])
       } finally {
         setLoading(false)

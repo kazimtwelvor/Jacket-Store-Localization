@@ -115,7 +115,6 @@ export default function TrackOrderClient() {
       setOrderData(transformedOrder);
       setError("");
     } catch (err) {
-      console.error("Error fetching order:", err);
       if (err instanceof TypeError && (err as TypeError).message.includes("fetch")) {
         setError(
           "Network error. Please check your internet connection and try again."

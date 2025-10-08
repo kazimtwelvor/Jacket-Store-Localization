@@ -342,7 +342,6 @@ const PaymentForm = ({
             }),
           });
         } catch (error) {
-          console.error("Failed to update payment status:", error);
         }
 
         setPaymentModal({
@@ -356,7 +355,6 @@ const PaymentForm = ({
         }, 2000);
       }
     } catch (err) {
-      console.error("Payment error:", err);
       setError("An unexpected error occurred");
       setPaymentModal({
         isOpen: true,
@@ -465,7 +463,6 @@ const CheckoutPage = () => {
     customBillingState: "",
   });
 
-  // Add formTouched state to track touched fields
   const [formTouched, setFormTouched] = useState({
     firstName: false,
     lastName: false,
@@ -479,8 +476,6 @@ const CheckoutPage = () => {
     password: false,
     phone: false,
   });
-
-  // Validation functions
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -504,7 +499,6 @@ const CheckoutPage = () => {
     return phoneRegex.test(phone.replace(/\s/g, ''));
   };
 
-  // Get validation errors
   const getFieldError = (fieldName: string): string | null => {
     if (!formTouched[fieldName as keyof typeof formTouched]) return null;
     
@@ -539,7 +533,6 @@ const CheckoutPage = () => {
     }
   };
 
-  // Get states for selected country
   const availableStates = getStatesForCountry(formData.country);
   const availableBillingStates = getStatesForCountry(formData.billingCountry);
 
@@ -553,8 +546,6 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     setIsMounted(true);
-
-    // Check for payment method in URL
     const urlParams = new URLSearchParams(window.location.search);
     const paymentMethod = urlParams.get("payment");
     if (paymentMethod) {
@@ -591,8 +582,6 @@ const CheckoutPage = () => {
         const data = await response.json();
         setStripePublishableKey(data.publishableKey);
       } catch (error) {
-        console.error("Error fetching Stripe publishable key:", error);
-        // Fallback to environment variable if API call fails
         const fallbackKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
         if (fallbackKey) {
           console.warn("Using fallback Stripe key from environment variable");
@@ -627,7 +616,6 @@ const CheckoutPage = () => {
         const decryptedClientId = decrypt(data.paypalClientId, encryptionKey);
         setPaypalClientId(decryptedClientId);
       } catch (error) {
-        console.error("Error fetching PayPal client ID:", error);
         const fallbackClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
         if (fallbackClientId) {
           setPaypalClientId(fallbackClientId);
@@ -704,7 +692,6 @@ const CheckoutPage = () => {
         setOrderId(data.orderId);
       }
     } catch (error) {
-      console.error("Payment initialization error:", error);
       toast.error("Failed to initialize payment. Please try again.");
       setActiveStep("address");
     } finally {
@@ -739,7 +726,6 @@ const CheckoutPage = () => {
         }),
       });
     } catch (error) {
-      console.error("Failed to send order emails:", error);
     }
 
     setTimeout(() => {

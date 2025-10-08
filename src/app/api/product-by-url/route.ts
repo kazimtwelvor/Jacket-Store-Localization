@@ -95,7 +95,6 @@ export async function GET(request: NextRequest) {
     }
 
     if (!productData) {
-      console.error('❌ Product not found for slug:', productSlug)
       return NextResponse.json({ 
         error: 'Product not found', 
         searchedSlug: productSlug,
@@ -126,7 +125,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(productData)
   } catch (error) {
-    console.error('❌ Error fetching product:', error)
     return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 })
   }
 }

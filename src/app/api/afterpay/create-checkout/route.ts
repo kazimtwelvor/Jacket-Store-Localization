@@ -55,16 +55,12 @@ export async function POST(req: Request) {
     }
 
     const auth = await getAfterpayAuth();
-
-    // Calculate totals
     const itemTotal = items.reduce(
       (sum: number, item: any) => sum + item.price * item.quantity,
       0
     );
 
     const finalAmount = Math.max(0, itemTotal - discount_amount);
-
-    // Prepare Afterpay checkout payload for express mode
     const checkoutPayload = {
       amount: {
         amount: finalAmount.toFixed(2),
@@ -74,7 +70,6 @@ export async function POST(req: Request) {
       merchant: {
         popupOriginUrl: merchant.popupOriginUrl,
       },
-      // No consumer details - Afterpay will collect these
       items: items.map((item: any) => ({
         name: item.name.substring(0, 250), // Afterpay limit
         sku: item.id?.toString() || "",
@@ -111,12 +106,6 @@ export async function POST(req: Request) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error("Afterpay checkout creation failed:", {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorData,
-      });
-
       return NextResponse.json(
         {
           error: errorData.message || "Failed to create Afterpay checkout",
@@ -133,7 +122,6 @@ export async function POST(req: Request) {
       redirectCheckoutUrl: checkoutData.redirectCheckoutUrl,
     });
   } catch (error: any) {
-    console.error("Afterpay checkout creation error:", error);
     return NextResponse.json(
       {
         error: "Internal server error",

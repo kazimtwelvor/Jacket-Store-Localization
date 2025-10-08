@@ -5,7 +5,6 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
 export async function GET(request: NextRequest) {
 
   if (!API_BASE_URL) {
-    console.error('API_BASE_URL is not configured:', process.env.NEXT_PUBLIC_API_URL)
     return NextResponse.json(
       { error: 'API_BASE_URL is not configured' },
       { status: 500 }
@@ -26,13 +25,11 @@ export async function GET(request: NextRequest) {
     })
 
     if (!response.ok) {
-      console.error('External API error:', response.status, response.statusText)
       throw new Error(`API responded with status: ${response.status}`)
     }
     const data = await response.json()
     return NextResponse.json(data)
   } catch (error) {
-    console.error('API proxy error:', error)
     return NextResponse.json(
       { 
         products: [],

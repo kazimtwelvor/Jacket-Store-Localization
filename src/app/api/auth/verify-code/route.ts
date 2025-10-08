@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
     verificationCodes.delete(email);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Verification error:', error);
     return NextResponse.json({ error: 'Verification failed' }, { status: 500 });
   }
 }

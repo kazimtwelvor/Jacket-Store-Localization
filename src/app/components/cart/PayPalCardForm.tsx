@@ -190,7 +190,6 @@ export default function PayPalCardForm({
       toast.success('Payment successful!');
       onSuccess();
     } catch (err: any) {
-      console.error("Payment error:", err);
       setErrors({ general: "Payment failed. Please check your card details and try again." });
       toast.error("Payment failed. Please try again.");
     } finally {

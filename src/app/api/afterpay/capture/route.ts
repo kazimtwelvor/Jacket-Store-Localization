@@ -75,12 +75,6 @@ export async function POST(req: Request) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error("Afterpay payment capture failed:", {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorData,
-      });
-
       return NextResponse.json(
         {
           error: errorData.message || "Failed to capture Afterpay payment",
@@ -152,7 +146,6 @@ export async function POST(req: Request) {
       
       if (!orderResponse.ok) {
         const errorData = await orderResponse.json().catch(() => ({}));
-        console.error("Order creation failed:", errorData);
         throw new Error(errorData.error || "Failed to create order");
       }
       const orderResult = await orderResponse.json();
@@ -169,17 +162,6 @@ export async function POST(req: Request) {
           ),
       });
     } catch (orderError) {
-      console.error("Order creation error:", orderError);
-
-      console.error(
-        "CRITICAL: Afterpay payment captured but order creation failed",
-        {
-          afterpay_payment_id: captureData.id,
-          order_token: orderToken,
-          error: orderError,
-        }
-      );
-
       return NextResponse.json(
         {
           error:
@@ -189,7 +171,6 @@ export async function POST(req: Request) {
       );
     }
   } catch (error: any) {
-    console.error("Afterpay capture error:", error);
     return NextResponse.json(
       {
         error: "Internal server error",

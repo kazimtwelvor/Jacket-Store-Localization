@@ -287,7 +287,6 @@ const Navbar = () => {
         setSearchResults(null);
       }
     } catch (error) {
-      console.error("Search error:", error);
       setSearchResults(null);
     } finally {
       setIsSearching(false);

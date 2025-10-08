@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
       paymentIntentId: paymentIntent.id,
     });
   } catch (error) {
-    console.error("Error creating express checkout:", error);
     return NextResponse.json(
       { error: "Failed to create express checkout", details: error.message },
       { status: 500 }

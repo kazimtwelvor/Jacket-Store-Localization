@@ -167,7 +167,6 @@ export async function POST(req: Request) {
       supportedCountry: countryCode,
     });
   } catch (error: any) {
-    console.error("Shipping calculation error:", error);
     return NextResponse.json(
       {
         error: "SERVICE_UNAVAILABLE",

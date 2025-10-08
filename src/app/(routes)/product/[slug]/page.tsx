@@ -37,7 +37,6 @@ export async function generateStaticParams() {
         try {
           productsResult = await getProducts({ limit: 10 });
         } catch (error3) {
-          console.error('❌ All fetch strategies failed:', error3);
           return [];
         }
       }
@@ -55,7 +54,6 @@ export async function generateStaticParams() {
     return params;
     
   } catch (error) {
-    console.error('❌ Critical error in generateStaticParams:', error);
     return [];
   }
 }
@@ -124,7 +122,6 @@ export async function generateMetadata({ params }: ProductPageProps, parent: Res
       },
     }
   } catch (error) {
-    console.error("Error generating metadata:", error)
     return {
       title: "Product",
       description: "View our product details",
@@ -136,7 +133,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
   const { slug: slugOrId } = await params || {}
 
   if (!slugOrId) {
-    console.error("No slug or ID provided")
     return notFound()
   }
 
@@ -144,7 +140,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
   try {
     product = await getProduct(slugOrId)
   } catch (error) {
-    console.error("Error fetching product:", error)
     try {
       const productsResult = await getProducts({ limit: 10000 })
       product = productsResult.products?.find(p => {
@@ -152,7 +147,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         return p.id === slugOrId || p.slug === slugOrId || nameSlug === slugOrId
       }) || null
     } catch (fallbackError) {
-      console.error("Fallback fetch also failed:", fallbackError)
     }
   }
 
@@ -210,7 +204,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         })
       }
     } catch (e) {
-      console.error("Error processing schema:", e)
     }
   }
 

@@ -108,7 +108,6 @@ export default function ProductCarousel({
         );
         setProductItems(convertedProducts);
       } catch (error) {
-        console.error("Error fetching products:", error);
         setProductItems([]);
       } finally {
         setLoading(false);

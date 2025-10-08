@@ -86,11 +86,6 @@ export default function PayPalButtons({
                 });
                 if (!res.ok) {
                   const errorText = await res.text();
-                  console.error(
-                    "PayPal create order error:",
-                    res.status,
-                    errorText
-                  );
                   throw new Error(
                     `Failed to create PayPal order: ${res.status}`
                   );
@@ -98,7 +93,6 @@ export default function PayPalButtons({
                 const data = await res.json();
                 return data.orderId;
               } catch (error) {
-                console.error("PayPal createOrder fetch error:", error);
                 throw error;
               }
             },
@@ -112,7 +106,6 @@ export default function PayPalButtons({
               onApproveSuccess(data.orderID);
             },
             onError: (err: any) => {
-              console.error("PayPal error", err);
               setError("PayPal failed. Please try another method.");
             },
           })

@@ -74,13 +74,9 @@ export async function POST(req: NextRequest) {
         
         if (!response.ok) {
           const errorText = await response.text();
-          console.error("Backend update failed:", {
-            status: response.status,
-            error: errorText
-          });
+      
         }
       } catch (error) {
-        console.error("Failed to update backend:", error);
       }
     }
     
@@ -91,7 +87,6 @@ export async function POST(req: NextRequest) {
     })
 
   } catch (error: any) {
-    console.error("PayPal capture order error:", error)
     return NextResponse.json(
       { error: error.message || "Failed to capture PayPal order" },
       { status: 500 }

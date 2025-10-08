@@ -57,14 +57,12 @@ export async function POST(req: Request) {
         message: "Email verification successful",
       })
     } catch (fetchError) {
-      console.error("[STORE_VERIFY] External API fetch failed:", fetchError)
       return NextResponse.json(
         { error: "Failed to connect to email verification service" },
         { status: 503 }
       )
     }
   } catch (error) {
-    console.error("[STORE_VERIFY_EMAIL_ERROR]", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

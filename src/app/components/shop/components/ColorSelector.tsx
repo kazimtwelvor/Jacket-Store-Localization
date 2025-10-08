@@ -134,7 +134,6 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, index, is
                             console.warn('Product not found for color link:', colorLink, errorData)
                           }
                         } catch (error) {
-                          console.error('Error fetching product by color link:', error)
                         } finally {
                           setLoadingProducts(prev => {
                             const newSet = new Set(prev)
@@ -222,7 +221,6 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({ product, index, is
                               console.warn('Product not found for color link:', colorLink, errorData)
                             }
                           } catch (error) {
-                            console.error('Error fetching product by color link:', error)
                           } finally {
                             setLoadingProducts(prev => {
                               const newSet = new Set(prev)

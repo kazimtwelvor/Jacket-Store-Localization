@@ -30,7 +30,6 @@ const WishlistPage = () => {
         const products = await getProducts({ isFeatured: true })
         setRecommendedProducts(Array.isArray(products) ? products.slice(0, 4) : [])
       } catch (error) {
-        console.error("Error fetching recommended products:", error)
       }
     }
 
@@ -85,7 +84,6 @@ const WishlistPage = () => {
       wishlist.removeItem(product.id)
       toast.success('Item moved to cart!')
     } catch (error) {
-      console.error('Error in handleAddToCart:', error)
       toast.error('Failed to add item to cart. Please try again.')
     }
   }

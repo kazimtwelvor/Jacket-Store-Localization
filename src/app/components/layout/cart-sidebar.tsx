@@ -199,7 +199,6 @@ const StripeExpressCheckout = ({
           }, 2000);
         } else {
           const errorData = await checkoutResponse.json();
-          console.error("Checkout API error:", errorData);
           setPaymentModal({
             isOpen: true,
             status: "error",
@@ -210,7 +209,6 @@ const StripeExpressCheckout = ({
         }
       }
     } catch (error) {
-      console.error("Express checkout error:", error);
       setPaymentModal({
         isOpen: true,
         status: "error",
@@ -296,7 +294,6 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
           setPaypalClientId(decryptedClientId);
         }
       } catch (error) {
-        console.error("Error initializing payments:", error);
       }
     };
 

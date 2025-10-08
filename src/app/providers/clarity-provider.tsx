@@ -10,15 +10,11 @@ export function ClarityProvider({ children }: { children: React.ReactNode }) {
     // Initialize Clarity only on client side
     if (typeof window !== 'undefined') {
       try {
-        // Initialize Clarity with your project ID
         clarity.init(CLARITY_PROJECT_ID);
-        
-        // Optional: Set custom session data
         clarity.setTag('userId', 'anonymous');
         clarity.setTag('pageTitle', document.title);
         
       } catch (error) {
-        console.error('Failed to initialize Microsoft Clarity:', error);
       }
     }
   }, []);
@@ -26,14 +22,12 @@ export function ClarityProvider({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-// Hook for programmatic Clarity interactions
 export function useClarity() {
   const trackEvent = (eventName: string, data?: any) => {
     if (typeof window !== 'undefined' && window.clarity) {
       try {
         clarity.event(eventName, data);
       } catch (error) {
-        console.error('Failed to track Clarity event:', error);
       }
     }
   };
@@ -43,7 +37,6 @@ export function useClarity() {
       try {
         clarity.setTag(key, value);
       } catch (error) {
-        console.error('Failed to set Clarity custom tag:', error);
       }
     }
   };
@@ -53,7 +46,6 @@ export function useClarity() {
       try {
         clarity.identify(userId, sessionId, pageId, friendlyName);
       } catch (error) {
-        console.error('Failed to identify user in Clarity:', error);
       }
     }
   };

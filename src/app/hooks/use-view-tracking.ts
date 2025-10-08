@@ -97,7 +97,6 @@ export const useViewTracking = ({
         console.warn(`Failed to track ${entityType} view:`, result.message)
       }
     } catch (error) {
-      console.error(`Error tracking ${entityType} view:`, error)
     } finally {
       isTrackingRef.current = false
     }

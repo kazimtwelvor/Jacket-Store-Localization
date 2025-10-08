@@ -40,12 +40,6 @@ export async function GET(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error("Afterpay get checkout failed:", {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorData,
-      });
-
       return NextResponse.json(
         {
           error: errorData.message || "Failed to retrieve Afterpay checkout",
@@ -59,7 +53,6 @@ export async function GET(
 
     return NextResponse.json(checkoutData);
   } catch (error: any) {
-    console.error("Afterpay get checkout error:", error);
     return NextResponse.json(
       {
         error: "Internal server error",

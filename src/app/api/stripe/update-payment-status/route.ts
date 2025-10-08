@@ -63,18 +63,10 @@ export async function POST(request: NextRequest) {
           }
         );
         if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Backend API error:", {
-            status: response.status,
-            statusText: response.statusText,
-            error: errorText,
-            url: response.url
-          });
         } else {
           const result = await response.json();
         }
       } catch (fetchError) {
-        console.error("Network error updating backend:", fetchError);
       }
     }
 
@@ -83,7 +75,6 @@ export async function POST(request: NextRequest) {
       paymentStatus: paymentIntent.status,
     });
   } catch (error) {
-    console.error("Error updating payment status:", error);
     return NextResponse.json(
       { error: "Failed to update payment status" },
       { status: 500 }

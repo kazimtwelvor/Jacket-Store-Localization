@@ -481,7 +481,6 @@ function LoginContent() {
         setShowVerification(false);
       }
     } catch (error) {
-      console.error("Registration error:", error);
       toast.error("An error occurred during registration");
       setShowVerification(false);
     } finally {

@@ -521,7 +521,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         setHasMore(false);
       }
     } catch (error) {
-      console.error("Error loading more products:", error);
       setHasMore(false);
     } finally {
       setIsLoadingMore(false);
@@ -805,7 +804,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           .filter(Boolean);
         setRecentlyViewed(productObjects);
       } catch (error) {
-        console.error("Error parsing recently viewed products:", error);
       }
     }
   }, []);

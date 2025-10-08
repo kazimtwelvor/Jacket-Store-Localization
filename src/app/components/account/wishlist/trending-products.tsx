@@ -60,7 +60,6 @@ export default async function TrendingProducts() {
       products = fetchedProducts.products.slice(0, 3) as any;
     }
   } catch (error) {
-    console.error("Error fetching trending products:", error);
   }
 
   return (

@@ -35,7 +35,6 @@ async function getAccessToken() {
 
   if (!resp.ok) {
     const errorData = await resp.json().catch(() => ({}));
-    console.error("PayPal auth failed:", errorData);
     throw new Error(
       `PayPal authentication failed: ${resp.status} ${resp.statusText}`
     );
@@ -215,13 +214,6 @@ export async function POST(req: Request) {
 
     if (!orderResp.ok) {
       const errorData = await orderResp.json().catch(() => ({}));
-      console.error("PayPal Google Pay order creation failed:", {
-        status: orderResp.status,
-        statusText: orderResp.statusText,
-        error: errorData,
-        total: total_amount,
-      });
-
       const paypalError = errorData?.details?.[0] || errorData;
       const errorDescription = paypalError?.description?.toLowerCase() || "";
       let userMessage = "Unable to process payment";
@@ -271,7 +263,6 @@ export async function POST(req: Request) {
     const pp = filterPayPalResponse(rawPp);
 
     if (!pp?.id || !pp?.status) {
-      console.error("PayPal returned invalid order response:", pp);
       return NextResponse.json(
         { error: "Invalid payment order response" },
         { status: 500 }
@@ -283,7 +274,6 @@ export async function POST(req: Request) {
       links: pp.links,
     });
   } catch (e) {
-    console.error("PayPal Google Pay order creation error:", e);
     const errorMessage =
       e instanceof Error ? e.message : "Unknown error occurred";
     return NextResponse.json(
