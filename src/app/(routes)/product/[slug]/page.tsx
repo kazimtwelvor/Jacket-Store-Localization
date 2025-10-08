@@ -259,7 +259,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
       
       <div className="sr-only">
         <h1>{product?.name?.toUpperCase()}</h1>
-        <h2>{product?.category?.name ? `${product.category.name} - ${product.name}` : `Product Details - ${product.name}`}</h2>
+        <h2>{product?.category?.name ? `${product.category.name} - ${product.name}` : `Details-${product.name}`}</h2>
       </div>
 
       <ProductPageClient productId={product.id} />

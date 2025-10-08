@@ -1017,6 +1017,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           })()}
         </h1>
       </div>
+      
+      <h2 className="sr-only">Product Listings</h2>
 
       <div className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
         <div ref={filterBarWrapperRef}>
