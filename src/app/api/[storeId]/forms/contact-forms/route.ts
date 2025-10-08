@@ -16,7 +16,6 @@ export async function POST(
       )
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -24,20 +23,6 @@ export async function POST(
         { status: 400 }
       )
     }
-
-    // Here you would typically save to database or send email
-    // For now, we'll just log and return success
-    console.log('Contact form submission:', {
-      storeId: params.storeId,
-      firstName,
-      lastName,
-      email,
-      subject,
-      message,
-      agreeToPrivacyPolicy,
-      timestamp: new Date().toISOString()
-    })
-
     return NextResponse.json(
       { message: 'Contact form submitted successfully' },
       { status: 200 }

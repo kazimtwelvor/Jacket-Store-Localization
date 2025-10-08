@@ -29,7 +29,6 @@ export async function GET(
 
     const auth = await getAfterpayAuth();
 
-    console.log(`Retrieving Afterpay checkout details for token: ${token}`);
 
     const response = await fetch(`${AFTERPAY_API_BASE}/v2/checkouts/${token}`, {
       method: "GET",
@@ -57,7 +56,6 @@ export async function GET(
     }
 
     const checkoutData = await response.json();
-    console.log("Afterpay checkout details retrieved successfully");
 
     return NextResponse.json(checkoutData);
   } catch (error: any) {

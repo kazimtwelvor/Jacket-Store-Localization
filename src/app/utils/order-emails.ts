@@ -25,7 +25,6 @@ export const sendOrderEmails = async (orderData: OrderEmailData) => {
     const result = await response.json()
     
     if (result.success) {
-      console.log('✅ Order emails sent:', result.details)
       return { success: true, ...result }
     } else {
       console.error('❌ Failed to send order emails:', result.error)

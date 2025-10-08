@@ -1,10 +1,8 @@
 import { filterPayPalResponse } from "@/src/app/lib/paypal-filter";
 import { NextResponse } from "next/server";
-// import { filterPayPalResponse } from "@/src/app/lib/paypal-filter";
 import { decrypt } from "@/src/app/utils/decrypt";
 
 async function getAccessToken() {
-  // Get PayPal credentials from backend
   const settingsRes = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/payment-settings`,
     {
@@ -68,7 +66,6 @@ export async function POST(req: Request) {
       sca_method?: "SCA_ALWAYS" | "SCA_WHEN_REQUIRED";
     } = await req.json();
 
-    // CRITICAL: Validate payload structure
     if (!Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
         { error: "Invalid or empty items array" },
@@ -76,7 +73,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // CRITICAL: Validate total amount
     if (!total_amount || total_amount <= 0) {
       return NextResponse.json(
         { error: "Valid total amount is required" },
@@ -84,7 +80,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // CRITICAL: Validate items
     let calculatedTotal = 0;
     for (const item of items) {
       if (
@@ -112,11 +107,8 @@ export async function POST(req: Request) {
       calculatedTotal += item.price * item.quantity;
     }
 
-    // Calculate discount amount
     const discountAmount = discount_amount || 0;
     const expectedTotal = calculatedTotal - discountAmount;
-
-    // Validate total matches calculated total after discount (within small tolerance for rounding)
     const totalDiff = Math.abs(total_amount - expectedTotal);
     if (totalDiff > 0.01) {
       return NextResponse.json(
@@ -136,7 +128,6 @@ export async function POST(req: Request) {
 
     const token = await getAccessToken();
 
-    // Create line items for PayPal
     const lineItems = items.map((item) => ({
       name: item.name,
       quantity: item.quantity.toString(),
@@ -149,7 +140,6 @@ export async function POST(req: Request) {
 
     const itemTotal = calculatedTotal;
 
-    // Create PayPal order with Google Pay specific configuration
     const orderResp = await fetch(
       `${process.env.PAYPAL_BASE_URL}/v2/checkout/orders`,
       {
@@ -187,7 +177,6 @@ export async function POST(req: Request) {
               items: lineItems,
             },
           ],
-          // Google Pay specific configuration with configurable 3DS
           payment_source: {
             google_pay: {
               attributes: {
@@ -233,7 +222,6 @@ export async function POST(req: Request) {
         total: total_amount,
       });
 
-      // Check for specific PayPal errors and provide user-friendly messages
       const paypalError = errorData?.details?.[0] || errorData;
       const errorDescription = paypalError?.description?.toLowerCase() || "";
       let userMessage = "Unable to process payment";
@@ -282,7 +270,6 @@ export async function POST(req: Request) {
     const rawPp = await orderResp.json();
     const pp = filterPayPalResponse(rawPp);
 
-    // CRITICAL: Validate PayPal response
     if (!pp?.id || !pp?.status) {
       console.error("PayPal returned invalid order response:", pp);
       return NextResponse.json(
@@ -290,14 +277,6 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
-
-    // Log successful order creation for monitoring
-    console.log("PayPal Google Pay order created successfully:", {
-      orderId: pp.id,
-      status: pp.status,
-      total: total_amount,
-    });
-
     return NextResponse.json({
       id: pp.id,
       status: pp.status,

@@ -79,9 +79,7 @@ export const sendEmail = async (config: EmailConfig): Promise<boolean> => {
       text: config.text || stripHtml(config.html),
     };
 
-    console.log('📧 Sending email to:', mailOptions.to, 'from:', mailOptions.from);
     const result = await transporter.sendMail(mailOptions);
-    console.log('✅ Email sent successfully to:', mailOptions.to);
     return true;
   } catch (error) {
     console.error('❌ Email failed to:', config.to, 'Error:', error.message);
@@ -89,7 +87,6 @@ export const sendEmail = async (config: EmailConfig): Promise<boolean> => {
   }
 };
 
-// Utility function to strip HTML for text version
 const stripHtml = (html: string): string => {
   return html
     .replace(/<[^>]*>/g, "")
@@ -101,7 +98,6 @@ const stripHtml = (html: string): string => {
     .trim();
 };
 
-// Predefined email functions for common use cases
 export const sendWelcomeEmail = async (
   to: string,
   name: string

@@ -99,10 +99,8 @@ export const ProductSuggestionsSection = ({ suggestProducts = [], relatedProduct
   const handleAddToCart = (product: Product) => {
     
     if (isMobileView) {
-      console.log('Opening mobile cart modal')
       setMobileCartModal({ isOpen: true, product })
     } else {
-      console.log('Adding directly to cart')
       const defaultSize = product?.sizeDetails && product.sizeDetails.length > 0 
         ? product.sizeDetails[0].name 
         : 'Default'

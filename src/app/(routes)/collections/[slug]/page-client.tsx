@@ -1526,7 +1526,6 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     open={sizeModalOpen}
                     onOpenChange={setSizeModalOpen}
                     onCategorySelect={(category) => {
-                        console.log('Selected category:', category)
                     }}
                 />
                 <CartSidebar

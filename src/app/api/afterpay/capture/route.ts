@@ -52,7 +52,6 @@ export async function POST(req: Request) {
       currency: "USD",
     };
 
-    // Prepare capture payload with exact amount from checkout
     const capturePayload = {
       token: orderToken,
       amount: {
@@ -64,12 +63,6 @@ export async function POST(req: Request) {
       },
     };
 
-    console.log(
-      "Capturing Afterpay payment with payload:",
-      JSON.stringify(capturePayload, null, 2)
-    );
-
-    // Capture the payment with Afterpay
     const response = await fetch(`${AFTERPAY_API_BASE}/v2/payments/capture`, {
       method: "POST",
       headers: {
@@ -98,9 +91,6 @@ export async function POST(req: Request) {
     }
 
     const captureData = await response.json();
-    console.log("Afterpay payment captured successfully:", captureData.id);
-
-    // Extract customer and shipping information from orderInfo
     const customer = {
       first_name: orderInfo?.consumer?.givenNames || "Guest",
       last_name: orderInfo?.consumer?.surname || "User",
@@ -123,7 +113,6 @@ export async function POST(req: Request) {
 
     const shipping = { ...billing };
 
-    // Create order via backend API
     try {
       const orderPayload = {
         productIds: items.map((item: any) => item.product?.id || item.id),
@@ -148,7 +137,6 @@ export async function POST(req: Request) {
         embedded: true,
       };
 
-      console.log("Sending order payload:", JSON.stringify(orderPayload, null, 2));
       
       const orderResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
@@ -161,17 +149,13 @@ export async function POST(req: Request) {
         }
       );
 
-      console.log("Order response status:", orderResponse.status);
       
       if (!orderResponse.ok) {
         const errorData = await orderResponse.json().catch(() => ({}));
         console.error("Order creation failed:", errorData);
         throw new Error(errorData.error || "Failed to create order");
       }
-
       const orderResult = await orderResponse.json();
-      console.log("Order created successfully:", orderResult.orderId);
-
       return NextResponse.json({
         success: true,
         orderId: orderResult.orderId,
@@ -187,7 +171,6 @@ export async function POST(req: Request) {
     } catch (orderError) {
       console.error("Order creation error:", orderError);
 
-      // Payment was captured but order creation failed
       console.error(
         "CRITICAL: Afterpay payment captured but order creation failed",
         {

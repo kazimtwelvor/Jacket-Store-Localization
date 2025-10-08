@@ -177,7 +177,6 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         try {
           if (i > 0) {
             const delay = Math.pow(2, i) * 2000; 
-            console.log(`⏳ Waiting ${delay}ms before retry ${i + 1} for collection ${slug}`);
             await new Promise(resolve => setTimeout(resolve, delay));
           }
           

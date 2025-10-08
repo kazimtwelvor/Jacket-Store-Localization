@@ -20,7 +20,6 @@ export default function ProductPageClient({ productId }: ProductPageClientProps)
     }
   }, []);
 
-  // Track product view
   const { trackView, hasTracked } = useViewTracking({
     storeId: getStoreId(),
     entityId: productId || slug || '',
@@ -29,11 +28,8 @@ export default function ProductPageClient({ productId }: ProductPageClientProps)
     delay: 2000 // Track after 2 seconds to ensure user is actually viewing
   });
 
-  // Optional: Track view when component mounts (alternative to auto-tracking)
   useEffect(() => {
     if (productId || slug) {
-      // The hook will auto-track, but we can also manually trigger if needed
-      console.log('Product page loaded, tracking will start automatically');
     }
   }, [productId, slug]);
 

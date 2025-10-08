@@ -161,12 +161,6 @@ export async function POST(req: Request) {
         },
       };
     });
-
-    console.log(
-      `Calculated ${shippingOptions.length} shipping options for ${countryCode}:`,
-      shippingOptions
-    );
-
     return NextResponse.json({
       success: true,
       shippingOptions,

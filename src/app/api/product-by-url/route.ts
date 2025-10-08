@@ -14,18 +14,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'API URL not configured' }, { status: 500 })
     }
 
-    console.log('🔗 Fetching product from URL:', productUrl)
     
-    // Extract product slug/ID from URL
     const urlParts = productUrl.split('/')
     const productSlug = urlParts[urlParts.length - 1]
-    console.log('📦 Extracted product slug:', productSlug)
 
-    // Try different API endpoints to find the product
     let productData = null
     let products: any[] = []
     
-    // First try direct product fetch by ID
     try {
       const directResponse = await fetch(`${apiUrl}/products/${productSlug}`, {
         method: 'GET',
@@ -35,13 +30,10 @@ export async function GET(request: NextRequest) {
       
       if (directResponse.ok) {
         productData = await directResponse.json()
-        console.log('✅ Found product via direct API:', productData.name)
       }
     } catch (directError) {
-      console.log('⚠️ Direct fetch failed, trying search...')
     }
     
-    // If direct fetch failed, search through products with multiple strategies
     if (!productData) {
       const searchResponse = await fetch(`${apiUrl}/products?limit=500`, {
         method: 'GET',
@@ -56,18 +48,14 @@ export async function GET(request: NextRequest) {
         
         productData = products.find((p: any) => p.slug === productSlug)
         if (productData) {
-          console.log('✅ Found product via exact slug match:', productData.name)
         }
         
-        // Strategy 2: ID match
         if (!productData) {
           productData = products.find((p: any) => p.id === productSlug)
           if (productData) {
-            console.log('✅ Found product via ID match:', productData.name)
           }
         }
         
-        // Strategy 3: Name-based slug match
         if (!productData) {
           productData = products.find((p: any) => {
             if (!p.name) return false
@@ -79,11 +67,9 @@ export async function GET(request: NextRequest) {
             return generatedSlug === productSlug
           })
           if (productData) {
-            console.log('✅ Found product via name-based slug match:', productData.name)
           }
         }
         
-        // Strategy 4: Partial name match (for similar products)
         if (!productData) {
           const searchTerms = productSlug.split('-').filter(term => term.length > 2)
           productData = products.find((p: any) => {
@@ -92,11 +78,9 @@ export async function GET(request: NextRequest) {
             return searchTerms.some(term => productName.includes(term))
           })
           if (productData) {
-            console.log('✅ Found similar product via partial match:', productData.name)
           }
         }
         
-        // Strategy 5: Search by keywords in the slug
         if (!productData) {
           const keywords = productSlug.split('-').filter(term => term.length > 3)
           productData = products.find((p: any) => {
@@ -105,7 +89,6 @@ export async function GET(request: NextRequest) {
             return keywords.every(keyword => productName.includes(keyword))
           })
           if (productData) {
-            console.log('✅ Found product via keyword match:', productData.name)
           }
         }
       }

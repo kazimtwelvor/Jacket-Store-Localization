@@ -17,7 +17,6 @@ export function ClarityProvider({ children }: { children: React.ReactNode }) {
         clarity.setTag('userId', 'anonymous');
         clarity.setTag('pageTitle', document.title);
         
-        console.log('Microsoft Clarity initialized successfully');
       } catch (error) {
         console.error('Failed to initialize Microsoft Clarity:', error);
       }

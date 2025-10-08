@@ -79,10 +79,8 @@ const StripeExpressCheckout = ({
   const elements = useElements();
 
   const handleExpressCheckout = async (event: any) => {
-    console.log("Express checkout event details:", event);
     if (!stripe || !elements) return;
 
-    console.log("Express checkout event:", event);
 
     setPaymentModal({
       isOpen: true,

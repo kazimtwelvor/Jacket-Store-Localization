@@ -16,16 +16,12 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const queryString = searchParams.toString()
     const apiUrl = `${API_BASE_URL}/products${queryString ? `?${queryString}` : ''}`
-    
-    console.log('Calling external API:', apiUrl)
-
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'User-Agent': 'NextJS-App',
       },
-      // Add timeout for Vercel
       signal: AbortSignal.timeout(1200000), 
     })
 
@@ -33,9 +29,7 @@ export async function GET(request: NextRequest) {
       console.error('External API error:', response.status, response.statusText)
       throw new Error(`API responded with status: ${response.status}`)
     }
-
     const data = await response.json()
-    console.log('External API response received, products count:', data.products?.length || 0)
     return NextResponse.json(data)
   } catch (error) {
     console.error('API proxy error:', error)

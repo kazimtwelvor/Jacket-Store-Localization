@@ -54,20 +54,9 @@ export async function GET(request: NextRequest) {
         ".avif": "image/avif",
       }
       const fileType = mimeTypes[extension] || "application/octet-stream"
-
-      // Get dimensions
       const dimensions = await getImageDimensions(filePath)
-
-      // Get filename
       const fileName = path.basename(filePath)
-
-      // Get additional metadata from database if available
       const dbMetadata = await getImageMetadata(urlPath)
-
-      // Log the database metadata
-      console.log("Database metadata:", dbMetadata)
-
-      // Create response data - combine file system data with database data
       const metadata = {
         name: fileName,
         type: fileType,

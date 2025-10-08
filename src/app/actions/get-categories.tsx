@@ -59,7 +59,6 @@ const getCategories = async (): Promise<Category[]> => {
     return categories
   } catch (error) {
     console.error("❌ Error fetching categories:", error)
-    console.log("⚠️ Using fallback categories data")
     return fallbackCategories
   }
 }

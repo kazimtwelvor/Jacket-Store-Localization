@@ -85,7 +85,6 @@ export async function POST(req: Request) {
         },
         categories: [["Clothing"]], // Default category
       })),
-      // No shipping details - Afterpay will collect these in express mode
       discounts:
         discount_amount > 0
           ? [
@@ -99,11 +98,6 @@ export async function POST(req: Request) {
             ]
           : [],
     };
-
-    console.log(
-      "Creating Afterpay checkout with payload:",
-      JSON.stringify(checkoutPayload, null, 2)
-    );
 
     const response = await fetch(`${AFTERPAY_API_BASE}/v2/checkouts`, {
       method: "POST",
@@ -133,7 +127,6 @@ export async function POST(req: Request) {
     }
 
     const checkoutData = await response.json();
-    console.log("Afterpay checkout created successfully:", checkoutData.token);
 
     return NextResponse.json({
       token: checkoutData.token,
