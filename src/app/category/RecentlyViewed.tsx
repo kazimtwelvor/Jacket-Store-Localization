@@ -437,7 +437,6 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                   console.warn('Product not found for color link:', colorLink, errorData)
                                 }
                               } catch (error) {
-                                console.error('Error:', error)
                               } finally {
                                 setLoadingProducts(prev => {
                                   const newSet = new Set(prev)
@@ -690,7 +689,6 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                                   console.warn('Product not found for color link:', colorLink, errorData)
                                                 }
                                               } catch (error) {
-                                                console.error('Error:', error)
                                               } finally {
                                                 setLoadingProducts(prev => {
                                                   const newSet = new Set(prev)
@@ -773,7 +771,6 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                                     console.warn('Product not found for color link:', colorLink, errorData)
                                                   }
                                                 } catch (error) {
-                                                  console.error('Error:', error)
                                                 } finally {
                                                   setLoadingProducts(prev => {
                                                     const newSet = new Set(prev)

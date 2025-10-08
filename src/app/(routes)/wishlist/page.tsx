@@ -30,7 +30,6 @@ const WishlistPage = () => {
         const products = await getProducts({ isFeatured: true })
         setRecommendedProducts(Array.isArray(products) ? products.slice(0, 4) : [])
       } catch (error) {
-        console.error("Error fetching recommended products:", error)
       }
     }
 
@@ -46,12 +45,7 @@ const WishlistPage = () => {
   }
 
   const handleAddToCart = (product: any) => {
-    console.log('Product sizeDetails:', product.sizeDetails)
-    console.log('Product size:', product.size)
-    console.log('sizeDetails length:', product.sizeDetails?.length)
-    console.log('Validation check:', product.sizeDetails && product.sizeDetails.length > 0 && (!product.size || product.size === ''))
     
-    // Check if product has size options and if size is required but not selected
     if (product.sizeDetails && product.sizeDetails.length > 0 && (!product.size || product.size === '')) {
       setSizeErrors(prev => ({...prev, [product.id]: 'Please select a size to add the product to the cart'}))
       return
@@ -64,7 +58,6 @@ const WishlistPage = () => {
       return newErrors
     })
     
-    console.log('Size validation passed, proceeding to add to cart')
 
     try {
       // Convert wishlist item to product format expected by CartContext
@@ -91,7 +84,6 @@ const WishlistPage = () => {
       wishlist.removeItem(product.id)
       toast.success('Item moved to cart!')
     } catch (error) {
-      console.error('Error in handleAddToCart:', error)
       toast.error('Failed to add item to cart. Please try again.')
     }
   }
@@ -282,31 +274,20 @@ const WishlistPage = () => {
                 </p>
                 <button
                   onClick={() => {
-                    console.log('Add all to cart clicked')
-                    console.log('Wishlist items:', wishlist.items)
                     
-                    // Check if ALL items have sizes selected (only for items that have size options)
                     const itemsWithSizeOptions = wishlist.items.filter(item => 
                       item.sizeDetails && item.sizeDetails.length > 0
                     )
                     
-                    console.log('Items with size options:', itemsWithSizeOptions)
-                    
                     const itemsWithoutSelectedSize = itemsWithSizeOptions.filter(item => !item.size)
-                    
-                    console.log('Items without selected size:', itemsWithoutSelectedSize)
-                    
                     if (itemsWithoutSelectedSize.length > 0) {
-                      // Show the same error message as individual add to cart
                       itemsWithoutSelectedSize.forEach(item => {
                         setSizeErrors(prev => ({...prev, [item.id]: 'Please select a size to add the product to the cart'}))
                       })
                       return
                     }
                     
-                    // Add all items to cart
                     wishlist.items.forEach((item) => {
-                      // Convert wishlist item to product format expected by CartContext
                       const product = {
                         id: item.id,
                         name: item.name,
@@ -320,10 +301,8 @@ const WishlistPage = () => {
                         colors: (item as any).colors,
                         colorDetails: item.colorDetails,
                         sizeDetails: item.sizeDetails,
-                        // Add the actual selected color from wishlist
                         color: ((item as any).colorDetails && (item as any).colorDetails[0]) || ((item as any).colors && (item as any).colors[0])
                       }
-                      // Only add to cart if size is selected
                       if ((item as any).size) {
                         addToCart(product, (item as any).size)
                       }

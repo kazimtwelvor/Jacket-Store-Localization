@@ -31,7 +31,6 @@ export async function generateStaticParams() {
         const regularCategories = await getCategories();
         categoriesResult = regularCategories?.slice(0, 20) || [];
       } catch (error2) {
-        console.error('❌ All category fetch strategies failed:', error2);
         return [];
       }
     }
@@ -49,7 +48,6 @@ export async function generateStaticParams() {
     return params;
     
   } catch (error) {
-    console.error('❌ Critical error in generateStaticParams:', error);
     return [];
   }
 }
@@ -177,7 +175,6 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         try {
           if (i > 0) {
             const delay = Math.pow(2, i) * 2000; 
-            console.log(`⏳ Waiting ${delay}ms before retry ${i + 1} for collection ${slug}`);
             await new Promise(resolve => setTimeout(resolve, delay));
           }
           

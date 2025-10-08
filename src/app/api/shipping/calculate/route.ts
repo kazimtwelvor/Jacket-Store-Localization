@@ -161,19 +161,12 @@ export async function POST(req: Request) {
         },
       };
     });
-
-    console.log(
-      `Calculated ${shippingOptions.length} shipping options for ${countryCode}:`,
-      shippingOptions
-    );
-
     return NextResponse.json({
       success: true,
       shippingOptions,
       supportedCountry: countryCode,
     });
   } catch (error: any) {
-    console.error("Shipping calculation error:", error);
     return NextResponse.json(
       {
         error: "SERVICE_UNAVAILABLE",

@@ -398,7 +398,6 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                         setRecentlyViewed(parsed)
                     }
                 } catch (error) {
-                    console.error('Error parsing recently viewed from localStorage:', error)
                 }
             }
         }
@@ -600,7 +599,6 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                 setHasMore(false)
             }
         } catch (error) {
-            console.error('Error loading more products:', error)
             setHasMore(false)
         } finally {
             setIsLoadingMore(false)
@@ -929,7 +927,6 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
             const cleanedContent = category.categoryContent.replace(/^\uFEFF/, '');
             parsedCategoryContent = JSON.parse(cleanedContent);
         } catch (error) {
-            console.error('Failed to parse categoryContent string:', error);
             parsedCategoryContent = {};
         }
     }
@@ -1021,7 +1018,6 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                 : category.customSchema
             structuredData.push(schemaData)
         } catch (error) {
-            console.error('Error parsing custom schema:', error)
         }
     }
     return (
@@ -1526,7 +1522,6 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     open={sizeModalOpen}
                     onOpenChange={setSizeModalOpen}
                     onCategorySelect={(category) => {
-                        console.log('Selected category:', category)
                     }}
                 />
                 <CartSidebar

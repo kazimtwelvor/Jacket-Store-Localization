@@ -40,7 +40,6 @@ const getBillboard = async (id: string): Promise<Billboard> => {
 
     return billboard
   } catch (error) {
-    console.error("Error fetching billboard:", error)
     return fallbackBillboard
   }
 }

@@ -47,7 +47,6 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Error loading more shop products:', error)
     return NextResponse.json(
       { 
         success: false,

@@ -221,9 +221,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
             )}
           </div>
 
-          {/* Desktop Arrows - REMOVED from here (this block is now empty and can be deleted if desired) */}
           <div className="hidden md:flex items-center gap-2">
-            {/* Arrows removed from this location */}
           </div>
         </div>
 
@@ -435,7 +433,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                   console.warn('Product not found for color link:', colorLink, errorData)
                                 }
                               } catch (error) {
-                                console.error('Error:', error)
                               } finally {
                                 setLoadingProducts(prev => {
                                   const newSet = new Set(prev)
@@ -686,7 +683,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                                   console.warn('Product not found for color link:', colorLink, errorData)
                                                 }
                                               } catch (error) {
-                                                console.error('Error:', error)
                                               } finally {
                                                 setLoadingProducts(prev => {
                                                   const newSet = new Set(prev)
@@ -766,7 +762,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                                     console.warn('Product not found for color link:', colorLink, errorData)
                                                   }
                                                 } catch (error) {
-                                                  console.error('Error:', error)
                                                 } finally {
                                                   setLoadingProducts(prev => {
                                                     const newSet = new Set(prev)

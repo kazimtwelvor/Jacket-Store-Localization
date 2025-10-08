@@ -11,13 +11,11 @@ export async function POST(request: NextRequest) {
     const stripeResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/payment-settings`
     );
-    console.log("Stripe response status:", stripeResponse);
     if (!stripeResponse.ok) {
       throw new Error("Failed to fetch Stripe configuration");
     }
 
     const stripeConfig = await stripeResponse.json();
-    console.log("Fetched Stripe config:", stripeConfig);
     const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
     const stripeSecretKey = decrypt(
       stripeConfig.stripeSecretKey,
@@ -44,7 +42,6 @@ export async function POST(request: NextRequest) {
       paymentIntentId: paymentIntent.id,
     });
   } catch (error) {
-    console.error("Error creating express checkout:", error);
     return NextResponse.json(
       { error: "Failed to create express checkout", details: error.message },
       { status: 500 }

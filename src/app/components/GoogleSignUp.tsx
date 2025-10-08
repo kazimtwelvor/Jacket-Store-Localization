@@ -52,7 +52,6 @@ export default function GoogleSignUp({ onSuccess, onError, isLoading, setIsLoadi
       }, 1000);
 
     } catch (error) {
-      console.error('Google sign-up error:', error);
       onError('Failed to initialize Google sign-up');
     }
   };

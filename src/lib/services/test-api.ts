@@ -1,8 +1,6 @@
 import ProductService from './product-service'
 
 export async function testApiConnection() {
-  console.log('🧪 Testing API Connection...')
-  
   try {
     const featuredProducts = await ProductService.getFeaturedProducts(3)
     

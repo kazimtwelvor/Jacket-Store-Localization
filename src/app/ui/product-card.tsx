@@ -67,7 +67,6 @@ const ProductCard = ({ data, onMouseEnter }: ProductCardProps) => {
 
   const handleAddToWishlist = (e: React.MouseEvent) => {
     e.stopPropagation()
-    console.log('Wishlist button clicked for product:', data.id, 'Currently wishlisted:', wishlist.isInWishlist(data.id))
     if (wishlist.isInWishlist(data.id)) {
       wishlist.removeItem(data.id)
     } else {

@@ -54,20 +54,16 @@ export default function PayPalCardFields({
           throw new Error("Missing API URL or STORE_ID");
         }
 
-        // Get PayPal client ID
-        console.log("Fetching payment settings from:", `${apiBase}/payment-settings`);
         const settingsRes = await fetch(`${apiBase}/payment-settings`, {
           cache: "no-store",
         });
         
         if (!settingsRes.ok) {
           const errorText = await settingsRes.text();
-          console.error("Payment settings fetch failed:", settingsRes.status, errorText);
           throw new Error(`Failed to fetch payment settings: ${settingsRes.status}`);
         }
         
         const settings = await settingsRes.json();
-        console.log("Payment settings:", settings);
         
         if (!settings.paypalClientId || !settings.paypalEnabled) {
           throw new Error("PayPal not enabled or client ID not available");
@@ -91,7 +87,6 @@ export default function PayPalCardFields({
                 }))
               };
               
-              console.log("Creating PayPal order with data:", orderData);
               
               const res = await fetch(`/api/paypal/create-order`, {
                 method: "POST",
@@ -101,25 +96,20 @@ export default function PayPalCardFields({
                 body: JSON.stringify(orderData),
               });
 
-              console.log("PayPal create order response status:", res.status);
 
               if (!res.ok) {
                 const errorText = await res.text();
-                console.error("PayPal create order error:", res.status, errorText);
                 throw new Error(`Failed to create PayPal order: ${res.status} - ${errorText}`);
               }
 
               const data = await res.json();
-              console.log("PayPal order created successfully:", data);
               return data.orderId;
             } catch (error) {
-              console.error("PayPal createOrder fetch error:", error);
               throw error;
             }
           },
           onApprove: async (data: any) => {
             try {
-              console.log("PayPal order approved:", data);
               const res = await fetch(`/api/paypal/capture-order`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -128,21 +118,17 @@ export default function PayPalCardFields({
               
               if (!res.ok) {
                 const errorData = await res.json();
-                console.error("PayPal capture error:", errorData);
                 throw new Error(`PayPal capture failed: ${JSON.stringify(errorData)}`);
               }
               
               const captureData = await res.json();
-              console.log("PayPal order captured successfully:", captureData);
               toast.success("Payment successful!");
               onSuccess();
             } catch (error) {
-              console.error("PayPal capture error:", error);
               toast.error("Payment failed. Please try again.");
             }
           },
           onError: (err: any) => {
-            console.error("PayPal Card Fields error:", err);
             setError("Payment failed. Please check your card details and try again.");
             toast.error("Payment failed. Please try again.");
           },
@@ -151,7 +137,6 @@ export default function PayPalCardFields({
         if (isMounted) {
           setCardFields(fields);
           
-          // Render card fields
           if (cardNumberRef.current) {
             fields.CardNumber().render(cardNumberRef.current);
           }
@@ -166,7 +151,6 @@ export default function PayPalCardFields({
           }
         }
       } catch (e: any) {
-        console.error("PayPal Card Fields initialization error:", e);
         setError(e.message || "Failed to initialize PayPal card fields");
         toast.error("Failed to load payment form. Please try again.");
       } finally {
@@ -193,10 +177,8 @@ export default function PayPalCardFields({
     setError(null);
 
     try {
-      // Submit the card fields - this will trigger createOrder and onApprove
       await cardFields.submit();
     } catch (err) {
-      console.error("Payment submission error:", err);
       setError("Payment failed. Please try again.");
       toast.error("Payment failed. Please try again.");
     } finally {

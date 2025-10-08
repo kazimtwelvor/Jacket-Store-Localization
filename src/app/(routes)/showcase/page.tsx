@@ -173,7 +173,6 @@ async function ShowcasePage() {
       </div>
     )
   } catch (error) {
-    console.error("Error rendering ShowcasePage:", error)
     return (
       <Container>
         <div className="py-10 text-center">

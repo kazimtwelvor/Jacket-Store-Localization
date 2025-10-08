@@ -100,24 +100,17 @@ const ConfirmationPage = () => {
 
     setIsLoading(false)
 
-    // Fetch order details from our Store API
     const fetchOrder = async () => {
       try {
-        // Use the Store API URL to fetch order details (no store segment)
         const response = await fetch(`/api/orders/${orderId}`);
 
         if (!response.ok) {
           const errorText = await response.text();
-          console.error(`Error response: ${response.status} - ${errorText}`);
           throw new Error(`Failed to fetch order details: ${response.status}`);
         }
 
         const data = await response.json();
-
-        // Calculate the total price from items if totalPrice is missing or zero
         let calculatedTotalPrice = data.totalPrice;
-
-        // If totalPrice is missing, zero, or "0", calculate from items
         if (
           !calculatedTotalPrice ||
           calculatedTotalPrice === "0" ||
@@ -133,8 +126,6 @@ const ConfirmationPage = () => {
               .toString();
           }
         }
-
-        // Format the order data if needed
         const formattedOrder = {
           id: data.id,
           orderNumber: data.id,
@@ -172,11 +163,7 @@ const ConfirmationPage = () => {
         };
 
         setOrder(formattedOrder);
-        
-        // Track purchase event
         trackPurchase(data.id, formattedOrder.items, calculatedTotalPrice || '0');
-        
-        // Send order confirmation email
         const customerEmail = data.email || data.customerEmail || data.address?.email || data.billingAddress?.email
         const customerName = data.customerName || data.name || data.address?.firstName || data.billingAddress?.firstName || 'Customer'
         
@@ -200,11 +187,9 @@ const ConfirmationPage = () => {
               })
             })
           } catch (emailError) {
-            console.error('Failed to send confirmation email:', emailError)
           }
         }
       } catch (err) {
-        console.error("Error fetching order:", err);
         setError(
           "Could not load order details. Please check your order history."
         );
@@ -216,8 +201,6 @@ const ConfirmationPage = () => {
 
     fetchOrder();
   }, [orderId, success]);
-
-  // Calculate subtotal from items for display
   const calculateSubtotal = () => {
     if (!order?.items || order.items.length === 0) {
       return order?.totalPrice || "0";

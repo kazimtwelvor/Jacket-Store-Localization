@@ -31,7 +31,6 @@ const Footer = () => {
             setEmailInput('')
         } catch (error) {
             setSubmitStatus('error')
-            console.error('Newsletter subscription failed:', error)
         } finally {
             setIsSubmitting(false)
         }

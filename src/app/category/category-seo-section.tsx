@@ -19,13 +19,11 @@ const CategorySEOSection: React.FC<CategorySEOSectionProps> = ({
 }) => {
   const categoryContent = category?.categoryContent;
 
-  // Helper function to decode Unicode HTML entities
   const decodeHtml = (html: string) => {
     return html.replace(/\\u([0-9a-fA-F]{4})/g, (match, code) =>
       String.fromCharCode(parseInt(code, 16))
     );
   };
-  console.log("categoryContent:", categoryContent);
   return (
     <section className="w-full bg-gradient-to-r from-gray-50 to-gray-100 py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
