@@ -105,8 +105,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               <Image
                 src={
                   isHovered && hasMultipleImages
-                    ? (product.images[1] as any).image?.url || (product.images[1] as any).url
-                    : ((product.images?.[0] as any)?.image?.url || (product.images?.[0] as any)?.url || "/placeholder.svg")
+                    ? (product.images[1] as any).url
+                    : ((product.images?.[0] as any)?.url || "/placeholder.svg")
                 }
                 alt={product.name}
                 fill

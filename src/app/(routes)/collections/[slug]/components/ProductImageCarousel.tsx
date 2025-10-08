@@ -15,12 +15,7 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({
   product, 
   wasDragged 
 }) => {
-  const images = product.images && product.images.length > 0 
-    ? product.images.map(img => ({
-        id: img.id,
-        url: (img as any).image?.url || (img as any).url || "/placeholder.svg"
-      }))
-    : [{ id: "placeholder", url: "/placeholder.svg" }]
+  const images = product.images && product.images.length > 0 ? product.images : [{ id: "placeholder", url: "/placeholder.svg" }]
   const [imageIndex, setImageIndex] = useState(0)
   const dragX = useMotionValue(0)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -67,7 +62,7 @@ export const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({
     return (
       <div className="w-full h-full overflow-hidden">
         <Image 
-          src={(product.images?.[0] as any)?.image?.url || (product.images?.[0] as any)?.url || "/placeholder.svg"} 
+          src={images[0].url} 
           alt={product.name} 
           fill 
           className="object-cover object-top" 
