@@ -118,7 +118,7 @@ const ColorSelection = ({
               if (colorLink && selectedColorId !== color.id) {
                 const modifiedLink = colorLink.replace('www.fineystjackets.com', 'www.fineystjackets.com')
                 return (
-                  <Link key={color.id} href={modifiedLink}>
+                  <Link key={color.id} href={modifiedLink} aria-label={`View ${color.name} color option`}>
                     <div 
                       className={cn(
                         "w-[24px] h-[24px] rounded-full border-2 transition-all duration-200 cursor-pointer",
@@ -126,6 +126,7 @@ const ColorSelection = ({
                       )}
                       style={{ backgroundColor: color.value }}
                     />
+                    <span className="sr-only">{color.name} color option</span>
                   </Link>
                 )
               }
