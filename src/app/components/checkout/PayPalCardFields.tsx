@@ -55,7 +55,6 @@ export default function PayPalCardFields({
         }
 
         // Get PayPal client ID
-        console.log("Fetching payment settings from:", `${apiBase}/payment-settings`);
         const settingsRes = await fetch(`${apiBase}/payment-settings`, {
           cache: "no-store",
         });
@@ -67,7 +66,6 @@ export default function PayPalCardFields({
         }
         
         const settings = await settingsRes.json();
-        console.log("Payment settings:", settings);
         
         if (!settings.paypalClientId || !settings.paypalEnabled) {
           throw new Error("PayPal not enabled or client ID not available");
@@ -91,7 +89,6 @@ export default function PayPalCardFields({
                 }))
               };
               
-              console.log("Creating PayPal order with data:", orderData);
               
               const res = await fetch(`/api/paypal/create-order`, {
                 method: "POST",
@@ -101,7 +98,6 @@ export default function PayPalCardFields({
                 body: JSON.stringify(orderData),
               });
 
-              console.log("PayPal create order response status:", res.status);
 
               if (!res.ok) {
                 const errorText = await res.text();
@@ -110,7 +106,6 @@ export default function PayPalCardFields({
               }
 
               const data = await res.json();
-              console.log("PayPal order created successfully:", data);
               return data.orderId;
             } catch (error) {
               console.error("PayPal createOrder fetch error:", error);
@@ -119,7 +114,6 @@ export default function PayPalCardFields({
           },
           onApprove: async (data: any) => {
             try {
-              console.log("PayPal order approved:", data);
               const res = await fetch(`/api/paypal/capture-order`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -133,7 +127,6 @@ export default function PayPalCardFields({
               }
               
               const captureData = await res.json();
-              console.log("PayPal order captured successfully:", captureData);
               toast.success("Payment successful!");
               onSuccess();
             } catch (error) {
@@ -193,7 +186,6 @@ export default function PayPalCardFields({
     setError(null);
 
     try {
-      // Submit the card fields - this will trigger createOrder and onApprove
       await cardFields.submit();
     } catch (err) {
       console.error("Payment submission error:", err);

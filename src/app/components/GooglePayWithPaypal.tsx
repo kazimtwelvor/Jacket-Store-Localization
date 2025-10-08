@@ -64,7 +64,6 @@ async function getGooglePayConfig() {
       }
 
       googlepayConfig = await paypalGooglePay.config();
-      console.log("===== Google Pay Config Fetched =====");
     } catch (error) {
       console.error("Error accessing PayPal Google Pay module:", error);
       throw new Error(
@@ -153,7 +152,6 @@ const loadGooglePayScript = (): Promise<void> => {
     script.src = "https://pay.google.com/gp/p/js/pay.js";
     script.async = true;
     script.onload = () => {
-      console.log("Google Pay SDK loaded successfully");
       resolve();
     };
     script.onerror = (error) => {
@@ -210,7 +208,6 @@ export default function GooglePayWithPayPal({
     reset: reset3DS,
   } = usePayPal3DS({
     onSuccess: (result) => {
-      console.log("Google Pay 3DS authentication successful:", result);
       setProcessing(false);
       if (onCaptureSuccess) {
         onCaptureSuccess(result.orderId || result.order_id);
@@ -222,7 +219,6 @@ export default function GooglePayWithPayPal({
       setError(error.message);
     },
     onAuthenticationRequired: (orderId) => {
-      console.log("Google Pay 3DS authentication required for order:", orderId);
     },
   });
 
@@ -255,13 +251,6 @@ export default function GooglePayWithPayPal({
   const processPayment = useCallback(
     async (paymentData: any) => {
       try {
-        // if (typeof termsAccepted !== "undefined" && !termsAccepted) {
-        //   const msg = "Please accept the terms and conditions to continue";
-        //   setError(msg);
-        //   if (onTermsError) onTermsError(msg);
-        //   throw new Error(msg);
-        // }
-
         const itemsToProcess =
           itemsSnapshotRef.current.length > 0
             ? itemsSnapshotRef.current

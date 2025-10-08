@@ -43,7 +43,6 @@ export default function PayPalButtons({
         if (!apiBase || !storeId)
           throw new Error("Missing API URL or STORE_ID");
 
-        // fetch payment settings to get encrypted client id
         const settingsRes = await fetch(`${apiBase}/payment-settings`, {
           cache: "no-store",
         });
@@ -56,8 +55,6 @@ export default function PayPalButtons({
         const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
         
         const decryptedClientId = decrypt(settings.paypalClientId, encryptionKey);
-        console.log('Decrypted Client ID:', decryptedClientId);
-        console.log('Client ID length:', decryptedClientId.length);
         await loadPayPalSDK(decryptedClientId, ['buttons']);
 
         if (!isMounted || !containerRef.current) return;
@@ -80,7 +77,6 @@ export default function PayPalButtons({
             },
             createOrder: async () => {
               try {
-                console.log("Creating PayPal order with items:", items);
                 const res = await fetch(`/api/paypal/create-order`, {
                   method: "POST",
                   headers: {
@@ -88,7 +84,6 @@ export default function PayPalButtons({
                   },
                   body: JSON.stringify({ items }),
                 });
-                console.log("PayPal API response status:", res.status);
                 if (!res.ok) {
                   const errorText = await res.text();
                   console.error(
@@ -101,7 +96,6 @@ export default function PayPalButtons({
                   );
                 }
                 const data = await res.json();
-                console.log("PayPal order created:", data);
                 return data.orderId;
               } catch (error) {
                 console.error("PayPal createOrder fetch error:", error);

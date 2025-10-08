@@ -133,26 +133,16 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     useState<PaginatedProductsData>(initialProductsData);
 
   useEffect(() => {
-    console.log("ProductsData state updated:", {
-      currentPage: productsData.pagination.currentPage,
-      totalPages: productsData.pagination.totalPages,
-      productsCount: productsData.products.length,
-      firstProduct: productsData.products[0]?.name || "none",
-    });
   }, [productsData]);
   const [loading, setLoading] = useState(false);
 
-  // Debug loading state changes
   useEffect(() => {
-    console.log("Loading state changed:", loading);
   }, [loading]);
 
-  // Load more functionality states
   const [loadedProducts, setLoadedProducts] = useState<Product[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(hasMoreProducts);
   const [loadMorePage, setLoadMorePage] = useState(2);
-
   const [sizeModalOpen, setSizeModalOpen] = useState(false);
   const [filterSidebarOpen, setFilterSidebarOpen] = useState(false);
   const [categorySliderOpen, setCategorySliderOpen] = useState(false);
@@ -375,21 +365,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         };
 
         const newProductsData = await getProducts(queryParams);
-        console.log("API Response received:", {
-          requestId,
-          latestHandled: latestHandledRequestRef.current,
-          page,
-          newProductsData: {
-            currentPage: newProductsData.pagination.currentPage,
-            totalPages: newProductsData.pagination.totalPages,
-            productsCount: newProductsData.products.length,
-          },
-        });
-
-        // Only apply if this is the latest request
         if (requestId > latestHandledRequestRef.current) {
           latestHandledRequestRef.current = requestId;
-          console.log("Updating state with new data for page:", page);
           setProductsData(newProductsData);
           setCurrentProducts(
             sortProductsClient(
@@ -398,15 +375,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             )
           );
           setCurrentPage(page);
-          // Update hasMore state based on filtered results
           setHasMore(newProductsData.pagination?.hasNextPage || false);
         } else {
-          console.log(
-            "Request ignored - not latest:",
-            requestId,
-            "vs",
-            latestHandledRequestRef.current
-          );
         }
 
         if (!skipURLUpdate) {
@@ -456,10 +426,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         isApplyingFilters.current = false;
       } finally {
         inflightCountRef.current = Math.max(0, inflightCountRef.current - 1);
-        // Always set loading to false when request completes
         if (inflightCountRef.current === 0) {
           setLoading(false);
-          // Clear pagination in progress flag after a short delay to allow URL to update
           if (isPaginationInProgress) {
             setTimeout(() => {
               setIsPaginationInProgress(false);
@@ -479,12 +447,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
   const handlePageChange = useCallback(
     (page: number) => {
-      console.log(
-        "Page change requested:",
-        page,
-        "Current productsData page:",
-        productsData.pagination.currentPage
-      );
       setIsPaginationInProgress(true);
       fetchProducts(page);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -537,10 +499,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         limit: 40,
         sort: activeSort || filterParams?.sort || "popular",
       };
-
-      console.log('🔄 Load More Payload:', loadMorePayload);
-      console.log('📊 Selected Filters State:', selectedFilters);
-
       const response = await fetch("/api/shop/load-more", {
         method: "POST",
         headers: {
@@ -826,18 +784,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       fetchProducts(urlPage, true, undefined, true, explicit);
       return;
     }
-
-    // Only fetch if URL page is different from current page AND we're not in the middle of a pagination update
-    console.log("URL sync check:", {
-      urlPage,
-      currentPage,
-      loading,
-      isPaginationInProgress,
-      shouldFetch:
-        urlPage !== currentPage && !loading && !isPaginationInProgress,
-    });
     if (urlPage !== currentPage && !isPaginationInProgress) {
-      console.log("URL sync triggering fetchProducts for page:", urlPage);
       fetchProducts(urlPage);
     }
   }, [currentPage, loading, isPaginationInProgress]);
@@ -1235,9 +1182,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         <WhatsMySize
           open={sizeModalOpen}
           onOpenChange={setSizeModalOpen}
-          // onCategorySelect={(category) => {
-          //   console.log("Selected category:", category);
-          // }}
         />
 
         {mobileCartModal.product && (

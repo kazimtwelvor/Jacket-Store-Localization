@@ -18,13 +18,11 @@ export async function POST(request: NextRequest) {
       const stripeResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/payment-settings`
     );
-    console.log("Stripe response status:", stripeResponse);
     if (!stripeResponse.ok) {
       throw new Error("Failed to fetch Stripe configuration");
     }
 
     const stripeConfig = await stripeResponse.json();
-    console.log("Fetched Stripe config:", stripeConfig);
     const encryptionKey = "a7b9c2d4e6f8g1h3j5k7m9n2p4q6r8s0";
     const stripeSecretKey = decrypt(
       stripeConfig.stripeSecretKey,
@@ -38,7 +36,6 @@ export async function POST(request: NextRequest) {
     const stripe = new Stripe(stripeSecretKey);
 
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-    console.log("Retrieved payment intent:", paymentIntent);
     if (paymentIntent.status !== "succeeded") {
       return NextResponse.json(
         { error: "Payment not successful" },
@@ -65,9 +62,6 @@ export async function POST(request: NextRequest) {
             }),
           }
         );
-        
-        console.log("Backend update response status:", response.status);
-        
         if (!response.ok) {
           const errorText = await response.text();
           console.error("Backend API error:", {
@@ -78,7 +72,6 @@ export async function POST(request: NextRequest) {
           });
         } else {
           const result = await response.json();
-          console.log("Backend update successful:", result);
         }
       } catch (fetchError) {
         console.error("Network error updating backend:", fetchError);
