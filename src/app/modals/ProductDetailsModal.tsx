@@ -41,7 +41,7 @@ const ProductDetailsModal = ({ isOpen, onClose, product }: ProductDetailsModalPr
           >
             {/* Header */}
             <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-[#2b2b2b]">Product Details</h2>
+              <span className="text-lg font-bold text-[#2b2b2b]">Product Details</span>
               <button
                 onClick={onClose}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"

@@ -19,7 +19,6 @@ interface CategoryPageProps {
 
 export async function generateStaticParams() {
   try {
-    console.log('🔨 Generating static params for collections...');
     
     let categoriesResult = null;
     
@@ -47,7 +46,6 @@ export async function generateStaticParams() {
       slug: category.slug,
     }));
     
-    console.log(`✅ Generated ${params.length} static collection params`);
     return params;
     
   } catch (error) {

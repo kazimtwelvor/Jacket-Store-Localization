@@ -23,24 +23,17 @@ interface ProductPageProps {
 
 export async function generateStaticParams() {
   try {
-    console.log('🔨 Generating static params for products...');
-    
-    // Try to get products with multiple fallback strategies
     let productsResult = null;
-    
-    // Strategy 1: Try with normal limit
     try {
       productsResult = await getProducts({ limit: 100 });
     } catch (error) {
       console.warn('⚠️ Failed to fetch 100 products, trying smaller batch...');
       
-      // Strategy 2: Try with smaller limit
       try {
         productsResult = await getProducts({ limit: 50 });
       } catch (error2) {
         console.warn('⚠️ Failed to fetch 50 products, trying minimal batch...');
         
-        // Strategy 3: Try with minimal limit
         try {
           productsResult = await getProducts({ limit: 10 });
         } catch (error3) {
@@ -59,12 +52,10 @@ export async function generateStaticParams() {
       slug: product.slug || product.id,
     }));
     
-    console.log(`✅ Generated ${params.length} static params`);
     return params;
     
   } catch (error) {
     console.error('❌ Critical error in generateStaticParams:', error);
-    // Return empty array as fallback - dynamicParams=true will handle missing routes
     return [];
   }
 }
@@ -266,8 +257,10 @@ const ProductPage = async ({ params }: ProductPageProps) => {
     <div className="min-h-screen bg-white" style={{ scrollBehavior: 'smooth' }}>
       <StructuredData data={schemaArray} />
       
-      {/* H1 as first element in HTML */}
-      <h1 className="sr-only">{product?.name?.toUpperCase()}</h1>
+      <div className="sr-only">
+        <h1>{product?.name?.toUpperCase()}</h1>
+        <h2>{product?.category?.name ? `${product.category.name} - ${product.name}` : `Product Details - ${product.name}`}</h2>
+      </div>
 
       <ProductPageClient productId={product.id} />
 

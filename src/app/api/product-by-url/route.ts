@@ -53,9 +53,7 @@ export async function GET(request: NextRequest) {
         const searchData = await searchResponse.json()
         products = searchData.products || searchData
         
-        console.log(`🔍 Searching through ${products.length} products...`)
         
-        // Strategy 1: Exact slug match
         productData = products.find((p: any) => p.slug === productSlug)
         if (productData) {
           console.log('✅ Found product via exact slug match:', productData.name)
@@ -115,7 +113,6 @@ export async function GET(request: NextRequest) {
 
     if (!productData) {
       console.error('❌ Product not found for slug:', productSlug)
-      console.error('🔍 Available product slugs:', products?.slice(0, 10).map((p: any) => p.slug || p.name?.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')).filter(Boolean))
       return NextResponse.json({ 
         error: 'Product not found', 
         searchedSlug: productSlug,
