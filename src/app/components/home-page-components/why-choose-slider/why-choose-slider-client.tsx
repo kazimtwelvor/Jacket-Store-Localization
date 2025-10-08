@@ -51,6 +51,8 @@ export default function WhyChooseSliderClient({ slides }: WhyChooseSliderClientP
         <img
           src={slides[currentSlide].imageUrl}
           alt={slides[currentSlide].title}
+          width={800}
+          height={600}
           className="w-full h-full object-contain object-right transition-all duration-500"
         />
         <div className="absolute inset-0 bg-black/10"></div>
@@ -93,6 +95,8 @@ export default function WhyChooseSliderClient({ slides }: WhyChooseSliderClientP
                   <img
                     src={slides[currentSlide].imageUrl}
                     alt={slides[currentSlide].title}
+                    width={400}
+                    height={320}
                     className="w-full h-full object-cover object-right"
                   />
                 </div>

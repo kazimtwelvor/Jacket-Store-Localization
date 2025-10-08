@@ -117,6 +117,8 @@ export default function SignatureSectionClient({ signatureData }: SignatureSecti
                 <img
                   src={signatureData.men.imageUrl}
                   alt="Men's Leather Jacket"
+                  width={600}
+                  height={700}
                   className="w-full h-full object-cover object-[5%] md:object-[5%] lg:object-[5%] group-hover:scale-110 transition-transform duration-500 block"
                 />
               </div>
@@ -168,6 +170,8 @@ export default function SignatureSectionClient({ signatureData }: SignatureSecti
                 <img
                   src={womenImageSrc}
                   alt="Women's Leather Jacket"
+                  width={600}
+                  height={700}
                   className="w-full h-full object-cover object-[100%] md:object-[100%] lg:object-[100%] group-hover:scale-110 transition-transform duration-500 block"
                 />
               </div>
