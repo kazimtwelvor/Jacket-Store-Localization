@@ -25,21 +25,11 @@ export async function GET(
         const baseColor = data.baseColor
         const colorDetails = data.colorDetails
         
-        let combinedColorDetails = []
-        
-        if (baseColor && baseColor.id) {
-          combinedColorDetails.push(baseColor)
+        if (Array.isArray(colorDetails) && colorDetails.length > 0) {
+          data.colorDetails = colorDetails
+        } else if (baseColor && baseColor.id) {
+          data.colorDetails = [baseColor]
         }
-        
-        if (Array.isArray(colorDetails)) {
-          colorDetails.forEach(color => {
-            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
-              combinedColorDetails.push(color)
-            }
-          })
-        }
-        
-        data.colorDetails = combinedColorDetails
       }
       
       return NextResponse.json(data)
@@ -67,21 +57,11 @@ export async function GET(
         const baseColor = product.baseColor
         const colorDetails = product.colorDetails
         
-        let combinedColorDetails = []
-        
-        if (baseColor && baseColor.id) {
-          combinedColorDetails.push(baseColor)
+        if (Array.isArray(colorDetails) && colorDetails.length > 0) {
+          product.colorDetails = colorDetails
+        } else if (baseColor && baseColor.id) {
+          product.colorDetails = [baseColor]
         }
-        
-        if (Array.isArray(colorDetails)) {
-          colorDetails.forEach(color => {
-            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
-              combinedColorDetails.push(color)
-            }
-          })
-        }
-        
-        product.colorDetails = combinedColorDetails
       }
       
       return NextResponse.json(product)
