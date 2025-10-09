@@ -78,25 +78,25 @@ const ConfirmationPage = () => {
     setIsMounted(true);
 
     // Check if this page has been visited before in this session
-    const hasVisited = sessionStorage.getItem('confirmation-visited');
-    if (hasVisited) {
-      router.push('/');
-      return;
-    }
-    // Mark as visited
-    sessionStorage.setItem('confirmation-visited', 'true');
+    // const hasVisited = sessionStorage.getItem('confirmation-visited');
+    // if (hasVisited) {
+    //   router.push('/');
+    //   return;
+    // }
+    // // Mark as visited
+    // sessionStorage.setItem('confirmation-visited', 'true');
 
-    if (!orderId) {
-      setError("No order ID provided");
-      setIsLoading(false);
-      return;
-    }
+    // if (!orderId) {
+    //   setError("No order ID provided");
+    //   setIsLoading(false);
+    //   return;
+    // }
 
-    if (!success) {
-      setError("Payment was not successful");
-      setIsLoading(false);
-      return;
-    }
+    // if (!success) {
+    //   setError("Payment was not successful");
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     setIsLoading(false)
 
