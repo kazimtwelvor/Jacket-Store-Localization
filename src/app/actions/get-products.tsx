@@ -44,21 +44,11 @@ const getProducts = async (query: Query): Promise<PaginatedResponse> => {
         const baseColor = product.baseColor
         const colorDetails = product.colorDetails
         
-        let combinedColorDetails = []
-        
-        if (baseColor && baseColor.id) {
-          combinedColorDetails.push(baseColor)
+        if (Array.isArray(colorDetails) && colorDetails.length > 0) {
+          product.colorDetails = colorDetails
+        } else if (baseColor && baseColor.id) {
+          product.colorDetails = [baseColor]
         }
-        
-        if (Array.isArray(colorDetails)) {
-          colorDetails.forEach(color => {
-            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
-              combinedColorDetails.push(color)
-            }
-          })
-        }
-        
-        product.colorDetails = combinedColorDetails
       }
       
       return product

@@ -106,21 +106,11 @@ export async function GET(request: NextRequest) {
       const baseColor = productData.baseColor
       const colorDetails = productData.colorDetails
       
-      let combinedColorDetails = []
-      
-      if (baseColor && baseColor.id) {
-        combinedColorDetails.push(baseColor)
+      if (Array.isArray(colorDetails) && colorDetails.length > 0) {
+        productData.colorDetails = colorDetails
+      } else if (baseColor && baseColor.id) {
+        productData.colorDetails = [baseColor]
       }
-      
-      if (Array.isArray(colorDetails)) {
-        colorDetails.forEach(color => {
-          if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
-            combinedColorDetails.push(color)
-          }
-        })
-      }
-      
-      productData.colorDetails = combinedColorDetails
     }
 
     return NextResponse.json(productData)
