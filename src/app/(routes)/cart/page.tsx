@@ -146,7 +146,7 @@ const StripeExpressCheckout = ({
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               productIds: items.map((item) => item.product.id),
-              paymentMethod: "stripe_express",
+              paymentMethod: "stripe",
               customerEmail: event.billingDetails?.email || "",
               customerName:
                 event.billingDetails?.name || event.shippingAddress?.name || "",

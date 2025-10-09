@@ -27,6 +27,14 @@ interface OrderItem {
   color?: string;
   size?: string;
   images?: { url: string }[];
+  product?: {
+    id: string;
+    name: string;
+    price: string;
+    images: Array<{ image?: { url: string }; url?: string } | string>;
+    color?: { name: string };
+    size?: { name: string };
+  };
 }
 
 interface OrderDetails {
@@ -77,26 +85,29 @@ const ConfirmationPage = () => {
   useEffect(() => {
     setIsMounted(true);
 
+    // Scroll to top when the page loads
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+
     // Check if this page has been visited before in this session
-    const hasVisited = sessionStorage.getItem('confirmation-visited');
-    if (hasVisited) {
-      router.push('/');
-      return;
-    }
-    // Mark as visited
-    sessionStorage.setItem('confirmation-visited', 'true');
+    // const hasVisited = sessionStorage.getItem('confirmation-visited');
+    // if (hasVisited) {
+    //   router.push('/');
+    //   return;
+    // }
+    // // Mark as visited
+    // sessionStorage.setItem('confirmation-visited', 'true');
 
-    if (!orderId) {
-      setError("No order ID provided");
-      setIsLoading(false);
-      return;
-    }
+    // if (!orderId) {
+    //   setError("No order ID provided");
+    //   setIsLoading(false);
+    //   return;
+    // }
 
-    if (!success) {
-      setError("Payment was not successful");
-      setIsLoading(false);
-      return;
-    }
+    // if (!success) {
+    //   setError("Payment was not successful");
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     setIsLoading(false)
 
@@ -148,6 +159,7 @@ const ConfirmationPage = () => {
               color: item.product?.color?.name,
               size: item.product?.size?.name,
               images: item.product?.images || [],
+              product: item.product, // Keep the full product object for better image access
             })) || [],
           shippingAddress: data.address
             ? {
@@ -164,31 +176,12 @@ const ConfirmationPage = () => {
 
         setOrder(formattedOrder);
         trackPurchase(data.id, formattedOrder.items, calculatedTotalPrice || '0');
-        const customerEmail = data.email || data.customerEmail || data.address?.email || data.billingAddress?.email
-        const customerName = data.customerName || data.name || data.address?.firstName || data.billingAddress?.firstName || 'Customer'
         
-        if (customerEmail && data.id) {
-          try {
-            await fetch('/api/orders/send-order-emails', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                customerEmail: customerEmail,
-                customerName: customerName,
-                orderNumber: data.id,
-                orderTotal: data.total?.toString() || data.totalAmount || calculatedTotalPrice || "0",
-                items: data.orderItems?.map((item: any) => ({
-                  name: item.product?.name || "Product",
-                  quantity: item.quantity || 1,
-                  price: parseFloat(item.product?.price || "0")
-                })) || []
-              })
-            })
-          } catch (emailError) {
-          }
-        }
+        // Scroll to top again when order data is loaded to ensure user sees the confirmation
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        
+        // Note: Emails are already sent from the checkout page after successful payment
+        // No need to send emails again here to avoid duplicates
       } catch (err) {
         setError(
           "Could not load order details. Please check your order history."
@@ -200,6 +193,13 @@ const ConfirmationPage = () => {
     };
 
     fetchOrder();
+  }, [orderId, success]);
+
+  // Additional effect to scroll to top when orderId or success changes
+  useEffect(() => {
+    if (orderId && success) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }
   }, [orderId, success]);
   const calculateSubtotal = () => {
     if (!order?.items || order.items.length === 0) {
@@ -367,17 +367,48 @@ const ConfirmationPage = () => {
                       order.items.map((item, index) => (
                         <div key={item.id || index} className="py-4 flex">
                           <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded overflow-hidden">
-                            {item.images && item.images[0] ? (
-                              <img
-                                src={item.images[0].url || "/placeholder.svg"}
-                                alt={item.name}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-gray-400">
-                                <Package className="h-8 w-8" />
-                              </div>
-                            )}
+                            {(() => {
+                              // Try multiple ways to get the image URL
+                              let imageUrl = null;
+                              
+                              // Method 1: Nested structure (most likely)
+                              const firstImage = item.product?.images?.[0];
+                              if (firstImage && typeof firstImage === 'object' && firstImage.image?.url) {
+                                imageUrl = firstImage.image.url;
+                              }
+                              
+                              // Method 2: Direct URL structure
+                              if (!imageUrl && firstImage && typeof firstImage === 'object' && firstImage.url) {
+                                imageUrl = firstImage.url;
+                              }
+                              
+                              // Method 3: From item.images directly
+                              if (!imageUrl && item.images?.[0]?.url) {
+                                imageUrl = item.images[0].url;
+                              }
+                              
+                              // Method 4: String array
+                              if (!imageUrl && firstImage && typeof firstImage === 'string') {
+                                imageUrl = firstImage;
+                              }
+                              
+                              // Fallback to placeholder
+                              if (!imageUrl) {
+                                imageUrl = "/placeholder.svg";
+                              }
+                              
+                              return imageUrl !== "/placeholder.svg" ? (
+                                <img
+                                  src={imageUrl}
+                                  alt={item.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                  <Package className="h-8 w-8" />
+                                </div>
+                              );
+                            })()}
                           </div>
                           <div className="ml-4 flex-1">
                             <h3 className="text-sm font-medium text-gray-900">
