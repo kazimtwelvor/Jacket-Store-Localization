@@ -102,6 +102,11 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
   const availableSizes: Size[] = (data?.sizeDetails as Size[]) || []
   const availableColors: Color[] = (data?.colorDetails as Color[]) || []
   
+  // DEBUG: Log color order
+  console.log('Product:', data?.name)
+  console.log('Available Colors:', availableColors.map(c => c.name))
+  console.log('Color Links:', data?.colorLinks)
+  
 
 
   // Set default selected color when data loads (but not size)
