@@ -4,12 +4,14 @@ import { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useViewTracking } from "@/src/app/hooks/use-view-tracking";
 import { getStoreId, isTrackingEnabled } from "@/src/app/utils/store-config";
+import { trackViewContent } from "@/src/app/lib/analytics";
 
 interface ProductPageClientProps {
   productId?: string;
+  product?: any;
 }
 
-export default function ProductPageClient({ productId }: ProductPageClientProps) {
+export default function ProductPageClient({ productId, product }: ProductPageClientProps) {
   const router = useRouter();
   const params = useParams();
   const slug = params?.slug as string;
@@ -31,7 +33,7 @@ export default function ProductPageClient({ productId }: ProductPageClientProps)
   useEffect(() => {
     if (productId || slug) {
     }
-  }, [productId, slug]);
+  }, [product]);
 
   return null;
 }

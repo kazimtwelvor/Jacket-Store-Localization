@@ -40,6 +40,7 @@ import {
   STATES_BY_COUNTRY,
   getStatesForCountry,
 } from "../../utils/states-data";
+import { trackBeginCheckout } from "../../lib/analytics";
 
 // Initialize Stripe
 let stripePromise: any = null;
@@ -554,7 +555,11 @@ const CheckoutPage = () => {
         selectedPaymentMethod: paymentMethod,
       }));
     }
-  }, []);
+
+    if (items.length > 0) {
+      trackBeginCheckout(items);
+    }
+  }, [items]);
 
   useEffect(() => {
     const fetchStripePublishableKey = async () => {

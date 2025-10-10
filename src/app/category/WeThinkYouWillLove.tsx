@@ -9,6 +9,7 @@ import { Heart, ChevronLeft, ChevronRight, X } from "lucide-react"
 import type { Product } from "@/types"
 import useWishlist from "../hooks/use-wishlist"
 import { cn } from "../lib/utils"
+import { trackAddToWishlist } from "../lib/analytics"
 
 
 interface WeThinkYouWillLoveProps {
@@ -267,6 +268,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                         wishlist.removeItemWithKey(uniqueKey)
                       } else {
                         wishlist.addItemWithKey(product, uniqueKey)
+                        trackAddToWishlist(product)
                       }
                     }}
                   >
@@ -514,6 +516,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                           wishlist.removeItemWithKey(uniqueKey)
                         } else {
                           wishlist.addItemWithKey(product, uniqueKey)
+                          trackAddToWishlist(product)
                         }
                       }}
                     >
