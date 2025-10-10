@@ -127,12 +127,23 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
   
 
 
-  // Set default selected color when data loads (but not size)
+  // Set selected color to current product's base color
   useEffect(() => {
     if (availableColors.length > 0 && !selectedColorId) {
-      setSelectedColorId(availableColors[0].id)
+      // Find current product's color (baseColor) in the sorted array
+      const currentProductColor = data?.baseColor
+      if (currentProductColor) {
+        const matchingColor = availableColors.find(color => color.id === currentProductColor.id)
+        if (matchingColor) {
+          setSelectedColorId(matchingColor.id)
+        } else {
+          setSelectedColorId(availableColors[0].id)
+        }
+      } else {
+        setSelectedColorId(availableColors[0].id)
+      }
     }
-  }, [availableColors.length])
+  }, [availableColors.length, data?.baseColor])
 
   // Handle click outside dropdown
   useEffect(() => {
