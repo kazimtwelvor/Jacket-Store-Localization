@@ -18,12 +18,14 @@ const items = [
 
 export function CapsuleNav() {
   const [isMounted, setIsMounted] = useState(false);
-  const [activeItem, setActiveItem] = useState(0);
+  const pathname = usePathname();
+  const [activeItem, setActiveItem] = useState(() => {
+    // Initialize activeItem based on current pathname
+    return pathname === "/us/" ? 0 : -1;
+  });
   const [isVisible, setIsVisible] = useState(true);
   const [isFilterBarSticky, setIsFilterBarSticky] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const pathname = usePathname();
   const [emblaRef] = useEmblaCarousel({
     align: "start",
     containScroll: "trimSnaps",
@@ -123,8 +125,6 @@ export function CapsuleNav() {
   useEffect(() => {
     if (pathname === "/us/") {
       setActiveItem(0);
-    } else if (pathname === "/us/shop") {
-      setActiveItem(-1);
     } else {
       setActiveItem(-1);
     }
