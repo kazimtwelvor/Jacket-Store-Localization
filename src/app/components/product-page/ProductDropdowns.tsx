@@ -237,7 +237,7 @@ const ProductDropdowns = ({
         <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeTab === "care" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
           <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed" data-dropdown>
             <p>To preserve the quality of your garment:</p>
-            <ul className="list-disc pl-5 mt-2 space-y-1">
+            <ul className="list-disc pl-5 mt-2 space-y-1"> 
               <li>Machine wash cold with similar colors</li>
               <li>Do not bleach</li>
               <li>Tumble dry low</li>

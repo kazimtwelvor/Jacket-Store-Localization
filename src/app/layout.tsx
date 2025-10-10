@@ -45,10 +45,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-5FDZTZJV');`
         }} />
         {/* End Google Tag Manager */}
-        
+
         {/* Google Site Verification */}
         <meta name="google-site-verification" content="7fzjFZWpRYLIz_L2sKypuvXyhyf44Na3by5X3a96l9g" />
-        
+
         {/* Preload critical images */}
         <link
           rel="preload"
@@ -78,54 +78,81 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           type="font/woff"
           crossOrigin="anonymous"
         />
-        
+
         {/* Initialize dataLayer */}
         <script
           dangerouslySetInnerHTML={{
             __html: `window.dataLayer = window.dataLayer || [];`
           }}
         />
-        
+
+        {/* Meta (Facebook) Pixel */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '${process.env.NEXT_PUBLIC_META_PIXEL_ID || ''}');
+              fbq('track', 'PageView');
+            `
+          }}
+        />
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: 'none' }}
+            src={`https://www.facebook.com/tr?id=${process.env.NEXT_PUBLIC_META_PIXEL_ID || ''}&ev=PageView&noscript=1`}
+          />
+        </noscript>
+        {/* End Meta Pixel */}
+
         {/* Microsoft Clarity Script */}
         <ClarityScript />
       </head>
       <body className={`${avertaDefault.variable} ${avertaBold.variable} w-full mx-0 px-0 bg-[#000000] min-h-screen flex flex-col`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
-          <iframe 
+          <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5FDZTZJV"
-            height="0" 
-            width="0" 
-            style={{display: 'none', visibility: 'hidden'}}
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-        
+
         <FontProvider>
           <ClarityProvider>
             {/* <Suspense fallback={<div />}> */}
-                <CartProvider>
-                <noscript>
-                  <div style={{background:'#111', color:'#fff', padding:'8px 12px', textAlign:'center'}}>
-                    For the best experience, enable JavaScript. Basic content is still available.
-                  </div>
-                </noscript>
-                {/* <Suspense fallback={<div />}> */}
-                  <Navbar />
+            <CartProvider>
+              <noscript>
+                <div style={{ background: '#111', color: '#fff', padding: '8px 12px', textAlign: 'center' }}>
+                  For the best experience, enable JavaScript. Basic content is still available.
+                </div>
+              </noscript>
+              {/* <Suspense fallback={<div />}> */}
+              <Navbar />
+              {/* </Suspense> */}
+              <Suspense fallback={null}>
+                <RouteLoadingOverlay />
+              </Suspense>
+              <main className="flex-1">
+                {/* <Suspense fallback={<div className="min-h-[50vh]" />}> */}
+                {children}
                 {/* </Suspense> */}
-                <Suspense fallback={null}>
-                  <RouteLoadingOverlay />
-                </Suspense>
-                <main className="flex-1">
-                  {/* <Suspense fallback={<div className="min-h-[50vh]" />}> */}
-                    {children}
-                  {/* </Suspense> */}
-                </main>
-                <Footer />
-                <CartSidebarWrapper />
-                </CartProvider>
+              </main>
+              <Footer />
+              <CartSidebarWrapper />
+            </CartProvider>
             {/* </Suspense> */}
-            <CustomChatButton/>
+            <CustomChatButton />
           </ClarityProvider>
         </FontProvider>
       </body>
