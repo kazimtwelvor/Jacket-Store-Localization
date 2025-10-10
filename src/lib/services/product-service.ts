@@ -125,11 +125,21 @@ export class ProductService {
                     const baseColor = product.baseColor
                     const colorDetails = product.colorDetails
                     
-                    if (Array.isArray(colorDetails) && colorDetails.length > 0) {
-                        product.colorDetails = colorDetails
-                    } else if (baseColor && baseColor.id) {
-                        product.colorDetails = [baseColor]
+                    let combinedColorDetails = []
+                    
+                    if (baseColor && baseColor.id) {
+                        combinedColorDetails.push(baseColor)
                     }
+                    
+                    if (Array.isArray(colorDetails)) {
+                        colorDetails.forEach(color => {
+                            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+                                combinedColorDetails.push(color)
+                            }
+                        })
+                    }
+                    
+                    product.colorDetails = combinedColorDetails
                 }
                 
                 return product
@@ -171,11 +181,21 @@ export class ProductService {
                 const baseColor = product.baseColor
                 const colorDetails = product.colorDetails
                 
-                if (Array.isArray(colorDetails) && colorDetails.length > 0) {
-                    product.colorDetails = colorDetails
-                } else if (baseColor && baseColor.id) {
-                    product.colorDetails = [baseColor]
+                let combinedColorDetails = []
+                
+                if (baseColor && baseColor.id) {
+                    combinedColorDetails.push(baseColor)
                 }
+                
+                if (Array.isArray(colorDetails)) {
+                    colorDetails.forEach(color => {
+                        if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+                            combinedColorDetails.push(color)
+                        }
+                    })
+                }
+                
+                product.colorDetails = combinedColorDetails
             }
             
             return product
@@ -203,11 +223,21 @@ export class ProductService {
                     const baseColor = product.baseColor
                     const colorDetails = product.colorDetails
                     
-                    if (Array.isArray(colorDetails) && colorDetails.length > 0) {
-                        product.colorDetails = colorDetails
-                    } else if (baseColor && baseColor.id) {
-                        product.colorDetails = [baseColor]
+                    let combinedColorDetails = []
+                    
+                    if (baseColor && baseColor.id) {
+                        combinedColorDetails.push(baseColor)
                     }
+                    
+                    if (Array.isArray(colorDetails)) {
+                        colorDetails.forEach(color => {
+                            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+                                combinedColorDetails.push(color)
+                            }
+                        })
+                    }
+                    
+                    product.colorDetails = combinedColorDetails
                 }
                 
                 return product
@@ -236,11 +266,21 @@ export class ProductService {
                     const baseColor = product.baseColor
                     const colorDetails = product.colorDetails
                     
-                    if (Array.isArray(colorDetails) && colorDetails.length > 0) {
-                        product.colorDetails = colorDetails
-                    } else if (baseColor && baseColor.id) {
-                        product.colorDetails = [baseColor]
+                    let combinedColorDetails = []
+                    
+                    if (baseColor && baseColor.id) {
+                        combinedColorDetails.push(baseColor)
                     }
+                    
+                    if (Array.isArray(colorDetails)) {
+                        colorDetails.forEach(color => {
+                            if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+                                combinedColorDetails.push(color)
+                            }
+                        })
+                    }
+                    
+                    product.colorDetails = combinedColorDetails
                 }
                 
                 return product

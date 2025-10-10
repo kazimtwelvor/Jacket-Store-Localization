@@ -21,13 +21,21 @@ const getProduct = async (slug: string): Promise<Product | null> => {
       const baseColor = foundProduct.baseColor
       const colorDetails = foundProduct.colorDetails
       
-      if (Array.isArray(colorDetails) && colorDetails.length > 0) {
-        // Keep original colorDetails order
-        foundProduct.colorDetails = colorDetails
-      } else if (baseColor && baseColor.id) {
-        // Only use baseColor as fallback if no colorDetails exist
-        foundProduct.colorDetails = [baseColor]
+      let combinedColorDetails = []
+      
+      if (baseColor && baseColor.id) {
+        combinedColorDetails.push(baseColor)
       }
+      
+      if (Array.isArray(colorDetails)) {
+        colorDetails.forEach(color => {
+          if (color && color.id && (!baseColor || color.id !== baseColor.id)) {
+            combinedColorDetails.push(color)
+          }
+        })
+      }
+      
+      foundProduct.colorDetails = combinedColorDetails
     }
     
     return foundProduct || null
@@ -37,4 +45,3 @@ const getProduct = async (slug: string): Promise<Product | null> => {
 }
 
 export default getProduct
-
