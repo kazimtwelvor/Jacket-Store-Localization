@@ -45,7 +45,7 @@ export function CapsuleNav() {
     setIsMounted(true);
     
     // Set initial active item after mounting
-    if (pathname === "/" || pathname === "/us" || pathname === "/us/") {
+    if (pathname === "/us") {
       setActiveItem(0);
     } else if (pathname === "/us/collections/mens-leather-jackets") {
       setActiveItem(1);
@@ -140,7 +140,7 @@ export function CapsuleNav() {
   }, [isCategoryPage, isShopPage, isCollectionsPage]);
 
   useEffect(() => {
-    if (pathname === "/" || pathname === "/us" || pathname === "/us/") {
+    if (pathname === "/us") {
       setActiveItem(0);
     } else if (pathname === "/us/collections/mens-leather-jackets") {
       setActiveItem(1);
