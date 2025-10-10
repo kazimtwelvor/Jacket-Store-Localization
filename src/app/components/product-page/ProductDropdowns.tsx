@@ -43,13 +43,25 @@ const ProductDropdowns = ({
           <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed">
             {(() => {
               const description = data?.description || "";
+              let parsedSpecs = null;
+              try {
+                parsedSpecs = typeof data?.specifications === 'string' 
+                  ? JSON.parse(data.specifications) 
+                  : data?.specifications;
+              } catch {
+                parsedSpecs = data?.specifications;
+              }
+              const materials = parsedSpecs?.externalMaterial || [];
+              const materialDisplay = materials.length > 0 ? materials.join(', ') : (data?.material || "Premium fabric");
+              const fitDisplay = parsedSpecs?.fit || "Regular fit";
+              
               return (
                 <>
                   <div dangerouslySetInnerHTML={{ __html: stripH2Tags(description) }} />
                   <ul className="list-disc pl-5 mt-3 sm:mt-4 space-y-1">
                     <li>SKU: {data?.sku || "N/A"}</li>
-                    <li>Material: {data?.material || "Premium fabric"}</li>
-                    <li>Fit: {data?.specifications?.fit || "Regular fit"}</li>
+                    <li>Material: {materialDisplay}</li>
+                    <li>Fit: {fitDisplay}</li>
                   </ul>
                 </>
               );
@@ -107,6 +119,18 @@ const ProductDropdowns = ({
               const firstParagraph = firstParagraphEnd > 4 ? description.substring(0, firstParagraphEnd) : description;
               const restOfDescription = firstParagraphEnd > 4 ? description.substring(firstParagraphEnd) : "";
               
+              let parsedSpecs = null;
+              try {
+                parsedSpecs = typeof data?.specifications === 'string' 
+                  ? JSON.parse(data.specifications) 
+                  : data?.specifications;
+              } catch {
+                parsedSpecs = data?.specifications;
+              }
+              const materials = parsedSpecs?.externalMaterial || [];
+              const materialDisplay = materials.length > 0 ? materials.join(', ') : (data?.material || "Premium fabric");
+              const fitDisplay = parsedSpecs?.fit || "Regular fit";
+              
               return (
                 <>
                   <div dangerouslySetInnerHTML={{ __html: stripH2Tags(firstParagraph) }} />
@@ -123,8 +147,8 @@ const ProductDropdowns = ({
                   
                   <ul className="list-disc pl-5 mt-3 sm:mt-4 space-y-1">
                     <li>SKU: {data?.sku || "N/A"}</li>
-                    <li>Material: {data?.material || "Premium fabric"}</li>
-                    <li>Fit: {data?.specifications?.fit || "Regular fit"}</li>
+                    <li>Material: {materialDisplay}</li>
+                    <li>Fit: {fitDisplay}</li>
                   </ul>
                 </>
               );
