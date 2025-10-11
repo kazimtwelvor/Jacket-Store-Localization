@@ -19,7 +19,6 @@ import { useRouter, usePathname } from "next/navigation";
 import useWishlist from "../../hooks/use-wishlist";
 import { useEffect, useRef, useState } from "react";
 import { CapsuleNav } from "./CapsuleNav";
-import { CountrySelector } from "../../../components/CountrySelector";
 import dynamic from "next/dynamic";
 // const MegaMenuCarousel = dynamic(() => import("./MegaMenuCarousal"), {
 //   ssr: false,
@@ -453,7 +452,6 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center space-x-4 lg:space-x-6 z-10">
-            {isMounted && <CountrySelector />}
             
             {isAuthenticated ? (
               <div
