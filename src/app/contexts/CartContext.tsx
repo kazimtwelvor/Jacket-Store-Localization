@@ -64,7 +64,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             ? { ...item, quantity: item.quantity + 1 }
             : item
         )
-        // Track add to cart for existing item (quantity +1)
         trackAddToCart(product, size, selectedColor, 1)
       } else {
         newItems = [...prev, {

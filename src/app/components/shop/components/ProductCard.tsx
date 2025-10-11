@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { ProductImageCarousel } from "./ProductImageCarousel"
 import { ColorSelector } from "./ColorSelector"
 import { SizeSelector } from "./SizeSelector"
+import { trackAddToWishlist } from "../../../lib/analytics"
 
 interface ProductCardProps {
   product: Product
@@ -132,6 +133,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               wishlist.removeItemWithKey(uniqueKey)
             } else {
               wishlist.addItemWithKey(product, uniqueKey)
+              trackAddToWishlist(product)
             }
           }}
         >

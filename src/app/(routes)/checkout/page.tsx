@@ -42,6 +42,7 @@ import {
   getStatesForCountry,
 } from "../../utils/states-data";
 import { clearCheckoutTracking } from "../../lib/analytics";
+import { trackBeginCheckout } from "../../lib/analytics";
 
 // Initialize Stripe
 let stripePromise: any = null;
@@ -553,7 +554,11 @@ const CheckoutPage = () => {
         selectedPaymentMethod: paymentMethod,
       }));
     }
-  }, []);
+
+    if (items.length > 0) {
+      trackBeginCheckout(items);
+    }
+  }, [items]);
 
   useEffect(() => {
     const fetchStripePublishableKey = async () => {

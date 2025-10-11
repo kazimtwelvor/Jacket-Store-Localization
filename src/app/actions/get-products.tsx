@@ -70,4 +70,3 @@ const getProducts = async (query: Query): Promise<PaginatedResponse> => {
 
 export default getProducts;
 
-

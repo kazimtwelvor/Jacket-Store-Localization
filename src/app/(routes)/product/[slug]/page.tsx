@@ -255,7 +255,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         <h2>{product?.category?.name ? `${product.category.name} - ${product.name}` : `Details-${product.name}`}</h2>
       </div>
 
-      <ProductPageClient productId={product.id} />
+      <ProductPageClient productId={product.id} product={product} />
 
 
       <div className="block lg:hidden">

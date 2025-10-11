@@ -100,16 +100,50 @@ const Info: React.FC<InfoProps> = ({ data, isMobile = false, suggestProducts = [
 
   // Use the sizes and colors from the API response if available
   const availableSizes: Size[] = (data?.sizeDetails as Size[]) || []
-  const availableColors: Color[] = (data?.colorDetails as Color[]) || []
+  // Create consistent color order using colorLinks as master reference
+  const rawColors: Color[] = (data?.colorDetails as Color[]) || []
+  const colorLinks = data?.colorLinks || {}
+  
+  // Get master color order from colorLinks keys (this stays consistent)
+  const masterColorOrder = Object.keys(colorLinks)
+  
+  // Sort availableColors to match master order
+  const availableColors: Color[] = rawColors.sort((a, b) => {
+    const aIndex = masterColorOrder.indexOf(a.name)
+    const bIndex = masterColorOrder.indexOf(b.name)
+    
+    // If both colors are in master order, sort by master order
+    if (aIndex !== -1 && bIndex !== -1) {
+      return aIndex - bIndex
+    }
+    
+    // If only one is in master order, prioritize it
+    if (aIndex !== -1) return -1
+    if (bIndex !== -1) return 1
+    
+    // If neither is in master order, keep original order
+    return 0
+  })
   
 
 
-  // Set default selected color when data loads (but not size)
+  // Set selected color to current product's base color
   useEffect(() => {
     if (availableColors.length > 0 && !selectedColorId) {
-      setSelectedColorId(availableColors[0].id)
+      // Find current product's color (baseColor) in the sorted array
+      const currentProductColor = data?.baseColor
+      if (currentProductColor) {
+        const matchingColor = availableColors.find(color => color.id === currentProductColor.id)
+        if (matchingColor) {
+          setSelectedColorId(matchingColor.id)
+        } else {
+          setSelectedColorId(availableColors[0].id)
+        }
+      } else {
+        setSelectedColorId(availableColors[0].id)
+      }
     }
-  }, [availableColors.length])
+  }, [availableColors.length, data?.baseColor])
 
   // Handle click outside dropdown
   useEffect(() => {

@@ -175,7 +175,13 @@ const ConfirmationPage = () => {
         };
 
         setOrder(formattedOrder);
-        trackPurchase(data.id, formattedOrder.items, calculatedTotalPrice || '0');
+        
+        const trackedOrders = JSON.parse(localStorage.getItem('tracked-purchase-orders') || '[]');
+        if (!trackedOrders.includes(data.id)) {
+          trackPurchase(data.id, formattedOrder.items, calculatedTotalPrice || '0');
+          trackedOrders.push(data.id);
+          localStorage.setItem('tracked-purchase-orders', JSON.stringify(trackedOrders));
+        }
         
         // Scroll to top again when order data is loaded to ensure user sees the confirmation
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });

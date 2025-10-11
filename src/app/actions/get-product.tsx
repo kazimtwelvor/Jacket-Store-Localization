@@ -45,4 +45,3 @@ const getProduct = async (slug: string): Promise<Product | null> => {
 }
 
 export default getProduct
-

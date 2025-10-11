@@ -12,18 +12,19 @@ const items = [
   { id: 0, label: "HOME", isActive: true, href: "/us/" },
   { id: 1, label: "LEATHER", isActive: false, href: "/us/collections/mens-leather-jackets" },
   { id: 2, label: "BOMBER", isActive: false, href: "/us/collections/leather-bomber-jacket-mens" },
-  { id: 3, label: "VARSITY", isActive: false, href: "/us/collections/mens-varsity-jackets" },
-  { id: 4, label: "BIKER", isActive: false, href: "/us/collections/biker-jacket-men" },
+  { id: 3, label: "BIKER", isActive: false, href: "/us/collections/biker-jacket-men" },
+  { id: 4, label: "VARSITY", isActive: false, href: "/us/collections/mens-varsity-jackets" },
+  { id: 5, label: "PUFFER", isActive: false, href: "/us/collections/mens-puffer-jackets" },
+
 ];
 
 export function CapsuleNav() {
   const [isMounted, setIsMounted] = useState(false);
-  const [activeItem, setActiveItem] = useState(0);
+  const pathname = usePathname();
+  const [activeItem, setActiveItem] = useState(-1);
   const [isVisible, setIsVisible] = useState(true);
   const [isFilterBarSticky, setIsFilterBarSticky] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const pathname = usePathname();
   const [emblaRef] = useEmblaCarousel({
     align: "start",
     containScroll: "trimSnaps",
@@ -42,6 +43,24 @@ export function CapsuleNav() {
 
   useEffect(() => {
     setIsMounted(true);
+    
+    // Set initial active item after mounting
+    if (pathname === "/us") {
+      setActiveItem(0);
+    } else if (pathname === "/us/collections/mens-leather-jackets") {
+      setActiveItem(1);
+    } else if (pathname === "/us/collections/leather-bomber-jacket-mens") {
+      setActiveItem(2);
+    } else if (pathname === "/us/collections/biker-jacket-men") {
+      setActiveItem(3);
+    } else if (pathname === "/us/collections/mens-varsity-jackets") {
+      setActiveItem(4);
+    } else if (pathname === "/us/collections/mens-puffer-jackets") {
+      setActiveItem(5);
+    } 
+    else {
+      setActiveItem(-1);
+    }
 
     const handleFilterBarSticky = (event: CustomEvent) => {
       setIsFilterBarSticky(event.detail.isSticky);
@@ -121,10 +140,18 @@ export function CapsuleNav() {
   }, [isCategoryPage, isShopPage, isCollectionsPage]);
 
   useEffect(() => {
-    if (pathname === "/us/") {
+    if (pathname === "/us") {
       setActiveItem(0);
-    } else if (pathname === "/us/shop") {
-      setActiveItem(-1);
+    } else if (pathname === "/us/collections/mens-leather-jackets") {
+      setActiveItem(1);
+    } else if (pathname === "/us/collections/leather-bomber-jacket-mens") {
+      setActiveItem(2);
+    } else if (pathname === "/us/collections/biker-jacket-men") {
+      setActiveItem(3);
+    } else if (pathname === "/us/collections/mens-varsity-jackets") {
+      setActiveItem(4);
+    } else if (pathname === "/us/collections/mens-puffer-jackets") {
+      setActiveItem(5);
     } else {
       setActiveItem(-1);
     }
