@@ -33,6 +33,10 @@ export const trackAddToCart = (product: any, size: string, selectedColor?: strin
 export const trackBeginCheckout = (cartItems: any[]) => {
   if (typeof window === 'undefined') return;
 
+  // Prevent duplicate tracking within the same session
+  const checkoutTracked = sessionStorage.getItem('checkout-tracked');
+  if (checkoutTracked) return;
+
   window.dataLayer = window.dataLayer || [];
   
   const items = cartItems.map(item => ({
@@ -54,6 +58,9 @@ export const trackBeginCheckout = (cartItems: any[]) => {
       items: items
     }
   });
+
+  // Mark checkout as tracked for this session
+  sessionStorage.setItem('checkout-tracked', 'true');
 };
 
 export const trackPurchase = (orderId: string, orderItems: any[], totalPrice: string) => {
@@ -85,4 +92,13 @@ export const trackPurchase = (orderId: string, orderItems: any[], totalPrice: st
   });
 
   sessionStorage.setItem(`purchase-tracked-${orderId}`, 'true');
+  
+  // Clear checkout tracking so future checkouts can be tracked
+  sessionStorage.removeItem('checkout-tracked');
+};
+
+// Helper function to clear checkout tracking (call when starting a new checkout session)
+export const clearCheckoutTracking = () => {
+  if (typeof window === 'undefined') return;
+  sessionStorage.removeItem('checkout-tracked');
 };

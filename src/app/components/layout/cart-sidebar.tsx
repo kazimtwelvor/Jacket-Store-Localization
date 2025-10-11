@@ -234,7 +234,7 @@ const StripeExpressCheckout = ({
           },
           layout: {
             maxColumns: 1,
-            maxRows: 1,
+            maxRows: 4,
           },
           emailRequired: true,
           phoneNumberRequired: true,

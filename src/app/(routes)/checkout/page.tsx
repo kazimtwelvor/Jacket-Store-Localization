@@ -4,6 +4,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   ShoppingBag,
@@ -40,6 +41,7 @@ import {
   STATES_BY_COUNTRY,
   getStatesForCountry,
 } from "../../utils/states-data";
+import { clearCheckoutTracking } from "../../lib/analytics";
 
 // Initialize Stripe
 let stripePromise: any = null;
@@ -379,8 +381,7 @@ const PaymentForm = ({
         <Button
           type="button"
           onClick={onBack}
-          variant="outline"
-          className="border-gray-300 text-gray-700 hover:bg-gray-50"
+          className="!border-none !text-black hover:!bg-black hover:!text-white !bg-transparent !opacity-100 !visible !block !inline-flex !items-center !justify-center !whitespace-nowrap !text-sm !font-medium"
         >
           <ChevronLeft className="mr-2 h-4 w-4" />
           Back
@@ -388,7 +389,7 @@ const PaymentForm = ({
         <Button
           type="submit"
           disabled={isLoading || !stripe || !elements}
-          className="bg-black hover:bg-black text-white"
+          className="!bg-black hover:!bg-black/90 !text-white"
         >
           {isLoading ? (
             <div className="flex items-center">
@@ -446,8 +447,7 @@ const CheckoutPage = () => {
     phone: "",
     password: "",
     createAccount: false,
-    acceptTerms: false,
-    acceptPrivacy: false,
+    acceptTermsAndPrivacy: false,
     billingAddressSame: true,
     selectedPaymentMethod: "",
     shippingMethod: "standard",
@@ -537,8 +537,7 @@ const CheckoutPage = () => {
   const availableBillingStates = getStatesForCountry(formData.billingCountry);
 
   const totalPrice = cartTotalPrice;
-  const shippingPrice =
-    formData.shippingMethod === "express" ? 15 : totalPrice > 100 ? 0 : 15;
+  const shippingPrice = totalPrice > 100 ? 0 : 15;
   const taxRate = 0.08;
   const taxAmount = 0;
   const grandTotal = totalPrice + shippingPrice + taxAmount;
@@ -796,7 +795,10 @@ const CheckoutPage = () => {
                 Your cart is empty. Add some items before checking out.
               </p>
               <Button
-                onClick={() => router.push("/us/")}
+                onClick={() => {
+                  clearCheckoutTracking();
+                  router.push("/us/");
+                }}
                 className="bg-[#B01E23] hover:bg-[#8a1a1e] text-white"
               >
                 Continue Shopping
@@ -854,9 +856,10 @@ const CheckoutPage = () => {
     formData.zipCode &&
     validateZipCode(formData.zipCode, formData.country) &&
     formData.country &&
-    formData.phone &&
-    validatePhone(formData.phone) &&
-    (!formData.createAccount || formData.password);
+            formData.phone &&
+            validatePhone(formData.phone) &&
+            (!formData.createAccount || formData.password) &&
+            formData.acceptTermsAndPrivacy;
 
   return (
     <div className="min-h-screen bg-gray-50 px-0 py-12">
@@ -1045,7 +1048,7 @@ const CheckoutPage = () => {
                     <Button
                       onClick={handleApplyVoucher}
                       disabled={voucherApplying}
-                      className="bg-[#B01E23] hover:bg-[#8a1a1e] text-white"
+                      className="!bg-black hover:!bg-black/90 !text-white"
                     >
                       {voucherApplying ? "Applying..." : "Apply"}
                     </Button>
@@ -1072,13 +1075,33 @@ const CheckoutPage = () => {
                           ADDRESS
                         </h2>
                         <p className="text-xs sm:text-sm text-red-600 hidden sm:block">
-                          + Delivery options
+                          + Shipping & Billing Info
                         </p>
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-400 flex-shrink-0" />
-                    <div className="flex items-center text-gray-400">
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mr-2 sm:mr-3 md:mr-4 bg-gray-300 flex-shrink-0">
+                    <div 
+                      onClick={() => {
+                        if (isAddressComplete) {
+                          setActiveStep("payment");
+                          // Set Credit Card as default when first entering payment step
+                          if (!formData.selectedPaymentMethod) {
+                            setFormData(prev => ({ ...prev, selectedPaymentMethod: "CREDIT_CARD" }));
+                          }
+                          initializePayment();
+                          // Scroll to top when transitioning to payment step
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }}
+                      className={`flex items-center transition-colors ${
+                        isAddressComplete 
+                          ? "text-gray-400 hover:text-gray-600 cursor-pointer" 
+                          : "text-gray-300 cursor-not-allowed"
+                      }`}
+                    >
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mr-2 sm:mr-3 md:mr-4 flex-shrink-0 ${
+                        isAddressComplete ? "bg-gray-300" : "bg-gray-200"
+                      }`}>
                         <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                       </div>
                       <div className="min-w-0">
@@ -1086,26 +1109,49 @@ const CheckoutPage = () => {
                           PAYMENT
                         </h2>
                         <p className="text-xs sm:text-sm text-red-600 hidden sm:block">
-                          + Delivery details
+                          + Payment & Order Review
                         </p>
                       </div>
                     </div>
                   </>
                 )}
                 {activeStep === "payment" && ( // Payment step is active
-                  <div className="flex items-center text-black justify-start w-full">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mr-2 sm:mr-3 md:mr-4 bg-black text-white flex-shrink-0">
-                      <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                  <>
+                    <div 
+                      onClick={() => {
+                        setActiveStep("address");
+                        // Scroll to top when transitioning to address step
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="flex items-center text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                    >
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mr-2 sm:mr-3 md:mr-4 bg-gray-300 flex-shrink-0">
+                        <Truck className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                      </div>
+                      <div className="min-w-0">
+                        <h2 className="font-bold text-sm sm:text-base md:text-lg truncate">
+                          ADDRESS
+                        </h2>
+                        <p className="text-xs sm:text-sm text-green-600 hidden sm:block">
+                          ✓ Completed
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h2 className="font-bold text-sm sm:text-base md:text-lg">
-                        PAYMENT
-                      </h2>
-                      <p className="text-xs sm:text-sm text-red-600 hidden sm:block">
-                        + Delivery details
-                      </p>
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-400 flex-shrink-0" />
+                    <div className="flex items-center text-black">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mr-2 sm:mr-3 md:mr-4 bg-black text-white flex-shrink-0">
+                        <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                      </div>
+                      <div className="min-w-0">
+                        <h2 className="font-bold text-sm sm:text-base md:text-lg truncate">
+                          PAYMENT
+                        </h2>
+                        <p className="text-xs sm:text-sm text-red-600 hidden sm:block">
+                          + Payment & Order Review
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </div>
             </div>
@@ -1531,6 +1577,37 @@ const CheckoutPage = () => {
                     )}
                   </div>
 
+                  {/* Terms and Conditions & Privacy Policy */}
+                  <div className="mt-6">
+                    <label className="flex items-start">
+                      <input
+                        type="checkbox"
+                        name="acceptTermsAndPrivacy"
+                        checked={formData.acceptTermsAndPrivacy}
+                        onChange={handleInputChange}
+                        className="h-5 w-5 text-[#B01E23] focus:ring-[#B01E23] border-gray-300 rounded mt-0.5"
+                      />
+                      <span className="ml-3 text-sm text-gray-700">
+                        I agree to the{" "}
+                        <Link
+                          href="/terms-conditions"
+                          className="text-[#B01E23] hover:text-[#8a1a1e] underline"
+                          target="_blank"
+                        >
+                          Terms and Conditions
+                        </Link>{" "}
+                        and{" "}
+                        <Link
+                          href="/us/privacy-policy"
+                          className="text-[#B01E23] hover:text-[#8a1a1e] underline"
+                          target="_blank"
+                        >
+                          Privacy Policy
+                        </Link>
+                      </span>
+                    </label>
+                  </div>
+
                   <Button
                     type="button"
                     onClick={() => {
@@ -1551,10 +1628,16 @@ const CheckoutPage = () => {
                       }));
                       if (isAddressComplete) {
                         setActiveStep("payment");
+                        // Set Credit Card as default when first entering payment step
+                        if (!formData.selectedPaymentMethod) {
+                          setFormData(prev => ({ ...prev, selectedPaymentMethod: "CREDIT_CARD" }));
+                        }
                         initializePayment();
+                        // Scroll to top when transitioning to payment step
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                       }
                     }}
-                    className="w-full bg-black hover:bg-black text-white py-3 mt-2 mb-8 md:mt-4 md:mb-0"
+                    className="w-full !bg-black hover:!bg-black/90 !text-white py-3 mt-2 mb-8 md:mt-4 md:mb-0"
                     disabled={!isAddressComplete}
                   >
                     Continue to Payment
@@ -1570,10 +1653,13 @@ const CheckoutPage = () => {
                 <div className="mb-8 p-4 border border-gray-200 rounded-lg">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-lg font-medium text-gray-900">
-                      Address Details
                     </h3>
                     <button
-                      onClick={() => setActiveStep("address")}
+                      onClick={() => {
+                        setActiveStep("address");
+                        // Scroll to top when transitioning to address step
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                       className="text-sm text-blue-600 hover:text-blue-800 underline"
                     >
                       Edit
@@ -1583,10 +1669,10 @@ const CheckoutPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Shipping Address */}
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-2">
+                      <h4 className="font-bold -mt-10 text-gray-900 mb-2">
                         Shipping Address
                       </h4>
-                      <div className="text-sm text-gray-700 space-y-1">
+                      <div className="text-sm text-gray-700">
                         <p>
                           {formData.firstName} {formData.lastName}
                         </p>
@@ -1606,12 +1692,27 @@ const CheckoutPage = () => {
 
                     {/* Billing Address */}
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-2">
+                      <h4 className="font-bold -mt-4 md:-mt-10 text-gray-900 mb-2">
                         Billing Address
                       </h4>
-                      <div className="text-sm text-gray-700 space-y-1">
+                      <div className="text-sm text-gray-700">
                         {formData.billingAddressSame ? (
-                          <p className="italic">Same as shipping address</p>
+                          <>
+                            <p>
+                              {formData.firstName} {formData.lastName}
+                            </p>
+                            <p>{formData.address1}</p>
+                            {formData.address2 && <p>{formData.address2}</p>}
+                            <p>
+                              {formData.city}, {formData.state} {formData.zipCode}
+                            </p>
+                            <p>
+                              {COUNTRIES.find((c) => c.code === formData.country)
+                                ?.name || formData.country}
+                            </p>
+                            <p>{formData.email}</p>
+                            <p>{formData.phone}</p>
+                          </>
                         ) : (
                           <>
                             <p>
@@ -1648,216 +1749,62 @@ const CheckoutPage = () => {
                   </div>
 
                   <div className="space-y-4">
-                    {/* PayPal */}
-                    <div className="group">
-                      <label
-                        className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                          formData.selectedPaymentMethod === "paypal"
-                            ? "border-black bg-gray-100 shadow-md"
-                            : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <div className="relative mr-4">
-                            <input
-                              type="radio"
-                              name="selectedPaymentMethod"
-                              value="paypal"
-                              checked={
-                                formData.selectedPaymentMethod === "paypal"
-                              }
-                              onChange={handleInputChange}
-                              className="sr-only"
-                            />
-                            <div
-                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
-                                formData.selectedPaymentMethod === "paypal"
-                                  ? "bg-black border-black"
-                                  : "border-gray-300 group-hover:border-gray-500"
-                              }`}
-                            >
-                              {formData.selectedPaymentMethod === "paypal" && (
-                                <Check className="w-4 h-4 text-white" />
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex items-center">
-                            <div className="bg-blue-600 px-4 py-2 rounded text-white font-semibold text-sm">
-                              PayPal
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="text-sm text-gray-500 mr-2">
-                            Secure payment
-                          </span>
-                          <Shield className="w-4 h-4 text-gray-600" />
-                        </div>
-                      </label>
-
-                      {/* PayPal Buttons */}
-                      {formData.selectedPaymentMethod === "paypal" && (
-                        <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
-                          <div className="mb-4">
-                            <p className="text-sm text-gray-700 mb-2">
-                              Complete your payment with PayPal
-                            </p>
-                          </div>
-                          <PayPalButtons
-                            items={items.map((i) => ({
-                              id: i.product.id,
-                              quantity: i.quantity,
-                            }))}
-                            onApproveSuccess={handlePaymentSuccess}
-                            orderId={orderId!}
-                          />
-                        </div>
-                      )}
-                    </div>
-
                     {/* Credit Card */}
                     <div className="group">
-                      <label
-                        className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                          formData.selectedPaymentMethod === "CREDIT_CARD"
-                            ? "border-black bg-gray-100 shadow-md"
-                            : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <div className="relative mr-4">
-                            <input
-                              type="radio"
-                              name="selectedPaymentMethod"
-                              value="CREDIT_CARD"
-                              checked={
-                                formData.selectedPaymentMethod === "CREDIT_CARD"
-                              }
-                              onChange={handleInputChange}
-                              className="sr-only"
-                            />
-                            <div
-                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
-                                formData.selectedPaymentMethod === "CREDIT_CARD"
-                                  ? "bg-black border-black"
-                                  : "border-gray-300 group-hover:border-gray-500"
-                              }`}
-                            >
-                              {formData.selectedPaymentMethod ===
-                                "CREDIT_CARD" && (
-                                <Check className="w-4 h-4 text-white" />
-                              )}
+                      <div className={`p-6 border-2 rounded-xl transition-all duration-200 ${
+                        formData.selectedPaymentMethod === "CREDIT_CARD"
+                          ? "border-black bg-gray-100 shadow-md"
+                          : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                      }`}>
+                        {/* Credit Card Selection Header */}
+                        <label className="cursor-pointer mb-4">
+                          <div className="flex items-center mb-3">
+                            <div className="relative mr-4">
+                              <input
+                                type="radio"
+                                name="selectedPaymentMethod"
+                                value="CREDIT_CARD"
+                                checked={
+                                  formData.selectedPaymentMethod === "CREDIT_CARD"
+                                }
+                                onChange={handleInputChange}
+                                className="sr-only"
+                              />
+                              <div
+                                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                  formData.selectedPaymentMethod === "CREDIT_CARD"
+                                    ? "bg-black border-black"
+                                    : "border-gray-300 group-hover:border-gray-500"
+                                }`}
+                              >
+                                {formData.selectedPaymentMethod ===
+                                  "CREDIT_CARD" && (
+                                  <Check className="w-4 h-4 text-white" />
+                                )}
+                              </div>
                             </div>
-                          </div>
-                          <div className="flex items-center">
-                            <CreditCard className="w-8 h-8 text-gray-600 mr-3" />
-                            <span className="text-base font-medium text-gray-900">
-                              Credit or Debit Card
+                            <span className="text-base font-bold text-gray-900">
+                              Credit / Debit & More
                             </span>
                           </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          {/* Mastercard */}
-                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
-                            <svg
-                              className="w-8 h-5"
-                              viewBox="0 0 32 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <circle cx="12" cy="10" r="6" fill="#EB001B" />
-                              <circle cx="20" cy="10" r="6" fill="#F79E1B" />
-                              <path
-                                d="M16 6c1.1 1.2 1.8 2.8 1.8 4.5s-.7 3.3-1.8 4.5c-1.1-1.2-1.8-2.8-1.8-4.5S14.9 7.2 16 6z"
-                                fill="#FF5F00"
-                              />
-                            </svg>
+                          <div className="flex items-center justify-center md:justify-start ml-0 md:ml-10">
+                            <img
+                              src="/images/payment-logos.webp"
+                              alt="Payment methods accepted"
+                              className="h-8 w-auto"
+                              style={{ width: 'auto', height: '32px' }}
+                            />
                           </div>
-                          {/* Visa */}
-                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
-                            <svg
-                              className="w-8 h-5"
-                              viewBox="0 0 32 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <rect
-                                width="32"
-                                height="20"
-                                rx="2"
-                                fill="#1A1F71"
-                              />
-                              <text
-                                x="6"
-                                y="13"
-                                fontSize="8"
-                                fill="#fff"
-                                fontFamily="Arial, sans-serif"
-                                fontWeight="bold"
-                              >
-                                VISA
-                              </text>
-                            </svg>
-                          </div>
-                          {/* American Express */}
-                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
-                            <svg
-                              className="w-8 h-5"
-                              viewBox="0 0 32 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <rect
-                                width="32"
-                                height="20"
-                                rx="2"
-                                fill="#2E77BC"
-                              />
-                              <text
-                                x="4"
-                                y="13"
-                                fontSize="7"
-                                fill="#fff"
-                                fontFamily="Arial, sans-serif"
-                                fontWeight="bold"
-                              >
-                                AMEX
-                              </text>
-                            </svg>
-                          </div>
-                          {/* Discover */}
-                          <div className="relative w-10 h-6 bg-white rounded border border-gray-200 flex items-center justify-center">
-                            <svg
-                              className="w-8 h-5"
-                              viewBox="0 0 32 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <rect
-                                width="32"
-                                height="20"
-                                rx="2"
-                                fill="#FF6000"
-                              />
-                              <text
-                                x="2"
-                                y="13"
-                                fontSize="6"
-                                fill="#fff"
-                                fontFamily="Arial, sans-serif"
-                                fontWeight="bold"
-                              >
-                                DISC
-                              </text>
-                            </svg>
-                          </div>
-                        </div>
-                      </label>
+                        </label>
 
-                      {/* Payment Form for Credit Card */}
-                      {formData.selectedPaymentMethod === "CREDIT_CARD" && (
-                        <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
-                          <div className="mb-4">
-                            <p className="text-sm text-gray-700 mb-2">
-                              Enter your card details securely
-                            </p>
-                          </div>
+                        {/* Payment Form for Credit Card */}
+                        {formData.selectedPaymentMethod === "CREDIT_CARD" && (
+                          <div className="pt-4 border-t border-gray-300">
+                            <div className="mb-4">
+                              <p className="text-sm text-gray-700 mb-2">
+                                Enter your card details securely
+                              </p>
+                            </div>
 
                           {isStripeEnabled ? (
                             // Stripe Payment Form
@@ -1937,7 +1884,77 @@ const CheckoutPage = () => {
                           )}
                         </div>
                       )}
+                      </div>
                     </div>
+
+                    {/* PayPal */}
+                    <div className="group">
+                      <div className={`p-6 border-2 rounded-xl transition-all duration-200 ${
+                        formData.selectedPaymentMethod === "paypal"
+                          ? "border-black bg-gray-100 shadow-md"
+                          : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
+                      }`}>
+                        {/* PayPal Selection Header */}
+                        <label className="cursor-pointer mb-4">
+                          <div className="flex items-center mb-3">
+                            <div className="relative mr-4">
+                              <input
+                                type="radio"
+                                name="selectedPaymentMethod"
+                                value="paypal"
+                                checked={
+                                  formData.selectedPaymentMethod === "paypal"
+                                }
+                                onChange={handleInputChange}
+                                className="sr-only"
+                              />
+                              <div
+                                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                  formData.selectedPaymentMethod === "paypal"
+                                    ? "bg-black border-black"
+                                    : "border-gray-300 group-hover:border-gray-500"
+                                }`}
+                              >
+                                {formData.selectedPaymentMethod === "paypal" && (
+                                  <Check className="w-4 h-4 text-white" />
+                                )}
+                              </div>
+                            </div>
+                            <span className="text-base font-bold text-gray-900">
+                              PayPal & Paylater
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-center md:justify-start ml-0 md:ml-10">
+                            <img
+                              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAxcHgiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAxMDEgMzIiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaW5ZTWluIG1lZXQiIHhtbG5zPSJodHRwOiYjeDJGOyYjeDJGO3d3dy53My5vcmcmI3gyRjsyMDAwJiN4MkY7c3ZnIj48cGF0aCBmaWxsPSIjMDAzMDg3IiBkPSJNIDEyLjIzNyAyLjggTCA0LjQzNyAyLjggQyAzLjkzNyAyLjggMy40MzcgMy4yIDMuMzM3IDMuNyBMIDAuMjM3IDIzLjcgQyAwLjEzNyAyNC4xIDAuNDM3IDI0LjQgMC44MzcgMjQuNCBMIDQuNTM3IDI0LjQgQyA1LjAzNyAyNC40IDUuNTM3IDI0IDUuNjM3IDIzLjUgTCA2LjQzNyAxOC4xIEMgNi41MzcgMTcuNiA2LjkzNyAxNy4yIDcuNTM3IDE3LjIgTCAxMC4wMzcgMTcuMiBDIDE1LjEzNyAxNy4yIDE4LjEzNyAxNC43IDE4LjkzNyA5LjggQyAxOS4yMzcgNy43IDE4LjkzNyA2IDE3LjkzNyA0LjggQyAxNi44MzcgMy41IDE0LjgzNyAyLjggMTIuMjM3IDIuOCBaIE0gMTMuMTM3IDEwLjEgQyAxMi43MzcgMTIuOSAxMC41MzcgMTIuOSA4LjUzNyAxMi45IEwgNy4zMzcgMTIuOSBMIDguMTM3IDcuNyBDIDguMTM3IDcuNCA4LjQzNyA3LjIgOC43MzcgNy4yIEwgOS4yMzcgNy4yIEMgMTAuNjM3IDcuMiAxMS45MzcgNy4yIDEyLjYzNyA4IEMgMTMuMTM3IDguNCAxMy4zMzcgOS4xIDEzLjEzNyAxMC4xIFoiPjwvcGF0aD48cGF0aCBmaWxsPSIjMDAzMDg3IiBkPSJNIDM1LjQzNyAxMCBMIDMxLjczNyAxMCBDIDMxLjQzNyAxMCAzMS4xMzcgMTAuMiAzMS4xMzcgMTAuNSBMIDMwLjkzNyAxMS41IEwgMzAuNjM3IDExLjEgQyAyOS44MzcgOS45IDI4LjAzNyA5LjUgMjYuMjM3IDkuNSBDIDIyLjEzNyA5LjUgMTguNjM3IDEyLjYgMTcuOTM3IDE3IEMgMTcuNTM3IDE5LjIgMTguMDM3IDIxLjMgMTkuMzM3IDIyLjcgQyAyMC40MzcgMjQgMjIuMTM3IDI0LjYgMjQuMDM3IDI0LjYgQyAyNy4zMzcgMjQuNiAyOS4yMzcgMjIuNSAyOS4yMzcgMjIuNSBMIDI5LjAzNyAyMy41IEMgMjguOTM3IDIzLjkgMjkuMjM3IDI0LjMgMjkuNjM3IDI0LjMgTCAzMy4wMzcgMjQuMyBDIDMzLjUzNyAyNC4zIDM0LjAzNyAyMy45IDM0LjEzNyAyMy40IEwgMzYuMTM3IDEwLjYgQyAzNi4yMzcgMTAuNCAzNS44MzcgMTAgMzUuNDM3IDEwIFogTSAzMC4zMzcgMTcuMiBDIDI5LjkzNyAxOS4zIDI4LjMzNyAyMC44IDI2LjEzNyAyMC44IEMgMjUuMDM3IDIwLjggMjQuMjM3IDIwLjUgMjMuNjM3IDE5LjggQyAyMy4wMzcgMTkuMSAyMi44MzcgMTguMiAyMy4wMzcgMTcuMiBDIDIzLjMzNyAxNS4xIDI1LjEzNyAxMy42IDI3LjIzNyAxMy42IEMgMjguMzM3IDEzLjYgMjkuMTM3IDE0IDI5LjczNyAxNC42IEMgMzAuMjM3IDE1LjMgMzAuNDM3IDE2LjIgMzAuMzM3IDE3LjIgWiI+PC9wYXRoPjxwYXRoIGZpbGw9IiMwMDMwODciIGQ9Ik0gNTUuMzM3IDEwIEwgNTEuNjM3IDEwIEMgNTEuMjM3IDEwIDUwLjkzNyAxMC4yIDUwLjczNyAxMC41IEwgNDUuNTM3IDE4LjEgTCA0My4zMzcgMTAuOCBDIDQzLjIzNyAxMC4zIDQyLjczNyAxMCA0Mi4zMzcgMTAgTCAzOC42MzcgMTAgQyAzOC4yMzcgMTAgMzcuODM3IDEwLjQgMzguMDM3IDEwLjkgTCA0Mi4xMzcgMjMgTCAzOC4yMzcgMjguNCBDIDM3LjkzNyAyOC44IDM4LjIzNyAyOS40IDM4LjczNyAyOS40IEwgNDIuNDM3IDI5LjQgQyA0Mi44MzcgMjkuNCA0My4xMzcgMjkuMiA0My4zMzcgMjguOSBMIDU1LjgzNyAxMC45IEMgNTYuMTM3IDEwLjYgNTUuODM3IDEwIDU1LjMzNyAxMCBaIj48L3BhdGg+PHBhdGggZmlsbD0iIzAwOWNkZSIgZD0iTSA2Ny43MzcgMi44IEwgNTkuOTM3IDIuOCBDIDU5LjQzNyAyLjggNTguOTM3IDMuMiA1OC44MzcgMy43IEwgNTUuNzM3IDIzLjYgQyA1NS42MzcgMjQgNTUuOTM3IDI0LjMgNTUuMzM3IDI0LjMgTCA2MC4zMzcgMjQuMyBDIDYwLjczNyAyNC4zIDYxLjAzNyAyNCA2MS4wMzcgMjMuNyBMIDYxLjkzNyAxOCBDIDYyLjAzNyAxNy41IDYyLjQzNyAxNy4xIDYzLjAzNyAxNy4xIEwgNjUuNTM3IDE3LjEgQyA3MC42MzcgMTcuMSA3My42MzcgMTQuNiA3NC40MzcgOS43IEMgNzQuNzM3IDcuNiA3NC40MzcgNS45IDczLjQzNyA0LjcgQyA3Mi4yMzcgMy41IDcwLjMzNyAyLjggNjcuNzM3IDIuOCBaIE0gNjguNjM3IDEwLjEgQyA2OC4yMzcgMTIuOSA2Ni4wMzcgMTIuOSA2NC4wMzcgMTIuOSBMIDYyLjgzNyAxMi45IEwgNjMuNjM3IDcuNyBDIDYzLjYzNyA3LjQgNjMuOTM3IDcuMiA2NC4yMzcgNy4yIEwgNjQuNzM3IDcuMiBDIDY2LjEzNyA3LjIgNjcuNDM3IDcuMiA2OC4xMzcgOCBDIDY4LjYzNyA4LjQgNjguNzM3IDkuMSA2OC42MzcgMTAuMSBaIj48L3BhdGg+PHBhdGggZmlsbD0iIzAwOWNkZSIgZD0iTSA5MC45MzcgMTAgTCA4Ny4yMzcgMTAgQyA4Ni45MzcgMTAgODYuNjM3IDEwLjIgODYuNjM3IDEwLjUgTCA4Ni40MzcgMTEuNSBMIDg2LjEzNyAxMS4xIEMgODUuMzM3IDkuOSA4My41MzcgOS41IDgxLjczNyA5LjUgQyA3Ny42MzcgOS41IDc0LjEzNyAxMi42IDczLjQzNyAxNyBDIDczLjAzNyAxOS4yIDczLjUzNyAyMS4zIDc0LjgzNyAyMi43IEMgNzUuOTM3IDI0IDc3LjYzNyAyNC42IDc5LjUzNyAyNC42IEMgODIuODM3IDI0LjYgODQuNzM3IDIyLjUgODQuNzM3IDIyLjUgTCA4NC41MzcgMjMuNSBDIDg0LjQzNyAyMy45IDg0LjczNyAyNC4zIDg1LjEzNyAyNC4zIEwgODguNTM3IDI0LjMgQyA4OS4wMzcgMjQuMyA4OS41MzcgMjMuOSA4OS42MzcgMjMuNCBMIDkxLjYzNyAxMC42IEMgOTEuNjM3IDEwLjQgOTEuMzM3IDEwIDkwLjkzNyAxMCBaIE0gODUuNzM3IDE3LjIgQyA4NS4zMzcgMTkuMyA4My43MzcgMjAuOCA4MS41MzcgMjAuOCBDIDgwLjQzNyAyMC44IDc5LjYzNyAyMC41IDc5LjAzNyAxOS44IEMgNzguNDM3IDE5LjEgNzguMjM3IDE4LjIgNzguNDM3IDE3LjIgQyA3OC43MzcgMTUuMSA4MC41MzcgMTMuNiA4Mi42MzcgMTMuNiBDIDgzLjczNyAxMy42IDg0LjUzNyAxNCA4NS4xMzcgMTQuNiBDIDg1LjczNyAxNS4zIDg1LjkzNyAxNi4yIDg1LjczNyAxNy4yIFoiPjwvcGF0aD48cGF0aCBmaWxsPSIjMDA5Y2RlIiBkPSJNIDk1LjMzNyAzLjMgTCA5Mi4xMzcgMjMuNiBDIDkyLjAzNyAyNCA5Mi4zMzcgMjQuMyA5Mi43MzcgMjQuMyBMIDk1LjkzNyAyNC4zIEMgOTYuNDM3IDI0LjMgOTYuOTM3IDIzLjkgOTcuMDM3IDIzLjQgTCAxMDAuMjM3IDMuNSBDIDEwMC4zMzcgMy4xIDEwMC4wMzcgMi44IDk5LjYzNyAyLjggTCA5Ni4wMzcgMi44IEMgOTUuNjM3IDIuOCA5NS40MzcgMyA5NS4zMzcgMy4zIFoiPjwvcGF0aD48L3N2Zz4"
+                              alt="PayPal"
+                              className="h-6 w-auto"
+                              style={{ width: 'auto', height: '24px' }}
+                            />
+                          </div>
+                        </label>
+
+                        {/* PayPal Buttons */}
+                        {formData.selectedPaymentMethod === "paypal" && (
+                          <div className="pt-4 border-t border-gray-300">
+                            <div className="mb-4">
+                              <p className="text-sm text-gray-700 mb-2">
+                                Complete your payment with PayPal
+                              </p>
+                            </div>
+                            <PayPalButtons
+                              items={items.map((i) => ({
+                                id: i.product.id,
+                                quantity: i.quantity,
+                              }))}
+                              onApproveSuccess={handlePaymentSuccess}
+                              orderId={orderId!}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
 
                     
 
@@ -2040,7 +2057,7 @@ const CheckoutPage = () => {
                           className="h-4 w-4 text-[#B01E23] focus:ring-[#B01E23]"
                         />
                         <span className="ml-3 text-sm font-medium">
-                          Shipping
+                          Standard Shipping
                         </span>
                       </div>
                       <span className="text-sm font-medium text-green-600">
@@ -2048,22 +2065,6 @@ const CheckoutPage = () => {
                       </span>
                     </label>
 
-                    <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                      <div className="flex items-center">
-                        <input
-                          type="radio"
-                          name="shippingMethod"
-                          value="express"
-                          checked={formData.shippingMethod === "express"}
-                          onChange={handleInputChange}
-                          className="h-4 w-4 text-[#B01E23] focus:ring-[#B01E23]"
-                        />
-                        <span className="ml-3 text-sm font-medium">
-                          2nd Day Express
-                        </span>
-                      </div>
-                      <span className="text-sm font-medium">($15.00)</span>
-                    </label>
                   </div>
                 </div>
 
@@ -2247,7 +2248,7 @@ const CheckoutPage = () => {
                     <Button
                       onClick={handleApplyVoucher}
                       disabled={voucherApplying}
-                      className="bg-black hover:bg-gray-800 text-white"
+                      className="!bg-black hover:!bg-black/90 !text-white"
                     >
                       {voucherApplying ? "Applying..." : "Apply"}
                     </Button>
