@@ -32,14 +32,12 @@ export async function POST(req: Request) {
         message: "Logout successful",
       })
     } catch (fetchError) {
-      console.error("[STORE_LOGOUT] External API fetch failed:", fetchError)
       return NextResponse.json(
         { error: "Failed to connect to logout service" },
         { status: 503 }
       )
     }
   } catch (error) {
-    console.error("[STORE_LOGOUT_ERROR]", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

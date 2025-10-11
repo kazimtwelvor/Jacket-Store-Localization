@@ -52,7 +52,6 @@ const getCachedProducts = unstable_cache(
       
       return convertedProducts;
     } catch (error) {
-      console.error("Error fetching products:", error);
       return [];
     }
   },

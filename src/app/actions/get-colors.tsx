@@ -16,7 +16,6 @@ const fallbackColors: Color[] = [
 
 const getColors = async (): Promise<Color[]> => {
   try {
-    // Check if API URL is available
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.warn("API URL not configured. Using fallback colors data.")
       return fallbackColors
@@ -24,8 +23,6 @@ const getColors = async (): Promise<Color[]> => {
 
     return await fetchJson<Color[]>("/colors")
   } catch (error) {
-    console.error("Error fetching colors:", error)
-    // Return fallback data when API call fails
     return fallbackColors
   }
 }

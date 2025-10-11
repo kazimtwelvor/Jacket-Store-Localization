@@ -8,10 +8,8 @@ interface HtmlRendererProps {
 }
 
 const HtmlRenderer: React.FC<HtmlRendererProps> = ({ content, className = '' }) => {
-  console.log('HtmlRenderer called with content:', content)
   
   if (!content) {
-    console.log('No content provided')
     return null
   }
 
@@ -24,8 +22,6 @@ const HtmlRenderer: React.FC<HtmlRendererProps> = ({ content, className = '' }) 
     .replace(/&#x27;/g, "'")
     .replace(/&#39;/g, "'")
     .trim()
-
-  console.log('Cleaned content:', cleanContent)
 
   const styledContent = `
     <style>

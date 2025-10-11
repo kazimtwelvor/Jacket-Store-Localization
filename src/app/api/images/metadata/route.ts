@@ -13,7 +13,6 @@ async function getImageDimensions(filePath: string) {
       height: metadata.height || 0,
     }
   } catch (error) {
-    console.error("Error getting image dimensions:", error)
     return { width: 0, height: 0 }
   }
 }
@@ -27,22 +26,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Image URL is required" }, { status: 400 })
     }
 
-    // Extract the path from the URL (assuming format like /uploads/2023/image.jpg)
     const urlPath = new URL(imageUrl, "http://localhost").pathname
-
-    // Map the URL path to the actual file system path
     const filePath = path.join(process.cwd(), "public", urlPath)
-
-    // Check if file exists
     try {
       const stats = statSync(filePath)
 
-      // Get file stats
       const fileSize = stats.size
       const createdDate = stats.birthtime
       const modifiedDate = stats.mtime
-
-      // Determine file type from extension
       const extension = path.extname(filePath).toLowerCase()
       const mimeTypes: Record<string, string> = {
         ".jpg": "image/jpeg",
@@ -54,20 +45,9 @@ export async function GET(request: NextRequest) {
         ".avif": "image/avif",
       }
       const fileType = mimeTypes[extension] || "application/octet-stream"
-
-      // Get dimensions
       const dimensions = await getImageDimensions(filePath)
-
-      // Get filename
       const fileName = path.basename(filePath)
-
-      // Get additional metadata from database if available
       const dbMetadata = await getImageMetadata(urlPath)
-
-      // Log the database metadata
-      console.log("Database metadata:", dbMetadata)
-
-      // Create response data - combine file system data with database data
       const metadata = {
         name: fileName,
         type: fileType,
@@ -88,11 +68,9 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json(metadata)
     } catch (error) {
-      console.error("Error accessing file:", error)
       return NextResponse.json({ error: "Image not found" }, { status: 404 })
     }
   } catch (error) {
-    console.error("Error processing image metadata:", error)
     return NextResponse.json({ error: "Failed to get image metadata" }, { status: 500 })
   }
 }

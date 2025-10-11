@@ -41,7 +41,7 @@ export const DesktopBannerContent = () => {
             transition={{ duration: 0.6 }}
             className={`${avertaBlack.className} text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-4 sm:mb-6 md:mb-8 tracking-tight`}
           >
-            FINEYST SALE
+            FINEYST JACKETS
           </motion.div>
 
           <motion.p
@@ -51,14 +51,10 @@ export const DesktopBannerContent = () => {
             style={{ fontFamily: "var(--font-averta-default)" }}
             className="text-sm sm:text-base md:text-lg text-black lg:text-xl mb-8 md:mb-10 max-w-3xl mx-auto"
           >
-            UP TO{" "}
+            {" "}
             <span className={`${avertaBlack.className} font-black`}>
-              50% OFF
+            Where Leather Meets Legacy.
             </span>{" "}
-            + CODE:{" "}
-            <span className={`${avertaBlack.className} font-black`}>
-              STREET15
-            </span>
           </motion.p>
 
           <motion.div

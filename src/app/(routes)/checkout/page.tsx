@@ -40,6 +40,7 @@ import {
   STATES_BY_COUNTRY,
   getStatesForCountry,
 } from "../../utils/states-data";
+import { trackBeginCheckout } from "../../lib/analytics";
 
 // Initialize Stripe
 let stripePromise: any = null;
@@ -342,7 +343,6 @@ const PaymentForm = ({
             }),
           });
         } catch (error) {
-          console.error("Failed to update payment status:", error);
         }
 
         setPaymentModal({
@@ -356,7 +356,6 @@ const PaymentForm = ({
         }, 2000);
       }
     } catch (err) {
-      console.error("Payment error:", err);
       setError("An unexpected error occurred");
       setPaymentModal({
         isOpen: true,
@@ -465,7 +464,6 @@ const CheckoutPage = () => {
     customBillingState: "",
   });
 
-  // Add formTouched state to track touched fields
   const [formTouched, setFormTouched] = useState({
     firstName: false,
     lastName: false,
@@ -479,8 +477,6 @@ const CheckoutPage = () => {
     password: false,
     phone: false,
   });
-
-  // Validation functions
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -504,7 +500,6 @@ const CheckoutPage = () => {
     return phoneRegex.test(phone.replace(/\s/g, ''));
   };
 
-  // Get validation errors
   const getFieldError = (fieldName: string): string | null => {
     if (!formTouched[fieldName as keyof typeof formTouched]) return null;
     
@@ -539,7 +534,6 @@ const CheckoutPage = () => {
     }
   };
 
-  // Get states for selected country
   const availableStates = getStatesForCountry(formData.country);
   const availableBillingStates = getStatesForCountry(formData.billingCountry);
 
@@ -553,8 +547,6 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     setIsMounted(true);
-
-    // Check for payment method in URL
     const urlParams = new URLSearchParams(window.location.search);
     const paymentMethod = urlParams.get("payment");
     if (paymentMethod) {
@@ -563,7 +555,11 @@ const CheckoutPage = () => {
         selectedPaymentMethod: paymentMethod,
       }));
     }
-  }, []);
+
+    if (items.length > 0) {
+      trackBeginCheckout(items);
+    }
+  }, [items]);
 
   useEffect(() => {
     const fetchStripePublishableKey = async () => {
@@ -591,8 +587,6 @@ const CheckoutPage = () => {
         const data = await response.json();
         setStripePublishableKey(data.publishableKey);
       } catch (error) {
-        console.error("Error fetching Stripe publishable key:", error);
-        // Fallback to environment variable if API call fails
         const fallbackKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
         if (fallbackKey) {
           console.warn("Using fallback Stripe key from environment variable");
@@ -627,7 +621,6 @@ const CheckoutPage = () => {
         const decryptedClientId = decrypt(data.paypalClientId, encryptionKey);
         setPaypalClientId(decryptedClientId);
       } catch (error) {
-        console.error("Error fetching PayPal client ID:", error);
         const fallbackClientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
         if (fallbackClientId) {
           setPaypalClientId(fallbackClientId);
@@ -704,7 +697,6 @@ const CheckoutPage = () => {
         setOrderId(data.orderId);
       }
     } catch (error) {
-      console.error("Payment initialization error:", error);
       toast.error("Failed to initialize payment. Please try again.");
       setActiveStep("address");
     } finally {
@@ -739,7 +731,6 @@ const CheckoutPage = () => {
         }),
       });
     } catch (error) {
-      console.error("Failed to send order emails:", error);
     }
 
     setTimeout(() => {
@@ -1953,82 +1944,7 @@ const CheckoutPage = () => {
                       )}
                     </div>
 
-                    {/* Afterpay */}
-                    {/* <div className="group">
-                      <label
-                        className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                          formData.selectedPaymentMethod === "afterpay"
-                            ? "border-black bg-gray-100 shadow-md"
-                            : "border-gray-200 hover:border-gray-400 hover:shadow-sm"
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <div className="relative mr-4">
-                            <input
-                              type="radio"
-                              name="selectedPaymentMethod"
-                              value="afterpay"
-                              checked={
-                                formData.selectedPaymentMethod === "afterpay"
-                              }
-                              onChange={handleInputChange}
-                              className="sr-only"
-                            />
-                            <div
-                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
-                                formData.selectedPaymentMethod === "afterpay"
-                                  ? "bg-black border-black"
-                                  : "border-gray-300 group-hover:border-gray-500"
-                              }`}
-                            >
-                              {formData.selectedPaymentMethod === "afterpay" && (
-                                <Check className="w-4 h-4 text-white" />
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex items-center">
-                            <div className="bg-[#b2fce3] px-4 py-2 rounded text-black font-semibold text-sm">
-                              afterpay
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="text-sm text-gray-500 mr-2">
-                            Buy now, pay later
-                          </span>
-                          <Shield className="w-4 h-4 text-gray-600" />
-                        </div>
-                      </label>
-
-                      {/* Afterpay Component */}
-                    {/* {formData.selectedPaymentMethod === "afterpay" && (
-                        <div className="mt-4 p-6 border border-gray-300 rounded-xl bg-gray-50">
-                          <div className="mb-4">
-                            <p className="text-sm text-gray-700 mb-2">
-                              Pay in 4 interest-free installments
-                            </p>
-                          </div>
-                          <AfterpayExpressCheckout
-                            onCaptureSuccess={(orderId) => {
-                              console.log("Afterpay payment successful:", orderId);
-                              handlePaymentSuccess();
-                            }}
-                            onError={(error) => {
-                              console.error("Afterpay payment error:", error);
-                              toast.error(error);
-                            }}
-                            setIsOrderConfirming={setIsOrderConfirming}
-                            totalAmount={effectiveGrandTotal}
-                            currencyCode="USD"
-                            countryCode="US"
-                            termsAccepted={true}
-                            onTermsError={(error) => toast.error(error)}
-                            discountAmount={discountAmount}
-                            coupon={voucherCode ? { code: voucherCode } : undefined}
-                          />
-                        </div>
-                      )}
-                    </div> } */}
+                    
 
                     {/* Google Pay */}
                     {!isStripeEnabled && (

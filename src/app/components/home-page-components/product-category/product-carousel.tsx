@@ -108,7 +108,6 @@ export default function ProductCarousel({
         );
         setProductItems(convertedProducts);
       } catch (error) {
-        console.error("Error fetching products:", error);
         setProductItems([]);
       } finally {
         setLoading(false);
@@ -358,6 +357,8 @@ export default function ProductCarousel({
                               <img
                                 src={getImageUrl(product)}
                                 alt={product.name}
+                                width={280}
+                                height={420}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
                                   e.currentTarget.src = "/placeholder.svg";
@@ -369,6 +370,8 @@ export default function ProductCarousel({
                             <img
                               src={getImageUrl(product)}
                               alt={product.name}
+                              width={280}
+                              height={420}
                               className="w-full h-full object-cover"
                               onError={(e) => {
                                 e.currentTarget.src = "/placeholder.svg";
@@ -470,6 +473,8 @@ export default function ProductCarousel({
                               <img
                                 src={getImageUrl(product)}
                                 alt={product.name}
+                                width={280}
+                                height={420}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                 onError={(e) => {
                                   e.currentTarget.src = "/placeholder.svg";

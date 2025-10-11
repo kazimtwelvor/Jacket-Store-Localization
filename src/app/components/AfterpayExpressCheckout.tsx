@@ -73,44 +73,27 @@ export default function AfterpayExpressCheckout({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Load Afterpay.js script
   useEffect(() => {
     const loadAfterpayScript = () => {
-      console.log("Loading Afterpay script...");
-
-      // Check if already loaded
       if (window.Afterpay) {
-        console.log("Afterpay already loaded");
-        console.log("Available methods:", Object.keys(window.Afterpay));
         setIsScriptLoaded(true);
         return;
       }
 
-      // Check if script already exists
       const existingScript = document.querySelector(
         'script[src*="afterpay.js"]'
       );
       if (existingScript) {
-        console.log("Afterpay script already in DOM, waiting for load...");
-
-        // Check if Afterpay is already available
         if (window.Afterpay) {
-          console.log("Afterpay already available from existing script");
           setIsScriptLoaded(true);
           return;
         }
 
-        // Wait for existing script to load
         existingScript.addEventListener("load", () => {
-          console.log("Existing Afterpay script loaded");
-          // Add a small delay to ensure the global object is available
           setTimeout(() => {
             if (window.Afterpay) {
               setIsScriptLoaded(true);
             } else {
-              console.error(
-                "Afterpay object still not available after script load"
-              );
               setError("Failed to load Afterpay properly");
             }
           }, 100);
@@ -125,54 +108,28 @@ export default function AfterpayExpressCheckout({
       script.async = true;
 
       script.onload = () => {
-        console.log("Afterpay script loaded successfully");
-        console.log("Window.Afterpay available:", !!window.Afterpay);
-        console.log("Window.AfterPay available:", !!window.AfterPay);
-
-        // Check for both possible global names
         const afterpayGlobal = window.Afterpay || window.AfterPay;
 
         if (afterpayGlobal) {
-          // Normalize the global reference
           if (!window.Afterpay && window.AfterPay) {
             window.Afterpay = window.AfterPay;
           }
-          console.log("Afterpay methods:", Object.keys(afterpayGlobal));
           setIsScriptLoaded(true);
         } else {
-          // Try multiple times with different delays
           let attempts = 0;
           const maxAttempts = 10;
 
           const checkForGlobal = () => {
             attempts++;
             const global = window.Afterpay || window.AfterPay;
-            console.log(
-              `Checking for global object (attempt ${attempts}/${maxAttempts}):`,
-              {
-                Afterpay: !!window.Afterpay,
-                AfterPay: !!window.AfterPay,
-              }
-            );
-
             if (global) {
               if (!window.Afterpay && window.AfterPay) {
                 window.Afterpay = window.AfterPay;
               }
-              console.log("Found global object:", Object.keys(global));
               setIsScriptLoaded(true);
             } else if (attempts < maxAttempts) {
               setTimeout(checkForGlobal, attempts * 50);
             } else {
-              console.error(
-                "Afterpay object not available after multiple attempts"
-              );
-              console.log(
-                "Available globals:",
-                Object.keys(window).filter((key) =>
-                  key.toLowerCase().includes("afterpay")
-                )
-              );
               setError("Failed to initialize Afterpay - object not found");
             }
           };
@@ -182,13 +139,9 @@ export default function AfterpayExpressCheckout({
       };
 
       script.onerror = (e) => {
-        console.error("Failed to load Afterpay script:", e);
         setError("Failed to load Afterpay script");
       };
-
       document.head.appendChild(script);
-      console.log("Afterpay script added to DOM");
-
       return () => {
         if (document.head.contains(script)) {
           document.head.removeChild(script);
@@ -199,7 +152,6 @@ export default function AfterpayExpressCheckout({
     loadAfterpayScript();
   }, []);
 
-  // Calculate shipping options for given address and total
   const calculateShippingOptions = useCallback(
     async (address: any, baseTotal: number) => {
       try {
@@ -224,8 +176,6 @@ export default function AfterpayExpressCheckout({
         const data = await response.json();
         return data.shippingOptions;
       } catch (error) {
-        console.error("Shipping calculation error:", error);
-        // Fallback to static options
         const fallbackOptions =
           SHIPPING_OPTIONS[
             address.countryCode as keyof typeof SHIPPING_OPTIONS
@@ -245,8 +195,6 @@ export default function AfterpayExpressCheckout({
     },
     [items, currencyCode]
   );
-  console.log("items", items);
-  // Create Afterpay order token
   const createAfterpayToken = useCallback(async () => {
     try {
       const response = await fetch("/api/afterpay/create-checkout", {
@@ -284,12 +232,9 @@ export default function AfterpayExpressCheckout({
       const data = await response.json();
       return data.token;
     } catch (error) {
-      console.error("Afterpay token creation failed:", error);
       throw error;
     }
   }, [items, totalAmount, currencyCode, invoiceId, coupon, discountAmount]);
-
-  // Handle shipping address changes
   const onShippingAddressChange = useCallback(
     async (data: any, actions: any) => {
       try {
@@ -301,7 +246,6 @@ export default function AfterpayExpressCheckout({
           return;
         }
 
-        // Calculate shipping options for this address
         const shippingOptions = await calculateShippingOptions(
           data,
           totalAmount
@@ -314,12 +258,9 @@ export default function AfterpayExpressCheckout({
           return;
         }
 
-        // Return shipping options
         actions.resolve(shippingOptions);
       } catch (error) {
-        console.error("Shipping address change error:", error);
 
-        // Check if it's a specific shipping error
         if (error instanceof Error) {
           if (error.message.includes("SHIPPING_UNSUPPORTED")) {
             actions.reject(
@@ -344,14 +285,9 @@ export default function AfterpayExpressCheckout({
     [totalAmount, calculateShippingOptions]
   );
 
-  // Handle shipping option changes (optional)
   const onShippingOptionChange = useCallback((data: any, actions?: any) => {
-    console.log("Shipping option selected:", data);
 
-    // If actions are provided, we can update the shipping option
     if (actions) {
-      // Here you could recalculate taxes or shipping based on the selected option
-      // For now, we'll just resolve with the same data
       actions.resolve({
         id: data.id,
         shippingAmount: data.shippingAmount,
@@ -361,14 +297,12 @@ export default function AfterpayExpressCheckout({
     }
   }, []);
 
-  // Handle checkout completion
   const onComplete = useCallback(
     async (event: any) => {
       if (event.data.status === "SUCCESS") {
         setIsOrderConfirming(true);
 
         try {
-          // Get order details from Afterpay
           const orderDetailsResponse = await fetch(
             `/api/afterpay/get-checkout/${event.data.orderToken}`
           );
@@ -402,7 +336,6 @@ export default function AfterpayExpressCheckout({
           const result = await captureResponse.json();
           onCaptureSuccess(result.orderId);
         } catch (error) {
-          console.error("Afterpay completion error:", error);
           const errorMessage =
             error instanceof Error ? error.message : "Payment failed";
           onError(errorMessage);
@@ -411,8 +344,6 @@ export default function AfterpayExpressCheckout({
           setIsOrderConfirming(false);
         }
       } else {
-        // User cancelled or closed popup
-        console.log("Afterpay checkout cancelled");
         setIsOrderConfirming(false);
       }
     },
@@ -427,7 +358,6 @@ export default function AfterpayExpressCheckout({
     ]
   );
 
-  // Handle checkout commencement
   const onCommenceCheckout = useCallback(
     async (actions: any) => {
       try {
@@ -439,19 +369,15 @@ export default function AfterpayExpressCheckout({
 
         setLoading(true);
         const token = await createAfterpayToken();
-        console.log("Token created successfully:", token);
-
         if (actions && actions.resolve) {
           actions.resolve(token);
         } else {
-          // Fallback: redirect to Afterpay checkout
           const checkoutBaseURL =
             process.env.AFTERPAY_CHECKOUT ||
             "https://portal.sandbox.afterpay.com/checkout";
           window.location.href = `${checkoutBaseURL}/?token=${token}`;
         }
       } catch (error) {
-        console.error("Checkout commencement error:", error);
         const errorMessage =
           error instanceof Error ? error.message : "Failed to start checkout";
         setError(errorMessage);
@@ -467,66 +393,34 @@ export default function AfterpayExpressCheckout({
     [termsAccepted, onTermsError, createAfterpayToken, onError]
   );
 
-  // Initialize Afterpay popup
   useEffect(() => {
     if (!isScriptLoaded || isInitialized) {
-      console.log("Afterpay init skipped:", {
-        isScriptLoaded,
-        isInitialized,
-        hasWindow: !!window.Afterpay,
-      });
       return;
     }
 
-    // Add a small delay to ensure the script is fully loaded
     const initTimer = setTimeout(() => {
-      // Check multiple times with increasing delays if needed
       let attempts = 0;
       const maxAttempts = 5;
 
       const checkAfterpay = () => {
         attempts++;
-        console.log(
-          `Checking for Afterpay object (attempt ${attempts}/${maxAttempts})`
-        );
-
         if (window.Afterpay) {
-          console.log("Afterpay object found, proceeding with initialization");
           initializeAfterpay();
         } else if (attempts < maxAttempts) {
-          console.log(`Afterpay not ready, retrying in ${attempts * 100}ms...`);
           setTimeout(checkAfterpay, attempts * 100);
         } else {
-          console.error(
-            "Afterpay object not available after multiple attempts"
-          );
           setError("Afterpay failed to load. Please refresh the page.");
         }
       };
 
       const initializeAfterpay = () => {
-        console.log("Initializing Afterpay with config:", {
-          countryCode,
-          target: "#afterpay-express-button",
-          addressMode: "ADDRESS_WITH_SHIPPING_OPTIONS",
-          buyNow: true,
-        });
-
-        console.log("Full Afterpay object:", window.Afterpay);
-        console.log("Available ADDRESS_MODES:", window.Afterpay.ADDRESS_MODES);
-        console.log("Available CONSTANTS:", window.Afterpay.CONSTANTS);
-        console.log("All Afterpay properties:", Object.keys(window.Afterpay));
-
-        // Log nested properties to understand the structure
         Object.keys(window.Afterpay).forEach((key) => {
           const value = window.Afterpay[key];
           if (typeof value === "object" && value !== null) {
-            console.log(`${key}:`, Object.keys(value));
           }
         });
 
         try {
-          // Check if ADDRESS_MODES exists, if not try to use string constants
           let addressMode;
           if (
             window.Afterpay.ADDRESS_MODES &&
@@ -534,34 +428,25 @@ export default function AfterpayExpressCheckout({
           ) {
             addressMode =
               window.Afterpay.ADDRESS_MODES.ADDRESS_WITH_SHIPPING_OPTIONS;
-            console.log("Using ADDRESS_MODES enum:", addressMode);
           } else {
-            // Fallback to string constant
             addressMode = "ADDRESS_WITH_SHIPPING_OPTIONS";
-            console.log("Using string constant for address mode:", addressMode);
           }
 
-          // Verify the target element exists
           const targetElement = document.getElementById(
             "afterpay-express-button"
           );
           if (!targetElement) {
-            console.error("Target button element not found");
             setError("Button element not ready");
             return;
           }
 
-          // Check available methods and try different initialization approaches
           const availableMethods = Object.keys(window.Afterpay).filter(
             (key) => typeof window.Afterpay[key] === "function"
           );
-          console.log("Available methods:", availableMethods);
 
           let initSuccess = false;
 
-          // Try the new popup API first
           if (typeof window.Afterpay.initializeForPopup === "function") {
-            console.log("Using initializeForPopup method");
             try {
               const config = {
                 countryCode: countryCode,
@@ -574,20 +459,16 @@ export default function AfterpayExpressCheckout({
                 onShippingOptionChange: onShippingOptionChange,
               };
 
-              console.log("Calling initializeForPopup with config:", config);
               window.Afterpay.initializeForPopup(config);
               initSuccess = true;
             } catch (error) {
-              console.error("initializeForPopup failed:", error);
             }
           }
 
-          // Try alternative initialization methods
           if (
             !initSuccess &&
             typeof window.Afterpay.initialize === "function"
           ) {
-            console.log("Trying alternative initialize method");
             try {
               window.Afterpay.initialize({
                 countryCode: countryCode,
@@ -598,56 +479,42 @@ export default function AfterpayExpressCheckout({
               });
               initSuccess = true;
             } catch (error) {
-              console.error("initialize failed:", error);
             }
           }
 
-          // Try direct button binding as fallback
           if (!initSuccess && typeof window.Afterpay.redirect === "function") {
-            console.log("Trying direct button binding approach");
             try {
-              // Bind click handler to button
               const button = document.getElementById("afterpay-express-button");
               if (button) {
                 button.addEventListener("click", async (e) => {
                   e.preventDefault();
-                  console.log("Button clicked, starting checkout flow");
 
                   try {
                     const token = await createAfterpayToken();
-                    console.log("Token created:", token);
                     const checkoutBaseURL =
                       process.env.AFTERPAY_CHECKOUT ||
                       "https://portal.sandbox.afterpay.com/checkout";
-                    // Redirect to Afterpay checkout
                     const checkoutUrl = `${checkoutBaseURL}/?token=${token}`;
                     window.location.href = checkoutUrl;
                   } catch (error) {
-                    console.error("Token creation failed:", error);
                     setError("Failed to start checkout");
                   }
                 });
                 initSuccess = true;
-                console.log("Button click handler bound successfully");
               }
             } catch (error) {
-              console.error("Button binding failed:", error);
             }
           }
 
           if (!initSuccess) {
-            console.error("All initialization methods failed");
-            console.log("Available Afterpay object:", window.Afterpay);
             setError(
               "Unable to initialize Afterpay - incompatible API version"
             );
             return;
           }
 
-          console.log("Afterpay initialized successfully");
           setIsInitialized(true);
         } catch (error) {
-          console.error("Afterpay initialization error:", error);
           setError(
             `Failed to initialize Afterpay: ${
               error instanceof Error ? error.message : "Unknown error"
@@ -674,60 +541,40 @@ export default function AfterpayExpressCheckout({
   useEffect(() => {
     if (window.Afterpay && isScriptLoaded) {
       window.Afterpay.onMessage = (payload: any) => {
-        console.log("Afterpay message:", payload);
         if (payload.severity === "error") {
-          console.error("Afterpay error:", payload.message);
           setError(payload.message);
         } else if (payload.severity === "warning") {
           console.warn("Afterpay warning:", payload.message);
         } else {
-          console.log("Afterpay info:", payload.message);
         }
       };
     }
   }, [isScriptLoaded]);
 
-  // Fallback click handler for debugging - must be defined before any early returns
   const handleButtonClick = useCallback(async () => {
-    console.log("Button clicked - fallback handler");
-    console.log("State:", {
-      isScriptLoaded,
-      isInitialized,
-      loading,
-      hasAfterpay: !!window.Afterpay,
-    });
-
     if (!isInitialized) {
-      console.error("Afterpay not initialized");
       setError("Afterpay not ready. Please refresh the page.");
       return;
     }
 
     if (!window.Afterpay) {
-      console.error("Afterpay object not available");
       setError("Afterpay not loaded. Please refresh the page.");
       return;
     }
 
-    // Prevent default and trigger checkout flow
     try {
-      console.log("Starting manual checkout flow...");
       await onCommenceCheckout({
         resolve: (token: string) => {
-          console.log("Manual checkout commenced with token:", token);
-          // Redirect to Afterpay checkout
           const checkoutBaseURL =
             process.env.AFTERPAY_CHECKOUT ||
             "https://portal.sandbox.afterpay.com/checkout";
           window.location.href = `${checkoutBaseURL}/?token=${token}`;
         },
         reject: () => {
-          console.log("Manual checkout rejected");
           setError("Checkout was cancelled");
         },
       });
     } catch (error) {
-      console.error("Manual checkout failed:", error);
       setError("Failed to start checkout");
     }
   }, [isScriptLoaded, isInitialized, loading, onCommenceCheckout]);

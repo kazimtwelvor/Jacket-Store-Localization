@@ -16,7 +16,6 @@ export async function POST(req: Request) {
 
     const { token } = validationResult.data
     
-    // Get store ID from environment variable
     const storeId = process.env.NEXT_PUBLIC_STORE_ID;
     if (!storeId) {
       return NextResponse.json(
@@ -25,12 +24,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // Forward the email verification request to the Admin API
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || ""
     
-    // If no external API URL is configured, return error
     if (!apiUrl) {
-      console.log("[STORE_VERIFY] No external API configured")
       return NextResponse.json(
         { error: "Email verification service not configured" },
         { status: 503 }
@@ -61,14 +57,12 @@ export async function POST(req: Request) {
         message: "Email verification successful",
       })
     } catch (fetchError) {
-      console.error("[STORE_VERIFY] External API fetch failed:", fetchError)
       return NextResponse.json(
         { error: "Failed to connect to email verification service" },
         { status: 503 }
       )
     }
   } catch (error) {
-    console.error("[STORE_VERIFY_EMAIL_ERROR]", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

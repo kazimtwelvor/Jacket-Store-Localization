@@ -8,6 +8,7 @@ import { Heart, ChevronLeft, ChevronRight, X } from "lucide-react"
 import type { Product } from "@/types"
 import useWishlist from "../../hooks/use-wishlist"
 import { cn } from "../../lib/utils"
+import { trackAddToWishlist } from "../../lib/analytics"
 
 interface RelatedProductsProps {
   relatedProductIds: string[]
@@ -86,7 +87,6 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
         const validProducts = fetchedProducts.filter(product => product !== null)
         setProducts(validProducts)
       } catch (error) {
-        console.error('Error fetching related products:', error)
         setProducts([])
       } finally {
         setLoading(false)
@@ -298,6 +298,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                         wishlist.removeItem(product.id)
                       } else {
                         wishlist.addItem(product)
+                        trackAddToWishlist(product)
                       }
                     }}
                   >
@@ -433,6 +434,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                           wishlist.removeItem(product.id)
                         } else {
                           wishlist.addItem(product)
+                          trackAddToWishlist(product)
                         }
                       }}
                     >

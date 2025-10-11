@@ -9,6 +9,7 @@ import { Heart, ChevronLeft, ChevronRight, X } from "lucide-react"
 import type { Product } from "@/types"
 import useWishlist from "../hooks/use-wishlist"
 import { cn } from "../lib/utils"
+import { trackAddToWishlist } from "../lib/analytics"
 
 
 interface WeThinkYouWillLoveProps {
@@ -197,7 +198,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
     <div className="w-full pl-4 pr-0 sm:pl-6 md:pl-8 lg:px-8 mb-8 md:mb-12 mt-16 h-auto">
       <div className="relative">
         <div className="flex justify-between items-center mb-4 pr-4 sm:pr-6 md:pr-0">
-          <h2 className="text-xl font-bold">You'll Also Love</h2>
+          <span className="text-xl font-bold">You'll Also Love</span>
 
           {/* Mobile Arrows - Updated Style */}
           <div className="md:hidden flex items-center gap-2">
@@ -221,9 +222,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
             )}
           </div>
 
-          {/* Desktop Arrows - REMOVED from here (this block is now empty and can be deleted if desired) */}
           <div className="hidden md:flex items-center gap-2">
-            {/* Arrows removed from this location */}
           </div>
         </div>
 
@@ -269,6 +268,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                         wishlist.removeItemWithKey(uniqueKey)
                       } else {
                         wishlist.addItemWithKey(product, uniqueKey)
+                        trackAddToWishlist(product)
                       }
                     }}
                   >
@@ -435,7 +435,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                   console.warn('Product not found for color link:', colorLink, errorData)
                                 }
                               } catch (error) {
-                                console.error('Error:', error)
                               } finally {
                                 setLoadingProducts(prev => {
                                   const newSet = new Set(prev)
@@ -517,6 +516,7 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                           wishlist.removeItemWithKey(uniqueKey)
                         } else {
                           wishlist.addItemWithKey(product, uniqueKey)
+                          trackAddToWishlist(product)
                         }
                       }}
                     >
@@ -686,7 +686,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                                   console.warn('Product not found for color link:', colorLink, errorData)
                                                 }
                                               } catch (error) {
-                                                console.error('Error:', error)
                                               } finally {
                                                 setLoadingProducts(prev => {
                                                   const newSet = new Set(prev)
@@ -766,7 +765,6 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                                                     console.warn('Product not found for color link:', colorLink, errorData)
                                                   }
                                                 } catch (error) {
-                                                  console.error('Error:', error)
                                                 } finally {
                                                   setLoadingProducts(prev => {
                                                     const newSet = new Set(prev)

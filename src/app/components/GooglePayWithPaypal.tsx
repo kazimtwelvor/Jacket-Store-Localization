@@ -19,7 +19,6 @@ declare global {
   }
 }
 
-// Global variables following best practices
 let paymentsClient: any = null;
 let googlepayConfig: any = null;
 
@@ -39,9 +38,7 @@ type GooglePayWithPayPalProps = {
   discountAmount?: number;
 };
 
-/**
- * Fetch the Google Pay Config From PayPal following best practices
- */
+
 async function getGooglePayConfig() {
   if (googlepayConfig === null) {
     let paypalGooglePay;
@@ -64,9 +61,7 @@ async function getGooglePayConfig() {
       }
 
       googlepayConfig = await paypalGooglePay.config();
-      console.log("===== Google Pay Config Fetched =====");
     } catch (error) {
-      console.error("Error accessing PayPal Google Pay module:", error);
       throw new Error(
         "PayPal Google Pay module not available. Ensure components=googlepay is loaded."
       );
@@ -75,9 +70,7 @@ async function getGooglePayConfig() {
   return googlepayConfig;
 }
 
-/**
- * Return an active PaymentsClient or initialize following best practices
- */
+
 function getGooglePaymentsClient(
   environment: string,
   onPaymentAuthorized: any
@@ -93,9 +86,7 @@ function getGooglePaymentsClient(
   return paymentsClient;
 }
 
-/**
- * Configure support for the Google Pay API following best practices
- */
+
 async function getGooglePaymentDataRequest(
   totalAmount: number,
   currencyCode: string
@@ -153,11 +144,9 @@ const loadGooglePayScript = (): Promise<void> => {
     script.src = "https://pay.google.com/gp/p/js/pay.js";
     script.async = true;
     script.onload = () => {
-      console.log("Google Pay SDK loaded successfully");
       resolve();
     };
     script.onerror = (error) => {
-      console.error("Failed to load Google Pay SDK:", error);
       reject(
         new Error(
           "Failed to load Google Pay SDK. Please check your internet connection and try again."
@@ -210,19 +199,16 @@ export default function GooglePayWithPayPal({
     reset: reset3DS,
   } = usePayPal3DS({
     onSuccess: (result) => {
-      console.log("Google Pay 3DS authentication successful:", result);
       setProcessing(false);
       if (onCaptureSuccess) {
         onCaptureSuccess(result.orderId || result.order_id);
       }
     },
     onError: (error) => {
-      console.error("Google Pay 3DS authentication failed:", error);
       setProcessing(false);
       setError(error.message);
     },
     onAuthenticationRequired: (orderId) => {
-      console.log("Google Pay 3DS authentication required for order:", orderId);
     },
   });
 
@@ -246,7 +232,6 @@ export default function GooglePayWithPayPal({
   const onPaymentAuthorized = useCallback((paymentData: any) => {
     setShowPaymentStatusModal(true);
     processPayment(paymentData).catch((error) => {
-      console.error("Payment processing failed:", error);
       setShowPaymentStatusModal(false);
     });
     return Promise.resolve({ transactionState: "SUCCESS" });
@@ -255,13 +240,6 @@ export default function GooglePayWithPayPal({
   const processPayment = useCallback(
     async (paymentData: any) => {
       try {
-        // if (typeof termsAccepted !== "undefined" && !termsAccepted) {
-        //   const msg = "Please accept the terms and conditions to continue";
-        //   setError(msg);
-        //   if (onTermsError) onTermsError(msg);
-        //   throw new Error(msg);
-        // }
-
         const itemsToProcess =
           itemsSnapshotRef.current.length > 0
             ? itemsSnapshotRef.current
@@ -506,7 +484,6 @@ export default function GooglePayWithPayPal({
           }
         }
       } catch (err: any) {
-        console.error("Google Pay payment error:", err);
         setError(err.message || "Payment failed");
         setProcessing(false);
         setShowPaymentStatusModal(false);
@@ -637,7 +614,6 @@ export default function GooglePayWithPayPal({
             );
             await paymentsClient.loadPaymentData(paymentDataRequest);
           } catch (err: any) {
-            console.error("Google Pay payment error:", err);
             setError(err.message || "Payment failed");
             setLoading(false);
             setProcessing(false);
@@ -653,7 +629,6 @@ export default function GooglePayWithPayPal({
         buttonContainerRef.current.appendChild(button);
       }
     } catch (err: any) {
-      console.error("Google Pay setup error:", err);
       setError(err.message || "Failed to initialize Google Pay");
     } finally {
       setLoading(false);

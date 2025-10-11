@@ -224,6 +224,41 @@ const BlogsClient = ({ initialBlogs }: BlogsClientProps) => {
         </div>
       </Container>
 
+      {/* FAQs Section */}
+      <div className="bg-white py-16">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center text-[#2b2b2b]">Frequently Asked Questions</h2>
+            <div className="space-y-6">
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-lg font-semibold text-[#2b2b2b] mb-3">How often do you publish new articles?</h3>
+                <p className="text-muted-foreground">We publish new fashion insights and style guides weekly, covering the latest trends, seasonal collections, and timeless fashion advice to keep your wardrobe fresh and current.</p>
+              </div>
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-lg font-semibold text-[#2b2b2b] mb-3">Can I suggest topics for future blog posts?</h3>
+                <p className="text-muted-foreground">Absolutely! We love hearing from our readers. <a href="/us/contact-us" className="text-blue-600 hover:underline">Contact us</a> with your topic suggestions, and our editorial team will consider them for upcoming articles.</p>
+              </div>
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-lg font-semibold text-[#2b2b2b] mb-3">Do you offer styling advice for specific occasions?</h3>
+                <p className="text-muted-foreground">Yes! Our blog features comprehensive styling guides for various occasions, from casual everyday looks to formal events. Use our search function to find specific styling advice for your needs.</p>
+              </div>
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-lg font-semibold text-[#2b2b2b] mb-3">Are your fashion tips suitable for all body types?</h3>
+                <p className="text-muted-foreground">Our styling advice is designed to be inclusive and adaptable for all body types. We focus on helping you find what works best for your unique style and preferences.</p>
+              </div>
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-lg font-semibold text-[#2b2b2b] mb-3">How can I stay updated with your latest content?</h3>
+                <p className="text-muted-foreground">Subscribe to our newsletter below to receive the latest articles directly in your inbox, or follow us on social media for daily style inspiration and updates.</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-[#2b2b2b] mb-3">Do you feature sustainable fashion content?</h3>
+                <p className="text-muted-foreground">Yes, we regularly publish articles about sustainable fashion practices, eco-friendly materials, and how to build a conscious wardrobe that's both stylish and environmentally responsible.</p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </div>
+
       <div className="bg-[#eaeaea] py-16">
         <Container>
           <div className="max-w-2xl mx-auto text-center">

@@ -91,15 +91,12 @@ export const useViewTracking = ({
 
       if (result.success) {
         hasTrackedRef.current = true
-        console.log(`${entityType} view tracked successfully:`, result.viewId)
       } else if (result.duplicate) {
         hasTrackedRef.current = true
-        console.log(`${entityType} view already recorded for this IP`)
       } else {
         console.warn(`Failed to track ${entityType} view:`, result.message)
       }
     } catch (error) {
-      console.error(`Error tracking ${entityType} view:`, error)
     } finally {
       isTrackingRef.current = false
     }
@@ -118,7 +115,6 @@ export const useViewTracking = ({
   useEffect(() => {
     if (enabled && entityId && storeId) {
       if (process.env.NODE_ENV === 'development') {
-        // logTrackingDebugInfo()
       }
       trackViewWithDelay()
     }

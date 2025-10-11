@@ -7,6 +7,7 @@ import useWishlist from "../../hooks/use-wishlist"
 import Gallery from "../gallery"
 import MobileAddToCartModal from "../../modals/MobileAddToCartModal"
 import React from "react"
+import { trackAddToWishlist } from "../../lib/analytics"
 
 interface GalleryWrapperProps {
   images: ProductImage[]
@@ -35,6 +36,7 @@ const GalleryWrapper: React.FC<GalleryWrapperProps> = ({ images, product }) => {
       wishlist.removeItem(product.id)
     } else {
       wishlist.addItem(product)
+      trackAddToWishlist(product)
     }
   }
 

@@ -101,6 +101,8 @@ export default function SignatureStylesSection() {
                 <img
                   src="/uploads/2025/Untitled_design__10_.png"
                   alt="Men's Leather Jacket"
+                  width={600}
+                  height={700}
                   className="w-full h-full object-cover object-[5%] md:object-[5%] lg:object-[5%] group-hover:scale-110 transition-transform duration-500 block"
                 />
               </div>
@@ -151,6 +153,8 @@ export default function SignatureStylesSection() {
                 <img
                   src={womenImageSrc}
                   alt="Women's Leather Jacket"
+                  width={600}
+                  height={700}
                   className="w-full h-full object-cover object-[100%] md:object-[100%] lg:object-[100%] group-hover:scale-110 transition-transform duration-500 block"
                 />
               </div>

@@ -105,7 +105,6 @@ export default function OrdersPage() {
           }
         }
       } catch (err) {
-        console.error("Error fetching orders:", err);
         setError("Failed to load your orders. Please try again later.");
       } finally {
         setIsLoading(false);
@@ -123,7 +122,6 @@ export default function OrdersPage() {
     const status = order.status?.toLowerCase();
     const paymentStatus = order.paymentStatus?.toLowerCase();
 
-    // Determine primary status based on both order and payment status
     if (status === "cancelled")
       return {
         status: "cancelled",

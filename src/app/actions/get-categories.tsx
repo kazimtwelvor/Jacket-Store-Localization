@@ -50,13 +50,7 @@ const getCategories = async (): Promise<Category[]> => {
       return fallbackCategories
     }
 
-    console.log("🔄 Fetching categories from API:", `${process.env.NEXT_PUBLIC_API_URL}/categories`)
-    
     const categories = await fetchJson<Category[]>("/categories", { timeoutMs: 1200000 })
-    
-    console.log("✅ Categories fetched from API:", categories)
-    console.log("✅ Categories length:", categories?.length)
-    
     if (!categories || categories.length === 0) {
       console.warn("⚠️ No categories returned from API, using fallback")
       return fallbackCategories
@@ -64,8 +58,6 @@ const getCategories = async (): Promise<Category[]> => {
     
     return categories
   } catch (error) {
-    console.error("❌ Error fetching categories:", error)
-    console.log("⚠️ Using fallback categories data")
     return fallbackCategories
   }
 }

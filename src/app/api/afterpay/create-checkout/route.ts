@@ -55,16 +55,12 @@ export async function POST(req: Request) {
     }
 
     const auth = await getAfterpayAuth();
-
-    // Calculate totals
     const itemTotal = items.reduce(
       (sum: number, item: any) => sum + item.price * item.quantity,
       0
     );
 
     const finalAmount = Math.max(0, itemTotal - discount_amount);
-
-    // Prepare Afterpay checkout payload for express mode
     const checkoutPayload = {
       amount: {
         amount: finalAmount.toFixed(2),
@@ -74,7 +70,6 @@ export async function POST(req: Request) {
       merchant: {
         popupOriginUrl: merchant.popupOriginUrl,
       },
-      // No consumer details - Afterpay will collect these
       items: items.map((item: any) => ({
         name: item.name.substring(0, 250), // Afterpay limit
         sku: item.id?.toString() || "",
@@ -85,7 +80,6 @@ export async function POST(req: Request) {
         },
         categories: [["Clothing"]], // Default category
       })),
-      // No shipping details - Afterpay will collect these in express mode
       discounts:
         discount_amount > 0
           ? [
@@ -100,11 +94,6 @@ export async function POST(req: Request) {
           : [],
     };
 
-    console.log(
-      "Creating Afterpay checkout with payload:",
-      JSON.stringify(checkoutPayload, null, 2)
-    );
-
     const response = await fetch(`${AFTERPAY_API_BASE}/v2/checkouts`, {
       method: "POST",
       headers: {
@@ -117,12 +106,6 @@ export async function POST(req: Request) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error("Afterpay checkout creation failed:", {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorData,
-      });
-
       return NextResponse.json(
         {
           error: errorData.message || "Failed to create Afterpay checkout",
@@ -133,14 +116,12 @@ export async function POST(req: Request) {
     }
 
     const checkoutData = await response.json();
-    console.log("Afterpay checkout created successfully:", checkoutData.token);
 
     return NextResponse.json({
       token: checkoutData.token,
       redirectCheckoutUrl: checkoutData.redirectCheckoutUrl,
     });
   } catch (error: any) {
-    console.error("Afterpay checkout creation error:", error);
     return NextResponse.json(
       {
         error: "Internal server error",

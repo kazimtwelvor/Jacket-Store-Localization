@@ -4,6 +4,7 @@ import { cn } from "../../../lib/utils"
 import { Heart, ShoppingCart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { trackAddToWishlist } from "../../../lib/analytics"
 
 interface ProductCardFallbackProps {
   product: Product
@@ -125,6 +126,7 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
               wishlist.removeItemWithKey(uniqueKey)
             } else {
               wishlist.addItemWithKey(product, uniqueKey)
+              trackAddToWishlist(product)
             }
           }}
         >

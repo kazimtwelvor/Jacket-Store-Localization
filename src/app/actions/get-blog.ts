@@ -26,7 +26,6 @@ export async function getBlog(slug: string): Promise<BlogDetail | null> {
     const blog = blogs.find((blog: any) => blog.content?.metadata?.slug === slug || blog.slug === slug)
 
     if (!blog) {
-      console.error(`Blog with slug ${slug} not found`)
       return null
     }
 
@@ -45,7 +44,6 @@ export async function getBlog(slug: string): Promise<BlogDetail | null> {
     const blogDetail = await blogRes.json()
     return blogDetail
   } catch (error) {
-    console.error("Error fetching blog:", error)
     return null
   }
 }

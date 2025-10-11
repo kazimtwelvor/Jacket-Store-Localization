@@ -133,39 +133,36 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     useState<PaginatedProductsData>(initialProductsData);
 
   useEffect(() => {
-    console.log("ProductsData state updated:", {
-      currentPage: productsData.pagination.currentPage,
-      totalPages: productsData.pagination.totalPages,
-      productsCount: productsData.products.length,
-      firstProduct: productsData.products[0]?.name || "none",
-    });
   }, [productsData]);
   const [loading, setLoading] = useState(false);
 
-  // Debug loading state changes
   useEffect(() => {
-    console.log("Loading state changed:", loading);
   }, [loading]);
 
-  // Load more functionality states
   const [loadedProducts, setLoadedProducts] = useState<Product[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(hasMoreProducts);
   const [loadMorePage, setLoadMorePage] = useState(2);
-
   const [sizeModalOpen, setSizeModalOpen] = useState(false);
   const [filterSidebarOpen, setFilterSidebarOpen] = useState(false);
   const [categorySliderOpen, setCategorySliderOpen] = useState(false);
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("t-shirts");
+  const mapGenderToTitle = (g: string) => {
+    const v = g.trim().toLowerCase();
+    if (v === "men" || v === "male") return "Male";
+    if (v === "women" || v === "female") return "Female";
+    return g;
+  };
+
+  const [activeCategory, setActiveCategory] = useState(filterParams?.categoryId || "t-shirts");
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
-  const [activeSort, setActiveSort] = useState<string>("");
+  const [activeSort, setActiveSort] = useState<string>(filterParams?.sort || "");
   const [selectedFilters, setSelectedFilters] = useState({
-    materials: [] as string[],
-    style: [] as string[],
-    gender: [] as string[],
-    colors: [] as string[],
-    sizes: [] as string[],
+    materials: (filterParams?.materials || []) as string[],
+    style: (filterParams?.styles || []) as string[],
+    gender: ((filterParams?.genders || []) as string[]).map(mapGenderToTitle),
+    colors: (filterParams?.colors || []) as string[],
+    sizes: (filterParams?.sizes || []) as string[],
   });
   const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>(
     {}
@@ -203,6 +200,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   const filterBarRef = useRef<HTMLDivElement>(null);
   const wasDraggedRef = useRef(false);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const isFirstRender = useRef(true);
+  const isApplyingFilters = useRef(false);
   const requestIdRef = useRef(0);
   const latestHandledRequestRef = useRef(0);
   const inflightCountRef = useRef(0);
@@ -366,21 +365,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         };
 
         const newProductsData = await getProducts(queryParams);
-        console.log("API Response received:", {
-          requestId,
-          latestHandled: latestHandledRequestRef.current,
-          page,
-          newProductsData: {
-            currentPage: newProductsData.pagination.currentPage,
-            totalPages: newProductsData.pagination.totalPages,
-            productsCount: newProductsData.products.length,
-          },
-        });
-
-        // Only apply if this is the latest request
         if (requestId > latestHandledRequestRef.current) {
           latestHandledRequestRef.current = requestId;
-          console.log("Updating state with new data for page:", page);
           setProductsData(newProductsData);
           setCurrentProducts(
             sortProductsClient(
@@ -389,15 +375,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             )
           );
           setCurrentPage(page);
-          // Update hasMore state based on filtered results
           setHasMore(newProductsData.pagination?.hasNextPage || false);
         } else {
-          console.log(
-            "Request ignored - not latest:",
-            requestId,
-            "vs",
-            latestHandledRequestRef.current
-          );
         }
 
         if (!skipURLUpdate) {
@@ -426,6 +405,11 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
                 : "",
             sort: (sortOverride ?? activeSort) || "",
           });
+          setTimeout(() => {
+            isApplyingFilters.current = false;
+          }, 200);
+        } else {
+          isApplyingFilters.current = false;
         }
       } catch (error) {
         setProductsData({
@@ -439,12 +423,11 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
             hasPreviousPage: false,
           },
         });
+        isApplyingFilters.current = false;
       } finally {
         inflightCountRef.current = Math.max(0, inflightCountRef.current - 1);
-        // Always set loading to false when request completes
         if (inflightCountRef.current === 0) {
           setLoading(false);
-          // Clear pagination in progress flag after a short delay to allow URL to update
           if (isPaginationInProgress) {
             setTimeout(() => {
               setIsPaginationInProgress(false);
@@ -464,12 +447,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
 
   const handlePageChange = useCallback(
     (page: number) => {
-      console.log(
-        "Page change requested:",
-        page,
-        "Current productsData page:",
-        productsData.pagination.currentPage
-      );
       setIsPaginationInProgress(true);
       fetchProducts(page);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -501,31 +478,33 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
     setIsLoadingMore(true);
 
     try {
+      const genderToParam = (g: string) => {
+        const v = g.trim().toLowerCase();
+        if (v === "male" || v === "men") return "male";
+        if (v === "female" || v === "women") return "female";
+        return v;
+      };
+
+      const loadMorePayload = {
+        materials: selectedFilters.materials.length > 0 ? selectedFilters.materials.join(',') : '',
+        styles: selectedFilters.style.length > 0 ? selectedFilters.style.join(',') : '',
+        colors: selectedFilters.colors.length > 0 ? selectedFilters.colors.join(',') : '',
+        genders: selectedFilters.gender.length > 0 ? Array.from(new Set(selectedFilters.gender.map(genderToParam))).join(',') : '',
+        sizes: selectedFilters.sizes.length > 0 ? selectedFilters.sizes.join(',') : '',
+        categoryId: activeCategory !== "t-shirts" ? activeCategory : undefined,
+        colorId: filterParams?.colorId,
+        sizeId: filterParams?.sizeId,
+        search: filterParams?.search,
+        page: loadMorePage,
+        limit: 40,
+        sort: activeSort || filterParams?.sort || "popular",
+      };
       const response = await fetch("/api/shop/load-more", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          materials: selectedFilters.materials,
-          styles: selectedFilters.style,
-          colors: selectedFilters.colors,
-          genders: selectedFilters.gender.map(g => {
-            const v = g.trim().toLowerCase();
-            if (v === "male" || v === "men") return "male";
-            if (v === "female" || v === "women") return "female";
-            // if (v === "unisex") return "unisex";
-            return v;
-          }),
-          sizes: selectedFilters.sizes,
-          categoryId: filterParams?.categoryId,
-          colorId: filterParams?.colorId,
-          sizeId: filterParams?.sizeId,
-          search: filterParams?.search,
-        page: loadMorePage,
-        limit: 40,
-          sort: activeSort || filterParams?.sort || "popular",
-        }),
+        body: JSON.stringify(loadMorePayload),
       });
 
       if (!response.ok) {
@@ -542,7 +521,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         setHasMore(false);
       }
     } catch (error) {
-      console.error("Error loading more products:", error);
       setHasMore(false);
     } finally {
       setIsLoadingMore(false);
@@ -747,6 +725,15 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    if (loading) return;
+
+    if (isApplyingFilters.current) return;
+
     const params = new URLSearchParams(window.location.search);
     const urlPage = Number.parseInt(params.get("page") || "1");
     const urlMaterials = params.get("materials") || "";
@@ -796,18 +783,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       fetchProducts(urlPage, true, undefined, true, explicit);
       return;
     }
-
-    // Only fetch if URL page is different from current page AND we're not in the middle of a pagination update
-    console.log("URL sync check:", {
-      urlPage,
-      currentPage,
-      loading,
-      isPaginationInProgress,
-      shouldFetch:
-        urlPage !== currentPage && !loading && !isPaginationInProgress,
-    });
-    if (urlPage !== currentPage && !loading && !isPaginationInProgress) {
-      console.log("URL sync triggering fetchProducts for page:", urlPage);
+    if (urlPage !== currentPage && !isPaginationInProgress) {
       fetchProducts(urlPage);
     }
   }, [currentPage, loading, isPaginationInProgress]);
@@ -828,7 +804,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           .filter(Boolean);
         setRecentlyViewed(productObjects);
       } catch (error) {
-        console.error("Error parsing recently viewed products:", error);
       }
     }
   }, []);
@@ -987,6 +962,8 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           })()}
         </h1>
       </div>
+      
+      <h2 className="sr-only">Product Listings</h2>
 
       <div className="mx-auto w-full px-0 sm:px-4 lg:px-6 py-6 sm:py-8 md:py-12">
         <div ref={filterBarWrapperRef}>
@@ -1168,6 +1145,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           }}
           onClearFilters={clearFilters}
           onApplyFilters={() => {
+            isApplyingFilters.current = true;
             fetchProducts(1, true);
             setFilterSidebarOpen(false);
           }}
@@ -1202,9 +1180,6 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
         <WhatsMySize
           open={sizeModalOpen}
           onOpenChange={setSizeModalOpen}
-          // onCategorySelect={(category) => {
-          //   console.log("Selected category:", category);
-          // }}
         />
 
         {mobileCartModal.product && (

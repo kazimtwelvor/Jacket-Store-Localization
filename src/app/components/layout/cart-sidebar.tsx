@@ -29,7 +29,6 @@ interface CartSidebarProps {
   onClose: () => void;
 }
 
-// Stripe Express Checkout Component
 const StripeExpressCheckout = ({
   totalAmount,
   onSuccess,
@@ -49,10 +48,8 @@ const StripeExpressCheckout = ({
   const elements = useElements();
 
   const handleExpressCheckout = async (event: any) => {
-    console.log("Express checkout event details:", event);
     if (!stripe || !elements) return;
 
-    console.log("Express checkout event:", event);
 
     setPaymentModal({
       isOpen: true,
@@ -61,7 +58,6 @@ const StripeExpressCheckout = ({
     });
 
     try {
-      // Create payment intent for express checkout
       const response = await fetch(`/api/stripe/express-checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -118,7 +114,7 @@ const StripeExpressCheckout = ({
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               productIds: items.map((item) => item.product.id),
-              paymentMethod: "stripe_express",
+              paymentMethod: "stripe",
               customerEmail: event.billingDetails?.email || "",
               customerName:
                 event.billingDetails?.name || event.shippingAddress?.name || "",
@@ -203,7 +199,6 @@ const StripeExpressCheckout = ({
           }, 2000);
         } else {
           const errorData = await checkoutResponse.json();
-          console.error("Checkout API error:", errorData);
           setPaymentModal({
             isOpen: true,
             status: "error",
@@ -214,7 +209,6 @@ const StripeExpressCheckout = ({
         }
       }
     } catch (error) {
-      console.error("Express checkout error:", error);
       setPaymentModal({
         isOpen: true,
         status: "error",
@@ -300,7 +294,6 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
           setPaypalClientId(decryptedClientId);
         }
       } catch (error) {
-        console.error("Error initializing payments:", error);
       }
     };
 

@@ -22,7 +22,6 @@ export async function getBlogs(): Promise<BlogDetail[]> {
     const blogs = await res.json()
     return blogs || []
   } catch (error) {
-    console.error("Error fetching blogs:", error)
     return []
   }
 }

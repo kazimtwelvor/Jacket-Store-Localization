@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react"
 import { cn } from "../../lib/utils"
 import type { Product, Review } from "@/types"
 import ProductDetailsModal from "../../modals/ProductDetailsModal"
+import { stripH2Tags } from "../../lib/stripHeadings"
 
 interface ProductDropdownsProps {
   data: Product
@@ -42,13 +43,25 @@ const ProductDropdowns = ({
           <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed">
             {(() => {
               const description = data?.description || "";
+              let parsedSpecs = null;
+              try {
+                parsedSpecs = typeof data?.specifications === 'string' 
+                  ? JSON.parse(data.specifications) 
+                  : data?.specifications;
+              } catch {
+                parsedSpecs = data?.specifications;
+              }
+              const materials = parsedSpecs?.externalMaterial || [];
+              const materialDisplay = materials.length > 0 ? materials.join(', ') : (data?.material || "Premium fabric");
+              const fitDisplay = parsedSpecs?.fit || "Regular fit";
+              
               return (
                 <>
-                  <div dangerouslySetInnerHTML={{ __html: description }} />
+                  <div dangerouslySetInnerHTML={{ __html: stripH2Tags(description) }} />
                   <ul className="list-disc pl-5 mt-3 sm:mt-4 space-y-1">
                     <li>SKU: {data?.sku || "N/A"}</li>
-                    <li>Material: {data?.material || "Premium fabric"}</li>
-                    <li>Fit: {data?.specifications?.fit || "Regular fit"}</li>
+                    <li>Material: {materialDisplay}</li>
+                    <li>Fit: {fitDisplay}</li>
                   </ul>
                 </>
               );
@@ -106,9 +119,21 @@ const ProductDropdowns = ({
               const firstParagraph = firstParagraphEnd > 4 ? description.substring(0, firstParagraphEnd) : description;
               const restOfDescription = firstParagraphEnd > 4 ? description.substring(firstParagraphEnd) : "";
               
+              let parsedSpecs = null;
+              try {
+                parsedSpecs = typeof data?.specifications === 'string' 
+                  ? JSON.parse(data.specifications) 
+                  : data?.specifications;
+              } catch {
+                parsedSpecs = data?.specifications;
+              }
+              const materials = parsedSpecs?.externalMaterial || [];
+              const materialDisplay = materials.length > 0 ? materials.join(', ') : (data?.material || "Premium fabric");
+              const fitDisplay = parsedSpecs?.fit || "Regular fit";
+              
               return (
                 <>
-                  <div dangerouslySetInnerHTML={{ __html: firstParagraph }} />
+                  <div dangerouslySetInnerHTML={{ __html: stripH2Tags(firstParagraph) }} />
                   
                   {restOfDescription && (
                     <button 
@@ -122,8 +147,8 @@ const ProductDropdowns = ({
                   
                   <ul className="list-disc pl-5 mt-3 sm:mt-4 space-y-1">
                     <li>SKU: {data?.sku || "N/A"}</li>
-                    <li>Material: {data?.material || "Premium fabric"}</li>
-                    <li>Fit: {data?.specifications?.fit || "Regular fit"}</li>
+                    <li>Material: {materialDisplay}</li>
+                    <li>Fit: {fitDisplay}</li>
                   </ul>
                 </>
               );
@@ -212,7 +237,7 @@ const ProductDropdowns = ({
         <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeTab === "care" ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
           <div className="pb-3 sm:pb-4 text-sm text-gray-700 leading-relaxed" data-dropdown>
             <p>To preserve the quality of your garment:</p>
-            <ul className="list-disc pl-5 mt-2 space-y-1">
+            <ul className="list-disc pl-5 mt-2 space-y-1"> 
               <li>Machine wash cold with similar colors</li>
               <li>Do not bleach</li>
               <li>Tumble dry low</li>

@@ -63,7 +63,6 @@ export async function POST(request: NextRequest) {
       order: data,
     });
   } catch (error) {
-    console.error("Error confirming payment:", error);
     return NextResponse.json(
       { error: "Failed to confirm payment" },
       { status: 500 }

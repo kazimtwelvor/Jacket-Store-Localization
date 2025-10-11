@@ -4,12 +4,14 @@ import { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useViewTracking } from "@/src/app/hooks/use-view-tracking";
 import { getStoreId, isTrackingEnabled } from "@/src/app/utils/store-config";
+import { trackViewContent } from "@/src/app/lib/analytics";
 
 interface ProductPageClientProps {
   productId?: string;
+  product?: any;
 }
 
-export default function ProductPageClient({ productId }: ProductPageClientProps) {
+export default function ProductPageClient({ productId, product }: ProductPageClientProps) {
   const router = useRouter();
   const params = useParams();
   const slug = params?.slug as string;
@@ -20,7 +22,6 @@ export default function ProductPageClient({ productId }: ProductPageClientProps)
     }
   }, []);
 
-  // Track product view
   const { trackView, hasTracked } = useViewTracking({
     storeId: getStoreId(),
     entityId: productId || slug || '',
@@ -29,13 +30,10 @@ export default function ProductPageClient({ productId }: ProductPageClientProps)
     delay: 2000 // Track after 2 seconds to ensure user is actually viewing
   });
 
-  // Optional: Track view when component mounts (alternative to auto-tracking)
   useEffect(() => {
     if (productId || slug) {
-      // The hook will auto-track, but we can also manually trigger if needed
-      console.log('Product page loaded, tracking will start automatically');
     }
-  }, [productId, slug]);
+  }, [product]);
 
   return null;
 }

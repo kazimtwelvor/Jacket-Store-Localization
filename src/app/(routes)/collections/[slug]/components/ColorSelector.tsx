@@ -124,7 +124,6 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
                               // You could show a toast notification here if needed
                             }
                           } catch (error) {
-                            console.error('Error fetching product by color link:', error)
                           } finally {
                             setLoadingProducts(prev => {
                               const newSet = new Set(prev)
@@ -211,7 +210,6 @@ export const ColorSelector: React.FC<ColorSelectorProps> = ({
                                 // You could show a toast notification here if needed
                               }
                             } catch (error) {
-                              console.error('Error fetching product by color link:', error)
                             } finally {
                               setLoadingProducts(prev => {
                                 const newSet = new Set(prev)

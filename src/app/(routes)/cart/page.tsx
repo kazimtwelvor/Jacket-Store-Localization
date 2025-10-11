@@ -79,10 +79,8 @@ const StripeExpressCheckout = ({
   const elements = useElements();
 
   const handleExpressCheckout = async (event: any) => {
-    console.log("Express checkout event details:", event);
     if (!stripe || !elements) return;
 
-    console.log("Express checkout event:", event);
 
     setPaymentModal({
       isOpen: true,
@@ -148,7 +146,7 @@ const StripeExpressCheckout = ({
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               productIds: items.map((item) => item.product.id),
-              paymentMethod: "stripe_express",
+              paymentMethod: "stripe",
               customerEmail: event.billingDetails?.email || "",
               customerName:
                 event.billingDetails?.name || event.shippingAddress?.name || "",
@@ -233,7 +231,6 @@ const StripeExpressCheckout = ({
           }, 2000);
         } else {
           const errorData = await checkoutResponse.json();
-          console.error("Checkout API error:", errorData);
           setPaymentModal({
             isOpen: true,
             status: "error",
@@ -244,7 +241,6 @@ const StripeExpressCheckout = ({
         }
       }
     } catch (error) {
-      console.error("Express checkout error:", error);
       setPaymentModal({
         isOpen: true,
         status: "error",
@@ -360,7 +356,6 @@ const CartPage = () => {
           }
         }
       } catch (error) {
-        console.error("Error initializing payments:", error);
       }
     };
 
@@ -915,24 +910,6 @@ const CartPage = () => {
                               </div>
                             </PayPalScriptProvider>
                           )}
-                          {/* {paypalClientId && (
-                            <PayPalScriptProvider
-                              options={{
-                                "client-id": paypalClientId,
-                                currency: "USD",
-                              }}
-                            >
-                              <div className="border border-gray-300 rounded p-1">
-                                <PayPalButtons
-                                  items={items.map((i) => ({
-                                    id: i.product.id,
-                                    quantity: i.quantity,
-                                  }))}
-                                  onApproveSuccess={handlePaymentSuccess}
-                                />
-                              </div>
-                            </PayPalScriptProvider>
-                          )} */}
                         </div>
                       )}
                     </div>

@@ -450,13 +450,11 @@ function LoginContent() {
         setShowVerification(true);
         toast.success("Verification code sent to your email!");
       } else {
-        // Still show verification page even if email fails
         setPendingUserData(userData);
         setShowVerification(true);
         toast.error("Email sending failed, but you can still proceed with verification");
       }
     } catch (error) {
-      console.error("Registration error:", error);
       toast.error("An error occurred during registration");
     } finally {
       setIsLoading(false);
@@ -483,7 +481,6 @@ function LoginContent() {
         setShowVerification(false);
       }
     } catch (error) {
-      console.error("Registration error:", error);
       toast.error("An error occurred during registration");
       setShowVerification(false);
     } finally {

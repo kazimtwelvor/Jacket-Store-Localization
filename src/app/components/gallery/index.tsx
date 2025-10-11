@@ -445,6 +445,8 @@ const Gallery: React.FC<GalleryProps> = ({
                   alt={
                     sortedImages[viewerIndex]?.image.altText || "Product image"
                   }
+                  width={800}
+                  height={1200}
                   className="block"
                   style={{
                     objectFit: "contain",
@@ -524,6 +526,8 @@ const Gallery: React.FC<GalleryProps> = ({
                     <img
                       src={image.image.url || "/placeholder.svg"}
                       alt={`Thumbnail ${index + 1}`}
+                      width={56}
+                      height={56}
                       className="w-full h-full object-cover"
                     />
                   </button>

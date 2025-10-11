@@ -147,14 +147,8 @@ export class ProductService {
 
             return responseData
         } catch (error) {
-            console.error("❌ Error fetching products:", error)
 
             if (error instanceof TypeError && error.message === "Failed to fetch") {
-                console.error("🌐 Network error - possible causes:")
-                console.error("   - API server is not running")
-                console.error("   - CORS issues")
-                console.error("   - Invalid API URL")
-                console.error("   - Network connectivity issues")
             }
 
             return {
@@ -206,7 +200,6 @@ export class ProductService {
             
             return product
         } catch (error) {
-            console.error("❌ Error fetching product:", error)
             return null
         }
     }
@@ -250,7 +243,6 @@ export class ProductService {
                 return product
             })
         } catch (error) {
-            console.error("❌ Error fetching featured products:", error)
             return []
         }
     }
@@ -294,7 +286,6 @@ export class ProductService {
                 return product
             })
         } catch (error) {
-            console.error("❌ Error searching products:", error)
             return []
         }
     }

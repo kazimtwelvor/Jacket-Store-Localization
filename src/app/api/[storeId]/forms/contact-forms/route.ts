@@ -7,8 +7,6 @@ export async function POST(
   try {
     const body = await request.json()
     const { firstName, lastName, email, subject, message, agreeToPrivacyPolicy } = body
-
-    // Validate required fields
     if (!firstName || !lastName || !email || !subject || !message || !agreeToPrivacyPolicy) {
       return NextResponse.json(
         { error: 'All fields are required and privacy policy must be agreed to' },
@@ -16,7 +14,6 @@ export async function POST(
       )
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -24,26 +21,11 @@ export async function POST(
         { status: 400 }
       )
     }
-
-    // Here you would typically save to database or send email
-    // For now, we'll just log and return success
-    console.log('Contact form submission:', {
-      storeId: params.storeId,
-      firstName,
-      lastName,
-      email,
-      subject,
-      message,
-      agreeToPrivacyPolicy,
-      timestamp: new Date().toISOString()
-    })
-
     return NextResponse.json(
       { message: 'Contact form submitted successfully' },
       { status: 200 }
     )
   } catch (error) {
-    console.error('Contact form submission error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

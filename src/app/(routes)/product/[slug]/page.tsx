@@ -23,28 +23,20 @@ interface ProductPageProps {
 
 export async function generateStaticParams() {
   try {
-    console.log('🔨 Generating static params for products...');
-    
-    // Try to get products with multiple fallback strategies
     let productsResult = null;
-    
-    // Strategy 1: Try with normal limit
     try {
       productsResult = await getProducts({ limit: 100 });
     } catch (error) {
       console.warn('⚠️ Failed to fetch 100 products, trying smaller batch...');
       
-      // Strategy 2: Try with smaller limit
       try {
         productsResult = await getProducts({ limit: 50 });
       } catch (error2) {
         console.warn('⚠️ Failed to fetch 50 products, trying minimal batch...');
         
-        // Strategy 3: Try with minimal limit
         try {
           productsResult = await getProducts({ limit: 10 });
         } catch (error3) {
-          console.error('❌ All fetch strategies failed:', error3);
           return [];
         }
       }
@@ -59,12 +51,9 @@ export async function generateStaticParams() {
       slug: product.slug || product.id,
     }));
     
-    console.log(`✅ Generated ${params.length} static params`);
     return params;
     
   } catch (error) {
-    console.error('❌ Critical error in generateStaticParams:', error);
-    // Return empty array as fallback - dynamicParams=true will handle missing routes
     return [];
   }
 }
@@ -133,7 +122,6 @@ export async function generateMetadata({ params }: ProductPageProps, parent: Res
       },
     }
   } catch (error) {
-    console.error("Error generating metadata:", error)
     return {
       title: "Product",
       description: "View our product details",
@@ -145,7 +133,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
   const { slug: slugOrId } = await params || {}
 
   if (!slugOrId) {
-    console.error("No slug or ID provided")
     return notFound()
   }
 
@@ -153,7 +140,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
   try {
     product = await getProduct(slugOrId)
   } catch (error) {
-    console.error("Error fetching product:", error)
     try {
       const productsResult = await getProducts({ limit: 10000 })
       product = productsResult.products?.find(p => {
@@ -161,7 +147,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         return p.id === slugOrId || p.slug === slugOrId || nameSlug === slugOrId
       }) || null
     } catch (fallbackError) {
-      console.error("Fallback fetch also failed:", fallbackError)
     }
   }
 
@@ -219,7 +204,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         })
       }
     } catch (e) {
-      console.error("Error processing schema:", e)
     }
   }
 
@@ -265,8 +249,13 @@ const ProductPage = async ({ params }: ProductPageProps) => {
   return (
     <div className="min-h-screen bg-white" style={{ scrollBehavior: 'smooth' }}>
       <StructuredData data={schemaArray} />
+      
+      <div className="sr-only">
+        <h1>{product?.name?.toUpperCase()}</h1>
+        <h2>{product?.category?.name ? `${product.category.name} - ${product.name}` : `Details-${product.name}`}</h2>
+      </div>
 
-      <ProductPageClient productId={product.id} />
+      <ProductPageClient productId={product.id} product={product} />
 
 
       <div className="block lg:hidden">

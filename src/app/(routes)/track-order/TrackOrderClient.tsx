@@ -115,7 +115,6 @@ export default function TrackOrderClient() {
       setOrderData(transformedOrder);
       setError("");
     } catch (err) {
-      console.error("Error fetching order:", err);
       if (err instanceof TypeError && (err as TypeError).message.includes("fetch")) {
         setError(
           "Network error. Please check your internet connection and try again."
@@ -336,6 +335,52 @@ export default function TrackOrderClient() {
             </div>
           </div>
         )}
+
+        {/* Internal Links Section */}
+        <div className="bg-white rounded-lg shadow-md p-6 mt-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Related Pages</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <a href="/us/shipping-and-delivery-policy" className="block p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors">
+              <h3 className="font-semibold text-gray-900 mb-2">Shipping Policy</h3>
+              <p className="text-sm text-gray-600">Learn about our shipping methods and delivery timeframes</p>
+            </a>
+            <a href="/us/refund-and-returns-policy" className="block p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors">
+              <h3 className="font-semibold text-gray-900 mb-2">Returns Policy</h3>
+              <p className="text-sm text-gray-600">Information about returns, exchanges, and refunds</p>
+            </a>
+            <a href="/us/contact-us" className="block p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors">
+              <h3 className="font-semibold text-gray-900 mb-2">Contact Us</h3>
+              <p className="text-sm text-gray-600">Get help from our customer service team</p>
+            </a>
+          </div>
+        </div>
+
+        {/* FAQs Section */}
+        <div className="bg-white rounded-lg shadow-md p-6 mt-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            <div className="border-b border-gray-200 pb-4">
+              <h3 className="font-semibold text-gray-900 mb-2">Where can I find my order number?</h3>
+              <p className="text-gray-600">Your order number can be found in your confirmation email or on your order confirmation page after completing your purchase.</p>
+            </div>
+            <div className="border-b border-gray-200 pb-4">
+              <h3 className="font-semibold text-gray-900 mb-2">How long does shipping take?</h3>
+              <p className="text-gray-600">Standard shipping typically takes 3-4 business days. You can view detailed shipping information on our <a href="/us/shipping-and-delivery-policy" className="text-blue-600 hover:underline">Shipping Policy</a> page.</p>
+            </div>
+            <div className="border-b border-gray-200 pb-4">
+              <h3 className="font-semibold text-gray-900 mb-2">What if my order shows as delivered but I haven't received it?</h3>
+              <p className="text-gray-600">Please check with neighbors, building management, or other household members. If you still can't locate your package, <a href="/us/contact-us" className="text-blue-600 hover:underline">contact our support team</a> within 48 hours.</p>
+            </div>
+            <div className="border-b border-gray-200 pb-4">
+              <h3 className="font-semibold text-gray-900 mb-2">Can I change my shipping address after placing an order?</h3>
+              <p className="text-gray-600">Address changes are only possible if your order hasn't been processed yet. Please <a href="/us/contact-us" className="text-blue-600 hover:underline">contact us immediately</a> if you need to update your shipping address.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2">What should I do if my tracking shows no updates?</h3>
+              <p className="text-gray-600">Tracking information may take 24-48 hours to update after shipping. If there are no updates after this time, please reach out to our <a href="/us/contact-us" className="text-blue-600 hover:underline">customer service team</a> for assistance.</p>
+            </div>
+          </div>
+        </div>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-8">
           <h4 className="font-semibold text-blue-900 mb-2">

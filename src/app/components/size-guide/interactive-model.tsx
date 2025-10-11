@@ -140,6 +140,8 @@ export default function InteractiveModel() {
                   <img
                     src="https://www.fineystjackets.com/placeholder.svg?height=600&width=400&query=fashion%20model%20female%20average%20average"
                     alt="Model visualization"
+                    width={400}
+                    height={600}
                     className="w-full h-full object-cover object-top"
                   />
                 </div>

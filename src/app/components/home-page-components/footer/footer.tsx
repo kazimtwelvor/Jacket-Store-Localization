@@ -31,7 +31,6 @@ const Footer = () => {
             setEmailInput('')
         } catch (error) {
             setSubmitStatus('error')
-            console.error('Newsletter subscription failed:', error)
         } finally {
             setIsSubmitting(false)
         }
@@ -332,8 +331,8 @@ const Footer = () => {
                         <img
                             src="/images/trust-signals.webp"
                             alt="Trust Signals"
-                            width="400"
-                            height="130"
+                            width={400}
+                            height={130}
                             className="h-auto w-[250px] md:w-[320px]"
                         />
                     </div>
@@ -409,8 +408,8 @@ const Footer = () => {
                                 <img
                                     src="/images/payment-methods.webp"
                                     alt="Accepted Payment Methods"
-                                    width="400"
-                                    height="50"
+                                    width={400}
+                                    height={50}
                                     className="h-8 w-auto"
                                 />
                             </div>

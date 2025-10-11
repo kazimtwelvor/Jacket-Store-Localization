@@ -61,7 +61,6 @@ const Summary = () => {
         router.push("/checkout/success")
       }
     } catch (error) {
-      console.error("Checkout error:", error);
       toast.error("Something went wrong");
     } finally {
       setLoading(false);

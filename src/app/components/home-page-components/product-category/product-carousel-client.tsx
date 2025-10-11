@@ -309,6 +309,8 @@ export default function ProductCarouselClient({
                               <img
                                 src={getImageUrl(product)}
                                 alt={product.name}
+                                width={280}
+                                height={420}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
                                   e.currentTarget.src = "/placeholder.svg";
@@ -320,6 +322,8 @@ export default function ProductCarouselClient({
                             <img
                               src={getImageUrl(product)}
                               alt={product.name}
+                              width={280}
+                              height={420}
                               className="w-full h-full object-cover"
                               onError={(e) => {
                                 e.currentTarget.src = "/placeholder.svg";
@@ -421,6 +425,8 @@ export default function ProductCarouselClient({
                               <img
                                 src={getImageUrl(product)}
                                 alt={product.name}
+                                width={280}
+                                height={420}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                 onError={(e) => {
                                   e.currentTarget.src = "/placeholder.svg";

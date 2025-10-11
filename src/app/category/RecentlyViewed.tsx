@@ -6,6 +6,7 @@ import { Heart, ChevronLeft, ChevronRight, X } from "lucide-react"
 import { cn } from "../lib/utils"
 import type { Product } from "@/types"
 import useWishlist from "../hooks/use-wishlist"
+import { trackAddToWishlist } from "../lib/analytics"
 
 
 interface RecentlyViewedProps {
@@ -270,6 +271,7 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                         wishlist.removeItemWithKey(uniqueKey)
                       } else {
                         wishlist.addItemWithKey(product, uniqueKey)
+                        trackAddToWishlist(product)
                       }
                     }}
                   >
@@ -437,7 +439,6 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                   console.warn('Product not found for color link:', colorLink, errorData)
                                 }
                               } catch (error) {
-                                console.error('Error:', error)
                               } finally {
                                 setLoadingProducts(prev => {
                                   const newSet = new Set(prev)
@@ -520,6 +521,7 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                           wishlist.removeItemWithKey(uniqueKey)
                         } else {
                           wishlist.addItemWithKey(product, uniqueKey)
+                          trackAddToWishlist(product)
                         }
                       }}
                     >
@@ -690,7 +692,6 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                                   console.warn('Product not found for color link:', colorLink, errorData)
                                                 }
                                               } catch (error) {
-                                                console.error('Error:', error)
                                               } finally {
                                                 setLoadingProducts(prev => {
                                                   const newSet = new Set(prev)
@@ -773,7 +774,6 @@ const RecentlyViewed: React.FC<RecentlyViewedProps> = ({
                                                     console.warn('Product not found for color link:', colorLink, errorData)
                                                   }
                                                 } catch (error) {
-                                                  console.error('Error:', error)
                                                 } finally {
                                                   setLoadingProducts(prev => {
                                                     const newSet = new Set(prev)

@@ -110,7 +110,6 @@ export default function TrendingProducts() {
             }
           }
         } catch (error) {
-          console.error("Error fetching products:", error);
         }
       } finally {
         setIsLoading(false);

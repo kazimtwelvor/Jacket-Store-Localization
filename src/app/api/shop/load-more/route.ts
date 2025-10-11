@@ -5,11 +5,11 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { 
-      materials = [], 
-      styles = [], 
-      colors = [], 
-      genders = [], 
-      sizes = [],
+      materials = '', 
+      styles = '', 
+      colors = '', 
+      genders = '', 
+      sizes = '',
       categoryId,
       colorId,
       sizeId,
@@ -20,15 +20,15 @@ export async function POST(request: NextRequest) {
     } = body
 
     const productsData = await getProducts({
-      materials,
-      styles,
-      colors,
-      genders,
-      sizes,
-      categoryId,
-      colorId,
-      sizeId,
-      search,
+      materials: materials && materials.trim() ? materials : undefined,
+      styles: styles && styles.trim() ? styles : undefined,
+      colors: colors && colors.trim() ? colors : undefined,
+      genders: genders && genders.trim() ? genders : undefined,
+      sizes: sizes && sizes.trim() ? sizes : undefined,
+      categoryId: categoryId || undefined,
+      colorId: colorId || undefined,
+      sizeId: sizeId || undefined,
+      search: search || undefined,
       page,
       limit,
       sort,
@@ -47,7 +47,6 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Error loading more shop products:', error)
     return NextResponse.json(
       { 
         success: false,
