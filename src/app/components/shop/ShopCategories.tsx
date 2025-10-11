@@ -88,9 +88,9 @@ const ShopCategories: React.FC<ShopCategoriesProps> = ({ keywordCategories }) =>
       setIsDesktop(isDesktopView);
       
       if (isDesktopView) {
-        const containerWidth = screenWidth * 0.6;
+        const containerWidth = 758; 
         const categoryWidth = 112 + 16;
-        const count = Math.floor(containerWidth / categoryWidth) - 1;
+        const count = Math.floor(containerWidth / categoryWidth);
         setVisibleCount(Math.max(1, count));
       }
     }
