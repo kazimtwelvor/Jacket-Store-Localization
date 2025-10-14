@@ -728,7 +728,8 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
               onClose();
               router.push("/checkout");
             }}
-            className="w-full bg-black text-white py-3 font-semibold text-lg mb-3"
+            disabled={effectiveGrandTotal <= 0}
+            className="w-full bg-black text-white py-3 font-semibold text-lg mb-3 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             CHECKOUT
           </button>
@@ -738,71 +739,75 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
           </p>
 
           <div className="space-y-2 mb-4">
-            {isStripe ? (
+            {effectiveGrandTotal > 0 && (
               <>
-                {/* Stripe Express Checkout Elements */}
-                {stripePromise && (
-                  <Elements
-                    stripe={stripePromise}
-                    options={{
-                      mode: "payment",
-                      amount: Math.round(effectiveGrandTotal * 100),
-                      currency: "usd",
-                      appearance: {
-                        theme: "stripe",
-                      },
-                    }}
-                  >
-                    <StripeExpressCheckout
-                      totalAmount={effectiveGrandTotal}
-                      onSuccess={handlePaymentSuccess}
-                      items={items}
-                      setPaymentModal={setPaymentModal}
-                    />
-                  </Elements>
-                )}
-              </>
-            ) : (
-              <>
-                {/* Google Pay via PayPal */}
-                {paypalClientId && (
-                  <PayPalScriptProvider
-                    options={{
-                      "client-id": paypalClientId,
-                      currency: "USD",
-                      components: "googlepay",
-                    }}
-                  >
-                    <div className="border border-gray-300 rounded">
-                      <GooglePayWithPaypal
-                        totalAmount={effectiveGrandTotal}
-                        onCaptureSuccess={handlePaymentSuccess}
-                        termsAccepted={true}
-                        onTermsError={(message) => toast.error(message)}
-                      />
-                    </div>
-                  </PayPalScriptProvider>
-                )}
+                {isStripe ? (
+                  <>
+                    {/* Stripe Express Checkout Elements */}
+                    {stripePromise && (
+                      <Elements
+                        stripe={stripePromise}
+                        options={{
+                          mode: "payment",
+                          amount: Math.round(effectiveGrandTotal * 100),
+                          currency: "usd",
+                          appearance: {
+                            theme: "stripe",
+                          },
+                        }}
+                      >
+                        <StripeExpressCheckout
+                          totalAmount={effectiveGrandTotal}
+                          onSuccess={handlePaymentSuccess}
+                          items={items}
+                          setPaymentModal={setPaymentModal}
+                        />
+                      </Elements>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {/* Google Pay via PayPal */}
+                    {paypalClientId && (
+                      <PayPalScriptProvider
+                        options={{
+                          "client-id": paypalClientId,
+                          currency: "USD",
+                          components: "googlepay",
+                        }}
+                      >
+                        <div className="border border-gray-300 rounded">
+                          <GooglePayWithPaypal
+                            totalAmount={effectiveGrandTotal}
+                            onCaptureSuccess={handlePaymentSuccess}
+                            termsAccepted={true}
+                            onTermsError={(message) => toast.error(message)}
+                          />
+                        </div>
+                      </PayPalScriptProvider>
+                    )}
 
-                {/* PayPal Express */}
-                {/* {paypalClientId && (
-                  <PayPalScriptProvider
-                    options={{
-                      "client-id": paypalClientId,
-                      currency: "USD",
-                    }}
-                  >
-                    <div className="border border-gray-300 rounded p-1">
-                      <PayPalButtons
-                        items={items.map((i) => ({
-                          id: i.product.id,
-                          quantity: i.quantity,
-                        }))}
-                        onApproveSuccess={handlePaymentSuccess}
-                      />
-                    </div>
-                  </PayPalScriptProvider>
-                )} */}
+                    {/* PayPal Express */}
+                    {/* {paypalClientId && (
+                      <PayPalScriptProvider
+                        options={{
+                          "client-id": paypalClientId,
+                          currency: "USD",
+                        }}
+                      >
+                        <div className="border border-gray-300 rounded p-1">
+                          <PayPalButtons
+                            items={items.map((i) => ({
+                              id: i.product.id,
+                              quantity: i.quantity,
+                            }))}
+                            onApproveSuccess={handlePaymentSuccess}
+                          />
+                        </div>
+                      </PayPalScriptProvider>
+                    )} */}
+                  </>
+                )}
               </>
             )}
           </div>
