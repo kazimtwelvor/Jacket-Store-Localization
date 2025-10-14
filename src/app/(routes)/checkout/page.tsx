@@ -630,6 +630,50 @@ const CheckoutPage = () => {
     fetchPayPalClientId();
   }, []);
 
+  useEffect(() => {
+    if (voucherCode && discountAmount > 0 && items.length > 0) {
+      const revalidateCoupon = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/confirm-voucher`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                code: voucherCode.trim(),
+                orderTotal: grandTotal,
+                items: items.map((i) => ({
+                  id: i.product.id,
+                  price: i.unitPrice,
+                  quantity: i.quantity,
+                })),
+              }),
+            }
+          );
+          const data = await response.json();
+          if (data.valid) {
+            setDiscountAmount(Number(data.discount) || 0);
+            setVoucherMessage(data.message || "Voucher applied");
+          } else {
+            setDiscountAmount(0);
+            setVoucherCode("");
+            setVoucherMessage("");
+            toast.error("Voucher no longer valid");
+          }
+        } catch (e) {
+          setDiscountAmount(0);
+          setVoucherCode("");
+          setVoucherMessage("");
+        }
+      };
+      revalidateCoupon();
+    } else if (items.length === 0 && discountAmount > 0) {
+      setDiscountAmount(0);
+      setVoucherCode("");
+      setVoucherMessage("");
+    }
+  }, [cartTotalPrice]);
+
   const initializePayment = async () => {
     if (clientSecret) return;
 
