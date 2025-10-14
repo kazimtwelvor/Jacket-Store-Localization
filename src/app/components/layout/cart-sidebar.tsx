@@ -300,6 +300,50 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
     initializePayments();
   }, []);
 
+  useEffect(() => {
+    if (couponCode && discountAmount > 0 && items.length > 0) {
+      const revalidateCoupon = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/confirm-voucher`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                code: couponCode.trim(),
+                orderTotal: grandTotal,
+                items: items.map((i) => ({
+                  id: i.product.id,
+                  price: i.unitPrice,
+                  quantity: i.quantity,
+                })),
+              }),
+            }
+          );
+          const data = await response.json();
+          if (data.valid) {
+            setDiscountAmount(Number(data.discount) || 0);
+            setVoucherMessage(data.message || "Voucher applied");
+          } else {
+            setDiscountAmount(0);
+            setCouponCode("");
+            setVoucherMessage("");
+            toast.error("Voucher no longer valid");
+          }
+        } catch (e) {
+          setDiscountAmount(0);
+          setCouponCode("");
+          setVoucherMessage("");
+        }
+      };
+      revalidateCoupon();
+    } else if (items.length === 0 && discountAmount > 0) {
+      setDiscountAmount(0);
+      setCouponCode("");
+      setVoucherMessage("");
+    }
+  }, [totalPrice]);
+
   const handlePaymentSuccess = (orderId?: string) => {
     setPaymentModal({
       isOpen: true,
@@ -725,6 +769,10 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
           <button
             onClick={() => {
               trackBeginCheckout(items);
+              if (discountAmount > 0 && couponCode) {
+                localStorage.setItem('appliedVoucherCode', couponCode);
+                localStorage.setItem('appliedDiscountAmount', discountAmount.toString());
+              }
               onClose();
               router.push("/checkout");
             }}

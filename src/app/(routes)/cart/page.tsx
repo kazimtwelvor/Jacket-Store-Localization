@@ -323,7 +323,8 @@ const CartPage = () => {
   const shippingPrice = totalPrice > 100 ? 0 : 10;
   const taxRate = 0.08;
   const taxAmount = 0;
-  const grandTotal = totalPrice + shippingPrice + taxAmount - discountAmount;
+  const baseGrandTotal = totalPrice + shippingPrice + taxAmount;
+  const grandTotal = baseGrandTotal - discountAmount;
 
   useEffect(() => {
     setIsMounted(true);
@@ -407,6 +408,50 @@ const CartPage = () => {
     }
   }, [isMounted]);
 
+  useEffect(() => {
+    if (couponCode && discountAmount > 0 && items.length > 0) {
+      const revalidateCoupon = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/confirm-voucher`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                code: couponCode.trim(),
+                orderTotal: baseGrandTotal,
+                items: items.map((i) => ({
+                  id: i.product.id,
+                  price: i.unitPrice,
+                  quantity: i.quantity,
+                })),
+              }),
+            }
+          );
+          const data = await response.json();
+          if (data.valid) {
+            setDiscountAmount(Number(data.discount) || 0);
+            setIsCouponApplied(true);
+          } else {
+            setDiscountAmount(0);
+            setCouponCode("");
+            setIsCouponApplied(false);
+            toast.error("Voucher no longer valid");
+          }
+        } catch (e) {
+          setDiscountAmount(0);
+          setCouponCode("");
+          setIsCouponApplied(false);
+        }
+      };
+      revalidateCoupon();
+    } else if (items.length === 0 && discountAmount > 0) {
+      setDiscountAmount(0);
+      setCouponCode("");
+      setIsCouponApplied(false);
+    }
+  }, [totalPrice]);
+
   if (!isMounted) {
     return null;
   }
@@ -464,7 +509,7 @@ const CartPage = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             code: couponCode.trim(),
-            orderTotal: grandTotal,
+            orderTotal: baseGrandTotal,
             items: items.map((i) => ({
               id: i.product.id,
               price: i.unitPrice,
@@ -497,7 +542,7 @@ const CartPage = () => {
 
   const handleCheckout = () => {
     trackBeginCheckout(items);
-    if (isCouponApplied && couponCode && discountAmount > 0) {
+    if (discountAmount > 0 && couponCode) {
       localStorage.setItem('appliedVoucherCode', couponCode);
       localStorage.setItem('appliedDiscountAmount', discountAmount.toString());
     }
@@ -913,7 +958,8 @@ const CartPage = () => {
                   >
                     <Button
                       onClick={handleCheckout}
-                      className="w-full bg-black hover:bg-gray-800 text-white py-4 mb-4 font-bold text-lg"
+                      disabled={grandTotal <= 0}
+                      className="w-full bg-black hover:bg-gray-800 text-white py-4 mb-4 font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       CHECKOUT
                     </Button>
@@ -922,52 +968,56 @@ const CartPage = () => {
                       <p className="text-center text-sm font-medium text-black mb-3">
                         Express checkout options
                       </p>
-                      {isStripe ? (
-                        // Stripe Express Checkout Elements
-                        stripePromise && (
-                          <Elements
-                            stripe={stripePromise}
-                            options={{
-                              mode: "payment",
-                              amount: Math.round(grandTotal * 100),
-                              currency: "usd",
-                              appearance: {
-                                theme: "stripe",
-                              },
-                            }}
-                          >
-                            <StripeExpressCheckout
-                              totalAmount={grandTotal}
-                              onSuccess={handlePaymentSuccess}
-                              items={items}
-                              setPaymentModal={setPaymentModal}
-                            />
-                          </Elements>
-                        )
-                      ) : (
-                        // PayPal and Google Pay
-                        <div className="space-y-2">
-                          {paypalClientId && (
-                            <PayPalScriptProvider
-                              options={{
-                                "client-id": paypalClientId,
-                                currency: "USD",
-                                components: "googlepay",
-                              }}
-                            >
-                              <div className="border border-gray-300 rounded">
-                                <GooglePayWithPaypal
+                      {grandTotal > 0 && (
+                        <>
+                          {isStripe ? (
+                            // Stripe Express Checkout Elements
+                            stripePromise && (
+                              <Elements
+                                stripe={stripePromise}
+                                options={{
+                                  mode: "payment",
+                                  amount: Math.round(grandTotal * 100),
+                                  currency: "usd",
+                                  appearance: {
+                                    theme: "stripe",
+                                  },
+                                }}
+                              >
+                                <StripeExpressCheckout
                                   totalAmount={grandTotal}
-                                  onCaptureSuccess={handlePaymentSuccess}
-                                  termsAccepted={true}
-                                  onTermsError={(message) =>
-                                    toast.error(message)
-                                  }
+                                  onSuccess={handlePaymentSuccess}
+                                  items={items}
+                                  setPaymentModal={setPaymentModal}
                                 />
-                              </div>
-                            </PayPalScriptProvider>
+                              </Elements>
+                            )
+                          ) : (
+                            // PayPal and Google Pay
+                            <div className="space-y-2">
+                              {paypalClientId && (
+                                <PayPalScriptProvider
+                                  options={{
+                                    "client-id": paypalClientId,
+                                    currency: "USD",
+                                    components: "googlepay",
+                                  }}
+                                >
+                                  <div className="border border-gray-300 rounded">
+                                    <GooglePayWithPaypal
+                                      totalAmount={grandTotal}
+                                      onCaptureSuccess={handlePaymentSuccess}
+                                      termsAccepted={true}
+                                      onTermsError={(message) =>
+                                        toast.error(message)
+                                      }
+                                    />
+                                  </div>
+                                </PayPalScriptProvider>
+                              )}
+                            </div>
                           )}
-                        </div>
+                        </>
                       )}
                     </div>
                   </div>
