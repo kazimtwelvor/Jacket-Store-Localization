@@ -14,6 +14,11 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const queryString = searchParams.toString()
+    
+    // Country parameter (cn) should be included in searchParams from client
+    const cn = searchParams.get('cn')
+    console.log('[PRODUCTS_API] Fetching products with country:', cn || 'none', 'params:', queryString)
+    
     const apiUrl = `${API_BASE_URL}/products${queryString ? `?${queryString}` : ''}`
     const response = await fetch(apiUrl, {
       method: 'GET',

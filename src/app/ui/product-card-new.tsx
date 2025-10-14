@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
+import { cn } from "@/src/app/lib/utils"
 import type { Product } from "@/types"
 
 // Helper function to generate a slug

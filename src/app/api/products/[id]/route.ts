@@ -12,8 +12,14 @@ export async function GET(
 
   try {
     const { id } = await params
+    const { searchParams } = new URL(request.url)
+    const cn = searchParams.get('cn')
+    
+    // Include country parameter if provided
+    const productUrl = `${API_BASE_URL}/products/${id}${cn ? `?cn=${cn}` : ''}`
+    console.log('[PRODUCT_DETAIL_API] Fetching product:', id, 'country:', cn || 'none')
 
-    let response = await fetch(`${API_BASE_URL}/products/${id}`, {
+    let response = await fetch(productUrl, {
       headers: { 'Accept': 'application/json' },
       next: { revalidate: 3600 }
     })

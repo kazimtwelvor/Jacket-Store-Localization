@@ -12,14 +12,17 @@ const fallbackSizes: Size[] = [
   { id: "size_xxl", name: "XXL", value: "XXL" },
 ]
 
-const getSizes = async (): Promise<Size[]> => {
+const getSizes = async (options?: { countryCode?: string }): Promise<Size[]> => {
   try {
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.warn("API URL not configured. Using fallback sizes data.")
       return fallbackSizes
     }
 
-    return await fetchJson<Size[]>("/sizes")
+    const url = options?.countryCode 
+      ? `/sizes?cn=${options.countryCode}` 
+      : "/sizes"
+    return await fetchJson<Size[]>(url)
   } catch (error) {
     return fallbackSizes
   }

@@ -19,6 +19,7 @@ interface Query {
     page?: number
     limit?: number
     search?: string
+    countryCode?: string
 }
 
 interface PaginatedResponse {
@@ -83,6 +84,7 @@ const buildQueryParams = (query: Query): Record<string, any> => {
     if (pockets) params.pockets = pockets
     if (query.sort) params.sort = query.sort
     if (query.limit) params.limit = query.limit
+    if (query.countryCode) params.cn = query.countryCode
 
     return params
 }

@@ -1,7 +1,7 @@
 
 "use client"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/src/app/lib/utils"
 import { motion } from "framer-motion"
 import type { ReactNode } from "react"
 
@@ -37,3 +37,4 @@ export default function PremiumCard({ children, className, hoverEffect = true, i
     </motion.div>
   )
 }
+

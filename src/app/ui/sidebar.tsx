@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/src/app/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 
@@ -197,3 +197,4 @@ export function SidebarInset({ className, children, ...props }: React.HTMLAttrib
     </div>
   )
 }
+

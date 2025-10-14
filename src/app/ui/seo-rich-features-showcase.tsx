@@ -20,7 +20,7 @@ import {
   Award,
 } from "lucide-react"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
+import { cn } from "@/src/app/lib/utils"
 
 // Schema.org JSON-LD markup for SEO
 const ProductFeatureSchema = () => {
@@ -1325,3 +1325,4 @@ const SEORichFeaturesShowcase = () => {
 }
 
 export default SEORichFeaturesShowcase
+

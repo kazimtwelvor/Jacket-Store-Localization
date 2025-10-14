@@ -43,14 +43,17 @@ const fallbackCategories: Category[] = [
   },
 ]
 
-const getCategories = async (): Promise<Category[]> => {
+const getCategories = async (options?: { countryCode?: string }): Promise<Category[]> => {
   try {
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.warn("API URL not configured. Using fallback categories data.")
       return fallbackCategories
     }
 
-    const categories = await fetchJson<Category[]>("/categories", { timeoutMs: 1200000 })
+    const url = options?.countryCode 
+      ? `/categories?cn=${options.countryCode}` 
+      : "/categories"
+    const categories = await fetchJson<Category[]>(url, { timeoutMs: 1200000 })
     if (!categories || categories.length === 0) {
       console.warn("⚠️ No categories returned from API, using fallback")
       return fallbackCategories

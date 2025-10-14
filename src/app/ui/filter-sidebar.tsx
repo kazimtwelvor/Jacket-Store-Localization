@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { X, ChevronDown } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/src/app/lib/utils"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"

@@ -21,6 +21,7 @@ export interface Query {
   page?: number;
   limit?: number;
   search?: string;
+  countryCode?: string;
 }
 
 export interface PaginatedResponse {

@@ -14,14 +14,17 @@ const fallbackColors: Color[] = [
   { id: "color_green", name: "Green", value: "#2E4A3B" },
 ]
 
-const getColors = async (): Promise<Color[]> => {
+const getColors = async (options?: { countryCode?: string }): Promise<Color[]> => {
   try {
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.warn("API URL not configured. Using fallback colors data.")
       return fallbackColors
     }
 
-    return await fetchJson<Color[]>("/colors")
+    const url = options?.countryCode 
+      ? `/colors?cn=${options.countryCode}` 
+      : "/colors"
+    return await fetchJson<Color[]>(url)
   } catch (error) {
     return fallbackColors
   }

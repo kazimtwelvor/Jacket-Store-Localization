@@ -40,6 +40,8 @@ const BrandsMegaMenu = dynamic(() => import("./BrandsMegaMenu"), {
 });
 import { cn } from "../../lib/utils";
 import { avertaBold } from "@/src/lib/fonts";
+import { CountrySelector } from "@/src/components/country-selector";
+import { useCountry } from "@/src/hooks/use-country";
 export const revalidate = 0;
 
 const MegaMenuScrollbarStyle = () => (
@@ -98,6 +100,7 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const wishlist = useWishlist();
+  const { countryCode } = useCountry();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -242,20 +245,20 @@ const Navbar = () => {
   const itemCount = totalItems;
 
   const handleLoginClick = () => {
-    router.push("/auth/login");
+    router.push(`/${countryCode}/auth/login`);
   };
 
   const handleAccountClick = () => {
     if (isAuthenticated) {
-      router.push("/account");
+      router.push(`/${countryCode}/account`);
     } else {
-      router.push("/auth/login");
+      router.push(`/${countryCode}/auth/login`);
     }
   };
 
   const handleLogout = () => {
     logout();
-    router.push("/us/");
+    router.push(`/${countryCode}/`);
   };
 
   const performSearch = async (query: string) => {
@@ -427,7 +430,7 @@ const Navbar = () => {
                   <Button
                     variant="ghost"
                     className={`h-full rounded-none bg-transparent hover:!bg-transparent text-white hover:text-white px-6 py-1 transition-all duration-300 ${avertaBold.className}`}
-                    onClick={() => router.push("/us/collections")}
+                    onClick={() => router.push(`/${countryCode}/collections`)}
                   >
                     COATS
                   </Button>
@@ -486,6 +489,10 @@ const Navbar = () => {
               </div>
             )}
 
+            <div className="hidden lg:block">
+              <CountrySelector />
+            </div>
+
             <button
               className="text-white hover:opacity-80"
               aria-label="Search"
@@ -497,7 +504,7 @@ const Navbar = () => {
 
             <button
               className="relative items-center text-white hover:opacity-80 hidden lg:flex"
-              onClick={() => router.push("/wishlist")}
+              onClick={() => router.push(`/${countryCode}/wishlist`)}
               aria-label="View wishlist"
             >
               <Heart className="h-6 w-6" strokeWidth={1.5} fill="none" />
@@ -513,7 +520,7 @@ const Navbar = () => {
               className="relative flex items-center text-white hover:opacity-80"
               onClick={() => {
                 if (window.innerWidth < 1024) {
-                  router.push("/cart");
+                  router.push(`/${countryCode}/cart`);
                 } else {
                   window.dispatchEvent(new CustomEvent("openCart"));
                 }
@@ -855,7 +862,7 @@ const Navbar = () => {
                                 setIsSearchOpen(false);
                                 setSelectedCategory(null);
                                 setSearchQuery("");
-                                setTimeout(() => router.push("/size-guide"), 100);
+                                setTimeout(() => router.push(`/${countryCode}/size-guide`), 100);
                               }}
                             >
                               <span className="text-white font-medium">
