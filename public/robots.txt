@@ -1,0 +1,19 @@
+User-agent: *
+Disallow: /cart/
+Disallow: /account/
+Disallow: /checkout/
+Disallow: /auth/
+
+User-agent: Googlebot
+Disallow: /cart/
+Disallow: /account/
+Disallow: /checkout/
+Disallow: /auth/
+
+User-agent: Googlebot-image
+Disallow: /cart/
+Disallow: /account/
+Disallow: /checkout/
+Disallow: /auth/
+
+Sitemap: https://www.fineystjackets.com/sitemap.xml

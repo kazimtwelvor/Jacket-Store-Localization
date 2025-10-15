@@ -15,31 +15,31 @@ const ZipCodeModal = ({ isOpen, onClose, onApply }: ZipCodeModalProps) => {
 
   const calculateDeliveryDates = () => {
     const today = new Date()
-    
+
     // Calculate earliest delivery (5 business days)
     const earliestDate = new Date(today)
     let businessDaysToAdd = 5
     let daysAdded = 0
-    
+
     while (daysAdded < businessDaysToAdd) {
       earliestDate.setDate(earliestDate.getDate() + 1)
       if (earliestDate.getDay() !== 0 && earliestDate.getDay() !== 6) {
         daysAdded++
       }
     }
-    
+
     // Calculate latest delivery (10 business days)
     const latestDate = new Date(today)
     businessDaysToAdd = 10
     daysAdded = 0
-    
+
     while (daysAdded < businessDaysToAdd) {
       latestDate.setDate(latestDate.getDate() + 1)
       if (latestDate.getDay() !== 0 && latestDate.getDay() !== 6) {
         daysAdded++
       }
     }
-    
+
     const options: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'long', day: '2-digit' }
     return {
       earliest: earliestDate.toLocaleDateString('en-US', options),
@@ -51,11 +51,11 @@ const ZipCodeModal = ({ isOpen, onClose, onApply }: ZipCodeModalProps) => {
     if (zipCode.trim()) {
       const dates = calculateDeliveryDates()
       const deliveryText = `Delivery to <strong>${zipCode}</strong> approx.<br><strong style="font-size: 14px;">${dates.earliest} - ${dates.latest}</strong>`
-      
+
       // Save to localStorage
       localStorage.setItem('savedZipCode', zipCode)
       localStorage.setItem('savedDeliveryText', deliveryText)
-      
+
       onApply(zipCode, deliveryText)
       onClose()
     }
@@ -86,10 +86,14 @@ const ZipCodeModal = ({ isOpen, onClose, onApply }: ZipCodeModalProps) => {
             <input
               type="text"
               value={zipCode}
-              onChange={(e) => setZipCode(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, '').slice(0, 5)
+                setZipCode(value)
+              }}
               placeholder="ZIP code"
               className="w-full px-2 py-1.5 pr-16 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black focus:border-transparent text-base"
               onKeyPress={(e) => e.key === 'Enter' && handleApply()}
+              maxLength={5}
             />
             <button
               onClick={handleApply}

@@ -17,7 +17,7 @@ import Button from "@/src/app/ui/button";
 import Container from "@/src/app/ui/container";
 import { Skeleton } from "@/src/app/ui/skeleton";
 import Currency from "@/src/app/ui/currency";
-import { trackPurchase } from "@/src/app/lib/analytics";
+import { trackPurchase, clearCheckoutTracking } from "@/src/app/lib/analytics";
 import { useCountry } from "@/src/hooks/use-country";
 
 interface OrderItem {
@@ -511,7 +511,10 @@ const ConfirmationPage = () => {
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
-                    onClick={() => router.push(`/${countryCode}/`)}
+                    onClick={() => {
+                      clearCheckoutTracking();
+                      router.push(`/${countryCode}/`)}
+                    }
                     className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
                   >
                     Continue Shopping
