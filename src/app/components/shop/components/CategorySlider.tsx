@@ -26,6 +26,7 @@ interface CategorySliderProps {
   onCategorySelect?: (category: KeywordCategory) => void
   currentCategory?: KeywordCategory
   relatedCategories?: KeywordCategory[]
+  countryCode?: string
 }
 
 export const CategorySlider: React.FC<CategorySliderProps> = ({
@@ -35,6 +36,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
   onCategorySelect,
   currentCategory,
   relatedCategories = [],
+  countryCode = "us",
 }) => {
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
@@ -371,7 +373,7 @@ export const CategorySlider: React.FC<CategorySliderProps> = ({
 
                   <div className="text-center">
                     <Link
-                      href={`/us/collections/${selectedCategory.slug || selectedCategory.id}`}
+                      href={`/${countryCode}/collections/${selectedCategory.slug || selectedCategory.id}`}
                       className="inline-flex items-center gap-2 px-8 py-3 bg-[#2b2b2b] text-white font-semibold rounded-lg hover:bg-black transition-colors"
                     >
                       Explore {selectedCategory.name}

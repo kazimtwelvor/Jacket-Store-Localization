@@ -583,7 +583,8 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     pockets: filterParams?.pockets || [],
                     page: loadMorePage,
                     limit: 40,
-                    sort: currentSort
+                    sort: currentSort,
+                    countryCode
                 }),
             })
 
@@ -1030,7 +1031,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     categories={categories}
                     onCategoryClick={(categorySlug) => {
                         const currentPath = window.location.pathname;
-                        const targetPath = `/us/collections/${categorySlug}`;
+                        const targetPath = `/${countryCode}/collections/${categorySlug}`;
 
                         if (currentPath === targetPath) {
                             window.dispatchEvent(new CustomEvent('route-loading:end'));
@@ -1628,6 +1629,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     imageUrl: category.currentCategory?.imageUrl,
                     description: ''
                 }}
+                countryCode={countryCode}
                 onCategorySelect={(selectedCategory) => {
                     router.push(`/${countryCode}/collections/${selectedCategory.slug}`);
                     setCategorySliderOpen(false);

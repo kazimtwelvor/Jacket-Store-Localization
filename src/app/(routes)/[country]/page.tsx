@@ -16,8 +16,8 @@ import AnimatedReviewSectionServer from "@/src/app/components/home-page-componen
 export const dynamic = 'force-static'
 export const revalidate = 3600
 
-export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
-  const countryCode = params.country
+export async function generateMetadata({ params }: { params: Promise<{ country: string }> }): Promise<Metadata> {
+  const { country: countryCode } = await params
   const title = "Premium Jackets & Outerwear | www.fineystjackets.com"
   const description = "Discover premium quality jackets and outerwear at www.fineystjackets.com. Shop leather jackets, winter coats, and stylish outerwear with fast shipping and excellent customer service."
   const canonical = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fineystjackets.com'}/${countryCode}`
@@ -46,8 +46,8 @@ export async function generateMetadata({ params }: { params: { country: string }
   }
 }
 
-export default function CountryHome({ params }: { params: { country: string } }) {
-  const countryCode = params.country
+export default async function CountryHome({ params }: { params: Promise<{ country: string }> }) {
+  const { country: countryCode } = await params
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fineystjackets.com'
   
   const homePageSchema = {

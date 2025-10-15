@@ -15,7 +15,8 @@ export async function POST(request: NextRequest) {
       pockets = [],
       page = 1, 
       limit = 20,
-      sort = 'popular'
+      sort = 'popular',
+      countryCode = 'us'
     } = body
 
     // Fetch more products using the same logic as the main page
@@ -31,6 +32,7 @@ export async function POST(request: NextRequest) {
       page,
       limit,
       sort,
+      countryCode,
     })
 
     return NextResponse.json({

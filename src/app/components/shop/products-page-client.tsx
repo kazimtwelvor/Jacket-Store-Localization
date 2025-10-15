@@ -106,6 +106,7 @@ type ProductsPageClientProps = {
   sizes?: Size[];
   keywordCategories?: KeywordCategory[];
   hasMoreProducts?: boolean;
+  countryCode?: string;
   filterParams?: {
     categoryId?: string;
     colorId?: string;
@@ -127,6 +128,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
   sizes,
   keywordCategories = [],
   hasMoreProducts = false,
+  countryCode = "us",
   filterParams,
 }) => {
   const [productsData, setProductsData] =
@@ -283,7 +285,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           params.delete(key);
         }
       });
-      const newUrl = params.toString() ? `/shop?${params.toString()}` : "/shop";
+      const newUrl = params.toString() ? `/${countryCode}/shop?${params.toString()}` : `/${countryCode}/shop`;
       window.dispatchEvent(new CustomEvent("route-loading:start"));
       router.push(newUrl, { scroll: false });
 
@@ -362,6 +364,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
               ? selectedFilters.sizes.join(",")
               : undefined),
           sort: hasFilters ? sortOverride ?? activeSort : undefined,
+          countryCode,
         };
 
         const newProductsData = await getProducts(queryParams);
@@ -442,6 +445,7 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
       updateURL,
       activeSort,
       isPaginationInProgress,
+      countryCode,
     ]
   );
 
@@ -1171,8 +1175,9 @@ const ProductsPageClient: React.FC<ProductsPageClientProps> = ({
           onClose={() => setCategorySliderOpen(false)}
           keywordCategories={keywordCategories || []}
           relatedCategories={[]}
+          countryCode={countryCode}
           onCategorySelect={(selectedCategory) => {
-            router.push(`/us/collections/${selectedCategory.slug}`);
+            router.push(`/${countryCode}/collections/${selectedCategory.slug}`);
             setCategorySliderOpen(false);
           }}
         />
