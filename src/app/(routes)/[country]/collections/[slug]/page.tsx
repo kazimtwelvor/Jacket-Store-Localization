@@ -206,7 +206,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         countryCode: countryCode, // Add country code
       })),
       fetchWithRetry(() => getCategories({ countryCode })),
-      fetchWithRetry(() => getKeywordCategories())
+      fetchWithRetry(() => getKeywordCategories({ countryCode }))
     ]);
 
     const categoryForClient: Category & { currentCategory?: any } = {

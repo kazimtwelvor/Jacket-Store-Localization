@@ -59,7 +59,7 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
       getCategories({ countryCode }),
       getColors({ countryCode }),
       getSizes({ countryCode }),
-      getKeywordCategories(),
+      getKeywordCategories({ countryCode }),
     ]);
 
   const products =
