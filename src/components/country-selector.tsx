@@ -84,26 +84,10 @@ export function CountrySelector() {
     console.log('[COUNTRY_SELECTOR] Changing country to:', country.countryCode)
     setSelectedCountry(country)
     
-    // Update URL with new country
-    const currentPath = pathname || '/'
+    // Always redirect to homepage of selected country
+    const newPath = `/${country.countryCode.toLowerCase()}`
     
-    // Extract the path without the country code
-    const pathParts = currentPath.split('/').filter(Boolean)
-    
-    // Check if first part is a country code (2-letter lowercase)
-    const isCountryInPath = pathParts[0]?.length === 2 && /^[a-z]{2}$/.test(pathParts[0])
-    
-    let newPath: string
-    if (isCountryInPath) {
-      // Replace existing country code
-      pathParts[0] = country.countryCode.toLowerCase()
-      newPath = '/' + pathParts.join('/')
-    } else {
-      // Add country code at the beginning
-      newPath = `/${country.countryCode.toLowerCase()}${currentPath === '/' ? '' : currentPath}`
-    }
-    
-    console.log('[COUNTRY_SELECTOR] Navigating to:', newPath)
+    console.log('[COUNTRY_SELECTOR] Navigating to homepage:', newPath)
     router.push(newPath)
   }
 
