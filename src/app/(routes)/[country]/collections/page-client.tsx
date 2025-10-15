@@ -4,14 +4,13 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
-import { useCountry } from '@/src/hooks/use-country'
 
 interface CategoriesPageProps {
   categories: any[]
+  countryCode: string
 }
 
-const CategoriesPage = ({ categories }: CategoriesPageProps) => {
-  const { countryCode } = useCountry()
+const CategoriesPage = ({ categories, countryCode }: CategoriesPageProps) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredCategories, setFilteredCategories] = useState(categories)
 

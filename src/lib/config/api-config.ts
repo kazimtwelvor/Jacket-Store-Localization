@@ -39,7 +39,12 @@ export const getApiBaseURL = (): string => {
   const isDevelopment = process.env.NODE_ENV === 'development'
   const isClient = typeof window !== 'undefined'
   
-  // Use local proxy in both development and production to avoid CORS issues
+  // For server-side requests, always use the external API URL directly
+  if (!isClient) {
+    return API_CONFIG.EXTERNAL_API_URL || ''
+  }
+  
+  // Use local proxy for client-side requests to avoid CORS issues
   if (isClient && (API_CONFIG.DEVELOPMENT.USE_LOCAL_PROXY || API_CONFIG.PRODUCTION.USE_LOCAL_PROXY)) {
     return API_CONFIG.DEVELOPMENT.LOCAL_PROXY_BASE
   }

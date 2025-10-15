@@ -71,14 +71,28 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
   const keywordCategoriesData =
     keywordCategories.status === "fulfilled" ? keywordCategories.value : [];
 
-  if (!products) {
-    return notFound();
-  }
+    if (!products) {
+      return notFound();
+    }
+
+  const fallbackPagination = {
+    currentPage: page,
+    totalPages: 0,
+    totalProducts: 0,
+    productsPerPage: limit,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  };
+
+  const safeProducts = products?.products || [];
+  const safePagination = products?.pagination || fallbackPagination;
 
   return (
     <ProductsPageClient
-      initialProducts={products.products}
-      initialPagination={products.pagination}
+      initialProductsData={{
+        products: safeProducts,
+        pagination: safePagination
+      }}
       categories={categoriesData}
       colors={colorsData}
       sizes={sizesData}

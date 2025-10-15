@@ -24,8 +24,12 @@ const getCachedBlogData = unstable_cache(
   { revalidate: 3600, tags: ['blogs'] }
 );
 
-export default async function BlogsShowcaseServer() {
+interface BlogsShowcaseServerProps {
+  countryCode: string;
+}
+
+export default async function BlogsShowcaseServer({ countryCode }: BlogsShowcaseServerProps) {
   const blogItems = await getCachedBlogData();
 
-  return <BlogsShowcaseClient blogItems={blogItems} />;
+  return <BlogsShowcaseClient blogItems={blogItems} countryCode={countryCode} />;
 }

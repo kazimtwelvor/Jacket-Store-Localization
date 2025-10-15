@@ -17,11 +17,12 @@ export interface Product {
 }
 
 const getCachedProducts = unstable_cache(
-  async (gender: "Male" | "Female"): Promise<Product[]> => {
+  async (gender: "Male" | "Female", countryCode: string): Promise<Product[]> => {
     try {
       const result = await getProducts({
         genders: gender,
         limit: 10,
+        countryCode,
       });
       
       const convertedProducts = (result.products || []).map((product: any) => {
@@ -60,15 +61,17 @@ const getCachedProducts = unstable_cache(
 );
 
 interface ProductCarouselServerProps {
+  countryCode: string;
   title?: string;
 }
 
 export default async function ProductCarouselServer({
+  countryCode,
   title = "HAND-PICKED FOR YOU",
 }: ProductCarouselServerProps) {
   const [menProducts, womenProducts] = await Promise.all([
-    getCachedProducts("Male"),
-    getCachedProducts("Female"),
+    getCachedProducts("Male", countryCode),
+    getCachedProducts("Female", countryCode),
   ]);
 
   return (

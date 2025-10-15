@@ -104,7 +104,9 @@ export class ProductService {
 
             let responseData: PaginatedResponse = response.data
 
-            if (!responseData.products || !Array.isArray(responseData.products)) {
+            // Validate response structure
+            if (!responseData || typeof responseData !== 'object') {
+                console.warn('Invalid response data structure:', responseData)
                 responseData = {
                     products: [],
                     pagination: {
@@ -115,6 +117,29 @@ export class ProductService {
                         hasNextPage: false,
                         hasPreviousPage: false,
                     },
+                }
+            } else if (!responseData.products || !Array.isArray(responseData.products)) {
+                console.warn('Invalid products array in response:', responseData.products)
+                responseData = {
+                    products: [],
+                    pagination: {
+                        currentPage: query.page || 1,
+                        totalPages: 0,
+                        totalProducts: 0,
+                        productsPerPage: query.limit || 28,
+                        hasNextPage: false,
+                        hasPreviousPage: false,
+                    },
+                }
+            } else if (!responseData.pagination || typeof responseData.pagination !== 'object') {
+                console.warn('Invalid pagination object in response:', responseData.pagination)
+                responseData.pagination = {
+                    currentPage: query.page || 1,
+                    totalPages: 0,
+                    totalProducts: 0,
+                    productsPerPage: query.limit || 28,
+                    hasNextPage: false,
+                    hasPreviousPage: false,
                 }
             }
 
@@ -149,8 +174,10 @@ export class ProductService {
 
             return responseData
         } catch (error) {
-
+            console.error('ProductService.getProducts error:', error)
+            
             if (error instanceof TypeError && error.message === "Failed to fetch") {
+                console.error('Network error - failed to fetch products')
             }
 
             return {

@@ -153,14 +153,14 @@ export default function CountryHome({ params }: { params: { country: string } })
         <SlideBanners />
       </section>
       <WelcomeAccordionSection />
-      <ProductCategoryServer />
+      <ProductCategoryServer countryCode={countryCode} />
       <SignatureSectionServer />
-      <ProductCarouselServer />
-      <JacketColorCollectionServer />
+      <ProductCarouselServer countryCode={countryCode} />
+      <JacketColorCollectionServer countryCode={countryCode} />
       <AboutUsServer />
       <WhyChooseSliderServer />
       <FAQServer />
-      <BlogsShowcaseServer />
+      <BlogsShowcaseServer countryCode={countryCode} />
       <GlobalFashionPartnerServer />
       <AnimatedReviewSectionServer />
     </>

@@ -18,22 +18,9 @@ apiClient.interceptors.request.use(
             config.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
         }
         
-        // Add country code to all requests
-        // Try to get from URL first (for server-side), then from localStorage (for client-side)
-        if (typeof window !== 'undefined') {
-            try {
-                const countryStore = localStorage.getItem('country-storage')
-                if (countryStore) {
-                    const parsed = JSON.parse(countryStore)
-                    const countryCode = parsed?.state?.selectedCountry?.countryCode
-                    if (countryCode && !config.params?.cn) {
-                        config.params = { ...config.params, cn: countryCode }
-                    }
-                }
-            } catch (e) {
-                // Ignore errors
-            }
-        }
+        // Note: Country code should be passed explicitly in the params
+        // This interceptor no longer automatically adds country code from localStorage
+        // to avoid server-side issues and ensure explicit control
         
         return config
     },

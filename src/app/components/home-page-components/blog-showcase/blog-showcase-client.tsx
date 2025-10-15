@@ -23,9 +23,10 @@ interface BlogItem {
 
 interface BlogsShowcaseClientProps {
   blogItems: BlogItem[];
+  countryCode?: string;
 }
 
-export default function BlogsShowcaseClient({ blogItems }: BlogsShowcaseClientProps) {
+export default function BlogsShowcaseClient({ blogItems, countryCode = "us" }: BlogsShowcaseClientProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [visibleItems, setVisibleItems] = useState(3);
@@ -374,7 +375,7 @@ export default function BlogsShowcaseClient({ blogItems }: BlogsShowcaseClientPr
 
         <div className={`text-center mt-12 md:mt-16 ${avertaBlack.className}`}>
           <Link
-            href="/us/blogs"
+            href={`/${countryCode}/blogs`}
             className="inline-flex items-center gap-3 bg-black text-white px-8 py-4 font-bold text-lg hover:bg-[#2b2b2b] transition-colors duration-300"
           >
             VIEW ALL ARTICLES

@@ -4,19 +4,23 @@ import type { Metadata } from 'next';
 import CategoriesPage from './page-client';
 import getKeywordCategories from '@/src/app/actions/get-keyword-categories';
 
-export const metadata: Metadata = {
-  title: 'All Categories | Jackets Store',
-  description: 'Explore FINEYST\'s complete collection of premium jackets and outerwear. From leather jackets to winter coats, find your perfect style with free shipping on orders over $100.',
-  alternates: {
-    canonical: "https://www.fineystjackets.com/us/collections"
-  }
-};
+export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
+  const countryCode = params.country;
+  
+  return {
+    title: 'All Categories | Jackets Store',
+    description: 'Explore FINEYST\'s complete collection of premium jackets and outerwear. From leather jackets to winter coats, find your perfect style with free shipping on orders over $100.',
+    alternates: {
+      canonical: `https://www.fineystjackets.com/${countryCode}/collections`
+    }
+  };
+}
 
 export default async function Categories({ params }: { params: { country: string } }) {
   const countryCode = params.country;
   
   try {
-    const keywordCategories = await getKeywordCategories();
+    const keywordCategories = await getKeywordCategories({ countryCode });
     return <CategoriesPage categories={keywordCategories || []} countryCode={countryCode} />;
   } catch (error) {
     return (
