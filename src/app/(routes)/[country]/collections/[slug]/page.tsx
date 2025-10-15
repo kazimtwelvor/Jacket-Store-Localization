@@ -14,7 +14,7 @@ import CollectionSchema from "@/src/app/components/schema/collection-schema";
 // import { Suspense } from "react";
 
 interface CategoryPageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; country: string }>;
 }
 
 export async function generateStaticParams() {
@@ -135,7 +135,7 @@ export async function generateMetadata(
 
 const CategoryPage = async ({ params }: CategoryPageProps) => {
   try {
-    const { slug } = (await params) || {};
+    const { slug, country: countryCode } = (await params) || {};
 
     if (!slug) {
       return notFound();
@@ -203,8 +203,9 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
         pockets: filterParams.pockets,
         limit: 40,
         page: 1,
+        countryCode: countryCode, // Add country code
       })),
-      fetchWithRetry(() => getCategories()),
+      fetchWithRetry(() => getCategories({ countryCode })),
       fetchWithRetry(() => getKeywordCategories())
     ]);
 

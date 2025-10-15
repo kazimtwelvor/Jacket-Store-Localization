@@ -16,7 +16,7 @@ export interface ReviewData {
   updatedAt: string | Date
 }
 
-export async function getProductReviews(productId: string): Promise<ReviewData[]> {
+export async function getProductReviews(productId: string, options?: { countryCode?: string }): Promise<ReviewData[]> {
   try {
     if (!productId) {
       return []
@@ -28,7 +28,9 @@ export async function getProductReviews(productId: string): Promise<ReviewData[]
       return []
     }
 
-    const apiUrl = `${baseApiUrl}/reviews?productId=${encodeURIComponent(productId)}`
+    const apiUrl = options?.countryCode 
+      ? `${baseApiUrl}/reviews?productId=${encodeURIComponent(productId)}&cn=${options.countryCode}`
+      : `${baseApiUrl}/reviews?productId=${encodeURIComponent(productId)}`
     
     const response = await fetch(apiUrl, {
       headers: {

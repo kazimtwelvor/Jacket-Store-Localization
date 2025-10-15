@@ -77,9 +77,9 @@ interface BlogData {
   }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params
-  const blogData = await getBlog(slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string; country: string }> }): Promise<Metadata> {
+  const { slug, country } = await params
+  const blogData = await getBlog(slug, { countryCode: country })
   
   if (!blogData || !blogData.content.metadata.isPublished) {
     return {
@@ -97,10 +97,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-export default async function BlogPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+interface BlogPageProps {
+  params: Promise<{ slug: string; country: string }>
+}
 
-  const blogData = await getBlog(slug)
+export default async function BlogPage({ params }: BlogPageProps) {
+  const { slug, country } = await params
+
+  const blogData = await getBlog(slug, { countryCode: country })
 
   if (!blogData || !blogData.content.metadata.isPublished) {
     notFound()

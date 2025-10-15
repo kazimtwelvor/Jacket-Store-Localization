@@ -168,9 +168,15 @@ export class ProductService {
     }
 
 
-    static async getProduct(slugOrId: string): Promise<Product | null> {
+    static async getProduct(slugOrId: string, options?: { countryCode?: string }): Promise<Product | null> {
         try {
+            const params: any = {}
+            if (options?.countryCode) {
+                params.cn = options.countryCode
+            }
+            
             const response = await apiClient.get(`/products/${slugOrId}`, {
+                params,
                 timeout: 1200000, 
                 headers: {
                     'Cache-Control': 'no-cache',
@@ -206,13 +212,18 @@ export class ProductService {
         }
     }
 
-    static async getFeaturedProducts(limit: number = 10): Promise<Product[]> {
+    static async getFeaturedProducts(limit: number = 10, options?: { countryCode?: string }): Promise<Product[]> {
         try {
+            const params: any = {
+                isFeatured: true,
+                limit
+            }
+            if (options?.countryCode) {
+                params.cn = options.countryCode
+            }
+            
             const response = await apiClient.get('/products', {
-                params: {
-                    isFeatured: true,
-                    limit
-                },
+                params,
                 headers: {
                     'Cache-Control': 'no-cache',
                 }
@@ -249,13 +260,18 @@ export class ProductService {
         }
     }
 
-    static async searchProducts(searchTerm: string, limit: number = 20): Promise<Product[]> {
+    static async searchProducts(searchTerm: string, limit: number = 20, options?: { countryCode?: string }): Promise<Product[]> {
         try {
+            const params: any = {
+                search: searchTerm,
+                limit
+            }
+            if (options?.countryCode) {
+                params.cn = options.countryCode
+            }
+            
             const response = await apiClient.get('/products', {
-                params: {
-                    search: searchTerm,
-                    limit
-                },
+                params,
                 headers: {
                     'Cache-Control': 'no-cache',
                 }

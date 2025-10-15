@@ -1,8 +1,12 @@
 import { getBlogs } from "@/src/app/actions/get-blogs"
 import BlogsClient from "./blogs-client"
 
-export default async function BlogsServer() {
-  const blogs = await getBlogs()
+interface BlogsServerProps {
+  countryCode: string
+}
+
+export default async function BlogsServer({ countryCode }: BlogsServerProps) {
+  const blogs = await getBlogs({ countryCode })
   const blogsArray = Array.isArray(blogs) ? blogs : []
   
   const webPageSchema = {

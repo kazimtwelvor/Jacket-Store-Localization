@@ -1,14 +1,20 @@
 import type { KeywordCategory } from "@/types";
 
 const getKeywordCategory = async (
-  slug: string
+  slug: string,
+  options?: { countryCode?: string }
 ): Promise<KeywordCategory | null> => {
   try {
     if (!process.env.NEXT_PUBLIC_API_URL) {
       return null;
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/category-pages`, {
+    // Build URL with country parameter if provided
+    const url = options?.countryCode 
+      ? `${process.env.NEXT_PUBLIC_API_URL}/category-pages?cn=${options.countryCode}` 
+      : `${process.env.NEXT_PUBLIC_API_URL}/category-pages`
+
+    const res = await fetch(url, {
       next: { revalidate: 0 }, 
       cache: "no-store",
       headers: {

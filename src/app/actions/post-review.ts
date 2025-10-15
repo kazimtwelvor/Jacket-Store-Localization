@@ -160,7 +160,7 @@ export async function postReview(formData: FormData): Promise<{ success: boolean
   }
 }
 
-export async function getProductReviews(productId: string): Promise<ReviewData[]> {
+export async function getProductReviews(productId: string, options?: { countryCode?: string }): Promise<ReviewData[]> {
   try {
     if (!productId) {
       return []
@@ -169,7 +169,9 @@ export async function getProductReviews(productId: string): Promise<ReviewData[]
 
     const adminApiUrl = process.env.ADMIN_API_URL || "http://localhost:3000/api"
     const storeId = process.env.NEXT_PUBLIC_STORE_ID || "7274a6f2-dd25-432e-b99e-74a236319931"
-    const apiUrl = `${adminApiUrl}/${storeId}/reviews?productId=${encodeURIComponent(productId)}`
+    const apiUrl = options?.countryCode 
+      ? `${adminApiUrl}/${storeId}/reviews?productId=${encodeURIComponent(productId)}&cn=${options.countryCode}`
+      : `${adminApiUrl}/${storeId}/reviews?productId=${encodeURIComponent(productId)}`
 
     try {
       const response = await fetch(apiUrl, {

@@ -7,7 +7,7 @@ const fallbackBillboard: Billboard = {
   imageUrl: "/placeholder.svg?height=600&width=1600",
 }
 
-const getBillboard = async (id: string): Promise<Billboard> => {
+const getBillboard = async (id: string, options?: { countryCode?: string }): Promise<Billboard> => {
   try {
     // Check if API URL is available
     if (!process.env.NEXT_PUBLIC_API_URL) {
@@ -15,8 +15,13 @@ const getBillboard = async (id: string): Promise<Billboard> => {
       return fallbackBillboard
     }
 
+    // Build URL with country parameter if provided
+    const url = options?.countryCode 
+      ? `${process.env.NEXT_PUBLIC_API_URL}/billboards/${id}?cn=${options.countryCode}` 
+      : `${process.env.NEXT_PUBLIC_API_URL}/billboards/${id}`
+
     // Use direct external API call with proper error handling and caching
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/billboards/${id}`, {
+    const response = await fetch(url, {
       next: { revalidate: 3600 }, // Cache for 1 hour
       cache: "force-cache",
       headers: {

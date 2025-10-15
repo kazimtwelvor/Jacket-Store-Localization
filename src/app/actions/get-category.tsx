@@ -4,12 +4,12 @@ import { fetchJson } from "./_http"
 
 const URL = `${process.env.NEXT_PUBLIC_API_URL}/categories`
 
-const getCategory = async (idOrSlug: string): Promise<Category | null> => {
+const getCategory = async (idOrSlug: string, options?: { countryCode?: string }): Promise<Category | null> => {
   try {
     
     // Search in all categories from API to find by slug
     try {
-      const categories = await getCategories()
+      const categories = await getCategories(options)
       
       const category = categories.find((c: Category) => {
         const match = c.slug === idOrSlug || c.id === idOrSlug

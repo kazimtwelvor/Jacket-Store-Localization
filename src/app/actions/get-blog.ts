@@ -3,13 +3,18 @@ import type { BlogDetail } from "@/types"
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 const STORE_ID = process.env.NEXT_PUBLIC_STORE_ID
 
-export async function getBlog(slug: string): Promise<BlogDetail | null> {
+export async function getBlog(slug: string, options?: { countryCode?: string }): Promise<BlogDetail | null> {
   try {
     if (!API_URL) throw new Error("API_URL is not defined")
     if (!STORE_ID) throw new Error("STORE_ID is not defined")
 
+    // Build URL with country parameter if provided
+    const url = options?.countryCode 
+      ? `${API_URL}/blog?cn=${options.countryCode}` 
+      : `${API_URL}/blog`
+
     // First, get all blogs to find the one with the matching slug
-    const res = await fetch(`${API_URL}/blog`, {
+    const res = await fetch(url, {
       next: { revalidate: 3600 }, // Cache for 1 hour
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +35,11 @@ export async function getBlog(slug: string): Promise<BlogDetail | null> {
     }
 
     // Now fetch the specific blog by ID to get full details
-    const blogRes = await fetch(`${API_URL}/blog/${blog.id}`, {
+    const blogDetailUrl = options?.countryCode 
+      ? `${API_URL}/blog/${blog.id}?cn=${options.countryCode}` 
+      : `${API_URL}/blog/${blog.id}`
+
+    const blogRes = await fetch(blogDetailUrl, {
       next: { revalidate: 3600 }, // Cache for 1 hour
       headers: {
         "Content-Type": "application/json",

@@ -1,15 +1,16 @@
 import type { Product } from "@/types"
 import ProductService from "../../lib/services/product-service"
 
-const getProduct = async (slug: string): Promise<Product | null> => {
+const getProduct = async (slug: string, options?: { countryCode?: string }): Promise<Product | null> => {
   try {
-    const product = await ProductService.getProduct(slug)
+    const product = await ProductService.getProduct(slug, options)
     if (product) {
       return product
     }
     
     const { products } = await ProductService.getProducts({ 
-      limit: 10000 
+      limit: 10000,
+      countryCode: options?.countryCode
     })
     
     const foundProduct = products.find(p => {
