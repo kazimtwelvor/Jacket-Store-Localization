@@ -1,5 +1,6 @@
 import getProduct from "@/src/app/actions/get-product"
 import getProducts from "@/src/app/actions/get-products"
+import { getCountries } from "@/src/app/actions/get-countries"
 import { notFound, redirect } from "next/navigation"
 import type { Metadata, ResolvingMetadata } from "next"
 import type { Product, ProductImage } from "@/types"
@@ -23,33 +24,31 @@ interface ProductPageProps {
 
 export async function generateStaticParams() {
   try {
-    let productsResult = null;
-    try {
-      productsResult = await getProducts({ limit: 100 });
-    } catch (error) {
-      console.warn('⚠️ Failed to fetch 100 products, trying smaller batch...');
-      
-      try {
-        productsResult = await getProducts({ limit: 50 });
-      } catch (error2) {
-        console.warn('⚠️ Failed to fetch 50 products, trying minimal batch...');
-        
-        try {
-          productsResult = await getProducts({ limit: 10 });
-        } catch (error3) {
-          return [];
-        }
-      }
-    }
+    const [countries, productsResult] = await Promise.all([
+      getCountries(),
+      getProducts({ limit: 100 }).catch(async () => {
+        console.warn('⚠️ Failed to fetch 100 products, trying smaller batch...');
+        return getProducts({ limit: 50 }).catch(async () => {
+          console.warn('⚠️ Failed to fetch 50 products, trying minimal batch...');
+          return getProducts({ limit: 10 }).catch(() => null);
+        });
+      })
+    ]);
     
     if (!productsResult?.products?.length) {
       console.warn('⚠️ No products found, returning empty array');
       return [];
     }
     
-    const params = productsResult.products.map((product: any) => ({
-      slug: product.slug || product.id,
-    }));
+    const params = [];
+    for (const country of countries) {
+      for (const product of productsResult.products) {
+        params.push({
+          country: country.countryCode,
+          slug: product.slug || product.id,
+        });
+      }
+    }
     
     return params;
     

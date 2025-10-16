@@ -12,9 +12,27 @@ import FAQServer from "@/src/app/components/home-page-components/faqs/faq-server
 import BlogsShowcaseServer from "@/src/app/components/home-page-components/blog-showcase/blog-showcase-server";
 import GlobalFashionPartnerServer from "@/src/app/components/home-page-components/global-fashion-partner/global-fashion-partner-server";
 import AnimatedReviewSectionServer from "@/src/app/components/home-page-components/animated-review-section/animated-review-section-server";
+import { getCountries } from "@/src/app/actions/get-countries";
 
 export const dynamic = 'force-static'
 export const revalidate = 3600
+
+export async function generateStaticParams() {
+  try {
+    const countries = await getCountries()
+    
+    return countries.map((country) => ({
+      country: country.countryCode,
+    }))
+  } catch (error) {
+    return [
+      { country: 'us' },
+      { country: 'ca' },
+      { country: 'uk' },
+      { country: 'au' }
+    ]
+  }
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ country: string }> }): Promise<Metadata> {
   const { country: countryCode } = await params

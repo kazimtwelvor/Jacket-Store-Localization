@@ -5,6 +5,7 @@ import getCategories from "@/src/app/actions/get-categories";
 import getSizes from "@/src/app/actions/get-sizes";
 import getColors from "@/src/app/actions/get-colors";
 import getKeywordCategories from "@/src/app/actions/get-keyword-categories";
+import { getCountries } from "@/src/app/actions/get-countries";
 
 export const metadata = {
   title: "Shop Premium Jackets and Outerwear | Fineyst",
@@ -14,6 +15,23 @@ export const metadata = {
 export const revalidate = 300;
 export const dynamic = "auto";
 export const fetchCache = "default-cache";
+
+export async function generateStaticParams() {
+  try {
+    const countries = await getCountries();
+    
+    return countries.map((country) => ({
+      country: country.countryCode,
+    }));
+  } catch (error) {
+    return [
+      { country: 'us' },
+      { country: 'ca' },
+      { country: 'uk' },
+      { country: 'au' }
+    ];
+  }
+}
 
 type ShopPageProps = {
   params: { country: string };

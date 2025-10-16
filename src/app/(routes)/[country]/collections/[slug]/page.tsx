@@ -5,6 +5,7 @@ import getCategories from "@/src/app/actions/get-categories";
 import getKeywordCategory from "@/src/app/actions/get-keyword-category";
 import getKeywordCategories from "@/src/app/actions/get-keyword-categories";
 import getProducts from "@/src/app/actions/get-products";
+import { getCountries } from "@/src/app/actions/get-countries";
 import type { Category, Product } from "@/types";
 import CategoryPageClient from "./page-client";
 import { notFound } from "next/navigation";
@@ -19,21 +20,12 @@ interface CategoryPageProps {
 
 export async function generateStaticParams() {
   try {
-    
-    let categoriesResult = null;
-    
-    try {
-      categoriesResult = await getKeywordCategories();
-    } catch (error) {
-      console.warn('⚠️ Failed to fetch keyword categories, trying fallback...');
-      
-      try {
-        const regularCategories = await getCategories();
-        categoriesResult = regularCategories?.slice(0, 20) || [];
-      } catch (error2) {
-        return [];
-      }
-    }
+    const [countries, categoriesResult] = await Promise.all([
+      getCountries(),
+      getKeywordCategories().catch(async () => {
+        return getCategories().catch(() => []);
+      })
+    ]);
     
     if (!categoriesResult?.length) {
       console.warn('⚠️ No categories found, returning empty array');
@@ -41,9 +33,17 @@ export async function generateStaticParams() {
     }
     
     const collectionCount = process.env.NEXT_COLLECTION_COUNT ? parseInt(process.env.NEXT_COLLECTION_COUNT) : 20;
-    const params = categoriesResult.slice(0, collectionCount).map((category: any) => ({
-      slug: category.slug,
-    }));
+    const categories = categoriesResult.slice(0, collectionCount);
+    
+    const params = [];
+    for (const country of countries) {
+      for (const category of categories) {
+        params.push({
+          country: country.countryCode,
+          slug: category.slug,
+        });
+      }
+    }
     
     return params;
     

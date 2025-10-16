@@ -7,7 +7,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   output: 'standalone',
-  staticPageGenerationTimeout: process.env.NEXT_BUILD_TIMEOUT ? parseInt(process.env.NEXT_BUILD_TIMEOUT) : 1200, // Default: 20 minutes (1200 seconds)
+  staticPageGenerationTimeout: process.env.NEXT_BUILD_TIMEOUT ? parseInt(process.env.NEXT_BUILD_TIMEOUT) : 1800,
   
   experimental: {
     appDir: true,
