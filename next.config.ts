@@ -7,14 +7,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   output: 'standalone',
-  staticPageGenerationTimeout: process.env.NEXT_BUILD_TIMEOUT ? parseInt(process.env.NEXT_BUILD_TIMEOUT) : 1800,
+  staticPageGenerationTimeout: process.env.NEXT_BUILD_TIMEOUT ? parseInt(process.env.NEXT_BUILD_TIMEOUT) : 1200,
   
   experimental: {
-    appDir: true,
-    
-    staticWorkerRequestDeduping: true,
-    cpus: 1, 
-    
     serverActions: {
       allowedOrigins: [
         "localhost:3000",
