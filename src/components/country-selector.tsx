@@ -12,7 +12,12 @@ import {
 } from '@/src/app/ui/dropdown-menu'
 import { Button } from '@/src/app/ui/button'
 
-export function CountrySelector() {
+interface CountrySelectorProps {
+  variant?: 'default' | 'footer'
+  size?: 'sm' | 'default' | 'lg'
+}
+
+export function CountrySelector({ variant = 'default', size = 'default' }: CountrySelectorProps = {}) {
   const router = useRouter()
   const pathname = usePathname()
   const {
@@ -100,8 +105,12 @@ export function CountrySelector() {
       <DropdownMenuTrigger asChild>
         <Button 
           variant="outline" 
-          size="sm" 
-          className="gap-2 border-gray-700 bg-gray-800 text-white hover:bg-gray-700"
+          size={size}
+          className={`gap-2 ${
+            variant === 'footer' 
+              ? 'border-gray-300 bg-white text-black hover:bg-gray-100' 
+              : 'border-gray-700 bg-gray-800 text-white hover:bg-gray-700'
+          }`}
           disabled={isLoading}
         >
           <Globe className="h-4 w-4" />
@@ -111,13 +120,19 @@ export function CountrySelector() {
           <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56 bg-gray-800 border-gray-700">
+      <DropdownMenuContent align="end" className={`w-56 ${
+        variant === 'footer' 
+          ? 'bg-white border-gray-300' 
+          : 'bg-gray-800 border-gray-700'
+      }`}>
         {countries.map((country) => (
           <DropdownMenuItem
             key={country.id}
             onClick={() => handleCountryChange(country)}
-            className={`flex items-center justify-between cursor-pointer text-white hover:bg-gray-700 ${
-              selectedCountry?.id === country.id ? 'bg-gray-700' : ''
+            className={`flex items-center justify-between cursor-pointer ${
+              variant === 'footer' 
+                ? 'text-black hover:bg-gray-100' + (selectedCountry?.id === country.id ? ' bg-gray-100' : '')
+                : 'text-white hover:bg-gray-700' + (selectedCountry?.id === country.id ? ' bg-gray-700' : '')
             }`}
           >
             <span className="flex items-center gap-2">

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Facebook, Twitter, Instagram, ChevronDown, Star, Phone, Mail } from "lucide-react"
+import { CountrySelector } from "@/src/components/country-selector"
 import Image from "next/image"
 import { avertaBlack, avertaBold } from "@/src/lib/fonts"
 import { submitNewsletterForm } from "@/src/lib/services/forms"
@@ -401,8 +402,11 @@ const Footer = () => {
                                 </Link>
                             </div>
                         </div>
-                        {/* Payment Methods - Right */}
+
                         <div className="text-center md:text-right md:w-1/3">
+                            <div className="mb-3">
+                                <CountrySelector variant="footer" size="lg" />
+                            </div>
                             <p className="text-black font-semibold text-xs mb-2">Accepted Payment Methods</p>
                             <div className="flex justify-center md:justify-end">
                                 <img

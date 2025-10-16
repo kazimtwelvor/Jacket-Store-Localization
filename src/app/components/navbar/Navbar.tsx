@@ -40,7 +40,6 @@ const BrandsMegaMenu = dynamic(() => import("./BrandsMegaMenu"), {
 });
 import { cn } from "../../lib/utils";
 import { avertaBold } from "@/src/lib/fonts";
-import { CountrySelector } from "@/src/components/country-selector";
 import { useCountry } from "@/src/hooks/use-country";
 export const revalidate = 0;
 
@@ -489,9 +488,6 @@ const Navbar = () => {
               </div>
             )}
 
-            <div className="hidden lg:block">
-              <CountrySelector />
-            </div>
 
             <button
               className="text-white hover:opacity-80"
