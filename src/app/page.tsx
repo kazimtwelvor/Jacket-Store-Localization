@@ -151,14 +151,14 @@ export default function Home() {
         <SlideBanners />
       </section>
       <WelcomeAccordionSection />
-      <ProductCategoryServer />
-      <SignatureSectionServer />
-      <ProductCarouselServer />
-      <JacketColorCollectionServer />
-      <AboutUsServer />
+      <ProductCategoryServer countryCode="us" />
+      <SignatureSectionServer countryCode="us" />
+      <ProductCarouselServer countryCode="us" />
+      <JacketColorCollectionServer countryCode="us" />
+      <AboutUsServer countryCode="us" />
       <WhyChooseSliderServer />
       <FAQServer />
-      <BlogsShowcaseServer />
+      <BlogsShowcaseServer countryCode="us" />
       <GlobalFashionPartnerServer />
       <AnimatedReviewSectionServer />
     </>

@@ -175,7 +175,7 @@ export default async function CountryHome({ params }: { params: Promise<{ countr
       <SignatureSectionServer countryCode={countryCode} />
       <ProductCarouselServer countryCode={countryCode} />
       <JacketColorCollectionServer countryCode={countryCode} />
-      <AboutUsServer />
+      <AboutUsServer countryCode={countryCode} />
       <WhyChooseSliderServer />
       <FAQServer />
       <BlogsShowcaseServer countryCode={countryCode} />

@@ -5,12 +5,16 @@ import { Award, Globe, Users, Heart } from "lucide-react"
 import Container from "@/src/app/ui/container"
 import Button from "@/src/app/ui/button"
 
-export const metadata: Metadata = {
-  title: "About Us - Our Story and Mission | FINEYST",
-  description: "Discover FINEYST's journey since 2010 - our sustainable fashion mission, passionate team, and commitment to quality craftsmanship. Learn about our values and vision for the future.",
-  alternates: {
-    canonical: "https://www.fineystjackets.com/us/about-us"
-  }
+export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
+  const { country: countryCode } = params;
+  
+  return {
+    title: "About Us - Our Story and Mission | FINEYST",
+    description: "Discover FINEYST's journey since 2010 - our sustainable fashion mission, passionate team, and commitment to quality craftsmanship. Learn about our values and vision for the future.",
+    alternates: {
+      canonical: `https://www.fineystjackets.com/${countryCode}/about-us`
+    }
+  };
 }
 
 export default function AboutUsPage({ params }: { params: { country: string } }) {
@@ -20,8 +24,8 @@ export default function AboutUsPage({ params }: { params: { country: string } })
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Fineyst",
-    "url": "https://www.fineystjackets.com/us",
-    "logo": "https://www.fineystjackets.com/us/logo.webp",
+    "url": `https://www.fineystjackets.com/${countryCode}`,
+    "logo": `https://www.fineystjackets.com/${countryCode}/logo.webp`,
     "description": "Crafting exceptional fashion experiences since 2010. We provide high-quality, sustainable fashion that empowers people to express themselves authentically.",
     "foundingDate": "2010",
     "founder": {
@@ -69,7 +73,7 @@ export default function AboutUsPage({ params }: { params: { country: string } })
     "@type": "AboutPage",
     "name": "About Us - Our Story and Mission",
     "description": "Learn about our story, mission, and the team behind FINEYST.",
-    "url": "https://www.fineystjackets.com/us/about-us"
+    "url": `https://www.fineystjackets.com/${countryCode}/about-us`
   }
 
   return (

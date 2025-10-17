@@ -12,8 +12,7 @@ import { notFound } from "next/navigation";
 import type { Metadata, ResolvingMetadata } from "next";
 import StructuredData from "@/src/app/components/layout/structured-data-layout";
 import CollectionSchema from "@/src/app/components/schema/collection-schema";
-// import { Suspense } from "react";
-import { useCountry } from "@/src/hooks/use-country";
+// import { Suspense } from "react";  
 
 interface CategoryPageProps {
   params: Promise<{ slug: string; country: string }>;
@@ -102,7 +101,7 @@ export async function generateMetadata(
           keywordCategory.seoDescription ||
           keywordCategory.description,
         type: "website",
-        url: keywordCategory.canonicalUrl || `https://www.fineystjackets.com/us/collections/${slug}`,
+        url: keywordCategory.canonicalUrl || `https://www.fineystjackets.com/${countryCode}/collections/${slug}`,
       },
       twitter: {
         card: "summary_large_image",
@@ -116,7 +115,7 @@ export async function generateMetadata(
           keywordCategory.description,
       },
       alternates: {
-        canonical: keywordCategory.canonicalUrl || `https://www.fineystjackets.com/us/collections/${slug}`,
+        canonical: keywordCategory.canonicalUrl || `https://www.fineystjackets.com/${countryCode}/collections/${slug}`,
       },
       ...(keywordCategory.enableSchema && keywordCategory.customSchema
         ? {

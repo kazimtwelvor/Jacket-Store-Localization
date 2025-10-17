@@ -15,7 +15,7 @@ interface AboutData {
 }
 
 const getCachedAboutData = unstable_cache(
-  async (): Promise<AboutData> => {
+  async (countryCode: string): Promise<AboutData> => {
     return {
       title: "ABOUT FINEYST",
       subtitle: "Premium streetwear that speaks your language",
@@ -24,15 +24,19 @@ const getCachedAboutData = unstable_cache(
       mission: "What sets Fineyst apart is our unwavering commitment to quality, authenticity, and customer satisfaction. We believe that streetwear should be both expressive and responsibly made.",
       values: "We believe that streetwear should be both expressive and responsibly made.",
       ctaText: "Discover our full story",
-      ctaLink: "/us/about-us"
+      ctaLink: `/${countryCode}/about-us`
     };
   },
   ['about-section'],
   { revalidate: 3600, tags: ['about'] }
 );
 
-export default async function AboutUsServer() {
-  const aboutData = await getCachedAboutData();
+interface AboutUsServerProps {
+  countryCode: string;
+}
+
+export default async function AboutUsServer({ countryCode }: AboutUsServerProps) {
+  const aboutData = await getCachedAboutData(countryCode);
 
   return <AboutUsClient aboutData={aboutData} />;
 }

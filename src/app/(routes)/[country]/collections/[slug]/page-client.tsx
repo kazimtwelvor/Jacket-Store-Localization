@@ -1596,7 +1596,7 @@ const CategoryPageClientContent: React.FC<CategoryPageClientProps> = ({
                     {keywordCategories.map((cat, index) => (
                         <Link
                             key={cat.id || index}
-                            href={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fineystjackets.com/us'}/collections/${cat.slug}`}
+                            href={`${process.env.NEXT_PUBLIC_SITE_URL || `https://www.fineystjackets.com/${countryCode}`}/collections/${cat.slug}`}
                             className="sr-only"
                         >
                             {cat.name}

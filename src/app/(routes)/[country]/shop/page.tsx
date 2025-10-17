@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import ProductsPageClient from "@/src/app/components/shop/products-page-client";
 import getProducts from "@/src/app/actions/get-products";
 import getCategories from "@/src/app/actions/get-categories";
@@ -7,10 +8,17 @@ import getColors from "@/src/app/actions/get-colors";
 import getKeywordCategories from "@/src/app/actions/get-keyword-categories";
 import { getCountries } from "@/src/app/actions/get-countries";
 
-export const metadata = {
-  title: "Shop Premium Jackets and Outerwear | Fineyst",
-  description: "Shop FINEYST's premium jackets, coats, and outerwear collection. Sustainable fashion with free shipping over $100, easy returns, and expert customer support. Find your perfect fit today.",
-};
+export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
+  const { country: countryCode } = params;
+  
+  return {
+    title: "Shop Premium Jackets and Outerwear | Fineyst",
+    description: "Shop FINEYST's premium jackets, coats, and outerwear collection. Sustainable fashion with free shipping over $100, easy returns, and expert customer support. Find your perfect fit today.",
+    alternates: {
+      canonical: `https://www.fineystjackets.com/${countryCode}/shop`
+    }
+  };
+}
 
 export const revalidate = 300;
 export const dynamic = "auto";

@@ -7,7 +7,6 @@ import getSizes from "../../actions/get-sizes";
 import getColors from "../../actions/get-colors";
 import getKeywordCategories from "../../actions/get-keyword-categories";
 import ProductCategory from "../home-page-components/product-category/product-category";
-
 export const metadata = {
   title: "Shop Premium Jackets and Outerwear | Fineyst",
   description: "Shop FINEYST's premium jackets, coats, and outerwear collection. Sustainable fashion with free shipping over $100, easy returns, and expert customer support. Find your perfect fit today.",

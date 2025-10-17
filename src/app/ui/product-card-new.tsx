@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/src/app/lib/utils"
 import type { Product } from "@/types"
+import { useCountry } from "@/src/hooks/use-country"
 
 // Helper function to generate a slug
 const getProductSlug = (product: Product): string => {
@@ -28,6 +29,7 @@ interface ProductCardProps {
 const ProductCardNew = ({ product }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const { countryCode } = useCountry()
   const slug = getProductSlug(product)
   
   // Check if product has sizes
@@ -45,7 +47,7 @@ const ProductCardNew = ({ product }: ProductCardProps) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link href={`/us/product/${slug}`}>
+      <Link href={`/${countryCode}/product/${slug}`}>
         <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
           <Image
             src={product.images?.[0]?.image?.url || "/placeholder.svg"}

@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
 import useWishlist from "../hooks/use-wishlist"
 import { useCart } from "@/src/app/contexts/CartContext"
+import { useCountry } from "@/src/hooks/use-country"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./dialog"
 
 // Shimmer effect for image loading
@@ -38,6 +39,7 @@ const ProductCard = ({ data, onMouseEnter }: ProductCardProps) => {
   const router = useRouter()
   const wishlist = useWishlist()
   const { addToCart } = useCart()
+  const { countryCode } = useCountry()
   const [isHovered, setIsHovered] = useState(false)
   const [selectedSize, setSelectedSize] = useState<{ id: string; name: string; value: string } | null>(null)
   const [isMounted, setIsMounted] = useState(false)
@@ -58,7 +60,7 @@ const ProductCard = ({ data, onMouseEnter }: ProductCardProps) => {
       setShopPage(currentPage);
       window.dispatchEvent(new CustomEvent('route-loading:start'))
     }
-    router.push(`/us/product/${data.slug || data.id}`)
+    router.push(`/${countryCode}/product/${data.slug || data.id}`)
   }
 
   const handleSizeSelect = (size: { id: string; name: string; value: string }) => {

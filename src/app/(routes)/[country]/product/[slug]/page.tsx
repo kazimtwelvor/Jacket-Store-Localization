@@ -19,6 +19,7 @@ export const revalidate = false;           // No revalidation for pure static
 interface ProductPageProps {
   params: Promise<{
     slug: string
+    country: string
   }>
 }
 
@@ -60,7 +61,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: ProductPageProps, parent: ResolvingMetadata): Promise<Metadata> {
   try {
-    const { slug: slugOrId } = await params || {}
+    const { slug: slugOrId, country: countryCode } = await params || {}
 
     if (!slugOrId) {
       return {
@@ -104,7 +105,7 @@ export async function generateMetadata({ params }: ProductPageProps, parent: Res
         description: product.metaDescription || product.description || `Buy ${product.name} online.`,
         images: [...productImages, ...previousImages],
         type: "website",
-        url: `https://www.fineystjackets.com/us/product/${product.slug || slugOrId}`,
+        url: `https://www.fineystjackets.com/${countryCode}/product/${product.slug || slugOrId}`,
       },
       twitter: {
         card: "summary_large_image",
@@ -113,7 +114,7 @@ export async function generateMetadata({ params }: ProductPageProps, parent: Res
         images: productImages.length > 0 ? [productImages[0]] : undefined,
       },
       alternates: {
-        canonical: `https://www.fineystjackets.com/us/product/${product.slug || slugOrId}`,
+        canonical: `https://www.fineystjackets.com/${countryCode}/product/${product.slug || slugOrId}`,
       },
       other: {
         "og:price:amount": product.isDiscounted && product.salePrice ? product.salePrice : product.price,
@@ -129,7 +130,7 @@ export async function generateMetadata({ params }: ProductPageProps, parent: Res
 }
 
 const ProductPage = async ({ params }: ProductPageProps) => {
-  const { slug: slugOrId } = await params || {}
+  const { slug: slugOrId, country: countryCode } = await params || {}
 
   if (!slugOrId) {
     return notFound()

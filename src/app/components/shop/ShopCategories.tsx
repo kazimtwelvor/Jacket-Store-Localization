@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useCountry } from '@/src/hooks/use-country';
 
 interface KeywordCategory {
   id: string
@@ -37,6 +38,7 @@ const ArrowIcon = ({ direction }: { direction: 'left' | 'right' }) => (
 
 const ShopCategories: React.FC<ShopCategoriesProps> = ({ keywordCategories }) => {
   const router = useRouter()
+  const { countryCode } = useCountry()
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -69,7 +71,7 @@ const ShopCategories: React.FC<ShopCategoriesProps> = ({ keywordCategories }) =>
     if (!slug) return;
     if (isNavigatingRef.current) return;
     isNavigatingRef.current = true;
-    router.push(`/us/collections/${slug}`);
+    router.push(`/${countryCode}/collections/${slug}`);
   }
 
   const checkForScrollability = useCallback(() => {

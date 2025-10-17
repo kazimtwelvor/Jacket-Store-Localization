@@ -1,20 +1,23 @@
 import { NextResponse } from 'next/server'
 import getProducts from '../actions/get-products'
 
-const BASE_URL = 'https://www.fineystjackets.com/us'
+const BASE_URL = 'https://www.fineystjackets.com'
+const SUPPORTED_COUNTRIES = ['us', 'uk', 'ca', 'au']
 
 export async function GET() {
   try {
     // Fetch all products
     const products = await getProducts({ limit: 1000 })
 
-    // Generate products sitemap XML
+    // Generate products sitemap XML with all countries
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-${products.products.map((product: any) => `  <url>
-    <loc>${BASE_URL}/product/${product.slug}</loc>
+${products.products.flatMap((product: any) => 
+  SUPPORTED_COUNTRIES.map(country => `  <url>
+    <loc>${BASE_URL}/${country}/product/${product.slug}</loc>
     <lastmod>${product.updatedAt ? new Date(product.updatedAt).toISOString().replace('Z', '+00:00') : new Date().toISOString().replace('Z', '+00:00')}</lastmod>
-  </url>`).join('\n')}
+  </url>`)
+).join('\n')}
 </urlset>`
 
     return new NextResponse(sitemap, {

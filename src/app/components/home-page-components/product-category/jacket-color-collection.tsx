@@ -4,49 +4,50 @@
 import type React from "react"
 import { avertaBlack } from "@/src/lib/fonts"
 import ProductCategory from "./product-category"
+import { useCountry } from "@/src/hooks/use-country"
 
-const colorCollectionMen = [
+const getColorCollectionMen = (countryCode: string) => [
   {
     id: "color-black-men",
     name: "BLACK JACKETS",
     imageUrl: "/images/color-collection/Black.webp",
-    href: "/us/collections/leather-bomber-jacket-mens",
+    href: `/${countryCode}/collections/leather-bomber-jacket-mens`,
   },
   {
     id: "color-brown-men",
     name: "BROWN JACKETS",
     imageUrl: "/images/color-collection/Brown .webp",
-    href: "/us/collections/mens-suede-jackets",
+    href: `/${countryCode}/collections/mens-suede-jackets`,
   },
   {
     id: "color-red-women",
     name: "RED JACKETS",
     imageUrl: "/images/color-collection/Red.webp",
-    href: "/us/collections/mens-suede-jackets",
+    href: `/${countryCode}/collections/mens-suede-jackets`,
   },
   {
     id: "color-white-men",
     name: "WHITE JACKETS",
     imageUrl: "/images/color-collection/White .webp",
-    href: "/us/collections/mens-denim-jackets",
+    href: `/${countryCode}/collections/mens-denim-jackets`,
   },
   {
     id: "color-pink-men",
     name: "PINK JACKETS",
     imageUrl: "/images/color-collection/Pink.webp",
-    href: "/us/collections/mens-suede-jackets",
+    href: `/${countryCode}/collections/mens-suede-jackets`,
   },
   {
     id: "color-blue-men",
     name: "BLUE JACKETS",
     imageUrl: "/images/color-collection/Blue.webp",
-    href: "/us/collections/mens-puffer-jackets",
+    href: `/${countryCode}/collections/mens-puffer-jackets`,
   },
   {
     id: "color-green-women",
     name: "GREEN JACKETS",
     imageUrl: "/images/color-collection/Green.webp",
-    href: "/us/collections/mens-suede-jackets",
+    href: `/${countryCode}/collections/mens-suede-jackets`,
   },
 
 
@@ -54,7 +55,7 @@ const colorCollectionMen = [
     id: "color-yellow-men",
     name: "YELLOW JACKETS",
     imageUrl: "/images/color-collection/Yellow .webp",
-    href: "/us/collections/mens-suede-jackets",
+    href: `/${countryCode}/collections/mens-suede-jackets`,
   },
 
 
@@ -63,6 +64,8 @@ const colorCollectionMen = [
 
 
 export default function JacketColorCollection() {
+  const { countryCode } = useCountry()
+  
   return (
     <section className="w-full bg-[#2B2B2B] text-black relative overflow-hidden">
       <div className="absolute inset-0 opacity-5">
@@ -88,8 +91,8 @@ export default function JacketColorCollection() {
           tabHoverColor="hover:text-black"
           showTabs={false}
           categories={{
-            men: colorCollectionMen,
-            women: colorCollectionMen
+            men: getColorCollectionMen(countryCode),
+            women: getColorCollectionMen(countryCode)
           }}
         />
       </div>

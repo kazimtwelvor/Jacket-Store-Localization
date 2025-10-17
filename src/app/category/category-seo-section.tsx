@@ -5,6 +5,7 @@ import { ArrowRight, Tag, Truck, Award, ThumbsUp } from "lucide-react";
 import Link from "next/link";
 import type { Category } from "@/types";
 import HtmlRenderer from "../ui/html-renderer";
+import { useCountry } from "@/src/hooks/use-country";
 HtmlRenderer;
 interface CategorySEOSectionProps {
   category: Category;
@@ -17,6 +18,7 @@ const CategorySEOSection: React.FC<CategorySEOSectionProps> = ({
   categoryName,
   categoryDescription,
 }) => {
+  const { countryCode } = useCountry();
   const categoryContent = category?.categoryContent;
 
   const decodeHtml = (html: string) => {
@@ -217,7 +219,7 @@ const CategorySEOSection: React.FC<CategorySEOSectionProps> = ({
             ).map((blog: any, index: number) => (
               <Link
                 key={index}
-                href={`/us/blogs/${blog.blogSlug}`}
+                href={`/${countryCode}/blogs/${blog.blogSlug}`}
                 className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-full text-sm text-gray-700 transition-colors"
               >
                 {blog.blogTitle}

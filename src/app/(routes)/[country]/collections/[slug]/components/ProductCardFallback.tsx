@@ -4,6 +4,7 @@ import { cn } from "@/src/app/lib/utils"
 import { Heart, ShoppingCart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useCountry } from "@/src/hooks/use-country"
 
 interface ProductCardFallbackProps {
   product: Product
@@ -44,6 +45,7 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
   setOpenColorModal,
   productRefs,
 }) => {
+  const { countryCode } = useCountry();
   const isHovered = hoveredProduct === `grid-${product.id}-${index}`
   const hasMultipleImages = product.images && product.images.length > 1
   const availableSizes = product.sizeDetails || []
@@ -51,7 +53,7 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
   const availableColors = product.colorDetails || []
   
   const getProductUrl = (product: Product) => {
-    if (product.slug) return `/us/product/${product.slug}`
+    if (product.slug) return `/${countryCode}/product/${product.slug}`
     if (product.name) {
       const baseSlug = product.name
         .toLowerCase()
@@ -59,9 +61,9 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
         .replace(/\s+/g, "-")
         .replace(/-+/g, "-")
         .trim()
-      return product.id ? `/us/product/${baseSlug}-${product.id.substring(0, 8)}` : `/us/product/${baseSlug}`
+      return product.id ? `/${countryCode}/product/${baseSlug}-${product.id.substring(0, 8)}` : `/${countryCode}/product/${baseSlug}`
     }
-    return `/us/product/${product.id}`
+    return `/${countryCode}/product/${product.id}`
   }
 
   return (
@@ -119,7 +121,7 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
           onClick={(e) => {
             e.stopPropagation()
             // No-JS fallback: direct navigation to product page
-            window.location.href = `/us/product/${product.slug}`
+            window.location.href = `/${countryCode}/product/${product.slug}`
           }}
         >
           <Heart className="w-4 h-4 md:w-5 md:h-5 text-gray-700" />
@@ -131,7 +133,7 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
           onClick={(e) => {
             e.stopPropagation()
             // No-JS fallback: direct navigation to product page
-            window.location.href = `/us/product/${product.slug}`
+            window.location.href = `/${countryCode}/product/${product.slug}`
           }}
         >
           <ShoppingCart className="w-4 h-4" />

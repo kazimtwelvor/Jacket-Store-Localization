@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
-const BASE_URL = 'https://www.fineystjackets.com/us'
+const BASE_URL = 'https://www.fineystjackets.com'
+const SUPPORTED_COUNTRIES = ['us', 'uk', 'ca', 'au']
 
 // Static pages that should be included in sitemap
 const STATIC_PAGES = [
@@ -21,13 +22,15 @@ const STATIC_PAGES = [
 ]
 
 export async function GET() {
-  // Generate static pages sitemap XML
+  // Generate static pages sitemap XML with all countries
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-${STATIC_PAGES.map(page => `  <url>
-    <loc>${BASE_URL}${page}</loc>
+${STATIC_PAGES.flatMap(page => 
+  SUPPORTED_COUNTRIES.map(country => `  <url>
+    <loc>${BASE_URL}/${country}${page}</loc>
     <lastmod>${new Date().toISOString().replace('Z', '+00:00')}</lastmod>
-  </url>`).join('\n')}
+  </url>`)
+).join('\n')}
 </urlset>`
 
   return new NextResponse(sitemap, {

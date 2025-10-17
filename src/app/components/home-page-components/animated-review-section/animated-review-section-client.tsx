@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { avertaBlack, avertaBold } from "@/src/lib/fonts";
+import { useCountry } from "@/src/hooks/use-country";
 
 interface Review {
   id: number;
@@ -21,18 +22,19 @@ interface AnimatedReviewSectionClientProps {
 
 const ReviewCard = ({ review, showH3 = true }: { review: Review; showH3?: boolean }) => {
   const router = useRouter();
+  const { countryCode } = useCountry();
 
   return (
     <section
       className="bg-[#F6F6F6] p-8 rounded-lg shadow-md mx-6 my-6 flex flex-col justify-center h-[200px] sm:h-[220px] md:h-[240px] cursor-pointer hover:scale-105 hover:shadow-lg"
       style={{ minWidth: '350px', width: '55vw', maxWidth: '650px' }}
-      onClick={() => router.push("/us/reviews")}
+      onClick={() => router.push(`/${countryCode}/reviews`)}
       role="button"
       tabIndex={0}
       aria-label={`Read review by ${review.name}`}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
-          router.push("/us/reviews");
+          router.push(`/${countryCode}/reviews`);
         }
       }}
     >

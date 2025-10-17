@@ -13,6 +13,7 @@ import Currency from "@/src/app/ui/currency"
 import Button from "@/src/app/ui/button"
 import getProducts from "@/src/app/actions/get-products"
 import { toast } from "react-hot-toast"
+import { useCountry } from "@/src/hooks/use-country"
 
 const WishlistPage = () => {
   const [isMounted, setIsMounted] = useState(false)
@@ -21,6 +22,7 @@ const WishlistPage = () => {
   const wishlist = useWishlist()
   const { addToCart } = useCart()
   const router = useRouter()
+  const { countryCode } = useCountry()
 
   useEffect(() => {
     setIsMounted(true)
@@ -89,7 +91,7 @@ const WishlistPage = () => {
   }
 
   const handleContinueShopping = () => {
-    router.push("/us/shop")
+    router.push(`/${countryCode}/shop`)
   }
 
   if (wishlist.items.length === 0) {

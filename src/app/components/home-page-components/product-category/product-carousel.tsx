@@ -13,6 +13,7 @@ import { cn } from "@/src/app/lib/utils";
 import getProducts from "@/src/app/actions/get-products";
 import Currency from "@/src/app/ui/currency";
 import { avertaBlack, avertaBold } from "@/src/lib/fonts";
+import { useCountry } from "@/src/hooks/use-country";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -59,6 +60,7 @@ export default function ProductCarousel({
   items = [],
 }: ProductCarouselProps) {
   const router = useRouter();
+  const { countryCode } = useCountry();
   const [activeCategory, setActiveCategory] = useState<Category>("MEN");
   const [productItems, setProductItems] = useState<Product[]>(items);
   const [loading, setLoading] = useState(true);
@@ -353,7 +355,7 @@ export default function ProductCarousel({
                           }}
                         >
                           {isCenter ? (
-                            <Link href={`/us/product/${product.slug}`}>
+                            <Link href={`/${countryCode}/product/${product.slug}`}>
                               <img
                                 src={getImageUrl(product)}
                                 alt={product.name}
@@ -465,7 +467,7 @@ export default function ProductCarousel({
                             isJumping ? { duration: 0 } : SPRING_OPTIONS
                           }
                         >
-                          <Link href={`/us/product/${product.slug}`}>
+                          <Link href={`/${countryCode}/product/${product.slug}`}>
                             <div
                               className="relative group overflow-hidden bg-gray-100"
                               style={{ aspectRatio: "280/420" }}
