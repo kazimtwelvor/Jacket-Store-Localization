@@ -3,15 +3,21 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
+import { FitGuideData } from "@/src/app/(routes)/[country]/size-guide/data/size-guide-data-by-country"
 
-export default function FitGuide() {
+interface FitGuideProps {
+  fitGuideData?: FitGuideData
+}
+
+export default function FitGuide({ fitGuideData }: FitGuideProps) {
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  const fitTypes = [
+  // Use dynamic data if provided, otherwise fall back to static data
+  const fitTypes = fitGuideData?.fitTypes || [
     {
       title: "Slim Fit",
       description:
@@ -46,9 +52,9 @@ export default function FitGuide() {
     return (
       <div className="space-y-8">
         <div className="mb-8">
-          <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">Fit Guide</h3>
+          <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">{fitGuideData?.title || "Fit Guide"}</h3>
           <p className="text-muted-foreground max-w-3xl">
-            Understand the different fits we offer to find the style that suits you best.
+            {fitGuideData?.description || "Understand the different fits we offer to find the style that suits you best."}
           </p>
         </div>
 
@@ -84,24 +90,16 @@ export default function FitGuide() {
         <div className="bg-muted/20 rounded-lg border p-6 mt-8">
           <h3 className="text-xl font-semibold mb-4">Fit Tips</h3>
           <ul className="space-y-2">
-            <li className="flex items-start">
-              <span className="text-primary mr-2">•</span>
-              <span className="text-muted-foreground">
-                If you're between sizes, size up for a relaxed fit or size down for a more fitted look.
-              </span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-primary mr-2">•</span>
-              <span className="text-muted-foreground">
-                Consider your body type when choosing a fit. Different fits flatter different body shapes.
-              </span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-primary mr-2">•</span>
-              <span className="text-muted-foreground">
-                Remember that fabrics with stretch will provide more give and comfort regardless of the fit.
-              </span>
-            </li>
+            {(fitGuideData?.tips || [
+              "If you're between sizes, size up for a relaxed fit or size down for a more fitted look.",
+              "Consider your body type when choosing a fit. Different fits flatter different body shapes.",
+              "Remember that fabrics with stretch will provide more give and comfort regardless of the fit."
+            ]).map((tip, index) => (
+              <li key={index} className="flex items-start">
+                <span className="text-primary mr-2">•</span>
+                <span className="text-muted-foreground">{tip}</span>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -116,9 +114,9 @@ export default function FitGuide() {
       viewport={{ once: true }}
       className="space-y-8"
     >
-      <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-white">Fit Guide</h3>
+      <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-white">{fitGuideData?.title || "Fit Guide"}</h3>
       <p className="text-[#666666] max-w-3xl mb-6">
-        Understand the different fits we offer to find the style that suits you best.
+        {fitGuideData?.description || "Understand the different fits we offer to find the style that suits you best."}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -160,24 +158,16 @@ export default function FitGuide() {
       <div className="bg-white rounded-lg border border-[#2b2b2b] p-6 mt-8">
         <h3 className="text-xl font-semibold mb-4 text-[#333333]">Fit Tips</h3>
         <ul className="space-y-2">
-          <li className="flex items-start">
-            <span className="text-white mr-2">•</span>
-            <span className="text-[#666666]">
-              If you're between sizes, size up for a relaxed fit or size down for a more fitted look.
-            </span>
-          </li>
-          <li className="flex items-start">
-            <span className="text-white mr-2">•</span>
-            <span className="text-[#666666]">
-              Consider your body type when choosing a fit. Different fits flatter different body shapes.
-            </span>
-          </li>
-          <li className="flex items-start">
-            <span className="text-white mr-2">•</span>
-            <span className="text-[#666666]">
-              Remember that fabrics with stretch will provide more give and comfort regardless of the fit.
-            </span>
-          </li>
+          {(fitGuideData?.tips || [
+            "If you're between sizes, size up for a relaxed fit or size down for a more fitted look.",
+            "Consider your body type when choosing a fit. Different fits flatter different body shapes.",
+            "Remember that fabrics with stretch will provide more give and comfort regardless of the fit."
+          ]).map((tip, index) => (
+            <li key={index} className="flex items-start">
+              <span className="text-white mr-2">•</span>
+              <span className="text-[#666666]">{tip}</span>
+            </li>
+          ))}
         </ul>
       </div>
     </motion.div>

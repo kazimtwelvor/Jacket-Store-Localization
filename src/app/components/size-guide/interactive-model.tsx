@@ -4,8 +4,13 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import SizeGuideCard from "./size-guide-card"
+import { InteractiveModelData } from "@/src/app/(routes)/[country]/size-guide/data/size-guide-data-by-country"
 
-export default function InteractiveModel() {
+interface InteractiveModelProps {
+  interactiveModelData?: InteractiveModelData
+}
+
+export default function InteractiveModel({ interactiveModelData }: InteractiveModelProps) {
   const [gender, setGender] = useState<"male" | "female">("female")
   const [bodyType, setBodyType] = useState<"slim" | "average" | "athletic" | "plus">("average")
   const [height, setHeight] = useState<"petite" | "average" | "tall">("average")
@@ -19,62 +24,68 @@ export default function InteractiveModel() {
     return `/placeholder.svg?height=600&width=400&query=fashion model ${gender} ${bodyType} ${height}`
   }
 
-  const bodyTypes = [
+  // Use dynamic data if provided, otherwise fall back to static data
+  const bodyTypes = interactiveModelData?.bodyTypes || [
     { id: "slim", label: "Slim" },
     { id: "average", label: "Average" },
     { id: "athletic", label: "Athletic" },
     { id: "plus", label: "Plus Size" },
   ]
 
-  const heights = [
+  const heights = interactiveModelData?.heights || [
     { id: "petite", label: "Petite (5'3\" and under)" },
     { id: "average", label: "Average (5'4\" - 5'8\")" },
     { id: "tall", label: "Tall (5'9\" and above)" },
   ]
 
   const getSizeRecommendation = () => {
-    if (gender === "female") {
-      if (bodyType === "slim") {
-        return "XS or S depending on height"
-      } else if (bodyType === "average") {
-        return "S or M depending on height"
-      } else if (bodyType === "athletic") {
-        return "M or L depending on muscle mass"
+    const key = `${gender}-${bodyType}`
+    return interactiveModelData?.sizeRecommendations?.[key] || (() => {
+      if (gender === "female") {
+        if (bodyType === "slim") {
+          return "XS or S depending on height"
+        } else if (bodyType === "average") {
+          return "S or M depending on height"
+        } else if (bodyType === "athletic") {
+          return "M or L depending on muscle mass"
+        } else {
+          return "L, XL, or XXL depending on measurements"
+        }
       } else {
-        return "L, XL, or XXL depending on measurements"
+        if (bodyType === "slim") {
+          return "S or M depending on height"
+        } else if (bodyType === "average") {
+          return "M or L depending on height"
+        } else if (bodyType === "athletic") {
+          return "L or XL depending on muscle mass"
+        } else {
+          return "XL, XXL, or 3XL depending on measurements"
+        }
       }
-    } else {
-      if (bodyType === "slim") {
-        return "S or M depending on height"
-      } else if (bodyType === "average") {
-        return "M or L depending on height"
-      } else if (bodyType === "athletic") {
-        return "L or XL depending on muscle mass"
-      } else {
-        return "XL, XXL, or 3XL depending on measurements"
-      }
-    }
+    })()
   }
 
   const getFitRecommendation = () => {
-    if (bodyType === "slim") {
-      return "Regular or slim fit for a tailored look. Avoid oversized fits unless going for a specific style."
-    } else if (bodyType === "average") {
-      return "Regular fit works well for most items. Slim fit for a more tailored look, relaxed for comfort."
-    } else if (bodyType === "athletic") {
-      return "Regular or relaxed fit to accommodate broader shoulders and chest. Look for stretch fabrics."
-    } else {
-      return "Relaxed or oversized fit for comfort. Look for stretch fabrics and avoid overly slim cuts."
-    }
+    return interactiveModelData?.fitRecommendations?.[bodyType] || (() => {
+      if (bodyType === "slim") {
+        return "Regular or slim fit for a tailored look. Avoid oversized fits unless going for a specific style."
+      } else if (bodyType === "average") {
+        return "Regular fit works well for most items. Slim fit for a more tailored look, relaxed for comfort."
+      } else if (bodyType === "athletic") {
+        return "Regular or relaxed fit to accommodate broader shoulders and chest. Look for stretch fabrics."
+      } else {
+        return "Relaxed or oversized fit for comfort. Look for stretch fabrics and avoid overly slim cuts."
+      }
+    })()
   }
 
   if (!isMounted) {
     return (
       <div className="space-y-8">
         <div className="mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-[#2b2b2b}">Interactive Size Finder</h2>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-[#2b2b2b]">{interactiveModelData?.title || "Interactive Size Finder"}</h2>
           <p className="text-[#666666] max-w-3xl">
-            Customize a model to match your body type and get personalized size recommendations.
+            {interactiveModelData?.description || "Customize a model to match your body type and get personalized size recommendations."}
           </p>
         </div>
 
@@ -233,8 +244,7 @@ export default function InteractiveModel() {
 
                   <div className=" p-3 rounded-md mt-auto border border-[#F6F6F6]">
                     <p className="text-sm text-black">
-                      <strong className="text-black">Note:</strong> These are general recommendations. For the most
-                      accurate fit, always refer to the specific product's size chart and take your actual measurements.
+                      <strong className="text-black">Note:</strong> {interactiveModelData?.note || "These are general recommendations. For the most accurate fit, always refer to the specific product's size chart and take your actual measurements."}
                     </p>
                   </div>
                 </div>
@@ -255,9 +265,9 @@ export default function InteractiveModel() {
       className="space-y-8"
     >
       <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-black">
-        Interactive Size Visualization
+        {interactiveModelData?.title || "Interactive Size Visualization"}
       </h2>
-      <p className="text-[#666666] max-w-3xl mb-6">Visualize how different sizes look on different body types.</p>
+      <p className="text-[#666666] max-w-3xl mb-6">{interactiveModelData?.description || "Visualize how different sizes look on different body types."}</p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1 space-y-6">
@@ -370,8 +380,7 @@ export default function InteractiveModel() {
 
                 <div className="bg-[#F6F6F6] p-3 rounded-md mt-auto border border-black">
                   <p className="text-sm text-[#333333]">
-                    <strong className="text-[#2b2b2b}">Note:</strong> These are general recommendations. For the most
-                    accurate fit, always refer to the specific product's size chart and take your actual measurements.
+                    <strong className="text-[#2b2b2b]">Note:</strong> {interactiveModelData?.note || "These are general recommendations. For the most accurate fit, always refer to the specific product's size chart and take your actual measurements."}
                   </p>
                 </div>
               </div>

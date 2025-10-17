@@ -4,8 +4,13 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { useSizeGuideContext } from "./size-guide-context"
+import { MeasurementGuideData } from "@/src/app/(routes)/[country]/size-guide/data/size-guide-data-by-country"
 
-export default function MeasurementGuide() {
+interface MeasurementGuideProps {
+  measurementGuideData?: MeasurementGuideData
+}
+
+export default function MeasurementGuide({ measurementGuideData }: MeasurementGuideProps) {
   const { unit } = useSizeGuideContext()
   const [isMounted, setIsMounted] = useState(false)
 
@@ -13,7 +18,7 @@ export default function MeasurementGuide() {
     setIsMounted(true)
   }, [])
 
-  const measurementSteps = [
+  const measurementSteps = measurementGuideData?.measurementSteps || [
     {
       title: "Chest / Bust",
       description:
@@ -38,7 +43,7 @@ export default function MeasurementGuide() {
     },
   ]
 
-  const tips = [
+  const tips = measurementGuideData?.tips || [
     "Use a soft measuring tape, not a metal one.",
     "Wear minimal clothing or measure directly against your skin.",
     "Stand straight with feet together when taking measurements.",
@@ -51,9 +56,9 @@ export default function MeasurementGuide() {
     return (
       <div className="space-y-8">
         <div className="mb-8">
-          <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">How to Measure</h3>
+          <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">{measurementGuideData?.title || "How to Measure"}</h3>
           <p className="text-muted-foreground max-w-3xl">
-            Follow these simple steps to take accurate measurements for the perfect fit.
+            {measurementGuideData?.description || "Follow these simple steps to take accurate measurements for the perfect fit."}
           </p>
         </div>
 
@@ -94,9 +99,9 @@ export default function MeasurementGuide() {
       viewport={{ once: true }}
       className="space-y-8"
     >
-      <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-black ">How to Measure</h3>
+      <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-black ">{measurementGuideData?.title || "How to Measure"}</h3>
       <p className="text-[#666666] max-w-3xl mb-6">
-        Follow these simple steps to take accurate measurements for the perfect fit.
+        {measurementGuideData?.description || "Follow these simple steps to take accurate measurements for the perfect fit."}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

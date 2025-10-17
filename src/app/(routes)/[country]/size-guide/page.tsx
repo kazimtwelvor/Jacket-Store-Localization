@@ -1,13 +1,18 @@
 import type { Metadata } from "next"
 import SizeGuideContextProvider from "@/src/app/components/size-guide/size-guide-context"
-import SizeGuideClientLayout from "@/src/app/components/size-guide/size-guide-client-layout"
+import SizeGuideClientDynamic from "./size-guide-client-dynamic"
 
-export const metadata: Metadata = {
+export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
+  const { country } = await params
+  const countryCode = country.toLowerCase()
+
+  return {
     title: "Complete Size Guide for Perfect Fit | Fineyst",
     description: "Find your perfect fit with our comprehensive size guide for all clothing categories.",
     alternates: {
-        canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fineystjackets.com/us'}/size-guide`
+      canonical: `https://www.fineystjackets.com/${countryCode}/size-guide`
     }
+  }
 }
 
 export default function SizeGuidePage() {
@@ -15,7 +20,7 @@ export default function SizeGuidePage() {
         <>
             <h1 className="sr-only">Complete Size Guide for Jackets & Outerwear</h1>
             <SizeGuideContextProvider>
-                <SizeGuideClientLayout />
+                <SizeGuideClientDynamic />
             </SizeGuideContextProvider>
         </>
     )

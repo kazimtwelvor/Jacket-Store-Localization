@@ -1,10 +1,15 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { FAQData } from "@/src/app/(routes)/[country]/size-guide/data/size-guide-data-by-country"
 
-export default function SizeFAQ() {
+interface SizeFAQProps {
+  faqData?: FAQData
+}
 
-  const faqs = [
+export default function SizeFAQ({ faqData }: SizeFAQProps) {
+
+  const faqs = faqData?.faqs || [
     {
       question: "How do I know which size to choose?",
       answer:
@@ -55,8 +60,8 @@ export default function SizeFAQ() {
       viewport={{ once: true }}
       className="space-y-8"
     >
-      <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-[#2b2b2b]">Frequently Asked Questions</h2>
-      <p className="text-[#666666] max-w-3xl mb-6">Find answers to common questions about sizing and fit.</p>
+      <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3 text-[#2b2b2b]">{faqData?.title || "Frequently Asked Questions"}</h2>
+      <p className="text-[#666666] max-w-3xl mb-6">{faqData?.description || "Find answers to common questions about sizing and fit."}</p>
 
       <div className="bg-white rounded-lg border border-[#2b2b2b] shadow-sm overflow-hidden">
         <div className="divide-y">
@@ -94,14 +99,14 @@ export default function SizeFAQ() {
         </div>
         <div>
           <p className="text-sm text-[#666666]">
-            Still have questions about finding your perfect size? Our customer service team is here to help! Contact us
+            {faqData?.contactInfo?.text || "Still have questions about finding your perfect size? Our customer service team is here to help!"} Contact us
             at{" "}
-            <a href="mailto:info@fineystjackets.com" className="text-[#2b2b2b] underline">
-            info@fineystjackets.com
+            <a href={`mailto:${faqData?.contactInfo?.email || "info@fineystjackets.com"}`} className="text-[#2b2b2b] underline">
+            {faqData?.contactInfo?.email || "info@fineystjackets.com"}
             </a>{" "}
             or call us at{" "}
-            <a href="tel:+18888400885" className="text-[#2b2b2b] underline">
-            +1 (888) 840-0885
+            <a href={`tel:${faqData?.contactInfo?.phone || "+18888400885"}`} className="text-[#2b2b2b] underline">
+            {faqData?.contactInfo?.phone || "+1 (888) 840-0885"}
             </a>
             .
           </p>

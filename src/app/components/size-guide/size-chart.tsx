@@ -3,8 +3,13 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useSizeGuideContext } from "./size-guide-context"
 import SizeGuideTable from "./size-guide-table"
+import { SizeChartData } from "@/src/app/(routes)/[country]/size-guide/data/size-guide-data-by-country"
 
-export default function SizeChart() {
+interface SizeChartProps {
+  sizeChartData?: SizeChartData
+}
+
+export default function SizeChart({ sizeChartData }: SizeChartProps) {
   const { unit, setUnit } = useSizeGuideContext()
   const [category, setCategory] = useState("mens")
   const [isMounted, setIsMounted] = useState(false)
@@ -19,7 +24,7 @@ export default function SizeChart() {
     forceUpdate({})
   }, [unit])
 
-  const categories = [
+  const categories = sizeChartData?.categories || [
     { id: "mens", label: "Men's Clothing" },
     { id: "womens", label: "Women's Clothing" },
     { id: "kids", label: "Kids' Clothing" },
@@ -27,7 +32,7 @@ export default function SizeChart() {
     { id: "accessories", label: "Accessories" },
   ]
 
-  const mensClothingSizes = [
+  const mensClothingSizes = sizeChartData?.mensClothingSizes || [
     {
       size: "XS",
       chest: unit === "in" ? "34-36" : "86-91",
@@ -66,7 +71,7 @@ export default function SizeChart() {
     },
   ]
 
-  const womensClothingSizes = [
+  const womensClothingSizes = sizeChartData?.womensClothingSizes || [
     {
       size: "XS",
       bust: unit === "in" ? "32-33" : "81-84",
@@ -105,7 +110,7 @@ export default function SizeChart() {
     },
   ]
 
-  const kidsClothingSizes = [
+  const kidsClothingSizes = sizeChartData?.kidsClothingSizes || [
     {
       size: "2T",
       height: unit === "in" ? "33-35" : "84-89",
@@ -144,7 +149,7 @@ export default function SizeChart() {
     },
   ]
 
-  const footwearSizes = [
+  const footwearSizes = sizeChartData?.footwearSizes || [
     { us: "6", uk: "5", eu: "39", jp: "24", cm: "23.5" },
     { us: "7", uk: "6", eu: "40", jp: "25", cm: "24.5" },
     { us: "8", uk: "7", eu: "41", jp: "26", cm: "25.5" },
@@ -154,7 +159,7 @@ export default function SizeChart() {
     { us: "12", uk: "11", eu: "45", jp: "30", cm: "29.5" },
   ]
 
-  const accessoriesSizes = [
+  const accessoriesSizes = sizeChartData?.accessoriesSizes || [
     { type: "Belts", size: "S", measurement: unit === "in" ? "30-32" : "76-81" },
     { type: "Belts", size: "M", measurement: unit === "in" ? "34-36" : "86-91" },
     { type: "Belts", size: "L", measurement: unit === "in" ? "38-40" : "97-102" },
@@ -270,8 +275,7 @@ export default function SizeChart() {
         </div>
 
         <p className="text-sm text-[#666666]">
-          Note: These measurements are body measurements, not garment measurements. For a more relaxed fit, we recommend
-          sizing up.
+          {sizeChartData?.note || "Note: These measurements are body measurements, not garment measurements. For a more relaxed fit, we recommend sizing up."}
         </p>
       </div>
     )
@@ -334,8 +338,7 @@ export default function SizeChart() {
       </div>
 
       <p className="text-sm text-[#666666]">
-        Note: These measurements are body measurements, not garment measurements. For a more relaxed fit, we recommend
-        sizing up.
+        {sizeChartData?.note || "Note: These measurements are body measurements, not garment measurements. For a more relaxed fit, we recommend sizing up."}
       </p>
     </motion.div>
   )
