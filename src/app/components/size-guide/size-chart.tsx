@@ -146,9 +146,9 @@ export default function SizeChart({ sizeChartData }: SizeChartProps) {
     sizeChartData.kidsClothingSizes.map(size => ({
       ...size,
       height: unit === "in" ? size.height : convertMeasurements(size.height),
-      weight: unit === "in" ? size.weight : size.weight.replace("lbs", "kg").replace(/\d+-\d+/, (match) => {
-        const [min, max] = match.split("-").map(Number)
-        return `${Math.round(min * 0.45)}-${Math.round(max * 0.45)}`
+      weight: unit === "in" ? size.weight : size.weight.replace(/\d+-\d+ lbs/, (match) => {
+        const [min, max] = match.replace(" lbs", "").split("-").map(Number)
+        return `${Math.round(min * 0.45)}-${Math.round(max * 0.45)} kg`
       }),
       chest: unit === "in" ? size.chest : convertMeasurements(size.chest)
     })) : [
