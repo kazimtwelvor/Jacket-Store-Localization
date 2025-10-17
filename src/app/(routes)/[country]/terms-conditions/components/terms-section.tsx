@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, CheckCircle } from "lucide-react"
-import type { TermsSection } from "../data/terms-data"
+import type { TermsSection } from "../data/terms-data-by-country"
 
 interface TermsSectionProps {
   sectionId: string

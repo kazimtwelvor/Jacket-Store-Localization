@@ -4,19 +4,10 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { ChevronRight, Menu, X, Check } from "lucide-react"
 
+import { TermsData } from "../data/terms-data-by-country"
+
 interface TermsNavigationProps {
-  termsData: Record<
-    string,
-    {
-      title: string
-      content: string[]
-      subsections?: {
-        title: string
-        content: string[]
-        listItems?: string[]
-      }[]
-    }
-  >
+  termsData: TermsData
   activeSection: string
   completedSections: string[]
   scrollToSection: (sectionId: string) => void
@@ -37,7 +28,7 @@ export default function TermsNavigation({
 
   // Calculate completion percentage - exactly 7% per section
   const completedCount = completedSections.length
-  const totalSections = Object.keys(termsData).length
+  const totalSections = Object.keys(termsData.sections).length
   const completionPercentage = completedCount >= totalSections ? 100 : completedCount * 7
 
   // Close mobile drawer when section is selected
@@ -94,7 +85,7 @@ export default function TermsNavigation({
 
           <nav>
             <ul className="space-y-1">
-              {Object.entries(termsData).map(([sectionId, section]) => {
+              {Object.entries(termsData.sections).map(([sectionId, section]) => {
                 const isCompleted = completedSections.includes(sectionId)
                 const isActive = activeSection === sectionId
 
@@ -143,7 +134,7 @@ export default function TermsNavigation({
 
           <nav>
             <ul className="space-y-1">
-              {Object.entries(termsData).map(([sectionId, section]) => {
+              {Object.entries(termsData.sections).map(([sectionId, section]) => {
                 const isCompleted = completedSections.includes(sectionId)
                 const isActive = activeSection === sectionId
 

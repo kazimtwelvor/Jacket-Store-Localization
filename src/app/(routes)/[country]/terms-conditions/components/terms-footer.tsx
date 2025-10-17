@@ -4,8 +4,13 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { FileText, Shield, HelpCircle } from "lucide-react"
+import { TermsData } from "../data/terms-data-by-country"
 
-export default function TermsFooter() {
+interface TermsFooterProps {
+  termsData: TermsData
+}
+
+export default function TermsFooter({ termsData }: TermsFooterProps) {
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {

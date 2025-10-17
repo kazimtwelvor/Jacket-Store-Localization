@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
+import { TermsData } from "../data/terms-data-by-country"
 
 interface TermsHeroProps {
+  termsData?: TermsData
   completionPercentage?: number
 }
 
-export default function TermsHero({ completionPercentage }: TermsHeroProps) {
+export default function TermsHero({ termsData, completionPercentage }: TermsHeroProps) {
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -28,10 +30,9 @@ export default function TermsHero({ completionPercentage }: TermsHeroProps) {
 
         <div className="container mx-auto px-4 py-12 md:py-20 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
-            <p className="text-3xl md:text-5xl font-bold mb-4 text-black pt-8 md:pt-0">Terms & Conditions</p>
+            <p className="text-3xl md:text-5xl font-bold mb-4 text-black pt-8 md:pt-0">{termsData?.title || "Terms & Conditions"}</p>
             <p className="text-lg text-[#666666] mb-8 max-w-3xl mx-auto">
-              Our commitment to transparency and fairness. These terms outline our relationship and responsibilities to
-              each other.
+              {termsData?.description || "Our commitment to transparency and fairness. These terms outline our relationship and responsibilities to each other."}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-8">
@@ -57,8 +58,8 @@ export default function TermsHero({ completionPercentage }: TermsHeroProps) {
                   </div>
                 </div>
                 <div className="text-left">
-                  <span className="font-semibold text-black">Last Updated</span>
-                  <p className="text-sm text-[#666666]">April 20, 2025</p>
+                <span className="font-semibold text-black">Last Updated</span>
+                <p className="text-sm text-[#666666]">{termsData?.lastUpdated || "April 20, 2025"}</p>
                 </div>
               </div>
 
@@ -105,10 +106,9 @@ export default function TermsHero({ completionPercentage }: TermsHeroProps) {
       <div className="container mx-auto px-4 py-12 md:py-20 relative z-10">
         <div className="max-w-5xl mx-auto text-center">
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
-            <p className="text-3xl md:text-5xl font-bold mb-4 text-[#2b2b2b] pt-8 md:pt-0">Terms & Conditions</p>
+            <p className="text-3xl md:text-5xl font-bold mb-4 text-[#2b2b2b] pt-8 md:pt-0">{termsData?.title || "Terms & Conditions"}</p>
             <p className="text-lg text-[#666666] mb-8 max-w-3xl mx-auto">
-              Our commitment to transparency and fairness. These terms outline our relationship and responsibilities to
-              each other.
+              {termsData?.description || "Our commitment to transparency and fairness. These terms outline our relationship and responsibilities to each other."}
             </p>
           </motion.div>
 
@@ -136,7 +136,7 @@ export default function TermsHero({ completionPercentage }: TermsHeroProps) {
               </div>
               <div className="text-left">
                 <span className="font-semibold text-[#333333]">Last Updated</span>
-                <p className="text-sm text-[#666666]">April 20, 2025</p>
+                <p className="text-sm text-[#666666]">{termsData?.lastUpdated || "April 20, 2025"}</p>
               </div>
             </div>
 

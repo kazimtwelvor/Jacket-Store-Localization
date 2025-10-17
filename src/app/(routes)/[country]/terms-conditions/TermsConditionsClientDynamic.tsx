@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { ChevronRight, ArrowUp } from "lucide-react"
@@ -8,18 +8,25 @@ import TermsHero from "./components/terms-hero"
 import TermsSection from "./components/terms-section"
 import TermsNavigation from "./components/terms-navigation"
 import TermsFooter from "./components/terms-footer"
-import { termsData } from "./data/terms-data"
-import type { TermsData as OriginalTermsData } from "./data/terms-data"
+import { useCountry } from "@/src/hooks/use-country"
+import { getTermsData, TermsData } from "./data/terms-data-by-country"
 
-export default function TermsConditionsClient() {
-  const [activeSection, setActiveSection] = useState("introduction")
+interface TermsConditionsClientDynamicProps {
+  initialData?: TermsData
+}
+
+export default function TermsConditionsClientDynamic({ initialData }: TermsConditionsClientDynamicProps) {
+  const { countryCode } = useCountry()
+  const [activeSection, setActiveSection] = useState("definitions")
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [completedSections, setCompletedSections] = useState<string[]>([])
-  const [expanded, setExpanded] = useState<string[]>(["introduction"])
+  const [expanded, setExpanded] = useState<string[]>(["definitions"])
   const [sectionVisibility, setSectionVisibility] = useState<{ [key: string]: number }>({})
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
   const [isMounted, setIsMounted] = useState(false)
-  const allSections = Object.keys(termsData)
+
+  const termsData = initialData || getTermsData(countryCode)
+  const allSections = useMemo(() => Object.keys(termsData.sections), [termsData.sections])
 
   useEffect(() => {
     setIsMounted(true)
@@ -28,7 +35,7 @@ export default function TermsConditionsClient() {
       initialVisibility[section] = 0
     })
     setSectionVisibility(initialVisibility)
-  }, [])
+  }, [allSections])
 
   useEffect(() => {
     if (!isMounted) return
@@ -40,7 +47,7 @@ export default function TermsConditionsClient() {
         setShowScrollTop(false)
       }
 
-      const updatedVisibility = { ...sectionVisibility }
+      const updatedVisibility: { [key: string]: number } = {}
       let currentActiveSection = activeSection
 
       allSections.forEach((sectionId) => {
@@ -48,18 +55,22 @@ export default function TermsConditionsClient() {
         if (ref) {
           const rect = ref.getBoundingClientRect()
           const sectionHeight = rect.height
+          const viewportHeight = window.innerHeight
+          const sectionTop = rect.top
+          const sectionBottom = rect.bottom
 
-          const visibleTop = Math.max(0, rect.top)
-          const visibleBottom = Math.min(window.innerHeight, rect.bottom)
-          const visibleHeight = Math.max(0, visibleBottom - visibleTop)
-
-          const visibilityPercentage = Math.min(100, Math.round((visibleHeight / sectionHeight) * 100))
-
-          if (visibilityPercentage > updatedVisibility[sectionId]) {
-            updatedVisibility[sectionId] = visibilityPercentage
+          // Calculate visibility percentage
+          let visibility = 0
+          if (sectionTop < viewportHeight && sectionBottom > 0) {
+            const visibleTop = Math.max(0, -sectionTop)
+            const visibleBottom = Math.min(sectionHeight, viewportHeight - sectionTop)
+            visibility = Math.max(0, (visibleBottom - visibleTop) / sectionHeight)
           }
 
-          if (rect.top <= 150 && rect.bottom > 150) {
+          updatedVisibility[sectionId] = visibility
+
+          // Update active section based on visibility
+          if (visibility > 0.3 && sectionTop < viewportHeight / 2) {
             currentActiveSection = sectionId
           }
         }
@@ -68,49 +79,41 @@ export default function TermsConditionsClient() {
       setSectionVisibility(updatedVisibility)
       setActiveSection(currentActiveSection)
 
-      const newCompletedSections = allSections.filter((section) => updatedVisibility[section] >= 90)
+      // Mark sections as completed when they're fully visible
+      const newCompletedSections = Object.entries(updatedVisibility)
+        .filter(([_, visibility]) => visibility > 0.8)
+        .map(([sectionId, _]) => sectionId)
 
-      if (
-        newCompletedSections.length !== completedSections.length ||
-        !newCompletedSections.every((section) => completedSections.includes(section))
-      ) {
-        setCompletedSections(newCompletedSections)
-      }
+      setCompletedSections(newCompletedSections)
     }
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [completedSections, sectionVisibility, activeSection, isMounted, allSections])
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() 
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [isMounted, allSections])
+
+  const handleSectionClick = (sectionId: string) => {
+    setActiveSection(sectionId)
+    const ref = sectionRefs.current[sectionId]
+    if (ref) {
+      ref.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
 
   const scrollToSection = (sectionId: string) => {
-    const section = sectionRefs.current[sectionId]
-    if (section) {
-      if (!expanded.includes(sectionId)) {
-        setExpanded((prev) => [...prev, sectionId])
-      }
-
-      window.scrollTo({
-        top: section.offsetTop - 100,
-        behavior: "smooth",
-      })
-
-      setActiveSection(sectionId)
+    const ref = sectionRefs.current[sectionId]
+    if (ref) {
+      ref.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    })
-  }
-
-  const toggleExpand = (sectionId: string) => {
-    if (expanded.includes(sectionId)) {
-      setExpanded((prev) => prev.filter((id) => id !== sectionId))
-    } else {
-      setExpanded((prev) => [...prev, sectionId])
-    }
+  const toggleExpanded = (sectionId: string) => {
+    setExpanded(prev => 
+      prev.includes(sectionId) 
+        ? prev.filter(id => id !== sectionId)
+        : [...prev, sectionId]
+    )
   }
 
   const totalSections = allSections.length
@@ -159,7 +162,7 @@ export default function TermsConditionsClient() {
                   </div>
                   <div className="text-left">
                     <span className="font-semibold  text-black">Last Updated</span>
-                    <p className="text-sm text-black">April 20, 2025</p>
+                    <p className="text-sm text-black">{termsData.lastUpdated}</p>
                   </div>
                 </div>
 
@@ -197,7 +200,7 @@ export default function TermsConditionsClient() {
               <span className="text-xl font-bold mb-4 text-black">Table of Contents</span>
               <nav>
                 <ul className="space-y-2">
-                  {Object.entries(termsData).map(([sectionId, section]) => (
+                  {Object.entries(termsData.sections).map(([sectionId, section]) => (
                     <li key={sectionId} className="p-2 rounded-md">
                       <div className="flex items-center">
                         <div className="h-4 w-4 rounded-full mr-2 flex-shrink-0 bg-[#2b2b2b]" />
@@ -215,7 +218,7 @@ export default function TermsConditionsClient() {
           <div className="lg:w-3/4 w-full">
             <div className="bg-white rounded-lg shadow-sm border  border-[#2b2b2b] p-6 md:p-8">
               <div className="prose prose-slate max-w-none">
-                <p className="text-black mb-6">Last updated: April 20, 2025</p>
+                <p className="text-black mb-6">Last updated: {termsData.lastUpdated}</p>
 
                 <div className="mb-8">
                   <p className="text-[#333333]">
@@ -341,11 +344,11 @@ export default function TermsConditionsClient() {
 
   return (
     <div className="min-h-screen bg-white">
-      <TermsHero completionPercentage={completionPercentage} />
+      <TermsHero termsData={termsData} completionPercentage={completionPercentage} />
 
       <div className="container mx-auto px-4 py-12 flex flex-col lg:flex-row gap-8">
         <TermsNavigation
-          termsData={termsData as any}
+          termsData={termsData}
           activeSection={activeSection}
           completedSections={completedSections}
           scrollToSection={scrollToSection}
@@ -360,7 +363,7 @@ export default function TermsConditionsClient() {
               className="prose prose-slate max-w-none"
             >
               <span className="text-3xl font-bold mb-8text-black">Introduction</span>
-              <p className="text-black mb-6">Last updated: April 20, 2025</p>
+              <p className="text-black mb-6">Last updated: {termsData.lastUpdated}</p>
 
               <div className="mb-8">
                 <p className="text-[#333333]">
@@ -369,7 +372,7 @@ export default function TermsConditionsClient() {
                 </p>
               </div>
 
-              {Object.entries(termsData).map(([sectionId, section]) => (
+              {Object.entries(termsData.sections).map(([sectionId, section]) => (
                 <div
                   key={sectionId}
                   ref={(el) => {
@@ -384,7 +387,7 @@ export default function TermsConditionsClient() {
                     isActive={activeSection === sectionId}
                     isCompleted={completedSections.includes(sectionId)}
                     isExpanded={expanded.includes(sectionId)}
-                    toggleExpand={() => toggleExpand(sectionId)}
+                    toggleExpand={() => toggleExpanded(sectionId)}
                   />
                 </div>
               ))}
@@ -414,7 +417,7 @@ export default function TermsConditionsClient() {
             </motion.div>
           </div>
 
-          <TermsFooter termsData={termsData as any} />
+          <TermsFooter termsData={termsData} />
         </div>
       </div>
 
@@ -425,7 +428,7 @@ export default function TermsConditionsClient() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.2 }}
-            onClick={scrollToTop}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="fixed bottom-8 right-8 bg-[#2b2b2b] text-white p-3 rounded-full shadow-lg hover:bg-[#2b2b2b]/90 transition-colors"
             aria-label="Scroll to top"
           >
