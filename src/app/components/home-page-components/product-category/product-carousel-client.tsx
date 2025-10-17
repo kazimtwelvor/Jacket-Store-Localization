@@ -13,6 +13,8 @@ import { cn } from "@/src/app/lib/utils";
 import Currency from "@/src/app/ui/currency";
 import { avertaBlack, avertaBold } from "@/src/lib/fonts";
 import Link from "next/link";
+import { useCountry } from "@/src/hooks/use-country";
+
 
 export interface Product {
   id: string;
@@ -74,6 +76,7 @@ export default function ProductCarouselClient({
   const [touchStartY, setTouchStartY] = useState<number | null>(null);
   const [isScrolling, setIsScrolling] = useState(false);
 
+  const { countryCode } = useCountry();
   // Get products based on active category
   const productItems = activeCategory === "MEN" ? menProducts : womenProducts;
 
@@ -305,7 +308,7 @@ export default function ProductCarouselClient({
                           }}
                         >
                           {isCenter ? (
-                            <Link href={`/us/product/${product.slug}`}>
+                            <Link href={`/${countryCode}/product/${product.slug}`}>
                               <img
                                 src={getImageUrl(product)}
                                 alt={product.name}
@@ -417,7 +420,7 @@ export default function ProductCarouselClient({
                             isJumping ? { duration: 0 } : SPRING_OPTIONS
                           }
                         >
-                          <Link href={`/us/product/${product.slug}`}>
+                          <Link href={`/${countryCode}/product/${product.slug}`}>
                             <div
                               className="relative group overflow-hidden bg-gray-100"
                               style={{ aspectRatio: "280/420" }}

@@ -580,7 +580,20 @@ export const sizeGuideDataByCountry: SizeGuideDataMap = {
 
 export function getSizeGuideData(countryCode: string): SizeGuideData {
   const normalizedCountryCode = countryCode.toLowerCase()
-  return sizeGuideDataByCountry[normalizedCountryCode] || sizeGuideDataByCountry.us
+  const baseData = sizeGuideDataByCountry[normalizedCountryCode] || sizeGuideDataByCountry.us
+  
+  const updatedData = {
+    ...baseData,
+    cta: {
+      ...baseData.cta,
+      buttons: baseData.cta.buttons.map(button => ({
+        ...button,
+        href: button.href.replace('/us/', `/${normalizedCountryCode}/`)
+      }))
+    }
+  }
+  
+  return updatedData
 }
 
 export function getAvailableSizeGuideCountryCodes(): string[] {

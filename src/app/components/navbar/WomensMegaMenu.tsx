@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { X } from "lucide-react";
 import dynamic from "next/dynamic";
+import { useCountry } from "@/src/hooks/use-country";
 
 const MegaMenuCarousel = dynamic(() => import("./MegaMenuCarousal"), {
   ssr: false,
@@ -11,6 +12,7 @@ interface WomensMegaMenuProps {
 }
 
 export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
+  const { countryCode } = useCountry();
   return (
     <div className="fixed left-0 right-0 top-16 w-screen z-[9001]">
       <div className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl max-h-[80vh] overflow-y-auto mega-menu-scrollbar">
@@ -31,7 +33,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/collections/womens-leather-jackets"
+                    href={`/${countryCode}/collections/womens-leather-jackets`}
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -40,7 +42,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-fashion-leather-jackets"
+                    href={`/${countryCode}/collections/womens-fashion-leather-jackets`}
                     className="mega-menu-link text-gray-200 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -49,7 +51,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-leather-bomber-jackets"
+                    href={`/${countryCode}/collections/womens-leather-bomber-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -58,7 +60,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-leather-biker-jackets"
+                    href={`/${countryCode}/collections/womens-leather-biker-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -67,7 +69,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-suede-leather-jackets"
+                    href={`/${countryCode}/collections/womens-suede-leather-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -76,7 +78,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-leather-blazers"
+                    href={`/${countryCode}/collections/womens-leather-blazers`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -85,7 +87,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-leather-vests"
+                    href={`/${countryCode}/collections/womens-leather-vests`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -101,7 +103,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/collections/womens-shearling-coats"
+                    href={`/${countryCode}/collections/womens-shearling-coats`}
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -110,7 +112,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-trench-coats"
+                    href={`/${countryCode}/collections/womens-trench-coats`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -119,7 +121,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-winter-coats"
+                    href={`/${countryCode}/collections/womens-winter-coats`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -128,7 +130,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-rain-coats"
+                    href={`/${countryCode}/collections/womens-rain-coats`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -137,7 +139,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-puffer-jackets"
+                    href={`/${countryCode}/collections/womens-puffer-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -146,7 +148,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-quilted-jackets"
+                    href={`/${countryCode}/collections/womens-quilted-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -162,7 +164,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/collections/womens-cropped-jackets"
+                    href={`/${countryCode}/collections/womens-cropped-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -171,7 +173,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-pilot-jackets"
+                    href={`/${countryCode}/collections/womens-pilot-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -180,7 +182,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-varsity-jackets"
+                    href={`/${countryCode}/collections/womens-varsity-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -189,7 +191,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-letterman-jackets"
+                    href={`/${countryCode}/collections/womens-letterman-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -198,7 +200,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-denim-jackets"
+                    href={`/${countryCode}/collections/womens-denim-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -207,7 +209,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/womens-anorak-jackets"
+                    href={`/${countryCode}/collections/womens-anorak-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -223,7 +225,7 @@ export default function WomensMegaMenu({ onClose }: WomensMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/collections/womens-puffer-vests"
+                    href={`/${countryCode}/collections/womens-puffer-vests`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >

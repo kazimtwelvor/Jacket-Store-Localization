@@ -3,8 +3,10 @@
 import { useEffect, useState, useTransition, useRef, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useCountry } from "@/src/hooks/use-country";
 
 function RouteLoadingOverlayContent() {
+  const { countryCode } = useCountry();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +65,7 @@ function RouteLoadingOverlayContent() {
           return;
         }
 
-        if (url.pathname === "/us/") return;
+        if (url.pathname === `/${countryCode}/`) return;
 
         // Check for error pages in both current and target URLs
         if (
@@ -96,8 +98,8 @@ function RouteLoadingOverlayContent() {
         const fromPath = location.pathname + location.search + location.hash;
         if (toPath === fromPath) return;
         if (
-          url.pathname.startsWith("/us/collections/") &&
-          location.pathname.startsWith("/us/collections/") &&
+          url.pathname.startsWith(`/${countryCode}/collections/`) &&
+          location.pathname.startsWith(`/${countryCode}/collections/`) &&
           url.pathname === location.pathname
         )
           return;

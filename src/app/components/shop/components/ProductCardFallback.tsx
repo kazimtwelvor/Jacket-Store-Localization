@@ -5,6 +5,7 @@ import { Heart, ShoppingCart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { trackAddToWishlist } from "../../../lib/analytics"
+import { useCountry } from "@/src/hooks/use-country"
 
 interface ProductCardFallbackProps {
   product: Product
@@ -47,6 +48,7 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
   openColorModal,
   setOpenColorModal,
 }) => {
+  const { countryCode } = useCountry()
   const isHovered = hoveredProduct === `grid-${product.id}-${index}`
   const hasMultipleImages = product.images && product.images.length > 1
   const availableSizes = product?.sizeDetails || []
@@ -54,7 +56,7 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
   const availableColors = product?.colorDetails || []
   
   const getProductUrl = (product: Product) => {
-    if (product.slug) return `/us/product/${product.slug}`
+    if (product.slug) return `/${countryCode}/product/${product.slug}`
     if (product.name) {
       const baseSlug = product.name
         .toLowerCase()
@@ -62,9 +64,9 @@ export const ProductCardFallback: React.FC<ProductCardFallbackProps> = ({
         .replace(/\s+/g, "-")
         .replace(/-+/g, "-")
         .trim()
-      return product.id ? `/us/product/${baseSlug}-${product.id.substring(0, 8)}` : `/us/product/${baseSlug}`
+      return product.id ? `/${countryCode}/product/${baseSlug}-${product.id.substring(0, 8)}` : `/${countryCode}/product/${baseSlug}`
     }
-    return `/us/product/${product.id}`
+    return `/${countryCode}/product/${product.id}`
   }
 
   return (

@@ -5,7 +5,11 @@ interface CollectionSchemaProps {
   collectionSlug: string;
 }
 
+import { useCountry } from "@/src/hooks/use-country"; 
+
+
 export default function CollectionSchema({ collectionName, collectionSlug }: CollectionSchemaProps) {
+  const { countryCode } = useCountry();
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -14,19 +18,19 @@ export default function CollectionSchema({ collectionName, collectionSlug }: Col
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://www.fineystjackets.com/us"
+        "item": `https://www.fineystjackets.com/${countryCode}`
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Collections",
-        "item": "https://www.fineystjackets.com/us/collections"
+        "item": `https://www.fineystjackets.com/${countryCode}/collections`
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": collectionName,
-        "item": `https://www.fineystjackets.com/us/collections/${collectionSlug}`
+        "item": `https://www.fineystjackets.com/${countryCode}/collections/${collectionSlug}`
       }
     ]
   };
@@ -35,8 +39,8 @@ export default function CollectionSchema({ collectionName, collectionSlug }: Col
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Fineyst Jackets",
-    "url": "https://www.fineystjackets.com/us",
-    "logo": "https://www.fineystjackets.com/us/images/logo.webp",
+    "url": `https://www.fineystjackets.com/${countryCode}`,
+    "logo": `https://www.fineystjackets.com/${countryCode}/images/logo.webp`,
     "description": "Experience the finest quality and timeless design. Your destination for luxury jackets and outerwear.",
     "foundingDate": "2020",
     "address": {

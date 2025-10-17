@@ -3,8 +3,11 @@
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { LoadingBannerProps } from "./types"
+import { useCountry } from "@/src/hooks/use-country"
 
 export const LoadingBanner = ({ heroImages, currentImageIndex }: LoadingBannerProps) => {
+    const { countryCode } = useCountry()
+    
     return (
         <section
             className="w-full text-white overflow-hidden holiday-sale-banner relative will-change-transform z-5"
@@ -44,10 +47,10 @@ export const LoadingBanner = ({ heroImages, currentImageIndex }: LoadingBannerPr
                         UP TO <span className="font-bold">50%</span> OFF + CODE: STREET <span className="font-black">15</span>
                     </p>
                     <div className="flex justify-center gap-5 w-full">
-                        <Link href="/us/shop" aria-label="Shop men's collection">
+                        <Link href={`/${countryCode}/shop`} aria-label="Shop men's collection">
                             <span className="bg-white text-[#ffffffff] font-bold py-3 px-8 text-sm uppercase block">SHOP MEN</span>
                         </Link>
-                        <Link href="/us/shop" aria-label="Shop women's collection">
+                        <Link href={`/${countryCode}/shop`} aria-label="Shop women's collection">
                             <span className="bg-white text-[#2b2b2b] font-bold py-3 px-8 text-sm uppercase block">
                                 SHOP WOMEN
                             </span>
@@ -64,12 +67,12 @@ export const LoadingBanner = ({ heroImages, currentImageIndex }: LoadingBannerPr
                             UP TO <span className="font-black">50%</span> OFF + CODE: STREET<span className="font-black">15</span>
                         </p>
                         <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-5">
-                            <Link href="/us/shop" aria-label="Shop men's collection">
+                            <Link href={`/${countryCode}/shop`} aria-label="Shop men's collection">
                                 <span className="bg-white text-black font-bold py-4 px-8 md:px-10 text-sm md:text-base uppercase w-full sm:w-auto min-w-[180px] inline-block">
                                     Shop Men
                                 </span>
                             </Link>
-                            <Link href="/us/shop" aria-label="Shop women's collection">
+                            <Link href={`/${countryCode}/shop`} aria-label="Shop women's collection">
                                 <span className="bg-white text-black font-bold py-4 px-8 md:px-10 text-sm md:text-base uppercase w-full sm:w-auto min-w-[180px] inline-block">
                                     Shop Women
                                 </span>

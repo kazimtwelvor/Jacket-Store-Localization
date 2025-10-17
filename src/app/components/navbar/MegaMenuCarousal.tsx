@@ -7,43 +7,44 @@ import Link from "next/link"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { motion, useMotionValue, animate, AnimatePresence } from "framer-motion"    
 import { cn } from "../../lib/utils"
+import { useCountry } from "@/src/hooks/use-country"
 
-const carouselItems = [
+const getCarouselItems = (countryCode: string) => [
   {
     id: "gift-cards",
     title: "Gift Cards",
     imageUrl: "/images/mega-carousel-1.jpg",
-    href: "/gift-card",
+    href: `/${countryCode}/gift-card`,
   },
   {
     id: "inspiration",
     title: "Inspiration",
     imageUrl: "/images/mega-carousel-2.jpg",
-    href: "/inspiration",
+    href: `/${countryCode}/inspiration`,
   },
   {
     id: "boss-lines",
     title: "Boss Brand Lines",
     imageUrl: "/images/mega-carousel-3.jpg",
-    href: "/us/shop?brand=boss",
+    href: `/${countryCode}/shop?brand=boss`,
   },
   {
     id: "made-to-order",
     title: "Made to order",
     imageUrl: "/images/mega-carousel-4.jpg",
-    href: "/made-to-order",
+    href: `/${countryCode}/made-to-order`,
   },
   {
     id: "new-arrivals",
     title: "New Arrivals",
     imageUrl: "/images/mega-carousel-5.jpg",
-    href: "/us/shop?sort=newest",
+    href: `/${countryCode}/shop?sort=newest`,
   },
   {
     id: "mens-collection",
     title: "Men's Collection",
     imageUrl: "/images/mega-carousel-men.jpg",
-    href: "/us/shop?gender=men",
+    href: `/${countryCode}/shop?gender=men`,
   },
 ]
 
@@ -56,6 +57,8 @@ interface MegaMenuCarouselProps {
 }
 
 export default function MegaMenuCarousel({ theme = 'dark', showNavButtons = true }: MegaMenuCarouselProps) {
+  const { countryCode } = useCountry();
+  const carouselItems = getCarouselItems(countryCode);
   const containerRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const wasDragged = useRef(false)

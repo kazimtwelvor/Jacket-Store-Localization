@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useViewTracking } from "@/src/app/hooks/use-view-tracking";
 import { getStoreId, isTrackingEnabled } from "@/src/app/utils/store-config";
 import { trackViewContent } from "@/src/app/lib/analytics";
+import { useCountry } from "@/src/hooks/use-country";
 
 interface ProductPageClientProps {
   productId?: string;
@@ -12,12 +13,13 @@ interface ProductPageClientProps {
 }
 
 export default function ProductPageClient({ productId, product }: ProductPageClientProps) {
+  const { countryCode } = useCountry();
   const router = useRouter();
   const params = useParams();
   const slug = params?.slug as string;
   
   useEffect(() => {
-    if (typeof window !== 'undefined' && document.referrer.includes('/us/shop')) {
+    if (typeof window !== 'undefined' && document.referrer.includes(`/${countryCode}/shop`)) {
       sessionStorage.setItem('lastShopUrl', document.referrer);
     }
   }, []);

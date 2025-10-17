@@ -172,7 +172,7 @@ export default async function CountryHome({ params }: { params: Promise<{ countr
       </section>
       <WelcomeAccordionSection />
       <ProductCategoryServer countryCode={countryCode} />
-      <SignatureSectionServer />
+      <SignatureSectionServer countryCode={countryCode} />
       <ProductCarouselServer countryCode={countryCode} />
       <JacketColorCollectionServer countryCode={countryCode} />
       <AboutUsServer />

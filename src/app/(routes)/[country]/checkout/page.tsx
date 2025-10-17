@@ -1716,7 +1716,7 @@ const CheckoutPage = () => {
                           </Link>{" "}
                           and{" "}
                           <Link
-                            href="/us/privacy-policy"
+                            href={`/${countryCode}/privacy-policy`}
                             className="text-[#000000] hover:text-[#000000] underline font-medium"
                             target="_blank"
                           >

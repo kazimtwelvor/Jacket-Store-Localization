@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { X } from "lucide-react";
 import dynamic from "next/dynamic";
+import { useCountry } from "@/src/hooks/use-country";
 
 // const MegaMenuCarousel = dynamic(() => import("./MegaMenuCarousal"), {
 //   ssr: false,
@@ -11,6 +12,7 @@ interface MensMegaMenuProps {
 }
 
 export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
+  const { countryCode } = useCountry();
   return (
     <div className="fixed left-0 right-0 top-16 w-screen z-[9001]">
       <div className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl max-h-[80vh] overflow-y-auto mega-menu-scrollbar">
@@ -31,7 +33,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/collections/mens-leather-jackets"
+                    href={`/${countryCode}/collections/mens-leather-jackets`}
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -40,7 +42,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/leather-bomber-jacket-mens"
+                    href={`/${countryCode}/collections/leather-bomber-jacket-mens`}
                     className="mega-menu-link text-gray-200 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -49,7 +51,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/biker-jacket-men"
+                    href={`/${countryCode}/collections/biker-jacket-men`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -58,7 +60,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-aviator-jackets"
+                    href={`/${countryCode}/collections/mens-aviator-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -67,7 +69,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-hooded-leather-jackets"
+                    href={`/${countryCode}/collections/mens-hooded-leather-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -76,7 +78,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-suede-jackets"
+                    href={`/${countryCode}/collections/mens-suede-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -85,7 +87,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-leather-vests"
+                    href={`/${countryCode}/collections/mens-leather-vests`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -101,7 +103,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/collections/mens-duster-jackets"
+                    href={`/${countryCode}/collections/mens-duster-jackets`}
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -110,7 +112,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-long-leather-coats"
+                    href={`/${countryCode}/collections/mens-long-leather-coats`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -119,7 +121,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-shearling-coats"
+                    href={`/${countryCode}/collections/mens-shearling-coats`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -128,7 +130,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-winter-coats"
+                    href={`/${countryCode}/collections/mens-winter-coats`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -137,7 +139,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-puffer-jackets"
+                    href={`/${countryCode}/collections/mens-puffer-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -146,7 +148,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-fur-jackets"
+                    href={`/${countryCode}/collections/mens-fur-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -162,7 +164,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/collections/mens-varsity-jackets"
+                    href={`/${countryCode}/collections/mens-varsity-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -171,7 +173,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-letterman-jackets"
+                    href={`/${countryCode}/collections/mens-letterman-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -180,7 +182,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-denim-jackets"
+                    href={`/${countryCode}/collections/mens-denim-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -189,7 +191,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-leather-blazers"
+                    href={`/${countryCode}/collections/mens-leather-blazers`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -198,7 +200,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-lightweight-jackets"
+                    href={`/${countryCode}/collections/mens-lightweight-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -207,7 +209,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-soft-shell-jackets"
+                    href={`/${countryCode}/collections/mens-soft-shell-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -223,7 +225,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/collections/plus-size-leather-jackets"
+                    href={`/${countryCode}/collections/plus-size-leather-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -232,7 +234,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-puffer-vests"
+                    href={`/${countryCode}/collections/mens-puffer-vests`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -241,7 +243,7 @@ export default function MensMegaMenu({ onClose }: MensMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/collections/mens-brown-vintage-leather-jackets"
+                    href={`/${countryCode}/collections/mens-brown-vintage-leather-jackets`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >

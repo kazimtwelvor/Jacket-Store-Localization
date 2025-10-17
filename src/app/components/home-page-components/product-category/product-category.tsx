@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/src/app/lib/utils";
 import { avertaBold } from "@/src/lib/fonts";
+import { useCountry } from "@/src/hooks/use-country";
 
 interface Category {
   id: string;
@@ -15,105 +16,105 @@ interface Category {
   slug?: string;
 }
 
-const menCategories: Category[] = [
+const getMenCategories = (countryCode: string): Category[] => [
   {
     id: "leather-men",
     name: "LEATHER JACKETS",
     imageUrl: "/images/leather.webp",
-    href: "/us/collections/leather-bomber-jacket-mens",
+    href: `/${countryCode}/collections/leather-bomber-jacket-mens`,
   },
   {
     id: "puffer-men",
     name: "PUFFER JACKETS",
     imageUrl: "/images/category-carousel-men/Mens-Puffer.webp",
-    href: "/us/collections/mens-puffer-jackets",
+    href: `/${countryCode}/collections/mens-puffer-jackets`,
   },
   {
     id: "denim-men",
     name: "DENIM JACKETS",
     imageUrl: "/images/category-carousel-men/Mens-denim.webp",
-    href: "/us/collections/mens-denim-jackets",
+    href: `/${countryCode}/collections/mens-denim-jackets`,
   },
   {
     id: "suede-men",
     name: "SUEDE JACKETS",
     imageUrl: "/images/category-carousel-men/mens-suede.webp",
-    href: "/us/collections/mens-suede-jackets",
+    href: `/${countryCode}/collections/mens-suede-jackets`,
   },
   {
     id: "aviator-men",
     name: "AVIATOR JACKETS",
     imageUrl: "/images/category-carousel-men/mens-aviator.webp",
-    href: "/us/collections/mens-aviator-jackets",
+    href: `/${countryCode}/collections/mens-aviator-jackets`,
   },
   {
     id: "biker-men",
     name: "BIKER JACKETS",
     imageUrl: "/images/category-carousel-men/Mens-Biker.webp",
-    href: "/us/collections/biker-jacket-men",
+    href: `/${countryCode}/collections/biker-jacket-men`,
   },
   {
     id: "varsity-men",
     name: "VARSITY JACKETS",
     imageUrl: "/images/category-carousel-men/mens-varsity.webp",
-    href: "/us/collections/mens-varsity-jackets",
+    href: `/${countryCode}/collections/mens-varsity-jackets`,
   },
   {
     id: "letterman-men",
     name: "LETTERMAN JACKETS",
     imageUrl: "/images/letterman.webp",
-    href: "/us/collections/mens-aviator-jackets",
+    href: `/${countryCode}/collections/mens-aviator-jackets`,
   },
 ];
 
-const womenCategories: Category[] = [
+const getWomenCategories = (countryCode: string): Category[] => [
   {
     id: "leather-women",
     name: "LEATHER JACKETS",
     imageUrl: "/images/category-carousel-women/women-leather.webp",
-    href: "/us/collections/womens-leather-bomber-jackets",
+    href: `/${countryCode}/collections/womens-leather-bomber-jackets`,
   },
   {
     id: "puffer-women",
     name: "PUFFER JACKETS",
     imageUrl: "/images/category-carousel-women/women-puffer.webp",
-    href: "/us/collections/womens-puffer-vests",
+    href: `/${countryCode}/collections/womens-puffer-vests`,
   },
   {
     id: "denim-women",
     name: "DENIM JACKETS",
     imageUrl: "/images/category-carousel-women/women-denim.webp",
-    href: "/us/collections/womens-denim-jackets",
+    href: `/${countryCode}/collections/womens-denim-jackets`,
   },
   {
     id: "suede-women",
     name: "SUEDE JACKETS",
     imageUrl: "/images/category-carousel-women/women-suede.webp",
-    href: "/us/collections/womens-suede-leather-jackets",
+    href: `/${countryCode}/collections/womens-suede-leather-jackets`,
   },
   {
     id: "aviator-women",
     name: "AVIATOR JACKETS",
     imageUrl: "/images/category-carousel-women/women-aviator.webp",
-    href: "/us/collections/womens-pilot-jackets",
+    href: `/${countryCode}/collections/womens-pilot-jackets`,
   },
   {
     id: "biker-women",
     name: "BIKER JACKETS",
     imageUrl: "/images/category-carousel-women/women-biker.webp",
-    href: "/us/collections/womens-leather-biker-jackets",
+    href: `/${countryCode}/collections/womens-leather-biker-jackets`,
   },
   {
     id: "varsity-women",
     name: "VARSITY JACKETS",
     imageUrl: "/images/category-carousel-women/women-varsity .webp",
-    href: "/us/collections/womens-varsity-jackets",
+    href: `/${countryCode}/collections/womens-varsity-jackets`,
   },
   {
     id: "letterman-women",
     name: "LETTERMAN JACKETS",
     imageUrl: "/images/category-carousel-women/women-letterman.webp",
-    href: "/us/collections/womens-letterman-jackets",
+    href: `/${countryCode}/collections/womens-letterman-jackets`,
   },
 ];
 
@@ -145,12 +146,13 @@ export default function ProductCategory({
   categories: propCategories,
   onCategoryClick,
 }: ProductCategoryProps) {
+  const { countryCode } = useCountry();
   const [activeTab, setActiveTab] = useState<"men" | "women">("men");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const displayCategories = propCategories 
     ? (activeTab === "men" ? propCategories.men : propCategories.women)
-    : (activeTab === "men" ? menCategories : womenCategories);
+    : (activeTab === "men" ? getMenCategories(countryCode) : getWomenCategories(countryCode));
 
   const scroll = (direction: "left" | "right") => {
     if (scrollContainerRef.current) {

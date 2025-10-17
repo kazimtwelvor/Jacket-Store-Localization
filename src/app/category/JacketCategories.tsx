@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useCountry } from '@/src/hooks/use-country';
 
 interface Category {
   name?: string;
@@ -48,6 +49,7 @@ const ArrowIcon = ({ direction }: { direction: 'left' | 'right' }) => (
 
 const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCategoryClick, currentCategory }) => {
   const router = useRouter();
+  const { countryCode } = useCountry();
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
@@ -89,7 +91,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
   const handleCategoryClick = (slug: string) => {
     if (typeof window !== 'undefined') {
       const currentPath = window.location.pathname;
-      const targetPath = `/us/collections/${slug}`;
+      const targetPath = `/${countryCode}/collections/${slug}`;
 
       if (currentPath === targetPath) {
         window.dispatchEvent(new CustomEvent('route-loading:end'));
@@ -106,7 +108,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
 
     if (typeof window !== 'undefined') {
       const currentPath = window.location.pathname;
-      const targetPath = `/us/collections/${categorySlug}`;
+      const targetPath = `/${countryCode}/collections/${categorySlug}`;
 
       if (currentPath === targetPath) {
         return;
@@ -119,7 +121,7 @@ const JacketCategories: React.FC<JacketCategoriesProps> = ({ categories, onCateg
     if (onCategoryClick) {
       onCategoryClick(categorySlug);
     } else {
-      router.push(`/us/collections/${categorySlug}`);
+      router.push(`/${countryCode}/collections/${categorySlug}`);
     }
   };
 

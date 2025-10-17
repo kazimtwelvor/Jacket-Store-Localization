@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react"
 import { motion, useInView, useAnimation, AnimatePresence } from "framer-motion"
+import { useCountry } from "@/src/hooks/use-country"
 import {
   Truck,
   CreditCard,
@@ -313,6 +314,7 @@ const FeatureDetailContent = ({ feature }) => {
 
 // Main Component
 const SEORichFeaturesShowcase = () => {
+  const { countryCode } = useCountry()
   const [activeFeature, setActiveFeature] = useState(0)
   const [autoplay, setAutoplay] = useState(true)
   const [openFAQ, setOpenFAQ] = useState(false)
@@ -579,9 +581,9 @@ const SEORichFeaturesShowcase = () => {
         location: "Austin, TX",
       },
       resources: [
-        { title: "Contact Our Support Team", url: "/us/contact-us" },
-        { title: "Frequently Asked Questions", url: "/us/faqs" },
-        { title: "Order Assistance Guide", url: "/us/order-help" },
+        { title: "Contact Our Support Team", url: `/${countryCode}/contact-us` },
+        { title: "Frequently Asked Questions", url: `/${countryCode}/faqs` },
+        { title: "Order Assistance Guide", url: `/${countryCode}/order-help` },
       ],
       faqContent: {
         how: "Our customer support is available 24/7 through multiple channels. Live chat is accessible directly on our website and typically connects you with a representative in under 60 seconds. Phone support is available at our toll-free number, and email inquiries receive responses within 2 hours, even overnight.",

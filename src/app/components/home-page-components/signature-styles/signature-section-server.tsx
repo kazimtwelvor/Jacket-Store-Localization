@@ -20,20 +20,20 @@ interface SignatureData {
 }
 
 const getCachedSignatureData = unstable_cache(
-  async (): Promise<SignatureData> => {
+  async (countryCode: string): Promise<SignatureData> => {
     return {
       men: {
         title: "MEN'S LEATHER JACKET",
         description: "Crafted for the modern warrior, each jacket embodies strength, style and sophistication with premium leather that ages beautifully with every adventure.",
         imageUrl: "/uploads/2025/Untitled_design__10_.png",
-        href: "/us/collections/leather-bomber-jacket-mens",
+        href: `/${countryCode}/collections/leather-bomber-jacket-mens`,
       },
       women: {
         title: "WOMEN'S LEATHER JACKET",
         description: "Elegance redefined. From boardroom power moves to weekend adventures, our women's collection celebrates confidence with every curve and contour.",
         imageUrl: "https://www.fineystjackets.com/uploads/2025/uadYfG.webp",
         tabletImageUrl: "/images/tablet-image.jpg",
-        href: "/us/collections/womens-leather-bomber-jackets",
+        href: `/${countryCode}/collections/womens-leather-bomber-jackets`,
       },
     };
   },
@@ -41,8 +41,12 @@ const getCachedSignatureData = unstable_cache(
   { revalidate: 3600, tags: ['signature-styles'] }
 );
 
-export default async function SignatureSectionServer() {
-  const signatureData = await getCachedSignatureData();
+interface SignatureSectionServerProps {
+  countryCode: string;
+}
+
+export default async function SignatureSectionServer({ countryCode }: SignatureSectionServerProps) {
+  const signatureData = await getCachedSignatureData(countryCode);
 
   return <SignatureSectionClient signatureData={signatureData} />;
 }

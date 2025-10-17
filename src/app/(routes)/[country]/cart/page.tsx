@@ -480,7 +480,7 @@ const CartPage = () => {
                 Explore our collection and find something you&apos;ll love.
               </p>
               <Button
-                onClick={() => router.push("/us/")}
+                onClick={() => router.push(`/${countryCode}/`)}
                 className="bg-black hover:bg-[#2b2b2b] text-white mt-4"
               >
                 Continue Shopping
@@ -763,7 +763,7 @@ const CartPage = () => {
                   </button>
                 </div>
 
-                <AddMoreOffer onContinueShopping={() => router.push("/us/shop")} />
+                <AddMoreOffer onContinueShopping={() => router.push(`/${countryCode}/shop`)} />
               </div>
 
               <div className="lg:col-span-5">
@@ -1035,7 +1035,7 @@ const CartPage = () => {
                       </Link>{" "}
                       apply. The{" "}
                       <Link
-                        href="/us/privacy-policy"
+                        href={`/${countryCode}/privacy-policy`}
                         className="underline cursor-pointer hover:text-gray-600"
                       >
                         data protection regulations
@@ -1048,7 +1048,7 @@ const CartPage = () => {
                     <div className="flex items-center gap-2 text-sm text-black">
                       <Truck className="h-4 w-4" />
                       <Link
-                        href="/us/shipping-and-delivery-policy"
+                        href={`/${countryCode}/shipping-and-delivery-policy`}
                         className="underline cursor-pointer hover:text-gray-600"
                       >
                         Free Shipping over 99 USD

@@ -1,10 +1,14 @@
 import type { Metadata } from "next"
 
-export const metadata: Metadata = {
-  title: "My Account | Fineyst",
-  description: "Manage your account settings, orders, and personal information.",
-  alternates: {
-    canonical: "https://www.fineystjackets.com/us/account"
+export async function generateMetadata({ params }: { params: Promise<{ country: string }> }): Promise<Metadata> {
+  const { country } = await params
+  
+  return {
+    title: "My Account | Fineyst",
+    description: "Manage your account settings, orders, and personal information.",
+    alternates: {
+      canonical: `https://www.fineystjackets.com/${country}/account`
+    }
   }
 }
 

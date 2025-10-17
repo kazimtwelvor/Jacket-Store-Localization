@@ -6,6 +6,7 @@ import { notFound, useRouter } from "next/navigation";
 import ResponsiveContainer from "@/src/app/ui/responsive-container";
 import { avertaBlack } from "@/src/lib/fonts";
 import ShopButton from "@/src/app/components/shop-button";
+import { useCountry } from "@/src/hooks/use-country";
 
 export interface typeGender {
   male: string;
@@ -13,13 +14,14 @@ export interface typeGender {
 }
 export const DesktopBannerContent = () => {
   const router = useRouter();
+  const { countryCode } = useCountry();
 
   const handleShopClick = (gender: string) => {
     let url: string;
     if (gender === "men") {
-      url = "/us/collections/leather-bomber-jacket-mens";
+      url = `/${countryCode}/collections/leather-bomber-jacket-mens`;
     } else if (gender === "women") {
-      url = "/us/collections/womens-leather-bomber-jackets";
+      url = `/${countryCode}/collections/womens-leather-bomber-jackets`;
     } else {
       notFound();
       return;

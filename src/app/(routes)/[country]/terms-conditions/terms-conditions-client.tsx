@@ -10,6 +10,7 @@ import TermsNavigation from "./components/terms-navigation"
 import TermsFooter from "./components/terms-footer"
 import { termsData } from "./data/terms-data"
 import type { TermsData as OriginalTermsData } from "./data/terms-data"
+import { useCountry } from "@/src/hooks/use-country"
 
 export default function TermsConditionsClient() {
   const [activeSection, setActiveSection] = useState("definitions")
@@ -18,6 +19,7 @@ export default function TermsConditionsClient() {
   const [expanded, setExpanded] = useState<string[]>(["definitions"])
   const [sectionVisibility, setSectionVisibility] = useState<{ [key: string]: number }>({})
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+  const { countryCode } = useCountry()
   const [isMounted, setIsMounted] = useState(false)
   const allSections = Object.keys(termsData)
 
@@ -232,11 +234,11 @@ export default function TermsConditionsClient() {
                     agree to these terms, please do not use our services or make purchases from our website.
                   </p>
                   <div className="mt-4 flex items-center justify-between">
-                    <Link href="/us/" className="text-black hover:underline flex items-center">
+                    <Link href={`/${countryCode}/`} className="text-black hover:underline flex items-center">
                       <span className="mr-1">→</span>
                       Return to Shopping
                     </Link>
-                    <Link href="/us/contact-us" className="text-black hover:underline flex items-center">
+                    <Link href={`/${countryCode}/contact-us`} className="text-black hover:underline flex items-center">
                       <span className="mr-1">→</span>
                       Contact Us
                     </Link>
@@ -246,7 +248,7 @@ export default function TermsConditionsClient() {
             </div>
 
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Link href="/us/privacy-policy" className="block">
+              <Link href={`/${countryCode}/privacy-policy`} className="block">
                 <div className="bg-white p-6 rounded-lg border  border-[#2b2b2b] shadow-sm hover:border-[#2b2b2b]/20 h-full">
                   <div className="flex items-center mb-3">
                     <div className="h-5 w-5 mr-2 text-black">
@@ -272,7 +274,7 @@ export default function TermsConditionsClient() {
                 </div>
               </Link>
 
-              <Link href="/us/faqs" className="block">
+              <Link href={`/${countryCode}/faqs`} className="block">
                 <div className="bg-[#f6f6f6] shadow-sm  p-6 rounded-lg border  border-[#2b2b2b] hover:border-[#2b2b2b] h-full">
                   <div className="flex items-center mb-3">
                     <div className="h-5 w-5 mr-2 text-black">
@@ -300,7 +302,7 @@ export default function TermsConditionsClient() {
                 </div>
               </Link>
 
-              <Link href="/us/contact-us" className="block">
+              <Link href={`/${countryCode}/contact-us`} className="block">
                 <div className="bg-white p-6 rounded-lg border  border-[#2b2b2b] shadow-sm hover:border-[#2b2b2b]/20 h-full">
                   <div className="flex items-center mb-3">
                     <div className="h-5 w-5 mr-2 text-black">
@@ -399,11 +401,11 @@ export default function TermsConditionsClient() {
                   agree to these terms, please do not use our services or make purchases from our website.
                 </p>
                 <div className="mt-4 flex items-center justify-between">
-                  <Link href="/us/" className="text-black hover:underline flex items-center">
+                  <Link href={`/${countryCode}/`} className="text-black hover:underline flex items-center">
                     <ChevronRight className="h-4 w-4 mr-1" />
                     Return to Shopping
                   </Link>
-                  <Link href="/us/contact-us" className="text-black hover:underline flex items-center">
+                  <Link href={`/${countryCode}/contact-us`} className="text-black hover:underline flex items-center">
                     <ChevronRight className="h-4 w-4 mr-1" />
                     Contact Us
                   </Link>

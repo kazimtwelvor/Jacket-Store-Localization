@@ -8,6 +8,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import { avertaBlack } from "@/src/lib/fonts"
+import { useCountry } from "@/src/hooks/use-country"
 
 interface BlogItem {
     id: string
@@ -23,6 +24,7 @@ interface BlogItem {
 }
 
 const BlogsShowcase = () => {
+    const { countryCode } = useCountry()
     const [currentIndex, setCurrentIndex] = useState(0)
     const [isAnimating, setIsAnimating] = useState(false)
     const [visibleItems, setVisibleItems] = useState(3)
@@ -372,7 +374,7 @@ const BlogsShowcase = () => {
 
                 <div className={`text-center mt-12 md:mt-16 ${avertaBlack.className}`}>
                     <Link
-                        href="/us/blogs"
+                        href={`/${countryCode}/blogs`}
                         className="inline-flex items-center gap-3 bg-black text-white px-8 py-4 font-bold text-lg hover:bg-[#2b2b2b] transition-colors duration-300"
                     >
                         VIEW ALL ARTICLES

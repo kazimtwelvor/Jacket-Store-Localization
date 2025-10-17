@@ -7,9 +7,11 @@ import { CountrySelector } from "@/src/components/country-selector"
 import Image from "next/image"
 import { avertaBlack, avertaBold } from "@/src/lib/fonts"
 import { submitNewsletterForm } from "@/src/lib/services/forms"
+import { useCountry } from "@/src/hooks/use-country"
 
 
 const Footer = () => {
+    const { countryCode } = useCountry()
     const [emailInput, setEmailInput] = useState("")
     const [expandedSection, setExpandedSection] = useState("")
     const [categories, setCategories] = useState<any[]>([])
@@ -72,7 +74,7 @@ const Footer = () => {
                     <div className="space-y-4 flex-shrink-0 md:w-64 flex flex-col items-center md:items-start">
                         <div className="flex flex-col items-center md:items-start">
                             <div className="mb-3 flex justify-center md:justify-start">
-                                <Link href="/us/" className="flex items-center justify-center">
+                                <Link href={`/${countryCode}/`} className="flex items-center justify-center">
                                     <Image
                                         src="/images/logo-footer.webp"
                                         alt="Fineyst Logo"
@@ -143,7 +145,7 @@ const Footer = () => {
 
 
                                 <li>
-                                    <Link href="/us/shop" className="text-black  hover:font-semibold transition-all" >
+                                    <Link href={`/${countryCode}/shop`} className="text-black  hover:font-semibold transition-all" >
                                         Shop
                                     </Link>
                                 </li>
@@ -160,27 +162,27 @@ const Footer = () => {
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'categories' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/us/collections/mens-leather-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/collections/mens-leather-jackets`} className="text-black hover:font-bold transition-all">
                                         Men's Leather Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/us/collections/mens-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/collections/mens-jackets`} className="text-black hover:font-bold transition-all">
                                         Men's Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/us/collections/mens-letterman-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/collections/mens-letterman-jackets`} className="text-black hover:font-bold transition-all">
                                         Men's Letterman Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/us/collections/mens-denim-jackets" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/collections/mens-denim-jackets`} className="text-black hover:font-bold transition-all">
                                         Men's Denim Jackets
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/us/collections" className="text-black  hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/collections`} className="text-black  hover:font-bold transition-all">
                                         View All
                                     </Link>
                                 </li>
@@ -196,12 +198,12 @@ const Footer = () => {
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'company' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/us/blogs" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/blogs`} className="text-black hover:font-bold transition-all">
                                         Blogs
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/us/about-us" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/about-us`} className="text-black hover:font-bold transition-all">
                                         About Us
                                     </Link>
                                 </li>
@@ -217,27 +219,27 @@ const Footer = () => {
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'support' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/us/faqs" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/faqs`} className="text-black hover:font-bold transition-all">
                                         FAQs
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/us/reviews" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/reviews`} className="text-black hover:font-bold transition-all">
                                         Reviews
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/us/contact-us" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/contact-us`} className="text-black hover:font-bold transition-all">
                                         Contact Us
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/us/size-guide" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/size-guide`} className="text-black hover:font-bold transition-all">
                                         Size Guide
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/us/track-order" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/track-order`} className="text-black hover:font-bold transition-all">
                                         Track My Order
                                     </Link>
                                 </li>
@@ -254,18 +256,18 @@ const Footer = () => {
                             </button>
                             <ul className={`${avertaBold.className} space-y-2 ${expandedSection === 'help' ? 'block' : 'hidden'} lg:block bg-[#eaeaea] lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 rounded-b-lg lg:rounded-none text-center md:text-left`}>
                                 <li>
-                                    <Link href="/us/privacy-policy" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/privacy-policy`} className="text-black hover:font-bold transition-all">
                                         Privacy Policy
                                     </Link>
                                 </li>
 
                                 <li>
-                                    <Link href="/us/terms-conditions" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/terms-conditions`} className="text-black hover:font-bold transition-all">
                                         Terms & Conditions
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/us/shipping-and-delivery-policy" className="text-black hover:font-bold transition-all">
+                                    <Link href={`/${countryCode}/shipping-and-delivery-policy`} className="text-black hover:font-bold transition-all">
                                         Shipping & Delivery
                                     </Link>
                                 </li>
@@ -385,19 +387,19 @@ const Footer = () => {
                         {/* Legal Links - Center */}
                         <div className="mb-4 md:mb-0 md:w-1/3 flex justify-center">
                             <div className="flex flex-wrap justify-center gap-3 text-sm">
-                                <Link href="/us/faqs" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href={`/${countryCode}/faqs`} className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     FAQs
                                 </Link>
-                                <Link href="/us/privacy-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href={`/${countryCode}/privacy-policy`} className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Privacy
                                 </Link>
-                                <Link href="/us/terms-conditions" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href={`/${countryCode}/terms-conditions`} className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Terms
                                 </Link>
-                                <Link href="/us/shipping-and-delivery-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href={`/${countryCode}/shipping-and-delivery-policy`} className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Shipping
                                 </Link>
-                                <Link href="/us/refund-and-returns-policy" className="text-black font-semibold hover:font-bold transition-all mx-1">
+                                <Link href={`/${countryCode}/refund-and-returns-policy`} className="text-black font-semibold hover:font-bold transition-all mx-1">
                                     Returns
                                 </Link>
                             </div>

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { cn } from "../../lib/utils"
 import type { Product } from "@/types"
 import { avertaBlack } from "@/src/lib/fonts"
+import { useCountry } from "@/src/hooks/use-country"
 
 interface ProductHeaderProps {
   data: Product
@@ -11,17 +12,19 @@ interface ProductHeaderProps {
 }
 
 const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
+  const { countryCode } = useCountry()
+  
   return (
     <>
     
       {!isMobile && (
         <div className="pt-0 text-sm">
           <nav className="flex items-center">
-            <Link href="/us/shop" className="text-gray-500 hover:text-black uppercase font-medium">
+            <Link href={`/${countryCode}/shop`} className="text-gray-500 hover:text-black uppercase font-medium">
               SHOP
             </Link>
             <span className="mx-1 text-gray-500">/</span>
-            <Link href="/us/collections/mens-leather-jackets" className="text-gray-500 hover:text-black uppercase font-medium">
+            <Link href={`/${countryCode}/collections/mens-leather-jackets`} className="text-gray-500 hover:text-black uppercase font-medium">
               LEATHER
             </Link>
             <span className="mx-1 text-gray-500">/</span>

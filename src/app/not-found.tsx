@@ -1,6 +1,10 @@
 import Link from 'next/link'
+import { headers } from 'next/headers'
 
 export default function NotFound() {
+  const headersList = headers()
+  const pathname = headersList.get('x-pathname') || ''
+  const countryCode = pathname.split('/')[1] || 'us'
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full text-center">
@@ -14,18 +18,18 @@ export default function NotFound() {
         
         <div className="space-y-4">
           <Link 
-            href="/us/"
+            href={`/${countryCode}/`}
             className="inline-block bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition-colors"
           >
             Go Home
           </Link>
           
           <div className="text-sm text-gray-400">
-            <Link href="/us/shop" className="hover:text-gray-600 transition-colors">
+            <Link href={`/${countryCode}/shop`} className="hover:text-gray-600 transition-colors">
               Browse Products
             </Link>
             {' • '}
-            <Link href="/us/contact-us" className="hover:text-gray-600 transition-colors">
+            <Link href={`/${countryCode}/contact-us`} className="hover:text-gray-600 transition-colors">
               Contact Support
             </Link>
           </div>

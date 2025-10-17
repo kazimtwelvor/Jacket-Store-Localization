@@ -4,8 +4,11 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import ResponsiveContainer from "@/src/app/ui/responsive-container"
 import { avertaBlack } from "@/src/lib/fonts"
+import { useCountry } from "@/src/hooks/use-country"
 
 export const MobileBannerContent = () => {
+    const { countryCode } = useCountry()
+    
     return (
         <ResponsiveContainer>
             <section
@@ -36,12 +39,12 @@ export const MobileBannerContent = () => {
                     transition={{ duration: 0 }}
                     className="flex justify-center gap-5 w-full"
                 >
-                    <Link href="/us/collections/leather-bomber-jacket-mens" aria-label="Shop men's collection">
+                    <Link href={`/${countryCode}/collections/leather-bomber-jacket-mens`} aria-label="Shop men's collection">
                         <button className={`${avertaBlack.className} bg-[#2b2b2b] text-white font-bold py-3 px-8 text-sm uppercase block min-w-[120px]`}>
                             SHOP MEN
                         </button>
                     </Link>
-                    <Link href="/us/collections/womens-leather-bomber-jackets" aria-label="Shop women's collection">
+                    <Link href={`/${countryCode}/collections/womens-leather-bomber-jackets`} aria-label="Shop women's collection">
                         <button className={`${avertaBlack.className} bg-[#2b2b2b] text-white font-bold py-3 px-8 text-sm uppercase block min-w-[120px]`}>
                             SHOP WOMEN
                         </button>

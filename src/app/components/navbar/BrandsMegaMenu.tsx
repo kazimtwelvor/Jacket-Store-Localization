@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { X } from "lucide-react";
+import { useCountry } from "@/src/hooks/use-country";
 
 interface BrandsMegaMenuProps {
   onClose: () => void;
 }
 
 export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
+  const { countryCode } = useCountry();
   return (
     <div className="fixed left-0 right-0 top-16 w-screen z-[9001]">
       <div className="relative bg-[#1c1c1c] border-t border-gray-800 shadow-2xl max-h-[80vh] overflow-y-auto mega-menu-scrollbar">
@@ -28,7 +30,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/blogs"
+                    href={`/${countryCode}/blogs`}
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -37,7 +39,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/about-us"
+                    href={`/${countryCode}/about-us`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -53,7 +55,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/faqs"
+                    href={`/${countryCode}/faqs`}
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -62,7 +64,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/reviews"
+                    href={`/${countryCode}/reviews`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -71,7 +73,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/contact-us"
+                    href={`/${countryCode}/contact-us`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -80,7 +82,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/size-guide"
+                    href={`/${countryCode}/size-guide`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -96,7 +98,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/us/privacy-policy"
+                    href={`/${countryCode}/privacy-policy`}
                     className="mega-menu-link text-gray-100 hover:text-white transition-all duration-300 text-sm font-semibold hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -105,7 +107,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/terms-conditions"
+                    href={`/${countryCode}/terms-conditions`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >
@@ -114,7 +116,7 @@ export default function BrandsMegaMenu({ onClose }: BrandsMegaMenuProps) {
                 </li>
                 <li>
                   <Link
-                    href="/us/shipping-and-delivery-policy"
+                    href={`/${countryCode}/shipping-and-delivery-policy`}
                     className="mega-menu-link text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium hover:translate-x-1 block"
                     onClick={onClose}
                   >

@@ -13,6 +13,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import StructuredData from "@/src/app/components/layout/structured-data-layout";
 import CollectionSchema from "@/src/app/components/schema/collection-schema";
 // import { Suspense } from "react";
+import { useCountry } from "@/src/hooks/use-country";
 
 interface CategoryPageProps {
   params: Promise<{ slug: string; country: string }>;

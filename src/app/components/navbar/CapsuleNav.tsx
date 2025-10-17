@@ -5,22 +5,23 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Button from "../../ui/button";
 import { cn } from "../../lib/utils";
+import { useCountry } from "@/src/hooks/use-country";
 
 import { avertaBold } from "@/src/lib/fonts";
 
-const items = [
-  { id: 0, label: "HOME", isActive: true, href: "/us/" },
-  { id: 1, label: "LEATHER", isActive: false, href: "/us/collections/mens-leather-jackets" },
-  { id: 2, label: "BOMBER", isActive: false, href: "/us/collections/leather-bomber-jacket-mens" },
-  { id: 3, label: "BIKER", isActive: false, href: "/us/collections/biker-jacket-men" },
-  { id: 4, label: "VARSITY", isActive: false, href: "/us/collections/mens-varsity-jackets" },
-  { id: 5, label: "PUFFER", isActive: false, href: "/us/collections/mens-puffer-jackets" },
-
+const getItems = (countryCode: string) => [
+  { id: 0, label: "HOME", isActive: true, href: `/${countryCode}/` },
+  { id: 1, label: "LEATHER", isActive: false, href: `/${countryCode}/collections/mens-leather-jackets` },
+  { id: 2, label: "BOMBER", isActive: false, href: `/${countryCode}/collections/leather-bomber-jacket-mens` },
+  { id: 3, label: "BIKER", isActive: false, href: `/${countryCode}/collections/biker-jacket-men` },
+  { id: 4, label: "VARSITY", isActive: false, href: `/${countryCode}/collections/mens-varsity-jackets` },
+  { id: 5, label: "PUFFER", isActive: false, href: `/${countryCode}/collections/mens-puffer-jackets` },
 ];
 
 export function CapsuleNav() {
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
+  const { countryCode } = useCountry();
   const [activeItem, setActiveItem] = useState(-1);
   const [isVisible, setIsVisible] = useState(true);
   const [isFilterBarSticky, setIsFilterBarSticky] = useState(false);
@@ -31,9 +32,11 @@ export function CapsuleNav() {
     dragFree: true,
   });
 
+  const items = getItems(countryCode);
+
   const isCategoryPage = pathname?.startsWith("/category/");
-  const isCollectionsPage = pathname?.startsWith("/us/collections/");
-  const isShopPage = pathname === "/us/shop";
+  const isCollectionsPage = pathname?.includes("/collections/");
+  const isShopPage = pathname?.includes("/shop");
   const lastScrollY = useRef(0);
 
   const isMobileView =
@@ -45,17 +48,17 @@ export function CapsuleNav() {
     setIsMounted(true);
     
     // Set initial active item after mounting
-    if (pathname === "/us") {
+    if (pathname === `/${countryCode}` || pathname === `/${countryCode}/`) {
       setActiveItem(0);
-    } else if (pathname === "/us/collections/mens-leather-jackets") {
+    } else if (pathname === `/${countryCode}/collections/mens-leather-jackets`) {
       setActiveItem(1);
-    } else if (pathname === "/us/collections/leather-bomber-jacket-mens") {
+    } else if (pathname === `/${countryCode}/collections/leather-bomber-jacket-mens`) {
       setActiveItem(2);
-    } else if (pathname === "/us/collections/biker-jacket-men") {
+    } else if (pathname === `/${countryCode}/collections/biker-jacket-men`) {
       setActiveItem(3);
-    } else if (pathname === "/us/collections/mens-varsity-jackets") {
+    } else if (pathname === `/${countryCode}/collections/mens-varsity-jackets`) {
       setActiveItem(4);
-    } else if (pathname === "/us/collections/mens-puffer-jackets") {
+    } else if (pathname === `/${countryCode}/collections/mens-puffer-jackets`) {
       setActiveItem(5);
     } 
     else {
@@ -140,22 +143,22 @@ export function CapsuleNav() {
   }, [isCategoryPage, isShopPage, isCollectionsPage]);
 
   useEffect(() => {
-    if (pathname === "/us") {
+    if (pathname === `/${countryCode}` || pathname === `/${countryCode}/`) {
       setActiveItem(0);
-    } else if (pathname === "/us/collections/mens-leather-jackets") {
+    } else if (pathname === `/${countryCode}/collections/mens-leather-jackets`) {
       setActiveItem(1);
-    } else if (pathname === "/us/collections/leather-bomber-jacket-mens") {
+    } else if (pathname === `/${countryCode}/collections/leather-bomber-jacket-mens`) {
       setActiveItem(2);
-    } else if (pathname === "/us/collections/biker-jacket-men") {
+    } else if (pathname === `/${countryCode}/collections/biker-jacket-men`) {
       setActiveItem(3);
-    } else if (pathname === "/us/collections/mens-varsity-jackets") {
+    } else if (pathname === `/${countryCode}/collections/mens-varsity-jackets`) {
       setActiveItem(4);
-    } else if (pathname === "/us/collections/mens-puffer-jackets") {
+    } else if (pathname === `/${countryCode}/collections/mens-puffer-jackets`) {
       setActiveItem(5);
     } else {
       setActiveItem(-1);
     }
-  }, [pathname]);
+  }, [pathname, countryCode]);
 
   const handleItemClick = (id: number) => {
     setActiveItem(id);

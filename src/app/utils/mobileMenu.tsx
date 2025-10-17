@@ -17,6 +17,7 @@ import useAuth from "../hooks/use-auth"
 import { useCart } from "../contexts/CartContext"
 import useWishlist from "../hooks/use-wishlist"
 import MegaMenuCarousel from "../components/navbar/MegaMenuCarousal"
+import { useCountry } from "@/src/hooks/use-country"
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -25,88 +26,90 @@ interface MobileMenuProps {
   onSearchOpen?: () => void
 }
 
+const { countryCode } = useCountry()
+
 const discoverData: Record<string, { title: string; items: string[]; links: string[] }[]> = {
   "Women's Jackets": [
     {
       title: "LEATHER JACKETS",
       items: ["Leather Jackets", "Fashion Leather Jackets", "Leather Bomber Jackets", "Leather Biker Jackets", "Suede Leather Jackets", "Leather Blazers", "Leather Vests"],
-      links: ["/us/collections/womens-leather-bomber-jackets", "/us/collections/womens-fashion-leather-jackets", "/us/collections/womens-leather-bomber-jackets", "/us/collections/womens-leather-biker-jackets", "/us/collections/womens-suede-leather-jackets", "/us/collections/womens-leather-blazers", "/us/collections/womens-leather-vests"]
+      links: [`/${countryCode}/collections/womens-leather-bomber-jackets`, `/${countryCode}/collections/womens-fashion-leather-jackets`, `/${countryCode}/collections/womens-leather-bomber-jackets`, `/${countryCode}/collections/womens-leather-biker-jackets`, `/${countryCode}/collections/womens-suede-leather-jackets`, `/${countryCode}/collections/womens-leather-blazers`, `/${countryCode}/collections/womens-leather-vests`]
     },
     {
       title: "COATS",
       items: ["Shearling Coats", "Trench Coats", "Winter Coats", "Rain Coats", "Puffer Jackets", "Quilted Jackets"],
-      links: ["/us/collections/womens-shearling-coats", "/us/collections/womens-trench-coats", "/us/collections/womens-winter-coats", "/us/collections/womens-rain-coats", "/us/collections/womens-puffer-jackets", "/us/collections/womens-quilted-jackets"]
+      links: [`/${countryCode}/collections/womens-shearling-coats`, `/${countryCode}/collections/womens-trench-coats`, `/${countryCode}/collections/womens-winter-coats`, `/${countryCode}/collections/womens-rain-coats`, `/${countryCode}/collections/womens-puffer-jackets`, `/${countryCode}/collections/womens-quilted-jackets`]
     },
     {
       title: "STYLES",
       items: ["Cropped Jackets", "Pilot & Aviator Jackets", "Varsity Jackets", "Letterman Jackets", "Denim Jackets", "Anorak & Ski Jackets"],
-      links: ["/us/collections/womens-cropped-jackets", "/us/collections/womens-pilot-jackets", "/us/collections/womens-varsity-jackets", "/us/collections/womens-letterman-jackets", "/us/collections/womens-denim-jackets", "/us/collections/womens-anorak-jackets"]
+      links: [`/${countryCode}/collections/womens-cropped-jackets`, `/${countryCode}/collections/womens-pilot-jackets`, `/${countryCode}/collections/womens-varsity-jackets`, `/${countryCode}/collections/womens-letterman-jackets`, `/${countryCode}/collections/womens-denim-jackets`, `/${countryCode}/collections/womens-anorak-jackets`]
     },
     {
       title: "SPECIAL COLLECTIONS",
       items: ["Puffer Vests"],
-      links: ["/us/collections/womens-puffer-vests"]
+      links: [`/${countryCode}/collections/womens-puffer-vests`]
     }
   ],
   "Men's Jackets": [
     {
       title: "LEATHER JACKETS",
       items: ["Leather Jackets", "Leather Bomber Jackets", "Biker & Moto Jackets", "Aviator & Flight Jackets", "Hooded Leather Jackets", "Suede Jackets", "Leather Vests"],
-      links: ["/us/collections/leather-bomber-jacket-mens", "/us/collections/leather-bomber-jacket-mens", "/us/collections/biker-jacket-men", "/us/collections/mens-aviator-jackets", "/us/collections/mens-hooded-leather-jackets", "/us/collections/mens-suede-jackets", "/us/collections/mens-leather-vests"]
+      links: [`/${countryCode}/collections/leather-bomber-jacket-mens`, `/${countryCode}/collections/leather-bomber-jacket-mens`, `/${countryCode}/collections/biker-jacket-men`, `/${countryCode}/collections/mens-aviator-jackets`, `/${countryCode}/collections/mens-hooded-leather-jackets`, `/${countryCode}/collections/mens-suede-jackets`, `/${countryCode}/collections/mens-leather-vests`]
     },
     {
       title: "COATS",
       items: ["Leather Dusters", "Long Leather Coats", "Shearling Coats", "Winter Coats", "Puffer Jackets", "Fur & Shearling Jackets"],
-      links: ["/us/collections/mens-duster-jackets", "/us/collections/mens-long-leather-coats", "/us/collections/mens-shearling-coats", "/us/collections/mens-winter-coats", "/us/collections/mens-puffer-jackets", "/us/collections/mens-fur-jackets"]
+      links: [`/${countryCode}/collections/mens-duster-jackets`, `/${countryCode}/collections/mens-long-leather-coats`, `/${countryCode}/collections/mens-shearling-coats`, `/${countryCode}/collections/mens-winter-coats`, `/${countryCode}/collections/mens-puffer-jackets`, `/${countryCode}/collections/mens-fur-jackets`]
     },
     {
       title: "STYLES",
       items: ["Varsity Jackets", "Letterman Jackets", "Denim Jackets", "Leather Blazers", "Lightweight Jackets", "Soft Shell Jackets"],
-      links: ["/us/collections/mens-varsity-jackets", "/us/collections/mens-letterman-jackets", "/us/collections/mens-denim-jackets", "/us/collections/mens-leather-blazers", "/us/collections/mens-lightweight-jackets", "/us/collections/mens-soft-shell-jackets"]
+      links: [`/${countryCode}/collections/mens-varsity-jackets`, `/${countryCode}/collections/mens-letterman-jackets`, `/${countryCode}/collections/mens-denim-jackets`, `/${countryCode}/collections/mens-leather-blazers`, `/${countryCode}/collections/mens-lightweight-jackets`, `/${countryCode}/collections/mens-soft-shell-jackets`]
     },
     {
       title: "SPECIAL COLLECTIONS",
       items: ["Plus Size Leather Jackets", "Puffer Vests", "Vintage Style"],
-      links: ["/us/collections/plus-size-leather-jackets", "/us/collections/mens-puffer-vests", "/us/collections/mens-brown-vintage-leather-jackets"]
+      links: [`/${countryCode}/collections/plus-size-leather-jackets`, `/${countryCode}/collections/mens-puffer-vests`, `/${countryCode}/collections/mens-brown-vintage-leather-jackets`]
     }
   ],
   "Coats": [
     {
       title: "LEATHER JACKETS",
       items: ["Biker Jackets", "Bomber Jackets", "Moto Jackets", "Racing Jackets", "Vintage Leather"],
-      links: ["/us/shop?category=biker-jackets", "/us/shop?category=bomber-jackets", "/us/shop?category=moto-jackets", "/us/shop?category=racing-jackets", "/us/shop?category=vintage-leather"]
+      links: [`/${countryCode}/shop?category=biker-jackets`, `/${countryCode}/shop?category=bomber-jackets`, `/${countryCode}/shop?category=moto-jackets`, `/${countryCode}/shop?category=racing-jackets`, `/${countryCode}/shop?category=vintage-leather`]
     },
     {
       title: "COATS & OUTERWEAR",
       items: ["Trench Coats", "Wool Coats", "Puffer Jackets", "Peacoats", "Parkas"],
-      links: ["/us/shop?category=trench-coats", "/us/shop?category=wool-coats", "/us/shop?category=puffer-jackets", "/us/shop?category=peacoats", "/us/shop?category=parkas"]
+      links: [`/${countryCode}/shop?category=trench-coats`, `/${countryCode}/shop?category=wool-coats`, `/${countryCode}/shop?category=puffer-jackets`, `/${countryCode}/shop?category=peacoats`, `/${countryCode}/shop?category=parkas`]
     },
     {
       title: "SPECIALTY",
       items: ["Varsity Jackets", "Denim Jackets", "Blazers", "Windbreakers", "Hooded Jackets"],
-      links: ["/us/shop?category=varsity-jackets", "/us/shop?category=denim-jackets", "/us/shop?category=blazers", "/us/shop?category=windbreakers", "/us/shop?category=hooded-jackets"]
+      links: [`/${countryCode}/shop?category=varsity-jackets`, `/${countryCode}/shop?category=denim-jackets`, `/${countryCode}/shop?category=blazers`, `/${countryCode}/shop?category=windbreakers`, `/${countryCode}/shop?category=hooded-jackets`]
     },
     {
       title: "COLLECTIONS",
       items: ["Men's Collection", "Women's Collection", "Unisex Styles", "Luxury Collection", "Size Guide"],
-      links: ["/us/shop?gender=mens", "/us/shop?gender=womens", "/us/shop?category=unisex", "/us/shop?price=luxury", "/size-guide"]
+      links: [`/${countryCode}/shop?gender=mens`, `/${countryCode}/shop?gender=womens`, `/${countryCode}/shop?category=unisex`, `/${countryCode}/shop?price=luxury`, `/${countryCode}/size-guide`]
     }
   ],
   "BRANDS": [
     {
       title: "COMPANY",
       items: ["Blogs", "About Us"],
-      links: ["/us/blogs", "/us/about-us"]
+      links: [`/${countryCode}/blogs`, `/${countryCode}/about-us`]
     },
     {
       title: "SUPPORT",
       items: ["FAQs", "Reviews", "Contact Us", "Size Guide"],
-      links: ["/us/faqs", "/us/reviews", "/us/contact-us", "/us/size-guide"]
+      links: [`/${countryCode}/faqs`, `/${countryCode}/reviews`, `/${countryCode}/contact-us`, `/${countryCode}/size-guide`]
     },
     {
       title: "HELP",
       items: ["Privacy Policy", "Terms & Conditions", "Shipping & Delivery"],
-      links: ["/us/privacy-policy", "/us/terms-conditions", "/us/shipping-and-delivery-policy"]
+      links: [`/${countryCode}/privacy-policy`, `/${countryCode}/terms-conditions`, `/${countryCode}/shipping-and-delivery-policy`]
     }
   ]
 };
@@ -182,6 +185,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate, on
   const { user, isAuthenticated, logout } = useAuth()
   const { items } = useCart()
   const wishlist = useWishlist()
+  const { countryCode } = useCountry()
   const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [direction, setDirection] = useState(1);
@@ -292,7 +296,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate, on
                 </div> */}
                 
                 <div className="bg-[#2b2b2b] text-white -mr-5.9 px-12 flex items-center justify-center flex-shrink-0 h-16 relative">
-                    <button onClick={() => onNavigate('/')} className="flex items-center justify-center" aria-label="Go to homepage">
+                    <button onClick={() => onNavigate(`/${countryCode}/`)} className="flex items-center justify-center" aria-label="Go to homepage">
                         <Image src="/images/logo.webp" alt="Leather Jacket Logo" width={160} height={35} className="object-contain" priority />
                     </button>
                 </div>
@@ -340,11 +344,11 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate, on
                                                 <Search size={22} />
                                                 <span className="sr-only">Search</span>
                                             </button>
-                                            <button onClick={() => onNavigate('/account')} className="hover:opacity-80 transition-opacity">
+                                            <button onClick={() => onNavigate(`/${countryCode}/account`)} className="hover:opacity-80 transition-opacity">
                                                 <User size={22} />
                                                 <span className="sr-only">Account</span>
                                             </button>
-                                            <button onClick={() => onNavigate('/wishlist')} className="relative hover:opacity-80 transition-opacity">
+                                            <button onClick={() => onNavigate(`/${countryCode}/wishlist`)} className="relative hover:opacity-80 transition-opacity">
                                                 <Heart size={22} />
                                                 <span className="sr-only">Wishlist</span>
                                                 {wishlist.items.length > 0 && (
@@ -353,7 +357,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate, on
                                                     </span>
                                                 )}
                                             </button>
-                                            <button onClick={() => onNavigate('/cart')} className="relative hover:opacity-80 transition-opacity">
+                                            <button onClick={() => onNavigate(`/${countryCode}/cart`)} className="relative hover:opacity-80 transition-opacity">
                                                 <ShoppingBag size={22} />
                                                 <span className="sr-only">Cart</span>
                                                 {items.length > 0 && (
@@ -417,7 +421,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate, on
                 
                 {isAuthenticated && (
                 <div className="px-12 py-4 border-t border-white/20 bg-[#2b2b2b] flex-shrink-0">
-                    <button onClick={() => onNavigate('/account')} className="flex items-center w-full text-left">
+                    <button onClick={() => onNavigate(`/${countryCode}/account`)} className="flex items-center w-full text-left">
                         <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
                             {(user?.username?.[0] || 'N').toUpperCase()}
                         </div>

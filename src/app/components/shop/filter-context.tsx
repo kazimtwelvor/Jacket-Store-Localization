@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react"
 import { useRouter } from "next/navigation"
+import { useCountry } from "@/src/hooks/use-country"
 
 // Define filter types
 export type FilterState = {
@@ -33,6 +34,7 @@ const FilterContext = createContext<FilterContextType | undefined>(undefined)
 export function FilterProvider({ children }: { children: ReactNode }) {
   const [filters, setFilters] = useState<FilterState>(initialFilters)
   const router = useRouter()
+  const { countryCode } = useCountry()
 
   // Load filters from URL on initial render
   useEffect(() => {
@@ -104,7 +106,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
     }
     
     const queryString = params.toString()
-    router.push(`/us/shop${queryString ? `?${queryString}` : ""}`, { scroll: false })
+    router.push(`/${countryCode}/shop${queryString ? `?${queryString}` : ""}`, { scroll: false })
   }
 
   // Calculate total active filters

@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import { Card } from "@/src/app/ui/card";
 import { avertaBlack, avertaBold } from "@/src/lib/fonts";
 import ShopButton from "@/src/app/components/shop-button";
+import { useCountry } from "@/src/hooks/use-country";
 
 const TruncatedText = ({
   text,
@@ -56,6 +57,7 @@ const TruncatedText = ({
 };
 
 export default function SignatureStylesSection() {
+  const { countryCode } = useCountry();
   const [menDropdownOpen, setMenDropdownOpen] = useState(false);
   const [womenDropdownOpen, setWomenDropdownOpen] = useState(false);
   const [womenImageSrc, setWomenImageSrc] = useState("https://www.fineystjackets.com/uploads/2025/uadYfG.webp");
@@ -128,7 +130,7 @@ export default function SignatureStylesSection() {
                   <div className="mt-6 text-center">
                     <ShopButton
                       variant="bordered"
-                      href="/us/collections/leather-bomber-jacket-mens"
+                      href={`/${countryCode}/collections/leather-bomber-jacket-mens`}
                       size="sm"
                       showArrow={true}
                       className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}
@@ -180,7 +182,7 @@ export default function SignatureStylesSection() {
                   <div className="mt-6 text-center">
                     <ShopButton
                       variant="bordered"
-                      href="/us/collections/womens-leather-bomber-jackets"
+                      href={`/${countryCode}/collections/womens-leather-bomber-jackets`}
                       size="sm"
                       showArrow={true}
                       className={`${avertaBold.className} py-1 px-3 md:py-1 md:px-3 lg:py-2 lg:px-6`}

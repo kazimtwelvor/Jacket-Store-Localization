@@ -1,8 +1,11 @@
 "use client"
 import Link from "next/link"
 import { ArrowRight, Star } from "lucide-react"
+import { useCountry } from "@/src/hooks/use-country"
 
 const AboutSection = () => {
+    const { countryCode } = useCountry()
+    
     return (
         <section className="py-12 md:py-20 lg:py-24 bg-white relative overflow-hidden">
             <div className="absolute inset-0 opacity-[0.02]">
@@ -49,7 +52,7 @@ const AboutSection = () => {
                                 We believe that streetwear should be both expressive and responsibly made.
                             </p>
 
-                            <Link href="/us/about-us" className="inline-flex items-center space-x-2 text-[#2b2b2b] hover:text-[#2b2b2b] font-semibold text-lg group transition-colors duration-300">
+                            <Link href={`/${countryCode}/about-us`} className="inline-flex items-center space-x-2 text-[#2b2b2b] hover:text-[#2b2b2b] font-semibold text-lg group transition-colors duration-300">
                                 <span>Discover our full story</span>
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                             </Link>

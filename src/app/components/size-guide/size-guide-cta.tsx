@@ -1,11 +1,14 @@
 import Link from "next/link"
 import { CTAData } from "@/src/app/(routes)/[country]/size-guide/data/size-guide-data-by-country"
+import { useCountry } from "@/src/hooks/use-country"
 
 interface SizeGuideCTAProps {
   ctaData?: CTAData
 }
 
 export default function SizeGuideCTA({ ctaData }: SizeGuideCTAProps) {
+  const { countryCode } = useCountry()
+  
   return (
     <div className="bg-gradient-to-r from-[#2b2b2b]/10 via-white to-[#2b2b2b]/5 py-16">
       <div className="max-w-3xl mx-auto text-center px-4 sm:px-6 lg:px-8">
@@ -17,12 +20,12 @@ export default function SizeGuideCTA({ ctaData }: SizeGuideCTAProps) {
           {(ctaData?.buttons || [
             {
               text: "Shop Women's Collection",
-              href: "/us/collections/womens-leather-bomber-jackets",
+              href: `/${countryCode}/collections/womens-leather-bomber-jackets`,
               variant: "primary" as const
             },
             {
               text: "Shop Men's Collection",
-              href: "/us/collections/leather-bomber-jacket-mens",
+              href: `/${countryCode}/collections/leather-bomber-jacket-mens`,
               variant: "secondary" as const
             }
           ]).map((button, index) => (
