@@ -25,14 +25,14 @@ export interface PrivacyPolicyDataMap {
 
 export const privacyPolicyData: PrivacyPolicyDataMap = {
   us: {
-    title: "Privacy Policy (US)",
+    title: "Privacy Policy",
     description: "How we collect, use, and protect your personal information",
     lastUpdated: "December 2024",
     contactEmail: "info@fineystjackets.com",
     contactAddress: "123 Fashion Avenue, Suite 500, San Francisco, CA 94103, United States",
     sections: {
       "information-we-collect": {
-        title: "Information We Collect (US)",
+        title: "Information We Collect",
         content: [
           "When you visit the Site, we automatically collect certain information about your device, including information about your web browser, IP address, time zone, and some of the cookies that are installed on your device.",
           "When you make a purchase or attempt to make a purchase through the Site, we collect certain information from you, including your name, billing address, shipping address, payment information (including credit card numbers), email address, and phone number."
@@ -128,14 +128,14 @@ export const privacyPolicyData: PrivacyPolicyDataMap = {
   },
 
   uk: {
-    title: "Privacy Policy (UK)",
+    title: "Privacy Policy",
     description: "How we collect, use, and protect your personal information in accordance with UK GDPR",
     lastUpdated: "December 2024",
     contactEmail: "privacy@fineystjackets.com",
     contactAddress: "123 Fashion Avenue, Suite 500, London, UK SW1A 1AA",
     sections: {
       "information-we-collect": {
-        title: "Information We Collect (UK)",
+        title: "Information We Collect",
         content: [
           "Under the UK General Data Protection Regulation (UK GDPR), we are required to inform you about the personal data we collect and process. When you visit our Site, we automatically collect certain information about your device, including information about your web browser, IP address, time zone, and some of the cookies that are installed on your device.",
           "When you make a purchase or attempt to make a purchase through the Site, we collect certain information from you, including your name, billing address, shipping address, payment information (including credit card numbers), email address, and phone number."
