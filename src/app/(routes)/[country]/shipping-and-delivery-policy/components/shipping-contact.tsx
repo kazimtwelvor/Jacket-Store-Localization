@@ -81,7 +81,11 @@ export default function ShippingContact({ shippingData }: ShippingContactProps) 
                 className="p-8 bg-white hover:border-gray-300 transition-colors duration-300"
               >
                 <div className="flex flex-col items-center text-center">
-                  <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4"></div>
+                  <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                    {item.icon === "Mail" && <Mail className="w-7 h-7 text-gray-600" />}
+                    {item.icon === "Phone" && <Phone className="w-7 h-7 text-gray-600" />}
+                    {item.icon === "MessageSquare" && <MessageSquare className="w-7 h-7 text-gray-600" />}
+                  </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
                   <p className="text-gray-600 mb-4">{item.description}</p>
                   <p className="font-medium text-gray-800 mb-6">{item.contact}</p>

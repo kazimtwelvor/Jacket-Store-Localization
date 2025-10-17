@@ -119,30 +119,36 @@ const usShippingData: ShippingPolicyData = {
             answer: "We can only change the shipping address if the order hasn't been processed yet. Please contact our customer service team immediately if you need to update your shipping address. Once an order has been shipped, we cannot redirect it to a different address.",
         },
     ],
-    contactOptions: [
-        {
-            title: "Email Us",
-            description: "Get a response within 24 hours",
-            contact: "info@fineystjackets.com",
-            action: "Send Email",
-        },
-        {
-            title: "Call Us",
-            description: "Available Mon-Fri, 9am-5pm EST",
-            contact: "+1 (888) 840-0885",
-            action: "Call Now",
-        },
-        {
-            title: "Live Chat",
-            description: "Get instant assistance",
-            contact: "Available 24/7",
-            action: "Start Chat",
-        },
-    ],
+     contactOptions: [
+         {
+             title: "Email Us",
+             description: "Get a response within 24 hours",
+             contact: "info@fineystjackets.com",
+             action: "Send Email",
+             icon: "Mail",
+             type: "email",
+         },
+         {
+             title: "Call Us",
+             description: "Available Mon-Fri, 9am-5pm EST",
+             contact: "+1 (888) 840-0885",
+             action: "Call Now",
+             icon: "Phone",
+             type: "phone",
+         },
+         {
+             title: "Live Chat",
+             description: "Get instant assistance",
+             contact: "Available 24/7",
+             action: "Start Chat",
+             icon: "MessageSquare",
+             type: "chat",
+         },
+     ],
 }
 
 const ukShippingData: ShippingPolicyData = {
-    title: "Shipping & Delivery Policy (UK)",
+    title: "Shipping & Delivery Policy",
     description: "Fast, reliable shipping to your doorstep across the United Kingdom",
     lastUpdated: "December 2024",
     contactEmail: "info@fineystjackets.com",
@@ -207,26 +213,32 @@ const ukShippingData: ShippingPolicyData = {
             answer: "We can only change the shipping address if the order hasn't been processed yet. Please contact our customer service team immediately if you need to update your shipping address. Once an order has been shipped, we cannot redirect it to a different address.",
         },
     ],
-    contactOptions: [
-        {
-            title: "Email Us",
-            description: "Get a response within 24 hours",
-            contact: "info@fineystjackets.com",
-            action: "Send Email",
-        },
-        {
-            title: "Call Us",
-            description: "Available Mon-Fri, 9am-5pm GMT",
-            contact: "+44 (0) 20 7946 0958",
-            action: "Call Now",
-        },
-        {
-            title: "Live Chat",
-            description: "Get instant assistance",
-            contact: "Available 24/7",
-            action: "Start Chat",
-        },
-    ],
+     contactOptions: [
+         {
+             title: "Email Us",
+             description: "Get a response within 24 hours",
+             contact: "info@fineystjackets.com",
+             action: "Send Email",
+             icon: "Mail",
+             type: "email",
+         },
+         {
+             title: "Call Us",
+             description: "Available Mon-Fri, 9am-5pm GMT",
+             contact: "+44 (0) 20 7946 0958",
+             action: "Call Now",
+             icon: "Phone",
+             type: "phone",
+         },
+         {
+             title: "Live Chat",
+             description: "Get instant assistance",
+             contact: "Available 24/7",
+             action: "Start Chat",
+             icon: "MessageSquare",
+             type: "chat",
+         },
+     ],
 }
 
 const caShippingData: ShippingPolicyData = {
@@ -295,26 +307,32 @@ const caShippingData: ShippingPolicyData = {
             answer: "We can only change the shipping address if the order hasn't been processed yet. Please contact our customer service team immediately if you need to update your shipping address. Once an order has been shipped, we cannot redirect it to a different address.",
         },
     ],
-    contactOptions: [
-        {
-            title: "Email Us",
-            description: "Get a response within 24 hours",
-            contact: "info@fineystjackets.com",
-            action: "Send Email",
-        },
-        {
-            title: "Call Us",
-            description: "Available Mon-Fri, 9am-5pm EST",
-            contact: "+1 (416) 555-0123",
-            action: "Call Now",
-        },
-        {
-            title: "Live Chat",
-            description: "Get instant assistance",
-            contact: "Available 24/7",
-            action: "Start Chat",
-        },
-    ],
+     contactOptions: [
+         {
+             title: "Email Us",
+             description: "Get a response within 24 hours",
+             contact: "info@fineystjackets.com",
+             action: "Send Email",
+             icon: "Mail",
+             type: "email",
+         },
+         {
+             title: "Call Us",
+             description: "Available Mon-Fri, 9am-5pm EST",
+             contact: "+1 (416) 555-0123",
+             action: "Call Now",
+             icon: "Phone",
+             type: "phone",
+         },
+         {
+             title: "Live Chat",
+             description: "Get instant assistance",
+             contact: "Available 24/7",
+             action: "Start Chat",
+             icon: "MessageSquare",
+             type: "chat",
+         },
+     ],
 }
 
 const auShippingData: ShippingPolicyData = {
@@ -383,26 +401,32 @@ const auShippingData: ShippingPolicyData = {
             answer: "We can only change the shipping address if the order hasn't been processed yet. Please contact our customer service team immediately if you need to update your shipping address. Once an order has been shipped, we cannot redirect it to a different address.",
         },
     ],
-    contactOptions: [
-        {
-            title: "Email Us",
-            description: "Get a response within 24 hours",
-            contact: "info@fineystjackets.com",
-            action: "Send Email",
-        },
-        {
-            title: "Call Us",
-            description: "Available Mon-Fri, 9am-5pm AEST",
-            contact: "+61 2 5555 0123",
-            action: "Call Now",
-        },
-        {
-            title: "Live Chat",
-            description: "Get instant assistance",
-            contact: "Available 24/7",
-            action: "Start Chat",
-        },
-    ],
+     contactOptions: [
+         {
+             title: "Email Us",
+             description: "Get a response within 24 hours",
+             contact: "info@fineystjackets.com",
+             action: "Send Email",
+             icon: "Mail",
+             type: "email",
+         },
+         {
+             title: "Call Us",
+             description: "Available Mon-Fri, 9am-5pm AEST",
+             contact: "+61 2 5555 0123",
+             action: "Call Now",
+             icon: "Phone",
+             type: "phone",
+         },
+         {
+             title: "Live Chat",
+             description: "Get instant assistance",
+             contact: "Available 24/7",
+             action: "Start Chat",
+             icon: "MessageSquare",
+             type: "chat",
+         },
+     ],
 }
 
 export const shippingPolicyDataByCountry: ShippingPolicyDataMap = {

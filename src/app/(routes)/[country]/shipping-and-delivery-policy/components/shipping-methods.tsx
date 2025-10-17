@@ -59,7 +59,9 @@ export default function ShippingMethods({ shippingData }: ShippingMethodsProps) 
         <div className="grid md:grid-cols-1 gap-8 max-w-md mx-auto">
           {shippingMethods.map((method, index) => (
             <div key={index} className="bg-white rounded-xl p-8 shadow-lg border border-black-100">
-              <div className="w-14 h-14 rounded-full bg-[#eaeaea] flex items-center justify-center mb-6"></div>
+              <div className="w-14 h-14 rounded-full bg-[#eaeaea] flex items-center justify-center mb-6">
+                <Truck className="w-7 h-7 text-black" />
+              </div>
               <h3 className="text-xl font-bold text-black-900 mb-3">{method.title}</h3>
               <p className="text-black-600 mb-6">{method.description}</p>
               <ul className="space-y-2">
@@ -105,7 +107,9 @@ export default function ShippingMethods({ shippingData }: ShippingMethodsProps) 
             variants={itemVariants}
             className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-black-100"
           >
-            <div className="w-14 h-14 rounded-full bg-[#eaeaea] flex items-center justify-center mb-6"></div>
+            <div className="w-14 h-14 rounded-full bg-[#eaeaea] flex items-center justify-center mb-6">
+              <Truck className="w-7 h-7 text-black" />
+            </div>
             <h3 className="text-xl font-bold text-black-900 mb-3">{method.title}</h3>
             <p className="text-black-600 mb-6">{method.description}</p>
             <ul className="space-y-2">
