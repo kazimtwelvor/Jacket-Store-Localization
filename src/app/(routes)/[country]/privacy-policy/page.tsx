@@ -1,13 +1,18 @@
-import PrivacyPolicyClient from "./PrivacyPolicyClient"
+import PrivacyPolicyClientDynamic from "./PrivacyPolicyClientDynamic"
 
-export const metadata = {
-  title: "Privacy Policy - Data Protection Information | Fineyst",
-  description: "Learn about how we collect, use, and protect your personal information.",
-  alternates: {
-    canonical: "https://www.fineystjackets.com/us/privacy-policy"
+export async function generateMetadata({ params }: { params: { country: string } }) {
+  const { country } = params
+  const countryCode = country.toLowerCase()
+  
+  return {
+    title: "Privacy Policy - Data Protection Information | Fineyst",
+    description: "Learn about how we collect, use, and protect your personal information.",
+    alternates: {
+      canonical: `https://www.fineystjackets.com/${countryCode}/privacy-policy`
+    }
   }
 }
 
 export default function PrivacyPolicyPage() {
-  return <PrivacyPolicyClient />
+  return <PrivacyPolicyClientDynamic />
 }
