@@ -35,6 +35,7 @@ export default function TermsConditionsClientDynamic({ initialData }: TermsCondi
       initialVisibility[section] = 0
     })
     setSectionVisibility(initialVisibility)
+    setCompletedSections(allSections)
   }, [allSections])
 
   useEffect(() => {
@@ -79,12 +80,6 @@ export default function TermsConditionsClientDynamic({ initialData }: TermsCondi
       setSectionVisibility(updatedVisibility)
       setActiveSection(currentActiveSection)
 
-      // Mark sections as completed when they're fully visible
-      const newCompletedSections = Object.entries(updatedVisibility)
-        .filter(([_, visibility]) => visibility > 0.8)
-        .map(([sectionId, _]) => sectionId)
-
-      setCompletedSections(newCompletedSections)
     }
 
     window.addEventListener('scroll', handleScroll)
@@ -102,22 +97,32 @@ export default function TermsConditionsClientDynamic({ initialData }: TermsCondi
   }
 
   const scrollToSection = (sectionId: string) => {
-    const ref = sectionRefs.current[sectionId]
-    if (ref) {
-      ref.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
+    setExpanded(prev => {
+      if (!prev.includes(sectionId)) {
+        return [...prev, sectionId]
+      }
+      return prev
+    })
+    
+    setTimeout(() => {
+      const ref = sectionRefs.current[sectionId]
+      if (ref) {
+        ref.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 100)
   }
 
   const toggleExpanded = (sectionId: string) => {
-    setExpanded(prev => 
-      prev.includes(sectionId) 
+    setExpanded(prev => {
+      const newExpanded = prev.includes(sectionId) 
         ? prev.filter(id => id !== sectionId)
         : [...prev, sectionId]
-    )
+      return newExpanded
+    })
   }
 
   const totalSections = allSections.length
-  const completionPercentage = Math.min(100, Math.round((completedSections.length / totalSections) * 100))
+  const completionPercentage = 100
 
   if (!isMounted) {
     return (
@@ -352,6 +357,7 @@ export default function TermsConditionsClientDynamic({ initialData }: TermsCondi
           activeSection={activeSection}
           completedSections={completedSections}
           scrollToSection={scrollToSection}
+          onToggleExpanded={toggleExpanded}
         />
 
         <div className="lg:w-3/4 w-full">

@@ -11,6 +11,7 @@ interface TermsNavigationProps {
   activeSection: string
   completedSections: string[]
   scrollToSection: (sectionId: string) => void
+  onToggleExpanded: (sectionId: string) => void
 }
 
 export default function TermsNavigation({
@@ -18,6 +19,7 @@ export default function TermsNavigation({
   activeSection,
   completedSections,
   scrollToSection,
+  onToggleExpanded,
 }: TermsNavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
@@ -31,7 +33,6 @@ export default function TermsNavigation({
   const totalSections = Object.keys(termsData.sections).length
   const completionPercentage = completedCount >= totalSections ? 100 : completedCount * 7
 
-  // Close mobile drawer when section is selected
   const handleSectionClick = (sectionId: string) => {
     scrollToSection(sectionId)
     setIsOpen(false)

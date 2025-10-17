@@ -12,10 +12,10 @@ import { termsData } from "./data/terms-data"
 import type { TermsData as OriginalTermsData } from "./data/terms-data"
 
 export default function TermsConditionsClient() {
-  const [activeSection, setActiveSection] = useState("introduction")
+  const [activeSection, setActiveSection] = useState("definitions")
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [completedSections, setCompletedSections] = useState<string[]>([])
-  const [expanded, setExpanded] = useState<string[]>(["introduction"])
+  const [expanded, setExpanded] = useState<string[]>(["definitions"])
   const [sectionVisibility, setSectionVisibility] = useState<{ [key: string]: number }>({})
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
   const [isMounted, setIsMounted] = useState(false)
@@ -28,6 +28,7 @@ export default function TermsConditionsClient() {
       initialVisibility[section] = 0
     })
     setSectionVisibility(initialVisibility)
+    setCompletedSections(allSections)
   }, [])
 
   useEffect(() => {
@@ -68,14 +69,6 @@ export default function TermsConditionsClient() {
       setSectionVisibility(updatedVisibility)
       setActiveSection(currentActiveSection)
 
-      const newCompletedSections = allSections.filter((section) => updatedVisibility[section] >= 90)
-
-      if (
-        newCompletedSections.length !== completedSections.length ||
-        !newCompletedSections.every((section) => completedSections.includes(section))
-      ) {
-        setCompletedSections(newCompletedSections)
-      }
     }
 
     window.addEventListener("scroll", handleScroll)
@@ -83,19 +76,23 @@ export default function TermsConditionsClient() {
   }, [completedSections, sectionVisibility, activeSection, isMounted, allSections])
 
   const scrollToSection = (sectionId: string) => {
-    const section = sectionRefs.current[sectionId]
-    if (section) {
-      if (!expanded.includes(sectionId)) {
-        setExpanded((prev) => [...prev, sectionId])
+    setExpanded(prev => {
+      if (!prev.includes(sectionId)) {
+        return [...prev, sectionId]
       }
-
-      window.scrollTo({
-        top: section.offsetTop - 100,
-        behavior: "smooth",
-      })
-
-      setActiveSection(sectionId)
-    }
+      return prev
+    })
+    
+    setTimeout(() => {
+      const section = sectionRefs.current[sectionId]
+      if (section) {
+        window.scrollTo({
+          top: section.offsetTop - 100,
+          behavior: "smooth",
+        })
+        setActiveSection(sectionId)
+      }
+    }, 100)
   }
 
   const scrollToTop = () => {
@@ -114,7 +111,7 @@ export default function TermsConditionsClient() {
   }
 
   const totalSections = allSections.length
-  const completionPercentage = Math.min(100, Math.round((completedSections.length / totalSections) * 100))
+  const completionPercentage = 100 
 
   if (!isMounted) {
     return (
@@ -349,6 +346,7 @@ export default function TermsConditionsClient() {
           activeSection={activeSection}
           completedSections={completedSections}
           scrollToSection={scrollToSection}
+          onToggleExpanded={toggleExpand}
         />
 
         <div className="lg:w-3/4 w-full">

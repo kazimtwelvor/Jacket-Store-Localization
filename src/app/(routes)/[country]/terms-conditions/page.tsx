@@ -2,8 +2,8 @@
 import type { Metadata } from "next"
 import TermsConditionsClientDynamic from "./TermsConditionsClientDynamic"
 
-export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
-  const { country } = params
+export async function generateMetadata({ params }: { params: Promise<{ country: string }> }): Promise<Metadata> {
+  const { country } = await params
   const countryCode = country.toLowerCase()
   
   return {
