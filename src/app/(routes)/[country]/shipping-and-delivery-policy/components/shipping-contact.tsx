@@ -5,8 +5,13 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Mail, MessageSquare, Phone } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { ShippingPolicyData } from "../data/shipping-data-by-country"
 
-export default function ShippingContact() {
+interface ShippingContactProps {
+  shippingData?: ShippingPolicyData
+}
+
+export default function ShippingContact({ shippingData }: ShippingContactProps) {
   const [isMounted, setIsMounted] = useState(false)
   const router = useRouter()
 
@@ -15,9 +20,10 @@ export default function ShippingContact() {
   }, [])
 
   const handleContactAction = (type: string) => {
+    const contactEmail = shippingData?.contactEmail || "info@fineystjackets.com"
     switch (type) {
       case "email":
-        window.location.href = "mailto:info@fineystjackets.com"
+        window.location.href = `mailto:${contactEmail}`
         break
       case "phone":
         window.location.href = "tel:+18888400885"
@@ -30,9 +36,9 @@ export default function ShippingContact() {
     }
   }
 
-  const contactOptions = [
+  const contactOptions = shippingData?.contactOptions || [
     {
-      icon: Mail,
+      icon: "Mail",
       title: "Email Us",
       description: "Get a response within 24 hours",
       contact: "info@fineystjackets.com",
@@ -40,7 +46,7 @@ export default function ShippingContact() {
       type: "email",
     },
     {
-      icon: Phone,
+      icon: "Phone",
       title: "Call Us",
       description: "Available Mon-Fri, 9am-5pm EST",
       contact: "+1 (888) 840-0885",
@@ -48,7 +54,7 @@ export default function ShippingContact() {
       type: "phone",
     },
     {
-      icon: MessageSquare,
+      icon: "MessageSquare",
       title: "Live Chat",
       description: "Get instant assistance",
       contact: "Available 24/7",
@@ -125,13 +131,15 @@ export default function ShippingContact() {
               )}
               <div className="flex flex-col items-center text-center">
                 <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                  <item.icon className="w-7 h-7 text-gray-600" />
+                  {item.icon === "Mail" && <Mail className="w-7 h-7 text-gray-600" />}
+                  {item.icon === "Phone" && <Phone className="w-7 h-7 text-gray-600" />}
+                  {item.icon === "MessageSquare" && <MessageSquare className="w-7 h-7 text-gray-600" />}
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
                 <p className="text-gray-600 mb-4">{item.description}</p>
                 <p className="font-medium text-gray-800 mb-6">{item.contact}</p>
                 <button
-                  onClick={() => handleContactAction(item.type)}
+                  onClick={() => handleContactAction(item.type || "email")}
                   className="px-6 py-2 bg-gray-100 text-gray-900 rounded-md hover:bg-gray-800 hover:text-white transition-colors duration-200"
                 >
                   {item.action}

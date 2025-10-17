@@ -3,8 +3,13 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown } from "lucide-react"
+import { ShippingPolicyData } from "../data/shipping-data-by-country"
 
-export default function ShippingFAQ() {
+interface ShippingFAQProps {
+  shippingData?: ShippingPolicyData
+}
+
+export default function ShippingFAQ({ shippingData }: ShippingFAQProps) {
   const [isMounted, setIsMounted] = useState(false)
   const [openIndex, setOpenIndex] = useState<number | null>(null) // No FAQ open by default
 
@@ -16,7 +21,7 @@ export default function ShippingFAQ() {
     setOpenIndex(openIndex === index ? null : index)
   }
 
-  const faqs = [
+  const faqs = shippingData?.faqs || [
     {
       question: "How can I track my order?",
       answer:

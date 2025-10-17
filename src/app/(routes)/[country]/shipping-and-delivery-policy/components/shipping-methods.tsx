@@ -3,8 +3,13 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Truck } from "lucide-react"
+import { ShippingPolicyData } from "../data/shipping-data-by-country"
 
-export default function ShippingMethods() {
+interface ShippingMethodsProps {
+  shippingData?: ShippingPolicyData
+}
+
+export default function ShippingMethods({ shippingData }: ShippingMethodsProps) {
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -32,9 +37,9 @@ export default function ShippingMethods() {
     },
   }
 
-  const shippingMethods = [
+  const shippingMethods = shippingData?.shippingMethods || [
     {
-      icon: Truck,
+      icon: "Truck",
       title: "Standard Shipping",
       description: "Delivery within 3-4 business days",
       features: ["Tracking included", "Signature on delivery optional", "Available for most locations"],
@@ -100,9 +105,7 @@ export default function ShippingMethods() {
             variants={itemVariants}
             className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-black-100"
           >
-            <div className="w-14 h-14 rounded-full bg-[#eaeaea] flex items-center justify-center mb-6">
-              <method.icon className="w-7 h-7 text-black" />
-            </div>
+            <div className="w-14 h-14 rounded-full bg-[#eaeaea] flex items-center justify-center mb-6"></div>
             <h3 className="text-xl font-bold text-black-900 mb-3">{method.title}</h3>
             <p className="text-black-600 mb-6">{method.description}</p>
             <ul className="space-y-2">

@@ -8,9 +8,17 @@ import ShippingTimeline from "./components/shipping-timeline"
 import ShippingFAQ from "./components/shipping-faq"
 import ShippingContact from "./components/shipping-contact"
 import { motion } from "framer-motion"
+import { useCountry } from "@/src/hooks/use-country"
+import { getShippingPolicyData, ShippingPolicyData } from "./data/shipping-data-by-country"
 
-export default function ShippingPolicyClient() {
+interface ShippingPolicyClientProps {
+  initialData?: ShippingPolicyData
+}
+
+export default function ShippingPolicyClient({ initialData }: ShippingPolicyClientProps) {
   const [isMounted, setIsMounted] = useState(false)
+  const { countryCode } = useCountry()
+  const shippingData = initialData || getShippingPolicyData(countryCode)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -307,7 +315,7 @@ export default function ShippingPolicyClient() {
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-white"
     >
-      <PolicyHero />
+      <PolicyHero shippingData={shippingData} />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -315,11 +323,11 @@ export default function ShippingPolicyClient() {
         transition={{ delay: 0.2, duration: 0.5 }}
         className="container mx-auto px-4 pt-0 pb-8 max-w-7xl"
       >
-        <ShippingMethods />
+        <ShippingMethods shippingData={shippingData} />
         <OrderProcessingInfo />
         <ShippingTimeline />
-        <ShippingFAQ />
-        <ShippingContact />
+        <ShippingFAQ shippingData={shippingData} />
+        <ShippingContact shippingData={shippingData} />
       </motion.div>
     </motion.div>
   )
