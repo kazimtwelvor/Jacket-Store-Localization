@@ -443,39 +443,39 @@ const ukSizeGuideData: SizeGuideData = {
   sizeCharts: {
     ...usSizeGuideData.sizeCharts,
     mensClothingSizes: [
-      { size: "XS", chest: "86-91", waist: "71-76", hips: "86-91" },
-      { size: "S", chest: "91-97", waist: "76-81", hips: "91-97" },
-      { size: "M", chest: "97-102", waist: "81-86", hips: "97-102" },
-      { size: "L", chest: "102-107", waist: "86-91", hips: "102-107" },
-      { size: "XL", chest: "107-112", waist: "91-97", hips: "107-112" },
-      { size: "XXL", chest: "112-117", waist: "97-102", hips: "112-117" }
+      { size: "XS", chest: "34-36", waist: "28-30", hips: "34-36" },
+      { size: "S", chest: "36-38", waist: "30-32", hips: "36-38" },
+      { size: "M", chest: "38-40", waist: "32-34", hips: "38-40" },
+      { size: "L", chest: "40-42", waist: "34-36", hips: "40-42" },
+      { size: "XL", chest: "42-44", waist: "36-38", hips: "42-44" },
+      { size: "XXL", chest: "44-46", waist: "38-40", hips: "44-46" }
     ],
     womensClothingSizes: [
-      { size: "XS", bust: "81-84", waist: "61-64", hips: "86-89" },
-      { size: "S", bust: "86-89", waist: "66-69", hips: "91-94" },
-      { size: "M", bust: "91-94", waist: "71-74", hips: "97-99" },
-      { size: "L", bust: "97-102", waist: "76-81", hips: "102-107" },
-      { size: "XL", bust: "104-109", waist: "84-89", hips: "109-114" },
-      { size: "XXL", bust: "112-117", waist: "91-97", hips: "117-122" }
+      { size: "XS", bust: "32-33", waist: "24-25", hips: "34-35" },
+      { size: "S", bust: "34-35", waist: "26-27", hips: "36-37" },
+      { size: "M", bust: "36-37", waist: "28-29", hips: "38-39" },
+      { size: "L", bust: "38-40", waist: "30-32", hips: "40-42" },
+      { size: "XL", bust: "41-43", waist: "33-35", hips: "43-45" },
+      { size: "XXL", bust: "44-46", waist: "36-38", hips: "46-48" }
     ],
     kidsClothingSizes: [
-      { size: "2T", height: "84-89", weight: "13-15 kg", chest: "53" },
-      { size: "3T", height: "89-97", weight: "15-16 kg", chest: "56" },
-      { size: "4T", height: "97-104", weight: "16-18 kg", chest: "58" },
-      { size: "5", height: "104-112", weight: "18-20 kg", chest: "61" },
-      { size: "6", height: "112-119", weight: "20-23 kg", chest: "64" },
-      { size: "7", height: "119-127", weight: "23-27 kg", chest: "66" }
+      { size: "2T", height: "33-35", weight: "28-32 lbs", chest: "21" },
+      { size: "3T", height: "35-38", weight: "32-35 lbs", chest: "22" },
+      { size: "4T", height: "38-41", weight: "35-39 lbs", chest: "23" },
+      { size: "5", height: "41-44", weight: "39-45 lbs", chest: "24" },
+      { size: "6", height: "44-47", weight: "45-50 lbs", chest: "25" },
+      { size: "7", height: "47-50", weight: "50-59 lbs", chest: "26" }
     ],
     accessoriesSizes: [
-      { type: "Belts", size: "S", measurement: "76-81" },
-      { type: "Belts", size: "M", measurement: "86-91" },
-      { type: "Belts", size: "L", measurement: "97-102" },
-      { type: "Gloves", size: "S", measurement: "18-19" },
-      { type: "Gloves", size: "M", measurement: "20-22" },
-      { type: "Gloves", size: "L", measurement: "23-24" },
-      { type: "Hats", size: "S", measurement: "53-55" },
-      { type: "Hats", size: "M", measurement: "56-57" },
-      { type: "Hats", size: "L", measurement: "58-60" }
+      { type: "Belts", size: "S", measurement: "30-32" },
+      { type: "Belts", size: "M", measurement: "34-36" },
+      { type: "Belts", size: "L", measurement: "38-40" },
+      { type: "Gloves", size: "S", measurement: "7-7.5" },
+      { type: "Gloves", size: "M", measurement: "8-8.5" },
+      { type: "Gloves", size: "L", measurement: "9-9.5" },
+      { type: "Hats", size: "S", measurement: "21-21.5" },
+      { type: "Hats", size: "M", measurement: "22-22.5" },
+      { type: "Hats", size: "L", measurement: "23-23.5" }
     ]
   },
   measurementGuide: {

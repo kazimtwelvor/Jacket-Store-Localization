@@ -32,7 +32,33 @@ export default function SizeChart({ sizeChartData }: SizeChartProps) {
     { id: "accessories", label: "Accessories" },
   ]
 
-  const mensClothingSizes = sizeChartData?.mensClothingSizes || [
+  const convertMeasurements = (measurements: string) => {
+    if (!measurements || !measurements.includes("-")) {
+      return measurements
+    }
+    
+    if (unit === "cm") {
+      return measurements.split("-").map(val => {
+        const num = parseFloat(val.trim())
+        if (isNaN(num)) return val
+        return Math.round(num * 2.54).toString()
+      }).join("-")
+    } else {
+      return measurements.split("-").map(val => {
+        const num = parseFloat(val.trim())
+        if (isNaN(num)) return val
+        return Math.round(num / 2.54).toString()
+      }).join("-")
+    }
+  }
+
+  const mensClothingSizes = sizeChartData?.mensClothingSizes ? 
+    sizeChartData.mensClothingSizes.map(size => ({
+      ...size,
+      chest: unit === "in" ? size.chest : convertMeasurements(size.chest),
+      waist: unit === "in" ? size.waist : convertMeasurements(size.waist),
+      hips: unit === "in" ? size.hips : convertMeasurements(size.hips)
+    })) : [
     {
       size: "XS",
       chest: unit === "in" ? "34-36" : "86-91",
@@ -71,7 +97,13 @@ export default function SizeChart({ sizeChartData }: SizeChartProps) {
     },
   ]
 
-  const womensClothingSizes = sizeChartData?.womensClothingSizes || [
+  const womensClothingSizes = sizeChartData?.womensClothingSizes ? 
+    sizeChartData.womensClothingSizes.map(size => ({
+      ...size,
+      bust: unit === "in" ? size.bust : convertMeasurements(size.bust),
+      waist: unit === "in" ? size.waist : convertMeasurements(size.waist),
+      hips: unit === "in" ? size.hips : convertMeasurements(size.hips)
+    })) : [
     {
       size: "XS",
       bust: unit === "in" ? "32-33" : "81-84",
@@ -110,7 +142,16 @@ export default function SizeChart({ sizeChartData }: SizeChartProps) {
     },
   ]
 
-  const kidsClothingSizes = sizeChartData?.kidsClothingSizes || [
+  const kidsClothingSizes = sizeChartData?.kidsClothingSizes ? 
+    sizeChartData.kidsClothingSizes.map(size => ({
+      ...size,
+      height: unit === "in" ? size.height : convertMeasurements(size.height),
+      weight: unit === "in" ? size.weight : size.weight.replace("lbs", "kg").replace(/\d+-\d+/, (match) => {
+        const [min, max] = match.split("-").map(Number)
+        return `${Math.round(min * 0.45)}-${Math.round(max * 0.45)}`
+      }),
+      chest: unit === "in" ? size.chest : convertMeasurements(size.chest)
+    })) : [
     {
       size: "2T",
       height: unit === "in" ? "33-35" : "84-89",
@@ -159,7 +200,11 @@ export default function SizeChart({ sizeChartData }: SizeChartProps) {
     { us: "12", uk: "11", eu: "45", jp: "30", cm: "29.5" },
   ]
 
-  const accessoriesSizes = sizeChartData?.accessoriesSizes || [
+  const accessoriesSizes = sizeChartData?.accessoriesSizes ? 
+    sizeChartData.accessoriesSizes.map(accessory => ({
+      ...accessory,
+      measurement: unit === "in" ? accessory.measurement : convertMeasurements(accessory.measurement)
+    })) : [
     { type: "Belts", size: "S", measurement: unit === "in" ? "30-32" : "76-81" },
     { type: "Belts", size: "M", measurement: unit === "in" ? "34-36" : "86-91" },
     { type: "Belts", size: "L", measurement: unit === "in" ? "38-40" : "97-102" },
