@@ -5,6 +5,7 @@ import Navbar from "@/src/app/components/navbar/Navbar";
 import { FontProvider } from "@/src/components/font-provider";
 import { CartProvider } from "@/src/app/contexts/CartContext";
 import { ClarityProvider } from "@/src/app/providers/clarity-provider";
+import { CurrencyProvider } from "@/src/contexts/CurrencyContext";
 import { ClarityScript } from "@/src/app/components/clarity-script";
 import { avertaBold, avertaDefault } from "@/src/lib/fonts";
 import Footer from "./components/home-page-components/footer/footer";
@@ -130,8 +131,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <FontProvider>
           <ClarityProvider>
-            {/* <Suspense fallback={<div />}> */}
-            <CartProvider>
+            <CurrencyProvider>
+              {/* <Suspense fallback={<div />}> */}
+              <CartProvider>
               <noscript>
                 <div style={{ background: '#111', color: '#fff', padding: '8px 12px', textAlign: 'center' }}>
                   For the best experience, enable JavaScript. Basic content is still available.
@@ -150,9 +152,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               </main>
               <Footer />
               <CartSidebarWrapper />
-            </CartProvider>
-            {/* </Suspense> */}
-            <CustomChatButton />
+              </CartProvider>
+              {/* </Suspense> */}
+              <CustomChatButton />
+            </CurrencyProvider>
           </ClarityProvider>
         </FontProvider>
       </body>

@@ -1,17 +1,15 @@
 "use client"
 import { useState, useEffect } from "react"
-
-const formatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-})
+import { useCurrency } from "@/src/hooks/use-currency"
 
 interface CurrencyProps {
   value?: string | number
+  className?: string
 }
 
-const Currency = ({ value }: CurrencyProps) => {
+const Currency = ({ value, className = "" }: CurrencyProps) => {
   const [mounted, setMounted] = useState(false)
+  const { convertAndFormat } = useCurrency()
 
   useEffect(() => {
     setMounted(true)
@@ -21,8 +19,11 @@ const Currency = ({ value }: CurrencyProps) => {
     return null
   }
 
+  const priceUSD = Number(value) || 0
+  const formattedPrice = convertAndFormat(priceUSD)
+
   return (
-    <span className="inline-block">{formatter.format(Number(value))}</span>
+    <span className={`inline-block ${className}`}>{formattedPrice}</span>
   )
 }
 

@@ -6,6 +6,7 @@ import Link from "next/link"
 import { cn } from "@/src/app/lib/utils"
 import type { Product } from "@/types"
 import { useCountry } from "@/src/hooks/use-country"
+import { PriceDisplay } from "@/src/components/price-display"
 
 // Helper function to generate a slug
 const getProductSlug = (product: Product): string => {
@@ -86,9 +87,10 @@ const ProductCardNew = ({ product }: ProductCardProps) => {
 
         <div className="mt-4">
           <h3 className="text-base font-bold line-clamp-1">{product.name.toUpperCase()}</h3>
-          <p className="text-lg font-bold mt-1">
-            ${Number.parseFloat(product.price?.toString() || "0").toFixed(2)}
-          </p>
+          <PriceDisplay 
+            priceUSD={Number.parseFloat(product.price?.toString() || "0")} 
+            className="text-lg font-bold mt-1" 
+          />
           
           {/* Color Options */}
           <div className="flex items-center gap-2 mt-3">

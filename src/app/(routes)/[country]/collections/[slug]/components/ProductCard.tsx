@@ -10,6 +10,7 @@ import { ColorSelector } from "./ColorSelector"
 import { SizeSelector } from "./SizeSelector"
 import { trackAddToWishlist } from "@/src/app/lib/analytics"
 import { useCountry } from "@/src/hooks/use-country"
+import { PriceDisplay, ComparePriceDisplay } from "@/src/components/price-display"
 
 interface ProductCardProps {
   product: Product
@@ -181,12 +182,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <p className="text-sm line-clamp-1">{product.name.toUpperCase()}</p>
         <div className="mt-1 xs:mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-1 2xl:mt-1">
           {product.salePrice && Number(product.salePrice) > 0 ? (
-            <div className="flex items-center gap-1">
-              <span className="text-sm line-through text-black-500">${product.price}</span>
-              <span className="text-sm font-bold text-black">${product.salePrice}</span>
-            </div>
+            <ComparePriceDisplay 
+              originalPriceUSD={Number(product.price)} 
+              salePriceUSD={Number(product.salePrice)} 
+            />
           ) : (
-            <span className="text-sm font-bold text-black">${product.price}</span>
+            <PriceDisplay priceUSD={Number(product.price)} className="text-sm font-bold text-black" />
           )}
         </div>
 

@@ -11,6 +11,7 @@ import useWishlist from "../hooks/use-wishlist"
 import { useCart } from "@/src/app/contexts/CartContext"
 import { useCountry } from "@/src/hooks/use-country"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./dialog"
+import { PriceDisplay } from "@/src/components/price-display"
 
 // Shimmer effect for image loading
 const shimmer = (w: number, h: number) => `
@@ -102,7 +103,7 @@ const ProductCard = ({ data, onMouseEnter }: ProductCardProps) => {
           <p className="text-sm text-gray-500">{data.category?.name}</p>
         </div>
         <div className="flex items-center justify-between">
-          <div className="font-bold text-lg">${data.price}</div>
+          <PriceDisplay priceUSD={data.price} className="font-bold text-lg" />
         </div>
         <div className="flex items-center gap-2">
           {data.colors && data.colors.slice(0, 3).map((color, i) => (
@@ -222,9 +223,10 @@ const ProductCard = ({ data, onMouseEnter }: ProductCardProps) => {
       <div className="mt-3 sm:mt-4">
         <div className="flex justify-between items-center">
           <h3 className="text-sm sm:text-base font-bold line-clamp-1 flex-1">{data.name}</h3>
-          <p className="text-base sm:text-lg font-bold ml-2 whitespace-nowrap">
-            ${data.price}
-          </p>
+          <PriceDisplay 
+            priceUSD={data.price} 
+            className="text-base sm:text-lg font-bold ml-2 whitespace-nowrap" 
+          />
         </div>
         
         {/* Color display with ball */}

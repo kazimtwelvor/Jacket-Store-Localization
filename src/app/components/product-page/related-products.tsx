@@ -9,6 +9,7 @@ import type { Product } from "@/types"
 import useWishlist from "../../hooks/use-wishlist"
 import { cn } from "../../lib/utils"
 import { trackAddToWishlist } from "../../lib/analytics"
+import { PriceDisplay, ComparePriceDisplay } from "@/src/components/price-display"
 
 interface RelatedProductsProps {
   relatedProductIds: string[]
@@ -339,12 +340,12 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                   <p className="text-sm truncate">{product.name}</p>
                   <div className="mt-1">
                     {product.salePrice && Number(product.salePrice) > 0 ? (
-                      <div className="flex items-center gap-1">
-                        <span className="text-sm font-bold line-through text-gray-500">${product.price}</span>
-                        <span className="text-lg font-bold text-black">${product.salePrice}</span>
-                      </div>
+                      <ComparePriceDisplay 
+                        originalPriceUSD={Number(product.price)} 
+                        salePriceUSD={Number(product.salePrice)} 
+                      />
                     ) : (
-                      <span className="text-lg font-bold text-black">${product.price}</span>
+                      <PriceDisplay priceUSD={Number(product.price)} className="text-lg font-bold text-black" />
                     )}
                   </div>
                   <div className="mt-2">
@@ -496,12 +497,12 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                     <p className="text-sm line-clamp-1">{product.name.toUpperCase()}</p>
                     <div className="mt-1 xs:mt-1 sm:mt-1 md:mt-1 lg:mt-1 xl:mt-1 2xl:mt-1">
                       {product.salePrice && Number(product.salePrice) > 0 ? (
-                        <div className="flex items-center gap-1">
-                          <span className="text-sm line-through text-black-500">${product.price}</span>
-                          <span className="text-sm font-bold text-black">${product.salePrice}</span>
-                        </div>
+                        <ComparePriceDisplay 
+                          originalPriceUSD={Number(product.price)} 
+                          salePriceUSD={Number(product.salePrice)} 
+                        />
                       ) : (
-                        <span className="text-sm font-bold text-black">${product.price}</span>
+                        <PriceDisplay priceUSD={Number(product.price)} className="text-sm font-bold text-black" />
                       )}
                     </div>
                     <div className="mt-2">
