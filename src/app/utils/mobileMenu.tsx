@@ -26,9 +26,7 @@ interface MobileMenuProps {
   onSearchOpen?: () => void
 }
 
-const { countryCode } = useCountry()
-
-const discoverData: Record<string, { title: string; items: string[]; links: string[] }[]> = {
+const getDiscoverData = (countryCode: string): Record<string, { title: string; items: string[]; links: string[] }[]> => ({
   "Women's Jackets": [
     {
       title: "LEATHER JACKETS",
@@ -112,7 +110,7 @@ const discoverData: Record<string, { title: string; items: string[]; links: stri
       links: [`/${countryCode}/privacy-policy`, `/${countryCode}/terms-conditions`, `/${countryCode}/shipping-and-delivery-policy`]
     }
   ]
-};
+});
 
 const mainNavLinks = [
   
@@ -186,6 +184,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, onNavigate, on
   const { items } = useCart()
   const wishlist = useWishlist()
   const { countryCode } = useCountry()
+  const discoverData = getDiscoverData(countryCode)
   const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [direction, setDirection] = useState(1);

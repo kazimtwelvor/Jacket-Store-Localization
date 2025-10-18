@@ -440,6 +440,7 @@ const usSizeGuideData: SizeGuideData = {
 // UK Data (with metric measurements)
 const ukSizeGuideData: SizeGuideData = {
   ...usSizeGuideData,
+  title: "Complete UK Size Guide for Jackets & Outerwear",
   sizeCharts: {
     ...usSizeGuideData.sizeCharts,
     mensClothingSizes: [
