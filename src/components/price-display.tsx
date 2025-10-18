@@ -97,6 +97,8 @@ interface ComparePriceDisplayProps {
   salePriceUSD: number
   /** Optional className for styling */
   className?: string
+  /** Show discount badge */
+  showDiscount?: boolean
 }
 
 /**
@@ -112,6 +114,7 @@ export function ComparePriceDisplay({
   originalPriceUSD,
   salePriceUSD,
   className = '',
+  showDiscount = false,
 }: ComparePriceDisplayProps) {
   const { convertAndFormat } = useCurrency()
   
@@ -121,15 +124,21 @@ export function ComparePriceDisplay({
   // Calculate discount percentage
   const discount = Math.round(((originalPriceUSD - salePriceUSD) / originalPriceUSD) * 100)
   
+  // Default styling - can be overridden by className
+  // Mobile: text-sm (strikethrough) + text-lg (sale price)
+  // Desktop: text-sm (both)
+  const defaultOriginalClass = "text-sm font-bold line-through text-gray-500"
+  const defaultSaleClass = "text-lg font-bold text-black"
+  
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
-      <span className="text-gray-500 line-through">
+    <div className={`flex items-center gap-1 ${className}`}>
+      <span className={defaultOriginalClass}>
         {originalPrice}
       </span>
-      <span className="text-black-600 font-semibold">
+      <span className={defaultSaleClass}>
         {salePrice}
       </span>
-      {discount > 0 && (
+      {showDiscount && discount > 0 && (
         <span className="bg-black/10 text-black text-xs px-2 py-1 rounded">
           {discount}% OFF
         </span>

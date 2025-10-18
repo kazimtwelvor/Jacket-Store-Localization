@@ -8,6 +8,7 @@ import type { Size, Color, Product } from "@/types";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "../contexts/CartContext";
+import { PriceDisplay, ComparePriceDisplay } from "@/src/components/price-display";
 
 interface MobileAddToCartModalProps {
   isOpen: boolean;
@@ -108,18 +109,13 @@ export default function MobileAddToCartModal({
                     </h3>
                     <div className="flex items-center gap-2">
                       {product.salePrice !== "0" ? (
-                        <>
-                          <span className="text-base font-bold line-through text-gray-400">
-                            ${product.price}
-                          </span>
-                          <span className="text-base font-bold text-[#2b2b2b]">
-                            ${product.salePrice}
-                          </span>
-                        </>
+                        <ComparePriceDisplay 
+                          originalPriceUSD={Number(product.price)} 
+                          salePriceUSD={Number(product.salePrice)} 
+                          className="text-base"
+                        />
                       ) : (
-                        <span className="text-base font-bold text-[#2b2b2b]">
-                          ${product.price}
-                        </span>
+                        <PriceDisplay priceUSD={Number(product.price)} className="text-base font-bold text-[#2b2b2b]" />
                       )}
                     </div>
                   </div>
@@ -249,18 +245,13 @@ export default function MobileAddToCartModal({
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           {product.salePrice !== "0" ? (
-                            <>
-                              <span className="text-sm line-through text-gray-400">
-                                ${product.price}
-                              </span>
-                              <span className="text-base font-bold text-[#2b2b2b]">
-                                ${product.salePrice}
-                              </span>
-                            </>
+                            <ComparePriceDisplay 
+                              originalPriceUSD={Number(product.price)} 
+                              salePriceUSD={Number(product.salePrice)} 
+                              className="text-base"
+                            />
                           ) : (
-                            <span className="text-base font-bold text-[#2b2b2b]">
-                              ${product.price}
-                            </span>
+                            <PriceDisplay priceUSD={Number(product.price)} className="text-base font-bold text-[#2b2b2b]" />
                           )}
                         </div>
                         <p className="text-sm text-gray-600">

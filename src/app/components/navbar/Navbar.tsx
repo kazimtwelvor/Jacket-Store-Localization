@@ -17,6 +17,7 @@ import { useCart } from "../../contexts/CartContext";
 import useAuth from "../../hooks/use-auth";
 import { useRouter, usePathname } from "next/navigation";
 import useWishlist from "../../hooks/use-wishlist";
+import { PriceDisplay } from "@/src/components/price-display";
 import { useEffect, useRef, useState } from "react";
 import { CapsuleNav } from "./CapsuleNav";
 import dynamic from "next/dynamic";
@@ -696,7 +697,7 @@ const Navbar = () => {
                                             {product.subcategory}
                                           </p>
                                           <p className="text-gray-500 text-xs">
-                                            ${product.price}
+                                            <PriceDisplay priceUSD={Number(product.price)} />
                                           </p>
                                         </div>
                                         <ChevronRight className="h-4 w-4 text-white" />
@@ -987,7 +988,7 @@ const Navbar = () => {
                                     {product.subcategory}
                                   </p>
                                   <p className="text-gray-500 text-xs">
-                                    ${product.price}
+                                    <PriceDisplay priceUSD={Number(product.price)} />
                                   </p>
                                 </div>
                                 <ChevronRight className="h-4 w-4 text-white" />

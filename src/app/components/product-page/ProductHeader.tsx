@@ -5,6 +5,7 @@ import { cn } from "../../lib/utils"
 import type { Product } from "@/types"
 import { avertaBlack } from "@/src/lib/fonts"
 import { useCountry } from "@/src/hooks/use-country"
+import { PriceDisplay, ComparePriceDisplay } from "@/src/components/price-display"
 
 interface ProductHeaderProps {
   data: Product
@@ -66,29 +67,23 @@ const ProductHeader = ({ data, isMobile }: ProductHeaderProps) => {
             const hasValidSalePrice = data?.salePrice && parseFloat(data?.salePrice) > 0;
             if (hasValidSalePrice) {
               return (
-                <div className="flex items-center gap-2">
-                  <span className={cn(
-                    "font-bold line-through text-gray-500",
-                    isMobile ? "text-lg sm:text-xl md:text-2xl" : "text-lg lg:text-xl"
-                  )}>
-                    ${data?.price}
-                  </span>
-                  <span className={cn(
-                    "font-bold text-black",
+                <ComparePriceDisplay 
+                  originalPriceUSD={parseFloat(data?.price || '0')} 
+                  salePriceUSD={parseFloat(data?.salePrice as string || '0')}
+                  className={cn(
                     isMobile ? "text-lg sm:text-xl md:text-2xl" : "text-xl lg:text-2xl"
-                  )}>
-                    ${data?.salePrice}
-                  </span>
-                </div>
+                  )}
+                />
               );
             } else {
               return (
-                <span className={cn(
-                  "font-bold text-black",
-                  isMobile ? "text-lg sm:text-xl md:text-2xl" : "text-xl lg:text-2xl"
-                )}>
-                  ${data?.price}
-                </span>
+                <PriceDisplay 
+                  priceUSD={parseFloat(data?.price || '0')}
+                  className={cn(
+                    "font-bold text-black",
+                    isMobile ? "text-lg sm:text-xl md:text-2xl" : "text-xl lg:text-2xl"
+                  )}
+                />
               );
             }
           })()}
