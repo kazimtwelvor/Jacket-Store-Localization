@@ -38,12 +38,24 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const { country: countryCode } = await params
   const title = "Premium Jackets & Outerwear | www.fineystjackets.com"
   const description = "Discover premium quality jackets and outerwear at www.fineystjackets.com. Shop leather jackets, winter coats, and stylish outerwear with fast shipping and excellent customer service."
-  const canonical = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fineystjackets.com'}/${countryCode}`
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fineystjackets.com'
+  const canonical = `${baseUrl}/${countryCode}`
+  
+  // Supported countries for hreflang
+  const countries = ['us', 'uk', 'ca', 'au']
   
   return {
     title,
     description,
-    alternates: { canonical },
+    alternates: { 
+      canonical,
+      languages: {
+        'x-default': `${baseUrl}/us`,
+        ...Object.fromEntries(
+          countries.map(country => [country === 'us' ? 'en-US' : country === 'uk' ? 'en-GB' : country === 'ca' ? 'en-CA' : 'en-AU', `${baseUrl}/${country}`])
+        )
+      }
+    },
     robots: 'index, follow',
     keywords: 'jackets, leather jackets, outerwear, winter coats, mens jackets, womens jackets',
     openGraph: {

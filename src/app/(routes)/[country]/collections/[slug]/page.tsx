@@ -116,6 +116,13 @@ export async function generateMetadata(
       },
       alternates: {
         canonical: keywordCategory.canonicalUrl || `https://www.fineystjackets.com/${countryCode}/collections/${slug}`,
+        languages: {
+          'x-default': `https://www.fineystjackets.com/us/collections/${slug}`,
+          'en-US': `https://www.fineystjackets.com/us/collections/${slug}`,
+          'en-GB': `https://www.fineystjackets.com/uk/collections/${slug}`,
+          'en-CA': `https://www.fineystjackets.com/ca/collections/${slug}`,
+          'en-AU': `https://www.fineystjackets.com/au/collections/${slug}`,
+        }
       },
       ...(keywordCategory.enableSchema && keywordCategory.customSchema
         ? {

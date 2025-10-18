@@ -115,6 +115,13 @@ export async function generateMetadata({ params }: ProductPageProps, parent: Res
       },
       alternates: {
         canonical: `https://www.fineystjackets.com/${countryCode}/product/${product.slug || slugOrId}`,
+        languages: {
+          'x-default': `https://www.fineystjackets.com/us/product/${product.slug || slugOrId}`,
+          'en-US': `https://www.fineystjackets.com/us/product/${product.slug || slugOrId}`,
+          'en-GB': `https://www.fineystjackets.com/uk/product/${product.slug || slugOrId}`,
+          'en-CA': `https://www.fineystjackets.com/ca/product/${product.slug || slugOrId}`,
+          'en-AU': `https://www.fineystjackets.com/au/product/${product.slug || slugOrId}`,
+        }
       },
       other: {
         "og:price:amount": product.isDiscounted && product.salePrice ? product.salePrice : product.price,
