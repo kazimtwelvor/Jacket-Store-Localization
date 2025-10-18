@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import ShippingPolicyClient from "./shipping-policy-client"
+import { generateHreflangLinks, getCanonicalUrl } from "@/src/lib/hreflang-helper"
 
 export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
   const { country } = await params
@@ -9,7 +10,8 @@ export async function generateMetadata({ params }: { params: { country: string }
     title: "Shipping & Delivery Policy | Fashion Store",
     description: "Learn about our shipping methods and delivery timeframes for domestic orders.",
     alternates: {
-      canonical: `https://www.fineystjackets.com/${countryCode}/shipping-and-delivery-policy`
+      canonical: getCanonicalUrl(countryCode, '/shipping-and-delivery-policy'),
+      languages: generateHreflangLinks({ path: '/shipping-and-delivery-policy' })
     }
   }
 }

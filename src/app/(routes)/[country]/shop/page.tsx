@@ -11,7 +11,6 @@ import { getCountries } from "@/src/app/actions/get-countries";
 export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
   const { country: countryCode } = params;
   const baseUrl = 'https://www.fineystjackets.com';
-  const countries = ['us', 'uk', 'ca', 'au'];
   
   return {
     title: "Shop Premium Jackets and Outerwear | Fineyst",
@@ -20,12 +19,10 @@ export async function generateMetadata({ params }: { params: { country: string }
       canonical: `${baseUrl}/${countryCode}/shop`,
       languages: {
         'x-default': `${baseUrl}/us/shop`,
-        ...Object.fromEntries(
-          countries.map(country => [
-            country === 'us' ? 'en-US' : country === 'uk' ? 'en-GB' : country === 'ca' ? 'en-CA' : 'en-AU',
-            `${baseUrl}/${country}/shop`
-          ])
-        )
+        'en-US': `${baseUrl}/us/shop`,
+        'en-GB': `${baseUrl}/uk/shop`,
+        'en-CA': `${baseUrl}/ca/shop`,
+        'en-AU': `${baseUrl}/au/shop`,
       }
     }
   };

@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { generateHreflangLinks, getCanonicalUrl } from "@/src/lib/hreflang-helper"
 
 export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
   const { country: countryCode } = params;
@@ -7,7 +8,8 @@ export async function generateMetadata({ params }: { params: { country: string }
     title: "My Wishlist | Fineyst",
     description: "Save and manage your favorite items in your personal wishlist.",
     alternates: {
-      canonical: `https://www.fineystjackets.com/${countryCode}/wishlist`
+      canonical: getCanonicalUrl(countryCode, '/wishlist'),
+      languages: generateHreflangLinks({ path: '/wishlist' })
     }
   };
 }

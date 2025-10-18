@@ -1,6 +1,7 @@
 
 import type { Metadata } from "next"
 import TermsConditionsClientDynamic from "./TermsConditionsClientDynamic"
+import { generateHreflangLinks, getCanonicalUrl } from "@/src/lib/hreflang-helper"
 
 export async function generateMetadata({ params }: { params: Promise<{ country: string }> }): Promise<Metadata> {
   const { country } = await params
@@ -10,7 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
     title: "Terms and Conditions - Legal Information | Fineyst",
     description: "Read our terms and conditions to understand your rights and responsibilities when using our services.",
     alternates: {
-      canonical: `https://www.fineystjackets.com/${countryCode}/terms-conditions`
+      canonical: getCanonicalUrl(countryCode, '/terms-conditions'),
+      languages: generateHreflangLinks({ path: '/terms-conditions' })
     }
   }
 }

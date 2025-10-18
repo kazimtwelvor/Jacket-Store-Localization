@@ -1,4 +1,5 @@
 import PrivacyPolicyClientDynamic from "./PrivacyPolicyClientDynamic"
+import { generateHreflangLinks, getCanonicalUrl } from "@/src/lib/hreflang-helper"
 
 export async function generateMetadata({ params }: { params: { country: string } }) {
   const { country } = params
@@ -8,7 +9,8 @@ export async function generateMetadata({ params }: { params: { country: string }
     title: "Privacy Policy - Data Protection Information | Fineyst",
     description: "Learn about how we collect, use, and protect your personal information.",
     alternates: {
-      canonical: `https://www.fineystjackets.com/${countryCode}/privacy-policy`
+      canonical: getCanonicalUrl(countryCode, '/privacy-policy'),
+      languages: generateHreflangLinks({ path: '/privacy-policy' })
     }
   }
 }

@@ -87,11 +87,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: "The requested blog post could not be found."
     }
   }
+  
+  const baseUrl = 'https://www.fineystjackets.com'
+  const countries = ['us', 'uk', 'ca', 'au']
+  const hreflangLinks = {
+    'x-default': `${baseUrl}/us/blogs/${slug}`,
+    ...Object.fromEntries(
+      countries.map(c => [
+        c === 'us' ? 'en-US' : c === 'uk' ? 'en-GB' : c === 'ca' ? 'en-CA' : 'en-AU',
+        `${baseUrl}/${c}/blogs/${slug}`
+      ])
+    )
+  }
+  
   return {
     title: blogData.content.hero.title,
     description: blogData.content.contentSection?.text || blogData.content.guideContent.title,
     alternates: {
-      canonical: `https://www.fineystjackets.com/${country}/blogs/${slug}`
+      canonical: `https://www.fineystjackets.com/${country}/blogs/${slug}`,
+      languages: hreflangLinks
     }
   }
 }

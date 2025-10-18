@@ -41,20 +41,20 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.fineystjackets.com'
   const canonical = `${baseUrl}/${countryCode}`
   
-  // Supported countries for hreflang
-  const countries = ['us', 'uk', 'ca', 'au']
+  const hreflangLinks = {
+    'x-default': `${baseUrl}/us`,
+    'en-US': `${baseUrl}/us`,
+    'en-GB': `${baseUrl}/uk`,
+    'en-CA': `${baseUrl}/ca`,
+    'en-AU': `${baseUrl}/au`,
+  }
   
   return {
     title,
     description,
     alternates: { 
       canonical,
-      languages: {
-        'x-default': `${baseUrl}/us`,
-        ...Object.fromEntries(
-          countries.map(country => [country === 'us' ? 'en-US' : country === 'uk' ? 'en-GB' : country === 'ca' ? 'en-CA' : 'en-AU', `${baseUrl}/${country}`])
-        )
-      }
+      languages: hreflangLinks
     },
     robots: 'index, follow',
     keywords: 'jackets, leather jackets, outerwear, winter coats, mens jackets, womens jackets',

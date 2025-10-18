@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import RefundPolicyClient from "./refund-policy-client"
+import { generateHreflangLinks, getCanonicalUrl } from "@/src/lib/hreflang-helper"
 
 export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
   const { country: countryCode } = params;
@@ -8,7 +9,8 @@ export async function generateMetadata({ params }: { params: { country: string }
     title: "Refund & Returns Policy | Fashion Store",
     description: "Learn about our customer-friendly refund and returns policy. Easy returns within 30 days of purchase.",
     alternates: {
-      canonical: `https://www.fineystjackets.com/${countryCode}/refund-and-returns-policy`
+      canonical: getCanonicalUrl(countryCode, '/refund-and-returns-policy'),
+      languages: generateHreflangLinks({ path: '/refund-and-returns-policy' })
     }
   };
 }

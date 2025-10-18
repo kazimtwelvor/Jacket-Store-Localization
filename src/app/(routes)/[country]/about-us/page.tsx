@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Award, Globe, Users, Heart } from "lucide-react"
 import Container from "@/src/app/ui/container"
 import Button from "@/src/app/ui/button"
+import { generateHreflangLinks, getCanonicalUrl } from "@/src/lib/hreflang-helper"
 
 export async function generateMetadata({ params }: { params: { country: string } }): Promise<Metadata> {
   const { country: countryCode } = params;
@@ -12,7 +13,8 @@ export async function generateMetadata({ params }: { params: { country: string }
     title: "About Us - Our Story and Mission | FINEYST",
     description: "Discover FINEYST's journey since 2010 - our sustainable fashion mission, passionate team, and commitment to quality craftsmanship. Learn about our values and vision for the future.",
     alternates: {
-      canonical: `https://www.fineystjackets.com/${countryCode}/about-us`
+      canonical: getCanonicalUrl(countryCode, '/about-us'),
+      languages: generateHreflangLinks({ path: '/about-us' })
     }
   };
 }
