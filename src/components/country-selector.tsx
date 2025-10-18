@@ -114,7 +114,7 @@ export function CountrySelector({ variant = 'default', size = 'default' }: Count
           disabled={isLoading}
         >
           <Globe className="h-4 w-4" />
-          <span className="hidden sm:inline">
+          <span>
             {selectedCountry?.countryCode.toUpperCase() || 'US'}
           </span>
           <ChevronDown className="h-4 w-4" />
