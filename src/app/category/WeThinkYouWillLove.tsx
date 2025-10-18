@@ -312,10 +312,11 @@ const WeThinkYouWillLove: React.FC<WeThinkYouWillLoveProps> = ({
                     {product.salePrice && Number(product.salePrice) > 0 ? (
                       <ComparePriceDisplay 
                         originalPriceUSD={Number(product.price)} 
-                        salePriceUSD={Number(product.salePrice)} 
+                        salePriceUSD={Number(product.salePrice)}
+                        size="sm"
                       />
                     ) : (
-                      <PriceDisplay priceUSD={Number(product.price)} className="text-lg font-bold text-black" />
+                      <PriceDisplay priceUSD={Number(product.price)} className="text-sm font-bold text-black" />
                     )}
                   </div>
                   <div className="mt-2">

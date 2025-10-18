@@ -99,6 +99,8 @@ interface ComparePriceDisplayProps {
   className?: string
   /** Show discount badge */
   showDiscount?: boolean
+  /** Size variant for different contexts */
+  size?: 'sm' | 'md' | 'lg'
 }
 
 /**
@@ -115,6 +117,7 @@ export function ComparePriceDisplay({
   salePriceUSD,
   className = '',
   showDiscount = false,
+  size = 'md',
 }: ComparePriceDisplayProps) {
   const { convertAndFormat } = useCurrency()
   
@@ -124,18 +127,30 @@ export function ComparePriceDisplay({
   // Calculate discount percentage
   const discount = Math.round(((originalPriceUSD - salePriceUSD) / originalPriceUSD) * 100)
   
-  // Default styling - can be overridden by className
-  // Mobile: text-sm (strikethrough) + text-lg (sale price)
-  // Desktop: text-sm (both)
-  const defaultOriginalClass = "text-sm font-bold line-through text-gray-500"
-  const defaultSaleClass = "text-lg font-bold text-black"
+  // Size variants for different contexts
+  const sizeClasses = {
+    sm: {
+      original: "text-xs font-bold line-through text-gray-500",
+      sale: "text-sm font-bold text-black"
+    },
+    md: {
+      original: "text-sm font-bold line-through text-gray-500",
+      sale: "text-lg font-bold text-black"
+    },
+    lg: {
+      original: "text-base font-bold line-through text-gray-500",
+      sale: "text-xl font-bold text-black"
+    }
+  }
+  
+  const { original: originalClass, sale: saleClass } = sizeClasses[size]
   
   return (
     <div className={`flex items-center gap-1 ${className}`}>
-      <span className={defaultOriginalClass}>
+      <span className={originalClass}>
         {originalPrice}
       </span>
-      <span className={defaultSaleClass}>
+      <span className={saleClass}>
         {salePrice}
       </span>
       {showDiscount && discount > 0 && (

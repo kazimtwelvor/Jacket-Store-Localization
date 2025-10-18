@@ -1,16 +1,14 @@
 /**
- * Currency Hook
- * Provides currency conversion functionality in React components
+ * Currency Hook (Simplified - Symbol Only)
+ * Provides currency symbol formatting without conversion
  */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 import { useCountry } from './use-country'
 import {
-  convertPrice,
   convertPriceSync,
   formatPrice,
   getCurrencyInfo,
-  preloadExchangeRates,
   type CurrencyConfig,
 } from '@/src/lib/currency/currency-converter'
 
@@ -19,62 +17,32 @@ export interface UseCurrencyReturn {
   currency: CurrencyConfig
   /** Country code */
   countryCode: string
-  /** Convert USD price to current currency (async) */
-  convertFromUSD: (priceUSD: number) => Promise<number>
-  /** Convert USD price to current currency (sync, uses cache) */
-  convertFromUSDSync: (priceUSD: number) => number
-  /** Format price with currency symbol */
+  /** Format price with currency symbol (no conversion) */
   formatCurrency: (price: number) => string
-  /** Convert and format price in one step */
+  /** Convert and format price (no actual conversion, just symbol change) */
   convertAndFormat: (priceUSD: number) => string
-  /** Check if rates are loaded */
+  /** Always true since no fetching needed */
   isLoaded: boolean
 }
 
 /**
- * Hook for currency conversion and formatting
+ * Hook for currency symbol formatting
  * 
  * @example
  * ```tsx
  * const { convertAndFormat, currency } = useCurrency()
  * 
- * // Convert and format a USD price
+ * // Format a USD price with the country's symbol
  * const displayPrice = convertAndFormat(99.99)
- * // Returns: "$99.99" (US), "£78.92" (UK), "CA$135.99" (CA), etc.
+ * // Returns: "$99.99" (US), "£99.99" (UK), "CA$99.99" (CA), etc.
+ * // Note: All show the same USD value, just different symbols
  * ```
  */
 export function useCurrency(): UseCurrencyReturn {
   const { countryCode } = useCountry()
-  const [isLoaded, setIsLoaded] = useState(false)
   const currency = getCurrencyInfo(countryCode)
 
-  // Preload exchange rates on mount
-  useEffect(() => {
-    const loadRates = async () => {
-      await preloadExchangeRates()
-      setIsLoaded(true)
-    }
-    
-    loadRates()
-  }, [])
-
-  // Convert from USD (async)
-  const convertFromUSD = useCallback(
-    async (priceUSD: number): Promise<number> => {
-      return convertPrice(priceUSD, currency.code)
-    },
-    [currency.code]
-  )
-
-  // Convert from USD (sync, uses cache)
-  const convertFromUSDSync = useCallback(
-    (priceUSD: number): number => {
-      return convertPriceSync(priceUSD, currency.code)
-    },
-    [currency.code]
-  )
-
-  // Format price with currency
+  // Format price with currency symbol
   const formatCurrency = useCallback(
     (price: number): string => {
       return formatPrice(price, countryCode)
@@ -82,11 +50,11 @@ export function useCurrency(): UseCurrencyReturn {
     [countryCode]
   )
 
-  // Convert and format in one step
+  // "Convert" and format (no actual conversion, just adds symbol)
   const convertAndFormat = useCallback(
     (priceUSD: number): string => {
-      const convertedPrice = convertPriceSync(priceUSD, currency.code)
-      return formatPrice(convertedPrice, countryCode)
+      const price = convertPriceSync(priceUSD, currency.code) // Returns same value
+      return formatPrice(price, countryCode)
     },
     [currency.code, countryCode]
   )
@@ -94,40 +62,22 @@ export function useCurrency(): UseCurrencyReturn {
   return {
     currency,
     countryCode,
-    convertFromUSD,
-    convertFromUSDSync,
     formatCurrency,
     convertAndFormat,
-    isLoaded,
+    isLoaded: true, // Always loaded
   }
 }
 
 /**
- * Hook for converting a single price
- * Returns the converted price value
- * 
- * @example
- * ```tsx
- * const convertedPrice = useConvertedPrice(99.99)
- * ```
- */
-export function useConvertedPrice(priceUSD: number): number {
-  const { convertFromUSDSync } = useCurrency()
-  return convertFromUSDSync(priceUSD)
-}
-
-/**
- * Hook for formatting a price
- * Returns formatted price string with currency symbol
+ * Hook for formatting a price with currency symbol
  * 
  * @example
  * ```tsx
  * const formattedPrice = useFormattedPrice(99.99)
- * // Returns: "$99.99", "£78.92", etc.
+ * // Returns: "$99.99", "£99.99", "CA$99.99", etc.
  * ```
  */
 export function useFormattedPrice(priceUSD: number): string {
   const { convertAndFormat } = useCurrency()
   return convertAndFormat(priceUSD)
 }
-
