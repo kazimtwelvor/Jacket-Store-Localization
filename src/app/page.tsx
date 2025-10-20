@@ -2,10 +2,12 @@
 
 import { useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import { useCountryStore } from '@/src/store/country-store'
 
 export default function Home() {
   const router = useRouter()
   const pathname = usePathname()
+  const { setSelectedCountry, getCountryByCode, countries } = useCountryStore()
 
   useEffect(() => {
     const detectAndRedirect = async () => {
@@ -25,6 +27,12 @@ export default function Home() {
       }
       
       console.log('[ROOT_PAGE] On root path, detecting country from IP...')
+      
+      // Wait for countries to be loaded before proceeding
+      if (countries.length === 0) {
+        console.log('[ROOT_PAGE] Countries not loaded yet, waiting...')
+        return
+      }
       
       try {
         const services = [
@@ -73,20 +81,42 @@ export default function Home() {
           else if (detectedCountry === 'AU') redirectCountry = 'au'
           
           console.log('[ROOT_PAGE] Detected country:', detectedCountry, '-> redirecting to:', redirectCountry)
+          
+          const countryData = getCountryByCode(redirectCountry)
+          if (countryData) {
+            console.log('[ROOT_PAGE] Updating country store to:', redirectCountry)
+            setSelectedCountry(countryData)
+          }
+          
           router.push(`/${redirectCountry}`)
         } else {
           // If no country detected, only then fallback to US
           console.log('[ROOT_PAGE] No country detected, defaulting to US')
+          
+          // Update the country store to US
+          const countryData = getCountryByCode('us')
+          if (countryData) {
+            console.log('[ROOT_PAGE] Updating country store to: us (fallback)')
+            setSelectedCountry(countryData)
+          }
+          
           router.push('/us')
         }
       } catch (error) {
         console.error('[ROOT_PAGE] All IP services failed, defaulting to US')
+        
+        const countryData = getCountryByCode('us')
+        if (countryData) {
+          console.log('[ROOT_PAGE] Updating country store to: us (error fallback)')
+          setSelectedCountry(countryData)
+        }
+        
         router.push('/us')
       }
     }
 
     detectAndRedirect()
-  }, [router, pathname])
+  }, [router, pathname, countries])
 
   return (
     <div className="flex items-center justify-center min-h-screen">
