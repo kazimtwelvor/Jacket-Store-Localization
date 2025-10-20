@@ -24,7 +24,16 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical },
+    alternates: { 
+      canonical,
+      languages: {
+        'x-default': 'https://www.fineystjackets.com/us',
+        'en-US': 'https://www.fineystjackets.com/us',
+        'en-GB': 'https://www.fineystjackets.com/uk',
+        'en-CA': 'https://www.fineystjackets.com/ca',
+        'en-AU': 'https://www.fineystjackets.com/au',
+      }
+    },
     robots: 'index, follow',
     keywords: 'jackets, leather jackets, outerwear, winter coats, mens jackets, womens jackets',
     openGraph: {
