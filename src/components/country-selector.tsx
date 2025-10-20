@@ -36,6 +36,24 @@ export function CountrySelector({ variant = 'default', size = 'default' }: Count
     setMounted(true)
   }, [])
 
+  useEffect(() => {
+    if (mounted && countries.length > 0) {
+      const pathSegments = pathname.split('/').filter(Boolean)
+      const urlCountryCode = pathSegments[0]?.toLowerCase()
+      
+      if (urlCountryCode) {
+        const urlCountry = countries.find(
+          (c: any) => c.countryCode.toLowerCase() === urlCountryCode
+        )
+        
+        if (urlCountry && selectedCountry?.id !== urlCountry.id) {
+          console.log('[COUNTRY_SELECTOR] Updating country from URL change:', urlCountry.countryCode)
+          setSelectedCountry(urlCountry)
+        }
+      }
+    }
+  }, [pathname, mounted, countries, selectedCountry, setSelectedCountry])
+
   // Fetch countries from API
   useEffect(() => {
     const fetchCountries = async () => {
@@ -59,15 +77,32 @@ export function CountrySelector({ variant = 'default', size = 'default' }: Count
           
           console.log('[COUNTRY_SELECTOR] Countries fetched:', data.countries.length)
           
-          // If no country is selected or the selected country is not in the list, set default
           if (!selectedCountry || !data.countries.find((c: any) => c.id === selectedCountry.id)) {
-            const defaultCountry = data.countries.find(
-              (c: any) => c.countryCode.toLowerCase() === 'us'
-            ) || data.countries[0]
+            const pathSegments = pathname.split('/').filter(Boolean)
+            const urlCountryCode = pathSegments[0]?.toLowerCase()
             
-            if (defaultCountry) {
-              console.log('[COUNTRY_SELECTOR] Setting default country:', defaultCountry.countryCode)
-              setSelectedCountry(defaultCountry)
+            let detectedCountry = null
+            
+            if (urlCountryCode) {
+              detectedCountry = data.countries.find(
+                (c: any) => c.countryCode.toLowerCase() === urlCountryCode
+              )
+            }
+            
+            if (!detectedCountry) {
+              if (urlCountryCode && !data.countries.find((c: any) => c.countryCode.toLowerCase() === urlCountryCode)) {
+                console.log('[COUNTRY_SELECTOR] URL country not supported, falling back to US')
+              }
+              
+              // Default to US or first available country
+              detectedCountry = data.countries.find(
+                (c: any) => c.countryCode.toLowerCase() === 'us'
+              ) || data.countries[0]
+            }
+            
+            if (detectedCountry) {
+              console.log('[COUNTRY_SELECTOR] Setting detected country:', detectedCountry.countryCode, 'from URL:', urlCountryCode)
+              setSelectedCountry(detectedCountry)
             }
           } else {
             console.log('[COUNTRY_SELECTOR] Using existing country:', selectedCountry.countryCode)
