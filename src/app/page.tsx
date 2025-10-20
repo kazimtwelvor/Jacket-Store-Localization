@@ -1,13 +1,31 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 export default function Home() {
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     const detectAndRedirect = async () => {
+      const pathSegments = pathname.split('/').filter(Boolean)
+      const firstSegment = pathSegments[0]?.toLowerCase()
+      
+      const validCountries = ['us', 'uk', 'ca', 'au', 'de', 'fr', 'es', 'it']
+      
+      if (firstSegment && validCountries.includes(firstSegment)) {
+        console.log('[ROOT_PAGE] URL already has country slug:', firstSegment, '- no redirect needed')
+        return 
+      }
+      
+      if (pathname !== '/') {
+        console.log('[ROOT_PAGE] Not on root path:', pathname, '- no redirect needed')
+        return
+      }
+      
+      console.log('[ROOT_PAGE] On root path, detecting country from IP...')
+      
       try {
         const services = [
           'https://ipapi.co/json/',
@@ -68,7 +86,7 @@ export default function Home() {
     }
 
     detectAndRedirect()
-  }, [router])
+  }, [router, pathname])
 
   return (
     <div className="flex items-center justify-center min-h-screen">
