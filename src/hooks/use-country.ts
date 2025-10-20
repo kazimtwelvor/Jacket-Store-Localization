@@ -14,20 +14,6 @@ export function useCountrySync() {
   const pathname = usePathname()
   const { selectedCountry, setSelectedCountry, getCountryByCode } = useCountryStore()
   
-  useEffect(() => {
-    // Get country from URL params
-    const urlCountry = params?.country as string | undefined
-    
-    if (urlCountry) {
-      const countryFromUrl = getCountryByCode(urlCountry)
-      
-      // If URL has a country and it's different from selected, update store
-      if (countryFromUrl && countryFromUrl.id !== selectedCountry?.id) {
-        console.log('[USE_COUNTRY_SYNC] Syncing country from URL:', urlCountry)
-        setSelectedCountry(countryFromUrl)
-      }
-    }
-  }, [params?.country, pathname])
   
   return {
     selectedCountry,

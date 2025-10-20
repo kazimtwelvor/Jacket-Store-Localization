@@ -9,22 +9,60 @@ export default function Home() {
   useEffect(() => {
     const detectAndRedirect = async () => {
       try {
-        const response = await fetch('https://ipapi.co/json/', {
-          headers: { 'Accept': 'application/json' }
-        })
-        const data = await response.json()
-        const countryCode = data.country_code?.toUpperCase()
+        const services = [
+          'https://ipapi.co/json/',
+          'https://ipinfo.io/json',
+          'https://api.country.is/'
+        ]
         
-        let redirectCountry = 'us'
-        if (countryCode === 'GB') redirectCountry = 'uk'
-        else if (countryCode === 'US') redirectCountry = 'us'
-        else if (countryCode === 'CA') redirectCountry = 'ca'
-        else if (countryCode === 'AU') redirectCountry = 'au'
+        let detectedCountry = null
         
-        console.log('[ROOT_PAGE] Detected country:', countryCode, '-> redirecting to:', redirectCountry)
-        router.push(`/${redirectCountry}`)
+        for (const service of services) {
+          try {
+            console.log('[ROOT_PAGE] Trying IP service:', service)
+            const response = await fetch(service, {
+              headers: { 'Accept': 'application/json' }
+            })
+            
+            if (response.ok) {
+              const data = await response.json()
+              
+              // Handle different response formats
+              if (service.includes('ipapi.co')) {
+                detectedCountry = data.country_code?.toUpperCase()
+              } else if (service.includes('ipinfo.io')) {
+                detectedCountry = data.country?.toUpperCase()
+              } else if (service.includes('country.is')) {
+                detectedCountry = data.country?.toUpperCase()
+              }
+              
+              if (detectedCountry) {
+                console.log('[ROOT_PAGE] IP detection successful:', detectedCountry, 'from:', service)
+                break
+              }
+            }
+          } catch (serviceError) {
+            console.log('[ROOT_PAGE] Service failed:', service, serviceError)
+            continue
+          }
+        }
+        
+        if (detectedCountry) {
+          let redirectCountry = 'us' // Default fallback
+          if (detectedCountry === 'GB') redirectCountry = 'uk'
+          else if (detectedCountry === 'US') redirectCountry = 'us'
+          else if (detectedCountry === 'CA') redirectCountry = 'ca'
+          else if (detectedCountry === 'AU') redirectCountry = 'au'
+          
+          console.log('[ROOT_PAGE] Detected country:', detectedCountry, '-> redirecting to:', redirectCountry)
+          router.push(`/${redirectCountry}`)
+        } else {
+          // If no country detected, only then fallback to US
+          console.log('[ROOT_PAGE] No country detected, defaulting to US')
+          router.push('/us')
+        }
       } catch (error) {
-        console.error('[ROOT_PAGE] Failed to detect country, defaulting to US')
+        console.error('[ROOT_PAGE] All IP services failed, defaulting to US')
         router.push('/us')
       }
     }

@@ -36,33 +36,15 @@ export function CountrySelector({ variant = 'default', size = 'default' }: Count
     setMounted(true)
   }, [])
 
-  useEffect(() => {
-    if (mounted && countries.length > 0) {
-      const pathSegments = pathname.split('/').filter(Boolean)
-      const urlCountryCode = pathSegments[0]?.toLowerCase()
-      
-      if (urlCountryCode) {
-        const urlCountry = countries.find(
-          (c: any) => c.countryCode.toLowerCase() === urlCountryCode
-        )
-        
-        if (urlCountry && selectedCountry?.id !== urlCountry.id) {
-          console.log('[COUNTRY_SELECTOR] Updating country from URL change:', urlCountry.countryCode)
-          setSelectedCountry(urlCountry)
-        }
-      }
-    }
-  }, [pathname, mounted, countries, selectedCountry, setSelectedCountry])
+  // Note: URL syncing is now handled only during initial country detection
+  // This prevents automatic updates when user navigates to /us or /uk URLs
 
   // Detect user's country from IP
   const detectUserCountry = async (): Promise<string | null> => {
     try {
-      // Use a free IP geolocation service
-      const response = await fetch('https://ipapi.co/json/', {
-        headers: { 'Accept': 'application/json' }
-      })
+      const response = await fetch('https://ip-api.com/json/?fields=countryCode')
       const data = await response.json()
-      return data.country_code?.toUpperCase() || null
+      return data.countryCode?.toUpperCase() || null
     } catch (error) {
       console.error('[COUNTRY_SELECTOR] Failed to detect country from IP:', error)
       return null
@@ -92,63 +74,34 @@ export function CountrySelector({ variant = 'default', size = 'default' }: Count
           
           console.log('[COUNTRY_SELECTOR] Countries fetched:', data.countries.length)
           
-          if (!selectedCountry || !data.countries.find((c: any) => c.id === selectedCountry.id)) {
-            const pathSegments = pathname.split('/').filter(Boolean)
-            const urlCountryCode = pathSegments[0]?.toLowerCase()
-            
-            let detectedCountry = null
-            
-            // First, try to match URL country code
-            if (urlCountryCode) {
-              detectedCountry = data.countries.find(
-                (c: any) => c.countryCode.toLowerCase() === urlCountryCode
-              )
-            }
-            
-            // If no URL country or not supported, detect from user's IP
-            if (!detectedCountry) {
-              console.log('[COUNTRY_SELECTOR] Detecting country from user IP...')
-              const userCountryCode = await detectUserCountry()
-              
-              if (userCountryCode) {
-                console.log('[COUNTRY_SELECTOR] User country detected:', userCountryCode)
-                
-                // Map country codes to supported regions
-                let mappedCountryCode = userCountryCode.toLowerCase()
-                if (userCountryCode === 'GB') mappedCountryCode = 'uk'
-                
-                detectedCountry = data.countries.find(
-                  (c: any) => c.countryCode.toLowerCase() === mappedCountryCode
-                )
-                
-                if (detectedCountry) {
-                  console.log('[COUNTRY_SELECTOR] Found supported country:', detectedCountry.countryCode)
-                } else {
-                  console.log('[COUNTRY_SELECTOR] User country not supported, falling back to US')
-                }
-              }
-              
-              // Final fallback to US or first available
-              if (!detectedCountry) {
-                detectedCountry = data.countries.find(
-                  (c: any) => c.countryCode.toLowerCase() === 'us'
-                ) || data.countries[0]
-              }
-            }
-            
-            if (detectedCountry) {
-              console.log('[COUNTRY_SELECTOR] Setting detected country:', detectedCountry.countryCode)
-              setSelectedCountry(detectedCountry)
-              
-              // If we're on homepage and detected a different country, redirect
-              if (pathname === '/' && detectedCountry.countryCode.toLowerCase() !== 'us') {
-                const newPath = `/${detectedCountry.countryCode.toLowerCase()}`
-                console.log('[COUNTRY_SELECTOR] Redirecting to detected country:', newPath)
-                router.push(newPath)
-              }
-            }
-          } else {
-            console.log('[COUNTRY_SELECTOR] Using existing country:', selectedCountry.countryCode)
+          const pathSegments = pathname.split('/').filter(Boolean)
+          const urlCountryCode = pathSegments[0]?.toLowerCase()
+          
+          let detectedCountry = null
+          
+          // Note: IP detection is now handled by the root page (src/app/page.tsx)
+          // Country selector only reads from URL and sets the appropriate country
+          
+          // If no IP detection or IP detection failed, use URL country
+          if (!detectedCountry && urlCountryCode) {
+            detectedCountry = data.countries.find(
+              (c: any) => c.countryCode.toLowerCase() === urlCountryCode
+            )
+            console.log('[COUNTRY_SELECTOR] Using country from URL:', urlCountryCode)
+          }
+          
+          // Final fallback to US or first available
+          if (!detectedCountry) {
+            detectedCountry = data.countries.find(
+              (c: any) => c.countryCode.toLowerCase() === 'us'
+            ) || data.countries[0]
+            console.log('[COUNTRY_SELECTOR] Using fallback country:', detectedCountry.countryCode)
+          }
+          
+          if (detectedCountry) {
+            console.log('[COUNTRY_SELECTOR] Setting detected country:', detectedCountry.countryCode)
+            setSelectedCountry(detectedCountry)
+            // Note: Redirect logic is handled by the root page (src/app/page.tsx)
           }
         }
       } catch (error) {

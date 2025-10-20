@@ -155,29 +155,23 @@ export async function middleware(request: NextRequest) {
 
     const segment = mapToSegment(countryIso)
 
-    // Only redirect the homepage "/" or naked paths to a localized root
+    // Note: Root path "/" redirection is now handled by client-side page (src/app/page.tsx)
+    // This allows for proper IP detection and user experience
     if (pathname === "/") {
-      const url = request.nextUrl.clone()
-      url.pathname = `/${segment}/`
-      url.search = searchParams.toString()
-
-      // Log host and decision for observability (appears in edge logs)
       if (debugEnabled) {
-        console.log(`[GEO-REDIRECT] method=${method} host=${host} ip=${ip} countryIso=${countryIso} segment=${segment} supported=${Array.from(supportedCountries).join(',')} to=${url.pathname}${url.search ? `?${url.search}` : ''}`)
+        console.log(`[GEO-PASS] method=${method} host=${host} ip=${ip} countryIso=${countryIso} segment=${segment} - letting client handle redirect`)
       }
-
-      const res = NextResponse.redirect(url)
-      res.headers.set("x-geo-redirect", `${host}; country=${countryIso}; segment=${segment}`)
+      const pass = NextResponse.next()
       if (debugEnabled) {
-        res.headers.set("x-geo-ip", ip)
-        res.headers.set("x-geo-country-iso", countryIso)
-        res.headers.set("x-geo-segment", segment)
-        res.headers.set("x-geo-supported", Array.from(supportedCountries).join(","))
-        res.headers.set("x-geo-cf-ipcountry", request.headers.get("cf-ipcountry") || "")
-        res.headers.set("x-geo-vercel-country", request.headers.get("x-vercel-ip-country") || "")
-        res.headers.set("x-geo-raw-xff", request.headers.get("x-forwarded-for") || "")
+        pass.headers.set("x-geo-ip", ip)
+        pass.headers.set("x-geo-country-iso", countryIso)
+        pass.headers.set("x-geo-segment", segment)
+        pass.headers.set("x-geo-supported", Array.from(supportedCountries).join(","))
+        pass.headers.set("x-geo-cf-ipcountry", request.headers.get("cf-ipcountry") || "")
+        pass.headers.set("x-geo-vercel-country", request.headers.get("x-vercel-ip-country") || "")
+        pass.headers.set("x-geo-raw-xff", request.headers.get("x-forwarded-for") || "")
       }
-      return res
+      return pass
     }
     if (debugEnabled) {
       console.log(`[GEO-PASS] method=${method} host=${host} ip=${ip} path=${pathname} countryIso=${countryIso} alreadyLocalized=${alreadyLocalized}`)
@@ -196,6 +190,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/api/:path*"
+    "/api/:path*",
+    "/"
   ],
 }
