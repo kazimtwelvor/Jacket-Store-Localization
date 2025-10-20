@@ -54,9 +54,24 @@ export function CountrySelector({ variant = 'default', size = 'default' }: Count
     }
   }, [pathname, mounted, countries, selectedCountry, setSelectedCountry])
 
-  // Fetch countries from API
+  // Detect user's country from IP
+  const detectUserCountry = async (): Promise<string | null> => {
+    try {
+      // Use a free IP geolocation service
+      const response = await fetch('https://ipapi.co/json/', {
+        headers: { 'Accept': 'application/json' }
+      })
+      const data = await response.json()
+      return data.country_code?.toUpperCase() || null
+    } catch (error) {
+      console.error('[COUNTRY_SELECTOR] Failed to detect country from IP:', error)
+      return null
+    }
+  }
+
+  // Fetch countries from API and detect user country
   useEffect(() => {
-    const fetchCountries = async () => {
+    const fetchCountriesAndDetectCountry = async () => {
       try {
         setLoading(true)
         const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -83,26 +98,54 @@ export function CountrySelector({ variant = 'default', size = 'default' }: Count
             
             let detectedCountry = null
             
+            // First, try to match URL country code
             if (urlCountryCode) {
               detectedCountry = data.countries.find(
                 (c: any) => c.countryCode.toLowerCase() === urlCountryCode
               )
             }
             
+            // If no URL country or not supported, detect from user's IP
             if (!detectedCountry) {
-              if (urlCountryCode && !data.countries.find((c: any) => c.countryCode.toLowerCase() === urlCountryCode)) {
-                console.log('[COUNTRY_SELECTOR] URL country not supported, falling back to US')
+              console.log('[COUNTRY_SELECTOR] Detecting country from user IP...')
+              const userCountryCode = await detectUserCountry()
+              
+              if (userCountryCode) {
+                console.log('[COUNTRY_SELECTOR] User country detected:', userCountryCode)
+                
+                // Map country codes to supported regions
+                let mappedCountryCode = userCountryCode.toLowerCase()
+                if (userCountryCode === 'GB') mappedCountryCode = 'uk'
+                
+                detectedCountry = data.countries.find(
+                  (c: any) => c.countryCode.toLowerCase() === mappedCountryCode
+                )
+                
+                if (detectedCountry) {
+                  console.log('[COUNTRY_SELECTOR] Found supported country:', detectedCountry.countryCode)
+                } else {
+                  console.log('[COUNTRY_SELECTOR] User country not supported, falling back to US')
+                }
               }
               
-              // Default to US or first available country
-              detectedCountry = data.countries.find(
-                (c: any) => c.countryCode.toLowerCase() === 'us'
-              ) || data.countries[0]
+              // Final fallback to US or first available
+              if (!detectedCountry) {
+                detectedCountry = data.countries.find(
+                  (c: any) => c.countryCode.toLowerCase() === 'us'
+                ) || data.countries[0]
+              }
             }
             
             if (detectedCountry) {
-              console.log('[COUNTRY_SELECTOR] Setting detected country:', detectedCountry.countryCode, 'from URL:', urlCountryCode)
+              console.log('[COUNTRY_SELECTOR] Setting detected country:', detectedCountry.countryCode)
               setSelectedCountry(detectedCountry)
+              
+              // If we're on homepage and detected a different country, redirect
+              if (pathname === '/' && detectedCountry.countryCode.toLowerCase() !== 'us') {
+                const newPath = `/${detectedCountry.countryCode.toLowerCase()}`
+                console.log('[COUNTRY_SELECTOR] Redirecting to detected country:', newPath)
+                router.push(newPath)
+              }
             }
           } else {
             console.log('[COUNTRY_SELECTOR] Using existing country:', selectedCountry.countryCode)
@@ -116,7 +159,7 @@ export function CountrySelector({ variant = 'default', size = 'default' }: Count
     }
 
     if (mounted) {
-      fetchCountries()
+      fetchCountriesAndDetectCountry()
     }
   }, [mounted])
 
