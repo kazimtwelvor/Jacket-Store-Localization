@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: { country: string }
     description: "Save and manage your favorite items in your personal wishlist.",
     alternates: {
       canonical: getCanonicalUrl(countryCode, '/wishlist'),
-      languages: generateHreflangLinks({ path: '/wishlist' })
+      languages: generateHreflangLinks({ path: '/wishlist', currentCountry: countryCode })
     }
   };
 }

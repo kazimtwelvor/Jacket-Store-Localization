@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
     description: "Read our terms and conditions to understand your rights and responsibilities when using our services.",
     alternates: {
       canonical: getCanonicalUrl(countryCode, '/terms-conditions'),
-      languages: generateHreflangLinks({ path: '/terms-conditions' })
+      languages: generateHreflangLinks({ path: '/terms-conditions', currentCountry: countryCode })
     }
   }
 }

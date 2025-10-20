@@ -11,7 +11,10 @@ export async function generateMetadata({ params }: { params: { country: string }
     description: "Contact FINEYST's expert support team 24/7. Get help with orders, returns, sizing, or product questions. Email, phone, live chat available. Fast response guaranteed.",
     alternates: {
       canonical: getCanonicalUrl(countryCode, '/contact-us'),
-      languages: generateHreflangLinks({ path: '/contact-us' })
+      languages: generateHreflangLinks({ 
+        path: '/contact-us', 
+        currentCountry: countryCode 
+      })
     }
   }
 }

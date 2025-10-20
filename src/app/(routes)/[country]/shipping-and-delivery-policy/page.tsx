@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: { country: string }
     description: "Learn about our shipping methods and delivery timeframes for domestic orders.",
     alternates: {
       canonical: getCanonicalUrl(countryCode, '/shipping-and-delivery-policy'),
-      languages: generateHreflangLinks({ path: '/shipping-and-delivery-policy' })
+      languages: generateHreflangLinks({ path: '/shipping-and-delivery-policy', currentCountry: countryCode })
     }
   }
 }

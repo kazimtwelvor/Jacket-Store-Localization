@@ -19,10 +19,10 @@ export async function generateMetadata({ params }: { params: { country: string }
       canonical: `${baseUrl}/${countryCode}/shop`,
       languages: {
         'x-default': `${baseUrl}/us/shop`,
-        'en-US': `${baseUrl}/us/shop`,
-        'en-GB': `${baseUrl}/uk/shop`,
-        'en-CA': `${baseUrl}/ca/shop`,
-        'en-AU': `${baseUrl}/au/shop`,
+        'en-US': `${baseUrl}/us/shop`, // Self-reference + cross-reference
+        'en-GB': `${baseUrl}/uk/shop`, // Cross-reference
+        'en-CA': `${baseUrl}/ca/shop`, // Cross-reference
+        'en-AU': `${baseUrl}/au/shop`, // Cross-reference
       }
     }
   };

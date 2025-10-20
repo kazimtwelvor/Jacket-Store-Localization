@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: { country: string }
     description: "Track your FINEYST order in real-time with our secure tracking system. Get instant updates on shipping status, delivery estimates, and package location. Enter your order number now.",
     alternates: {
       canonical: getCanonicalUrl(countryCode, '/track-order'),
-      languages: generateHreflangLinks({ path: '/track-order' })
+      languages: generateHreflangLinks({ path: '/track-order', currentCountry: countryCode })
     }
   };
 }

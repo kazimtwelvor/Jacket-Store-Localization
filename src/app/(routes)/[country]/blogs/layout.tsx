@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
     description: 'Discover the latest fashion insights, style guides, and expert advice on premium jackets and outerwear. Stay updated with trends, care tips, and styling advice.',
     alternates: {
       canonical: getCanonicalUrl(country, '/blogs'),
-      languages: generateHreflangLinks({ path: '/blogs' })
+      languages: generateHreflangLinks({ path: '/blogs', currentCountry: country })
     }
   }
 }

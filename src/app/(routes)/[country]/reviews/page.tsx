@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: { country: string }
     description: "Read what our customers are saying about their experience with our products and service.",
     alternates: {
       canonical: getCanonicalUrl(countryCode, '/reviews'),
-      languages: generateHreflangLinks({ path: '/reviews' })
+      languages: generateHreflangLinks({ path: '/reviews', currentCountry: countryCode })
     }
   };
 }

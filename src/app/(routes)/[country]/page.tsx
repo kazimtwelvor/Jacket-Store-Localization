@@ -43,10 +43,10 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   
   const hreflangLinks = {
     'x-default': `${baseUrl}/us`,
-    'en-US': `${baseUrl}/us`,
-    'en-GB': `${baseUrl}/uk`,
-    'en-CA': `${baseUrl}/ca`,
-    'en-AU': `${baseUrl}/au`,
+    'en-US': `${baseUrl}/us`, 
+    'en-GB': `${baseUrl}/uk`, 
+    'en-CA': `${baseUrl}/ca`, 
+    'en-AU': `${baseUrl}/au`, 
   }
   
   return {

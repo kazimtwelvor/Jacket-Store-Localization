@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: { country: string }
     description: "Discover FINEYST's journey since 2010 - our sustainable fashion mission, passionate team, and commitment to quality craftsmanship. Learn about our values and vision for the future.",
     alternates: {
       canonical: getCanonicalUrl(countryCode, '/about-us'),
-      languages: generateHreflangLinks({ path: '/about-us' })
+      languages: generateHreflangLinks({ path: '/about-us', currentCountry: countryCode })
     }
   };
 }

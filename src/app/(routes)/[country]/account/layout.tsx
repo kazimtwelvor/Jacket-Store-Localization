@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
     description: "Manage your account settings, orders, and personal information.",
     alternates: {
       canonical: getCanonicalUrl(country, '/account'),
-      languages: generateHreflangLinks({ path: '/account' })
+      languages: generateHreflangLinks({ path: '/account', currentCountry: country })
     }
   }
 }

@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: { country: string }
     description: "Learn about our customer-friendly refund and returns policy. Easy returns within 30 days of purchase.",
     alternates: {
       canonical: getCanonicalUrl(countryCode, '/refund-and-returns-policy'),
-      languages: generateHreflangLinks({ path: '/refund-and-returns-policy' })
+      languages: generateHreflangLinks({ path: '/refund-and-returns-policy', currentCountry: countryCode })
     }
   };
 }

@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: { country: string }
     description: "Learn about how we collect, use, and protect your personal information.",
     alternates: {
       canonical: getCanonicalUrl(countryCode, '/privacy-policy'),
-      languages: generateHreflangLinks({ path: '/privacy-policy' })
+      languages: generateHreflangLinks({ path: '/privacy-policy', currentCountry: countryCode })
     }
   }
 }

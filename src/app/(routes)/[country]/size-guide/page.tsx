@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: { country: string }
     description: "Find your perfect fit with our comprehensive size guide for all clothing categories.",
     alternates: {
       canonical: getCanonicalUrl(countryCode, '/size-guide'),
-      languages: generateHreflangLinks({ path: '/size-guide' })
+      languages: generateHreflangLinks({ path: '/size-guide', currentCountry: countryCode })
     }
   }
 }
