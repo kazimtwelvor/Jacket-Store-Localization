@@ -17,17 +17,70 @@ function getClientIp(request: NextRequest): string {
   return ip || "unknown"
 }
 
-function detectCountryCode(request: NextRequest): string {
+async function getCountryFromIp(ip: string): Promise<string | null> {
+  if (!ip || ip === "unknown" || ip.startsWith("::1") || ip.startsWith("127.") || ip.startsWith("192.168.") || ip.startsWith("10.")) {
+    return null
+  }
+  
+  try {
+    const services = [
+      `https://ipapi.co/${ip}/country/`,
+      `https://ip-api.com/json/${ip}?fields=countryCode`,
+      `https://ipinfo.io/${ip}/country`
+    ]
+    
+    for (const service of services) {
+      try {
+        const response = await fetch(service, {
+          headers: { "User-Agent": "NextJS-Middleware" },
+          signal: AbortSignal.timeout(3000) 
+        })
+        
+        if (response.ok) {
+          const data = await response.text()
+          let countryCode = data.trim().toUpperCase()
+          
+          if (service.includes("ip-api.com")) {
+            const json = JSON.parse(data)
+            countryCode = json.countryCode?.toUpperCase()
+          }
+          
+          if (countryCode && countryCode.length === 2) {
+            return countryCode
+          }
+        }
+      } catch (err) {
+        continue
+      }
+    }
+  } catch (err) {
+  }
+  
+  return null
+}
+
+async function detectCountryCode(request: NextRequest): Promise<string> {
   const candidates = [
     request.headers.get("cf-ipcountry"),           
     request.headers.get("x-vercel-ip-country"),      
     request.headers.get("x-geo-country"),            
     request.headers.get("x-country-code"),          
-    (request as any).geo?.country,                  
+    (request as any).geo?.country,                           
   ]
-  const code = candidates.find(Boolean)?.toString().toUpperCase()
-  if (!code) return "US"
-  return code
+  const headerCode = candidates.find(Boolean)?.toString().toUpperCase()
+  
+  if (headerCode && headerCode.length === 2) {
+    return headerCode
+  }
+  
+  const clientIp = getClientIp(request)
+  const ipCountry = await getCountryFromIp(clientIp)
+  
+  if (ipCountry) {
+    return ipCountry
+  }
+  
+  return "US"
 }
 
 export async function middleware(request: NextRequest) {
@@ -81,19 +134,22 @@ export async function middleware(request: NextRequest) {
   const alreadyLocalized = new RegExp(`^/(${Array.from(supportedCountries).join("|")})(/?|$)`, "i").test(pathname)
 
   if (!alreadyLocalized) {
-    const countryIso = detectCountryCode(request)
+    const countryIso = await detectCountryCode(request)
 
-    // Map ISO 3166-1 Alpha-2 -> our country segments
     const mapToSegment = (cc: string): string => {
       const lower = cc.toLowerCase()
-      // Prefer direct match if API provided that code
+      
       if (supportedCountries.has(lower)) return lower
-      // Common normalization
+      
       if (cc === "GB" && supportedCountries.has("uk")) return "uk"
       if (cc === "US" && supportedCountries.has("us")) return "us"
       if (cc === "CA" && supportedCountries.has("ca")) return "ca"
       if (cc === "AU" && supportedCountries.has("au")) return "au"
-      // Fallback to first active (or us)
+      
+      if (cc === "GB" && !supportedCountries.has("uk")) {
+        return supportedCountries.has("us") ? "us" : Array.from(supportedCountries)[0] || "us"
+      }
+      
       return supportedCountries.has("us") ? "us" : Array.from(supportedCountries)[0] || "us"
     }
 
@@ -107,7 +163,7 @@ export async function middleware(request: NextRequest) {
 
       // Log host and decision for observability (appears in edge logs)
       if (debugEnabled) {
-        console.log(`[GEO-REDIRECT] method=${method} host=${host} ip=${ip} countryIso=${countryIso} segment=${segment} to=${url.pathname}${url.search ? `?${url.search}` : ''}`)
+        console.log(`[GEO-REDIRECT] method=${method} host=${host} ip=${ip} countryIso=${countryIso} segment=${segment} supported=${Array.from(supportedCountries).join(',')} to=${url.pathname}${url.search ? `?${url.search}` : ''}`)
       }
 
       const res = NextResponse.redirect(url)
