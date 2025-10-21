@@ -90,8 +90,7 @@ export function CountrySelector({ variant = 'default', size = 'default' }: Count
             console.log('[COUNTRY_SELECTOR] Using country from URL:', urlCountryCode)
           }
           
-          // Final fallback to US or first available
-          if (!detectedCountry) {
+          if (!detectedCountry && pathname !== '/') {
             detectedCountry = data.countries.find(
               (c: any) => c.countryCode.toLowerCase() === 'us'
             ) || data.countries[0]
