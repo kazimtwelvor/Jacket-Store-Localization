@@ -133,6 +133,21 @@ export async function middleware(request: NextRequest) {
   const supportedCountries = await getSupportedCountryCodes()
   const alreadyLocalized = new RegExp(`^/(${Array.from(supportedCountries).join("|")})(/?|$)`, "i").test(pathname)
 
+  if (pathname === "/") {
+    if (debugEnabled) {
+      console.log(`[GEO-PASS] method=${method} host=${host} ip=${ip} - letting client handle redirect`)
+    }
+    const pass = NextResponse.next()
+    if (debugEnabled) {
+      pass.headers.set("x-geo-ip", ip)
+      pass.headers.set("x-geo-supported", Array.from(supportedCountries).join(","))
+      pass.headers.set("x-geo-cf-ipcountry", request.headers.get("cf-ipcountry") || "")
+      pass.headers.set("x-geo-vercel-country", request.headers.get("x-vercel-ip-country") || "")
+      pass.headers.set("x-geo-raw-xff", request.headers.get("x-forwarded-for") || "")
+    }
+    return pass
+  }
+
   if (!alreadyLocalized) {
     const countryIso = await detectCountryCode(request)
 
@@ -154,25 +169,6 @@ export async function middleware(request: NextRequest) {
     }
 
     const segment = mapToSegment(countryIso)
-
-    // Note: Root path "/" redirection is now handled by client-side page (src/app/page.tsx)
-    // This allows for proper IP detection and user experience
-    if (pathname === "/") {
-      if (debugEnabled) {
-        console.log(`[GEO-PASS] method=${method} host=${host} ip=${ip} countryIso=${countryIso} segment=${segment} - letting client handle redirect`)
-      }
-      const pass = NextResponse.next()
-      if (debugEnabled) {
-        pass.headers.set("x-geo-ip", ip)
-        pass.headers.set("x-geo-country-iso", countryIso)
-        pass.headers.set("x-geo-segment", segment)
-        pass.headers.set("x-geo-supported", Array.from(supportedCountries).join(","))
-        pass.headers.set("x-geo-cf-ipcountry", request.headers.get("cf-ipcountry") || "")
-        pass.headers.set("x-geo-vercel-country", request.headers.get("x-vercel-ip-country") || "")
-        pass.headers.set("x-geo-raw-xff", request.headers.get("x-forwarded-for") || "")
-      }
-      return pass
-    }
     if (debugEnabled) {
       console.log(`[GEO-PASS] method=${method} host=${host} ip=${ip} path=${pathname} countryIso=${countryIso} alreadyLocalized=${alreadyLocalized}`)
     }
