@@ -31,6 +31,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
   
+  if (pathname === '/') {
+    console.log(`[MIDDLEWARE] Root path - letting client handle redirect`)
+    return NextResponse.next()
+  }
+  
   // No country in path - redirect to default country
   // Try to get saved country from cookie
   const savedCountry = request.cookies.get('selected-country')?.value
