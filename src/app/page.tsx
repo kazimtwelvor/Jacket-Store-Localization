@@ -127,4 +127,4 @@ export default function Home() {
     </div>
   )
 }
-
+// ipapi.co/json/
